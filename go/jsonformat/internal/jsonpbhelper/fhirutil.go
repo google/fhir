@@ -564,6 +564,27 @@ func IsChoice(d protoreflect.MessageDescriptor) bool {
 	return d != nil && proto.HasExtension(d.Options(), apb.E_IsChoiceType)
 }
 
+// IsContainedResource returns true iff the message type d is a FHIR contained resource.
+func IsContainedResource(d protoreflect.MessageDescriptor) bool {
+	// TODO(b/244184211): Add a contained-resource specific annotation and read
+	// that instead.
+	return d.Name() == "ContainedResource"
+}
+
+// GetContainedResource unwraps a ContainedResource and returns the inner Resource message.
+func GetContainedResource(msg proto.Message) (proto.Message, error) {
+	rpb := msg.ProtoReflect()
+	oneof := rpb.Descriptor().Oneofs().ByName("oneof_resource")
+	if oneof == nil {
+		return nil, fmt.Errorf("%T is not a ContainedResource", msg)
+	}
+	f := rpb.WhichOneof(oneof)
+	if f == nil {
+		return nil, fmt.Errorf("empty ContainedResource")
+	}
+	return rpb.Get(f).Message().Interface(), nil
+}
+
 // GetExtensionFieldDesc returns the extension field descriptor.
 func GetExtensionFieldDesc(d protoreflect.MessageDescriptor) (protoreflect.FieldDescriptor, error) {
 	f := d.Fields().ByName("extension")
