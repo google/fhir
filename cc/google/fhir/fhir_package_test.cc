@@ -45,6 +45,7 @@ namespace {
 using ::google::fhir::testutil::CreateTarFileContaining;
 using ::google::fhir::testutil::CreateZipFileContaining;
 using ::testing::UnorderedElementsAre;
+using ::testing::UnorderedElementsAreArray;
 
 constexpr int kR4DefinitionsCount = 653;
 constexpr int kR4CodeSystemsCount = 1062;
@@ -795,6 +796,38 @@ TEST(ResourceCollectionTest, WithValidAndInvalidResourcesIterateSkipsInvalid) {
   }
   EXPECT_THAT(found, UnorderedElementsAre("http://value.set/id-1",
                                           "http://value.set/id-2"));
+}
+
+TEST(ResourceCollectionTest, WithResourcesIterateJsonSucceeds) {
+  std::vector<std::string> resources = {
+      R"({"resourceType": "ValueSet", "url": "http://value.set/id-1",
+          "id": "a-value-set-1", "status": "draft"})",
+      R"({"resourceType": "ValueSet", "url": "http://value.set/id-2",
+          "id": "a-value-set-2", "status": "draft"})",
+      R"({"resourceType": "ValueSet", "url": "http://value.set/id-3",
+          "id": "a-value-set-3", "status": "draft"})",
+  };
+
+  // Keep track of the pointers for the FhirJson objects we add to the
+  // collection.
+  std::vector<const internal::FhirJson*> resource_json;
+  ResourceCollection<fhir::r4::core::ValueSet> collection;
+  for (const std::string& resource : resources) {
+    auto parsed_json = std::make_unique<internal::FhirJson>();
+    FHIR_ASSERT_OK(internal::ParseJsonValue(resource, *parsed_json));
+
+    resource_json.push_back(parsed_json.get());
+    FHIR_ASSERT_OK(collection.Put(std::move(parsed_json)));
+  }
+
+  // We should get those same FhirJson pointers back when we iterate over the
+  // json in the collection.
+  std::vector<const internal::FhirJson*> found;
+  for (auto itr = collection.json_begin(); itr != collection.json_end();
+       ++itr) {
+    found.push_back(*itr);
+  }
+  EXPECT_THAT(found, UnorderedElementsAreArray(resource_json));
 }
 
 TEST(ResourceCollectionTest, AddGetResourceWithEmptyCollectionReturnsNotFound) {

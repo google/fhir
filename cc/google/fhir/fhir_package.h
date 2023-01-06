@@ -61,7 +61,7 @@ class ResourceCollection {
   // An iterator over all valid resources contained in the collection. Invalid
   // resources, such as those with malformed JSON, will not be returned by the
   // iterator.
-  class Iterator {
+  class ProtoIterator {
    public:
     using iterator_category = std::input_iterator_tag;
     using difference_type = std::ptrdiff_t;
@@ -69,7 +69,7 @@ class ResourceCollection {
     // value_type is an iterator_trait
     using value_type = T;
 
-    Iterator(
+    ProtoIterator(
         const ResourceCollection* resource_collection,
         typename absl::flat_hash_map<
             std::string,
@@ -93,20 +93,20 @@ class ResourceCollection {
 
       return std::move(*resource);
     }
-    Iterator& operator++() {
+    ProtoIterator& operator++() {
       ++uri_iter_;
       // Additionally advance past invalid entries so it is safe to dereference.
       this->AdvanceUntilValid();
       return *this;
     }
-    bool operator==(const Iterator& other) const {
+    bool operator==(const ProtoIterator& other) const {
       // Perform equality checks between iterators at positions with valid
       // resources. This allows an iterator with no remaining valid resources to
       // equal an iterator at the end of uri_iter_.
       return this->NextValidPosistion().uri_iter_ ==
              other.NextValidPosistion().uri_iter_;
     }
-    bool operator!=(const Iterator& other) const {
+    bool operator!=(const ProtoIterator& other) const {
       return this->NextValidPosistion().uri_iter_ !=
              other.NextValidPosistion().uri_iter_;
     }
@@ -134,10 +134,10 @@ class ResourceCollection {
     // Builds a new iterator pointing towards the next valid, parse-able
     // resource. If the current iterator points to a valid resource, the
     // returned iterator will be an identical copy.
-    Iterator NextValidPosistion() const {
+    ProtoIterator NextValidPosistion() const {
       // The constructor calls .AdvanceUntilValid(), so we know the new
       // iterator is pointing to a valid resource.
-      return Iterator(this->resource_collection_, this->uri_iter_);
+      return ProtoIterator(this->resource_collection_, this->uri_iter_);
     }
     // Indicates if the URIs being iterated over have been exhausted.
     bool UriIterExhausted() const {
@@ -150,6 +150,42 @@ class ResourceCollection {
         uri_iter_;
   };
 
+  // An iterator over the raw JSON contained in the resource collection.
+  class JsonIterator {
+   public:
+    using iterator_category = std::input_iterator_tag;
+    using difference_type = std::ptrdiff_t;
+    using value_type = const internal::FhirJson*;
+
+    explicit JsonIterator(
+        typename absl::flat_hash_map<
+            std::string,
+            std::shared_ptr<const internal::FhirJson>>::const_iterator
+            resources_iter)
+        : resources_iter_(resources_iter) {}
+
+    const internal::FhirJson* operator*() const {
+      return resources_iter_->second.get();
+    }
+
+    JsonIterator& operator++() {
+      ++resources_iter_;
+      return *this;
+    }
+
+    bool operator==(const JsonIterator& other) const {
+      return resources_iter_ == other.resources_iter_;
+    }
+
+    bool operator!=(const JsonIterator& other) const {
+      return resources_iter_ != other.resources_iter_;
+    }
+
+    typename absl::flat_hash_map<
+        std::string, std::shared_ptr<const internal::FhirJson>>::const_iterator
+        resources_iter_;
+  };
+
   ResourceCollection() = default;
   ResourceCollection(const ResourceCollection& other) = default;
   ResourceCollection(ResourceCollection&& other) = default;
@@ -157,11 +193,23 @@ class ResourceCollection {
   ResourceCollection& operator=(const ResourceCollection& other) = default;
   ResourceCollection& operator=(ResourceCollection&& other) = default;
 
-  Iterator begin() const {
-    return Iterator(this, this->resources_by_uri_.cbegin());
+  // Returns an iterator over the protocol buffer representation of all valid
+  // resources in the collection.
+  ProtoIterator begin() const {
+    return ProtoIterator(this, this->resources_by_uri_.cbegin());
   }
-  Iterator end() const {
-    return Iterator(this, this->resources_by_uri_.cend());
+  ProtoIterator end() const {
+    return ProtoIterator(this, this->resources_by_uri_.cend());
+  }
+
+  // Returns an iterator over the raw JSON representation of all resources in
+  // the collection.
+  JsonIterator json_begin() const {
+    return JsonIterator(this->resources_by_uri_.cbegin());
+  }
+
+  JsonIterator json_end() const {
+    return JsonIterator(this->resources_by_uri_.cend());
   }
 
   typename absl::flat_hash_map<

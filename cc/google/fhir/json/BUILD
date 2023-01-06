@@ -2,7 +2,10 @@ licenses(["notice"])
 
 package(
     
-    default_visibility = ["//cc/google/fhir:__subpackages__"],
+    default_visibility = [
+        "//cc/google/fhir:__subpackages__",
+        
+    ],
 )
 
 cc_library(
