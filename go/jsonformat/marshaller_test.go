@@ -16,6 +16,8 @@ package jsonformat
 
 import (
 	"bytes"
+	"encoding/json"
+	"fmt"
 	"testing"
 
 	"github.com/google/fhir/go/fhirversion"
@@ -23,10 +25,12 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/testing/protocmp"
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
 	c4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/codes_go_proto"
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
+	r4binarypb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/binary_go_proto"
 	r4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
 	r4codesystempb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/code_system_go_proto"
 	r4conditionpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/condition_go_proto"
@@ -64,6 +68,60 @@ func TestMarshalContainedResource(t *testing.T) {
 		inputs []mvr
 		want   []byte
 	}{
+		{
+			name: "Normalized reference",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.ContainedResource{
+						OneofResource: &r3pb.ContainedResource_Patient{
+							Patient: &r3pb.Patient{
+								ManagingOrganization: &d3pb.Reference{
+									Reference: &d3pb.Reference_PatientId{
+										PatientId: &d3pb.ReferenceId{
+											Value: "1",
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			want: []byte(`{"managingOrganization":{"reference":"Patient/1"},"resourceType":"Patient"}`),
+		},
+		{
+			name: "Primitive no extension",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.ContainedResource{
+						OneofResource: &r3pb.ContainedResource_Patient{
+							Patient: &r3pb.Patient{
+								Active: &d3pb.Boolean{
+									Extension: []*d3pb.Extension{
+										{
+											Url: &d3pb.Uri{Value: jsonpbhelper.PrimitiveHasNoValueURL},
+										},
+										{
+											Url: &d3pb.Uri{Value: "foo"},
+											Value: &d3pb.Extension_ValueX{
+												Choice: &d3pb.Extension_ValueX_StringValue{
+													StringValue: &d3pb.String{
+														Value: "bar",
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			want: []byte(`{"_active":{"extension":[{"url":"foo","valueString":"bar"}]},"resourceType":"Patient"}`),
+		},
 		{
 			name:   "PrimitiveExtension",
 			pretty: true,
@@ -379,7 +437,7 @@ func TestMarshalContainedResource(t *testing.T) {
 					if err != nil {
 						t.Fatalf("failed to create marshaler; %v", err)
 					}
-					got, err := marshaller.Marshal(i.r)
+					got, err := marshalAndValidate(marshaller, i.r)
 					if err != nil {
 						t.Fatalf("marshal failed on %v: %v", test.name, err)
 					}
@@ -390,6 +448,30 @@ func TestMarshalContainedResource(t *testing.T) {
 			}
 		})
 	}
+}
+
+func marshalAndValidate(m *Marshaller, pb proto.Message) ([]byte, error) {
+	before := proto.Clone(pb)
+	got, err := m.Marshal(pb)
+	if err != nil {
+		return nil, err
+	}
+	if diff := cmp.Diff(before, pb, protocmp.Transform()); diff != "" {
+		return nil, fmt.Errorf("input resource was changed by marshaller: %s", diff)
+	}
+	return got, nil
+}
+
+func marshalResourceAndValidate(m *Marshaller, pb proto.Message) ([]byte, error) {
+	before := proto.Clone(pb)
+	got, err := m.MarshalResource(pb)
+	if err != nil {
+		return got, err
+	}
+	if diff := cmp.Diff(before, pb, protocmp.Transform()); diff != "" {
+		return nil, fmt.Errorf("input resource was changed by marshaller: %s", diff)
+	}
+	return got, nil
 }
 
 func TestMarshalResource(t *testing.T) {
@@ -519,11 +601,11 @@ func TestMarshalResource(t *testing.T) {
 					if err != nil {
 						t.Fatalf("failed to create marshaler; %v", err)
 					}
-					got, err := marshaller.MarshalResource(i.r)
+					got, err := marshalResourceAndValidate(marshaller, i.r)
 					if err != nil {
 						t.Fatalf("MarshalResource() got err %v; want nil err", err)
 					}
-					if bytes.Compare(got, tt.want) != 0 {
+					if diff := cmp.Diff(got, tt.want); diff != "" {
 						t.Errorf("MarshalResource() got:\n%s\nwant:\n%s", got, tt.want)
 					}
 				})
@@ -536,7 +618,7 @@ func TestMarshalMessage(t *testing.T) {
 	tests := []struct {
 		name   string
 		inputs []mvr
-		want   jsonpbhelper.IsJSON
+		want   map[string]interface{}
 	}{
 		{
 			name: "ResearchStudy pretty",
@@ -561,12 +643,13 @@ func TestMarshalMessage(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"id":     jsonpbhelper.JSONString("example"),
-				"status": jsonpbhelper.JSONString("draft"),
-				"text": jsonpbhelper.JSONObject{
-					"div":    jsonpbhelper.JSONString("<div xmlns=\"http://www.w3.org/1999/xhtml\">[Put rendering here]</div>"),
-					"status": jsonpbhelper.JSONString("generated"),
+			want: map[string]interface{}{
+				"resourceType": "ResearchStudy",
+				"id":           "example",
+				"status":       "draft",
+				"text": map[string]interface{}{
+					"div":    "<div xmlns=\"http://www.w3.org/1999/xhtml\">[Put rendering here]</div>",
+					"status": "generated",
 				},
 			},
 		},
@@ -624,18 +707,19 @@ func TestMarshalMessage(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"entry": jsonpbhelper.JSONArray{
-					jsonpbhelper.JSONObject{
-						"resource": jsonpbhelper.JSONObject{
-							"id":           jsonpbhelper.JSONString("DomainResource-text"),
-							"resourceType": jsonpbhelper.JSONString("SearchParameter"),
+			want: map[string]interface{}{
+				"resourceType": "Bundle",
+				"entry": []interface{}{
+					map[string]interface{}{
+						"resource": map[string]interface{}{
+							"id":           "DomainResource-text",
+							"resourceType": "SearchParameter",
 						},
 					},
-					jsonpbhelper.JSONObject{
-						"resource": jsonpbhelper.JSONObject{
-							"id":           jsonpbhelper.JSONString("Resource-content"),
-							"resourceType": jsonpbhelper.JSONString("SearchParameter"),
+					map[string]interface{}{
+						"resource": map[string]interface{}{
+							"id":           "Resource-content",
+							"resourceType": "SearchParameter",
 						},
 					},
 				},
@@ -697,17 +781,18 @@ func TestMarshalMessage(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"_birthDate": jsonpbhelper.JSONObject{
-					"extension": jsonpbhelper.JSONArray{
-						jsonpbhelper.JSONObject{
-							"url":           jsonpbhelper.JSONString("http://hl7.org/fhir/StructureDefinition/patient-birthTime"),
-							"valueDateTime": jsonpbhelper.JSONString("2016-05-18T10:28:45Z"),
+			want: map[string]interface{}{
+				"resourceType": "Patient",
+				"_birthDate": map[string]interface{}{
+					"extension": []interface{}{
+						map[string]interface{}{
+							"url":           "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+							"valueDateTime": "2016-05-18T10:28:45Z",
 						},
 					},
-					"id": jsonpbhelper.JSONString("a3"),
+					"id": "a3",
 				},
-				"birthDate": jsonpbhelper.JSONString("2016-05-18"),
+				"birthDate": "2016-05-18",
 			},
 		},
 		{
@@ -760,16 +845,17 @@ func TestMarshalMessage(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"_birthDate": jsonpbhelper.JSONObject{
-					"extension": jsonpbhelper.JSONArray{
-						jsonpbhelper.JSONObject{
-							"url":           jsonpbhelper.JSONString("http://hl7.org/fhir/StructureDefinition/patient-birthTime"),
-							"valueDateTime": jsonpbhelper.JSONString("2016-05-18T10:28:45Z"),
+			want: map[string]interface{}{
+				"resourceType": "Patient",
+				"_birthDate": map[string]interface{}{
+					"extension": []interface{}{
+						map[string]interface{}{
+							"url":           "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+							"valueDateTime": "2016-05-18T10:28:45Z",
 						},
 					},
 				},
-				"birthDate": jsonpbhelper.JSONString("2016-05-18"),
+				"birthDate": "2016-05-18",
 			},
 		},
 		{
@@ -794,7 +880,7 @@ func TestMarshalMessage(t *testing.T) {
 								},
 							}, {
 								Url: &d3pb.Uri{
-									Value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
+									Value: jsonpbhelper.PrimitiveHasNoValueURL,
 								},
 								Value: &d3pb.Extension_ValueX{
 									Choice: &d3pb.Extension_ValueX_Boolean{
@@ -826,7 +912,7 @@ func TestMarshalMessage(t *testing.T) {
 								},
 							}, {
 								Url: &d4pb.Uri{
-									Value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
+									Value: jsonpbhelper.PrimitiveHasNoValueURL,
 								},
 								Value: &d4pb.Extension_ValueX{
 									Choice: &d4pb.Extension_ValueX_Boolean{
@@ -840,15 +926,92 @@ func TestMarshalMessage(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"_birthDate": jsonpbhelper.JSONObject{
-					"extension": jsonpbhelper.JSONArray{
-						jsonpbhelper.JSONObject{
-							"url":           jsonpbhelper.JSONString("http://hl7.org/fhir/StructureDefinition/patient-birthTime"),
-							"valueDateTime": jsonpbhelper.JSONString("2016-05-18T10:28:45Z"),
+			want: map[string]interface{}{
+				"resourceType": "Patient",
+				"_birthDate": map[string]interface{}{
+					"extension": []interface{}{
+						map[string]interface{}{
+							"url":           "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+							"valueDateTime": "2016-05-18T10:28:45Z",
 						},
 					},
 				},
+			},
+		},
+		{
+			name: "Binary with stride",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Binary{
+						Content: &d3pb.Base64Binary{
+							Value: []byte{1, 2, 3, 4},
+							Extension: []*d3pb.Extension{{
+								Url: &d3pb.Uri{Value: jsonpbhelper.Base64BinarySeparatorStrideURL},
+								Extension: []*d3pb.Extension{
+									{
+										Url: &d3pb.Uri{Value: "separator"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_StringValue{
+												StringValue: &d3pb.String{Value: "  "},
+											},
+										},
+									},
+									{
+										Url: &d3pb.Uri{Value: "stride"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_PositiveInt{
+												PositiveInt: &d3pb.PositiveInt{Value: 2},
+											},
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+			},
+			want: map[string]interface{}{
+				"resourceType": "Binary",
+				"content":      "AQ  ID  BA  ==",
+			},
+		},
+		{
+			name: "Binary with stride - R4",
+			inputs: []mvr{
+				{
+					ver: fhirversion.R4,
+					r: &r4binarypb.Binary{
+						Data: &d4pb.Base64Binary{
+							Value: []byte{1, 2, 3, 4},
+							Extension: []*d4pb.Extension{{
+								Url: &d4pb.Uri{Value: jsonpbhelper.Base64BinarySeparatorStrideURL},
+								Extension: []*d4pb.Extension{
+									{
+										Url: &d4pb.Uri{Value: "separator"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_StringValue{
+												StringValue: &d4pb.String{Value: "  "},
+											},
+										},
+									},
+									{
+										Url: &d4pb.Uri{Value: "stride"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_PositiveInt{
+												PositiveInt: &d4pb.PositiveInt{Value: 2},
+											},
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+			},
+			want: map[string]interface{}{
+				"resourceType": "Binary",
+				"data":         "AQ  ID  BA  ==",
 			},
 		},
 	}
@@ -860,12 +1023,16 @@ func TestMarshalMessage(t *testing.T) {
 					if err != nil {
 						t.Fatalf("failed to create marshaler; %v", err)
 					}
-					got, err := marshaller.marshalMessageToMap(i.r.ProtoReflect())
+					gotJSON, err := marshalResourceAndValidate(marshaller, i.r)
 					if err != nil {
 						t.Fatalf("marshal failed on %v: %v", test.name, err)
 					}
-					if !cmp.Equal(got, test.want) {
-						t.Errorf("marshal %v: got %v, want %v", test.name, got, test.want)
+					got := make(map[string]interface{})
+					if err := json.Unmarshal(gotJSON, &got); err != nil {
+						t.Fatalf("json.Unmarshal(%q) failed: %v", gotJSON, err)
+					}
+					if diff := cmp.Diff(got, test.want); diff != "" {
+						t.Errorf("marshal %v: diff: %s", test.name, diff)
 					}
 				})
 			}
@@ -878,7 +1045,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 		name   string
 		inputs []mvr
 		depth  int
-		want   jsonpbhelper.IsJSON
+		want   map[string]interface{}
 	}{
 		{
 			name: "ID Fields Omitted",
@@ -910,12 +1077,12 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 				},
 			},
 			depth: 10,
-			want: jsonpbhelper.JSONObject{
-				"id":     jsonpbhelper.JSONString("keep resource id"),
-				"status": jsonpbhelper.JSONString("draft"),
-				"text": jsonpbhelper.JSONObject{
-					"div":    jsonpbhelper.JSONString("<div xmlns=\"http://www.w3.org/1999/xhtml\">[Put rendering here]</div>"),
-					"status": jsonpbhelper.JSONString("generated"),
+			want: map[string]interface{}{
+				"id":     "keep resource id",
+				"status": "draft",
+				"text": map[string]interface{}{
+					"div":    "<div xmlns=\"http://www.w3.org/1999/xhtml\">[Put rendering here]</div>",
+					"status": "generated",
 				},
 			},
 		},
@@ -948,9 +1115,9 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 				},
 			},
 			depth: 10,
-			want: jsonpbhelper.JSONObject{
-				"managingOrganization": jsonpbhelper.JSONObject{
-					"organizationId": jsonpbhelper.JSONString("1"),
+			want: map[string]interface{}{
+				"managingOrganization": map[string]interface{}{
+					"organizationId": "1",
 				},
 			},
 		},
@@ -975,9 +1142,9 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 				},
 			},
 			depth: 10,
-			want: jsonpbhelper.JSONObject{
-				"deceased": jsonpbhelper.JSONObject{
-					"boolean": jsonpbhelper.JSONRawValue(`false`),
+			want: map[string]interface{}{
+				"deceased": map[string]interface{}{
+					"boolean": false,
 				},
 			},
 		},
@@ -1056,10 +1223,10 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 				},
 			},
 			depth: 10,
-			want: jsonpbhelper.JSONObject{
-				"extension": jsonpbhelper.JSONArray{
-					jsonpbhelper.JSONString("http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"),
-					jsonpbhelper.JSONString("http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"),
+			want: map[string]interface{}{
+				"extension": []interface{}{
+					"http://hl7.org/fhir/us/core/StructureDefinition/us-core-race",
+					"http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName",
 				},
 			},
 		},
@@ -1120,8 +1287,8 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 				},
 			},
 			depth: 10,
-			want: jsonpbhelper.JSONObject{
-				"birthDate": jsonpbhelper.JSONString("2016-05-18"),
+			want: map[string]interface{}{
+				"birthDate": "2016-05-18",
 			},
 		},
 		{
@@ -1146,7 +1313,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 								},
 							}, {
 								Url: &d3pb.Uri{
-									Value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
+									Value: jsonpbhelper.PrimitiveHasNoValueURL,
 								},
 								Value: &d3pb.Extension_ValueX{
 									Choice: &d3pb.Extension_ValueX_Boolean{
@@ -1178,7 +1345,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 								},
 							}, {
 								Url: &d4pb.Uri{
-									Value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
+									Value: jsonpbhelper.PrimitiveHasNoValueURL,
 								},
 								Value: &d4pb.Extension_ValueX{
 									Choice: &d4pb.Extension_ValueX_Boolean{
@@ -1193,7 +1360,7 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 				},
 			},
 			depth: 10,
-			want:  jsonpbhelper.JSONObject{},
+			want:  map[string]interface{}{},
 		},
 		{
 			name: "max depth less than actual depth",
@@ -1252,15 +1419,15 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 				},
 			},
 			depth: 2,
-			want: jsonpbhelper.JSONObject{
-				"concept": jsonpbhelper.JSONArray{
-					jsonpbhelper.JSONObject{
-						"concept": jsonpbhelper.JSONArray{
-							jsonpbhelper.JSONObject{
-								"code": jsonpbhelper.JSONString("code2"),
+			want: map[string]interface{}{
+				"concept": []interface{}{
+					map[string]interface{}{
+						"concept": []interface{}{
+							map[string]interface{}{
+								"code": "code2",
 							},
 						},
-						"code": jsonpbhelper.JSONString("code1"),
+						"code": "code1",
 					},
 				},
 			},
@@ -1313,15 +1480,15 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"concept": jsonpbhelper.JSONArray{
-					jsonpbhelper.JSONObject{
-						"concept": jsonpbhelper.JSONArray{
-							jsonpbhelper.JSONObject{
-								"code": jsonpbhelper.JSONString("code2"),
+			want: map[string]interface{}{
+				"concept": []interface{}{
+					map[string]interface{}{
+						"concept": []interface{}{
+							map[string]interface{}{
+								"code": "code2",
 							},
 						},
-						"code": jsonpbhelper.JSONString("code1"),
+						"code": "code1",
 					},
 				},
 			},
@@ -1335,11 +1502,15 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 					if err != nil {
 						t.Fatalf("failed to create marshaller %v: %v", test.name, err)
 					}
-					got, err := marshaller.marshalMessageToMap(i.r.ProtoReflect())
+					gotJSON, err := marshalResourceAndValidate(marshaller, i.r)
 					if err != nil {
 						t.Fatalf("marshal failed on %v: %v", test.name, err)
 					}
-					if !cmp.Equal(got, test.want) {
+					got := make(map[string]interface{})
+					if err := json.Unmarshal(gotJSON, &got); err != nil {
+						t.Fatalf("json.Unmarshal(%q) failed: %v", gotJSON, err)
+					}
+					if diff := cmp.Diff(got, test.want); diff != "" {
 						t.Errorf("marshal %v: got %v, want %v", test.name, got, test.want)
 					}
 				})
@@ -1353,7 +1524,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 		name   string
 		inputs []mvr
 		depth  int
-		want   jsonpbhelper.IsJSON
+		want   map[string]interface{}
 	}{
 		{
 			name: "ID Fields Omitted",
@@ -1385,12 +1556,12 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 				},
 			},
 			depth: 10,
-			want: jsonpbhelper.JSONObject{
-				"id":     jsonpbhelper.JSONString("keep resource id"),
-				"status": jsonpbhelper.JSONString("draft"),
-				"text": jsonpbhelper.JSONObject{
-					"div":    jsonpbhelper.JSONString("<div xmlns=\"http://www.w3.org/1999/xhtml\">[Put rendering here]</div>"),
-					"status": jsonpbhelper.JSONString("generated"),
+			want: map[string]interface{}{
+				"id":     "keep resource id",
+				"status": "draft",
+				"text": map[string]interface{}{
+					"div":    "<div xmlns=\"http://www.w3.org/1999/xhtml\">[Put rendering here]</div>",
+					"status": "generated",
 				},
 			},
 		},
@@ -1423,9 +1594,9 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 				},
 			},
 			depth: 10,
-			want: jsonpbhelper.JSONObject{
-				"managingOrganization": jsonpbhelper.JSONObject{
-					"organizationId": jsonpbhelper.JSONString("1"),
+			want: map[string]interface{}{
+				"managingOrganization": map[string]interface{}{
+					"organizationId": "1",
 				},
 			},
 		},
@@ -1450,9 +1621,9 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 				},
 			},
 			depth: 10,
-			want: jsonpbhelper.JSONObject{
-				"deceased": jsonpbhelper.JSONObject{
-					"boolean": jsonpbhelper.JSONRawValue(`false`),
+			want: map[string]interface{}{
+				"deceased": map[string]interface{}{
+					"boolean": false,
 				},
 			},
 		},
@@ -1531,25 +1702,25 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 				},
 			},
 			depth: 10,
-			want: jsonpbhelper.JSONObject{
-				"us_core_race": jsonpbhelper.JSONObject{
-					"ombCategory": jsonpbhelper.JSONObject{
-						"value": jsonpbhelper.JSONObject{
-							"coding": jsonpbhelper.JSONObject{
-								"system": jsonpbhelper.JSONString("urn:oid:2.16.840.1.113883.6.238"),
-								"code":   jsonpbhelper.JSONString("2106-3"),
+			want: map[string]interface{}{
+				"us_core_race": map[string]interface{}{
+					"ombCategory": map[string]interface{}{
+						"value": map[string]interface{}{
+							"coding": map[string]interface{}{
+								"system": "urn:oid:2.16.840.1.113883.6.238",
+								"code":   "2106-3",
 							},
 						},
 					},
-					"text": jsonpbhelper.JSONObject{
-						"value": jsonpbhelper.JSONObject{
-							"string": jsonpbhelper.JSONString("White"),
+					"text": map[string]interface{}{
+						"value": map[string]interface{}{
+							"string": "White",
 						},
 					},
 				},
-				"patient_mothersMaidenName": jsonpbhelper.JSONObject{
-					"value": jsonpbhelper.JSONObject{
-						"string": jsonpbhelper.JSONString("Rosie"),
+				"patient_mothersMaidenName": map[string]interface{}{
+					"value": map[string]interface{}{
+						"string": "Rosie",
 					},
 				},
 			},
@@ -1621,13 +1792,13 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 				},
 			},
 			depth: 10,
-			want: jsonpbhelper.JSONObject{
-				"us_core_race": jsonpbhelper.JSONObject{
-					"ombCategory": jsonpbhelper.JSONObject{
-						"value": jsonpbhelper.JSONObject{
-							"coding": jsonpbhelper.JSONObject{
-								"system": jsonpbhelper.JSONString("urn:oid:2.16.840.1.113883.6.238"),
-								"code":   jsonpbhelper.JSONString("2106-3"),
+			want: map[string]interface{}{
+				"us_core_race": map[string]interface{}{
+					"ombCategory": map[string]interface{}{
+						"value": map[string]interface{}{
+							"coding": map[string]interface{}{
+								"system": "urn:oid:2.16.840.1.113883.6.238",
+								"code":   "2106-3",
 							},
 						},
 					},
@@ -1691,15 +1862,15 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 				},
 			},
 			depth: 10,
-			want: jsonpbhelper.JSONObject{
-				"_birthDate": jsonpbhelper.JSONObject{
-					"patient_birthTime": jsonpbhelper.JSONObject{
-						"value": jsonpbhelper.JSONObject{
-							"dateTime": jsonpbhelper.JSONString("2016-05-18T10:28:45Z"),
+			want: map[string]interface{}{
+				"_birthDate": map[string]interface{}{
+					"patient_birthTime": map[string]interface{}{
+						"value": map[string]interface{}{
+							"dateTime": "2016-05-18T10:28:45Z",
 						},
 					},
 				},
-				"birthDate": jsonpbhelper.JSONString("2016-05-18"),
+				"birthDate": "2016-05-18",
 			},
 		},
 		{
@@ -1724,7 +1895,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 								},
 							}, {
 								Url: &d3pb.Uri{
-									Value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
+									Value: jsonpbhelper.PrimitiveHasNoValueURL,
 								},
 								Value: &d3pb.Extension_ValueX{
 									Choice: &d3pb.Extension_ValueX_Boolean{
@@ -1756,7 +1927,7 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 								},
 							}, {
 								Url: &d4pb.Uri{
-									Value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
+									Value: jsonpbhelper.PrimitiveHasNoValueURL,
 								},
 								Value: &d4pb.Extension_ValueX{
 									Choice: &d4pb.Extension_ValueX_Boolean{
@@ -1771,11 +1942,11 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 				},
 			},
 			depth: 10,
-			want: jsonpbhelper.JSONObject{
-				"_birthDate": jsonpbhelper.JSONObject{
-					"patient_birthTime": jsonpbhelper.JSONObject{
-						"value": jsonpbhelper.JSONObject{
-							"dateTime": jsonpbhelper.JSONString("2016-05-18T10:28:45Z"),
+			want: map[string]interface{}{
+				"_birthDate": map[string]interface{}{
+					"patient_birthTime": map[string]interface{}{
+						"value": map[string]interface{}{
+							"dateTime": "2016-05-18T10:28:45Z",
 						},
 					},
 				},
@@ -1838,15 +2009,15 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 				},
 			},
 			depth: 2,
-			want: jsonpbhelper.JSONObject{
-				"concept": jsonpbhelper.JSONArray{
-					jsonpbhelper.JSONObject{
-						"concept": jsonpbhelper.JSONArray{
-							jsonpbhelper.JSONObject{
-								"code": jsonpbhelper.JSONString("code2"),
+			want: map[string]interface{}{
+				"concept": []interface{}{
+					map[string]interface{}{
+						"concept": []interface{}{
+							map[string]interface{}{
+								"code": "code2",
 							},
 						},
-						"code": jsonpbhelper.JSONString("code1"),
+						"code": "code1",
 					},
 				},
 			},
@@ -1899,15 +2070,15 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"concept": jsonpbhelper.JSONArray{
-					jsonpbhelper.JSONObject{
-						"concept": jsonpbhelper.JSONArray{
-							jsonpbhelper.JSONObject{
-								"code": jsonpbhelper.JSONString("code2"),
+			want: map[string]interface{}{
+				"concept": []interface{}{
+					map[string]interface{}{
+						"concept": []interface{}{
+							map[string]interface{}{
+								"code": "code2",
 							},
 						},
-						"code": jsonpbhelper.JSONString("code1"),
+						"code": "code1",
 					},
 				},
 			},
@@ -1944,11 +2115,11 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"id": jsonpbhelper.JSONString("id1"),
-				"hl7_org_fhir_StructureDefinition_id": jsonpbhelper.JSONObject{
-					"value": jsonpbhelper.JSONObject{
-						"string": jsonpbhelper.JSONString("id2"),
+			want: map[string]interface{}{
+				"id": "id1",
+				"hl7_org_fhir_StructureDefinition_id": map[string]interface{}{
+					"value": map[string]interface{}{
+						"string": "id2",
 					},
 				},
 			},
@@ -1995,15 +2166,15 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"hl7_org_fhir_StructureDefinition1_id": jsonpbhelper.JSONObject{
-					"value": jsonpbhelper.JSONObject{
-						"string": jsonpbhelper.JSONString("id1"),
+			want: map[string]interface{}{
+				"hl7_org_fhir_StructureDefinition1_id": map[string]interface{}{
+					"value": map[string]interface{}{
+						"string": "id1",
 					},
 				},
-				"hl7_org_fhir_StructureDefinition2_id": jsonpbhelper.JSONObject{
-					"value": jsonpbhelper.JSONObject{
-						"string": jsonpbhelper.JSONString("id2"),
+				"hl7_org_fhir_StructureDefinition2_id": map[string]interface{}{
+					"value": map[string]interface{}{
+						"string": "id2",
 					},
 				},
 			},
@@ -2050,15 +2221,15 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"hl7_org_fhir_StructureDefinition1_id": jsonpbhelper.JSONObject{
-					"value": jsonpbhelper.JSONObject{
-						"string": jsonpbhelper.JSONString("id1"),
+			want: map[string]interface{}{
+				"hl7_org_fhir_StructureDefinition1_id": map[string]interface{}{
+					"value": map[string]interface{}{
+						"string": "id1",
 					},
 				},
-				"hl7_org_fhir_StructureDefinition2_ID": jsonpbhelper.JSONObject{
-					"value": jsonpbhelper.JSONObject{
-						"string": jsonpbhelper.JSONString("id2"),
+				"hl7_org_fhir_StructureDefinition2_ID": map[string]interface{}{
+					"value": map[string]interface{}{
+						"string": "id2",
 					},
 				},
 			},
@@ -2072,11 +2243,15 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					if err != nil {
 						t.Fatalf("failed to create marshaller %v: %v", test.name, err)
 					}
-					got, err := marshaller.marshalMessageToMap(i.r.ProtoReflect())
+					gotJSON, err := marshalResourceAndValidate(marshaller, i.r)
 					if err != nil {
 						t.Fatalf("marshal failed on %v: %v", test.name, err)
 					}
-					if !cmp.Equal(got, test.want) {
+					got := make(map[string]interface{})
+					if err := json.Unmarshal(gotJSON, &got); err != nil {
+						t.Fatalf("json.Unmarshal(%q) failed: %v", gotJSON, err)
+					}
+					if diff := cmp.Diff(got, test.want); diff != "" {
 						t.Errorf("marshal %v: got %v, want %v", test.name, got, test.want)
 					}
 				})
@@ -2220,7 +2395,7 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 	tests := []struct {
 		name   string
 		inputs []mvr
-		want   jsonpbhelper.IsJSON
+		want   map[string]interface{}
 	}{
 		{
 			name: "Repetitive extension",
@@ -2318,35 +2493,35 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"us_core_race": jsonpbhelper.JSONArray{
-					jsonpbhelper.JSONObject{
-						"ombCategory": jsonpbhelper.JSONArray{
-							jsonpbhelper.JSONObject{
-								"value": jsonpbhelper.JSONObject{
-									"coding": jsonpbhelper.JSONObject{
-										"system": jsonpbhelper.JSONString("urn:oid:2.16.840.1.113883.6.238"),
-										"code":   jsonpbhelper.JSONString("2076-8"),
+			want: map[string]interface{}{
+				"us_core_race": []interface{}{
+					map[string]interface{}{
+						"ombCategory": []interface{}{
+							map[string]interface{}{
+								"value": map[string]interface{}{
+									"coding": map[string]interface{}{
+										"system": "urn:oid:2.16.840.1.113883.6.238",
+										"code":   "2076-8",
 									},
 								},
 							},
-							jsonpbhelper.JSONObject{
-								"value": jsonpbhelper.JSONObject{
-									"coding": jsonpbhelper.JSONObject{
-										"system": jsonpbhelper.JSONString("urn:oid:2.16.840.1.113883.6.238"),
-										"code":   jsonpbhelper.JSONString("2028-9"),
+							map[string]interface{}{
+								"value": map[string]interface{}{
+									"coding": map[string]interface{}{
+										"system": "urn:oid:2.16.840.1.113883.6.238",
+										"code":   "2028-9",
 									},
 								},
 							},
 						},
-						"text": jsonpbhelper.JSONArray{jsonpbhelper.JSONObject{
-							"value": jsonpbhelper.JSONObject{
-								"string": jsonpbhelper.JSONString("Native Hawaiian or Other Pacific Islander"),
+						"text": []interface{}{map[string]interface{}{
+							"value": map[string]interface{}{
+								"string": "Native Hawaiian or Other Pacific Islander",
 							},
 						},
-							jsonpbhelper.JSONObject{
-								"value": jsonpbhelper.JSONObject{
-									"string": jsonpbhelper.JSONString("Asian"),
+							map[string]interface{}{
+								"value": map[string]interface{}{
+									"string": "Asian",
 								},
 							},
 						},
@@ -2488,40 +2663,40 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"test": jsonpbhelper.JSONArray{
-					jsonpbhelper.JSONObject{
-						"value": jsonpbhelper.JSONObject{
-							"string": jsonpbhelper.JSONString("a"),
+			want: map[string]interface{}{
+				"test": []interface{}{
+					map[string]interface{}{
+						"value": map[string]interface{}{
+							"string": "a",
 						},
 					},
-					jsonpbhelper.JSONObject{
-						"value": jsonpbhelper.JSONObject{
-							"string": jsonpbhelper.JSONString("b"),
+					map[string]interface{}{
+						"value": map[string]interface{}{
+							"string": "b",
 						},
 					},
-					jsonpbhelper.JSONObject{
-						"test": jsonpbhelper.JSONArray{
-							jsonpbhelper.JSONObject{
-								"value": jsonpbhelper.JSONObject{
-									"string": jsonpbhelper.JSONString("c"),
+					map[string]interface{}{
+						"test": []interface{}{
+							map[string]interface{}{
+								"value": map[string]interface{}{
+									"string": "c",
 								},
 							},
-							jsonpbhelper.JSONObject{
-								"value": jsonpbhelper.JSONObject{
-									"string": jsonpbhelper.JSONString("d"),
+							map[string]interface{}{
+								"value": map[string]interface{}{
+									"string": "d",
 								},
 							},
-							jsonpbhelper.JSONObject{
-								"test": jsonpbhelper.JSONArray{
-									jsonpbhelper.JSONObject{
-										"value": jsonpbhelper.JSONObject{
-											"string": jsonpbhelper.JSONString("e"),
+							map[string]interface{}{
+								"test": []interface{}{
+									map[string]interface{}{
+										"value": map[string]interface{}{
+											"string": "e",
 										},
 									},
-									jsonpbhelper.JSONObject{
-										"value": jsonpbhelper.JSONObject{
-											"string": jsonpbhelper.JSONString("f"),
+									map[string]interface{}{
+										"value": map[string]interface{}{
+											"string": "f",
 										},
 									},
 								},
@@ -2665,50 +2840,50 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"QueryData": jsonpbhelper.JSONArray{
-					jsonpbhelper.JSONObject{
-						"QueryMnemonic": jsonpbhelper.JSONArray{
-							jsonpbhelper.JSONObject{
-								"value": jsonpbhelper.JSONObject{
-									"string": jsonpbhelper.JSONString("a"),
+			want: map[string]interface{}{
+				"QueryData": []interface{}{
+					map[string]interface{}{
+						"QueryMnemonic": []interface{}{
+							map[string]interface{}{
+								"value": map[string]interface{}{
+									"string": "a",
 								},
 							},
 						},
-						"QueryQuestion": jsonpbhelper.JSONArray{
-							jsonpbhelper.JSONObject{
-								"value": jsonpbhelper.JSONObject{
-									"string": jsonpbhelper.JSONString("b"),
+						"QueryQuestion": []interface{}{
+							map[string]interface{}{
+								"value": map[string]interface{}{
+									"string": "b",
 								},
 							},
 						},
-						"QueryResponse": jsonpbhelper.JSONArray{
-							jsonpbhelper.JSONObject{
-								"value": jsonpbhelper.JSONObject{
-									"string": jsonpbhelper.JSONString("c"),
+						"QueryResponse": []interface{}{
+							map[string]interface{}{
+								"value": map[string]interface{}{
+									"string": "c",
 								},
 							},
 						},
 					},
-					jsonpbhelper.JSONObject{
-						"QueryMnemonic": jsonpbhelper.JSONArray{
-							jsonpbhelper.JSONObject{
-								"value": jsonpbhelper.JSONObject{
-									"string": jsonpbhelper.JSONString("d"),
+					map[string]interface{}{
+						"QueryMnemonic": []interface{}{
+							map[string]interface{}{
+								"value": map[string]interface{}{
+									"string": "d",
 								},
 							},
 						},
-						"QueryQuestion": jsonpbhelper.JSONArray{
-							jsonpbhelper.JSONObject{
-								"value": jsonpbhelper.JSONObject{
-									"string": jsonpbhelper.JSONString("e"),
+						"QueryQuestion": []interface{}{
+							map[string]interface{}{
+								"value": map[string]interface{}{
+									"string": "e",
 								},
 							},
 						},
-						"QueryResponse": jsonpbhelper.JSONArray{
-							jsonpbhelper.JSONObject{
-								"value": jsonpbhelper.JSONObject{
-									"string": jsonpbhelper.JSONString("f"),
+						"QueryResponse": []interface{}{
+							map[string]interface{}{
+								"value": map[string]interface{}{
+									"string": "f",
 								},
 							},
 						},
@@ -2748,12 +2923,12 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"id": jsonpbhelper.JSONString("id1"),
-				"hl7_org_fhir_StructureDefinition_id": jsonpbhelper.JSONArray{
-					jsonpbhelper.JSONObject{
-						"value": jsonpbhelper.JSONObject{
-							"string": jsonpbhelper.JSONString("id2"),
+			want: map[string]interface{}{
+				"id": "id1",
+				"hl7_org_fhir_StructureDefinition_id": []interface{}{
+					map[string]interface{}{
+						"value": map[string]interface{}{
+							"string": "id2",
 						},
 					},
 				},
@@ -2801,15 +2976,15 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"hl7_org_fhir_StructureDefinition1_id": jsonpbhelper.JSONArray{jsonpbhelper.JSONObject{
-					"value": jsonpbhelper.JSONObject{
-						"string": jsonpbhelper.JSONString("id1"),
+			want: map[string]interface{}{
+				"hl7_org_fhir_StructureDefinition1_id": []interface{}{map[string]interface{}{
+					"value": map[string]interface{}{
+						"string": "id1",
 					},
 				}},
-				"hl7_org_fhir_StructureDefinition2_id": jsonpbhelper.JSONArray{jsonpbhelper.JSONObject{
-					"value": jsonpbhelper.JSONObject{
-						"string": jsonpbhelper.JSONString("id2"),
+				"hl7_org_fhir_StructureDefinition2_id": []interface{}{map[string]interface{}{
+					"value": map[string]interface{}{
+						"string": "id2",
 					},
 				}},
 			},
@@ -2856,15 +3031,15 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"hl7_org_fhir_StructureDefinition1_id": jsonpbhelper.JSONArray{jsonpbhelper.JSONObject{
-					"value": jsonpbhelper.JSONObject{
-						"string": jsonpbhelper.JSONString("id1"),
+			want: map[string]interface{}{
+				"hl7_org_fhir_StructureDefinition1_id": []interface{}{map[string]interface{}{
+					"value": map[string]interface{}{
+						"string": "id1",
 					},
 				}},
-				"hl7_org_fhir_StructureDefinition2_ID": jsonpbhelper.JSONArray{jsonpbhelper.JSONObject{
-					"value": jsonpbhelper.JSONObject{
-						"string": jsonpbhelper.JSONString("id2"),
+				"hl7_org_fhir_StructureDefinition2_ID": []interface{}{map[string]interface{}{
+					"value": map[string]interface{}{
+						"string": "id2",
 					},
 				}},
 			},
@@ -2935,19 +3110,19 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"us_core_race": jsonpbhelper.JSONArray{
-					jsonpbhelper.JSONObject{
-						"ombCategory": jsonpbhelper.JSONArray{
-							jsonpbhelper.JSONObject{
-								"text": jsonpbhelper.JSONArray{jsonpbhelper.JSONObject{
-									"value": jsonpbhelper.JSONObject{"string": jsonpbhelper.JSONString("White")},
+			want: map[string]interface{}{
+				"us_core_race": []interface{}{
+					map[string]interface{}{
+						"ombCategory": []interface{}{
+							map[string]interface{}{
+								"text": []interface{}{map[string]interface{}{
+									"value": map[string]interface{}{"string": "White"},
 								},
 								},
-								"value": jsonpbhelper.JSONObject{
-									"coding": jsonpbhelper.JSONObject{
-										"system": jsonpbhelper.JSONString("urn:oid:2.16.840.1.113883.6.238"),
-										"code":   jsonpbhelper.JSONString("2106-3"),
+								"value": map[string]interface{}{
+									"coding": map[string]interface{}{
+										"system": "urn:oid:2.16.840.1.113883.6.238",
+										"code":   "2106-3",
 									},
 								},
 							},
@@ -3002,13 +3177,13 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"us_core_race": jsonpbhelper.JSONArray{
-					jsonpbhelper.JSONObject{
-						"value": jsonpbhelper.JSONObject{"string": jsonpbhelper.JSONString("Asian")},
-						"hl7_org_fhir_us_core_StructureDefinition_us_core_race_value": jsonpbhelper.JSONArray{
-							jsonpbhelper.JSONObject{
-								"value": jsonpbhelper.JSONObject{"string": jsonpbhelper.JSONString("Asian")},
+			want: map[string]interface{}{
+				"us_core_race": []interface{}{
+					map[string]interface{}{
+						"value": map[string]interface{}{"string": "Asian"},
+						"hl7_org_fhir_us_core_StructureDefinition_us_core_race_value": []interface{}{
+							map[string]interface{}{
+								"value": map[string]interface{}{"string": "Asian"},
 							},
 						},
 					},
@@ -3071,15 +3246,95 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"_birthDate": jsonpbhelper.JSONObject{
-					"patient_birthTime": jsonpbhelper.JSONArray{jsonpbhelper.JSONObject{
-						"value": jsonpbhelper.JSONObject{
-							"dateTime": jsonpbhelper.JSONString("2016-05-18T10:28:45Z"),
+			want: map[string]interface{}{
+				"_birthDate": map[string]interface{}{
+					"patient_birthTime": []interface{}{map[string]interface{}{
+						"value": map[string]interface{}{
+							"dateTime": "2016-05-18T10:28:45Z",
 						},
 					}},
 				},
-				"birthDate": jsonpbhelper.JSONString("2016-05-18"),
+				"birthDate": "2016-05-18",
+			},
+		},
+		{
+			name: "Primitive extension no value",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						BirthDate: &d3pb.Date{
+							Extension: []*d3pb.Extension{{
+								Url: &d3pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_DateTime{
+										DateTime: &d3pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d3pb.DateTime_SECOND,
+										},
+									},
+								},
+							}, {
+								Url: &d3pb.Uri{
+									Value: jsonpbhelper.PrimitiveHasNoValueURL,
+								},
+								Value: &d3pb.Extension_ValueX{
+									Choice: &d3pb.Extension_ValueX_Boolean{
+										Boolean: &d3pb.Boolean{
+											Value: true,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						BirthDate: &d4pb.Date{
+							Extension: []*d4pb.Extension{{
+								Url: &d4pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_DateTime{
+										DateTime: &d4pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d4pb.DateTime_SECOND,
+										},
+									},
+								},
+							}, {
+								Url: &d4pb.Uri{
+									Value: jsonpbhelper.PrimitiveHasNoValueURL,
+								},
+								Value: &d4pb.Extension_ValueX{
+									Choice: &d4pb.Extension_ValueX_Boolean{
+										Boolean: &d4pb.Boolean{
+											Value: true,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+			},
+			want: map[string]interface{}{
+				"_birthDate": map[string]interface{}{
+					"patient_birthTime": []interface{}{
+						map[string]interface{}{
+							"value": map[string]interface{}{
+								"dateTime": "2016-05-18T10:28:45Z",
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -3128,11 +3383,11 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONObject{
-				"contained": jsonpbhelper.JSONArray{
-					jsonpbhelper.JSONString("{\"id\":\"p1\"}"),
+			want: map[string]interface{}{
+				"contained": []interface{}{
+					"{\"id\":\"p1\"}",
 				},
-				"asserter": jsonpbhelper.JSONObject{},
+				"asserter": map[string]interface{}{},
 			},
 		},
 	}
@@ -3144,12 +3399,17 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 					if err != nil {
 						t.Fatalf("failed to create marshaller %v: %v", test.name, err)
 					}
-					got, err := marshaller.marshalMessageToMap(i.r.ProtoReflect())
+					gotJSON, err := marshalResourceAndValidate(marshaller, i.r)
 					if err != nil {
 						t.Fatalf("marshal failed on %v: %v", test.name, err)
 					}
-					if !cmp.Equal(got, test.want) {
-						t.Errorf("marshal %v: got %v, want %v", test.name, got, test.want)
+					var got interface{}
+					if err := json.Unmarshal(gotJSON, &got); err != nil {
+						t.Fatalf("json.Unmarshal(%q) failed: %v", gotJSON, err)
+					}
+
+					if diff := cmp.Diff(test.want, got); diff != "" {
+						t.Errorf("marshal %v: diff: %s", test.name, diff)
 					}
 				})
 			}
@@ -3238,7 +3498,7 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema_Error(t *testing.T) {
 					if err != nil {
 						t.Fatalf("failed to create marshaller %v: %v", test.name, err)
 					}
-					_, err = marshaller.marshalMessageToMap(i.r.ProtoReflect())
+					_, err = marshalResourceAndValidate(marshaller, i.r)
 					if err == nil {
 						t.Errorf("marshalMessageToMap on %v did not return an error", test.name)
 					}
@@ -3274,7 +3534,7 @@ func TestMarshalPrimitiveType(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONRawValue(`true`),
+			want: jsonpbhelper.JSONRawValue("true"),
 		},
 		{
 			name: "Integer",
@@ -3292,7 +3552,7 @@ func TestMarshalPrimitiveType(t *testing.T) {
 					},
 				},
 			},
-			want: jsonpbhelper.JSONRawValue(`1`),
+			want: jsonpbhelper.JSONRawValue("1"),
 		},
 		{
 			name: "Canonical",
@@ -3445,9 +3705,8 @@ func TestMarshalPrimitiveType(t *testing.T) {
 					if err != nil {
 						t.Fatalf("marshalPrimitiveType(%v): %v", test.name, err)
 					}
-					if !cmp.Equal(got, test.want) {
-						t.Errorf("found diff for marshalPrimitiveType(%v): got %v, want %v",
-							test.name, got, test.want)
+					if diff := cmp.Diff(got, test.want); diff != "" {
+						t.Errorf("found diff for marshalPrimitiveType(%v): got %s, want %s, diff: %s", test.name, got, test.want, diff)
 					}
 				})
 			}

@@ -228,9 +228,6 @@ func serializeBinary(binary proto.Message) (string, error) {
 	if ext == nil {
 		return encoded, nil
 	}
-	if err := jsonpbhelper.RemoveExtension(binary, jsonpbhelper.Base64BinarySeparatorStrideURL); err != nil {
-		return "", err
-	}
 	extList, err := accessor.GetList(ext.ProtoReflect(), "extension")
 	if err != nil {
 		return "", err

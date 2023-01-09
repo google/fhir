@@ -509,32 +509,48 @@ func (m *Marshaller) marshalPrimitiveExtensions(pb protoreflect.Message) (jsonpb
 	// Populate extensions if set.
 	e := pb.Descriptor().Fields().ByName(jsonpbhelper.Extension)
 	if e != nil {
-		rf := pb.Get(e).List()
-		if rf.Len() > 0 {
-			pbs := make([]protoreflect.Message, 0, rf.Len())
-			for i := 0; i < rf.Len(); i++ {
-				pbs = append(pbs, rf.Get(i).Message())
-			}
-			sm := jsonpbhelper.JSONObject{}
-			err := m.marshalRepeatedFieldValue(sm, e, pbs)
-			if err != nil {
-				return nil, err
-			}
-			if m.jsonFormat == formatPure {
-				// Unmarshal primitive extensions to the "extension" field.
-				decmap[jsonpbhelper.Extension] = sm[jsonpbhelper.Extension]
-			} else if m.jsonFormat == formatAnalyticWithInferredSchema || m.jsonFormat == formatAnalyticV2WithInferredSchema {
-				// Promote primitive extensions to first class fields.
-				for k, v := range sm {
-					decmap[k] = v
-				}
-			}
+		if err := m.marshalExtensions(pb, e, decmap); err != nil {
+			return nil, err
 		}
 	}
 	if len(decmap) > 0 {
 		return decmap, nil
 	}
 	return nil, nil
+}
+
+func (m *Marshaller) marshalExtensions(pb protoreflect.Message, extField protoreflect.FieldDescriptor, decmap jsonpbhelper.JSONObject) error {
+	rf := pb.Get(extField).List()
+	if rf.Len() == 0 {
+		return nil
+	}
+	pbs := make([]protoreflect.Message, 0, rf.Len())
+	for i := 0; i < rf.Len(); i++ {
+		pb := rf.Get(i).Message()
+		urlVal, err := jsonpbhelper.ExtensionURL(pb)
+		if err == nil && (urlVal == jsonpbhelper.PrimitiveHasNoValueURL || urlVal == jsonpbhelper.Base64BinarySeparatorStrideURL) {
+			continue
+		}
+		pbs = append(pbs, pb)
+	}
+	if len(pbs) == 0 {
+		return nil
+	}
+	sm := jsonpbhelper.JSONObject{}
+	err := m.marshalRepeatedFieldValue(sm, extField, pbs)
+	if err != nil {
+		return err
+	}
+	if m.jsonFormat == formatPure {
+		// Unmarshal primitive extensions to the "extension" field.
+		decmap[jsonpbhelper.Extension] = sm[jsonpbhelper.Extension]
+	} else if m.jsonFormat == formatAnalyticWithInferredSchema || m.jsonFormat == formatAnalyticV2WithInferredSchema {
+		// Promote primitive extensions to first class fields.
+		for k, v := range sm {
+			decmap[k] = v
+		}
+	}
+	return nil
 }
 
 func (m *Marshaller) marshalFieldValue(decmap jsonpbhelper.JSONObject, f protoreflect.FieldDescriptor, pb protoreflect.Message) error {
@@ -645,16 +661,16 @@ func (m *Marshaller) marshalNonPrimitiveFieldValue(f protoreflect.FieldDescripto
 }
 
 func (m *Marshaller) marshalReference(rpb protoreflect.Message) (jsonpbhelper.IsJSON, error) {
-	pb := rpb.Interface().(proto.Message)
-	if err := DenormalizeReference(pb); err != nil {
+	newRef, err := NewDenormalizedReference(rpb.Interface())
+	if err != nil {
 		return nil, err
 	}
 	if m.jsonFormat != formatPure {
-		if err := normalizeRelativeReferenceAndIgnoreHistory(pb); err != nil {
+		if err := normalizeRelativeReferenceAndIgnoreHistory(newRef); err != nil {
 			return nil, err
 		}
 	}
-	return m.marshalMessageToMap(rpb)
+	return m.marshalMessageToMap(newRef.ProtoReflect())
 }
 
 func (m *Marshaller) marshalMessageToMap(pb protoreflect.Message) (jsonpbhelper.JSONObject, error) {
@@ -704,7 +720,6 @@ func (m *Marshaller) marshalMessageToMap(pb protoreflect.Message) (jsonpbhelper.
 func (m *Marshaller) marshalPrimitiveType(rpb protoreflect.Message) (jsonpbhelper.IsJSON, error) {
 	pb := rpb.Interface().(proto.Message)
 	if jsonpbhelper.HasExtension(pb, jsonpbhelper.PrimitiveHasNoValueURL) {
-		_ = jsonpbhelper.RemoveExtension(pb, jsonpbhelper.PrimitiveHasNoValueURL)
 		return nil, nil
 	}
 

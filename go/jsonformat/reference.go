@@ -176,6 +176,33 @@ func DenormalizeReference(pb proto.Message) error {
 	return nil
 }
 
+// NewDenormalizedReference creates a new reference with a URI from a normalized representation.
+func NewDenormalizedReference(pb proto.Message) (proto.Message, error) {
+	var newRef proto.Message
+	switch ref := pb.(type) {
+	case *d3pb.Reference:
+		newRef = copyR3Reference(ref)
+	case *d4pb.Reference:
+		newRef = copyR4Reference(ref)
+	default:
+		return nil, fmt.Errorf("invalid reference type %T", pb)
+	}
+	if err := DenormalizeReference(newRef); err != nil {
+		return nil, err
+	}
+	return newRef, nil
+}
+
+func copyR3Reference(ref *d3pb.Reference) proto.Message {
+	return &d3pb.Reference{
+		Id:         ref.GetId(),
+		Extension:  ref.GetExtension(),
+		Identifier: ref.GetIdentifier(),
+		Display:    ref.GetDisplay(),
+		Reference:  ref.GetReference(),
+	}
+}
+
 func denormalizeR3Reference(ref *d3pb.Reference) {
 	if uri := ref.GetUri(); uri != nil {
 		return
@@ -202,6 +229,18 @@ func denormalizeR3Reference(ref *d3pb.Reference) {
 		parts = append(parts, jsonpbhelper.RefHistory, refID.GetHistory().GetValue())
 	}
 	ref.Reference = &d3pb.Reference_Uri{Uri: &d3pb.String{Value: strings.Join(parts, "/")}}
+	return
+}
+
+func copyR4Reference(ref *d4pb.Reference) proto.Message {
+	return &d4pb.Reference{
+		Id:         ref.GetId(),
+		Extension:  ref.GetExtension(),
+		Type:       ref.GetType(),
+		Identifier: ref.GetIdentifier(),
+		Display:    ref.GetDisplay(),
+		Reference:  ref.GetReference(),
+	}
 }
 
 func denormalizeR4Reference(ref *d4pb.Reference) {
@@ -230,4 +269,5 @@ func denormalizeR4Reference(ref *d4pb.Reference) {
 		parts = append(parts, jsonpbhelper.RefHistory, refID.GetHistory().GetValue())
 	}
 	ref.Reference = &d4pb.Reference_Uri{Uri: &d4pb.String{Value: strings.Join(parts, "/")}}
+	return
 }
