@@ -306,4 +306,32 @@ absl::Status FhirPackageManager::AddPackageAtPath(absl::string_view path) {
   return absl::OkStatus();
 }
 
+absl::StatusOr<std::unique_ptr<google::fhir::r4::core::ValueSet>>
+FhirPackage::GetValueSet(absl::string_view uri) const {
+  // Handle "canonical" URLs of the form "$url|$version", e.g.
+  // "http://hl7.org/fhir/ValueSet/identifier-use|4.3.0"
+  // For these URLs, split on the pipe, resolve the url and return an error if
+  // the resource doesn't match the version.
+  const std::size_t version_delimiter = uri.find_last_of('|');
+  std::string version;
+  if (version_delimiter != std::string::npos) {
+    version = uri.substr(version_delimiter + 1,  // + 1 to skip the '|' itself
+                         std::string::npos);
+    uri = uri.substr(0, version_delimiter);
+  }
+
+  FHIR_ASSIGN_OR_RETURN(
+      std::unique_ptr<google::fhir::r4::core::ValueSet> value_set,
+      this->value_sets.Get(uri));
+
+  if (version_delimiter != std::string::npos &&
+      value_set->version().value() != version) {
+    return absl::NotFoundError(
+        absl::StrCat("Found version ", value_set->version().value(),
+                     " for resource ", uri, " but ", version, " requested."));
+  }
+
+  return std::move(value_set);
+}
+
 }  // namespace google::fhir

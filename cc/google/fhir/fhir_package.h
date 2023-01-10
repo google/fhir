@@ -335,9 +335,7 @@ struct FhirPackage {
   }
 
   absl::StatusOr<std::unique_ptr<google::fhir::r4::core::ValueSet>> GetValueSet(
-      absl::string_view uri) const {
-    return this->value_sets.Get(uri);
-  }
+      absl::string_view uri) const;
 
  private:
   FhirPackage()

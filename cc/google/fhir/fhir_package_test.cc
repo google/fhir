@@ -204,6 +204,41 @@ TEST(FhirPackageTest, LoadAndGetResourceSucceeds) {
   EXPECT_EQ(vs_result2->url().value(), "http://vs2");
 }
 
+TEST(FhirPackageTest, GetResourceForVersionedUriFindsResource) {
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string temp_name,
+      CreateZipFileContaining(
+          {{"a_value_set.json",
+            R"({"resourceType": "ValueSet", "url": "http://value.set/id",
+                "version": "1.0", "id": "a-value-set", "status": "draft"})"}}));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
+
+  FHIR_ASSERT_OK_AND_ASSIGN(std::unique_ptr<FhirPackage> fhir_package,
+                            FhirPackage::Load(temp_name));
+
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      const std::unique_ptr<fhir::r4::core::ValueSet> value_set,
+      fhir_package->GetValueSet("http://value.set/id|1.0"));
+  EXPECT_EQ(value_set->url().value(), "http://value.set/id");
+}
+
+TEST(FhirPackageTest, GetResourceForVersionedUriReturnsErrorOnVersionMismatch) {
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string temp_name,
+      CreateZipFileContaining(
+          {{"a_value_set.json",
+            R"({"resourceType": "ValueSet", "url": "http://value.set/id",
+                "version": "1.0", "id": "a-value-set", "status": "draft"})"}}));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
+
+  FHIR_ASSERT_OK_AND_ASSIGN(std::unique_ptr<FhirPackage> fhir_package,
+                            FhirPackage::Load(temp_name));
+
+  EXPECT_EQ(
+      fhir_package->GetValueSet("http://value.set/id|2.0").status().code(),
+      absl::StatusCode::kNotFound);
+}
+
 TEST(FhirPackageTest, ResourceWithParseErrorFails) {
   // Define a malformed resource to test parse failures.
   const std::string malformed_struct_def = R"({
