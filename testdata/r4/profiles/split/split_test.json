@@ -10,7 +10,7 @@
         "name": "Bundle",
         "title": "Bundle",
         "status": "draft",
-        "date": "2022-09-08",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1888,7 +1888,7 @@
         "name": "TestPatient",
         "title": "TestPatient",
         "status": "draft",
-        "date": "2022-09-08",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -4843,7 +4843,7 @@
         "name": "TestObservation",
         "title": "TestObservation",
         "status": "draft",
-        "date": "2022-09-08",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -10735,7 +10735,7 @@
         "name": "TestObservationLvl2",
         "title": "TestObservationLvl2",
         "status": "draft",
-        "date": "2022-09-08",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -16949,7 +16949,7 @@
         "name": "TestEncounter",
         "title": "TestEncounter",
         "status": "draft",
-        "date": "2022-09-08",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -20890,7 +20890,7 @@
         "name": "ProfiledDatatypesObservation",
         "title": "ProfiledDatatypesObservation",
         "status": "draft",
-        "date": "2022-09-08",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -23714,7 +23714,7 @@
         "name": "TestEncounterWithProfiledIdentifier",
         "title": "TestEncounterWithProfiledIdentifier",
         "status": "draft",
-        "date": "2022-09-08",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -27652,7 +27652,7 @@
         "name": "TestPatientWithWarningAndErrorFhirpath",
         "title": "TestPatientWithWarningAndErrorFhirpath",
         "status": "draft",
-        "date": "2022-09-08",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {

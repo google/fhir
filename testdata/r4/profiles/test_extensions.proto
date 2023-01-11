@@ -71,6 +71,23 @@ message ComplexExt {
       [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
 }
 
+// Auto-generated from StructureDefinition for CustomCodeableConceptExtension.
+// CustomCodeableConceptExtension Extension.
+// See http://test/url/base/StructureDefinition/CustomCodeableConceptExtension
+message CustomCodeableConceptExtension {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://test/url/base/StructureDefinition/CustomCodeableConceptExtension";
+
+  // Unique id for inter-element referencing
+  core.String id = 1;
+
+  // Value of extension
+  core.CodeableConcept value_codeable_concept = 3;
+}
+
 // Auto-generated from StructureDefinition for DigitalMediaType.
 // Extension for Digital Media Type code.
 // See http://test/url/base/StructureDefinition/DigitalMediaType

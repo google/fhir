@@ -19,6 +19,15 @@ simple_extension {
   }
 }
 
+simple_extension {
+  element_data {
+    name: "CustomCodeableConceptExtension"
+    size_restriction: OPTIONAL
+    description: "CustomCodeableConceptExtension Extension"
+  }
+  type: "CodeableConcept"
+}
+
 complex_extension {
   element_data {
     name: "ComplexExt"

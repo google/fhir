@@ -7,10 +7,11 @@
         "resourceType": "StructureDefinition",
         "id": "Bundle",
         "url": "http://test/url/base/StructureDefinition/Bundle",
+        "version": "123",
         "name": "Bundle",
         "title": "Bundle",
         "status": "draft",
-        "date": "2022-08-01",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1885,10 +1886,11 @@
         "resourceType": "StructureDefinition",
         "id": "TestPatient",
         "url": "http://test/url/base/StructureDefinition/TestPatient",
+        "version": "123",
         "name": "TestPatient",
         "title": "TestPatient",
         "status": "draft",
-        "date": "2022-08-01",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -4201,7 +4203,7 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               },
               "short": "Code defined by a terminology system",
               "definition": "A reference to a code defined by a terminology system.",
@@ -4270,6 +4272,11 @@
                 "min": 0,
                 "max": "*"
               },
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ],
               "condition": [
                 "ele-1"
               ],
@@ -4729,14 +4736,19 @@
                   }
                 ],
                 "ordered": false,
-                "rules": "closed"
+                "rules": "open"
               }
             },
             {
               "id": "Patient.maritalStatus.coding:color",
               "path": "Patient.maritalStatus.coding",
               "sliceName": "color",
-              "max": "1"
+              "max": "1",
+              "type": [
+                {
+                  "code": "Coding"
+                }
+              ]
             },
             {
               "id": "Patient.maritalStatus.coding:color.system",

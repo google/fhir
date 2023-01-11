@@ -7,10 +7,11 @@
         "resourceType": "StructureDefinition",
         "id": "Bundle",
         "url": "http://test/url/base/StructureDefinition/Bundle",
+        "version": "123",
         "name": "Bundle",
         "title": "Bundle",
         "status": "draft",
-        "date": "2022-09-08",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -1885,10 +1886,11 @@
         "resourceType": "StructureDefinition",
         "id": "TestPatient",
         "url": "http://test/url/base/StructureDefinition/TestPatient",
+        "version": "123",
         "name": "TestPatient",
         "title": "TestPatient",
         "status": "draft",
-        "date": "2022-09-08",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -4840,10 +4842,11 @@
         "resourceType": "StructureDefinition",
         "id": "TestObservation",
         "url": "http://test/url/base/StructureDefinition/TestObservation",
+        "version": "123",
         "name": "TestObservation",
         "title": "TestObservation",
         "status": "draft",
-        "date": "2022-09-08",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -10732,10 +10735,11 @@
         "resourceType": "StructureDefinition",
         "id": "TestObservationLvl2",
         "url": "http://test/url/base/StructureDefinition/TestObservationLvl2",
+        "version": "123",
         "name": "TestObservationLvl2",
         "title": "TestObservationLvl2",
         "status": "draft",
-        "date": "2022-09-08",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -16946,10 +16950,11 @@
         "resourceType": "StructureDefinition",
         "id": "TestEncounter",
         "url": "http://test/url/base/StructureDefinition/TestEncounter",
+        "version": "123",
         "name": "TestEncounter",
         "title": "TestEncounter",
         "status": "draft",
-        "date": "2022-09-08",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -20887,10 +20892,11 @@
         "resourceType": "StructureDefinition",
         "id": "ProfiledDatatypesObservation",
         "url": "http://test/url/base/StructureDefinition/ProfiledDatatypesObservation",
+        "version": "123",
         "name": "ProfiledDatatypesObservation",
         "title": "ProfiledDatatypesObservation",
         "status": "draft",
-        "date": "2022-09-08",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -23711,10 +23717,11 @@
         "resourceType": "StructureDefinition",
         "id": "TestEncounterWithProfiledIdentifier",
         "url": "http://test/url/base/StructureDefinition/TestEncounterWithProfiledIdentifier",
+        "version": "123",
         "name": "TestEncounterWithProfiledIdentifier",
         "title": "TestEncounterWithProfiledIdentifier",
         "status": "draft",
-        "date": "2022-09-08",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
@@ -27649,10 +27656,11 @@
         "resourceType": "StructureDefinition",
         "id": "TestPatientWithWarningAndErrorFhirpath",
         "url": "http://test/url/base/StructureDefinition/TestPatientWithWarningAndErrorFhirpath",
+        "version": "123",
         "name": "TestPatientWithWarningAndErrorFhirpath",
         "title": "TestPatientWithWarningAndErrorFhirpath",
         "status": "draft",
-        "date": "2022-09-08",
+        "date": "2023-01-10",
         "publisher": "Testington Inc.",
         "contact": [
           {
