@@ -154,6 +154,12 @@ absl::Status LoadPackage(absl::string_view archive_file_path,
           read_next_status, archive_error_string(archive.get())));
     }
 
+    // Skip hardlinks, as we don't need to process the same file contents
+    // multiple times.
+    if (archive_entry_hardlink(entry) != nullptr) {
+      continue;
+    }
+
     std::string entry_name = archive_entry_pathname(entry);
     // Ignore deprecated package_info data.
     if (absl::EndsWith(entry_name, "package_info.prototxt") ||

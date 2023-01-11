@@ -14,10 +14,10 @@
 
 #include "google/fhir/fhir_package.h"
 
-#include <stdio.h>
+#include <stddef.h>
+#include <string.h>
 
 #include <cstdio>
-#include <functional>
 #include <memory>
 #include <string>
 #include <utility>
@@ -26,8 +26,10 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/cleanup/cleanup.h"
+#include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_format.h"
+#include "absl/strings/string_view.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json/json_sax_handler.h"
 #include "google/fhir/testutil/archive.h"
@@ -38,6 +40,8 @@
 #include "proto/google/fhir/proto/r4/core/resources/search_parameter.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/structure_definition.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/value_set.pb.h"
+#include "libarchive/archive.h"
+#include "libarchive/archive_entry.h"
 
 namespace google::fhir {
 
@@ -202,6 +206,72 @@ TEST(FhirPackageTest, LoadAndGetResourceSucceeds) {
       const std::unique_ptr<fhir::r4::core::ValueSet> vs_result2,
       fhir_package->GetValueSet("http://vs2"));
   EXPECT_EQ(vs_result2->url().value(), "http://vs2");
+}
+
+TEST(FhirPackageTest, LoadWithHardlinksInArchiveSucceeds) {
+  std::string temp_name = std::tmpnam(nullptr);
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
+
+  // Introduce a new scope so all the Cleanup actions occur at its end.
+  {
+    // Create a tar archive.
+    archive* archive = archive_write_new();
+    absl::Cleanup archive_closer = [&archive] { archive_write_free(archive); };
+
+    int errorp = archive_write_set_format_ustar(archive);
+    ASSERT_EQ(errorp, ARCHIVE_OK) << absl::StrFormat(
+        "Failed to create archive due to error code: %d.", errorp);
+
+    errorp = archive_write_open_filename(archive, temp_name.c_str());
+    ASSERT_EQ(errorp, ARCHIVE_OK)
+        << absl::StrFormat("Failed to create archive due to error code: %d %s.",
+                           errorp, archive_error_string(archive));
+
+    // Add an entry for a value set.
+    archive_entry* entry = archive_entry_new();
+    archive_entry_set_pathname(entry, "a_value_set.json");
+
+    char contents[] =
+        R"({"resourceType": "ValueSet", "url": "http://value.set/id",
+                "version": "1.0", "id": "a-value-set", "status": "draft"})";
+    size_t content_size = strlen(contents);
+    archive_entry_set_size(entry, content_size);
+    archive_entry_set_filetype(entry, AE_IFREG);
+    absl::Cleanup entry_closer = [&entry] { archive_entry_free(entry); };
+
+    errorp = archive_write_header(archive, entry);
+    ASSERT_EQ(errorp, ARCHIVE_OK)
+        << absl::StrFormat("Unable to add file to archive, error code: %d %s",
+                           errorp, archive_error_string(archive));
+
+    la_ssize_t written = archive_write_data(archive, contents, content_size);
+    ASSERT_TRUE(written >= content_size)
+        << absl::StrFormat("Unable to add file to archive, error: %s",
+                           archive_error_string(archive));
+
+    // Add a hard-link to the above entry.
+    archive_entry* link_entry = archive_entry_new();
+    archive_entry_set_pathname(link_entry, "a_duplicate_value_set.json");
+    archive_entry_set_hardlink(link_entry, "a_value_set.json");
+    absl::Cleanup link_entry_closer = [&link_entry] {
+      archive_entry_free(link_entry);
+    };
+
+    errorp = archive_write_header(archive, link_entry);
+    ASSERT_EQ(errorp, ARCHIVE_OK)
+        << absl::StrFormat("Unable to add file to archive, error code: %d %s",
+                           errorp, archive_error_string(archive));
+  }
+
+  // Ensure we can load the package with the hardlink.
+  FHIR_ASSERT_OK_AND_ASSIGN(std::unique_ptr<FhirPackage> fhir_package,
+                            FhirPackage::Load(temp_name));
+
+  // Ensure we can read from it.
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      const std::unique_ptr<fhir::r4::core::ValueSet> value_set,
+      fhir_package->GetValueSet("http://value.set/id"));
+  EXPECT_EQ(value_set->url().value(), "http://value.set/id");
 }
 
 TEST(FhirPackageTest, GetResourceForVersionedUriFindsResource) {
