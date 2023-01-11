@@ -15,21 +15,25 @@
 #ifndef GOOGLE_FHIR_FHIR_PACKAGE_H_
 #define GOOGLE_FHIR_FHIR_PACKAGE_H_
 
+#include <cstddef>
 #include <functional>
 #include <iterator>
 #include <memory>
 #include <optional>
 #include <string>
 #include <utility>
-#include <variant>
 #include <vector>
 
 #include "glog/logging.h"
 #include "absl/container/flat_hash_map.h"
+#include "absl/status/status.h"
 #include "absl/status/statusor.h"
+#include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
+#include "absl/strings/str_join.h"
 #include "absl/strings/string_view.h"
-#include "absl/types/optional.h"
+#include "absl/strings/substitute.h"
+#include "absl/time/time.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/r4/json_format.h"
 #include "google/fhir/status/status.h"

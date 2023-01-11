@@ -14,17 +14,21 @@
 
 #include "google/fhir/fhir_package.h"
 
+#include <stddef.h>
+
 #include <functional>
 #include <memory>
-#include <optional>
 #include <string>
 #include <utility>
+#include <vector>
 
-#include "google/protobuf/text_format.h"
+#include "absl/memory/memory.h"
 #include "absl/status/status.h"
+#include "absl/status/statusor.h"
 #include "absl/strings/match.h"
+#include "absl/strings/str_cat.h"
+#include "absl/strings/str_format.h"
 #include "absl/strings/string_view.h"
-#include "absl/types/optional.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json/json_sax_handler.h"
 #include "google/fhir/status/status.h"
@@ -167,9 +171,9 @@ absl::Status LoadPackage(absl::string_view archive_file_path,
       continue;
     }
 
-    int64 length = archive_entry_size(entry);
+    la_int64_t length = archive_entry_size(entry);
     std::string contents(length, '\0');
-    int64 read = archive_read_data(archive.get(), &contents[0], length);
+    la_ssize_t read = archive_read_data(archive.get(), &contents[0], length);
     if (read < length) {
       return absl::InvalidArgumentError(
           absl::StrFormat("Unable to read entry %s from archive %s.",
