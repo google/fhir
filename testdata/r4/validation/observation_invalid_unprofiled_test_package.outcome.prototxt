@@ -1,0 +1,29 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Invalid input for google.fhir.r4.core.Decimal"
+  }
+  expression {
+    value: "Observation.meta.extension[0].value.decimal"
+  }
+}
+
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Input failed regex requirement for: google.fhir.r4.core.Code"
+  }
+  expression {
+    value: "Observation.meta.extension[2].value.codeableConcept.coding[0].code"
+  }
+}

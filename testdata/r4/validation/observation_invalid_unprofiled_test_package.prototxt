@@ -1,0 +1,68 @@
+id {
+  value: "example"
+}
+status {
+  value: FINAL
+}
+
+code {
+  coding {
+    system { value: "foo" }
+    code { value: "bar" }
+  }
+}
+
+meta {
+  source { value: "https://foo.bar.com" }
+
+  # Invalid decimal example.
+  extension {
+    url { value: "http://test/url/base/StructureDefinition/SimpleDecimalExt" }
+    value { decimal { value: "notADecimal" } }
+  }
+  # Valid decimal example.
+  extension {
+    url { value: "http://test/url/base/StructureDefinition/SimpleDecimalExt" }
+    value { decimal { value: "6.8" } }
+  }
+  # Invalid CodeableConcept example.
+  extension {
+    url { value: "http://test/url/base/StructureDefinition/CustomCodeableConceptExtension" }
+    value {
+      codeable_concept {
+        coding {
+          system { value: "foo" }
+          code { value: " invalid code " }
+        }
+      }
+    }
+  }
+  # Valid CodeableConcept example.
+  extension {
+    url { value: "http://test/url/base/StructureDefinition/CustomCodeableConceptExtension" }
+    value {
+      codeable_concept {
+        coding {
+          system { value: "foo" }
+          code { value: "bar" }
+        }
+      }
+    }
+  }
+}
+
+reference_range {
+  text {
+    value: "ref range"
+    # TODO(b/265057603): See if we need to validate extensions inside
+    # primitives. We currently do not.
+    extension {
+      url { value: "http://test/url/base/StructureDefinition/SimpleDecimalExt" }
+      value { decimal { value: "notADecimal" } }
+    }
+    extension {
+      url { value: "http://test/url/base/StructureDefinition/SimpleDecimalExt" }
+      value { decimal { value: "32" } }
+    }
+  }
+}
