@@ -200,8 +200,8 @@ def add_extension_to_message(extension: message.Message,
 
   # Copy the id field if present
   id_field = desc.fields_by_name.get('id')
-  if proto_utils.field_is_set(extension, id_field):
-    proto_utils.set_value_at_field(msg, id_field, cast(Any, extension).id)
+  if proto_utils.field_is_set(extension, id_field):  # pytype: disable=wrong-arg-types
+    proto_utils.set_value_at_field(msg, id_field, cast(Any, extension).id)  # pytype: disable=wrong-arg-types
 
   # Handle simple extensions (only one value present)
   if proto_utils.field_is_set(extension, 'value'):

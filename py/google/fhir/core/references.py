@@ -89,10 +89,10 @@ def split_if_relative_reference(reference: message.Message) -> None:
   """
   _validate_reference(reference)
   uri_field = reference.DESCRIPTOR.fields_by_name.get('uri')
-  if not proto_utils.field_is_set(reference, uri_field):
+  if not proto_utils.field_is_set(reference, uri_field):  # pytype: disable=wrong-arg-types
     return  # No URI to split
 
-  uri = proto_utils.get_value_at_field(reference, uri_field)
+  uri = proto_utils.get_value_at_field(reference, uri_field)  # pytype: disable=wrong-arg-types
 
   internal_match = re.fullmatch(_INTERNAL_REFERENCE_PATTERN, uri.value)
   if internal_match is not None:
