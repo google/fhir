@@ -48,8 +48,9 @@ namespace google::fhir {
 namespace {
 using ::google::fhir::testutil::CreateTarFileContaining;
 using ::google::fhir::testutil::CreateZipFileContaining;
+using ::testing::Eq;
+using ::testing::Pointee;
 using ::testing::UnorderedElementsAre;
-using ::testing::UnorderedElementsAreArray;
 
 constexpr int kR4DefinitionsCount = 653;
 constexpr int kR4CodeSystemsCount = 1062;
@@ -411,6 +412,78 @@ TEST(FhirPackageTest, LoadWithUserProvidedHandlerCallsHandler) {
   EXPECT_EQ(count, 2);
   // Ensure we can read the package as normal.
   EXPECT_TRUE(fhir_package->GetValueSet("http://value.set/id").ok());
+}
+
+TEST(FhirPackageTest, WithResourcesIterateJsonSucceeds) {
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string temp_name,
+      CreateZipFileContaining(
+          {{"vs1.json",
+            R"({"resourceType": "ValueSet", "url": "http://value.set/id-1",
+                "id": "a-value-set-1", "status": "draft"})"},
+           {"vs2.json",
+            R"({"resourceType": "ValueSet", "url": "http://value.set/id-2",
+                "id": "a-value-set-2", "status": "draft"})"},
+           {"vs3.json",
+            R"({"resourceType": "ValueSet", "url": "http://value.set/id-3",
+                "id": "a-value-set-3", "status": "draft"})"},
+           {"bundle.json",
+            R"({"resourceType": "Bundle", "entry": [
+                 {"resource": {
+                   "resourceType": "ValueSet", "url": "http://value.set/id-b1",
+                   "id": "bundled-a-value-set-1", "status": "draft"}},
+                 {"resource": {
+                   "resourceType": "ValueSet", "url": "http://value.set/id-b2",
+                   "id": "bundled-a-value-set-2", "status": "draft"}}]})"}}));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
+
+  FHIR_ASSERT_OK_AND_ASSIGN(std::unique_ptr<FhirPackage> fhir_package,
+                            FhirPackage::Load(temp_name));
+
+  // Collect all the JSON objects returned by the json_begin iterator.
+  std::vector<const internal::FhirJson*> found;
+  for (auto itr = fhir_package->value_sets.json_begin();
+       itr != fhir_package->value_sets.json_end(); ++itr) {
+    found.push_back(*itr);
+  }
+
+  // Ensure we found the expected JSON objects.
+  internal::FhirJson expected_1;
+  FHIR_ASSERT_OK(internal::ParseJsonValue(
+      R"({"resourceType": "ValueSet", "url": "http://value.set/id-1",
+          "id": "a-value-set-1", "status": "draft"})",
+      expected_1));
+
+  internal::FhirJson expected_2;
+  FHIR_ASSERT_OK(internal::ParseJsonValue(
+      R"({"resourceType": "ValueSet", "url": "http://value.set/id-2",
+          "id": "a-value-set-2", "status": "draft"})",
+      expected_2));
+
+  internal::FhirJson expected_3;
+  FHIR_ASSERT_OK(internal::ParseJsonValue(
+      R"({"resourceType": "ValueSet", "url": "http://value.set/id-3",
+          "id": "a-value-set-3", "status": "draft"})",
+      expected_3));
+
+  internal::FhirJson expected_bundle_1;
+  FHIR_ASSERT_OK(internal::ParseJsonValue(
+      R"({"resourceType": "ValueSet", "url": "http://value.set/id-b1",
+          "id": "bundled-a-value-set-1", "status": "draft"})",
+      expected_bundle_1));
+
+  internal::FhirJson expected_bundle_2;
+  FHIR_ASSERT_OK(internal::ParseJsonValue(
+      R"({"resourceType": "ValueSet", "url": "http://value.set/id-b2",
+          "id": "bundled-a-value-set-2", "status": "draft"})",
+      expected_bundle_2));
+
+  EXPECT_THAT(found,
+              UnorderedElementsAre(Pointee(Eq(std::ref(expected_1))),
+                                   Pointee(Eq(std::ref(expected_2))),
+                                   Pointee(Eq(std::ref(expected_3))),
+                                   Pointee(Eq(std::ref(expected_bundle_1))),
+                                   Pointee(Eq(std::ref(expected_bundle_2)))));
 }
 
 TEST(FhirPackageTest, LoadWithUserProvidedHandlerReturnsErrorsFromHandler) {
@@ -901,38 +974,6 @@ TEST(ResourceCollectionTest, WithValidAndInvalidResourcesIterateSkipsInvalid) {
   }
   EXPECT_THAT(found, UnorderedElementsAre("http://value.set/id-1",
                                           "http://value.set/id-2"));
-}
-
-TEST(ResourceCollectionTest, WithResourcesIterateJsonSucceeds) {
-  std::vector<std::string> resources = {
-      R"({"resourceType": "ValueSet", "url": "http://value.set/id-1",
-          "id": "a-value-set-1", "status": "draft"})",
-      R"({"resourceType": "ValueSet", "url": "http://value.set/id-2",
-          "id": "a-value-set-2", "status": "draft"})",
-      R"({"resourceType": "ValueSet", "url": "http://value.set/id-3",
-          "id": "a-value-set-3", "status": "draft"})",
-  };
-
-  // Keep track of the pointers for the FhirJson objects we add to the
-  // collection.
-  std::vector<const internal::FhirJson*> resource_json;
-  ResourceCollection<fhir::r4::core::ValueSet> collection;
-  for (const std::string& resource : resources) {
-    auto parsed_json = std::make_unique<internal::FhirJson>();
-    FHIR_ASSERT_OK(internal::ParseJsonValue(resource, *parsed_json));
-
-    resource_json.push_back(parsed_json.get());
-    FHIR_ASSERT_OK(collection.Put(std::move(parsed_json)));
-  }
-
-  // We should get those same FhirJson pointers back when we iterate over the
-  // json in the collection.
-  std::vector<const internal::FhirJson*> found;
-  for (auto itr = collection.json_begin(); itr != collection.json_end();
-       ++itr) {
-    found.push_back(*itr);
-  }
-  EXPECT_THAT(found, UnorderedElementsAreArray(resource_json));
 }
 
 TEST(ResourceCollectionTest, AddGetResourceWithEmptyCollectionReturnsNotFound) {

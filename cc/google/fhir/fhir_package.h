@@ -169,7 +169,40 @@ class ResourceCollection {
         : resources_iter_(resources_iter) {}
 
     const internal::FhirJson* operator*() const {
-      return resources_iter_->second.get();
+      absl::string_view url = resources_iter_->first;
+      const internal::FhirJson* resource = resources_iter_->second.get();
+
+      // The JSON will either be for an individual resource or a bundle. If it's
+      // an individual resource, return that JSON. If it's for a bundle, return
+      // the JSON for the resource with the given `url` found inside the bundle.
+      // Otherwise, we'll return the same JSON for the same bundle once for
+      // every resource inside it.
+      // For a resource with a resourceType of 'Bundle,' return the child
+      // resource with `url` found inside that bundle. For all other resources,
+      // return `resource` as-is.
+      absl::StatusOr<const internal::FhirJson*> resource_type_json =
+          resource->get("resourceType");
+      if (!resource_type_json.ok()) {
+        return resource;
+      }
+
+      absl::StatusOr<std::string> resource_type =
+          (*resource_type_json)->asString();
+      if (!resource_type.ok()) {
+        return resource;
+      }
+
+      if (*resource_type != "Bundle") {
+        return resource;
+      }
+
+      absl::StatusOr<const internal::FhirJson*> resource_from_bundle =
+          FindResourceInBundle(url, *resource);
+      if (!resource_from_bundle.ok()) {
+        return resource;
+      }
+
+      return *resource_from_bundle;
     }
 
     JsonIterator& operator++() {
