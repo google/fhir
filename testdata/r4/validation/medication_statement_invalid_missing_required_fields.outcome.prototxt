@@ -1,0 +1,44 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "missing-required-field"
+  }
+  expression {
+    value: "MedicationStatement.status"
+  }
+}
+
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "missing-required-field"
+  }
+  expression {
+    value: "MedicationStatement.medication"
+  }
+}
+
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "missing-required-field"
+  }
+  expression {
+    value: "MedicationStatement.subject"
+  }
+}
