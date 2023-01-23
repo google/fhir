@@ -24,8 +24,6 @@
 #include <utility>
 
 #include "google/protobuf/any.pb.h"
-#include "google/protobuf/descriptor.h"
-#include "google/protobuf/message.h"
 #include "absl/container/flat_hash_map.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
@@ -122,17 +120,17 @@ const std::unordered_map<std::string, const FieldDescriptor*>& GetFieldMap(
       new absl::flat_hash_map<intptr_t,
                               std::unique_ptr<const std::unordered_map<
                                   std::string, const FieldDescriptor*>>>();
-  static absl::Mutex memos_mutex(absl::kConstInit);
+  ABSL_CONST_INIT static absl::Mutex memos_mutex(absl::kConstInit);
 
   const intptr_t memo_key = reinterpret_cast<intptr_t>(descriptor);
 
-  memos_mutex.ReaderLock();
-  const auto iter = memos->find(memo_key);
-  if (iter != memos->end()) {
-    memos_mutex.ReaderUnlock();
-    return *iter->second;
+  {
+    absl::ReaderMutexLock reader_lock(&memos_mutex);
+    const auto iter = memos->find(memo_key);
+    if (iter != memos->end()) {
+      return *iter->second;
+    }
   }
-  memos_mutex.ReaderUnlock();
 
   absl::MutexLock lock(&memos_mutex);
 
