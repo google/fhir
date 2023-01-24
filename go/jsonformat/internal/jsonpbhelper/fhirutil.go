@@ -948,22 +948,10 @@ func ReferenceFieldForType(resType string) (protoreflect.Name, bool) {
 	return f, ok
 }
 
-// ValidateReferenceType returns an error is `ref` is a strongly typed
+// ValidateReferenceMessageType returns an error if `ref` is a strongly typed
 // reference that is not compatible with the types allowed by `msgField`.
 // References should be normalized before being passed to this function.
-func ValidateReferenceType(msgField protoreflect.FieldDescriptor, ref protoreflect.Message) error {
-	var validRefTypes []string
-	ext := msgField.Options().ProtoReflect().Get(apb.E_ValidReferenceType.TypeDescriptor())
-	if ext.IsValid() {
-		validRefTypes = apb.E_ValidReferenceType.InterfaceOf(ext).([]string)
-	} else {
-		validRefTypes = nil
-	}
-
-	if len(validRefTypes) == 0 {
-		return nil
-	}
-
+func ValidateReferenceMessageType(msgField protoreflect.FieldDescriptor, ref protoreflect.Message) error {
 	f, err := ResourceIDField(ref)
 	if err != nil {
 		return err
@@ -973,6 +961,16 @@ func ValidateReferenceType(msgField protoreflect.FieldDescriptor, ref protorefle
 	}
 	refType, ok := ResourceTypeForReference(f.Name())
 	if !ok {
+		return nil
+	}
+
+	return ValidateReferenceType(msgField, refType)
+}
+
+// ValidateReferenceType returns an error if `refType` is not compatible with the types allowed by `msgField`.
+func ValidateReferenceType(msgField protoreflect.FieldDescriptor, refType string) error {
+	validRefTypes := proto.GetExtension(msgField.Options(), apb.E_ValidReferenceType).([]string)
+	if len(validRefTypes) == 0 {
 		return nil
 	}
 

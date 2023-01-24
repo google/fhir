@@ -105,7 +105,7 @@ func validateReferenceTypes(fd protoreflect.FieldDescriptor, msg protoreflect.Me
 	if !proto.HasExtension(msg.Descriptor().Options(), apb.E_FhirReferenceType) {
 		return nil
 	}
-	return jsonpbhelper.ValidateReferenceType(fd, msg)
+	return jsonpbhelper.ValidateReferenceMessageType(fd, msg)
 }
 
 func validateReferenceTypesWithErrorReporter(fd protoreflect.FieldDescriptor, msg protoreflect.Message, jsonPath string, errorReporter errorreporter.ErrorReporter) error {

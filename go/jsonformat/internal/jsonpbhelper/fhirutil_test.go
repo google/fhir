@@ -1366,7 +1366,7 @@ func TestValidateReferenceType(t *testing.T) {
 			field := msg.Descriptor().Fields().ByName(protoreflect.Name(test.fieldName))
 			ref := test.ref.ProtoReflect()
 
-			err := ValidateReferenceType(field, ref)
+			err := ValidateReferenceMessageType(field, ref)
 			valid := err == nil
 			if test.valid != valid {
 				t.Fatalf("ValidateReferenceType on field %s of %+v returned %v, want %v", test.fieldName, test.msg, valid, test.valid)
