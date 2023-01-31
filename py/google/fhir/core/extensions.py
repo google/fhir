@@ -270,6 +270,10 @@ def _add_fields_to_extension(msg: message.Message,
   for field in msg.DESCRIPTOR.fields:
     _verify_field_is_proto_message_type(field)
 
+    # Skip the ID field since it is shouldn't be added as an extension.
+    if field.name in NON_VALUE_FIELDS:
+      continue
+
     # Add submessages to nested extensions; singular fields have a length of 1
     for i in range(proto_utils.field_content_length(msg, field)):
       child_extension = proto_utils.set_in_parent_or_add(extension, 'extension')

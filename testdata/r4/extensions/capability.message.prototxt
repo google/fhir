@@ -1,2 +1,3 @@
+id { value: "dummy" }
 required { value: "foo" }
 required { value: "bar" }

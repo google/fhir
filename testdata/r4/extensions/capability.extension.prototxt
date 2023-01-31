@@ -1,3 +1,4 @@
+id { value: "dummy" }
 url { value: "http://hl7.org/fhir/StructureDefinition/capabilitystatement-search-parameter-combination" }
 extension {
   url { value: "required" }

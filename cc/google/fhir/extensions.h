@@ -158,6 +158,10 @@ absl::Status AddFieldsToExtension(const ::google::protobuf::Message& message,
       return ::absl::InvalidArgumentError(absl::StrCat(
           descriptor->full_name(), " is not a FHIR extension type"));
     }
+    if (field->name() == "id") {
+      // Skip the ID field since it is shouldn't be added as an extension.
+      continue;
+    }
     // Add submessages to nested extensions.
     if (field->is_repeated()) {
       for (int j = 0; j < reflection->FieldSize(message, field); j++) {
