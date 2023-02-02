@@ -40,9 +40,9 @@ function go_modules_tests {
     export GO111MODULE=on
     cp -r ./ /tmp/go/src/github.com/google/fhir
     pushd /tmp/go/src/github.com/google/fhir/go
-    go1.15.5 mod download  # Download module dependencies
-    go1.15.5 build ./...  # Build everything in go/
-    go1.15.5 test ./...  # Test everything in go/
+    go1.19.5 mod download  # Download module dependencies
+    go1.19.5 build ./...  # Build everything in go/
+    go1.19.5 test ./...  # Test everything in go/
     popd
 }
 
