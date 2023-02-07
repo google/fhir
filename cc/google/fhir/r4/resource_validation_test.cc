@@ -29,6 +29,7 @@
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/composition.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/coverage_eligibility_request.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/encounter.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
 #include "proto/google/fhir/proto/r4/fhirproto.pb.h"
@@ -88,6 +89,12 @@ void InvalidTest(absl::string_view name,
 
 TEST(ResourceValidationTest, MissingRequiredField) {
   InvalidTest<Observation>("observation_invalid_missing_required");
+}
+
+TEST(ResourceValidationTest,
+     ResourceMissingRequiredMatchesDynamicValidatorWithCompatabilityModeOn) {
+  InvalidTest<CoverageEligibilityRequest>(
+      "coverage_eligibility_request_missing_required_matches_classical");
 }
 
 TEST(ResourceValidationTest, InvalidPrimitiveField) {

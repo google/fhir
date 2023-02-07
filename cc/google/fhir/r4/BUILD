@@ -401,6 +401,7 @@ cc_test(
         "//proto/google/fhir/proto/r4:fhirproto_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:composition_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:coverage_eligibility_request_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:encounter_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:observation_cc_proto",
         "//testdata/r4/profiles:test_cc_proto",
