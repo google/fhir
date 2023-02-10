@@ -6,6 +6,7 @@ load(
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 
 package(
+    default_applicable_licenses = ["//:license"],
     default_visibility = [
         "//py/google/fhir:__subpackages__",
     ],

@@ -2,6 +2,7 @@ load("//bazel:proto.bzl", "fhir_proto_library")
 
 package(
     
+    default_applicable_licenses = ["//:license"],
     
     default_visibility = ["//visibility:public"],
 )

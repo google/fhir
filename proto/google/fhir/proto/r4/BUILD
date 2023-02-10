@@ -3,6 +3,7 @@ load("//bazel:protogen.bzl", "gen_fhir_protos")
 
 package(
     
+    default_applicable_licenses = ["//:license"],
     
     default_visibility = ["//visibility:public"],
 )
