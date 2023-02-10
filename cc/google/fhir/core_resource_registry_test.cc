@@ -14,27 +14,17 @@
 
 #include "google/fhir/core_resource_registry.h"
 
-#include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "google/fhir/proto_util.h"
 #include "proto/google/fhir/proto/profile_config.pb.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
-#include "proto/google/fhir/proto/stu3/resources.pb.h"
 #include "testdata/r4/profiles/test.pb.h"
-#include "testdata/stu3/profiles/test.pb.h"
 
 namespace google {
 namespace fhir {
 
 namespace {
-
-TEST(CoreResourceRegistryTest, Stu3Profile) {
-  auto result = GetBaseResourceInstance(stu3::testing::TestObservationLvl2());
-  ASSERT_TRUE(result.ok());
-  ASSERT_TRUE(IsMessageType<stu3::proto::Observation>(*result.value()))
-      << result.value()->GetDescriptor()->full_name();
-}
 
 TEST(CoreResourceRegistryTest, R4Profile) {
   auto result = GetBaseResourceInstance(r4::testing::TestObservationLvl2());

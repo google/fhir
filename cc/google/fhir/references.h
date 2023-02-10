@@ -17,17 +17,16 @@
 #ifndef GOOGLE_FHIR_REFERENCES_H_
 #define GOOGLE_FHIR_REFERENCES_H_
 
+#include <optional>
 #include <string>
 
-#include "google/protobuf/message.h"
+#include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/strip.h"
-#include "absl/types/optional.h"
+#include "google/fhir/annotations.h"
 #include "google/fhir/core_resource_registry.h"
 #include "google/fhir/status/statusor.h"
-#include "google/fhir/type_macros.h"
 #include "google/fhir/util.h"
-#include "re2/re2.h"
 
 namespace google {
 namespace fhir {
@@ -64,7 +63,7 @@ absl::Status SplitIfRelativeReference(::google::protobuf::Message* reference);
 // Return the full string representation of a reference.
 // If the message `reference` is a valid reference type, but does not contain
 // an actual reference (e.g. empty message), then returns nullopt.
-absl::StatusOr<absl::optional<std::string>> ReferenceProtoToString(
+absl::StatusOr<std::optional<std::string>> ReferenceProtoToString(
     const ::google::protobuf::Message& reference);
 
 absl::Status ReferenceStringToProto(const std::string& input,
@@ -107,11 +106,24 @@ std::string GetReferenceStringToResource(const ::google::protobuf::Message& mess
 template <typename ReferenceType>
 absl::StatusOr<ReferenceType> GetReferenceProtoToResource(
     const ::google::protobuf::Message& resource) {
+  // TODO(b/268518264): Clean up profiled proto support.
+  if (GetFhirVersion(resource.GetDescriptor()) != proto::R4 &&
+      IsProfile(resource.GetDescriptor())) {
+    return absl::InvalidArgumentError(
+        "Profiled resoures only supported for R4");
+  }
   ReferenceType reference;
   FHIR_ASSIGN_OR_RETURN(const std::string resource_id, GetResourceId(resource));
-  FHIR_ASSIGN_OR_RETURN(const Descriptor* base_resource_type,
-                        GetBaseResourceDescriptor(resource.GetDescriptor()));
-  FHIR_ASSIGN_OR_RETURN(const ::google::protobuf::FieldDescriptor* reference_id_field,
+
+  const google::protobuf::Descriptor* base_resource_type = nullptr;
+  if (IsProfile(resource.GetDescriptor())) {
+    FHIR_ASSIGN_OR_RETURN(base_resource_type,
+                          GetBaseResourceDescriptor(resource.GetDescriptor()));
+  } else {
+    base_resource_type = resource.GetDescriptor();
+  }
+
+  FHIR_ASSIGN_OR_RETURN(const google::protobuf::FieldDescriptor* reference_id_field,
                         internal::GetReferenceFieldForResource(
                             reference, base_resource_type->name()));
   ::google::protobuf::Message* reference_id =

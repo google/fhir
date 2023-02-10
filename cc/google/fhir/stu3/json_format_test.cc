@@ -156,31 +156,6 @@ TEST(JsonFormatStu3Test, EdgeCasesNdjsonParse) {
       "testdata/stu3/ndjson/Patient-null.ndjson");
 }
 
-/** Test parsing to a profile */
-TEST(JsonFormatStu3Test, ParseProfile) {
-  TestParseWithFilepaths<stu3::testing::TestPatient>(
-      "testdata/stu3/profiles/test_patient-profiled-testpatient.prototxt",
-      "testdata/stu3/profiles/test_patient.json");
-  // This test is only meaningful because Patient.name is singular in the
-  // profile, unlike in the unprofiled resource.  This means it has array
-  // syntax in json, but singular syntax in proto.
-  // Access the proto field directly, so it will be a compile-time failure if
-  // that changes.
-  ASSERT_EQ("Duck", ParseJsonToProto<stu3::testing::TestPatient>(
-                        "testdata/stu3/profiles/test_patient.json")
-                        .value()
-                        .name()
-                        .given(0)
-                        .value());
-}
-
-/** Test printing from a profile */
-TEST(JsonFormatStu3Test, PrintProfile) {
-  TestPrintWithFilepaths<stu3::testing::TestPatient>(
-      "testdata/stu3/profiles/test_patient-profiled-testpatient.prototxt",
-      "testdata/stu3/profiles/test_patient.json");
-}
-
 /** Test printing of FHIR edge cases. */
 TEST(JsonFormatStu3Test, EdgeCasesPrint) { TestPrint<Patient>("Patient-null"); }
 

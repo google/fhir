@@ -19,19 +19,16 @@
 #include <unordered_map>
 
 #include "google/protobuf/descriptor.pb.h"
-#include "google/protobuf/message.h"
 #include "absl/container/node_hash_map.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
-#include "absl/synchronization/mutex.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/status/statusor.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
-#include "proto/google/fhir/proto/stu3/resources.pb.h"
 
 namespace google {
 namespace fhir {
@@ -43,6 +40,8 @@ using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
 
 namespace {
+
+// TODO(b/268518264): Clean up support for profiled protos from core libraries.
 
 // Given a resource descriptor, return the base resource in the core FHIR spec.
 // If given a core resource, will return its own url.
@@ -106,14 +105,9 @@ GetBaseResourceInstanceForVersion(const ::google::protobuf::Descriptor* descript
   return absl::WrapUnique(example_iter->second->New());
 }
 
-// TODO(b/244184211): Split into versioned files so we don't pull in both STU3
-// and R4
 absl::StatusOr<std::unique_ptr<::google::protobuf::Message>>
 GetBaseResourceInstanceFromDescriptor(const Descriptor* descriptor) {
   switch (GetFhirVersion(descriptor)) {
-    case proto::STU3:
-      return GetBaseResourceInstanceForVersion<stu3::proto::ContainedResource>(
-          descriptor);
     case proto::R4:
       return GetBaseResourceInstanceForVersion<r4::core::ContainedResource>(
           descriptor);

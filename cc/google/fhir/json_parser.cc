@@ -45,7 +45,6 @@
 #include "google/fhir/resource_validation.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "google/fhir/stu3/profiles.h"
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 
@@ -558,6 +557,11 @@ absl::StatusOr<ParseResult> Parser::MergeJsonFhirObjectIntoProto(
   // since those are handled directly by the primitive wrappers.
   if (IsProfile(target->GetDescriptor()) &&
       !IsPrimitive(target->GetDescriptor())) {
+    if (GetFhirVersion(*target) != proto::R4) {
+      return InvalidArgumentError(
+          "Unsupported FHIR Version for profiling for resource: " +
+          target->GetDescriptor()->full_name());
+    }
     FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> core_resource,
                           GetBaseResourceInstance(*target));
 
@@ -568,25 +572,10 @@ absl::StatusOr<ParseResult> Parser::MergeJsonFhirObjectIntoProto(
       return ParseResult::kFailed;
     }
 
-    // TODO(b/244184211): This is not ideal because it pulls in both stu3 and
-    // r4 datatypes.
-    absl::Status profile_status;
-    switch (GetFhirVersion(*target)) {
-      case proto::STU3:
-        profile_status =
-            validate ? ConvertToProfileStu3(*core_resource, target)
-                     : ConvertToProfileLenientStu3(*core_resource, target);
-        break;
-      case proto::R4:
-        profile_status =
-            validate ? ConvertToProfileR4(*core_resource, target)
-                     : ConvertToProfileLenientR4(*core_resource, target);
-        break;
-      default:
-        return InvalidArgumentError(
-            "Unsupported FHIR Version for profiling for resource: " +
-            target->GetDescriptor()->full_name());
-    }
+    absl::Status profile_status =
+        validate ? ConvertToProfileR4(*core_resource, target)
+                 : ConvertToProfileLenientR4(*core_resource, target);
+
     if (profile_status.ok()) {
       return ParseResult::kSucceeded;
     }
