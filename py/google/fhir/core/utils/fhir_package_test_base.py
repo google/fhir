@@ -70,7 +70,8 @@ class _FhirPackageTestMeta(abc.ABCMeta, type(parameterized.TestCase)):
 
 
 class FhirPackageTest(
-    parameterized.TestCase, abc.ABC, metaclass=_FhirPackageTestMeta):
+    parameterized.TestCase, abc.ABC, metaclass=_FhirPackageTestMeta
+):
   """Base class for testing the FhirPackage class."""
 
   @property
@@ -100,17 +101,19 @@ class FhirPackageTest(
 
   @abc.abstractmethod
   def _load_package(
-      self,
-      package_source: fhir_package.PackageSource) -> fhir_package.FhirPackage:
+      self, package_source: fhir_package.PackageSource
+  ) -> fhir_package.FhirPackage:
     pass
 
   def empty_collection(self) -> fhir_package.ResourceCollection:
-    return fhir_package.ResourceCollection(self._valueset_cls,
-                                           self._primitive_handler, 'Z')
+    return fhir_package.ResourceCollection(
+        self._valueset_cls, self._primitive_handler, 'Z'
+    )
 
   @_parameterized_with_package_sources
   def testFhirPackageLoad_withValidFhirPackage_isReadable(
-      self, package_source_fn: PackageSourceFn):
+      self, package_source_fn: PackageSourceFn
+  ):
     """Ensure we can read resources following a load."""
     # Define a bunch of fake resources.
     structure_definition_1 = {
@@ -172,39 +175,32 @@ class FhirPackageTest(
         'resourceType': 'ValueSet',
         'url': 'http://vs1',
         'name': 'vs1',
-        'status': 'draft'
+        'status': 'draft',
     }
     value_set_2 = {
         'resourceType': 'ValueSet',
         'url': 'http://vs2',
         'name': 'vs2',
-        'status': 'draft'
+        'status': 'draft',
     }
 
     # create a bundle for half of the resources
     bundle = {
-        'resourceType':
-            'Bundle',
+        'resourceType': 'Bundle',
         'entry': [
-            {
-                'resource': structure_definition_2
-            },
-            {
-                'resource': search_parameter_2
-            },
+            {'resource': structure_definition_2},
+            {'resource': search_parameter_2},
             # ensure we handle bundles containing other bundles
             {
                 'resource': {
-                    'resourceType':
-                        'Bundle',
-                    'entry': [{
-                        'resource': code_system_2
-                    }, {
-                        'resource': value_set_2
-                    }]
+                    'resourceType': 'Bundle',
+                    'entry': [
+                        {'resource': code_system_2},
+                        {'resource': value_set_2},
+                    ],
                 }
-            }
-        ]
+            },
+        ],
     }
 
     # Create zip and npm files containing the resources and our bundle.
@@ -222,9 +218,10 @@ class FhirPackageTest(
         'license': 'Apache',
         'canonical': 'http://example.com/fhir',
     }
-    npmfile_contents = fhir_resource_contents + [
-        ('package.json', json.dumps(npm_package_info))
-    ]
+    npmfile_contents = fhir_resource_contents + [(
+        'package.json',
+        json.dumps(npm_package_info),
+    )]
 
     # Helper to check contents for both zip and NPM/tar packages.
     def check_contents(package):
@@ -245,19 +242,23 @@ class FhirPackageTest(
       # Ensure we can iterate over all resources for each collection.
       self.assertCountEqual(
           [resource.url.value for resource in package.structure_definitions],
-          [structure_definition_1['url'], structure_definition_2['url']])
+          [structure_definition_1['url'], structure_definition_2['url']],
+      )
 
       self.assertCountEqual(
           [resource.url.value for resource in package.search_parameters],
-          [search_parameter_1['url'], search_parameter_2['url']])
+          [search_parameter_1['url'], search_parameter_2['url']],
+      )
 
       self.assertCountEqual(
           [resource.url.value for resource in package.code_systems],
-          [code_system_1['url'], code_system_2['url']])
+          [code_system_1['url'], code_system_2['url']],
+      )
 
       self.assertCountEqual(
           [resource.url.value for resource in package.value_sets],
-          [value_set_1['url'], value_set_2['url']])
+          [value_set_1['url'], value_set_2['url']],
+      )
 
     with zipfile_containing(fhir_resource_contents) as temp_file:
       package = self._load_package(package_source_fn(temp_file.name))
@@ -273,7 +274,8 @@ class FhirPackageTest(
         structure_definitions=self.empty_collection(),
         search_parameters=self.empty_collection(),
         code_systems=self.empty_collection(),
-        value_sets=self.empty_collection())
+        value_sets=self.empty_collection(),
+    )
     self.assertIsNone(package.get_resource('some_uri'))
 
   def testFhirPackage_pickle_isSuccessful(self):
@@ -282,7 +284,8 @@ class FhirPackageTest(
         structure_definitions=self.empty_collection(),
         search_parameters=self.empty_collection(),
         code_systems=self.empty_collection(),
-        value_sets=self.empty_collection())
+        value_sets=self.empty_collection(),
+    )
     pickle.dumps(package)
 
   def testGetStructureDefinition_withAddedPackages_retrievesResource(self):
@@ -383,8 +386,9 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
         'id': 'example-extensional',
         'status': 'draft',
     }
-    collection = fhir_package.ResourceCollection(self._valueset_cls,
-                                                 self._primitive_handler, 'Z')
+    collection = fhir_package.ResourceCollection(
+        self._valueset_cls, self._primitive_handler, 'Z'
+    )
     collection.put(resource_json)
     resource = collection.get(uri)
 
@@ -396,20 +400,22 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
   def testResourceCollection_getBundles(self):
     """Ensure we can add and then get a resource from a bundle."""
     bundle = {
-        'resourceType':
-            'Bundle',
-        'entry': [{
-            'resource': {
-                'resourceType': 'ValueSet',
-                'id': 'example-extensional',
-                'url': 'http://value-in-a-bundle',
-                'status': 'draft',
+        'resourceType': 'Bundle',
+        'entry': [
+            {
+                'resource': {
+                    'resourceType': 'ValueSet',
+                    'id': 'example-extensional',
+                    'url': 'http://value-in-a-bundle',
+                    'status': 'draft',
+                }
             }
-        }]
+        ],
     }
 
-    collection = fhir_package.ResourceCollection(self._valueset_cls,
-                                                 self._primitive_handler, 'Z')
+    collection = fhir_package.ResourceCollection(
+        self._valueset_cls, self._primitive_handler, 'Z'
+    )
     collection.put(bundle['entry'][0]['resource'], bundle)
     resource = collection.get('http://value-in-a-bundle')
 
@@ -420,16 +426,18 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
 
   def testResourceCollection_getMissingResource(self):
     """Ensure we return None when requesing missing resources."""
-    collection = fhir_package.ResourceCollection(self._valueset_cls,
-                                                 self._primitive_handler, 'Z')
+    collection = fhir_package.ResourceCollection(
+        self._valueset_cls, self._primitive_handler, 'Z'
+    )
     resource = collection.get('missing-uri')
 
     self.assertIsNone(resource)
 
   def testResourceCollection_cachedResource(self):
     """Ensure we cache the first access to a resource."""
-    collection = fhir_package.ResourceCollection(self._valueset_cls,
-                                                 self._primitive_handler, 'Z')
+    collection = fhir_package.ResourceCollection(
+        self._valueset_cls, self._primitive_handler, 'Z'
+    )
     uri = 'http://value.set'
     collection.put({
         'resourceType': 'ValueSet',
@@ -653,13 +661,15 @@ def npmfile_containing(file_contents: Sequence[Tuple[str, str]]):
         info = tarfile.TarInfo(name=f'package/{file_name}')
         info.size = len(contents)
         tar_file.addfile(
-            tarinfo=info, fileobj=io.BytesIO(contents.encode('utf-8')))
+            tarinfo=info, fileobj=io.BytesIO(contents.encode('utf-8'))
+        )
     temp_file.flush()
     yield temp_file
 
 
 def mock_resource_collection_containing(
-    resources: Iterable[message.Message]) -> mock.MagicMock:
+    resources: Iterable[message.Message],
+) -> mock.MagicMock:
   """Builds a mock for a ResourceCollection containing the given resources."""
   mock_collection = mock.MagicMock(spec=fhir_package.ResourceCollection)
   resources = {
