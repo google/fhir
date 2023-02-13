@@ -89,5 +89,6 @@ fhir_package(
     name = "test_extensions",
     definitions = [
         "test_extensions.json",
+        "package.json",
     ],
 )
