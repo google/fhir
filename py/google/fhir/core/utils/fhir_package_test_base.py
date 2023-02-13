@@ -623,6 +623,33 @@ class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
     self.assertEqual(manager.get_value_set('r2'), r2)
     self.assertIsNone(manager.get_value_set('mystery-url'))
 
+  def testIterStructureDefinitions_withAddedPackages_retrievesResources(self):
+    """Ensures structure definitions are retrievable from packages."""
+    r1 = self._structure_definition_cls()
+    r1.url.value = 'r1'
+
+    r2 = self._structure_definition_cls()
+    r2.url.value = 'r2'
+
+    package_1 = fhir_package.FhirPackage(
+        structure_definitions=mock.Mock(__iter__=lambda _: iter([r1])),
+        search_parameters=mock.Mock(__iter__=lambda _: iter([])),
+        code_systems=mock.Mock(__iter__=lambda _: iter([])),
+        value_sets=mock.Mock(__iter__=lambda _: iter([])),
+    )
+    package_2 = fhir_package.FhirPackage(
+        structure_definitions=mock.Mock(__iter__=lambda _: iter([r2])),
+        search_parameters=mock.Mock(__iter__=lambda _: iter([])),
+        code_systems=mock.Mock(__iter__=lambda _: iter([])),
+        value_sets=mock.Mock(__iter__=lambda _: iter([])),
+    )
+
+    manager = fhir_package.FhirPackageManager()
+    manager.add_package(package_1)
+    manager.add_package(package_2)
+
+    self.assertCountEqual(list(manager.iter_structure_definitions()), [r1, r2])
+
 
 @contextlib.contextmanager
 def zipfile_containing(file_contents: Sequence[Tuple[str, str]]):

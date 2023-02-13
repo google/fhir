@@ -433,6 +433,10 @@ class FhirPackageManager(
       if resource is not None:
         return resource
 
+  def iter_structure_definitions(self) -> Iterator[_StructDefT]:
+    for package in self.packages:
+      yield from package.structure_definitions
+
 
 def _add_resource_to_collection(
     parent_resource: Dict[str, Any],
