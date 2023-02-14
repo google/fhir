@@ -1,9 +1,6 @@
-load(
-    "@rules_python//python:python.bzl",
-    "py_library",
-    "py_test",
-)
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
+# Placeholder for internal Python strict library compatibility macro.
+# Placeholder for internal Python strict test compatibility macro.
 
 package(
     default_visibility = [
