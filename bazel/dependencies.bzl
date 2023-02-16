@@ -162,6 +162,7 @@ def fhirproto_dependencies(core_lib = False):
             "https://github.com/gflags/gflags/archive/v2.2.2.tar.gz",
         ],
     )
+
     http_archive(
         name = "com_github_glog_glog",
         strip_prefix = "glog-0a2e5931bd5ff22fd3bf8999eb8ce776f159cda6",
@@ -169,4 +170,15 @@ def fhirproto_dependencies(core_lib = False):
         urls = [
             "https://github.com/google/glog/archive/0a2e5931bd5ff22fd3bf8999eb8ce776f159cda6.zip",
         ],
+    )
+
+    http_archive(
+        name = "six_archive",
+        urls = [
+            "https://pypi.python.org/packages/source/s/six/six-1.16.0.tar.gz",
+            "http://mirror.bazel.build/pypi.python.org/packages/source/s/six/six-1.16.0.tar.gz",
+        ],
+        sha256 = "1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926",
+        strip_prefix = "six-1.16.0",
+        build_file = main_fhir_location + "//bazel/buildfiles:six.BUILD",
     )
