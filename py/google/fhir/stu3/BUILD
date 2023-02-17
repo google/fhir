@@ -3,6 +3,7 @@ load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 # Placeholder for internal Python strict test compatibility macro.
 
 package(
+    default_applicable_licenses = [""],
     default_visibility = [
         "//visibility:public",
     ],

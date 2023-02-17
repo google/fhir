@@ -3,6 +3,7 @@
 load("//bazel:protogen.bzl", "fhir_package")
 
 package(
+    default_applicable_licenses = [""],
     
     default_visibility = ["//visibility:public"],
 )

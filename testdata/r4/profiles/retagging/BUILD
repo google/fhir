@@ -1,5 +1,7 @@
 load("//bazel:protogen.bzl", "gen_fhir_definitions_and_protos")
 
+package(default_applicable_licenses = [""])
+
 licenses(["notice"])
 
 # This build rule uses the baseline "test" protos as the golden_java_proto_rules
