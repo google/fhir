@@ -1,6 +1,7 @@
 licenses(["notice"])
 
 package(
+    default_applicable_licenses = [""],
     
     default_visibility = [
         "//cc/google/fhir:__subpackages__",

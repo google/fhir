@@ -6,6 +6,8 @@ load(
 
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 
+package(default_applicable_licenses = [""])
+
 licenses(["notice"])
 
 # @rules_python may not be able to pull in transitive dependency correctly
