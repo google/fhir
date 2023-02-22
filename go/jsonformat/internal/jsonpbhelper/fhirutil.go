@@ -992,7 +992,7 @@ func ValidateReferenceType(msgField protoreflect.FieldDescriptor, refType string
 
 // ValidateRequiredFields returns an error if any field isn't populated in pb
 // that should be, according to the ValidationRequirement annotation.
-func ValidateRequiredFields(pb protoreflect.Message) error {
+func ValidateRequiredFields(pb protoreflect.Message, disallowNull bool) error {
 	var el UnmarshalErrorList
 	for _, requiredField := range requiredFields[pb.Descriptor().FullName()] {
 		field := pb.Descriptor().Fields().ByNumber(requiredField)
@@ -1001,12 +1001,34 @@ func ValidateRequiredFields(pb protoreflect.Message) error {
 				Type:    RequiredFieldError,
 				Details: fmt.Sprintf("missing required field %q", field.JSONName()),
 			})
+		} else if disallowNull {
+			if field.Kind() != protoreflect.MessageKind || field.IsList() || IsPrimitiveType(field.Message()) {
+				continue
+			}
+			msgVal := pb.Get(field).Message().Interface()
+			isEmpty := isEmptyMessage(msgVal)
+			if isEmpty {
+				el = append(el, &UnmarshalError{
+					Type:    RequiredFieldError,
+					Details: fmt.Sprintf("required field %q is either null or empty value", field.JSONName()),
+				})
+			}
+
 		}
 	}
 	if len(el) > 0 {
 		return el
 	}
 	return nil
+}
+
+func isEmptyMessage(m proto.Message) bool {
+	isEmpty := true
+	m.ProtoReflect().Range(func(fd protoreflect.FieldDescriptor, v protoreflect.Value) bool {
+		isEmpty = false
+		return false
+	})
+	return isEmpty
 }
 
 // collectDirectRequiredFields checks all the fields in the given message descriptor, collect the field numbers

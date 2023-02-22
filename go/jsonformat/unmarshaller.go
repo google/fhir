@@ -92,10 +92,10 @@ func newUnmarshaller(tz string, ver fhirversion.Version, enableExtendedValidatio
 // Unmarshal a FHIR resource from JSON into a ContainedResource proto. The FHIR
 // version of the proto is determined by the version the Unmarshaller was
 // created with.
-func (u *Unmarshaller) Unmarshal(in []byte) (proto.Message, error) {
+func (u *Unmarshaller) Unmarshal(in []byte, opts ...fhirvalidate.ValidationOption) (proto.Message, error) {
 	var umErrList jsonpbhelper.UnmarshalErrorList
 	er := errorreporter.NewBasicErrorReporter()
-	res, err := u.UnmarshalWithErrorReporter(in, er)
+	res, err := u.UnmarshalWithErrorReporter(in, er, opts...)
 	if err != nil {
 		return res, err
 	}
@@ -115,7 +115,7 @@ func (u *Unmarshaller) Unmarshal(in []byte) (proto.Message, error) {
 // reported according to user defined error reporter.
 // The FHIR version of the proto is determined by the version the Unmarshaller was
 // created with.
-func (u *Unmarshaller) UnmarshalWithErrorReporter(in []byte, er errorreporter.ErrorReporter) (proto.Message, error) {
+func (u *Unmarshaller) UnmarshalWithErrorReporter(in []byte, er errorreporter.ErrorReporter, opts ...fhirvalidate.ValidationOption) (proto.Message, error) {
 	var decoded map[string]json.RawMessage
 	if err := jsp.Unmarshal(in, &decoded); err != nil {
 		return nil, &jsonpbhelper.UnmarshalError{
@@ -124,7 +124,7 @@ func (u *Unmarshaller) UnmarshalWithErrorReporter(in []byte, er errorreporter.Er
 			Cause:       err,
 		}
 	}
-	return u.unmarshalJSONObject(decoded, er)
+	return u.unmarshalJSONObject(decoded, er, opts...)
 }
 
 func readFullResource(in io.Reader) (map[string]json.RawMessage, error) {
@@ -165,7 +165,7 @@ func (u *Unmarshaller) UnmarshalFromReaderWithErrorReporter(in io.Reader, er err
 	return u.unmarshalJSONObject(decoded, er)
 }
 
-func (u *Unmarshaller) unmarshalJSONObject(decoded map[string]json.RawMessage, er errorreporter.ErrorReporter) (proto.Message, error) {
+func (u *Unmarshaller) unmarshalJSONObject(decoded map[string]json.RawMessage, er errorreporter.ErrorReporter, opts ...fhirvalidate.ValidationOption) (proto.Message, error) {
 	res, err := u.parseContainedResource("", decoded)
 	if err != nil {
 		return res, err

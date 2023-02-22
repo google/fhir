@@ -1413,7 +1413,7 @@ func TestValidateRequiredFields(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			msg := test.msg.ProtoReflect()
-			err := ValidateRequiredFields(msg)
+			err := ValidateRequiredFields(msg, false /* disallowNullRequired */)
 			valid := err == nil
 			if valid != test.valid {
 				t.Errorf("ValidateRequiredFields(%v): got %v, want %v", test.name, valid, test.valid)

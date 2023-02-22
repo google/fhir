@@ -69,6 +69,22 @@ func init() {
 	}
 }
 
+// validationOptions provide options for validation.
+type validationOptions struct {
+	DisallowNullRequiredField bool
+}
+
+// A ValidationOption configures ValidationOptions.
+type ValidationOption func(*validationOptions)
+
+// DisallowNullRequiredField is used to turn on FHIR resources null or
+// empty required field validation, which is disabled by default.
+func DisallowNullRequiredField() ValidationOption {
+	return func(opts *validationOptions) {
+		opts.DisallowNullRequiredField = true
+	}
+}
+
 func collectDescriptorNames(msgs ...proto.Message) stringset.Set {
 	names := stringset.New()
 	for _, msg := range msgs {
@@ -77,17 +93,17 @@ func collectDescriptorNames(msgs ...proto.Message) stringset.Set {
 	return names
 }
 
-type validationStep func(fd protoreflect.FieldDescriptor, msg protoreflect.Message) error
+type validationStep func(fd protoreflect.FieldDescriptor, msg protoreflect.Message, opts validationOptions) error
 
 type validationStepWithErrorReporter func(fd protoreflect.FieldDescriptor, msg protoreflect.Message, jsonPath string, er errorreporter.ErrorReporter) error
 
-func validateRequiredFields(_ protoreflect.FieldDescriptor, msg protoreflect.Message) error {
-	return jsonpbhelper.ValidateRequiredFields(msg)
+func validateRequiredFields(_ protoreflect.FieldDescriptor, msg protoreflect.Message, opts validationOptions) error {
+	return jsonpbhelper.ValidateRequiredFields(msg, opts.DisallowNullRequiredField)
 }
 
 func validateRequiredFieldsWithErrorReporter(fd protoreflect.FieldDescriptor, msg protoreflect.Message, jsonPath string, errorReporter errorreporter.ErrorReporter) error {
 	var errors jsonpbhelper.UnmarshalErrorList
-	if err := validateRequiredFields(fd, msg); err != nil {
+	if err := validateRequiredFields(fd, msg, validationOptions{}); err != nil {
 		if !jsonpbhelper.IsUnmarshalError(err) {
 			return err
 		}
@@ -101,7 +117,7 @@ func validateRequiredFieldsWithErrorReporter(fd protoreflect.FieldDescriptor, ms
 	return nil
 }
 
-func validateReferenceTypes(fd protoreflect.FieldDescriptor, msg protoreflect.Message) error {
+func validateReferenceTypes(fd protoreflect.FieldDescriptor, msg protoreflect.Message, opts validationOptions) error {
 	if !proto.HasExtension(msg.Descriptor().Options(), apb.E_FhirReferenceType) {
 		return nil
 	}
@@ -110,7 +126,7 @@ func validateReferenceTypes(fd protoreflect.FieldDescriptor, msg protoreflect.Me
 
 func validateReferenceTypesWithErrorReporter(fd protoreflect.FieldDescriptor, msg protoreflect.Message, jsonPath string, errorReporter errorreporter.ErrorReporter) error {
 	var errors jsonpbhelper.UnmarshalErrorList
-	if err := validateReferenceTypes(fd, msg); err != nil {
+	if err := validateReferenceTypes(fd, msg, validationOptions{}); err != nil {
 		if !jsonpbhelper.IsUnmarshalError(err) {
 			return err
 		}
@@ -124,7 +140,7 @@ func validateReferenceTypesWithErrorReporter(fd protoreflect.FieldDescriptor, ms
 	return nil
 }
 
-func validatePrimitives(_ protoreflect.FieldDescriptor, msg protoreflect.Message) error {
+func validatePrimitives(_ protoreflect.FieldDescriptor, msg protoreflect.Message, opts validationOptions) error {
 	if !validatedTypes.Contains(string(msg.Descriptor().FullName())) {
 		return nil
 	}
@@ -164,7 +180,7 @@ func validatePrimitives(_ protoreflect.FieldDescriptor, msg protoreflect.Message
 
 func validatePrimitivesWithErrorReporter(fd protoreflect.FieldDescriptor, msg protoreflect.Message, jsonPath string, errorReporter errorreporter.ErrorReporter) error {
 	var errors jsonpbhelper.UnmarshalErrorList
-	if err := validatePrimitives(fd, msg); err != nil {
+	if err := validatePrimitives(fd, msg, validationOptions{}); err != nil {
 		if !jsonpbhelper.IsUnmarshalError(err) {
 			return err
 		}
@@ -185,13 +201,13 @@ func validateStringPrimitiveRegex(msg protoreflect.Message) bool {
 
 // Validate a FHIR msg against the rules defined in the FHIR spec. See package
 // description for what is included.
-func Validate(msg proto.Message) error {
+func Validate(msg proto.Message, opts ...ValidationOption) error {
 	validationSteps := []validationStep{
 		validatePrimitives,
 		validateRequiredFields,
 		validateReferenceTypes,
 	}
-	return walkMessage(msg.ProtoReflect(), nil, "", validationSteps)
+	return walkMessage(msg.ProtoReflect(), nil, "", validationSteps, opts...)
 }
 
 // ValidateWithErrorReporter validates a FHIR msg against the rules defined in the FHIR
@@ -226,10 +242,14 @@ func addFieldToPath(jsonPath, field string) string {
 	return jsonpbhelper.AddFieldToPath(jsonPath, field)
 }
 
-func walkMessage(msg protoreflect.Message, fd protoreflect.FieldDescriptor, jsonPath string, validators []validationStep) error {
+func walkMessage(msg protoreflect.Message, fd protoreflect.FieldDescriptor, jsonPath string, validators []validationStep, opts ...ValidationOption) error {
 	var errors jsonpbhelper.UnmarshalErrorList
+	options := &validationOptions{}
+	for _, setopt := range opts {
+		setopt(options)
+	}
 	for _, validator := range validators {
-		if err := validator(fd, msg); err != nil {
+		if err := validator(fd, msg, *options); err != nil {
 			if err := jsonpbhelper.AppendUnmarshalError(&errors, jsonpbhelper.AnnotateUnmarshalErrorWithPath(err, jsonPath)); err != nil {
 				return err
 			}
@@ -244,7 +264,7 @@ func walkMessage(msg protoreflect.Message, fd protoreflect.FieldDescriptor, json
 		if fd.IsList() {
 			l := value.List()
 			for i := 0; i < l.Len(); i++ {
-				if err := walkMessage(l.Get(i).Message(), fd, jsonpbhelper.AddIndexToPath(jsonPath, i), validators); err != nil {
+				if err := walkMessage(l.Get(i).Message(), fd, jsonpbhelper.AddIndexToPath(jsonPath, i), validators, opts...); err != nil {
 					if err := jsonpbhelper.AppendUnmarshalError(&errors, err); err != nil {
 						fatalErr = err
 						return false
@@ -252,7 +272,7 @@ func walkMessage(msg protoreflect.Message, fd protoreflect.FieldDescriptor, json
 				}
 			}
 		} else {
-			err := walkMessage(value.Message(), fd, jsonPath, validators)
+			err := walkMessage(value.Message(), fd, jsonPath, validators, opts...)
 			if err := jsonpbhelper.AppendUnmarshalError(&errors, err); err != nil {
 				fatalErr = err
 				return false
