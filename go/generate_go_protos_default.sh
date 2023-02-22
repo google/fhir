@@ -13,6 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# In order to run this command, you must have protoc and the protoc-gen-go
+# plugin installed in your PATH.
+# More details on protoc-gen-go install: https://protobuf.dev/reference/go/go-generated/
+# Install protoc on linux with sudo apt install -y protobuf-compiler.
+
 # This should be run from the root FHIR repository, like so:
 # ./go/generate_go_protos_default.sh
 bazel run //go:generate_go_protos -- --repo-path=.
