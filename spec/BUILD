@@ -123,21 +123,3 @@ fhir_package(
     ]) + ["hl7.fhir.us.core/3.1.0/package/package.json"],
     package_info = "uscore_r4_package_info.prototxt",
 )
-
-# US QI core profiles.
-fhir_package(
-    name = "qicore_3_2_0_package",
-    definitions = glob([
-        "hl7.fhir.us.qicore/3.2.0/*.json",
-    ]),
-    package_info = "qicore_stu3_package_info.prototxt",
-)
-
-# US QI core profiles.
-fhir_package(
-    name = "qicore_3_3_0_package",
-    definitions = glob([
-        "hl7.fhir.us.qicore/3.3.0/*.json",
-    ]),
-    package_info = "qicore_r4_package_info.prototxt",
-)
