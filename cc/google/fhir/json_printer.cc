@@ -23,8 +23,6 @@
 
 #include "google/protobuf/any.pb.h"
 #include "google/protobuf/descriptor.pb.h"
-#include "google/protobuf/descriptor.h"
-#include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
@@ -40,7 +38,6 @@
 #include "google/fhir/references.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "google/fhir/stu3/codeable_concepts.h"
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 
@@ -424,14 +421,6 @@ class Printer {
     }
 
     switch (GetFhirVersion(profiled_codeable_concept)) {
-      case proto::STU3:
-        stu3::ForEachCoding(
-            profiled_codeable_concept, [&](const stu3::proto::Coding& coding) {
-              reflection
-                  ->AddMessage(analytic_codeable_concept.get(), coding_field)
-                  ->CopyFrom(coding);
-            });
-        break;
       case proto::R4:
         r4::ForEachCoding(
             profiled_codeable_concept, [&](const r4::core::Coding& coding) {
