@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 /* config.h.  Generated from build/cmake/config.h.in by cmake configure */
+#define __LIBARCHIVE_CONFIG_H_INCLUDED 1
 
 /*
  * Ensure we have C99-style int64_t, etc, all defined.
@@ -35,14 +36,14 @@
 /* #undef HAVE_UNSIGNED___INT64 */
 
 /* The sizes of various standard integer types. */
-#define SIZE_OF_SHORT 2
-#define SIZE_OF_INT 4
-#define SIZE_OF_LONG 8
-#define SIZE_OF_LONG_LONG 8
-#define SIZE_OF_UNSIGNED_SHORT 2
-#define SIZE_OF_UNSIGNED 4
-#define SIZE_OF_UNSIGNED_LONG 8
-#define SIZE_OF_UNSIGNED_LONG_LONG 8
+#define SIZEOF_SHORT 2
+#define SIZEOF_INT 4
+#define SIZEOF_LONG 8
+#define SIZEOF_LONG_LONG 8
+#define SIZEOF_UNSIGNED_SHORT 2
+#define SIZEOF_UNSIGNED 4
+#define SIZEOF_UNSIGNED_LONG 8
+#define SIZEOF_UNSIGNED_LONG_LONG 8
 
 /*
  * If we lack int64_t, define it to the first of __int64, int, long, and long
@@ -53,17 +54,17 @@ typedef __int64 int64_t;
 #define HAVE_INT64_T
 #endif
 
-#if !defined(HAVE_INT64_T) && SIZE_OF_INT == 8
+#if !defined(HAVE_INT64_T) && SIZEOF_INT == 8
 typedef int int64_t;
 #define HAVE_INT64_T
 #endif
 
-#if !defined(HAVE_INT64_T) && SIZE_OF_LONG == 8
+#if !defined(HAVE_INT64_T) && SIZEOF_LONG == 8
 typedef long int64_t;
 #define HAVE_INT64_T
 #endif
 
-#if !defined(HAVE_INT64_T) && SIZE_OF_LONG_LONG == 8
+#if !defined(HAVE_INT64_T) && SIZEOF_LONG_LONG == 8
 typedef long long int64_t;
 #define HAVE_INT64_T
 #endif
@@ -75,12 +76,12 @@ typedef long long int64_t;
 /*
  * Similarly for int32_t
  */
-#if !defined(HAVE_INT32_T) && SIZE_OF_INT == 4
+#if !defined(HAVE_INT32_T) && SIZEOF_INT == 4
 typedef int int32_t;
 #define HAVE_INT32_T
 #endif
 
-#if !defined(HAVE_INT32_T) && SIZE_OF_LONG == 4
+#if !defined(HAVE_INT32_T) && SIZEOF_LONG == 4
 typedef long int32_t;
 #define HAVE_INT32_T
 #endif
@@ -92,12 +93,12 @@ typedef long int32_t;
 /*
  * Similarly for int16_t
  */
-#if !defined(HAVE_INT16_T) && SIZE_OF_INT == 2
+#if !defined(HAVE_INT16_T) && SIZEOF_INT == 2
 typedef int int16_t;
 #define HAVE_INT16_T
 #endif
 
-#if !defined(HAVE_INT16_T) && SIZE_OF_SHORT == 2
+#if !defined(HAVE_INT16_T) && SIZEOF_SHORT == 2
 typedef short int16_t;
 #define HAVE_INT16_T
 #endif
@@ -114,17 +115,17 @@ typedef unsigned __int64 uint64_t;
 #define HAVE_UINT64_T
 #endif
 
-#if !defined(HAVE_UINT64_T) && SIZE_OF_UNSIGNED == 8
+#if !defined(HAVE_UINT64_T) && SIZEOF_UNSIGNED == 8
 typedef unsigned uint64_t;
 #define HAVE_UINT64_T
 #endif
 
-#if !defined(HAVE_UINT64_T) && SIZE_OF_UNSIGNED_LONG == 8
+#if !defined(HAVE_UINT64_T) && SIZEOF_UNSIGNED_LONG == 8
 typedef unsigned long uint64_t;
 #define HAVE_UINT64_T
 #endif
 
-#if !defined(HAVE_UINT64_T) && SIZE_OF_UNSIGNED_LONG_LONG == 8
+#if !defined(HAVE_UINT64_T) && SIZEOF_UNSIGNED_LONG_LONG == 8
 typedef unsigned long long uint64_t;
 #define HAVE_UINT64_T
 #endif
@@ -136,12 +137,12 @@ typedef unsigned long long uint64_t;
 /*
  * Similarly for uint32_t
  */
-#if !defined(HAVE_UINT32_T) && SIZE_OF_UNSIGNED == 4
+#if !defined(HAVE_UINT32_T) && SIZEOF_UNSIGNED == 4
 typedef unsigned uint32_t;
 #define HAVE_UINT32_T
 #endif
 
-#if !defined(HAVE_UINT32_T) && SIZE_OF_UNSIGNED_LONG == 4
+#if !defined(HAVE_UINT32_T) && SIZEOF_UNSIGNED_LONG == 4
 typedef unsigned long uint32_t;
 #define HAVE_UINT32_T
 #endif
@@ -153,12 +154,12 @@ typedef unsigned long uint32_t;
 /*
  * Similarly for uint16_t
  */
-#if !defined(HAVE_UINT16_T) && SIZE_OF_UNSIGNED == 2
+#if !defined(HAVE_UINT16_T) && SIZEOF_UNSIGNED == 2
 typedef unsigned uint16_t;
 #define HAVE_UINT16_T
 #endif
 
-#if !defined(HAVE_UINT16_T) && SIZE_OF_UNSIGNED_SHORT == 2
+#if !defined(HAVE_UINT16_T) && SIZEOF_UNSIGNED_SHORT == 2
 typedef unsigned short uint16_t;
 #define HAVE_UINT16_T
 #endif
@@ -327,13 +328,13 @@ typedef uint64_t uintmax_t;
 #define ARCHIVE_XATTR_LINUX 1
 
 /* Version number of bsdcpio */
-#define BSDCPIO_VERSION_STRING "3.3.3"
+#define BSDCPIO_VERSION_STRING "3.6.1"
 
 /* Version number of bsdtar */
-#define BSDTAR_VERSION_STRING "3.3.3"
+#define BSDTAR_VERSION_STRING "3.6.1"
 
 /* Version number of bsdcat */
-#define BSDCAT_VERSION_STRING "3.3.3"
+#define BSDCAT_VERSION_STRING "3.6.1"
 
 /* Define to 1 if you have the `acl_create_entry' function. */
 /* #undef HAVE_ACL_CREATE_ENTRY */
@@ -384,7 +385,7 @@ typedef uint64_t uintmax_t;
 /* #undef HAVE_BSDXML_H */
 
 /* Define to 1 if you have the <bzlib.h> header file. */
-/* #define HAVE_BZLIB_H 1 */
+/* #undef HAVE_BZLIB_H */
 
 /* Define to 1 if you have the `chflags' function. */
 /* #undef HAVE_CHFLAGS */
@@ -690,7 +691,13 @@ typedef uint64_t uintmax_t;
 /* #undef HAVE_LIBBSDXML */
 
 /* Define to 1 if you have the `bz2' library (-lbz2). */
-/* #define HAVE_LIBBZ2 1 */
+/* #undef HAVE_LIBBZ2 */
+
+/* Define to 1 if you have the `b2' library (-lb2). */
+/* #undef HAVE_LIBB2 */
+
+/* Define to 1 if you have the <blake2.h> header file. */
+/* #undef HAVE_BLAKE2_H */
 
 /* Define to 1 if you have the `charset' library (-lcharset). */
 /* #undef HAVE_LIBCHARSET */
@@ -716,6 +723,9 @@ typedef uint64_t uintmax_t;
 /* Define to 1 if you have the `lzo2' library (-llzo2). */
 /* #undef HAVE_LIBLZO2 */
 
+/* Define to 1 if you have the `mbedcrypto' library (-lmbedcrypto). */
+/* #undef HAVE_LIBMBEDCRYPTO */
+
 /* Define to 1 if you have the `nettle' library (-lnettle). */
 /* #undef HAVE_LIBNETTLE */
 
@@ -740,23 +750,38 @@ typedef uint64_t uintmax_t;
 /* Define to 1 if you have the `zstd' library (-lzstd). */
 /* #undef HAVE_LIBZSTD */
 
+/* Define to 1 if you have the `zstd' library (-lzstd) with compression
+   support. */
+/* #undef HAVE_LIBZSTD_COMPRESSOR */
+
 /* Define to 1 if you have the <limits.h> header file. */
 #define HAVE_LIMITS_H 1
 
 /* Define to 1 if you have the `link' function. */
 #define HAVE_LINK 1
 
+/* Define to 1 if you have the `linkat' function. */
+#define HAVE_LINKAT 1
+
 /* Define to 1 if you have the <linux/fiemap.h> header file. */
+#ifndef MALDOCA_WASM
 #define HAVE_LINUX_FIEMAP_H 1
+#endif
 
 /* Define to 1 if you have the <linux/fs.h> header file. */
+#ifndef MALDOCA_WASM
 #define HAVE_LINUX_FS_H 1
+#endif
 
 /* Define to 1 if you have the <linux/magic.h> header file. */
+#ifndef MALDOCA_WASM
 #define HAVE_LINUX_MAGIC_H 1
+#endif
 
 /* Define to 1 if you have the <linux/types.h> header file. */
+#ifndef MALDOCA_WASM
 #define HAVE_LINUX_TYPES_H 1
+#endif
 
 /* Define to 1 if you have the `listea' function. */
 /* #undef HAVE_LISTEA */
@@ -892,7 +917,9 @@ typedef uint64_t uintmax_t;
 #define HAVE_POLL_H 1
 
 /* Define to 1 if you have the `posix_spawnp' function. */
+#ifndef MALDOCA_WASM
 #define HAVE_POSIX_SPAWNP 1
+#endif
 
 /* Define to 1 if you have the <process.h> header file. */
 /* #undef HAVE_PROCESS_H */
@@ -960,6 +987,9 @@ typedef uint64_t uintmax_t;
 
 /* Define to 1 if you have the `strchr' function. */
 #define HAVE_STRCHR 1
+
+/* Define to 1 if you have the `strnlen' function. */
+#define HAVE_STRNLEN 1
 
 /* Define to 1 if you have the `strdup' function. */
 #define HAVE_STRDUP 1
@@ -1116,6 +1146,9 @@ typedef uint64_t uintmax_t;
 /* Define to 1 if you have the <unistd.h> header file. */
 #define HAVE_UNISTD_H 1
 
+/* Define to 1 if you have the `unlinkat' function. */
+#define HAVE_UNLINKAT 1
+
 /* Define to 1 if you have the `unsetenv' function. */
 #define HAVE_UNSETENV 1
 
@@ -1209,6 +1242,9 @@ typedef uint64_t uintmax_t;
 /* Define to 1 if you have the `_get_timezone' function. */
 /* #undef HAVE__GET_TIMEZONE */
 
+/* Define to 1 if you have the `_gmtime64_s' function. */
+/* #undef HAVE__GMTIME64_S */
+
 /* Define to 1 if you have the `_localtime64_s' function. */
 /* #undef HAVE__LOCALTIME64_S */
 
@@ -1219,10 +1255,10 @@ typedef uint64_t uintmax_t;
 #define ICONV_CONST
 
 /* Version number of libarchive as a single integer */
-#define LIBARCHIVE_VERSION_NUMBER "3003003"
+#define LIBARCHIVE_VERSION_NUMBER "3006001"
 
 /* Version number of libarchive */
-#define LIBARCHIVE_VERSION_STRING "3.3.3"
+#define LIBARCHIVE_VERSION_STRING "3.6.1"
 
 /* Define to 1 if `lstat' dereferences a symlink specified with a trailing
    slash. */
@@ -1276,7 +1312,7 @@ typedef uint64_t uintmax_t;
 #endif /* SAFE_TO_DEFINE_EXTENSIONS */
 
 /* Version number of package */
-#define VERSION "3.3.3"
+#define VERSION "3.6.1"
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 /* #undef _FILE_OFFSET_BITS */

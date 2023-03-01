@@ -13,9 +13,9 @@ def fhirproto_dependencies(core_lib = False):
 
     http_archive(
         name = "com_google_absl",
-        sha256 = "5ec35586b685eea11f198bb6e75f870e37fde62d15b95a3897c37b2d0bbd9017",
-        strip_prefix = "abseil-cpp-143a27800eb35f4568b9be51647726281916aac9",
-        urls = ["https://github.com/abseil/abseil-cpp/archive/143a27800eb35f4568b9be51647726281916aac9.zip"],
+        sha256 = "61d0af0262a0131bb8917fcb883e5e831ee5ad1535433f2f13f85906d1607f81",
+        strip_prefix = "abseil-cpp-20230125.1",
+        urls = ["https://github.com/abseil/abseil-cpp/archive/refs/tags/20230125.1.zip"],
     )
 
     http_archive(
@@ -68,8 +68,8 @@ def fhirproto_dependencies(core_lib = False):
 
     http_archive(
         name = "bazel_skylib",
-        sha256 = "1dde365491125a3db70731e25658dfdd3bc5dbdfd11b840b3e987ecf043c7ca0",
-        urls = ["https://github.com/bazelbuild/bazel-skylib/releases/download/0.9.0/bazel_skylib-0.9.0.tar.gz"],
+        sha256 = "b8a1527901774180afc798aeb28c4634bdccf19c4d98e7bdd1ce79d1fe9aaad7",
+        urls = ["https://github.com/bazelbuild/bazel-skylib/releases/download/1.4.1/bazel-skylib-1.4.1.tar.gz"],
     )
 
     http_archive(
@@ -116,10 +116,10 @@ def fhirproto_dependencies(core_lib = False):
     http_archive(
         name = "libarchive",
         build_file = main_fhir_location + "//bazel/buildfiles:libarchive.BUILD",
-        sha256 = "ee1e749213c108cb60d53147f18c31a73d6717d7e3d2481c157e1b34c881ea39",
-        strip_prefix = "libarchive-3.4.3",
+        sha256 = "c676146577d989189940f1959d9e3980d28513d74eedfbc6b7f15ea45fe54ee2",
+        strip_prefix = "libarchive-3.6.1",
         urls = [
-            "https://github.com/libarchive/libarchive/releases/download/v3.4.3/libarchive-3.4.3.tar.gz",
+            "https://github.com/libarchive/libarchive/releases/download/v3.6.1/libarchive-3.6.1.tar.gz",
         ],
     )
 
@@ -145,11 +145,10 @@ def fhirproto_dependencies(core_lib = False):
 
     http_archive(
         name = "com_google_googletest",
-        sha256 = "9dc9157a9a1551ec7a7e43daea9a694a0bb5fb8bec81235d8a1e6ef64c716dcb",
-        strip_prefix = "googletest-release-1.10.0",
+        sha256 = "ad7fdba11ea011c1d925b3289cf4af2c66a352e18d4c7264392fead75e919363",
+        strip_prefix = "googletest-1.13.0",
         urls = [
-            "https://mirror.bazel.build/github.com/google/googletest/archive/release-1.10.0.tar.gz",
-            "https://github.com/google/googletest/archive/release-1.10.0.tar.gz",
+            "https://github.com/google/googletest/archive/refs/tags/v1.13.0.tar.gz",
         ],
     )
 

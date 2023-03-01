@@ -13,11 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+readonly PYTHON_VERSION='3.7.3'
 readonly PIP_VERSION='~=21.0.0'
 readonly SETUPTOOLS_VERSION='~=56.0.0'
 
 function run_bazel_in_venv {
-  python3 -m venv venv
+  eval "$(pyenv init -)"
+  pyenv install --skip-existing "${PYTHON_VERSION}"
+  pyenv shell "${PYTHON_VERSION}"
+
+  python -m venv venv
   source venv/bin/activate
   pip install pip"${PIP_VERSION}"
   pip install setuptools"${SETUPTOOLS_VERSION}"
