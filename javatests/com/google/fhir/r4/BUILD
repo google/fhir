@@ -1,5 +1,7 @@
 # TODO(b/244184211): describe this package.
 
+package(default_applicable_licenses = [""])
+
 licenses(["notice"])
 
 java_test(

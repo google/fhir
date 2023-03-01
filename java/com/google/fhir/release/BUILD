@@ -1,6 +1,7 @@
 load("@google_bazel_common//tools/jarjar:jarjar.bzl", "jarjar_library")
 
 package(
+    default_applicable_licenses = [""],
     # No Bazel target should depend on these
     default_visibility = ["//visibility:private"],
 )
