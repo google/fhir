@@ -28,12 +28,7 @@ function run_bazel_in_venv {
   pip install setuptools"${SETUPTOOLS_VERSION}"
   pip install wheel
 
-  # Run bazel test command. We run bazel test //... first so that the tests
-  # can start before all targets have been built. In particular, it takes
-  # around 2 minutes to build resources proto package for java - and it would
-  # block all cc and py tests if we run bazel build //... first.
   bazel test --test_output=errors //...
-  bazel build //...
 
   # Deactivate venv
   deactivate
