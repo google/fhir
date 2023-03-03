@@ -42,11 +42,12 @@ def move_generated_go_protos(tmp_dir: str):
       transformations occur.
   """
   dest_root = _REPO_PATH.value
-  proto_dest_dir = os.path.join(dest_root, "go/proto")
+  proto_dest_dir = os.path.join(dest_root, "go/proto/google")
   shutil.rmtree(proto_dest_dir, ignore_errors=True)
   shutil.move(
-      os.path.join(tmp_dir, "proto-out/github.com/google/fhir/go/proto"),
-      proto_dest_dir)
+      os.path.join(tmp_dir, "proto-out/github.com/google/fhir/go/proto/google"),
+      proto_dest_dir,
+  )
 
   accessor_out = os.path.join(
       dest_root, "go/jsonformat/internal/accessor/accessor_test_go_proto")
