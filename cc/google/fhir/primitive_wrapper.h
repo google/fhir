@@ -44,6 +44,8 @@
 #include "google/fhir/json_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/type_macros.h"
+#include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 #include "re2/re2.h"
 

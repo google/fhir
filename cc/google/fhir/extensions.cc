@@ -14,16 +14,15 @@
 
 #include "google/fhir/extensions.h"
 
+#include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "google/protobuf/descriptor.h"
-#include "google/protobuf/message.h"
 #include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
-#include "google/fhir/codes.h"
 #include "google/fhir/fhir_types.h"
-#include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
@@ -48,7 +47,7 @@ absl::Status CheckIsMessage(const FieldDescriptor* field) {
   return absl::OkStatus();
 }
 
-const std::vector<const FieldDescriptor*> FindValueFields(
+std::vector<const FieldDescriptor*> FindValueFields(
     const Descriptor* descriptor) {
   std::vector<const FieldDescriptor*> value_fields;
   for (int i = 0; i < descriptor->field_count(); i++) {
@@ -140,6 +139,79 @@ std::string GetInlinedExtensionUrl(const FieldDescriptor* field) {
              ? field->options().GetExtension(
                    ::google::fhir::proto::fhir_inlined_extension_url)
              : field->json_name();
+}
+
+absl::StatusOr<const google::protobuf::Message*> GetOnlyMatchingExtension(
+    absl::string_view url, const google::protobuf::Message& element) {
+  const FieldDescriptor* extension_field =
+      element.GetDescriptor()->FindFieldByName("extension");
+
+  if (extension_field == nullptr ||
+      extension_field->message_type() == nullptr ||
+      !extension_field->is_repeated()) {
+    return absl::InvalidArgumentError(
+        absl::StrCat("Invalid or missing extension field on ",
+                     element.GetDescriptor()->full_name()));
+  }
+
+  std::string scratch;
+  const Message* return_value = nullptr;
+  for (int i = 0;
+       i < element.GetReflection()->FieldSize(element, extension_field); i++) {
+    const Message& extension = element.GetReflection()->GetRepeatedMessage(
+        element, extension_field, i);
+    if (GetExtensionUrl(extension, &scratch) == url) {
+      if (return_value != nullptr) {
+        return absl::InvalidArgumentError(
+            absl::StrCat("Multiple extensions found for url: ", url));
+      }
+      return_value = &extension;
+    }
+  }
+  return return_value;
+}
+
+absl::StatusOr<const Message*> GetOnlySimpleExtensionValue(
+    absl::string_view url, const google::protobuf::Message& element) {
+  FHIR_ASSIGN_OR_RETURN(const google::protobuf::Message* extension,
+                        GetOnlyMatchingExtension(url, element));
+  if (extension == nullptr) {
+    return nullptr;
+  }
+
+  const google::protobuf::FieldDescriptor* value_field =
+      extension->GetDescriptor()->FindFieldByName("value");
+  if (value_field == nullptr || value_field->message_type() == nullptr) {
+    return absl::InvalidArgumentError(
+        absl::StrCat("Value field missing or invalid on extension: ",
+                     extension->GetDescriptor()->full_name()));
+  }
+
+  const google::protobuf::Message& value_element =
+      extension->GetReflection()->GetMessage(*extension, value_field);
+
+  const google::protobuf::OneofDescriptor* value_oneof =
+      value_element.GetDescriptor()->FindOneofByName("choice");
+
+  if (value_oneof == nullptr) {
+    return absl::InvalidArgumentError(absl::StrCat(
+        "Not a valid extension: ", extension->GetDescriptor()->full_name()));
+  }
+  const google::protobuf::FieldDescriptor* set_field =
+      value_element.GetReflection()->GetOneofFieldDescriptor(value_element,
+                                                             value_oneof);
+  if (set_field == nullptr) {
+    return absl::InvalidArgumentError(
+        absl::StrCat("Value field not set on extension: ", url));
+  }
+  const google::protobuf::Descriptor* set_type = set_field->message_type();
+
+  if (set_type == nullptr) {
+    return absl::InvalidArgumentError(
+        absl::StrCat("Invalid primitive value field on extension: ", url));
+  }
+
+  return &value_element.GetReflection()->GetMessage(value_element, set_field);
 }
 
 }  // namespace fhir

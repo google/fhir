@@ -17,23 +17,23 @@
 #ifndef GOOGLE_FHIR_EXTENSIONS_H_
 #define GOOGLE_FHIR_EXTENSIONS_H_
 
+#include <optional>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "glog/logging.h"
-#include "google/protobuf/descriptor.pb.h"
 #include "google/protobuf/descriptor.h"
-#include "google/protobuf/message.h"
-#include "google/protobuf/reflection.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
-#include "absl/types/optional.h"
+#include "absl/strings/substitute.h"
+#include "google/fhir/annotations.h"
 #include "google/fhir/codes.h"
 #include "google/fhir/fhir_types.h"
+#include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
-#include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 
 namespace google {
@@ -92,7 +92,7 @@ namespace extensions_internal {
 
 absl::Status CheckIsMessage(const ::google::protobuf::FieldDescriptor* field);
 
-const std::vector<const ::google::protobuf::FieldDescriptor*> FindValueFields(
+std::vector<const ::google::protobuf::FieldDescriptor*> FindValueFields(
     const ::google::protobuf::Descriptor* descriptor);
 
 template <class ExtensionLike>
@@ -104,8 +104,8 @@ absl::Status AddValueToExtension(const ::google::protobuf::Message& message,
 // For example, given a Base64Binary, this will return the base64_binary field
 // on an extension.
 template <typename ExtensionType>
-const absl::optional<const ::google::protobuf::FieldDescriptor*>
-GetExtensionValueFieldByType(const ::google::protobuf::Descriptor* field_type) {
+std::optional<const ::google::protobuf::FieldDescriptor*> GetExtensionValueFieldByType(
+    const ::google::protobuf::Descriptor* field_type) {
   static const std::unordered_map<
       std::string,
       const ::google::protobuf::FieldDescriptor*>* extension_value_fields_by_type = []() {
@@ -123,8 +123,8 @@ GetExtensionValueFieldByType(const ::google::protobuf::Descriptor* field_type) {
   }();
   auto iter = extension_value_fields_by_type->find(field_type->full_name());
   return iter == extension_value_fields_by_type->end()
-             ? absl::optional<const ::google::protobuf::FieldDescriptor*>()
-             : absl::make_optional(iter->second);
+             ? std::optional<const ::google::protobuf::FieldDescriptor*>()
+             : std::make_optional(iter->second);
 }
 
 // Given an extension, returns the field descriptor for the populated choice
@@ -467,6 +467,45 @@ absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
   } else {
     return extensions_internal::AddFieldsToExtension(message, extension);
   }
+}
+
+// Locates and returns a pointer to the only extension on `element` with url
+// matching `url`. Returns nullptr if no matching extension is found. Returns
+// InvalidArgument if `element` does not have a valid extension field, or if
+// multiple matching urls are present.
+absl::StatusOr<const google::protobuf::Message*> GetOnlyMatchingExtension(
+    absl::string_view url, const google::protobuf::Message& element);
+
+// Locates and returns a pointer to the only extension on `element` with url
+// matching `url`. Returns nullptr if no matching extension is found. Returns
+// InvalidArgument if `element` does not have a valid extension field, or the
+// value element is not set (e.g., in a complex extension), or if multiple
+// matching urls are present.
+absl::StatusOr<const google::protobuf::Message*> GetOnlySimpleExtensionValue(
+    absl::string_view url, const google::protobuf::Message& element);
+
+// Locates the only extension on `element` with url matching `url`
+// and returns a pointer to the set value element, or nullptr if no matching
+// extension is found. Returns an InvalidArgument error if the set value element
+// is not of type T, or if `element` doesn't have a valid extension field, or
+// the value element is not set (e.g., in a complex extension), or if multiple
+// matching urls are present.
+template <typename T>
+absl::StatusOr<const T*> GetOnlySimpleExtensionValue(
+    absl::string_view url, const google::protobuf::Message& element) {
+  FHIR_ASSIGN_OR_RETURN(const google::protobuf::Message* value,
+                        GetOnlySimpleExtensionValue(url, element));
+  if (value == nullptr) return nullptr;
+
+  if (value->GetDescriptor()->full_name() != T::descriptor()->full_name()) {
+    return absl::InvalidArgumentError(
+        absl::Substitute("Invalid value type on extension with url: $0.  "
+                         "Expected $1 but found $2",
+                         url, T::descriptor()->full_name(),
+                         value->GetDescriptor()->full_name()));
+  }
+
+  return dynamic_cast<const T*>(value);
 }
 
 }  // namespace fhir

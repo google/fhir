@@ -75,7 +75,6 @@ cc_library(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
-        "@com_google_absl//absl/types:optional",
         "@com_google_protobuf//:protobuf",
     ],
 )
@@ -289,6 +288,7 @@ cc_library(
         ":json_format_results",
         ":json_util",
         ":proto_util",
+        ":type_macros",
         ":util",
         "//cc/google/fhir/json:fhir_json",
         "//cc/google/fhir/status",
