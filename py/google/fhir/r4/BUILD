@@ -1,6 +1,5 @@
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
-# Placeholder for internal Python strict library compatibility macro.
-# Placeholder for internal Python strict test compatibility macro.
+# Placeholder for internal Python strict contrib test and library compatibility macro.
 
 package(
     default_visibility = [
@@ -266,9 +265,9 @@ py_test(
         "//proto/google/fhir/proto/r4/core:datatypes_py_pb2",
         "//proto/google/fhir/proto/r4/core:extensions_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:patient_py_pb2",
+        "//testdata/r4/profiles:test_extensions_py_pb2",
         "//py/google/fhir/core:extensions",
         "//py/google/fhir/core:extensions_test",
-        "//testdata/r4/profiles:test_extensions_py_pb2",
         requirement("absl-py"),
         requirement("six"),
     ],

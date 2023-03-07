@@ -92,7 +92,11 @@ class ExtensionsTest(extensions_test.ExtensionsTest):
     remaining_extensions = extensions.get_fhir_extensions(arbitrary_string)
     self.assertLen(remaining_extensions, 2)
 
-    remaining_urls = [extension.url.value for extension in remaining_extensions]
+    remaining_urls = [
+        extension.url.value
+        for extension in remaining_extensions
+        if isinstance(extension, datatypes_pb2.Extension)
+    ]
     self.assertEqual(remaining_urls, ['first', 'third'])
 
   def testExtensionToMessage_withEventTrigger_succeeds(self):

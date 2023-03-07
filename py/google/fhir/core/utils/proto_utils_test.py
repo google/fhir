@@ -14,7 +14,7 @@
 # limitations under the License.
 """Test proto_utils functionality."""
 
-from typing import List
+from typing import List, cast
 
 from absl.testing import absltest
 from proto.google.fhir.proto.r4 import uscore_pb2
@@ -109,7 +109,10 @@ class ProtoUtilsTest(absltest.TestCase):
     patient = patient_pb2.Patient()
     self.assertFalse(proto_utils.field_is_set(patient, "active"))
 
-    active_set_in_parent = proto_utils.set_in_parent_or_add(patient, "active")
+    active_set_in_parent = cast(
+        datatypes_pb2.Boolean,
+        proto_utils.set_in_parent_or_add(patient, "active"),
+    )
     self.assertTrue(proto_utils.field_is_set(patient, "active"))
     self.assertFalse(active_set_in_parent.value)
     self.assertFalse(patient.active.value)
@@ -123,7 +126,10 @@ class ProtoUtilsTest(absltest.TestCase):
     patient = patient_pb2.Patient()
     self.assertFalse(proto_utils.field_is_set(patient, "name"))
 
-    name_set_in_parent = proto_utils.set_in_parent_or_add(patient, "name")
+    name_set_in_parent = cast(
+        datatypes_pb2.HumanName,
+        proto_utils.set_in_parent_or_add(patient, "name"),
+    )
     self.assertTrue(proto_utils.field_is_set(patient, "name"))
     self.assertEmpty(name_set_in_parent.text.value)
     self.assertEmpty(patient.name[0].text.value)
