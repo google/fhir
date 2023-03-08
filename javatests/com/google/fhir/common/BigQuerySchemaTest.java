@@ -17,7 +17,6 @@ package com.google.fhir.common;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableSchema;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
@@ -29,7 +28,6 @@ import com.google.protobuf.Descriptors.Descriptor;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,17 +45,12 @@ public final class BigQuerySchemaTest {
     gsonFactory = new GsonFactory();
   }
 
-  /** Read the specifed json schema file from the testdata directory and parse it. */
-  @SuppressWarnings("unchecked")
-  private TableSchema readSchema(String filename) throws IOException {
+  /** Read the specifed json schema file from the testdata directory. */
+  private String readSchema(String filename) throws IOException {
     Runfiles runfiles = Runfiles.create();
     File file =
         new File(runfiles.rlocation("com_google_fhir/testdata/stu3/bigquery/" + filename));
-    ArrayList<TableFieldSchema> fields =
-        (ArrayList<TableFieldSchema>)
-            gsonFactory.fromString(
-                Files.asCharSource(file, StandardCharsets.UTF_8).read(), ArrayList.class);
-    return new TableSchema().setFields(fields);
+    return Files.asCharSource(file, StandardCharsets.UTF_8).read();
   }
 
   private void testSchema(Descriptor descriptor) throws IOException {
@@ -74,8 +67,8 @@ public final class BigQuerySchemaTest {
     } else {
       // Testing.
       // Parse the json-schema version of the input.
-      TableSchema expected = readSchema(name + ".schema.json");
-      assertThat(schema).isEqualTo(expected);
+      String expected = readSchema(name + ".schema.json");
+      assertThat(gsonFactory.toPrettyString(schema.getFields())).isEqualTo(expected);
     }
   }
 
