@@ -1,6 +1,5 @@
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
-# Placeholder for internal Python strict library compatibility macro.
-# Placeholder for internal Python strict test compatibility macro.
+# Placeholder for internal Python strict contrib test and library compatibility macro.
 
 package(
     default_visibility = [
@@ -117,7 +116,7 @@ py_test(
         "//proto/google/fhir/proto/r4/core:codes_py_pb2",
         "//proto/google/fhir/proto/r4/core:datatypes_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:patient_py_pb2",
-        "//py/google/fhir/core/utils:proto_utils",
+        ":proto_utils",
         requirement("absl-py"),
         requirement("six"),
     ],
@@ -137,7 +136,7 @@ py_test(
         "//proto/google/fhir/proto/r4:uscore_py_pb2",
         "//proto/google/fhir/proto/r4/core:datatypes_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:patient_py_pb2",
-        "//py/google/fhir/core/utils:fhir_types",
+        ":fhir_types",
         requirement("absl-py"),
         requirement("six"),
     ],
@@ -152,13 +151,14 @@ py_test(
     python_version = "PY3",
     srcs_version = "PY3",
     deps = [
+        ":annotation_utils",
         "//py",
+        "//proto/google/fhir/proto/r4:uscore_codes_py_pb2",
         "//proto/google/fhir/proto/r4:uscore_py_pb2",
         "//proto/google/fhir/proto/r4/core:datatypes_py_pb2",
         "//proto/google/fhir/proto/r4/core:valuesets_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:observation_py_pb2",
         "//proto/google/fhir/proto/r4/core/resources:patient_py_pb2",
-        "//py/google/fhir/core/utils:annotation_utils",
         "//testdata/r4/profiles:test_py_pb2",
         requirement("absl-py"),
         requirement("six"),
@@ -175,7 +175,7 @@ py_test(
     srcs_version = "PY3",
     deps = [
         "//py",
-        "//py/google/fhir/core/utils:path_utils",
+        ":path_utils",
         requirement("absl-py"),
         requirement("six"),
     ],
