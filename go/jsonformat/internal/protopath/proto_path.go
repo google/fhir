@@ -29,12 +29,12 @@ import (
 	"strconv"
 	"strings"
 
+	anypb "google.golang.org/protobuf/types/known/anypb"
+	protov1 "github.com/golang/protobuf/proto"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/reflect/protoregistry"
 	"github.com/serenize/snaker"
-
-	protov1 "github.com/golang/protobuf/proto"
 )
 
 // Zero represents the zero value of any type, it can be used in Set as the
@@ -107,14 +107,14 @@ func isValidPath(p Path) bool {
 func getMessageField(rpb protoreflect.Message, fieldName protoreflect.Name) (protoreflect.Descriptor, error) {
 	desc := rpb.Descriptor()
 	f := rpb.Descriptor().Fields().ByName(fieldName)
-	if f == nil {
-		oneof := desc.Oneofs().ByName(fieldName)
-		if oneof == nil {
-			return nil, fmt.Errorf("no field %s in %v", fieldName, desc.FullName())
-		}
+	if f != nil {
+		return f, nil
+	}
+	oneof := desc.Oneofs().ByName(fieldName)
+	if oneof != nil {
 		return oneof, nil
 	}
-	return f, nil
+	return nil, fmt.Errorf("no field %s in %v", fieldName, desc.FullName())
 }
 
 func getSliceElement(m protoreflect.Message, fd protoreflect.FieldDescriptor, i protoreflect.Name, allowExtend bool) (protoreflect.Value, error) {
@@ -324,9 +324,31 @@ func setOneOfFieldByType(m protoreflect.Message, oneOfDesc protoreflect.OneofDes
 	return nil
 }
 
+func setAny(anyMsg *anypb.Any, value any, path []protoreflect.Name) error {
+	if anyMsg.GetTypeUrl() == "" {
+		return fmt.Errorf("cannot return a value on an untyped Any")
+	}
+	inner, err := anyMsg.UnmarshalNew()
+	if err != nil {
+		return err
+	}
+	if err := set(inner.ProtoReflect(), value, path); err != nil {
+		return err
+	}
+	modifiedAny, err := anypb.New(inner)
+	if err != nil {
+		return err
+	}
+	anyMsg.Value = modifiedAny.Value
+	return nil
+}
+
 func set(m protoreflect.Message, value interface{}, path []protoreflect.Name) error {
 	fieldDesc, err := getMessageField(m, path[0])
 	if err != nil {
+		if anyMsg, ok := m.Interface().(*anypb.Any); ok {
+			return setAny(anyMsg, value, path)
+		}
 		return err
 	}
 	var oneOfDesc protoreflect.OneofDescriptor
@@ -505,6 +527,9 @@ func getDefaultValueAtPath(m protoreflect.Message, fd protoreflect.FieldDescript
 	} else {
 		m = v.Message()
 	}
+	if _, ok := m.Interface().(*anypb.Any); ok {
+		return nil, nil, fmt.Errorf("cannot return a default value for an untyped Any")
+	}
 
 	var ft protoreflect.FieldDescriptor
 	oneOfDesc := t.Oneofs().ByName(path[0])
@@ -549,9 +574,23 @@ func checkDefaultValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, 
 	return defVal, nil
 }
 
+func getAny(anyMsg *anypb.Any, defVal any, path []protoreflect.Name) (any, error) {
+	if anyMsg.GetTypeUrl() == "" {
+		return nil, fmt.Errorf("cannot return a value from an untyped Any")
+	}
+	inner, err := anyMsg.UnmarshalNew()
+	if err != nil {
+		return nil, err
+	}
+	return get(inner.ProtoReflect(), defVal, path)
+}
+
 func get(m protoreflect.Message, defVal interface{}, path []protoreflect.Name) (interface{}, error) {
 	field, err := getMessageField(m, path[0])
 	if err != nil {
+		if anyMsg, ok := m.Interface().(*anypb.Any); ok {
+			return getAny(anyMsg, defVal, path)
+		}
 		return nil, err
 	}
 

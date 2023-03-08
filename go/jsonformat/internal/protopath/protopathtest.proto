@@ -15,7 +15,9 @@
 // Dummy proto to facilitate testing of the protopath library.
 syntax = "proto3";
 
-package fhir.go.jsonformat.internal.protopath;
+package google.fhir.go.jsonformat.internal.protopath;
+
+import "google/protobuf/any.proto";
 
 option go_package = "github.com/google/fhir/go/jsonformat/internal/protopath/protopathtest_go_proto"; // NOLINT
 
@@ -70,4 +72,6 @@ message Message {
   string json_annotated_string_field = 12 [json_name = "jsonAnnotated"];
 
   bytes bytes_field = 13;
+
+  protobuf.Any any_field = 14;
 }

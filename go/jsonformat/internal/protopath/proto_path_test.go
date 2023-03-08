@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//      http://www.apache.org/licenses/LICENSE-2.0
+//	http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,13 +16,22 @@ package protopath
 import (
 	"testing"
 
+	anypb "google.golang.org/protobuf/types/known/anypb"
+	pptpb "github.com/google/fhir/go/jsonformat/internal/protopath/protopathtest_go_proto"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/testing/protocmp"
-
-	pptpb "github.com/google/fhir/go/jsonformat/internal/protopath/protopathtest_go_proto"
 )
+
+func mustMarshalAny(t *testing.T, pb proto.Message) *anypb.Any {
+	t.Helper()
+	anyPB, err := anypb.New(pb)
+	if err != nil {
+		t.Fatalf("creating Any: %v", err)
+	}
+	return anyPB
+}
 
 func TestSet(t *testing.T) {
 	tests := []struct {
@@ -221,6 +230,40 @@ func TestSet(t *testing.T) {
 			&pptpb.Message{BytesField: []byte{1, 2, 3}},
 			&pptpb.Message{},
 		},
+		{
+			"any",
+			NewPath("any_field.inner_field"),
+			int32(2),
+			&pptpb.Message{
+				AnyField: mustMarshalAny(t, &pptpb.Message_InnerMessage{
+					InnerField: 1,
+				}),
+			},
+			&pptpb.Message{
+				AnyField: mustMarshalAny(t, &pptpb.Message_InnerMessage{
+					InnerField: 2,
+				}),
+			},
+		},
+		{
+			"nested - any",
+			NewPath("any_field.any_field.inner_field"),
+			int32(2),
+			&pptpb.Message{
+				AnyField: mustMarshalAny(t, &pptpb.Message{
+					AnyField: mustMarshalAny(t, &pptpb.Message_InnerMessage{
+						InnerField: 1,
+					}),
+				}),
+			},
+			&pptpb.Message{
+				AnyField: mustMarshalAny(t, &pptpb.Message{
+					AnyField: mustMarshalAny(t, &pptpb.Message_InnerMessage{
+						InnerField: 2,
+					}),
+				}),
+			},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -380,6 +423,18 @@ func TestSet_Errors(t *testing.T) {
 			NewPath("type"),
 			"INVALID",
 			&pptpb.Message{},
+		},
+		{
+			"missing any",
+			NewPath("any_field.inner_field"),
+			int32(1),
+			&pptpb.Message{},
+		},
+		{
+			"untyped any",
+			NewPath("any_field.inner_field"),
+			int32(1),
+			&pptpb.Message{AnyField: &anypb.Any{}},
 		},
 	}
 	for _, test := range tests {
@@ -598,6 +653,30 @@ func TestGet(t *testing.T) {
 			&pptpb.Message{},
 			pptpb.MessageType_TYPE_1,
 		},
+		{
+			"any",
+			NewPath("any_field.inner_field"),
+			Zero,
+			&pptpb.Message{
+				AnyField: mustMarshalAny(t, &pptpb.Message_InnerMessage{
+					InnerField: 1,
+				}),
+			},
+			int32(1),
+		},
+		{
+			"nested - any",
+			NewPath("any_field.any_field.inner_field"),
+			Zero,
+			&pptpb.Message{
+				AnyField: mustMarshalAny(t, &pptpb.Message{
+					AnyField: mustMarshalAny(t, &pptpb.Message_InnerMessage{
+						InnerField: 1,
+					}),
+				}),
+			},
+			int32(1),
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -697,6 +776,18 @@ func TestGet_Errors(t *testing.T) {
 			NewPath("foo.inner_field"),
 			Zero,
 			&pptpb.Message{},
+		},
+		{
+			"missing any",
+			NewPath("any_field.inner_field"),
+			Zero,
+			&pptpb.Message{},
+		},
+		{
+			"untyped any",
+			NewPath("any_field.inner_field"),
+			Zero,
+			&pptpb.Message{AnyField: &anypb.Any{}},
 		},
 	}
 	for _, test := range tests {
