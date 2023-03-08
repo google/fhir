@@ -17,7 +17,7 @@ go_library(
         "//proto/google/fhir/proto:annotations_go_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",
         "//proto/google/fhir/proto/stu3:datatypes_go_proto",
-        "@com_bitbucket_creachadair_stringset//:go_default_library",
+        "@org_bitbucket_creachadair_stringset//:go_default_library",
         "@org_golang_google_protobuf//proto:go_default_library",
         "@org_golang_google_protobuf//reflect/protoreflect:go_default_library",
     ],
