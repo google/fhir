@@ -18,12 +18,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "google/protobuf/descriptor.h"
 #include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
-#include "google/fhir/annotations.h"
 #include "google/fhir/fhir_types.h"
-#include "google/fhir/status/status.h"
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 
@@ -36,7 +33,18 @@ using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
 
-namespace extensions_internal {
+namespace internal {
+bool IsSimpleExtension(const ::google::protobuf::Descriptor* descriptor) {
+  // Simple extensions have only a single, non-repeated value field.
+  // However, it is also possible to have a complex extension with only
+  // a single non-repeated field.  In that case, is_complex_extension is used to
+  // disambiguate.
+  const std::vector<const FieldDescriptor*> value_fields =
+      internal::FindValueFields(descriptor);
+  return IsProfileOfExtension(descriptor) && value_fields.size() == 1 &&
+         !value_fields.front()->is_repeated() &&
+         !descriptor->options().GetExtension(proto::is_complex_extension);
+}
 
 absl::Status CheckIsMessage(const FieldDescriptor* field) {
   if (field->type() != FieldDescriptor::Type::TYPE_MESSAGE) {
@@ -59,8 +67,6 @@ std::vector<const FieldDescriptor*> FindValueFields(
   return value_fields;
 }
 
-}  // namespace extensions_internal
-
 absl::Status ValidateExtension(const Descriptor* descriptor) {
   if (!IsProfileOfExtension(descriptor)) {
     return InvalidArgumentError(
@@ -75,12 +81,7 @@ absl::Status ValidateExtension(const Descriptor* descriptor) {
   }
   return absl::OkStatus();
 }
-
-absl::Status ClearTypedExtensions(const Descriptor* descriptor,
-                                  Message* message) {
-  FHIR_RETURN_IF_ERROR(ValidateExtension(descriptor));
-  return ClearExtensionsWithUrl(GetStructureDefinitionUrl(descriptor), message);
-}
+}  // namespace internal
 
 absl::Status ClearExtensionsWithUrl(const std::string& url, Message* message) {
   const Reflection* reflection = message->GetReflection();
@@ -110,27 +111,6 @@ const std::string& GetExtensionUrl(const google::protobuf::Message& extension,
   return url_message.GetReflection()->GetStringReference(
       url_message, url_message.GetDescriptor()->FindFieldByName("value"),
       scratch);
-}
-
-const std::string& GetExtensionSystem(const google::protobuf::Message& extension,
-                                      std::string* scratch) {
-  const Message& url_message = extension.GetReflection()->GetMessage(
-      extension, extension.GetDescriptor()->FindFieldByName("system"));
-  return url_message.GetReflection()->GetStringReference(
-      url_message, url_message.GetDescriptor()->FindFieldByName("value"),
-      scratch);
-}
-
-bool IsSimpleExtension(const ::google::protobuf::Descriptor* descriptor) {
-  // Simple extensions have only a single, non-repeated value field.
-  // However, it is also possible to have a complex extension with only
-  // a single non-repeated field.  In that case, is_complex_extension is used to
-  // disambiguate.
-  const std::vector<const FieldDescriptor*> value_fields =
-      extensions_internal::FindValueFields(descriptor);
-  return IsProfileOfExtension(descriptor) && value_fields.size() == 1 &&
-         !value_fields.front()->is_repeated() &&
-         !descriptor->options().GetExtension(proto::is_complex_extension);
 }
 
 std::string GetInlinedExtensionUrl(const FieldDescriptor* field) {

@@ -23,7 +23,6 @@
 #include <vector>
 
 #include "glog/logging.h"
-#include "google/protobuf/descriptor.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
@@ -41,8 +40,6 @@ namespace fhir {
 
 // Provides utility functions for dealing with FHIR extensions.
 
-absl::Status ValidateExtension(const ::google::protobuf::Descriptor* descriptor);
-
 // Extract all matching extensions from a container into a vector, and parse
 // them into protos. Example usage:
 // Patient patient = ...
@@ -58,9 +55,6 @@ absl::Status GetAllMatchingExtensions(const C& extension_container,
 template <class T, class C>
 absl::StatusOr<T> ExtractOnlyMatchingExtension(const C& entity);
 
-absl::Status ClearTypedExtensions(const ::google::protobuf::Descriptor* descriptor,
-                                  ::google::protobuf::Message* message);
-
 absl::Status ClearExtensionsWithUrl(const std::string& url,
                                     ::google::protobuf::Message* message);
 
@@ -68,9 +62,6 @@ std::string GetInlinedExtensionUrl(const ::google::protobuf::FieldDescriptor* fi
 
 const std::string& GetExtensionUrl(const google::protobuf::Message& extension,
                                    std::string* scratch);
-
-const std::string& GetExtensionSystem(const google::protobuf::Message& extension,
-                                      std::string* scratch);
 
 template <class ExtensionLike>
 absl::Status ExtensionToMessage(const ExtensionLike& extension,
@@ -88,7 +79,9 @@ template <class ExtensionLike>
 absl::Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
                                     ExtensionLike* extension);
 
-namespace extensions_internal {
+namespace internal {
+
+absl::Status ValidateExtension(const ::google::protobuf::Descriptor* descriptor);
 
 absl::Status CheckIsMessage(const ::google::protobuf::FieldDescriptor* field);
 
@@ -142,7 +135,7 @@ GetPopulatedExtensionValueField(const ExtensionLike& extension) {
   if (field == nullptr) {
     return ::absl::InvalidArgumentError("No value set on extension.");
   }
-  FHIR_RETURN_IF_ERROR(extensions_internal::CheckIsMessage(field));
+  FHIR_RETURN_IF_ERROR(internal::CheckIsMessage(field));
   return field;
 }
 
@@ -167,16 +160,16 @@ absl::Status AddFieldsToExtension(const ::google::protobuf::Message& message,
       for (int j = 0; j < reflection->FieldSize(message, field); j++) {
         ExtensionLike* child = extension->add_extension();
         child->mutable_url()->set_value(GetInlinedExtensionUrl(field));
-        FHIR_RETURN_IF_ERROR(extensions_internal::CheckIsMessage(field));
-        FHIR_RETURN_IF_ERROR(extensions_internal::AddValueToExtension(
+        FHIR_RETURN_IF_ERROR(internal::CheckIsMessage(field));
+        FHIR_RETURN_IF_ERROR(internal::AddValueToExtension(
             reflection->GetRepeatedMessage(message, field, j), child,
             IsChoiceType(field)));
       }
     } else {
       ExtensionLike* child = extension->add_extension();
       child->mutable_url()->set_value(GetInlinedExtensionUrl(field));
-      FHIR_RETURN_IF_ERROR(extensions_internal::CheckIsMessage(field));
-      FHIR_RETURN_IF_ERROR(extensions_internal::AddValueToExtension(
+      FHIR_RETURN_IF_ERROR(internal::CheckIsMessage(field));
+      FHIR_RETURN_IF_ERROR(internal::AddValueToExtension(
           reflection->GetMessage(message, field), child, IsChoiceType(field)));
     }
   }
@@ -202,8 +195,8 @@ absl::Status AddValueToExtension(const ::google::protobuf::Message& message,
       return ::absl::InvalidArgumentError(absl::StrCat(
           "Choice type has no value set: ", descriptor->full_name()));
     }
-    FHIR_RETURN_IF_ERROR(extensions_internal::CheckIsMessage(value_field));
-    return extensions_internal::AddValueToExtension(
+    FHIR_RETURN_IF_ERROR(internal::CheckIsMessage(value_field));
+    return internal::AddValueToExtension(
         message_reflection->GetMessage(message, value_field), extension, false);
   }
   // Try to set the message directly as a datatype value on the extension.
@@ -229,9 +222,8 @@ absl::Status ValueToMessage(const ExtensionLike& extension,
     return ::absl::InvalidArgumentError(
         absl::StrCat("Invalid extension: ", extension.DebugString()));
   }
-  FHIR_ASSIGN_OR_RETURN(
-      const ::google::protobuf::FieldDescriptor* value_field,
-      extensions_internal::GetPopulatedExtensionValueField(extension));
+  FHIR_ASSIGN_OR_RETURN(const ::google::protobuf::FieldDescriptor* value_field,
+                        internal::GetPopulatedExtensionValueField(extension));
 
   const ::google::protobuf::Reflection* message_reflection = message->GetReflection();
   if (IsChoiceType(field)) {
@@ -281,7 +273,12 @@ absl::Status ValueToMessage(const ExtensionLike& extension,
   return absl::OkStatus();
 }
 
-}  // namespace extensions_internal
+// Returns true if the passed-in descriptor descriptor describes a "Simple"
+// extension, which corresponds to an unprofiled extension with the "value"
+// choice type set, rather than itself having extensions.
+bool IsSimpleExtension(const ::google::protobuf::Descriptor* descriptor);
+
+}  // namespace internal
 
 template <class C, class T>
 absl::Status GetAllMatchingExtensions(const C& extension_container,
@@ -293,7 +290,7 @@ absl::Status GetAllMatchingExtensions(const C& extension_container,
     return absl::OkStatus();
   }
   const ::google::protobuf::Descriptor* descriptor = T::descriptor();
-  FHIR_RETURN_IF_ERROR(ValidateExtension(descriptor));
+  FHIR_RETURN_IF_ERROR(internal::ValidateExtension(descriptor));
   const std::string& url = descriptor->options().GetExtension(
       ::google::fhir::proto::fhir_structure_definition_url);
   for (const auto& extension : extension_container) {
@@ -325,11 +322,6 @@ absl::StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
   }
   return result.front();
 }
-
-// Returns true if the passed-in descriptor descriptor describes a "Simple"
-// extension, which corresponds to an unprofiled extension with the "value"
-// choice type set, rather than itself having extensions.
-bool IsSimpleExtension(const ::google::protobuf::Descriptor* descriptor);
 
 template <class ExtensionLike>
 absl::Status ExtensionToMessage(const ExtensionLike& extension,
@@ -366,8 +358,8 @@ absl::Status ExtensionToMessage(const ExtensionLike& extension,
       return ::absl::InvalidArgumentError(absl::StrCat(
           descriptor->full_name(), " is not a FHIR extension type"));
     }
-    return extensions_internal::ValueToMessage(extension, message,
-                                               fields_by_url.begin()->second);
+    return internal::ValueToMessage(extension, message,
+                                    fields_by_url.begin()->second);
   }
 
   for (const ExtensionLike& inner : extension.extension()) {
@@ -380,8 +372,7 @@ absl::Status ExtensionToMessage(const ExtensionLike& extension,
     }
 
     if (inner.value().choice_case() != ExtensionLike::ValueX::CHOICE_NOT_SET) {
-      FHIR_RETURN_IF_ERROR(
-          extensions_internal::ValueToMessage(inner, message, field));
+      FHIR_RETURN_IF_ERROR(internal::ValueToMessage(inner, message, field));
     } else {
       ::google::protobuf::Message* child;
       if (field->is_repeated()) {
@@ -405,8 +396,7 @@ absl::Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
                                     ExtensionLike* extension) {
   const ::google::protobuf::Descriptor* descriptor = datum.GetDescriptor();
   auto value_field_optional =
-      extensions_internal::GetExtensionValueFieldByType<ExtensionLike>(
-          descriptor);
+      internal::GetExtensionValueFieldByType<ExtensionLike>(descriptor);
   if (value_field_optional.has_value()) {
     extension->value()
         .GetReflection()
@@ -432,7 +422,7 @@ template <class ExtensionLike>
 absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
                                 ExtensionLike* extension) {
   const ::google::protobuf::Descriptor* descriptor = message.GetDescriptor();
-  FHIR_RETURN_IF_ERROR(ValidateExtension(descriptor));
+  FHIR_RETURN_IF_ERROR(internal::ValidateExtension(descriptor));
 
   extension->mutable_url()->set_value(GetStructureDefinitionUrl(descriptor));
 
@@ -448,16 +438,16 @@ absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
   }
 
   const std::vector<const ::google::protobuf::FieldDescriptor*> value_fields =
-      extensions_internal::FindValueFields(descriptor);
+      internal::FindValueFields(descriptor);
   if (value_fields.empty()) {
     return ::absl::InvalidArgumentError(
         absl::StrCat("Extension has no value fields: ", descriptor->name()));
   }
-  if (IsSimpleExtension(descriptor)) {
+  if (internal::IsSimpleExtension(descriptor)) {
     const ::google::protobuf::FieldDescriptor* value_field = value_fields[0];
-    FHIR_RETURN_IF_ERROR(extensions_internal::CheckIsMessage(value_field));
+    FHIR_RETURN_IF_ERROR(internal::CheckIsMessage(value_field));
     if (reflection->HasField(message, value_field)) {
-      return extensions_internal::AddValueToExtension(
+      return internal::AddValueToExtension(
           reflection->GetMessage(message, value_field), extension,
           IsChoiceType(value_field));
     } else {
@@ -465,7 +455,7 @@ absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
       return absl::OkStatus();
     }
   } else {
-    return extensions_internal::AddFieldsToExtension(message, extension);
+    return internal::AddFieldsToExtension(message, extension);
   }
 }
 

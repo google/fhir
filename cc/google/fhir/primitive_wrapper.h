@@ -24,8 +24,6 @@
 #include <utility>
 #include <vector>
 
-#include "google/protobuf/descriptor.h"
-#include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
@@ -59,7 +57,6 @@ namespace primitives_internal {
 using ::absl::FailedPreconditionError;
 using ::absl::InvalidArgumentError;
 using ::google::fhir::ClearExtensionsWithUrl;
-using ::google::fhir::ClearTypedExtensions;
 using ::google::protobuf::Descriptor;
 using ::google::protobuf::EnumDescriptor;
 using ::google::protobuf::EnumValueDescriptor;
@@ -745,12 +742,12 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
   absl::StatusOr<std::string> ToNonNullValueString() const override {
     std::string escaped;
     absl::Base64Escape(this->GetWrapped()->value(), &escaped);
-    std::vector<SeparatorStrideExtensionType> separator_extensions;
-    FHIR_RETURN_IF_ERROR(GetAllMatchingExtensions(
-        this->GetWrapped()->extension(), &separator_extensions));
-    if (!separator_extensions.empty()) {
-      int stride = separator_extensions[0].stride().value();
-      std::string separator = separator_extensions[0].separator().value();
+    absl::StatusOr<SeparatorStrideExtensionType> separator_extension =
+        ExtractOnlyMatchingExtension<SeparatorStrideExtensionType>(
+            *this->GetWrapped());
+    if (separator_extension.ok()) {
+      int stride = separator_extension->stride().value();
+      std::string separator = separator_extension->separator().value();
 
       RE2::GlobalReplace(&escaped, absl::StrCat("(.{", stride, "})"),
                          absl::StrCat("\\1", separator));
@@ -765,8 +762,10 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
       const override {
     FHIR_ASSIGN_OR_RETURN(auto extension_message,
                           ExtensibleWrapper<Base64BinaryType>::GetElement());
-    FHIR_RETURN_IF_ERROR(ClearTypedExtensions(
-        SeparatorStrideExtensionType::descriptor(), extension_message.get()));
+
+    FHIR_RETURN_IF_ERROR(ClearExtensionsWithUrl(
+        GetStructureDefinitionUrl(SeparatorStrideExtensionType::descriptor()),
+        extension_message.get()));
     return std::move(extension_message);
   }
 

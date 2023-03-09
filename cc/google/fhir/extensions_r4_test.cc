@@ -296,24 +296,6 @@ TEST(ExtensionsR4Test, ExtractOnlyMatchingExtensionMultipleFound) {
   EXPECT_EQ(absl::StatusCode::kInvalidArgument, extracted.status().code());
 }
 
-TEST(ExtensionsR4Test, IsSimpleExtensionTrue) {
-  EXPECT_TRUE(IsSimpleExtension(r4::testing::SimpleDecimalExt::descriptor()));
-}
-
-TEST(ExtensionsR4Test, IsSimpleExtensionFalseManyFields) {
-  EXPECT_FALSE(IsSimpleExtension(r4::testing::ComplexExt::descriptor()));
-}
-
-TEST(ExtensionsR4Test, IsSimpleExtensionFalseOneFieldWithComplexAnnotation) {
-  EXPECT_FALSE(IsSimpleExtension(
-      r4::testing::SingleValueComplexExtension::descriptor()));
-}
-
-TEST(ExtensionsR4Test, IsSimpleExtensionFalseOneRepeatedField) {
-  EXPECT_FALSE(IsSimpleExtension(
-      r4::testing::SingleValueRepeatedComplexExtension::descriptor()));
-}
-
 TEST(ExtensionsR4Test, GetOnlyMatchingExtensionSucceeds) {
   Composition composition;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
