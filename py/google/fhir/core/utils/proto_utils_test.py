@@ -34,22 +34,30 @@ class ProtoUtilsTest(absltest.TestCase):
     patient_a = patient_pb2.Patient()
     patient_b = patient_pb2.Patient()
     self.assertTrue(
-        proto_utils.are_same_message_type(patient_a.DESCRIPTOR,
-                                          patient_b.DESCRIPTOR))
+        proto_utils.are_same_message_type(
+            patient_a.DESCRIPTOR, patient_b.DESCRIPTOR
+        )
+    )
     self.assertTrue(
-        proto_utils.are_same_message_type(patient_pb2.Patient.DESCRIPTOR,
-                                          patient_pb2.Patient.DESCRIPTOR))
+        proto_utils.are_same_message_type(
+            patient_pb2.Patient.DESCRIPTOR, patient_pb2.Patient.DESCRIPTOR
+        )
+    )
 
   def testAreSameMessageType_withDifferentMessageType_returnsFalse(self):
     """Test are_same_message_type with two different message types."""
     patient = patient_pb2.Patient()
     uscore_patient_profile = uscore_pb2.USCorePatientProfile()
     self.assertFalse(
-        proto_utils.are_same_message_type(patient.DESCRIPTOR,
-                                          uscore_patient_profile.DESCRIPTOR))
+        proto_utils.are_same_message_type(
+            patient.DESCRIPTOR, uscore_patient_profile.DESCRIPTOR
+        )
+    )
     self.assertFalse(
-        proto_utils.are_same_message_type(patient_pb2.Patient.DESCRIPTOR,
-                                          uscore_patient_profile.DESCRIPTOR))
+        proto_utils.are_same_message_type(
+            patient_pb2.Patient.DESCRIPTOR, uscore_patient_profile.DESCRIPTOR
+        )
+    )
 
   def testMessageIsType_withActualMessageType_returnsTrue(self):
     """Test MessageIsType functionality against the proper FHIR type."""
@@ -63,7 +71,8 @@ class ProtoUtilsTest(absltest.TestCase):
     """Test MessageIsType functionality against a different FHIR type."""
     patient = patient_pb2.Patient()
     self.assertFalse(
-        proto_utils.is_message_type(patient, datatypes_pb2.Boolean))
+        proto_utils.is_message_type(patient, datatypes_pb2.Boolean)
+    )
 
     boolean = datatypes_pb2.Boolean()
     self.assertFalse(proto_utils.is_message_type(boolean, patient_pb2.Patient))
@@ -82,7 +91,8 @@ class ProtoUtilsTest(absltest.TestCase):
     """Test field_content_length functionality on non-existent field input."""
     default_patient = patient_pb2.Patient()  # Leave active unset
     self.assertEqual(
-        proto_utils.field_content_length(default_patient, "active"), 0)
+        proto_utils.field_content_length(default_patient, "active"), 0
+    )
 
   def testFieldIsSet_withSetField_returnsTrue(self):
     """Test field_is_set with a set field."""
@@ -221,8 +231,9 @@ class ProtoUtilsTest(absltest.TestCase):
     patient = patient_pb2.Patient(active=datatypes_pb2.Boolean(value=False))
 
     self.assertFalse(patient.active.value)
-    proto_utils.set_value_at_field(patient, "active",
-                                   datatypes_pb2.Boolean(value=True))
+    proto_utils.set_value_at_field(
+        patient, "active", datatypes_pb2.Boolean(value=True)
+    )
     self.assertTrue(patient.active.value)
 
   def testSetValueAtField_repeatedCompositeValue_setsList(self):
@@ -246,9 +257,11 @@ class ProtoUtilsTest(absltest.TestCase):
   def testSetValueAtFieldIndex_singleCompositeField_setsValue(self):
     """Test set_value_at_field_index with a singular composite type."""
     known_gender = patient_pb2.Patient.GenderCode(
-        value=codes_pb2.AdministrativeGenderCode.MALE)
+        value=codes_pb2.AdministrativeGenderCode.MALE
+    )
     unknown_gender = patient_pb2.Patient.GenderCode(
-        value=codes_pb2.AdministrativeGenderCode.UNKNOWN)
+        value=codes_pb2.AdministrativeGenderCode.UNKNOWN
+    )
 
     patient = patient_pb2.Patient(gender=unknown_gender)
     self.assertEqual(patient.gender, unknown_gender)
@@ -260,7 +273,8 @@ class ProtoUtilsTest(absltest.TestCase):
     patient = self._create_patient_with_names(["A", "B", "C"])
     new_name = datatypes_pb2.HumanName(
         text=datatypes_pb2.String(value="Foo"),
-        family=datatypes_pb2.String(value="Bar"))
+        family=datatypes_pb2.String(value="Bar"),
+    )
     proto_utils.set_value_at_field_index(patient, "name", 1, new_name)
     self.assertEqual(patient.name[1], new_name)
 
@@ -275,7 +289,8 @@ class ProtoUtilsTest(absltest.TestCase):
     patient = self._create_patient_with_names(["A", "B", "C"])
     new_name = datatypes_pb2.HumanName(
         text=datatypes_pb2.String(value="Foo"),
-        family=datatypes_pb2.String(value="Bar"))
+        family=datatypes_pb2.String(value="Bar"),
+    )
 
     with self.assertRaises(ValueError) as ve:
       proto_utils.set_value_at_field_index(patient, "name", 3, new_name)
@@ -300,9 +315,11 @@ class ProtoUtilsTest(absltest.TestCase):
   def testCopyCommonField_notPresentInBothMessages_raisesException(self):
     """Tests copy_common_field with an invalid descriptor raises."""
     first_patient = patient_pb2.Patient(
-        active=datatypes_pb2.Boolean(value=True))
+        active=datatypes_pb2.Boolean(value=True)
+    )
     second_patient = patient_pb2.Patient(
-        active=datatypes_pb2.Boolean(value=False))
+        active=datatypes_pb2.Boolean(value=False)
+    )
 
     with self.assertRaises(ValueError) as ve:
       proto_utils.copy_common_field(first_patient, second_patient, "value")
@@ -311,33 +328,42 @@ class ProtoUtilsTest(absltest.TestCase):
   def testGetMessageClassFromDescriptor_returnsMessageClass(self):
     """Tests that the correct class is returned for a message."""
     actual = proto_utils.get_message_class_from_descriptor(
-        patient_pb2.Patient.DESCRIPTOR)
+        patient_pb2.Patient.DESCRIPTOR
+    )
     self.assertTrue(
-        proto_utils.are_same_message_type(actual.DESCRIPTOR,
-                                          patient_pb2.Patient.DESCRIPTOR))
+        proto_utils.are_same_message_type(
+            actual.DESCRIPTOR, patient_pb2.Patient.DESCRIPTOR
+        )
+    )
 
   def testCreateMessageFromDescriptor_returnsMessage(self):
     """Tests that the correct class is returned for a message."""
     self.assertEqual(
         proto_utils.create_message_from_descriptor(
-            patient_pb2.Patient.DESCRIPTOR), patient_pb2.Patient())
+            patient_pb2.Patient.DESCRIPTOR
+        ),
+        patient_pb2.Patient(),
+    )
 
   def testCreateMessageFromDescriptor_withArguments_returnsMessage(self):
     """Tests that the correct class is instantiated with kwargs."""
 
     patient_name = datatypes_pb2.HumanName(
         text=datatypes_pb2.String(value="Foo"),
-        family=datatypes_pb2.String(value="Bar"))
+        family=datatypes_pb2.String(value="Bar"),
+    )
     expected_patient = patient_pb2.Patient(name=[patient_name])
     actual_patient = proto_utils.create_message_from_descriptor(
-        patient_pb2.Patient.DESCRIPTOR, name=[patient_name])
+        patient_pb2.Patient.DESCRIPTOR, name=[patient_name]
+    )
     self.assertEqual(expected_patient, actual_patient)
 
   def _create_patient_with_names(self, names: List[str]) -> patient_pb2.Patient:
     patient = patient_pb2.Patient()
     for name in names:
       patient.name.append(
-          datatypes_pb2.HumanName(text=datatypes_pb2.String(value=name)))
+          datatypes_pb2.HumanName(text=datatypes_pb2.String(value=name))
+      )
     return patient
 
 

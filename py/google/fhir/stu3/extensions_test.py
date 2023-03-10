@@ -59,7 +59,9 @@ class ExtensionsTest(extensions_test.ExtensionsTest):
     patient.extension.add(
         url=datatypes_pb2.Uri(value='abcd'),
         value=datatypes_pb2.Extension.ValueX(
-            boolean=datatypes_pb2.Boolean(value=True)))
+            boolean=datatypes_pb2.Boolean(value=True)
+        ),
+    )
     self.assertLen(extensions.get_fhir_extensions(patient), 1)
 
   def testClearFhirExtensions_withMultipleExtensions_succeeds(self):
@@ -68,15 +70,21 @@ class ExtensionsTest(extensions_test.ExtensionsTest):
     arbitrary_string.extension.add(
         url=datatypes_pb2.Uri(value='first'),
         value=datatypes_pb2.Extension.ValueX(
-            boolean=datatypes_pb2.Boolean(value=True)))
+            boolean=datatypes_pb2.Boolean(value=True)
+        ),
+    )
     arbitrary_string.extension.add(
         url=datatypes_pb2.Uri(value='second'),
         value=datatypes_pb2.Extension.ValueX(
-            boolean=datatypes_pb2.Boolean(value=True)))
+            boolean=datatypes_pb2.Boolean(value=True)
+        ),
+    )
     arbitrary_string.extension.add(
         url=datatypes_pb2.Uri(value='third'),
         value=datatypes_pb2.Extension.ValueX(
-            boolean=datatypes_pb2.Boolean(value=True)))
+            boolean=datatypes_pb2.Boolean(value=True)
+        ),
+    )
     self.assertLen(extensions.get_fhir_extensions(arbitrary_string), 3)
 
     # Remove middle extension
@@ -89,61 +97,77 @@ class ExtensionsTest(extensions_test.ExtensionsTest):
 
   def testExtensionToMessage_withEventTrigger_succeeds(self):
     self.assert_extension_to_message_equals_golden(
-        'trigger', ml_extensions_pb2.EventTrigger)
+        'trigger', ml_extensions_pb2.EventTrigger
+    )
 
   def testMessageToExtension_withEventTrigger_succeeds(self):
     self.assert_message_to_extension_equals_golden(
-        'trigger', ml_extensions_pb2.EventTrigger)
+        'trigger', ml_extensions_pb2.EventTrigger
+    )
 
   def testExtensionToMessage_withEventLabel_succeeds(self):
-    self.assert_extension_to_message_equals_golden('label',
-                                                   ml_extensions_pb2.EventLabel)
+    self.assert_extension_to_message_equals_golden(
+        'label', ml_extensions_pb2.EventLabel
+    )
 
   def testMessageToExtension_withEventLabel_succeeds(self):
-    self.assert_message_to_extension_equals_golden('label',
-                                                   ml_extensions_pb2.EventLabel)
+    self.assert_message_to_extension_equals_golden(
+        'label', ml_extensions_pb2.EventLabel
+    )
 
   def testExtensionToMessage_withPrimitiveHasNoValue_succeeds(self):
     self.assert_extension_to_message_equals_golden(
-        'primitive_has_no_value', fhirproto_extensions_pb2.PrimitiveHasNoValue)
+        'primitive_has_no_value', fhirproto_extensions_pb2.PrimitiveHasNoValue
+    )
 
   def testMessageToExtension_withPrimitiveHasNoValue_succeeds(self):
     self.assert_message_to_extension_equals_golden(
-        'primitive_has_no_value', fhirproto_extensions_pb2.PrimitiveHasNoValue)
+        'primitive_has_no_value', fhirproto_extensions_pb2.PrimitiveHasNoValue
+    )
 
   def testExtensionToMessage_withEmptyPrimitiveHasNoValue_succeeds(self):
     self.assert_extension_to_message_equals_golden(
-        'empty', fhirproto_extensions_pb2.PrimitiveHasNoValue)
+        'empty', fhirproto_extensions_pb2.PrimitiveHasNoValue
+    )
 
   def testMessageToExtension_withEmptyPrimitiveHasNoValue_succeeds(self):
     self.assert_message_to_extension_equals_golden(
-        'empty', fhirproto_extensions_pb2.PrimitiveHasNoValue)
+        'empty', fhirproto_extensions_pb2.PrimitiveHasNoValue
+    )
 
   def testExtensionToMessage_withCapabilityStatementSearchParameterCombination_succeeds(
-      self):
+      self,
+  ):
     self.assert_extension_to_message_equals_golden(
         'capability',
-        extensions_pb2.CapabilityStatementSearchParameterCombination)
+        extensions_pb2.CapabilityStatementSearchParameterCombination,
+    )
 
   def testMessageToExtension_withCapabilityStatementSearchParameterCombination_succeeds(
-      self):
+      self,
+  ):
     self.assert_message_to_extension_equals_golden(
         'capability',
-        extensions_pb2.CapabilityStatementSearchParameterCombination)
+        extensions_pb2.CapabilityStatementSearchParameterCombination,
+    )
 
   @absltest.skipIf(
       'testdata' not in sys.modules,
-      'google-fhir package does not build+install tertiary testdata protos.')
+      'google-fhir package does not build+install tertiary testdata protos.',
+  )
   def testExtensionToMessage_withDigitalMediaType_succeeds(self):
     self.assert_extension_to_message_equals_golden(
-        'digital_media_type', test_extensions_pb2.DigitalMediaType)
+        'digital_media_type', test_extensions_pb2.DigitalMediaType
+    )
 
   @absltest.skipIf(
       'testdata' not in sys.modules,
-      'google-fhir package does not build+install tertiary testdata protos.')
+      'google-fhir package does not build+install tertiary testdata protos.',
+  )
   def testMessageToExtension_withDigitalMediaType_succeeds(self):
     self.assert_message_to_extension_equals_golden(
-        'digital_media_type', test_extensions_pb2.DigitalMediaType)
+        'digital_media_type', test_extensions_pb2.DigitalMediaType
+    )
 
 
 if __name__ == '__main__':
