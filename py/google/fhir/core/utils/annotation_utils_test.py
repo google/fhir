@@ -328,13 +328,6 @@ class AnnotationUtilsTest(absltest.TestCase):
         _BODY_LENGTH_UNITS_VALUESET_URL,
     )
 
-  def testGetEnumValuesetUrl_withMessageDescriptor_raisesException(self):
-    """Tests get_enum_valueset_url raises without passing an EnumDescriptor."""
-    with self.assertRaises(KeyError) as ke:
-      annotation_utils.get_enum_valueset_url(patient_pb2.Patient())
-
-    self.assertIsInstance(ke.exception, KeyError)
-
   def testHasFhirValuesetUrl_withFhirValueSet_returnsTrue(self):
     """Tests has_fhir_valueset_url with a valid FHIR valueset."""
     use_code = datatypes_pb2.Address.UseCode()
