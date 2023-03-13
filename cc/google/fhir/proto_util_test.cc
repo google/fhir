@@ -30,6 +30,7 @@ namespace fhir {
 namespace {
 using ::google::fhir::stu3::proto::DateTime;
 using ::google::fhir::stu3::proto::Encounter;
+using ::google::fhir::stu3::proto::Id;
 using ::google::fhir::stu3::proto::MedicationRequest;
 using ::google::fhir::stu3::proto::Observation;
 using ::google::fhir::testutil::EqualsProto;
@@ -39,27 +40,28 @@ using ::google::protobuf::Message;
 
 Encounter MakeTestEncounter() {
   Encounter encounter;
-  google::protobuf::TextFormat::ParseFromString(R"proto(
-    id { value: "5446" }
-    location {
-      period {
-        start { value_us: 5 }
-        end { value_us: 6 }
-      }
-    }
-    location {
-      period {
-        start { value_us: 7 }
-        end { value_us: 8 }
-      }
-    }
-    location {
-      period {
-        start { value_us: 9 }
-        end { value_us: 10 }
-      }
-    }
-  )proto", &encounter);
+  google::protobuf::TextFormat::ParseFromString(R"pb(
+                                        id { value: "5446" }
+                                        location {
+                                          period {
+                                            start { value_us: 5 }
+                                            end { value_us: 6 }
+                                          }
+                                        }
+                                        location {
+                                          period {
+                                            start { value_us: 7 }
+                                            end { value_us: 8 }
+                                          }
+                                        }
+                                        location {
+                                          period {
+                                            start { value_us: 9 }
+                                            end { value_us: 10 }
+                                          }
+                                        }
+                                      )pb",
+                                      &encounter);
   return encounter;
 }
 
@@ -93,28 +95,31 @@ TEST(ForEachMessageWithStatus, Fail) {
 
 TEST(GetSubmessageByPath, Valid) {
   MedicationRequest request;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    dispense_request: {
-      validity_period: {
-        start: {
-          value_us: 1275350400000000
-          timezone: "America/New_York"
-          precision: 3
-        }
-        end: {
-          value_us: 1275436800000000
-          timezone: "America/New_York"
-          precision: 3
-        }
-      }
-    })proto", &request));
+  ASSERT_TRUE(
+      google::protobuf::TextFormat::ParseFromString(R"pb(
+                                            dispense_request: {
+                                              validity_period: {
+                                                start: {
+                                                  value_us: 1275350400000000
+                                                  timezone: "America/New_York"
+                                                  precision: 3
+                                                }
+                                                end: {
+                                                  value_us: 1275436800000000
+                                                  timezone: "America/New_York"
+                                                  precision: 3
+                                                }
+                                              }
+                                            })pb",
+                                          &request));
 
   DateTime expected;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    value_us: 1275350400000000
-    timezone: "America/New_York"
-    precision: 3
-  )proto", &expected));
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"pb(
+                                                    value_us: 1275350400000000
+                                                    timezone: "America/New_York"
+                                                    precision: 3
+                                                  )pb",
+                                                  &expected));
 
   auto result = google::fhir::GetSubmessageByPathAndCheckType<DateTime>(
       request, "MedicationRequest.dispenseRequest.validityPeriod.start");
@@ -142,9 +147,10 @@ TEST(GetSubmessageByPath, BadPath) {
   MedicationRequest request;
   ASSERT_TRUE(
       google::protobuf::TextFormat::ParseFromString(
-          R"proto(
-            dispense_request:
-                { validity_period: { start: { value_us: 12753 } } })proto",
+          R"pb(
+            dispense_request: {
+              validity_period: { start: { value_us: 12753 } }
+            })pb",
           &request));
 
   auto result = google::fhir::GetSubmessageByPathAndCheckType<DateTime>(
@@ -156,9 +162,10 @@ TEST(GetSubmessageByPath, WrongRequestedType) {
   MedicationRequest request;
   ASSERT_TRUE(
       google::protobuf::TextFormat::ParseFromString(
-          R"proto(
-            dispense_request:
-                { validity_period: { start: { value_us: 12753 } } })proto",
+          R"pb(
+            dispense_request: {
+              validity_period: { start: { value_us: 12753 } }
+            })pb",
           &request));
 
   auto result = google::fhir::GetSubmessageByPathAndCheckType<Observation>(
@@ -170,9 +177,10 @@ TEST(GetSubmessageByPath, WrongResourceType) {
   MedicationRequest request;
   ASSERT_TRUE(
       google::protobuf::TextFormat::ParseFromString(
-          R"proto(
-            dispense_request:
-                { validity_period: { start: { value_us: 12753 } } })proto",
+          R"pb(
+            dispense_request: {
+              validity_period: { start: { value_us: 12753 } }
+            })pb",
           &request));
   auto result = google::fhir::GetSubmessageByPathAndCheckType<DateTime>(
       request, "Encounter.dispenseRequest.validityPeriod.start");
@@ -182,9 +190,10 @@ TEST(GetSubmessageByPath, WrongResourceType) {
 TEST(GetSubmessageByPath, HasIndex) {
   const Encounter encounter = MakeTestEncounter();
   DateTime expected;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    value_us: 7
-  )proto", &expected));
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"pb(
+                                                    value_us: 7
+                                                  )pb",
+                                                  &expected));
   auto result = google::fhir::GetSubmessageByPathAndCheckType<DateTime>(
       encounter, "Encounter.location[1].period.start");
   ASSERT_TRUE(result.ok());
@@ -194,9 +203,13 @@ TEST(GetSubmessageByPath, HasIndex) {
 TEST(GetSubmessageByPath, EndsInIndex) {
   const Encounter encounter = MakeTestEncounter();
   Encounter::Location expected;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    period { start { value_us: 7 } end { value_us: 8 } }
-  )proto", &expected));
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"pb(
+                                                    period {
+                                                      start { value_us: 7 }
+                                                      end { value_us: 8 }
+                                                    }
+                                                  )pb",
+                                                  &expected));
   auto result =
       google::fhir::GetSubmessageByPathAndCheckType<Encounter::Location>(
           encounter, "Encounter.location[1]");
@@ -220,28 +233,31 @@ TEST(GetSubmessageByPath, UnindexedRepeatedInMiddle) {
 
 TEST(GetSubmessageByPath, Untemplatized) {
   MedicationRequest request;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    dispense_request: {
-      validity_period: {
-        start: {
-          value_us: 1275350400000000
-          timezone: "America/New_York"
-          precision: 3
-        }
-        end: {
-          value_us: 1275436800000000
-          timezone: "America/New_York"
-          precision: 3
-        }
-      }
-    })proto", &request));
+  ASSERT_TRUE(
+      google::protobuf::TextFormat::ParseFromString(R"pb(
+                                            dispense_request: {
+                                              validity_period: {
+                                                start: {
+                                                  value_us: 1275350400000000
+                                                  timezone: "America/New_York"
+                                                  precision: 3
+                                                }
+                                                end: {
+                                                  value_us: 1275436800000000
+                                                  timezone: "America/New_York"
+                                                  precision: 3
+                                                }
+                                              }
+                                            })pb",
+                                          &request));
 
   DateTime expected;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    value_us: 1275350400000000
-    timezone: "America/New_York"
-    precision: 3
-  )proto", &expected));
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"pb(
+                                                    value_us: 1275350400000000
+                                                    timezone: "America/New_York"
+                                                    precision: 3
+                                                  )pb",
+                                                  &expected));
 
   const google::protobuf::Message& request_as_message = request;
 
@@ -255,12 +271,24 @@ TEST(GetSubmessageByPath, Untemplatized) {
 TEST(ClearFieldByPath, SingularPresent) {
   Encounter encounter = MakeTestEncounter();
   Encounter expected;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    id { value: "5446" }
-    location { period { start { value_us: 5 } end { value_us: 6 } } }
-    location { period { start { value_us: 7 } } }
-    location { period { start { value_us: 9 } end { value_us: 10 } } }
-  )proto", &expected));
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"pb(
+        id { value: "5446" }
+        location {
+          period {
+            start { value_us: 5 }
+            end { value_us: 6 }
+          }
+        }
+        location { period { start { value_us: 7 } } }
+        location {
+          period {
+            start { value_us: 9 }
+            end { value_us: 10 }
+          }
+        }
+      )pb",
+      &expected));
   ASSERT_TRUE(
       ClearFieldByPath(&encounter, "Encounter.location[1].period.end").ok());
   ASSERT_THAT(encounter, EqualsProto(expected));
@@ -282,22 +310,25 @@ TEST(ClearFieldByPath, SingularInvalid) {
 TEST(ClearFieldByPath, RepeatedUnindexedPresent) {
   Encounter encounter = MakeTestEncounter();
   Encounter expected;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    id { value: "5446" }
-  )proto", &expected));
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"pb(
+                                                    id { value: "5446" }
+                                                  )pb",
+                                                  &expected));
   ASSERT_TRUE(ClearFieldByPath(&encounter, "Encounter.location").ok());
   ASSERT_THAT(encounter, EqualsProto(expected));
 }
 
 TEST(ClearFieldByPath, RepeatedUnindexedAbsent) {
   Encounter encounter;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    id { value: "5446" }
-  )proto", &encounter));
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"pb(
+                                                    id { value: "5446" }
+                                                  )pb",
+                                                  &encounter));
   Encounter expected;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"proto(
-    id { value: "5446" }
-  )proto", &expected));
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(R"pb(
+                                                    id { value: "5446" }
+                                                  )pb",
+                                                  &expected));
   ASSERT_TRUE(ClearFieldByPath(&encounter, "Encounter.location").ok());
   ASSERT_THAT(encounter, EqualsProto(expected));
 }
@@ -413,6 +444,26 @@ TEST(ProtoUtilTest, MutableMessageInField_WrongType) {
   ASSERT_EQ(
       MutableMessageInField(encounter.mutable_id(), "value").status().code(),
       absl::StatusCode::kInvalidArgument);
+}
+
+TEST(ProtoUtilTest, TypedMutableMessageInFieldSucceeds) {
+  Encounter encounter = MakeTestEncounter();
+  ASSERT_THAT(MutableMessageInField<Id>(&encounter, "id").value(),
+              EqualsProto(encounter.id()));
+}
+
+TEST(ProtoUtilTest, TypedMutableMessageInFieldWrongTypeReturnsStatus) {
+  Encounter encounter = MakeTestEncounter();
+  ASSERT_EQ(MutableMessageInField<DateTime>(&encounter, "id").status().code(),
+            absl::StatusCode::kInvalidArgument);
+}
+
+TEST(ProtoUtilTest, TypedMutableMessageInFieldPrimitiveReturnsStatus) {
+  Encounter encounter = MakeTestEncounter();
+  ASSERT_EQ(MutableMessageInField<DateTime>(encounter.mutable_id(), "value")
+                .status()
+                .code(),
+            absl::StatusCode::kInvalidArgument);
 }
 
 }  // namespace

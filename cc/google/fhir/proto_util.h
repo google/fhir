@@ -27,6 +27,7 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/substitute.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 
@@ -221,6 +222,27 @@ absl::StatusOr<const google::protobuf::Message*> GetMessageInField(
 
 absl::StatusOr<google::protobuf::Message*> MutableMessageInField(
     ::google::protobuf::Message* message, const std::string& field_name);
+
+template <typename T>
+absl::StatusOr<T*> MutableMessageInField(::google::protobuf::Message* message,
+                                         const std::string& field_name) {
+  if (message == nullptr) {
+    return absl::InvalidArgumentError(
+        "MutableMessageInField called with null argument.");
+  }
+
+  const ::google::protobuf::FieldDescriptor* field =
+      message->GetDescriptor()->FindFieldByName(field_name);
+
+  if (!field->message_type() ||
+      field->message_type()->full_name() != T::descriptor()->full_name()) {
+    return absl::InvalidArgumentError(absl::Substitute(
+        "Invalid arguments to GetMessageInField: $0 is not of type $1",
+        field->full_name(), T::descriptor()->full_name()));
+  }
+  return dynamic_cast<T*>(
+      message->GetReflection()->MutableMessage(message, field));
+}
 
 template <typename T>
 absl::StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
