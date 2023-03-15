@@ -658,7 +658,7 @@ std::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForStu3Types(
                  target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(
         new Base64BinaryWrapper<FHIR_DATATYPE(ExtensionType, base64_binary),
-                                Base64BinarySeparatorStrideType>());
+                                ExtensionType>());
   } else if (IsMessageType<FHIR_DATATYPE(ExtensionType, boolean)>(
                  target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(

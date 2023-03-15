@@ -735,24 +735,31 @@ class CodeWrapper : public StringTypeWrapper<CodeType> {
   }
 };
 
-template <typename Base64BinaryType, typename SeparatorStrideExtensionType,
-          typename ExtensionType = EXTENSION_TYPE(Base64BinaryType)>
+template <typename Base64BinaryType,
+          typename ExtensionType = EXTENSION_TYPE(Base64BinaryType),
+          typename StringType = FHIR_DATATYPE(Base64BinaryType, string_value),
+          typename PositiveIntType =
+              FHIR_DATATYPE(Base64BinaryType, positive_int)>
 class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
  public:
   absl::StatusOr<std::string> ToNonNullValueString() const override {
     std::string escaped;
     absl::Base64Escape(this->GetWrapped()->value(), &escaped);
-    absl::StatusOr<SeparatorStrideExtensionType> separator_extension =
-        ExtractOnlyMatchingExtension<SeparatorStrideExtensionType>(
-            *this->GetWrapped());
-    if (separator_extension.ok()) {
-      int stride = separator_extension->stride().value();
-      std::string separator = separator_extension->separator().value();
+    FHIR_ASSIGN_OR_RETURN(const ExtensionType* separator_extension,
+                          GetOnlyMatchingExtension<ExtensionType>(
+                              kBinarySeparatorStrideUrl, *this->GetWrapped()));
+    if (separator_extension != nullptr) {
+      FHIR_ASSIGN_OR_RETURN(const PositiveIntType* stride,
+                            GetOnlySimpleExtensionValue<PositiveIntType>(
+                                "stride", *separator_extension));
+      FHIR_ASSIGN_OR_RETURN(const StringType* separator,
+                            GetOnlySimpleExtensionValue<StringType>(
+                                "separator", *separator_extension));
 
-      RE2::GlobalReplace(&escaped, absl::StrCat("(.{", stride, "})"),
-                         absl::StrCat("\\1", separator));
-      if (absl::EndsWith(escaped, separator)) {
-        escaped.erase(escaped.length() - separator.length());
+      RE2::GlobalReplace(&escaped, absl::StrCat("(.{", stride->value(), "})"),
+                         absl::StrCat("\\1", separator->value()));
+      if (absl::EndsWith(escaped, separator->value())) {
+        escaped.erase(escaped.length() - separator->value().length());
       }
     }
     return absl::StrCat("\"", escaped, "\"");
@@ -763,9 +770,8 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
     FHIR_ASSIGN_OR_RETURN(auto extension_message,
                           ExtensibleWrapper<Base64BinaryType>::GetElement());
 
-    FHIR_RETURN_IF_ERROR(ClearExtensionsWithUrl(
-        GetStructureDefinitionUrl(SeparatorStrideExtensionType::descriptor()),
-        extension_message.get()));
+    FHIR_RETURN_IF_ERROR(ClearExtensionsWithUrl(kBinarySeparatorStrideUrl,
+                                                extension_message.get()));
     return std::move(extension_message);
   }
 
@@ -802,13 +808,21 @@ class Base64BinaryWrapper : public StringInputWrapper<Base64BinaryType> {
       while (end < json_string.length() && json_string[end] == ' ') {
         end++;
       }
-      const std::string separator = json_string.substr(stride, end - stride);
-      SeparatorStrideExtensionType separator_stride_extension_msg;
-      separator_stride_extension_msg.mutable_separator()->set_value(separator);
-      separator_stride_extension_msg.mutable_stride()->set_value(stride);
+      ExtensionType* separator_stride_extension = wrapped->add_extension();
+      separator_stride_extension->mutable_url()->set_value(
+          kBinarySeparatorStrideUrl);
 
-      FHIR_RETURN_IF_ERROR(ConvertToExtension<ExtensionType>(
-          separator_stride_extension_msg, wrapped->add_extension()));
+      ExtensionType* separator_extension =
+          separator_stride_extension->add_extension();
+      separator_extension->mutable_url()->set_value("separator");
+      separator_extension->mutable_value()->mutable_string_value()->set_value(
+          json_string.substr(stride, end - stride));
+
+      ExtensionType* stride_extension =
+          separator_stride_extension->add_extension();
+      stride_extension->mutable_url()->set_value("stride");
+      stride_extension->mutable_value()->mutable_positive_int()->set_value(
+          stride);
     }
 
     std::string unescaped;
