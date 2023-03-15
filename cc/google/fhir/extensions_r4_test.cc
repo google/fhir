@@ -15,6 +15,7 @@
  */
 
 #include <string>
+#include <vector>
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -26,9 +27,11 @@
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 #include "proto/google/fhir/proto/r4/core/extensions.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/binary.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/composition.pb.h"
 #include "proto/google/fhir/proto/r4/fhirproto_extensions.pb.h"
 #include "proto/google/fhir/proto/r4/ml_extensions.pb.h"
+#include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 #include "testdata/r4/profiles/test_extensions.pb.h"
 
 namespace google {
@@ -311,7 +314,7 @@ TEST(ExtensionsR4Test, GetOnlyMatchingExtensionSucceeds) {
       )pb",
       &composition));
 
-  auto result = GetOnlyMatchingExtension("test_url", composition);
+  auto result = GetOnlyMatchingExtension<Extension>("test_url", composition);
 
   Extension expected;
   ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
@@ -323,6 +326,82 @@ TEST(ExtensionsR4Test, GetOnlyMatchingExtensionSucceeds) {
 
   EXPECT_TRUE(result.ok());
   EXPECT_THAT(result.value(), EqualsProto(expected));
+}
+
+TEST(ExtensionsR4Test, GetAllMatchingExtensionsSucceeds) {
+  Composition composition;
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"pb(
+        extension {
+          url { value: "test_url" }
+          value { string_value { value: "%" } }
+        }
+        extension {
+          url { value: "random_url" }
+          value { string_value { value: "*" } }
+        }
+        extension {
+          url { value: "test_url" }
+          value { string_value { value: "!" } }
+        }
+      )pb",
+      &composition));
+
+  std::vector<const Extension*> matches;
+  auto result = GetAllMatchingExtensions("test_url", composition, matches);
+
+  EXPECT_TRUE(result.ok());
+  EXPECT_THAT(matches, testing::ElementsAre(&composition.extension(0),
+                                            &composition.extension(2)));
+}
+
+TEST(
+    ExtensionsR4Test,
+    GetAllMatchingExtensionsReturnsEmptyArrayForElementsWithoutExtensionField) {
+  r4::core::Binary binary;
+
+  std::vector<const Extension*> matches;
+  auto result = GetAllMatchingExtensions("test_url", binary, matches);
+
+  EXPECT_TRUE(result.ok());
+  EXPECT_THAT(matches, testing::ElementsAre());
+}
+
+TEST(ExtensionsR4Test, GetAllMatchingExtensionsFailsWithWrongType) {
+  Composition composition;
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"pb(
+        extension {
+          url { value: "test_url" }
+          value { string_value { value: "%" } }
+        }
+        extension {
+          url { value: "random_url" }
+          value { string_value { value: "*" } }
+        }
+        extension {
+          url { value: "test_url" }
+          value { string_value { value: "!" } }
+        }
+      )pb",
+      &composition));
+
+  // This requests with incorrect extension type template - the proto contains
+  // R4 extensions, not STU3.
+  std::vector<const stu3::proto::Extension*> matches;
+  auto result = GetAllMatchingExtensions("test_url", composition, matches);
+
+  EXPECT_FALSE(result.ok());
+}
+
+TEST(ExtensionsR4Test,
+     GetOnlyMatchingExtensionReturnsNullptrForElementsWithoutExtensionField) {
+  r4::core::Binary binary;
+
+  auto result = GetOnlyMatchingExtension<Extension>("test_url", binary);
+
+  EXPECT_TRUE(result.ok());
+  EXPECT_THAT(result.value(), nullptr);
 }
 
 TEST(ExtensionsR4Test, GetOnlyMatchingExtensionReturnsStatusIfMultipleFound) {
@@ -344,7 +423,7 @@ TEST(ExtensionsR4Test, GetOnlyMatchingExtensionReturnsStatusIfMultipleFound) {
       )pb",
       &composition));
 
-  auto result = GetOnlyMatchingExtension("test_url", composition);
+  auto result = GetOnlyMatchingExtension<Extension>("test_url", composition);
 
   EXPECT_FALSE(result.ok());
 }
@@ -360,7 +439,7 @@ TEST(ExtensionsR4Test, GetOnlyMatchingExtensionReturnsNullptrIfMissing) {
       )pb",
       &composition));
 
-  auto result = GetOnlyMatchingExtension("test_url", composition);
+  auto result = GetOnlyMatchingExtension<Extension>("test_url", composition);
 
   EXPECT_TRUE(result.ok());
   EXPECT_EQ(result.value(), nullptr);
@@ -483,27 +562,6 @@ TEST(ExtensionsR4Test, GetOnlySimpleExtensionValueNotFoundReturnsNullptr) {
   EXPECT_EQ(result.value(), nullptr);
 }
 
-TEST(ExtensionsR4Test, GetOnlySimpleExtensionValueUntypedSucceeds) {
-  Composition composition;
-  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
-      R"pb(
-        extension {
-          url { value: "test_url" }
-          value { string_value { value: "!" } }
-        }
-      )pb",
-      &composition));
-
-  auto result = GetOnlySimpleExtensionValue("test_url", composition);
-
-  google::fhir::r4::core::String expected;
-  ASSERT_TRUE(
-      google::protobuf::TextFormat::ParseFromString(R"pb(value: "!")pb", &expected));
-
-  EXPECT_TRUE(result.ok());
-  EXPECT_THAT(result.value(), EqualsProto(expected));
-}
-
 TEST(ExtensionsR4Test,
      GetOnlySimpleExtensionValueReturnsStatusForComplexExtension) {
   Composition composition;
@@ -523,7 +581,8 @@ TEST(ExtensionsR4Test,
       )pb",
       &composition));
 
-  auto result = GetOnlySimpleExtensionValue("test_url", composition);
+  auto result = GetOnlySimpleExtensionValue<google::fhir::r4::core::Coding>(
+      "test_url", composition);
 
   EXPECT_FALSE(result.ok());
 }

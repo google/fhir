@@ -22,6 +22,7 @@
 #include <unordered_map>
 #include <vector>
 
+
 #include "glog/logging.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
@@ -39,22 +40,6 @@ namespace google {
 namespace fhir {
 
 // Provides utility functions for dealing with FHIR extensions.
-
-// Extract all matching extensions from a container into a vector, and parse
-// them into protos. Example usage:
-// Patient patient = ...
-// std::vector<MyExtension> my_extensions;
-// auto status = GetAllMatchingExtensions(patient.extension(), &my_extension);
-template <class C, class T>
-absl::Status GetAllMatchingExtensions(const C& extension_container,
-                                      std::vector<T>* result);
-
-// Extracts a single extension of type T from 'entity'. Returns a NotFound error
-// if there are zero extensions of that type. Returns an InvalidArgument error
-// if there are more than one.
-template <class T, class C>
-absl::StatusOr<T> ExtractOnlyMatchingExtension(const C& entity);
-
 absl::Status ClearExtensionsWithUrl(const std::string& url,
                                     ::google::protobuf::Message* message);
 
@@ -79,7 +64,51 @@ template <class ExtensionLike>
 absl::Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
                                     ExtensionLike* extension);
 
+// Locates and returns a pointer to the only extension on `element` with url
+// matching `url`. Returns nullptr if no matching extension is found. Returns
+// InvalidArgument if `element` does not have a valid extension field, or if
+// multiple matching urls are present.
+//
+// This is templated on core Extension type and does a safe cast of the located
+// extension to that type (returning an InvalidArgument if the type is
+// incorrect).
+template <typename CoreExtensionType>
+absl::StatusOr<const CoreExtensionType*> GetOnlyMatchingExtension(
+    absl::string_view url, const google::protobuf::Message& element);
+
+// Populates the final vector param with all extensions from an element with a
+// given url.  The template parameter allows this function to be used with any
+// core version of FHIR.
+//
+// Usage Example:
+// std::vector<const google::fhir::r4::core::Extension> matches;
+// RETURN_IF_ERROR(GetAllMatchingExtensions(
+//     "http://myextension", patient, matches);
+//
+// Throws an InvalidArgument error if the extension version found does not match
+// the template parameter.
+template <typename CoreExtensionType>
+absl::Status GetAllMatchingExtensions(
+    absl::string_view url, const google::protobuf::Message& element,
+    std::vector<const CoreExtensionType*>& matches);
+
+// Locates the only extension on `element` with url matching `url`
+// and returns a pointer to the set value element, or nullptr if no matching
+// extension is found. Returns an InvalidArgument error if the set value
+// element is not of type T, or if `element` doesn't have a valid extension
+// field, or the value element is not set (e.g., in a complex extension), or
+// if multiple matching urls are present.
+template <typename T>
+absl::StatusOr<const T*> GetOnlySimpleExtensionValue(
+    absl::string_view url, const google::protobuf::Message& element);
+
 namespace internal {
+
+absl::StatusOr<const google::protobuf::Message*> GetOnlyUntypedMatchingExtension(
+    absl::string_view url, const google::protobuf::Message& element);
+
+absl::StatusOr<const google::protobuf::Message*> GetSimpleExtensionValueFromExtension(
+    const google::protobuf::Message& extension);
 
 absl::Status ValidateExtension(const ::google::protobuf::Descriptor* descriptor);
 
@@ -280,6 +309,12 @@ bool IsSimpleExtension(const ::google::protobuf::Descriptor* descriptor);
 
 }  // namespace internal
 
+// Extract all matching extensions from a container into a vector, and parse
+// them into protos. Example usage:
+// Patient patient = ...
+// std::vector<MyExtension> my_extensions;
+// auto status = GetAllMatchingExtensions(patient.extension(), &my_extension);
+// DEPRECATED - this relies on profiled protos, which are being deprecated.
 template <class C, class T>
 absl::Status GetAllMatchingExtensions(const C& extension_container,
                                       std::vector<T>* result) {
@@ -304,6 +339,10 @@ absl::Status GetAllMatchingExtensions(const C& extension_container,
   return absl::OkStatus();
 }
 
+// Extracts a single extension of type T from 'entity'. Returns a NotFound error
+// if there are zero extensions of that type. Returns an InvalidArgument error
+// if there are more than one.
+// DEPRECATED - this relies on profiled protos, which are being deprecated.
 template <class T, class C>
 absl::StatusOr<T> ExtractOnlyMatchingExtension(const C& entity) {
   std::vector<T> result;
@@ -459,33 +498,99 @@ absl::Status ConvertToExtension(const ::google::protobuf::Message& message,
   }
 }
 
+// Populates the final vector param with all extensions from an element with a
+// given url.  The template parameter allows this function to be used with any
+// core version of FHIR.
+//
+// Usage Example:
+// std::vector<const google::fhir::r4::core::Extension> matches;
+// RETURN_IF_ERROR(GetAllMatchingExtensions(
+//     "http://myextension", patient, matches);
+//
+// Throws an InvalidArgument error if the extension version found does not match
+// the template parameter.
+template <typename CoreExtensionType>
+absl::Status GetAllMatchingExtensions(
+    absl::string_view url, const google::protobuf::Message& element,
+    std::vector<const CoreExtensionType*>& matches) {
+  const google::protobuf::FieldDescriptor* extension_field =
+      element.GetDescriptor()->FindFieldByName("extension");
+
+  if (extension_field == nullptr) {
+    // This element doesn't support extensions.
+    // This doesn't imply a failure - just no extensions were found.
+    return absl::OkStatus();
+  }
+  if (extension_field->message_type() == nullptr ||
+      !extension_field->is_repeated()) {
+    return absl::InvalidArgumentError(absl::StrCat(
+        "Invalid extension field on ", element.GetDescriptor()->full_name()));
+  }
+  if (extension_field->message_type()->full_name() !=
+      CoreExtensionType::descriptor()->full_name()) {
+    return absl::InvalidArgumentError(
+        absl::Substitute("GetAllMatchingExtensions requested with type `$0`, "
+                         "but found extensions with type `$1`.",
+                         CoreExtensionType::descriptor()->full_name(),
+                         extension_field->message_type()->full_name()));
+  }
+
+  std::string scratch;
+  for (int i = 0;
+       i < element.GetReflection()->FieldSize(element, extension_field); i++) {
+    const google::protobuf::Message& extension =
+        element.GetReflection()->GetRepeatedMessage(element, extension_field,
+                                                    i);
+    if (GetExtensionUrl(extension, &scratch) == url) {
+      matches.push_back(dynamic_cast<const CoreExtensionType*>(&extension));
+    }
+  }
+  return absl::OkStatus();
+}
+
 // Locates and returns a pointer to the only extension on `element` with url
 // matching `url`. Returns nullptr if no matching extension is found. Returns
 // InvalidArgument if `element` does not have a valid extension field, or if
 // multiple matching urls are present.
-absl::StatusOr<const google::protobuf::Message*> GetOnlyMatchingExtension(
-    absl::string_view url, const google::protobuf::Message& element);
-
-// Locates and returns a pointer to the only extension on `element` with url
-// matching `url`. Returns nullptr if no matching extension is found. Returns
-// InvalidArgument if `element` does not have a valid extension field, or the
-// value element is not set (e.g., in a complex extension), or if multiple
-// matching urls are present.
-absl::StatusOr<const google::protobuf::Message*> GetOnlySimpleExtensionValue(
-    absl::string_view url, const google::protobuf::Message& element);
+//
+// This is templated on core Extension type and does a safe cast of the located
+// extension to that type (returning an InvalidArgument if the type is
+// incorrect).
+template <typename CoreExtensionType>
+absl::StatusOr<const CoreExtensionType*> GetOnlyMatchingExtension(
+    absl::string_view url, const google::protobuf::Message& element) {
+  FHIR_ASSIGN_OR_RETURN(
+      const google::protobuf::Message* extension,
+      internal::GetOnlyUntypedMatchingExtension(url, element));
+  if (extension == nullptr) return nullptr;
+  if (extension->GetDescriptor()->full_name() !=
+      CoreExtensionType::descriptor()->full_name()) {
+    return absl::InvalidArgumentError(
+        absl::Substitute("GetOnlyMatchingExtension requested with type `$0`, "
+                         "but found extension with type `$1`.",
+                         CoreExtensionType::descriptor()->full_name(),
+                         extension->GetDescriptor()->full_name()));
+  }
+  return dynamic_cast<const CoreExtensionType*>(extension);
+}
 
 // Locates the only extension on `element` with url matching `url`
 // and returns a pointer to the set value element, or nullptr if no matching
-// extension is found. Returns an InvalidArgument error if the set value element
-// is not of type T, or if `element` doesn't have a valid extension field, or
-// the value element is not set (e.g., in a complex extension), or if multiple
-// matching urls are present.
+// extension is found. Returns an InvalidArgument error if the set value
+// element is not of type T, or if `element` doesn't have a valid extension
+// field, or the value element is not set (e.g., in a complex extension), or
+// if multiple matching urls are present.
 template <typename T>
 absl::StatusOr<const T*> GetOnlySimpleExtensionValue(
     absl::string_view url, const google::protobuf::Message& element) {
-  FHIR_ASSIGN_OR_RETURN(const google::protobuf::Message* value,
-                        GetOnlySimpleExtensionValue(url, element));
-  if (value == nullptr) return nullptr;
+  FHIR_ASSIGN_OR_RETURN(
+      const google::protobuf::Message* extension,
+      internal::GetOnlyUntypedMatchingExtension(url, element));
+  if (extension == nullptr) return nullptr;
+
+  FHIR_ASSIGN_OR_RETURN(
+      const google::protobuf::Message* value,
+      internal::GetSimpleExtensionValueFromExtension(*extension));
 
   if (value->GetDescriptor()->full_name() != T::descriptor()->full_name()) {
     return absl::InvalidArgumentError(

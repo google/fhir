@@ -75,7 +75,6 @@ cc_library(
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
-        "@com_google_protobuf//:protobuf",
     ],
 )
 
@@ -591,7 +590,9 @@ cc_test(
         "//proto/google/fhir/proto/r4:ml_extensions_cc_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
         "//proto/google/fhir/proto/r4/core:extensions_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:binary_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:composition_cc_proto",
+        "//proto/google/fhir/proto/stu3:datatypes_cc_proto",
         "//testdata/r4/profiles:test_extensions_cc_proto",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
