@@ -23,6 +23,7 @@ import (
 	"github.com/google/fhir/go/fhirversion"
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
+	"golang.org/x/exp/maps"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 
@@ -72,6 +73,9 @@ type Marshaller struct {
 	maxDepth       int
 	depths         map[string]int
 	cfg            config
+	// If true, the resourceType field will be populated in the output JSON.
+	// This is enabled for the pure format and contained resources in AnalyticsV2.
+	includeResourceType bool
 }
 
 // NewMarshaller returns a Marshaller.
@@ -81,11 +85,12 @@ func NewMarshaller(enableIndent bool, prefix, indent string, ver fhirversion.Ver
 		return nil, err
 	}
 	return &Marshaller{
-		enableIndent: enableIndent,
-		prefix:       prefix,
-		jsonFormat:   formatPure,
-		indent:       indent,
-		cfg:          cfg,
+		enableIndent:        enableIndent,
+		prefix:              prefix,
+		jsonFormat:          formatPure,
+		indent:              indent,
+		cfg:                 cfg,
+		includeResourceType: true,
 	}, nil
 }
 
@@ -129,6 +134,19 @@ func newAnalyticsMarshaller(maxDepth int, ver fhirversion.Version, format jsonFo
 		depths:       map[string]int{},
 		cfg:          cfg,
 	}, nil
+}
+
+func (m *Marshaller) clone() *Marshaller {
+	return &Marshaller{
+		enableIndent:        m.enableIndent,
+		prefix:              m.prefix,
+		indent:              m.indent,
+		jsonFormat:          m.jsonFormat,
+		maxDepth:            m.maxDepth,
+		depths:              maps.Clone(m.depths),
+		cfg:                 m.cfg,
+		includeResourceType: m.includeResourceType,
+	}
 }
 
 // MarshalToString returns serialized JSON object of a ContainedResource protobuf message as string.
@@ -220,7 +238,7 @@ func (m *Marshaller) marshalResource(pb protoreflect.Message) (jsonpbhelper.JSON
 	if err != nil {
 		return nil, err
 	}
-	if m.jsonFormat == formatPure {
+	if m.includeResourceType {
 		decmap[jsonpbhelper.ResourceTypeField] = jsonpbhelper.JSONString(string(pb.Descriptor().Name()))
 	}
 	return decmap, nil
@@ -618,7 +636,9 @@ func (m *Marshaller) marshalNonPrimitiveFieldValue(f protoreflect.FieldDescripto
 	}
 	if d.Name() == containedResourceProtoName(m.cfg) {
 		if m.jsonFormat == formatAnalyticV2WithInferredSchema {
-			str, err := m.MarshalToString(pb.Interface())
+			containedMarshaller := m.clone()
+			containedMarshaller.includeResourceType = true
+			str, err := containedMarshaller.MarshalToString(pb.Interface())
 			if err != nil {
 				return nil, err
 			}
@@ -637,7 +657,9 @@ func (m *Marshaller) marshalNonPrimitiveFieldValue(f protoreflect.FieldDescripto
 			if err := pbAny.UnmarshalTo(crpb); err != nil {
 				return nil, fmt.Errorf("unmarshalling Any, err: %w", err)
 			}
-			str, err := m.MarshalToString(crpb.ProtoReflect().Interface())
+			containedMarshaller := m.clone()
+			containedMarshaller.includeResourceType = true
+			str, err := containedMarshaller.MarshalToString(crpb.ProtoReflect().Interface())
 			if err != nil {
 				return nil, err
 			}

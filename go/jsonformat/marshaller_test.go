@@ -23,6 +23,7 @@ import (
 	"github.com/google/fhir/go/fhirversion"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/testing/protocmp"
@@ -45,6 +46,24 @@ import (
 )
 
 // TODO(b/135148603): Find a better way to maintain the versioned unit tests.
+
+var (
+	compareJSON = cmp.Options{
+		cmp.FilterValues(func(d1, d2 string) bool {
+			return json.Valid([]byte(d1)) && json.Valid([]byte(d2))
+		}, cmp.Transformer("ParseJSON", func(d string) any {
+			var ret any
+			if err := json.Unmarshal([]byte(d), &ret); err != nil {
+				// Shouldn't fail based on the valid precondition
+				panic(err)
+			}
+			return ret
+		})),
+		cmpopts.SortMaps(func(k1, k2 string) bool {
+			return k1 < k2
+		}),
+	}
+)
 
 type mvr struct {
 	ver fhirversion.Version
@@ -3350,13 +3369,27 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 										Id: &d4pb.Id{
 											Value: "p1",
 										},
+										Extension: []*d4pb.Extension{{
+											Url: &d4pb.Uri{
+												Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+											},
+											Value: &d4pb.Extension_ValueX{
+												Choice: &d4pb.Extension_ValueX_DateTime{
+													DateTime: &d4pb.DateTime{
+														ValueUs:   1463567325000000,
+														Timezone:  "Z",
+														Precision: d4pb.DateTime_SECOND,
+													},
+												},
+											},
+										}},
 									},
 								},
 							}),
 						},
 						Asserter: &d4pb.Reference{
-							Id: &d4pb.String{
-								Value: "#p1",
+							Reference: &d4pb.Reference_Fragment{
+								Fragment: &d4pb.String{Value: "p1"},
 							},
 						},
 					},
@@ -3371,23 +3404,39 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 										Id: &d3pb.Id{
 											Value: "p1",
 										},
+										Extension: []*d3pb.Extension{{
+											Url: &d3pb.Uri{
+												Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+											},
+											Value: &d3pb.Extension_ValueX{
+												Choice: &d3pb.Extension_ValueX_DateTime{
+													DateTime: &d3pb.DateTime{
+														ValueUs:   1463567325000000,
+														Timezone:  "Z",
+														Precision: d3pb.DateTime_SECOND,
+													},
+												},
+											},
+										}},
 									},
 								},
 							},
 						},
 						Asserter: &d3pb.Reference{
-							Id: &d3pb.String{
-								Value: "#p1",
+							Reference: &d3pb.Reference_Fragment{
+								Fragment: &d3pb.String{Value: "p1"},
 							},
 						},
 					},
 				},
 			},
-			want: map[string]interface{}{
-				"contained": []interface{}{
-					"{\"id\":\"p1\"}",
+			want: map[string]any{
+				"contained": []any{
+					`{"resourceType":"Patient","id":"p1","patient_birthTime":[{"value":{"dateTime":"2016-05-18T10:28:45Z"}}]}`,
 				},
-				"asserter": map[string]interface{}{},
+				"asserter": map[string]any{
+					"reference": "#p1",
+				},
 			},
 		},
 	}
@@ -3408,7 +3457,7 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 						t.Fatalf("json.Unmarshal(%q) failed: %v", gotJSON, err)
 					}
 
-					if diff := cmp.Diff(test.want, got); diff != "" {
+					if diff := cmp.Diff(test.want, got, compareJSON); diff != "" {
 						t.Errorf("marshal %v: diff: %s", test.name, diff)
 					}
 				})

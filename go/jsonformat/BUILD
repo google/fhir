@@ -39,6 +39,7 @@ go_library(
         "@org_golang_google_protobuf//proto:go_default_library",
         "@org_golang_google_protobuf//reflect/protoreflect:go_default_library",
         "@org_golang_google_protobuf//types/known/anypb:go_default_library",
+        "@org_golang_x_exp//maps",
     ],
 )
 
@@ -83,10 +84,6 @@ go_test(
         "//go/jsonformat/errorreporter",
         "//go/jsonformat/fhirvalidate",
         "//go/jsonformat/internal/jsonpbhelper",
-        "//proto/google/fhir/proto/dstu2:codes_go_proto",
-        "//proto/google/fhir/proto/dstu2:datatypes_go_proto",
-        "//proto/google/fhir/proto/dstu2:metadatatypes_go_proto",
-        "//proto/google/fhir/proto/dstu2:resources_go_proto",
         "//proto/google/fhir/proto/r4/core:codes_go_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:binary_go_proto",
