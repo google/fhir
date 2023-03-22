@@ -39,7 +39,7 @@ if ! [ -x "$(command -v protoc)" ]; then
 fi
 
 if ! [ -x "$(command -v protoc-gen-go)" ]; then
-  go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.29
+  go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.29.0
   PATH=$PATH:$GOBIN
 fi
 
