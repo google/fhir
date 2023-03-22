@@ -29,6 +29,7 @@ enum FhirVersion {
   DSTU2 = 1;
   STU3 = 2;
   R4 = 4;
+  R4B = 45;
   R5 = 5;
 }
 

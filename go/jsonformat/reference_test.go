@@ -41,7 +41,8 @@ func TestAllReferenceTypes(t *testing.T) {
 	var versions []apb.FhirVersion
 	for _, v := range apb.FhirVersion_value {
 		ver := apb.FhirVersion(v)
-		if ver != apb.FhirVersion_FHIR_VERSION_UNKNOWN && ver != apb.FhirVersion_R5 && ver != apb.FhirVersion_DSTU2 {
+		// TODO(b/265289586): Testing support for r4b
+		if ver != apb.FhirVersion_FHIR_VERSION_UNKNOWN && ver != apb.FhirVersion_R5 && ver != apb.FhirVersion_DSTU2 && ver != apb.FhirVersion_R4B {
 			versions = append(versions, ver)
 		}
 	}

@@ -21,12 +21,11 @@
 package primitive_test_suite_go_proto
 
 import (
-	reflect "reflect"
-	sync "sync"
-
 	datatypes_go_proto "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	reflect "reflect"
+	sync "sync"
 )
 
 const (
