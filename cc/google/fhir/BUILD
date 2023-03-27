@@ -66,12 +66,10 @@ cc_library(
         ":annotations",
         ":codes",
         ":fhir_types",
-        ":proto_util",
         ":util",
-        "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//proto/google/fhir/proto:annotations_cc_proto",
-        "@com_github_glog_glog//:glog",
+        "@com_google_absl//absl/log:check",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
@@ -128,6 +126,7 @@ cc_library(
         ":error_reporter",
         ":extensions",
         ":fhir_types",
+        ":profiled_extensions",
         ":proto_util",
         ":resource_validation",
         ":util",
@@ -139,7 +138,6 @@ cc_library(
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/synchronization",
-        "@com_google_protobuf//:protobuf",
     ],
 )
 
@@ -563,6 +561,7 @@ cc_test(
     data = ["//testdata/stu3:extensions"],
     deps = [
         ":extensions",
+        ":profiled_extensions",
         ":test_helper",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/google/fhir/proto/stu3:datatypes_cc_proto",
@@ -581,23 +580,17 @@ cc_test(
 cc_test(
     name = "extensions_r4_test",
     srcs = ["extensions_r4_test.cc"],
-    data = ["//testdata/r4:extensions"],
     deps = [
         ":extensions",
-        ":test_helper",
         "//cc/google/fhir/testutil:proto_matchers",
-        "//proto/google/fhir/proto/r4:fhirproto_extensions_cc_proto",
-        "//proto/google/fhir/proto/r4:ml_extensions_cc_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
-        "//proto/google/fhir/proto/r4/core:extensions_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:binary_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:composition_cc_proto",
         "//proto/google/fhir/proto/stu3:datatypes_cc_proto",
-        "//testdata/r4/profiles:test_extensions_cc_proto",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
-        "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest_main",
+        "@com_google_protobuf//:protobuf",
     ],
 )
 
@@ -640,5 +633,41 @@ cc_library(
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/time",
         "@libarchive",
+    ],
+)
+
+cc_library(
+    name = "profiled_extensions",
+    srcs = ["profiled_extensions.cc"],
+    hdrs = ["profiled_extensions.h"],
+    data = ["//testdata/r4:extensions"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        ":annotations",
+        ":codes",
+        ":extensions",
+        ":fhir_types",
+        ":proto_util",
+        "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
+    ],
+)
+
+cc_test(
+    name = "profiled_extensions_test",
+    srcs = ["profiled_extensions_test.cc"],
+    deps = [
+        ":profiled_extensions",
+        ":test_helper",
+        "//cc/google/fhir/testutil:proto_matchers",
+        "//proto/google/fhir/proto/r4:fhirproto_extensions_cc_proto",
+        "//proto/google/fhir/proto/r4:ml_extensions_cc_proto",
+        "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
+        "//proto/google/fhir/proto/r4/core:extensions_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:composition_cc_proto",
+        "//testdata/r4/profiles:test_extensions_cc_proto",
+        "@com_google_googletest//:gtest_main",
     ],
 )

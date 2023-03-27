@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,47 +14,40 @@
  * limitations under the License.
  */
 
+#include "google/fhir/profiled_extensions.h"
+
 #include <string>
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "absl/status/status.h"
-#include "absl/status/statusor.h"
-#include "absl/strings/str_cat.h"
-#include "google/fhir/extensions.h"
-#include "google/fhir/profiled_extensions.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
-#include "proto/google/fhir/proto/stu3/datatypes.pb.h"
-#include "proto/google/fhir/proto/stu3/extensions.pb.h"
-#include "proto/google/fhir/proto/stu3/fhirproto_extensions.pb.h"
-#include "proto/google/fhir/proto/stu3/ml_extensions.pb.h"
-#include "proto/google/fhir/proto/stu3/resources.pb.h"
-#include "testdata/stu3/profiles/test_extensions.pb.h"
+#include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
+#include "proto/google/fhir/proto/r4/core/extensions.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/composition.pb.h"
+#include "proto/google/fhir/proto/r4/fhirproto_extensions.pb.h"
+#include "proto/google/fhir/proto/r4/ml_extensions.pb.h"
+#include "testdata/r4/profiles/test_extensions.pb.h"
 
-namespace google {
-namespace fhir {
+namespace google::fhir::profiled {
 
 namespace {
 
-using ::google::fhir::ReadStu3Proto;
-using ::google::fhir::stu3::fhirproto::Base64BinarySeparatorStride;
-using ::google::fhir::stu3::fhirproto::PrimitiveHasNoValue;
-using ::google::fhir::stu3::ml::EventLabel;
-using ::google::fhir::stu3::ml::EventTrigger;
-using ::google::fhir::stu3::proto::
-    CapabilityStatementSearchParameterCombination;
-using ::google::fhir::stu3::proto::Composition;
-using ::google::fhir::stu3::proto::Extension;
-using ::google::fhir::stu3::testing::DigitalMediaType;
+using ::google::fhir::r4::core::CapabilityStatementSearchParameterCombination;
+using ::google::fhir::r4::core::Composition;
+using ::google::fhir::r4::core::Extension;
+using ::google::fhir::r4::fhirproto::Base64BinarySeparatorStride;
+using ::google::fhir::r4::fhirproto::PrimitiveHasNoValue;
+using ::google::fhir::r4::ml::EventLabel;
+using ::google::fhir::r4::ml::EventTrigger;
+using ::google::fhir::r4::testing::DigitalMediaType;
 using ::google::fhir::testutil::EqualsProto;
 
 template <class T>
-void ReadStu3TestData(const std::string& type, T* message,
-                      Extension* extension) {
+void ReadR4TestData(const std::string& type, T* message, Extension* extension) {
   *message =
-      ReadStu3Proto<T>(absl::StrCat("extensions/", type, ".message.prototxt"));
-  *extension = ReadStu3Proto<Extension>(
+      ReadR4Proto<T>(absl::StrCat("extensions/", type, ".message.prototxt"));
+  *extension = ReadR4Proto<Extension>(
       absl::StrCat("extensions/", type, ".extension.prototxt"));
 }
 
@@ -62,10 +55,10 @@ template <class T>
 void TestExtensionToMessage(const std::string& name) {
   T message;
   Extension extension;
-  ReadStu3TestData(name, &message, &extension);
+  ReadR4TestData(name, &message, &extension);
 
   T output;
-  FHIR_ASSERT_OK(profiled::ExtensionToMessage(extension, &output));
+  FHIR_ASSERT_OK(ExtensionToMessage(extension, &output));
   EXPECT_THAT(output, EqualsProto(message));
 }
 
@@ -73,65 +66,76 @@ template <class T>
 void TestConvertToExtension(const std::string& name) {
   T message;
   Extension extension;
-  ReadStu3TestData(name, &message, &extension);
+  ReadR4TestData(name, &message, &extension);
 
   Extension output;
-  FHIR_ASSERT_OK(profiled::ConvertToExtension(message, &output));
+  FHIR_ASSERT_OK(ConvertToExtension(message, &output));
   EXPECT_THAT(output, EqualsProto(extension));
 }
 
-TEST(ExtensionsTest, ParseEventTrigger) {
+TEST(ExtensionsR4Test, ConvertToProfiledEventTrigger) {
   TestExtensionToMessage<EventTrigger>("trigger");
 }
 
-TEST(ExtensionsTest, PrintEventTrigger) {
+TEST(ExtensionsR4Test, ConvertToUnprofiledEventTrigger) {
   TestConvertToExtension<EventTrigger>("trigger");
 }
 
-TEST(ExtensionsTest, ParseEventLabel) {
+TEST(ExtensionsR4Test, ConvertToProfiledEventLabel) {
   TestExtensionToMessage<EventLabel>("label");
 }
 
-TEST(ExtensionsTest, PrintEventLabel) {
+TEST(ExtensionsR4Test, ConvertToUnprofiledEventLabel) {
   TestConvertToExtension<EventLabel>("label");
 }
 
-TEST(ExtensionsTest, ParsePrimitiveHasNoValue) {
+TEST(ExtensionsR4Test, ConvertToProfiledPrimitiveHasNoValue) {
   TestExtensionToMessage<PrimitiveHasNoValue>("primitive_has_no_value");
 }
 
-TEST(ExtensionsTest, PrintPrimitiveHasNoValue) {
+TEST(ExtensionsR4Test, ConvertToUnprofiledPrimitiveHasNoValue) {
   TestConvertToExtension<PrimitiveHasNoValue>("primitive_has_no_value");
 }
 
-TEST(ExtensionsTest, ParsePrimitiveHasNoValue_Empty) {
+TEST(ExtensionsR4Test, ConvertToProfiledPrimitiveHasNoValue_Empty) {
   TestExtensionToMessage<PrimitiveHasNoValue>("empty");
 }
 
-TEST(ExtensionsTest, PrintPrimitiveHasNoValue_Empty) {
+TEST(ExtensionsR4Test, ConvertToUnprofiledPrimitiveHasNoValue_Empty) {
   TestConvertToExtension<PrimitiveHasNoValue>("empty");
 }
 
-TEST(ExtensionsTest, ParseCapabilityStatementSearchParameterCombination) {
+TEST(ExtensionsR4Test,
+     ConvertToProfiledCapabilityStatementSearchParameterCombination) {
   TestExtensionToMessage<CapabilityStatementSearchParameterCombination>(
       "capability");
 }
 
-TEST(ExtensionsTest, PrintCapabilityStatementSearchParameterCombination) {
+TEST(ExtensionsR4Test,
+     ConvertToUnprofiledCapabilityStatementSearchParameterCombination) {
   TestConvertToExtension<CapabilityStatementSearchParameterCombination>(
       "capability");
 }
 
-TEST(ExtensionsTest, ParseBoundCodeExtension) {
+TEST(ExtensionsR4Test, ConvertToProfiledBoundCodeExtension) {
   TestExtensionToMessage<DigitalMediaType>("digital_media_type");
 }
 
-TEST(ExtensionsTest, PrintBoundCodeExtension) {
+TEST(ExtensionsR4Test, ConvertToUnprofiledBoundCodeExtension) {
   TestConvertToExtension<DigitalMediaType>("digital_media_type");
 }
 
-TEST(ExtensionsTest, ExtractOnlyMatchingExtensionOneFound) {
-  Composition composition = PARSE_VALID_STU3_PROTO(R"pb(
+TEST(ExtensionsR4Test, ConvertToProfiledSingleValueComplexExtension) {
+  TestExtensionToMessage<r4::testing::SingleValueComplexExtension>(
+      "single_value_complex");
+}
+
+TEST(ExtensionsR4Test, ConvertToUnprofiledSingleValueComplexExtension) {
+  TestConvertToExtension<r4::testing::SingleValueComplexExtension>(
+      "single_value_complex");
+}
+TEST(ExtensionsR4Test, ExtractOnlyMatchingExtensionOneFound) {
+  Composition composition = PARSE_VALID_FHIR_PROTO(R"pb(
     id { value: "1" }
     status { value: FINAL }
     subject { patient_id { value: "P0" } }
@@ -179,8 +183,7 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionOneFound) {
   )pb");
 
   absl::StatusOr<Base64BinarySeparatorStride> extracted =
-      profiled::ExtractOnlyMatchingExtension<Base64BinarySeparatorStride>(
-          composition);
+      ExtractOnlyMatchingExtension<Base64BinarySeparatorStride>(composition);
 
   Base64BinarySeparatorStride expected;
   ASSERT_TRUE(::google::protobuf::TextFormat::ParseFromString(R"pb(
@@ -193,8 +196,8 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionOneFound) {
   EXPECT_THAT(extracted.value(), EqualsProto(expected));
 }
 
-TEST(ExtensionsTest, ExtractOnlyMatchingExtensionNoneFound) {
-  Composition composition = PARSE_VALID_STU3_PROTO(R"pb(
+TEST(ExtensionsR4Test, ExtractOnlyMatchingExtensionNoneFound) {
+  Composition composition = PARSE_VALID_FHIR_PROTO(R"pb(
     id { value: "1" }
     status { value: FINAL }
     subject { patient_id { value: "P0" } }
@@ -229,15 +232,14 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionNoneFound) {
   )pb");
 
   absl::StatusOr<Base64BinarySeparatorStride> extracted =
-      profiled::ExtractOnlyMatchingExtension<Base64BinarySeparatorStride>(
-          composition);
+      ExtractOnlyMatchingExtension<Base64BinarySeparatorStride>(composition);
 
   EXPECT_FALSE(extracted.status().ok());
   EXPECT_EQ(absl::StatusCode::kNotFound, extracted.status().code());
 }
 
-TEST(ExtensionsTest, ExtractOnlyMatchingExtensionMultipleFound) {
-  Composition composition = PARSE_VALID_STU3_PROTO(R"pb(
+TEST(ExtensionsR4Test, ExtractOnlyMatchingExtensionMultipleFound) {
+  Composition composition = PARSE_VALID_FHIR_PROTO(R"pb(
     id { value: "1" }
     status { value: FINAL }
     subject { patient_id { value: "P0" } }
@@ -284,14 +286,11 @@ TEST(ExtensionsTest, ExtractOnlyMatchingExtensionMultipleFound) {
   )pb");
 
   absl::StatusOr<Base64BinarySeparatorStride> extracted =
-      profiled::ExtractOnlyMatchingExtension<Base64BinarySeparatorStride>(
-          composition);
+      ExtractOnlyMatchingExtension<Base64BinarySeparatorStride>(composition);
 
   EXPECT_FALSE(extracted.status().ok());
   EXPECT_EQ(absl::StatusCode::kInvalidArgument, extracted.status().code());
 }
 
 }  // namespace
-
-}  // namespace fhir
-}  // namespace google
+}  // namespace google::fhir::profiled

@@ -20,18 +20,16 @@
 #include <unordered_map>
 #include <utility>
 
-#include "google/protobuf/descriptor.pb.h"
-#include "google/protobuf/descriptor.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/codes.h"
-#include "google/fhir/core_resource_registry.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/extensions.h"
 #include "google/fhir/fhir_types.h"
+#include "google/fhir/profiled_extensions.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/resource_validation.h"
 #include "google/fhir/status/status.h"
@@ -128,7 +126,7 @@ absl::Status PerformExtensionSlicing(
       } else {
         // This is a complex extension
         Message* typed_extension = MutableOrAddMessage(target, inlined_field);
-        FHIR_RETURN_IF_ERROR(ExtensionToMessage<ExtensionLike>(
+        FHIR_RETURN_IF_ERROR(profiled::ExtensionToMessage<ExtensionLike>(
             source_extension, typed_extension));
       }
     } else {
@@ -157,10 +155,11 @@ absl::Status UnsliceExtension(const Message& typed_extension,
                               ExtensionLike* target) {
   if (IsProfileOfExtension(typed_extension)) {
     // This a profile on extension, and therefore a complex extension
-    return ConvertToExtension<ExtensionLike>(typed_extension, target);
+    return profiled::ConvertToExtension<ExtensionLike>(typed_extension, target);
   } else {
     // This just a raw datatype, and therefore a simple extension
-    target->mutable_url()->set_value(GetInlinedExtensionUrl(source_field));
+    target->mutable_url()->set_value(
+        profiled::GetInlinedExtensionUrl(source_field));
 
     return SetDatatypeOnExtension<ExtensionLike>(typed_extension, target);
   }

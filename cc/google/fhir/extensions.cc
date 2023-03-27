@@ -19,15 +19,12 @@
 
 #include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
-#include "google/fhir/fhir_types.h"
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 
 namespace google {
 namespace fhir {
 
-using ::absl::InvalidArgumentError;
-using ::google::protobuf::Descriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
@@ -60,14 +57,6 @@ const std::string& GetExtensionUrl(const google::protobuf::Message& extension,
   return url_message.GetReflection()->GetStringReference(
       url_message, url_message.GetDescriptor()->FindFieldByName("value"),
       scratch);
-}
-
-std::string GetInlinedExtensionUrl(const FieldDescriptor* field) {
-  return field->options().HasExtension(
-             ::google::fhir::proto::fhir_inlined_extension_url)
-             ? field->options().GetExtension(
-                   ::google::fhir::proto::fhir_inlined_extension_url)
-             : field->json_name();
 }
 
 namespace {
@@ -103,53 +92,6 @@ GetAllUntypedMatchingExtensions(absl::string_view url,
 }  // namespace
 
 namespace internal {
-bool IsSimpleExtension(const ::google::protobuf::Descriptor* descriptor) {
-  // Simple extensions have only a single, non-repeated value field.
-  // However, it is also possible to have a complex extension with only
-  // a single non-repeated field.  In that case, is_complex_extension is used to
-  // disambiguate.
-  const std::vector<const FieldDescriptor*> value_fields =
-      internal::FindValueFields(descriptor);
-  return IsProfileOfExtension(descriptor) && value_fields.size() == 1 &&
-         !value_fields.front()->is_repeated() &&
-         !descriptor->options().GetExtension(proto::is_complex_extension);
-}
-
-absl::Status CheckIsMessage(const FieldDescriptor* field) {
-  if (field->type() != FieldDescriptor::Type::TYPE_MESSAGE) {
-    return InvalidArgumentError(absl::StrCat(
-        "Encountered unexpected proto primitive: ", field->full_name(),
-        ".  Should be FHIR type"));
-  }
-  return absl::OkStatus();
-}
-
-std::vector<const FieldDescriptor*> FindValueFields(
-    const Descriptor* descriptor) {
-  std::vector<const FieldDescriptor*> value_fields;
-  for (int i = 0; i < descriptor->field_count(); i++) {
-    const std::string& name = descriptor->field(i)->name();
-    if (name != "id" && name != "extension") {
-      value_fields.push_back(descriptor->field(i));
-    }
-  }
-  return value_fields;
-}
-
-absl::Status ValidateExtension(const Descriptor* descriptor) {
-  if (!IsProfileOfExtension(descriptor)) {
-    return InvalidArgumentError(
-        absl::StrCat(descriptor->full_name(), " is not a FHIR extension type"));
-  }
-  if (!descriptor->options().HasExtension(
-          ::google::fhir::proto::fhir_structure_definition_url)) {
-    return InvalidArgumentError(
-        absl::StrCat(descriptor->full_name(),
-                     " is not a valid FHIR extension type: No "
-                     "fhir_structure_definition_url."));
-  }
-  return absl::OkStatus();
-}
 
 absl::StatusOr<const Message*> GetSimpleExtensionValueFromExtension(
     const google::protobuf::Message& extension) {
