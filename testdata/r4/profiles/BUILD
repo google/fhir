@@ -1,5 +1,5 @@
 load("//bazel:proto.bzl", "fhir_proto_library")
-load("//bazel:protogen.bzl", "fhir_package", "gen_fhir_definitions_and_protos")
+load("//bazel:protogen.bzl", "gen_fhir_definitions_and_protos")
 
 licenses(["notice"])
 
@@ -83,12 +83,4 @@ exports_files(
         "test_package.json",
     ],
     visibility = ["//testdata/r4/profiles:__subpackages__"],
-)
-
-fhir_package(
-    name = "test_extensions",
-    definitions = [
-        "test_extensions.json",
-        "package.json",
-    ],
 )
