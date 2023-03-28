@@ -148,7 +148,7 @@ class ResourceCollection(Iterable[_T]):
 
     # The resource needs to be parsed from JSON into a proto.
     parsed = self._parse_resource(uri, resource)
-    self.resources_by_uri[uri] = parsed
+    self.resources_by_uri[uri] = parsed  # pytype: disable=container-type-mismatch  # always-use-return-annotations
     return parsed
 
   def _parse_resource(self, uri: str, json_obj: Dict[str, Any]) -> Optional[_T]:
