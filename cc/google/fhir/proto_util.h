@@ -233,6 +233,11 @@ absl::StatusOr<T*> MutableMessageInField(::google::protobuf::Message* message,
 
   const ::google::protobuf::FieldDescriptor* field =
       message->GetDescriptor()->FindFieldByName(field_name);
+  if (field == nullptr) {
+    return absl::InvalidArgumentError(absl::StrCat(
+        "Invalid arguments to MutableMessageInField: No field ", field_name,
+        " in type ", message->GetDescriptor()->full_name()));
+  }
 
   if (!field->message_type() ||
       field->message_type()->full_name() != T::descriptor()->full_name()) {

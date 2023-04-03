@@ -458,6 +458,13 @@ TEST(ProtoUtilTest, TypedMutableMessageInFieldWrongTypeReturnsStatus) {
             absl::StatusCode::kInvalidArgument);
 }
 
+TEST(ProtoUtilTest, TypedMutableMessageInFieldMissingMessageReturnsStatus) {
+  Encounter encounter = MakeTestEncounter();
+  ASSERT_EQ(
+      MutableMessageInField<DateTime>(&encounter, "garbage").status().code(),
+      absl::StatusCode::kInvalidArgument);
+}
+
 TEST(ProtoUtilTest, TypedMutableMessageInFieldPrimitiveReturnsStatus) {
   Encounter encounter = MakeTestEncounter();
   ASSERT_EQ(MutableMessageInField<DateTime>(encounter.mutable_id(), "value")
