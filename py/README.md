@@ -9,7 +9,7 @@ FhirProto is Google's implementation of the [FHIR Standard](http://hl7.org/fhir/
 
 ### Installation
 
-You can install the Python3 distribution of FhirProto with for use with Python interpreters >=3.6, <3.9 using the [pip](https://pypi.org/project/pip/) package manager. We strongly recommend installing into a Python3 virtual environment, such as [venv](https://docs.python.org/3/library/venv.html):
+You can install the Python3 distribution of FhirProto with for use with Python interpreters >=3.8, <3.9 using the [pip](https://pypi.org/project/pip/) package manager. We strongly recommend installing into a Python3 virtual environment, such as [venv](https://docs.python.org/3/library/venv.html):
 
 ```sh
 python3 -m venv fhir

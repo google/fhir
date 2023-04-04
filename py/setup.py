@@ -33,21 +33,24 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 _ROOT = os.path.abspath(os.path.join(_HERE, '..'))
 _PROTO = os.path.join(_ROOT, 'proto', 'google', 'fhir', 'proto')
 _PROTO_FILES = (
-    glob.glob(os.path.join(_PROTO, '*.proto')) +
-    glob.glob(os.path.join(_PROTO, 'stu3', '**', '*.proto'), recursive=True) +
-    glob.glob(os.path.join(_PROTO, 'r4', '**', '*.proto'), recursive=True))
+    glob.glob(os.path.join(_PROTO, '*.proto'))
+    + glob.glob(os.path.join(_PROTO, 'stu3', '**', '*.proto'), recursive=True)
+    + glob.glob(os.path.join(_PROTO, 'r4', '**', '*.proto'), recursive=True)
+)
 
 # Locate the protobuf compiler. If it does not exist, abandon.
 _protoc = (
-    os.environ['PROTOC'] if 'PROTOC' in os.environ and
-    os.path.exists(os.environ['PROTOC']) else spawn.find_executable('protoc'))
+    os.environ['PROTOC']
+    if 'PROTOC' in os.environ and os.path.exists(os.environ['PROTOC'])
+    else spawn.find_executable('protoc')
+)
 if _protoc is None:
   raise FileNotFoundError('protoc was not found.')
 
 
-def _generate_python_protos(proto_files: List[str],
-                            *,
-                            python_out: str = '.') -> None:
+def _generate_python_protos(
+    proto_files: List[str], *, python_out: str = '.'
+) -> None:
   """Generates FHIR Python protobuf classes.
 
   Args:
@@ -77,9 +80,10 @@ def _generate_python_protos(proto_files: List[str],
 
     # Generate _py_pb2.py file
     output = proto_file.replace('.proto', '_py_pb2.py')
-    if (not os.path.exists(output) or
-        (os.path.exists(proto_file) and
-         os.path.getmtime(proto_file) > os.path.getmtime(output))):
+    if not os.path.exists(output) or (
+        os.path.exists(proto_file)
+        and os.path.getmtime(proto_file) > os.path.getmtime(output)
+    ):
       sys.stdout.write(f'Generating file: {output}\n')
       protoc_cmd = (
           _protoc,
@@ -167,8 +171,6 @@ setuptools.setup(
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: POSIX :: Linux',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
     ],

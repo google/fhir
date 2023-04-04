@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-readonly PYTHON_VERSION='3.7.3'
+readonly PYTHON_VERSION='3.8.10'
 readonly PIP_VERSION='~=21.0.0'
 readonly SETUPTOOLS_VERSION='~=56.0.0'
 
