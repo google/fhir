@@ -35,6 +35,7 @@ using ::google::fhir::r4::core::CodeableConcept;
 using ::google::fhir::r4::core::Coding;
 using ::google::fhir::r4::testing::TestObservation;
 using ::google::fhir::testutil::EqualsProto;
+using ::google::fhir::testutil::IgnoringRepeatedFieldOrdering;
 using ::testing::ElementsAre;
 
 const TestObservation::CodeableConceptForCode GetConcept() {
@@ -396,7 +397,7 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
     }
   )pb");
   TestObservation::CodeableConceptForCode concept_for_code =
-      PARSE_FHIR_PROTO(R"proto(
+      PARSE_FHIR_PROTO(R"pb(
         # inlined system
         sys_a {
           code { value: "acode" },
@@ -422,9 +423,9 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
           url { value: "baz" }
           value { integer { value: 5 } }
         }
-      )proto");
+      )pb");
   TestObservation::CodeableConceptForCategory concept_for_cat =
-      PARSE_FHIR_PROTO(R"proto(
+      PARSE_FHIR_PROTO(R"pb(
         coding {
           system { value: "http://sysa.org" }
           code { value: "acode" }
@@ -450,24 +451,24 @@ TEST(CodeableConceptsTest, CopyCodeableConcept) {
           url { value: "baz" }
           value { integer { value: 5 } }
         }
-      )proto");
+      )pb");
 
   CodeableConcept profiled_to_unprofiled;
   FHIR_ASSERT_OK(
       CopyCodeableConcept(concept_for_code, &profiled_to_unprofiled));
-  ASSERT_THAT(codeable_concept,
-              testutil::EqualsProtoIgnoringReordering(profiled_to_unprofiled));
+  ASSERT_THAT(codeable_concept, IgnoringRepeatedFieldOrdering(
+                                    EqualsProto(profiled_to_unprofiled)));
 
   TestObservation::CodeableConceptForCode unprofiled_to_profiled;
   FHIR_ASSERT_OK(
       CopyCodeableConcept(codeable_concept, &unprofiled_to_profiled));
-  ASSERT_THAT(concept_for_code,
-              testutil::EqualsProtoIgnoringReordering(unprofiled_to_profiled));
+  ASSERT_THAT(concept_for_code, IgnoringRepeatedFieldOrdering(
+                                    EqualsProto(unprofiled_to_profiled)));
 
   TestObservation::CodeableConceptForCategory profiled_to_profiled;
   FHIR_ASSERT_OK(CopyCodeableConcept(concept_for_code, &profiled_to_profiled));
   ASSERT_THAT(concept_for_cat,
-              testutil::EqualsProtoIgnoringReordering(profiled_to_profiled));
+              IgnoringRepeatedFieldOrdering(EqualsProto(profiled_to_profiled)));
 }
 
 TEST(CodeableConceptsTest, AddCodingFromStrings) {

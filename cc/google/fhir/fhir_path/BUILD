@@ -306,6 +306,7 @@ cc_test(
     ],
     deps = [
         ":utils",
+        "//cc/google/fhir/status",
         "//cc/google/fhir/testutil:proto_matchers",
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_cc_proto",

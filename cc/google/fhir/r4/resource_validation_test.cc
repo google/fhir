@@ -43,7 +43,8 @@ namespace {
 
 using namespace ::google::fhir::r4::core;  // NOLINT
 using ::google::fhir::r4::fhirproto::ValidationOutcome;
-using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
+using ::google::fhir::testutil::EqualsProto;
+using ::google::fhir::testutil::IgnoringRepeatedFieldOrdering;
 
 template <typename T>
 void ValidTest(const absl::string_view name, const bool has_resource_id = true,
@@ -63,7 +64,7 @@ void ValidTest(const absl::string_view name, const bool has_resource_id = true,
         GetReferenceProtoToResource<::google::fhir::r4::core::Reference>(
             resource));
   }
-  EXPECT_THAT(*outcome, EqualsProtoIgnoringReordering(expected));
+  EXPECT_THAT(*outcome, IgnoringRepeatedFieldOrdering(EqualsProto(expected)));
 }
 
 template <typename T>
@@ -84,7 +85,8 @@ void InvalidTest(absl::string_view name,
 
   ValidationOutcome expected_outcome = ReadProto<ValidationOutcome>(
       absl::StrCat("testdata/r4/validation/", name, ".outcome.prototxt"));
-  EXPECT_THAT(*outcome, EqualsProtoIgnoringReordering(expected_outcome));
+  EXPECT_THAT(*outcome,
+              IgnoringRepeatedFieldOrdering(EqualsProto(expected_outcome)));
 }
 
 TEST(ResourceValidationTest, MissingRequiredField) {

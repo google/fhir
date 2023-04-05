@@ -205,7 +205,7 @@ namespace {
 using namespace ::google::fhir::r4::core;  // NOLINT
 using ::google::fhir::r4::OperationOutcomeErrorHandler;
 using ::google::fhir::testutil::EqualsProto;
-using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
+using ::google::fhir::testutil::IgnoringRepeatedFieldOrdering;
 using internal::JsonEq;
 using ::testing::Eq;
 
@@ -231,8 +231,8 @@ absl::StatusOr<R> ParseJsonToProto(const std::string& json_path) {
   std::string json = ReadFile(json_path);
   absl::TimeZone tz;
   absl::LoadTimeZone(kTimeZoneString, &tz);
-  FHIR_ASSIGN_OR_RETURN(R resource, JsonFhirStringToProtoWithoutValidating<R>(
-                                        json, tz));
+  FHIR_ASSIGN_OR_RETURN(R resource,
+                        JsonFhirStringToProtoWithoutValidating<R>(json, tz));
 
   if (INVALID_RECORDS.find(json_path) == INVALID_RECORDS.end()) {
     FHIR_RETURN_IF_ERROR(
@@ -1864,7 +1864,8 @@ TEST(JsonFormatR4Test, ParserErrorHandlerAggregatesErrorsAndFatalsParseFails) {
   FHIR_ASSERT_STATUS(
       merge_status,
       "Merge failure when parsing JSON.  See ErrorHandler for more info.");
-  EXPECT_THAT(outcome, EqualsProtoIgnoringReordering(expected_outcome));
+  EXPECT_THAT(outcome,
+              IgnoringRepeatedFieldOrdering(EqualsProto(expected_outcome)));
 }
 
 TEST(JsonFormatR4Test,
@@ -1900,7 +1901,8 @@ TEST(JsonFormatR4Test,
   // Merge succeeds despite data issues.
   FHIR_ASSERT_OK(merge_status);
 
-  EXPECT_THAT(outcome, EqualsProtoIgnoringReordering(expected_outcome));
+  EXPECT_THAT(outcome,
+              IgnoringRepeatedFieldOrdering(EqualsProto(expected_outcome)));
 }
 
 }  // namespace

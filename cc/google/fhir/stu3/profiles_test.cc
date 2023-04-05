@@ -41,7 +41,7 @@ using ::google::fhir::stu3::proto::Patient;
 using ::google::fhir::stu3::testing::TestObservation;
 using ::google::fhir::stu3::testing::TestObservationLvl2;
 using ::google::fhir::testutil::EqualsProto;
-using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
+using ::google::fhir::testutil::IgnoringRepeatedFieldOrdering;
 
 template <class B>
 B GetUnprofiled(const std::string& filename) {
@@ -83,12 +83,14 @@ void TestUpConvert(const std::string& filename) {
   // Ignore conversion OperationOutcome structure for bi-directional tests;
   // failure modes are tested elsewhere.
   EXPECT_TRUE(result.ok());
-  EXPECT_THAT(unprofiled, EqualsProtoIgnoringReordering(expected_unprofiled));
+  EXPECT_THAT(unprofiled,
+              IgnoringRepeatedFieldOrdering(EqualsProto(expected_unprofiled)));
 
   // Test deprecated method as well.
   unprofiled.Clear();
   FHIR_ASSERT_OK(ConvertToProfileLenientStu3(profiled, &unprofiled));
-  EXPECT_THAT(unprofiled, EqualsProtoIgnoringReordering(expected_unprofiled));
+  EXPECT_THAT(unprofiled,
+              IgnoringRepeatedFieldOrdering(EqualsProto(expected_unprofiled)));
 }
 
 template <class B, class P>
@@ -203,7 +205,7 @@ TEST(ProfilesTest, NormalizeBundle) {
   absl::StatusOr<stu3::testing::Bundle> normalized =
       NormalizeStu3(unnormalized_bundle);
   EXPECT_THAT(normalized.value(),
-              EqualsProtoIgnoringReordering(expected_normalized));
+              IgnoringRepeatedFieldOrdering(EqualsProto(expected_normalized)));
 }
 
 TEST(ProfilesTest, ProfileOfProfile) {

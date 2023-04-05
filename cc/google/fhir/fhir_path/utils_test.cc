@@ -17,6 +17,7 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "google/fhir/status/status.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
@@ -46,25 +47,25 @@ TEST(Utils, RetrieveFieldPrimitive) {
   std::vector<const Message*> results;
   FHIR_ASSERT_OK(RetrieveField(
       primitive, *r4::Boolean::GetDescriptor()->FindFieldByName("value"),
-      [](const Descriptor*) {return nullptr;}, &results));
+      [](const Descriptor*) { return nullptr; }, &results));
 
   ASSERT_THAT(results, UnorderedElementsAreArray({EqualsProto(primitive)}));
 }
 
 TEST(Utils, RetrieveFieldR4ContainedResource) {
   r4::Bundle_Entry entry;
-  ASSERT_TRUE(
-      TextFormat::ParseFromString(
-          R"proto(resource: {
-                    patient: { deceased: { boolean: { value: true } } }
-                  })proto",
-          &entry));
+  ASSERT_TRUE(TextFormat::
+                  ParseFromString(
+                      R"pb(resource: {
+                             patient: { deceased: { boolean: { value: true } } }
+                           })pb",
+                      &entry));
   r4::Patient patient = entry.resource().patient();
 
   std::vector<const Message*> results;
   FHIR_ASSERT_OK(RetrieveField(
       entry, *r4::Bundle_Entry::GetDescriptor()->FindFieldByName("resource"),
-      [](const Descriptor*) {return nullptr;}, &results));
+      [](const Descriptor*) { return nullptr; }, &results));
 
   ASSERT_THAT(results, UnorderedElementsAreArray({EqualsProto(patient)}));
 }
@@ -102,18 +103,18 @@ TEST(Utils, RetrieveFieldR4WrongAny) {
 
 TEST(Utils, RetrieveFieldStu3ContainedResource) {
   stu3::Bundle_Entry entry;
-  ASSERT_TRUE(
-      TextFormat::ParseFromString(
-          R"proto(resource: {
-                    patient: { deceased: { boolean: { value: true } } }
-                  })proto",
-          &entry));
+  ASSERT_TRUE(TextFormat::
+                  ParseFromString(
+                      R"pb(resource: {
+                             patient: { deceased: { boolean: { value: true } } }
+                           })pb",
+                      &entry));
   stu3::Patient patient = entry.resource().patient();
 
   std::vector<const Message*> results;
   FHIR_ASSERT_OK(RetrieveField(
       entry, *stu3::Bundle_Entry::GetDescriptor()->FindFieldByName("resource"),
-      [](const Descriptor*) {return nullptr;}, &results));
+      [](const Descriptor*) { return nullptr; }, &results));
 
   ASSERT_THAT(results, UnorderedElementsAreArray({EqualsProto(patient)}));
 }
@@ -127,7 +128,7 @@ TEST(Utils, RetrieveFieldR4Choice) {
   std::vector<const Message*> results;
   FHIR_ASSERT_OK(RetrieveField(
       patient, *r4::Patient::GetDescriptor()->FindFieldByName("deceased"),
-      [](const Descriptor*) {return nullptr;}, &results));
+      [](const Descriptor*) { return nullptr; }, &results));
 
   ASSERT_THAT(results, UnorderedElementsAreArray({EqualsProto(deceased)}));
 }
@@ -188,7 +189,7 @@ TEST(Utils, RetrieveFieldStu3Choice) {
   std::vector<const Message*> results;
   FHIR_ASSERT_OK(RetrieveField(
       patient, *stu3::Patient::GetDescriptor()->FindFieldByName("deceased"),
-      [](const Descriptor*) {return nullptr;}, &results));
+      [](const Descriptor*) { return nullptr; }, &results));
 
   ASSERT_THAT(results, UnorderedElementsAreArray({EqualsProto(deceased)}));
 }
@@ -196,8 +197,8 @@ TEST(Utils, RetrieveFieldStu3Choice) {
 TEST(Utils, RetrieveFieldRepeated) {
   r4::Patient patient;
   ASSERT_TRUE(TextFormat::ParseFromString(
-      R"proto(communication: { preferred: { value: true } }
-              communication: { preferred: { value: false } })proto",
+      R"pb(communication: { preferred: { value: true } }
+           communication: { preferred: { value: false } })pb",
       &patient));
   r4::Patient_Communication communication1 = patient.communication(0);
   r4::Patient_Communication communication2 = patient.communication(1);
@@ -205,7 +206,7 @@ TEST(Utils, RetrieveFieldRepeated) {
   std::vector<const Message*> results;
   FHIR_ASSERT_OK(RetrieveField(
       patient, *r4::Patient::GetDescriptor()->FindFieldByName("communication"),
-      [](const Descriptor*) {return nullptr;}, &results));
+      [](const Descriptor*) { return nullptr; }, &results));
 
   ASSERT_THAT(results,
               UnorderedElementsAreArray(
@@ -227,10 +228,10 @@ TEST(Utils, FindFieldByJsonName) {
 }
 
 TEST(Utils, HasFieldWithJsonName) {
-  EXPECT_TRUE(HasFieldWithJsonName(stu3::ContainedResource::descriptor(),
-                                   "deceased"));
-  EXPECT_TRUE(HasFieldWithJsonName(r4::ContainedResource::descriptor(),
-                                   "deceased"));
+  EXPECT_TRUE(
+      HasFieldWithJsonName(stu3::ContainedResource::descriptor(), "deceased"));
+  EXPECT_TRUE(
+      HasFieldWithJsonName(r4::ContainedResource::descriptor(), "deceased"));
 }
 
 }  // namespace

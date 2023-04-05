@@ -13,7 +13,7 @@ cc_library(
     hdrs = ["proto_matchers.h"],
     strip_include_prefix = "//cc/",
     deps = [
-        "//cc/google/fhir:proto_util",
+        "@com_google_absl//absl/strings",
         "@com_google_googletest//:gtest",
         "@com_google_protobuf//:protobuf",
     ],

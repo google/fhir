@@ -48,7 +48,7 @@ using ::google::fhir::r4::testing::TestObservation;
 using ::google::fhir::r4::testing::TestObservationLvl2;
 using ::google::fhir::r4::testing::TestPatient;
 using ::google::fhir::testutil::EqualsProto;
-using ::google::fhir::testutil::EqualsProtoIgnoringReordering;
+using ::google::fhir::testutil::IgnoringRepeatedFieldOrdering;
 
 template <class B>
 B GetUnprofiled(const std::string& filename) {
@@ -90,12 +90,14 @@ void TestUpConvert(const std::string& filename) {
   // Ignore conversion OperationOutcome structure for bi-directional tests;
   // failure modes are tested elsewhere.
   FHIR_ASSERT_OK(result.status());
-  EXPECT_THAT(unprofiled, EqualsProtoIgnoringReordering(expected_unprofiled));
+  EXPECT_THAT(unprofiled,
+              IgnoringRepeatedFieldOrdering(EqualsProto(expected_unprofiled)));
 
   // Test deprecated method as well.
   unprofiled.Clear();
   FHIR_ASSERT_OK(ConvertToProfileLenientR4(profiled, &unprofiled));
-  EXPECT_THAT(unprofiled, EqualsProtoIgnoringReordering(expected_unprofiled));
+  EXPECT_THAT(unprofiled,
+              IgnoringRepeatedFieldOrdering(EqualsProto(expected_unprofiled)));
 }
 
 template <class B, class P>
@@ -189,7 +191,7 @@ TEST(ProfilesTest, NormalizeBundle) {
   absl::StatusOr<r4::testing::Bundle> normalized =
       NormalizeR4(unnormalized_bundle);
   EXPECT_THAT(normalized.value(),
-              EqualsProtoIgnoringReordering(expected_normalized));
+              IgnoringRepeatedFieldOrdering(EqualsProto(expected_normalized)));
 }
 
 TEST(ProfilesTest, ProfileOfProfile) {
@@ -262,7 +264,7 @@ TEST(ProfilesTest, ContainedResourcesWithUnmatchedProfileNames) {
   FHIR_ASSERT_OK(
       ConvertToProfileR4(entry.resource().patient(), &test_patient_roundtrip));
   EXPECT_THAT(test_patient_roundtrip,
-              EqualsProtoIgnoringReordering(test_patient));
+              IgnoringRepeatedFieldOrdering(EqualsProto(test_patient)));
 }
 
 // TODO(b/237447770): Reenable once PrimitiveHandler can wrap profiled
