@@ -59,7 +59,8 @@ const std::string& GetExtensionUrl(const google::protobuf::Message& extension,
       scratch);
 }
 
-namespace {
+namespace internal {
+
 absl::StatusOr<std::vector<const google::protobuf::Message*>>
 GetAllUntypedMatchingExtensions(absl::string_view url,
                                 const google::protobuf::Message& element) {
@@ -88,10 +89,6 @@ GetAllUntypedMatchingExtensions(absl::string_view url,
   }
   return matches;
 }
-
-}  // namespace
-
-namespace internal {
 
 absl::StatusOr<const Message*> GetSimpleExtensionValueFromExtension(
     const google::protobuf::Message& extension) {
@@ -127,19 +124,6 @@ absl::StatusOr<const Message*> GetSimpleExtensionValueFromExtension(
   }
 
   return &value_element.GetReflection()->GetMessage(value_element, set_field);
-}
-
-absl::StatusOr<const google::protobuf::Message*> GetOnlyUntypedMatchingExtension(
-    absl::string_view url, const google::protobuf::Message& element) {
-  FHIR_ASSIGN_OR_RETURN(std::vector<const google::protobuf::Message*> matches,
-                        GetAllUntypedMatchingExtensions(url, element));
-  if (matches.empty()) return nullptr;
-  if (matches.size() > 1) {
-    return absl::InvalidArgumentError(absl::Substitute(
-        "Expected maximum one extension with url: $0.  Found: $1", url,
-        matches.size()));
-  }
-  return matches.front();
 }
 
 }  // namespace internal

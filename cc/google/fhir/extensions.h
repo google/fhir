@@ -63,21 +63,22 @@ template <typename CoreExtensionType>
 absl::StatusOr<const CoreExtensionType*> GetOnlyMatchingExtension(
     absl::string_view url, const google::protobuf::Message& element);
 
-// Populates the final vector param with all extensions from an element with a
-// given url.  The template parameter allows this function to be used with any
-// core version of FHIR.
-//
-// Usage Example:
-// std::vector<const google::fhir::r4::core::Extension> matches;
-// RETURN_IF_ERROR(GetAllMatchingExtensions(
-//     "http://myextension", patient, matches);
-//
+// Returns a vector of all extensions with a given url in a given FHIR element.
+// This is templated on core (i.e., unprofiled) extension proto type, e.g.,
+// google::fhir::r4::core::Extension.
 // Throws an InvalidArgument error if the extension version found does not match
 // the template parameter.
 template <typename CoreExtensionType>
-absl::Status GetAllMatchingExtensions(
-    absl::string_view url, const google::protobuf::Message& element,
-    std::vector<const CoreExtensionType*>& matches);
+absl::StatusOr<std::vector<const CoreExtensionType*>> GetAllMatchingExtensions(
+    absl::string_view url, const google::protobuf::Message& element);
+
+// Given a simple extension url, simple extension type T, and a FHIR element,
+// returns a vector pointing to all simple extension values with that url and
+// type found on the FHIR element. Returns an InvalidArgument error if any
+// extensions have the matching url but incorrect datatype.
+template <typename T>
+absl::StatusOr<std::vector<const T*>> GetAllSimpleExtensionValues(
+    absl::string_view url, const google::protobuf::Message& element);
 
 // Locates the only extension on `element` with url matching `url`
 // and returns a pointer to the set value element, or nullptr if no matching
@@ -91,8 +92,9 @@ absl::StatusOr<const T*> GetOnlySimpleExtensionValue(
 
 namespace internal {
 
-absl::StatusOr<const google::protobuf::Message*> GetOnlyUntypedMatchingExtension(
-    absl::string_view url, const google::protobuf::Message& element);
+absl::StatusOr<std::vector<const google::protobuf::Message*>>
+GetAllUntypedMatchingExtensions(absl::string_view url,
+                                const google::protobuf::Message& element);
 
 absl::StatusOr<const google::protobuf::Message*> GetSimpleExtensionValueFromExtension(
     const google::protobuf::Message& extension);
@@ -154,29 +156,18 @@ absl::Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
       descriptor->full_name(), " is not a valid value type on Extension."));
 }
 
-// Populates the final vector param with all extensions from an element with a
-// given url.  The template parameter allows this function to be used with any
-// core version of FHIR.
-//
-// Usage Example:
-// std::vector<const google::fhir::r4::core::Extension> matches;
-// RETURN_IF_ERROR(GetAllMatchingExtensions(
-//     "http://myextension", patient, matches);
-//
-// Throws an InvalidArgument error if the extension version found does not match
-// the template parameter.
 template <typename CoreExtensionType>
-absl::Status GetAllMatchingExtensions(
-    absl::string_view url, const google::protobuf::Message& element,
-    std::vector<const CoreExtensionType*>& matches) {
+absl::StatusOr<std::vector<const CoreExtensionType*>> GetAllMatchingExtensions(
+    absl::string_view url, const google::protobuf::Message& element) {
   const google::protobuf::FieldDescriptor* extension_field =
       element.GetDescriptor()->FindFieldByName("extension");
 
   if (extension_field == nullptr) {
     // This element doesn't support extensions.
     // This doesn't imply a failure - just no extensions were found.
-    return absl::OkStatus();
+    return std::vector<const CoreExtensionType*>();
   }
+
   if (extension_field->message_type() == nullptr ||
       !extension_field->is_repeated()) {
     return absl::InvalidArgumentError(absl::StrCat(
@@ -191,6 +182,7 @@ absl::Status GetAllMatchingExtensions(
                          extension_field->message_type()->full_name()));
   }
 
+  std::vector<const CoreExtensionType*> matches;
   std::string scratch;
   for (int i = 0;
        i < element.GetReflection()->FieldSize(element, extension_field); i++) {
@@ -201,7 +193,7 @@ absl::Status GetAllMatchingExtensions(
       matches.push_back(dynamic_cast<const CoreExtensionType*>(&extension));
     }
   }
-  return absl::OkStatus();
+  return matches;
 }
 
 // Locates and returns a pointer to the only extension on `element` with url
@@ -216,18 +208,16 @@ template <typename CoreExtensionType>
 absl::StatusOr<const CoreExtensionType*> GetOnlyMatchingExtension(
     absl::string_view url, const google::protobuf::Message& element) {
   FHIR_ASSIGN_OR_RETURN(
-      const google::protobuf::Message* extension,
-      internal::GetOnlyUntypedMatchingExtension(url, element));
-  if (extension == nullptr) return nullptr;
-  if (extension->GetDescriptor()->full_name() !=
-      CoreExtensionType::descriptor()->full_name()) {
-    return absl::InvalidArgumentError(
-        absl::Substitute("GetOnlyMatchingExtension requested with type `$0`, "
-                         "but found extension with type `$1`.",
-                         CoreExtensionType::descriptor()->full_name(),
-                         extension->GetDescriptor()->full_name()));
+      std::vector<const CoreExtensionType*> matches,
+      GetAllMatchingExtensions<CoreExtensionType>(url, element));
+  if (matches.empty()) return nullptr;
+  if (matches.size() > 1) {
+    return absl::InvalidArgumentError(absl::Substitute(
+        "Expected maximum one extension with url: $0.  Found: $1", url,
+        matches.size()));
   }
-  return dynamic_cast<const CoreExtensionType*>(extension);
+
+  return dynamic_cast<const CoreExtensionType*>(matches.front());
 }
 
 // Locates the only extension on `element` with url matching `url`
@@ -239,24 +229,45 @@ absl::StatusOr<const CoreExtensionType*> GetOnlyMatchingExtension(
 template <typename T>
 absl::StatusOr<const T*> GetOnlySimpleExtensionValue(
     absl::string_view url, const google::protobuf::Message& element) {
-  FHIR_ASSIGN_OR_RETURN(
-      const google::protobuf::Message* extension,
-      internal::GetOnlyUntypedMatchingExtension(url, element));
-  if (extension == nullptr) return nullptr;
+  FHIR_ASSIGN_OR_RETURN(std::vector<const T*> all_extensions,
+                        GetAllSimpleExtensionValues<T>(url, element));
 
-  FHIR_ASSIGN_OR_RETURN(
-      const google::protobuf::Message* value,
-      internal::GetSimpleExtensionValueFromExtension(*extension));
+  if (all_extensions.empty()) return nullptr;
 
-  if (value->GetDescriptor()->full_name() != T::descriptor()->full_name()) {
-    return absl::InvalidArgumentError(
-        absl::Substitute("Invalid value type on extension with url: $0.  "
-                         "Expected $1 but found $2",
-                         url, T::descriptor()->full_name(),
-                         value->GetDescriptor()->full_name()));
+  if (all_extensions.size() > 1) {
+    return absl::InvalidArgumentError(absl::Substitute(
+        "Expected maximum one extension with url: $0.  Found: $1", url,
+        all_extensions.size()));
   }
 
-  return dynamic_cast<const T*>(value);
+  return all_extensions.front();
+}
+
+template <typename T>
+absl::StatusOr<std::vector<const T*>> GetAllSimpleExtensionValues(
+    absl::string_view url, const google::protobuf::Message& element) {
+  FHIR_ASSIGN_OR_RETURN(
+      std::vector<const google::protobuf::Message*> extensions,
+      internal::GetAllUntypedMatchingExtensions(url, element));
+  if (extensions.empty()) return std::vector<const T*>();
+
+  std::vector<const T*> values;
+  for (const google::protobuf::Message* extension : extensions) {
+    FHIR_ASSIGN_OR_RETURN(
+        const google::protobuf::Message* value,
+        internal::GetSimpleExtensionValueFromExtension(*extension));
+
+    if (value->GetDescriptor()->full_name() != T::descriptor()->full_name()) {
+      return absl::InvalidArgumentError(
+          absl::Substitute("Invalid value type on extension with url: $0.  "
+                           "Expected $1 but found $2",
+                           url, T::descriptor()->full_name(),
+                           value->GetDescriptor()->full_name()));
+    }
+    values.push_back(dynamic_cast<const T*>(value));
+  }
+
+  return values;
 }
 
 }  // namespace google::fhir
