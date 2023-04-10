@@ -1,0 +1,60 @@
+id {
+  value: "V-1"
+}
+category {
+  text {
+    value: "N/A"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis"
+    }
+    code {
+      value: "a"
+    }
+  }
+  coding {
+    system {
+      value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis"
+    }
+    code {
+      value: "b"
+    }
+  }
+  coding {
+    system {
+      value: "http://hl7.org/fhir/sid/icd-9-cm/diagnosis"
+    }
+    code {
+      value: "c"
+    }
+  }
+  coding {
+    system {
+      value: "http://hl7.org/fhir/sid/icd-10"
+    }
+    code {
+      value: "a2"
+    }
+  }
+  coding {
+    system {
+      value: "http://hl7.org/fhir/sid/icd-10"
+    }
+    code {
+      value: "b2"
+    }
+  }
+}
+subject {
+  display {
+    value: "N/A"
+  }
+}
+recorded_date {
+  value_us: 1628208000000000
+  timezone: "UTC"
+  precision: DAY
+}
