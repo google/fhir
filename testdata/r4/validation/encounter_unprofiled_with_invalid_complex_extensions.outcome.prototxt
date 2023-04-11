@@ -1,0 +1,44 @@
+issue{
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Input failed regex requirement for: google.fhir.r4.core.String"
+  }
+  expression {
+    value: "Encounter.meta.extension[0].extension[0].extension[0].value.coding.version"
+  }
+}
+
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Input failed regex requirement for: google.fhir.r4.core.Code"
+  }
+  expression {
+    value: "Encounter.meta.extension[0].extension[1].extension[0].value.coding.code"
+  }
+}
+
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Invalid input for google.fhir.r4.core.Decimal"
+  }
+  expression {
+    value: "Encounter.meta.extension[0].extension[2].value.decimal"
+  }
+}

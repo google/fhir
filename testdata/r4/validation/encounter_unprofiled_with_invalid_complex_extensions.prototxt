@@ -1,0 +1,52 @@
+id {
+  value: "example"
+}
+status {
+  value: ARRIVED
+}
+
+class_value {}
+
+subject { patient_id { value: "4" } }
+
+meta {
+  source { value: "https://foo.bar.com" }
+
+  extension {
+    url { value: "https://g.co/fhir/medicalrecords/EncounterSource" }
+    extension {
+      url { value: "status" }
+      extension {
+        url { value: "coding" }
+        # `version` is an invalid empty string.
+        value { coding { version: { value: "" } } }
+      }
+    }
+    extension {
+      url { value: "class" }
+      extension {
+        url { value: "coding" }
+        # code is invalid, trailing whitespace.
+        value { coding { code: { value: "with whitespace " } } }
+      }
+    }
+    # Invalid decimal example.
+    extension {
+      url { value: "http://test/url/base/StructureDefinition/SimpleDecimalExt" }
+      value { decimal { value: "notADecimal" } }
+    }
+  }
+}
+
+period {
+  start {
+    value_us: 5515679100000000  # "2144-10-13T21:05:00+00:00"
+    timezone: "UTC"
+    precision: SECOND
+  }
+  end {
+    value_us: 5515680100000000  # "2144-10-13T21:21:40+00:00"
+    timezone: "UTC"
+    precision: SECOND
+  }
+}
