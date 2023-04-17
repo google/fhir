@@ -25,7 +25,9 @@
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/binary.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/composition.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 
 namespace google {
@@ -430,6 +432,31 @@ TEST(ExtensionsR4Test, GetAllSimpleExtensionValuesForComplexExtensionsFails) {
       "test_url", composition);
 
   EXPECT_FALSE(result.ok());
+}
+
+TEST(ExtensionsR4Test, AddExtensionSucceedsOnComposition) {
+  Composition composition;
+  absl::StatusOr<Extension*> extension = AddExtension<Extension>(&composition);
+  EXPECT_TRUE(extension.ok());
+
+  (*extension)->mutable_url()->set_value("test_url");
+
+  EXPECT_THAT(composition, EqualsProto(R"pb(
+                extension { url { value: "test_url" } }
+              )pb"));
+}
+
+TEST(ExtensionsR4Test, AddExtensionFailsOnMessageWithoutExtensions) {
+  r4::core::ContainedResource contained;
+  absl::StatusOr<Extension*> extension = AddExtension<Extension>(&contained);
+  EXPECT_FALSE(extension.ok());
+}
+
+TEST(ExtensionsR4Test, AddExtensionFailsWithWrongExtensionType) {
+  Composition composition;
+  absl::StatusOr<stu3::proto::Extension*> extension =
+      AddExtension<stu3::proto::Extension>(&composition);
+  EXPECT_FALSE(extension.ok());
 }
 
 }  // namespace

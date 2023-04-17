@@ -23,6 +23,7 @@
 #include <vector>
 
 
+#include "google/protobuf/message.h"
 #include "absl/log/check.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
@@ -36,6 +37,13 @@
 
 namespace google::fhir {
 
+// Util for safely adding an extension of type `CoreExtensionType` to proto
+// `message`.
+// Returns a status error if `message` does not  have a repeated extension field
+// with type `CoreExtensionType`.
+template <class CoreExtensionType>
+absl::StatusOr<CoreExtensionType*> AddExtension(google::protobuf::Message* message);
+
 // Provides utility functions for dealing with FHIR extensions.
 absl::Status ClearExtensionsWithUrl(const std::string& url,
                                     ::google::protobuf::Message* message);
@@ -47,9 +55,9 @@ const std::string& GetExtensionUrl(const google::protobuf::Message& extension,
 // finds the appropriate field on the target extension and sets it.
 // Returns ::absl::InvalidArgumentError if there's no matching oneof
 // type on the extension for the message.
-template <class ExtensionLike>
+template <class CoreExtensionType>
 absl::Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
-                                    ExtensionLike* extension);
+                                    CoreExtensionType* extension);
 
 // Locates and returns a pointer to the only extension on `element` with url
 // matching `url`. Returns nullptr if no matching extension is found. Returns
@@ -92,6 +100,13 @@ absl::StatusOr<const T*> GetOnlySimpleExtensionValue(
 
 namespace internal {
 
+// Given a proto `element`, returs the FieldDescriptor for the extension field,
+// if one is found.
+// Returns a nullptr if there is no "extension" field is present, or
+// it is not a repeated message.
+const google::protobuf::FieldDescriptor* GetExtensionField(
+    const google::protobuf::Message& element);
+
 absl::StatusOr<std::vector<const google::protobuf::Message*>>
 GetAllUntypedMatchingExtensions(absl::string_view url,
                                 const google::protobuf::Message& element);
@@ -129,12 +144,34 @@ std::optional<const ::google::protobuf::FieldDescriptor*> GetExtensionValueField
 
 }  // namespace internal
 
-template <class ExtensionLike>
+template <class CoreExtensionType>
+absl::StatusOr<CoreExtensionType*> AddExtension(google::protobuf::Message* message) {
+  const google::protobuf::FieldDescriptor* extension_field =
+      internal::GetExtensionField(*message);
+
+  if (extension_field == nullptr) {
+    return absl::InvalidArgumentError(absl::StrCat(
+        "Cannot add extension to message type: ", message->GetTypeName()));
+  }
+
+  if (extension_field->message_type()->full_name() !=
+      CoreExtensionType::descriptor()->full_name()) {
+    return absl::InvalidArgumentError(absl::Substitute(
+        "Invalid extension type on `$0`: expected `$1`, found `$2`",
+        message->GetTypeName(), CoreExtensionType::descriptor()->full_name(),
+        extension_field->message_type()->full_name()));
+  }
+
+  return dynamic_cast<CoreExtensionType*>(
+      message->GetReflection()->AddMessage(message, extension_field));
+}
+
+template <class CoreExtensionType>
 absl::Status SetDatatypeOnExtension(const ::google::protobuf::Message& datum,
-                                    ExtensionLike* extension) {
+                                    CoreExtensionType* extension) {
   const ::google::protobuf::Descriptor* descriptor = datum.GetDescriptor();
   auto value_field_optional =
-      internal::GetExtensionValueFieldByType<ExtensionLike>(descriptor);
+      internal::GetExtensionValueFieldByType<CoreExtensionType>(descriptor);
   if (value_field_optional.has_value()) {
     extension->value()
         .GetReflection()
@@ -160,18 +197,9 @@ template <typename CoreExtensionType>
 absl::StatusOr<std::vector<const CoreExtensionType*>> GetAllMatchingExtensions(
     absl::string_view url, const google::protobuf::Message& element) {
   const google::protobuf::FieldDescriptor* extension_field =
-      element.GetDescriptor()->FindFieldByName("extension");
-
+      internal::GetExtensionField(element);
   if (extension_field == nullptr) {
-    // This element doesn't support extensions.
-    // This doesn't imply a failure - just no extensions were found.
     return std::vector<const CoreExtensionType*>();
-  }
-
-  if (extension_field->message_type() == nullptr ||
-      !extension_field->is_repeated()) {
-    return absl::InvalidArgumentError(absl::StrCat(
-        "Invalid extension field on ", element.GetDescriptor()->full_name()));
   }
   if (extension_field->message_type()->full_name() !=
       CoreExtensionType::descriptor()->full_name()) {
@@ -201,8 +229,8 @@ absl::StatusOr<std::vector<const CoreExtensionType*>> GetAllMatchingExtensions(
 // InvalidArgument if `element` does not have a valid extension field, or if
 // multiple matching urls are present.
 //
-// This is templated on core Extension type and does a safe cast of the located
-// extension to that type (returning an InvalidArgument if the type is
+// This is templated on core Extension type and does a safe cast of the
+// located extension to that type (returning an InvalidArgument if the type is
 // incorrect).
 template <typename CoreExtensionType>
 absl::StatusOr<const CoreExtensionType*> GetOnlyMatchingExtension(

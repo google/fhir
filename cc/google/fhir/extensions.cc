@@ -31,10 +31,13 @@ using ::google::protobuf::Reflection;
 
 absl::Status ClearExtensionsWithUrl(const std::string& url, Message* message) {
   const Reflection* reflection = message->GetReflection();
-  const FieldDescriptor* field =
-      message->GetDescriptor()->FindFieldByName("extension");
+  const FieldDescriptor* extension_field =
+      internal::GetExtensionField(*message);
+  if (extension_field == nullptr) {
+    return absl::OkStatus();
+  }
   google::protobuf::RepeatedPtrField<Message>* repeated_ptr_field =
-      reflection->MutableRepeatedPtrField<Message>(message, field);
+      reflection->MutableRepeatedPtrField<Message>(message, extension_field);
   for (auto iter = repeated_ptr_field->begin();
        iter != repeated_ptr_field->end();) {
     const Message& extension = *iter;
@@ -61,20 +64,26 @@ const std::string& GetExtensionUrl(const google::protobuf::Message& extension,
 
 namespace internal {
 
+const FieldDescriptor* GetExtensionField(const google::protobuf::Message& element) {
+  const FieldDescriptor* extension_field =
+      element.GetDescriptor()->FindFieldByName("extension");
+
+  if (extension_field == nullptr ||
+      extension_field->message_type() == nullptr ||
+      !extension_field->is_repeated()) {
+    return nullptr;
+  }
+  return extension_field;
+}
+
 absl::StatusOr<std::vector<const google::protobuf::Message*>>
 GetAllUntypedMatchingExtensions(absl::string_view url,
                                 const google::protobuf::Message& element) {
-  const FieldDescriptor* extension_field =
-      element.GetDescriptor()->FindFieldByName("extension");
+  const FieldDescriptor* extension_field = GetExtensionField(element);
 
   if (extension_field == nullptr) {
     // This element doesn't support extensions.
     return std::vector<const google::protobuf::Message*>();
-  }
-  if (extension_field->message_type() == nullptr ||
-      !extension_field->is_repeated()) {
-    return absl::InvalidArgumentError(absl::StrCat(
-        "Invalid extension field on ", element.GetDescriptor()->full_name()));
   }
 
   std::string scratch;
