@@ -1,0 +1,14 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Field size: `2` is higher than max size: `1`"
+  }
+  expression {
+    value: "Patient.extension"
+  }
+}

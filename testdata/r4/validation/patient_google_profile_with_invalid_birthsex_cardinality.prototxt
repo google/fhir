@@ -1,0 +1,30 @@
+id {
+  value: "V-1"
+}
+identifier {
+  value {
+    value: "V-1"
+  }
+  system {
+    value: "V-1"
+  }
+}
+name {
+  family {
+    value: "N/A"
+  }
+  given {
+    value: "N/A"
+  }
+}
+gender {
+  value: UNKNOWN
+}
+extension {
+  url { value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex" }
+  value { code { value: "M" } }
+}
+extension {
+  url { value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex" }
+  value { code { value: "M" } }
+}
