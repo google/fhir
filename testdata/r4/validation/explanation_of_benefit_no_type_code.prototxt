@@ -1,0 +1,98 @@
+id {
+  value: "C-A"
+}
+status {
+  value: ACTIVE
+}
+type {
+  text {
+    value: "type-1; type-2; type-3"
+  }
+}
+use {
+  value: CLAIM
+}
+patient {
+  patient_id {
+    value: "V-1"
+  }
+}
+created {
+  value_us: 1582156800000000
+  timezone: "UTC"
+  precision: DAY
+}
+insurer {
+  organization_id {
+    value: "O-1"
+  }
+}
+provider {
+  organization_id {
+    value: "O-1"
+  }
+}
+outcome {
+  value: COMPLETE
+}
+insurance {
+  focal {
+  }
+  coverage {
+    coverage_id {
+      value: "C-1"
+    }
+  }
+  pre_auth_ref {
+    value: "pre-auth-ref-1"
+  }
+  pre_auth_ref {
+    value: "pre-auth-ref-2"
+  }
+  pre_auth_ref {
+    value: "pre-auth-ref-3"
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  care_team_sequence {
+    value: 101
+  }
+  care_team_sequence {
+    value: 102
+  }
+  care_team_sequence {
+    value: 103
+  }
+  diagnosis_sequence {
+    value: 201
+  }
+  diagnosis_sequence {
+    value: 202
+  }
+  diagnosis_sequence {
+    value: 203
+  }
+  procedure_sequence {
+    value: 301
+  }
+  procedure_sequence {
+    value: 301
+  }
+  procedure_sequence {
+    value: 302
+  }
+  procedure_sequence {
+    value: 303
+  }
+  procedure_sequence {
+    value: 303
+  }
+  product_or_service {
+    text {
+      value: "product"
+    }
+  }
+}
