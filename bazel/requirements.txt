@@ -12,5 +12,6 @@ requests-mock~=1.9
 requests-toolbelt~=0.10.1
 requests~=2.27
 six~=1.16.0
+sqlalchemy~=1.4
 sqlalchemy-bigquery~=1.4
-sqlalchemy~=1.2
+stringcase==1.2.0

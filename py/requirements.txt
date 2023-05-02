@@ -8,5 +8,6 @@ protobuf~=3.13
 python-dateutil~=2.8
 requests~=2.27
 requests-mock~=1.9
-sqlalchemy~=1.2
+sqlalchemy~=1.4
 sqlalchemy-bigquery~=1.4
+stringcase==1.2.0
