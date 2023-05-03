@@ -1,0 +1,14 @@
+issue {
+  severity {
+    value: WARNING
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "No extension definition found with url `http://dmpi/regtest/insurance-id`, skipping validation."
+  }
+  expression {
+    value: "Patient.extension[0]"
+  }
+}

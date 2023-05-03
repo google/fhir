@@ -1,0 +1,27 @@
+id {
+  value: "V-1"
+}
+identifier {
+  value {
+    value: "V-1"
+  }
+  system {
+    value: "V-1"
+  }
+}
+name {
+  family {
+    value: "N/A"
+  }
+  given {
+    value: "N/A"
+  }
+}
+gender {
+  value: UNKNOWN
+}
+
+extension {
+  url: { value: "http://dmpi/regtest/insurance-id" }
+  value: { id { value: "I-111" } }
+}
