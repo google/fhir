@@ -19,8 +19,8 @@ py_library(
     ],
     srcs_version = "PY3",
     deps = [
-        "@com_google_protobuf//:protobuf_python",
         "//py",
+        "@com_google_protobuf//:protobuf_python",
         requirement("absl-py"),
         requirement("six"),
     ],
@@ -34,8 +34,8 @@ py_library(
     ],
     srcs_version = "PY3",
     deps = [
-        "@com_google_protobuf//:protobuf_python",
         "//py",
+        "@com_google_protobuf//:protobuf_python",
         requirement("absl-py"),
         requirement("six"),
     ],

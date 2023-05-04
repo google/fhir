@@ -2,9 +2,7 @@ load("//bazel:protogen.bzl", "gen_fhir_definitions_and_protos")
 
 licenses(["notice"])
 
-package(
-    default_visibility = ["//visibility:public"],
-)
+package(default_visibility = ["//visibility:public"])
 
 # This build rule uses the baseline "split_test" protos as the golden_java_proto_rules
 # but generates its own protos and shifts around some fields.

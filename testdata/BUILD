@@ -1,8 +1,6 @@
 load("//bazel:proto.bzl", "fhir_proto_library")
 
-package(
-    default_visibility = ["//:__subpackages__"],
-)
+package(default_visibility = ["//:__subpackages__"])
 
 licenses(["notice"])
 

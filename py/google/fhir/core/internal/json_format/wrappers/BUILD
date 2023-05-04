@@ -3,11 +3,9 @@ load(
     "py_library",
 )
 
-package(
-    default_visibility = [
-        "//py/google/fhir:__subpackages__",
-    ],
-)
+package(default_visibility = [
+    "//py/google/fhir:__subpackages__",
+])
 
 licenses(["notice"])
 

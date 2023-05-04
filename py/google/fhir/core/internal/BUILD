@@ -1,15 +1,13 @@
 load(
     "@rules_python//python:python.bzl",
-    "py_test",
     "py_library",
+    "py_test",
 )
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 
-package(
-    default_visibility = [
-        "//py/google/fhir:__subpackages__",
-    ],
-)
+package(default_visibility = [
+    "//py/google/fhir:__subpackages__",
+])
 
 licenses(["notice"])
 
@@ -22,9 +20,9 @@ py_library(
     srcs_version = "PY3",
     visibility = ["//py/google/fhir:__subpackages__"],
     deps = [
-        "@com_google_protobuf//:protobuf_python",
         "//py",
         "//py/google/fhir/core/utils:proto_utils",
+        "@com_google_protobuf//:protobuf_python",
         requirement("backports.zoneinfo"),
         requirement("python-dateutil"),
         requirement("six"),
@@ -57,13 +55,13 @@ py_library(
     deps = [
         ":primitive_handler",
         ":primitive_time_utils",
-        "@com_google_protobuf//:protobuf_python",
         "//py",
         "//py/google/fhir/core:extensions",
         "//py/google/fhir/core:fhir_errors",
         "//py/google/fhir/core/testing:testdata_utils",
         "//py/google/fhir/core/utils:path_utils",
         "//py/google/fhir/core/utils:proto_utils",
+        "@com_google_protobuf//:protobuf_python",
         requirement("absl-py"),
         requirement("six"),
     ],
@@ -79,8 +77,8 @@ py_library(
     deps = [
         ":primitive_handler",
         ":primitive_time_utils",
-        "//py",
         "//proto/google/fhir/proto:annotations_py_pb2",
+        "//py",
         "//py/google/fhir/core:fhir_errors",
         "//py/google/fhir/core/utils:annotation_utils",
         "//py/google/fhir/core/utils:fhir_types",

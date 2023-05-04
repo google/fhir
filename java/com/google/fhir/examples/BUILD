@@ -1,6 +1,4 @@
-package(
-    default_visibility = ["//visibility:public"],
-)
+package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
 
@@ -48,8 +46,8 @@ java_library(
     name = "big_query_schema_generator_lib",
     srcs = ["BigQuerySchemaGeneratorMain.java"],
     deps = [
-        "//java/com/google/fhir/common:big_query_schema",
         "//examples/profiles:demo_java_proto",
+        "//java/com/google/fhir/common:big_query_schema",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_apis_google_api_services_bigquery",
         "@maven//:com_google_guava_guava",

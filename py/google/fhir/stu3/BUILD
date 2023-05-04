@@ -1,11 +1,9 @@
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 # Placeholder for internal Python strict contrib test and library compatibility macro.
 
-package(
-    default_visibility = [
-        "//visibility:public",
-    ],
-)
+package(default_visibility = [
+    "//visibility:public",
+])
 
 licenses(["notice"])
 
@@ -34,10 +32,10 @@ py_library(
     ],
     srcs_version = "PY3",
     deps = [
-        "//py",
         "//proto/google/fhir/proto/stu3:datatypes_py_pb2",
         "//proto/google/fhir/proto/stu3:fhirproto_extensions_py_pb2",
         "//proto/google/fhir/proto/stu3:resources_py_pb2",
+        "//py",
         "//py/google/fhir/core/internal:primitive_handler",
         "//py/google/fhir/core/internal:primitive_time_utils",
         "//py/google/fhir/core/internal/json_format/wrappers:base64_binary",
@@ -65,13 +63,13 @@ py_test(
     legacy_create_init = 0,
     python_version = "PY3",
     deps = [
-        "@com_google_protobuf//:protobuf_python",
-        "//py",
         "//proto/google/fhir/proto/stu3:codes_py_pb2",
         "//proto/google/fhir/proto/stu3:datatypes_py_pb2",
+        "//py",
         "//py/google/fhir/core:codes",
         "//py/google/fhir/core:fhir_errors",
         "//py/google/fhir/core/testing:testdata_utils",
+        "@com_google_protobuf//:protobuf_python",
         requirement("absl-py"),
         requirement("six"),
     ],
@@ -88,16 +86,16 @@ py_test(
     legacy_create_init = 0,
     python_version = "PY3",
     deps = [
-        "@com_google_protobuf//:protobuf_python",
-        "//py",
         "//proto/google/fhir/proto/stu3:datatypes_py_pb2",
         "//proto/google/fhir/proto/stu3:extensions_py_pb2",
         "//proto/google/fhir/proto/stu3:fhirproto_extensions_py_pb2",
         "//proto/google/fhir/proto/stu3:ml_extensions_py_pb2",
         "//proto/google/fhir/proto/stu3:resources_py_pb2",
+        "//py",
         "//py/google/fhir/core:extensions",
-        "//testdata/stu3/profiles:test_extensions_py_pb2",
         "//py/google/fhir/core:extensions_test",
+        "//testdata/stu3/profiles:test_extensions_py_pb2",
+        "@com_google_protobuf//:protobuf_python",
         requirement("absl-py"),
         requirement("six"),
     ],
@@ -119,14 +117,14 @@ py_test(
     python_version = "PY3",
     shard_count = 16,
     deps = [
-        "@com_google_protobuf//:protobuf_python",
-        "//py",
+        ":json_format",
         "//proto/google/fhir/proto/stu3:datatypes_py_pb2",
         "//proto/google/fhir/proto/stu3:resources_py_pb2",
+        "//py",
         "//py/google/fhir/core/internal/json_format:json_format_test",
-        ":json_format",
         "//py/google/fhir/core/testing:testdata_utils",
         "//py/google/fhir/core/utils:proto_utils",
+        "@com_google_protobuf//:protobuf_python",
         requirement("absl-py"),
         requirement("six"),
     ],
@@ -143,9 +141,9 @@ py_test(
     legacy_create_init = 0,
     python_version = "PY3",
     deps = [
+        ":primitive_handler",
         "//py",
         "//py/google/fhir/core/internal:primitive_handler_test",
-        ":primitive_handler",
         requirement("absl-py"),
         requirement("six"),
     ],
@@ -160,8 +158,8 @@ py_test(
     legacy_create_init = 0,
     python_version = "PY3",
     deps = [
-        "//py",
         "//proto/google/fhir/proto/stu3:datatypes_py_pb2",
+        "//py",
         "//py/google/fhir/core:references",
         "//py/google/fhir/core/utils:proto_utils",
         requirement("absl-py"),
@@ -196,11 +194,11 @@ py_test(
     python_version = "PY3",
     deps = [
         ":resource_validation",
-        "@com_google_protobuf//:protobuf_python",
-        "//py",
         "//proto/google/fhir/proto/stu3:resources_py_pb2",
+        "//py",
         "//py/google/fhir/core:fhir_errors",
         "//py/google/fhir/core/testing:testdata_utils",
+        "@com_google_protobuf//:protobuf_python",
         requirement("absl-py"),
         requirement("six"),
     ],

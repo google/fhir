@@ -29,11 +29,11 @@ java_binary(
     ],
     main_class = "com.google.fhir.release.Release",
     runtime_deps = [
+        "//java/com/google/fhir/common:big_query_schema",
         "//java/com/google/fhir/common:fhir_version",
         "//java/com/google/fhir/common:json_format",
         "//java/com/google/fhir/common:resource_utils",
         "//java/com/google/fhir/common:resource_validator",
-        "//java/com/google/fhir/common:big_query_schema",
         "//java/com/google/fhir/examples:big_query_schema_generator_lib",
         "//java/com/google/fhir/wrappers:primitive_wrappers",
         "//proto/google/fhir/proto/r4/core/resources:all_java_proto",

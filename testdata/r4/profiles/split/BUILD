@@ -3,9 +3,7 @@ load("//bazel:proto.bzl", "fhir_proto_library")
 
 licenses(["notice"])
 
-package(
-    default_visibility = ["//visibility:public"],
-)
+package(default_visibility = ["//visibility:public"])
 
 gen_fhir_definitions_and_protos(
     name = "split_test",

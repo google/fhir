@@ -3,7 +3,6 @@ load(
     "@rules_python//python:python.bzl",
     "py_binary",
 )
-
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 
 licenses(["notice"])

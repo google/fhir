@@ -2,11 +2,9 @@ load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 
 # Placeholder for internal Python strict contrib test and library compatibility macro.
 
-package(
-    default_visibility = [
-        "//visibility:public",
-    ],
-)
+package(default_visibility = [
+    "//visibility:public",
+])
 
 licenses(["notice"])
 
@@ -18,8 +16,8 @@ py_library(
     srcs_version = "PY3",
     deps = [
         ":fhir_errors",
-        "//py",
         "//proto/google/fhir/proto:annotations_py_pb2",
+        "//py",
         "//py/google/fhir/core/utils:annotation_utils",
         "//py/google/fhir/core/utils:fhir_types",
         "//py/google/fhir/core/utils:proto_utils",
@@ -59,8 +57,8 @@ py_library(
     deps = [
         ":codes",
         ":fhir_errors",
-        "//py",
         "//proto/google/fhir/proto:annotations_py_pb2",
+        "//py",
         "//py/google/fhir/core/utils:annotation_utils",
         "//py/google/fhir/core/utils:fhir_types",
         "//py/google/fhir/core/utils:proto_utils",
@@ -77,9 +75,9 @@ py_library(
     srcs_version = "PY3",
     deps = [
         ":extensions",
-        "@com_google_protobuf//:protobuf_python",
         "//py",
         "//py/google/fhir/core/testing:testdata_utils",
+        "@com_google_protobuf//:protobuf_python",
         requirement("absl-py"),
         requirement("six"),
     ],

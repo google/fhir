@@ -1,15 +1,13 @@
 load(
     "@rules_python//python:python.bzl",
-    "py_test",
     "py_library",
+    "py_test",
 )
 load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 
-package(
-    default_visibility = [
-        "//py/google/fhir:__subpackages__",
-    ],
-)
+package(default_visibility = [
+    "//py/google/fhir:__subpackages__",
+])
 
 licenses(["notice"])
 
@@ -42,9 +40,9 @@ py_library(
     ],
     srcs_version = "PY3",
     deps = [
-        "@com_google_protobuf//:protobuf_python",
         "//py",
         "//py/google/fhir/core/testing:testdata_utils",
+        "@com_google_protobuf//:protobuf_python",
         requirement("absl-py"),
         requirement("six"),
     ],
@@ -57,9 +55,9 @@ py_test(
     legacy_create_init = 0,
     python_version = "PY3",
     deps = [
-        "//py",
         "//proto/google/fhir/proto/r4:primitive_test_suite_py_pb2",
         "//proto/google/fhir/proto/r4/core:datatypes_py_pb2",
+        "//py",
         "//py/google/fhir/core:extensions",
         "//py/google/fhir/core:fhir_errors",
         "//py/google/fhir/core/testing:protobuf_compare",
