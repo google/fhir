@@ -1,0 +1,33 @@
+id {
+  value: "S-1"
+}
+status {
+  value: UNKNOWN
+}
+intent {
+  value: ORDER
+}
+quantity {
+  range {
+    low {
+      value {
+        value: "1.5"
+      }
+    }
+    high {
+      value {
+        value: "2.5000"
+      }
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "V-1"
+  }
+}
+authored_on {
+  value_us: 1582156800000000
+  timezone: "UTC"
+  precision: DAY
+}
