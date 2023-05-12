@@ -1,0 +1,9 @@
+id {
+  value: "B-INVALID-UTF8"
+}
+content_type {
+  value: "text/plain"
+}
+data {
+  value: "\377\377"
+}

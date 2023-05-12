@@ -1,0 +1,62 @@
+id {
+  value: "V-1"
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
+  }
+  value {
+    code {
+      value: "invalid"
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
+  }
+  value {
+    code {
+      value: "F"
+    }
+  }
+}
+extension {
+  url {
+    value: "https://g.co/fhir/medicalrecords/SoftDelete"
+  }
+  value {
+    code {
+      value: "invalid"
+    }
+  }
+}
+extension {
+  url {
+    value: "https://g.co/fhir/medicalrecords/SoftDelete"
+  }
+  value {
+    code {
+      value: "inactive-data"
+    }
+  }
+}
+identifier {
+  system {
+    value: "https://g.co/fhir/datamapper-regtest/patients-subject_id"
+  }
+  value {
+    value: "V-1"
+  }
+}
+name {
+  family {
+    value: "Doe"
+  }
+  given {
+    value: "John"
+  }
+}
+gender {
+  value: MALE
+}
