@@ -191,7 +191,7 @@ func getOneOfField(pb protoreflect.Message, oneofField protoreflect.OneofDescrip
 	return caseField, nil
 }
 
-func getAnyOneOfField(pb protoreflect.Message, oneofField protoreflect.OneofDescriptor) (interface{}, error) {
+func getAnyOneOfField(pb protoreflect.Message, oneofField protoreflect.OneofDescriptor) (any, error) {
 	caseField := pb.WhichOneof(oneofField)
 	if caseField == nil {
 		return nil, fmt.Errorf("%s is empty", snaker.SnakeToCamel(string(oneofField.Name())))
@@ -237,7 +237,7 @@ func getEnumValueByName(ed protoreflect.EnumDescriptor, val string) (protoreflec
 	return 0, false
 }
 
-func canAssignValueToField(val interface{}, fd protoreflect.FieldDescriptor) bool {
+func canAssignValueToField(val any, fd protoreflect.FieldDescriptor) bool {
 	fdKind := fd.Kind()
 	if val == nil {
 		return fdKind == protoreflect.MessageKind || fdKind == protoreflect.BytesKind || fd.IsList()
@@ -277,7 +277,7 @@ func canAssignValueToField(val interface{}, fd protoreflect.FieldDescriptor) boo
 	return valType.AssignableTo(def.Type())
 }
 
-func valAsReflectMessage(val interface{}) (protoreflect.Message, bool) {
+func valAsReflectMessage(val any) (protoreflect.Message, bool) {
 	switch msgVal := val.(type) {
 	case proto.Message:
 		return msgVal.ProtoReflect(), true
@@ -288,7 +288,7 @@ func valAsReflectMessage(val interface{}) (protoreflect.Message, bool) {
 	}
 }
 
-func oneOfFieldByPrimitiveType(oneOfDesc protoreflect.OneofDescriptor, val interface{}) (protoreflect.FieldDescriptor, error) {
+func oneOfFieldByPrimitiveType(oneOfDesc protoreflect.OneofDescriptor, val any) (protoreflect.FieldDescriptor, error) {
 	var typeField protoreflect.FieldDescriptor
 	valType := reflect.TypeOf(val)
 	fields := oneOfDesc.Fields()
@@ -307,7 +307,7 @@ func oneOfFieldByPrimitiveType(oneOfDesc protoreflect.OneofDescriptor, val inter
 	return typeField, nil
 }
 
-func setOneOfFieldByType(m protoreflect.Message, oneOfDesc protoreflect.OneofDescriptor, val interface{}) error {
+func setOneOfFieldByType(m protoreflect.Message, oneOfDesc protoreflect.OneofDescriptor, val any) error {
 	var innerField protoreflect.FieldDescriptor
 	var err error
 	if rpb, ok := valAsReflectMessage(val); ok {
@@ -343,7 +343,7 @@ func setAny(anyMsg *anypb.Any, value any, path []protoreflect.Name) error {
 	return nil
 }
 
-func set(m protoreflect.Message, value interface{}, path []protoreflect.Name) error {
+func set(m protoreflect.Message, value any, path []protoreflect.Name) error {
 	fieldDesc, err := getMessageField(m, path[0])
 	if err != nil {
 		if anyMsg, ok := m.Interface().(*anypb.Any); ok {
@@ -386,7 +386,7 @@ func set(m protoreflect.Message, value interface{}, path []protoreflect.Name) er
 	return assignValue(m, fd, path, value)
 }
 
-func assignValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path []protoreflect.Name, value interface{}) error {
+func assignValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path []protoreflect.Name, value any) error {
 	// Allow Zero to enables us to set proto fields to zero regardless of the
 	// underlying type.
 	if value == Zero {
@@ -425,7 +425,7 @@ func assignValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path [
 	return nil
 }
 
-func protoValueFromGoValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, i interface{}) protoreflect.Value {
+func protoValueFromGoValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, i any) protoreflect.Value {
 	switch v := i.(type) {
 	case string:
 		if fd.Kind() == protoreflect.EnumKind {
@@ -463,7 +463,7 @@ func protoValueFromGoValue(m protoreflect.Message, fd protoreflect.FieldDescript
 	return protoreflect.ValueOfList(slice)
 }
 
-func goValueFromProtoValue(fd protoreflect.FieldDescriptor, v protoreflect.Value) (interface{}, error) {
+func goValueFromProtoValue(fd protoreflect.FieldDescriptor, v protoreflect.Value) (any, error) {
 	switch v := v.Interface().(type) {
 	case protoreflect.Message:
 		return v.Interface(), nil
@@ -501,7 +501,7 @@ func goValueFromProtoValue(fd protoreflect.FieldDescriptor, v protoreflect.Value
 // error is returned.
 //
 // If the input message is nil, an error will be returned.
-func Set(m proto.Message, path Path, value interface{}) error {
+func Set(m proto.Message, path Path, value any) error {
 	if !isValidPath(path) {
 		return fmt.Errorf("invalid path %v", path)
 	}
@@ -553,7 +553,7 @@ func getDefaultValueAtPath(m protoreflect.Message, fd protoreflect.FieldDescript
 	return getDefaultValueAtPath(m, ft, path[1:])
 }
 
-func checkDefaultValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path []protoreflect.Name, defVal interface{}) (interface{}, error) {
+func checkDefaultValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path []protoreflect.Name, defVal any) (any, error) {
 	m, ft, err := getDefaultValueAtPath(m, fd, path)
 	if err != nil {
 		return nil, err
@@ -585,7 +585,7 @@ func getAny(anyMsg *anypb.Any, defVal any, path []protoreflect.Name) (any, error
 	return get(inner.ProtoReflect(), defVal, path)
 }
 
-func get(m protoreflect.Message, defVal interface{}, path []protoreflect.Name) (interface{}, error) {
+func get(m protoreflect.Message, defVal any, path []protoreflect.Name) (any, error) {
 	field, err := getMessageField(m, path[0])
 	if err != nil {
 		if anyMsg, ok := m.Interface().(*anypb.Any); ok {
@@ -647,7 +647,22 @@ func get(m protoreflect.Message, defVal interface{}, path []protoreflect.Name) (
 	return get(m, defVal, path[1:])
 }
 
-// Get retrieves a value from a V2 proto at `path`, or returns a default value. An
+// Get retrieves a value from a proto at `path`, or returns the zero value of
+// that field if any of the parent fields are missing. An error will occur if the path is invalid.
+//
+// If the last value of `path` is a oneof then the populated field of the oneof
+// will be returned. An error will be returned if the oneof is not populated.
+//
+// Any T such that the value at path is assignable to T is valid. If T is a
+// slice then the elements of path must be assignable to T. Reflection is used
+// to cast each of the elements, so the performance implications of this should
+// be taken into account. If this is not desired simply use `any` for the type
+// of T.
+func Get[T any](m proto.Message, path Path) (T, error) {
+	return getUntyped[T](m, path, Zero)
+}
+
+// GetWithDefault retrieves a value from a proto at `path`, or returns a default value. An
 // error will occur if the path is invalid, or the default value's type is
 // incompatible with the type of the field at `path`.
 //
@@ -656,12 +671,49 @@ func get(m protoreflect.Message, defVal interface{}, path []protoreflect.Name) (
 // if the oneof is not populated.
 //
 // If the input message is nil, the default value will be returned.
-func Get(m proto.Message, path Path, defVal interface{}) (interface{}, error) {
+//
+// Any T such that the value at path is assignable to T is valid. If T is a
+// slice then the elements of path must be assignable to T. Reflection is used
+// to cast each of the elements, so the performance implications of this should
+// be taken into account. If this is not desired simply use `any` for the type
+// of T.
+func GetWithDefault[T any](m proto.Message, path Path, defVal T) (T, error) {
+	return getUntyped[T](m, path, defVal)
+}
+
+func getUntyped[T any](m proto.Message, path Path, defVal any) (T, error) {
+	var zero T
 	if !isValidPath(path) {
-		return nil, fmt.Errorf("invalid path %v", path)
+		return zero, fmt.Errorf("invalid path %v", path)
 	}
 	if m == nil {
-		return defVal, nil
+		if defVal == Zero {
+			return zero, nil
+		}
+		defValT, ok := defVal.(T)
+		if !ok {
+			return zero, fmt.Errorf("invalid type %T for default value", defVal)
+		}
+		return defValT, nil
 	}
-	return get(m.ProtoReflect(), defVal, path.parts)
+	val, err := get(m.ProtoReflect(), defVal, path.parts)
+	if err != nil {
+		return zero, err
+	}
+	// Take a reference + Elem so this works with interfaces too
+	retType := reflect.TypeOf(&zero).Elem()
+	valType := reflect.TypeOf(val)
+	if valType.AssignableTo(retType) {
+		return val.(T), nil
+	}
+	if retType.Kind() == reflect.Slice && valType.Kind() == reflect.Slice && valType.Elem().AssignableTo(retType.Elem()) {
+		retElemType := retType.Elem()
+		valRef := reflect.ValueOf(val)
+		ret := reflect.MakeSlice(retType, 0, valRef.Len())
+		for i := 0; i < valRef.Len(); i++ {
+			ret = reflect.Append(ret, valRef.Index(i).Convert(retElemType))
+		}
+		return ret.Interface().(T), nil
+	}
+	return zero, fmt.Errorf("value at path is a %T, want %T", val, zero)
 }

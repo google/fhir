@@ -481,11 +481,7 @@ func getZeroResource(jsonData []byte, ver fhirversion.Version) (proto.Message, e
 
 // unwrapFromContainedResource returns the resource contained within a contained resource.
 func unwrapFromContainedResource(containedRes proto.Message) (proto.Message, error) {
-	res, err := protopath.Get(containedRes, protopath.NewPath(oneofResourceProtopath), nil)
-	if err != nil {
-		return nil, err
-	}
-	return res.(proto.Message), nil
+	return protopath.Get[proto.Message](containedRes, protopath.NewPath(oneofResourceProtopath))
 }
 
 // wrapInContainedResource wraps a resource within a contained resource.

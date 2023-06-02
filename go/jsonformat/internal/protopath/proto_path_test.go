@@ -37,7 +37,7 @@ func TestSet(t *testing.T) {
 	tests := []struct {
 		name  string
 		path  Path
-		value interface{}
+		value any
 		msg   proto.Message
 		want  proto.Message
 	}{
@@ -283,7 +283,7 @@ func TestSet_Errors(t *testing.T) {
 	tests := []struct {
 		name  string
 		path  Path
-		value interface{}
+		value any
 		msg   proto.Message
 	}{
 		{
@@ -448,12 +448,102 @@ func TestSet_Errors(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
+	innerMsg := &pptpb.Message_InnerMessage{InnerField: 1}
+	tests := []struct {
+		name string
+		msg  proto.Message
+		path Path
+		fn   func(proto.Message, Path) (any, error)
+		want any
+	}{
+		{
+			name: "concrete type",
+			msg: &pptpb.Message{
+				Int32: 1,
+			},
+			path: NewPath("int32"),
+			fn: func(m proto.Message, path Path) (any, error) {
+				return Get[int32](m, path)
+			},
+			want: int32(1),
+		},
+		{
+			name: "interface",
+			msg: &pptpb.Message{
+				MessageField: innerMsg,
+			},
+			path: NewPath("message_field"),
+			fn: func(m proto.Message, path Path) (any, error) {
+				return Get[proto.Message](m, path)
+			},
+			want: innerMsg,
+		},
+		{
+			name: "interface - missing value",
+			msg:  &pptpb.Message{},
+			path: NewPath("message_field"),
+			fn: func(m proto.Message, path Path) (any, error) {
+				return Get[proto.Message](m, path)
+			},
+			want: (*pptpb.Message_InnerMessage)(nil),
+		},
+		{
+			name: "nil message",
+			msg:  nil,
+			path: NewPath("int32"),
+			fn: func(m proto.Message, path Path) (any, error) {
+				return Get[int32](m, path)
+			},
+			want: int32(0),
+		},
+		{
+			name: "nil message - interface",
+			msg:  nil,
+			path: NewPath("message_field"),
+			fn: func(m proto.Message, path Path) (any, error) {
+				return Get[proto.Message](m, path)
+			},
+			want: (proto.Message)(nil),
+		},
+		{
+			name: "proto slice",
+			msg:  &pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{innerMsg}},
+			path: NewPath("repeated_message_field"),
+			fn: func(m proto.Message, path Path) (any, error) {
+				return Get[[]proto.Message](m, path)
+			},
+			want: []proto.Message{proto.Message(innerMsg)},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := test.fn(test.msg, test.path)
+			if err != nil {
+				t.Errorf("Get(%v, %v) returned an unexpected error: %v", test.msg, test.path, err)
+			}
+			if diff := cmp.Diff(test.want, got, protocmp.Transform()); diff != "" {
+				t.Errorf("Get(%v, %v) got unexpected diff(-want +got): %s", test.msg, test.path, diff)
+			}
+		})
+	}
+}
+
+func TestGet_Errors(t *testing.T) {
+	m := &pptpb.Message{Int32: 1}
+	path := NewPath("int32")
+	got, err := Get[int64](m, path)
+	if err == nil {
+		t.Errorf("Get(%v, %v) returned %v, want error", m, path, got)
+	}
+}
+
+func TestGetWithDefault(t *testing.T) {
 	tests := []struct {
 		name   string
 		path   Path
-		defVal interface{}
+		defVal any
 		msg    proto.Message
-		want   interface{}
+		want   any
 	}{
 		{
 			"single field",
@@ -680,7 +770,7 @@ func TestGet(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			val, err := Get(test.msg, test.path, test.defVal)
+			val, err := GetWithDefault(test.msg, test.path, test.defVal)
 			if err != nil {
 				t.Fatalf("Get(%v, %v, %v) got err %v, expected <nil>", test.msg, test.path, test.defVal, err)
 			}
@@ -692,11 +782,11 @@ func TestGet(t *testing.T) {
 	}
 }
 
-func TestGet_Errors(t *testing.T) {
+func TestGetWithDefault_Errors(t *testing.T) {
 	tests := []struct {
 		name   string
 		path   Path
-		defVal interface{}
+		defVal any
 		msg    proto.Message
 	}{
 		{
@@ -792,7 +882,7 @@ func TestGet_Errors(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			if _, err := Get(test.msg, test.path, test.defVal); err == nil {
+			if _, err := GetWithDefault(test.msg, test.path, test.defVal); err == nil {
 				t.Fatalf("Get(%v, %v, %v) got error <nil>, expected error", test.msg, test.path, test.defVal)
 			}
 		})
