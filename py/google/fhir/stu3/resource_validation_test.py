@@ -30,54 +30,55 @@ _VALIDATION_DIR = os.path.join('testdata', 'stu3', 'validation')
 class ResourceValidationTest(absltest.TestCase):
   """Basic unit test suite ensuring that resource validation works correctly."""
 
-  def testResourceValidation_withMissingRequiredField_raises(self):
+  def test_resource_validation_with_missing_required_field_raises(self):
     self._invalid_test('observation_invalid_missing_required',
                        resources_pb2.Observation)
 
-  def testResourceValidation_withInvalidPrimitive_raises(self):
+  def test_resource_validation_with_invalid_primitive_raises(self):
     self._invalid_test('observation_invalid_primitive',
                        resources_pb2.Observation)
 
-  def testResourceValidation_withValidReference_succeeds(self):
+  def test_resource_validation_with_valid_reference_succeeds(self):
     self._valid_test('observation_valid_reference', resources_pb2.Observation)
 
-  def testResourceValidation_withInvalidReference_raises(self):
+  def test_resource_validation_with_invalid_reference_raises(self):
     self._invalid_test('observation_invalid_reference',
                        resources_pb2.Observation)
 
   # TODO(b/155795499): Implement FHIR-Path validation for Python API
-  # def testResourceValidation_withFhirPathViolation_raises(self):
+  # def test_resource_validation_with_fhir_path_violation_raises(self):
   #   self._invalid_test('observation_invalid_fhirpath_violation',
   #                     resources_pb2.Observation)
 
-  def testResourceValidation_withValidRepeatedReference_succeeds(self):
+  def test_resource_validation_with_valid_repeated_reference_succeeds(self):
     self._valid_test('encounter_valid_repeated_reference',
                      resources_pb2.Encounter)
 
-  def testResourceValidation_withInvalidRepeatedReference_raies(self):
+  def test_resource_validation_with_invalid_repeated_reference_raies(self):
     self._invalid_test('encounter_invalid_repeated_reference',
                        resources_pb2.Encounter)
 
-  def testResourceValidation_withInvalidEmptyOneof_Raises(self):
+  def test_resource_validation_with_invalid_empty_oneof_raises(self):
     self._invalid_test('observation_invalid_empty_oneof',
                        resources_pb2.Observation)
 
-  def testResourceValidation_withValidBundle_succeeds(self):
+  def test_resource_validation_with_valid_bundle_succeeds(self):
     self._valid_test('bundle_valid', resources_pb2.Bundle)
 
-  def testResourceValidation_withStartLaterThanEnd_raises(self):
+  def test_resource_validation_with_start_later_than_end_raises(self):
     self._invalid_test('encounter_invalid_start_later_than_end',
                        resources_pb2.Encounter)
 
-  def testResourceValidation_withStartLaterThanEndWithEndPrecision_succeeds(
-      self):
+  def test_resource_validation_with_start_later_than_end_with_end_precision_succeeds(
+      self,
+  ):
     self._valid_test('encounter_valid_start_later_than_end_day_precision',
                      resources_pb2.Encounter)
 
-  def testResourceValidation_withValidEncounter_succeeds(self):
+  def test_resource_validation_with_valid_encounter_succeeds(self):
     self._valid_test('encounter_valid', resources_pb2.Encounter)
 
-  def testResourceValidation_withValidNumericTimezone_succeeds(self):
+  def test_resource_validation_with_valid_numeric_timezone_succeeds(self):
     self._valid_test('encounter_valid_numeric_timezone',
                      resources_pb2.Encounter)
 

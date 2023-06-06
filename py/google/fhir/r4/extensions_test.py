@@ -48,12 +48,12 @@ class ExtensionsTest(extensions_test.ExtensionsTest):
   def testdata_dir(self) -> str:
     return _EXTENSIONS_DIR
 
-  def testGetFhirExtensions_withNoExtensions_returnsEmptyList(self):
+  def test_get_fhir_extensions_with_no_extensions_returns_empty_list(self):
     """Tests get_fhir_extensions returns an empty list with no extensions."""
     patient = patient_pb2.Patient()
     self.assertEmpty(extensions.get_fhir_extensions(patient))
 
-  def testGetFhirExtensions_withExtensions_returnsList(self):
+  def test_get_fhir_extensions_with_extensions_returns_list(self):
     """Tests get_fhir_extensions returns a non-empty list with extensions."""
     patient = patient_pb2.Patient()
     patient.extension.add(
@@ -64,7 +64,7 @@ class ExtensionsTest(extensions_test.ExtensionsTest):
     )
     self.assertLen(extensions.get_fhir_extensions(patient), 1)
 
-  def testClearFhirExtensions_withMultipleExtensions_succeeds(self):
+  def test_clear_fhir_extensions_with_multiple_extensions_succeeds(self):
     """Tests ClearFhirExtensions when a message has multiple extensions."""
     arbitrary_string = datatypes_pb2.String()
     arbitrary_string.extension.add(
@@ -99,47 +99,51 @@ class ExtensionsTest(extensions_test.ExtensionsTest):
     ]
     self.assertEqual(remaining_urls, ['first', 'third'])
 
-  def testExtensionToMessage_withEventTrigger_succeeds(self):
+  def test_extension_to_message_with_event_trigger_succeeds(self):
     self.assert_extension_to_message_equals_golden(
         'trigger', ml_extensions_pb2.EventTrigger
     )
 
-  def testMessageToExtension_withEventTrigger_succeeds(self):
+  def test_message_to_extension_with_event_trigger_succeeds(self):
     self.assert_message_to_extension_equals_golden(
         'trigger', ml_extensions_pb2.EventTrigger
     )
 
-  def testExtensionToMessage_withEventLabel_succeeds(self):
+  def test_extension_to_message_with_event_label_succeeds(self):
     self.assert_extension_to_message_equals_golden(
         'label', ml_extensions_pb2.EventLabel
     )
 
-  def testMessageToExtension_withEventLabel_succeeds(self):
+  def test_message_to_extension_with_event_label_succeeds(self):
     self.assert_message_to_extension_equals_golden(
         'label', ml_extensions_pb2.EventLabel
     )
 
-  def testExtensionToMessage_withPrimitiveHasNoValue_succeeds(self):
+  def test_extension_to_message_with_primitive_has_no_value_succeeds(self):
     self.assert_extension_to_message_equals_golden(
         'primitive_has_no_value', fhirproto_extensions_pb2.PrimitiveHasNoValue
     )
 
-  def testMessageToExtension_withPrimitiveHasNoValue_succeeds(self):
+  def test_message_to_extension_with_primitive_has_no_value_succeeds(self):
     self.assert_message_to_extension_equals_golden(
         'primitive_has_no_value', fhirproto_extensions_pb2.PrimitiveHasNoValue
     )
 
-  def testExtensionToMessage_withEmptyPrimitiveHasNoValue_succeeds(self):
+  def test_extension_to_message_with_empty_primitive_has_no_value_succeeds(
+      self,
+  ):
     self.assert_extension_to_message_equals_golden(
         'empty', fhirproto_extensions_pb2.PrimitiveHasNoValue
     )
 
-  def testMessageToExtension_withEmptyPrimitiveHasNoValue_succeeds(self):
+  def test_message_to_extension_with_empty_primitive_has_no_value_succeeds(
+      self,
+  ):
     self.assert_message_to_extension_equals_golden(
         'empty', fhirproto_extensions_pb2.PrimitiveHasNoValue
     )
 
-  def testExtensionToMessage_withCapabilityStatementSearchParameterCombination_succeeds(
+  def test_extension_to_message_with_capability_statement_search_parameter_combination_succeeds(
       self,
   ):
     self.assert_extension_to_message_equals_golden(
@@ -147,7 +151,7 @@ class ExtensionsTest(extensions_test.ExtensionsTest):
         extensions_pb2.CapabilityStatementSearchParameterCombination,
     )
 
-  def testMessageToExtension_withCapabilityStatementSearchParameterCombination_succeeds(
+  def test_message_to_extension_with_capability_statement_search_parameter_combination_succeeds(
       self,
   ):
     self.assert_message_to_extension_equals_golden(
@@ -159,7 +163,7 @@ class ExtensionsTest(extensions_test.ExtensionsTest):
       'testdata' not in sys.modules,
       'google-fhir package does not build+install tertiary testdata protos.',
   )
-  def testExtensionToMessage_withDigitalMediaType_succeeds(self):
+  def test_extension_to_message_with_digital_media_type_succeeds(self):
     self.assert_extension_to_message_equals_golden(
         'digital_media_type', test_extensions_pb2.DigitalMediaType
     )
@@ -168,7 +172,7 @@ class ExtensionsTest(extensions_test.ExtensionsTest):
       'testdata' not in sys.modules,
       'google-fhir package does not build+install tertiary testdata protos.',
   )
-  def testMessageToExtension_withDigitalMediaType_succeeds(self):
+  def test_message_to_extension_with_digital_media_type_succeeds(self):
     self.assert_message_to_extension_equals_golden(
         'digital_media_type', test_extensions_pb2.DigitalMediaType
     )

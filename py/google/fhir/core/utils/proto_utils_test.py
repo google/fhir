@@ -29,7 +29,7 @@ from google.fhir.core.utils import proto_utils
 class ProtoUtilsTest(absltest.TestCase):
   """Unit tests for functionality in proto_utils.py."""
 
-  def testAreSameMessageType_withSameMessageType_returnsTrue(self):
+  def test_are_same_message_type_with_same_message_type_returns_true(self):
     """Test are_same_message_type with the same message types."""
     patient_a = patient_pb2.Patient()
     patient_b = patient_pb2.Patient()
@@ -44,7 +44,9 @@ class ProtoUtilsTest(absltest.TestCase):
         )
     )
 
-  def testAreSameMessageType_withDifferentMessageType_returnsFalse(self):
+  def test_are_same_message_type_with_different_message_type_returns_false(
+      self,
+  ):
     """Test are_same_message_type with two different message types."""
     patient = patient_pb2.Patient()
     uscore_patient_profile = uscore_pb2.USCorePatientProfile()
@@ -59,7 +61,7 @@ class ProtoUtilsTest(absltest.TestCase):
         )
     )
 
-  def testMessageIsType_withActualMessageType_returnsTrue(self):
+  def test_message_is_type_with_actual_message_type_returns_true(self):
     """Test MessageIsType functionality against the proper FHIR type."""
     patient = patient_pb2.Patient()
     self.assertTrue(proto_utils.is_message_type(patient, patient_pb2.Patient))
@@ -67,7 +69,7 @@ class ProtoUtilsTest(absltest.TestCase):
     boolean = datatypes_pb2.Boolean()
     self.assertTrue(proto_utils.is_message_type(boolean, datatypes_pb2.Boolean))
 
-  def testMessageIsType_withDifferentMessageType_returnsFalse(self):
+  def test_message_is_type_with_different_message_type_returns_false(self):
     """Test MessageIsType functionality against a different FHIR type."""
     patient = patient_pb2.Patient()
     self.assertFalse(
@@ -77,34 +79,36 @@ class ProtoUtilsTest(absltest.TestCase):
     boolean = datatypes_pb2.Boolean()
     self.assertFalse(proto_utils.is_message_type(boolean, patient_pb2.Patient))
 
-  def testFieldContentLength_withRepeatedField_returnsContentLength(self):
+  def test_field_content_length_with_repeated_field_returns_content_length(
+      self,
+  ):
     """Test field_content_length functionality on repeated field input."""
     patient = self._create_patient_with_names(["A", "B", "C"])
     self.assertEqual(proto_utils.field_content_length(patient, "name"), 3)
 
-  def testFieldContentLength_withSingularField_returnsSingleCount(self):
+  def test_field_content_length_with_singular_field_returns_single_count(self):
     """Test field_content_length functionality on singular field input."""
     patient = patient_pb2.Patient(active=datatypes_pb2.Boolean(value=True))
     self.assertEqual(proto_utils.field_content_length(patient, "active"), 1)
 
-  def testFieldContentLength_withNonExistentField_returnsZero(self):
+  def test_field_content_length_with_non_existent_field_returns_zero(self):
     """Test field_content_length functionality on non-existent field input."""
     default_patient = patient_pb2.Patient()  # Leave active unset
     self.assertEqual(
         proto_utils.field_content_length(default_patient, "active"), 0
     )
 
-  def testFieldIsSet_withSetField_returnsTrue(self):
+  def test_field_is_set_with_set_field_returns_true(self):
     """Test field_is_set with a set field."""
     patient = patient_pb2.Patient(active=datatypes_pb2.Boolean(value=True))
     self.assertTrue(proto_utils.field_is_set(patient, "active"))
 
-  def testFieldIsSet_withUnsetField_returnsFalse(self):
+  def test_field_is_set_with_unset_field_returns_false(self):
     """Test field_is_set with an unset field."""
     default_patient = patient_pb2.Patient()  # Leave active unset
     self.assertFalse(proto_utils.field_is_set(default_patient, "active"))
 
-  def testSetInParentOrAdd_withSingularComposite_returnsMessage(self):
+  def test_set_in_parent_or_add_with_singular_composite_returns_message(self):
     """Test set_in_parent_or_add with a singlular composite field."""
     patient = patient_pb2.Patient()
     self.assertFalse(proto_utils.field_is_set(patient, "active"))
@@ -121,7 +125,7 @@ class ProtoUtilsTest(absltest.TestCase):
     self.assertTrue(active_set_in_parent.value)
     self.assertTrue(patient.active.value)
 
-  def testSetInParentOrAdd_withRepeatedComposite_returnsMessage(self):
+  def test_set_in_parent_or_add_with_repeated_composite_returns_message(self):
     """Test set_in_parent_or_add with repeated composite field."""
     patient = patient_pb2.Patient()
     self.assertFalse(proto_utils.field_is_set(patient, "name"))
@@ -138,7 +142,7 @@ class ProtoUtilsTest(absltest.TestCase):
     self.assertEqual(name_set_in_parent.text.value, "Foo")
     self.assertEqual(patient.name[0].text.value, "Foo")
 
-  def testSetInParentOrAdd_withSingularPrimitive_raises(self):
+  def test_set_in_parent_or_add_with_singular_primitive_raises(self):
     """Test set_in_parent_or_add with singular proto primitive."""
     boolean = datatypes_pb2.Boolean()
     with self.assertRaises(ValueError) as ve:
@@ -146,20 +150,20 @@ class ProtoUtilsTest(absltest.TestCase):
 
     self.assertIsInstance(ve.exception, ValueError)
 
-  def testGetValueAtField_withSingularPrimitive_returnsValue(self):
+  def test_get_value_at_field_with_singular_primitive_returns_value(self):
     """Test get_value_at_field with a basic singular primitive field."""
     arbitrary_string = datatypes_pb2.String(value="foo")
     result = proto_utils.get_value_at_field(arbitrary_string, "value")
     self.assertEqual(result, "foo")
 
-  def testGetValueAtField_withSingularComposite_returnsValue(self):
+  def test_get_value_at_field_with_singular_composite_returns_value(self):
     """Test get_value_at_field with a singular composite field."""
     active_value = datatypes_pb2.Boolean(value=True)
     patient = patient_pb2.Patient(active=active_value)
     result = proto_utils.get_value_at_field(patient, "active")
     self.assertEqual(result, active_value)
 
-  def testGetValueAtField_withRepeatedComposite_returnsList(self):
+  def test_get_value_at_field_with_repeated_composite_returns_list(self):
     """Test get_value_at_field with a repeated composite field."""
     patient_names = [
         datatypes_pb2.HumanName(text=datatypes_pb2.String(value="Foo")),
@@ -170,19 +174,21 @@ class ProtoUtilsTest(absltest.TestCase):
     result = proto_utils.get_value_at_field(patient, "name")
     self.assertEqual(list(result), patient_names)
 
-  def testGetValueAtFieldIndex_withRepeatedField_returnsValueAtIndex(self):
+  def test_get_value_at_field_index_with_repeated_field_returns_value_at_index(
+      self,
+  ):
     """Test get_value_at_field_index with a repeated field."""
     patient = self._create_patient_with_names(["A", "B", "C"])
     result = proto_utils.get_value_at_field_index(patient, "name", 1)
     self.assertEqual(result.text.value, "B")
 
-  def testGetValueAtFieldIndex_withSingularField_returnsValue(self):
+  def test_get_value_at_field_index_with_singular_field_returns_value(self):
     """Test get_value_at_field_index with a singular field."""
     patient = patient_pb2.Patient(active=datatypes_pb2.Boolean(value=True))
     result = proto_utils.get_value_at_field_index(patient, "active", 0)
     self.assertTrue(result.value)
 
-  def testGetValueAtFieldIndex_invalidIndex_raisesException(self):
+  def test_get_value_at_field_index_invalid_index_raises_exception(self):
     """Test get_value_at_field_index with an invalid index."""
     patient = patient_pb2.Patient(active=datatypes_pb2.Boolean(value=True))
     with self.assertRaises(ValueError) as ve:
@@ -190,14 +196,14 @@ class ProtoUtilsTest(absltest.TestCase):
 
     self.assertIsInstance(ve.exception, ValueError)
 
-  def testGetValueAtFieldName_invalidName_raisesException(self):
+  def test_get_value_at_field_name_invalid_name_raises_exception(self):
     arbitrary_string = datatypes_pb2.String(value="foo")
     with self.assertRaises(ValueError) as ve:
       proto_utils.get_value_at_field(arbitrary_string, "notvalue")
 
     self.assertIsInstance(ve.exception, ValueError)
 
-  def testAppendValueAtField_repeatedCompositeValue_appendsValue(self):
+  def test_append_value_at_field_repeated_composite_value_appends_value(self):
     """Test append_value_at_field with a repeated composite type."""
     patient = patient_pb2.Patient()
 
@@ -214,7 +220,7 @@ class ProtoUtilsTest(absltest.TestCase):
     self.assertEqual(proto_utils.field_content_length(patient, "name"), 3)
     self.assertEqual(patient.name[:], patient_names)
 
-  def testAppendValueAtField_singularCompositeValue_raises(self):
+  def test_append_value_at_field_singular_composite_value_raises(self):
     """Test append_value_at_field with a singular composite type."""
     patient = patient_pb2.Patient()
     active = datatypes_pb2.Boolean(value=True)
@@ -224,7 +230,7 @@ class ProtoUtilsTest(absltest.TestCase):
 
     self.assertIsInstance(ve.exception, ValueError)
 
-  def testSetValueAtField_singlePrimitiveValue_setsValue(self):
+  def test_set_value_at_field_single_primitive_value_sets_value(self):
     """Test set_value_at_field with a singular primitive type."""
     arbitrary_string = datatypes_pb2.String(value="foo")
 
@@ -232,7 +238,7 @@ class ProtoUtilsTest(absltest.TestCase):
     proto_utils.set_value_at_field(arbitrary_string, "value", "bar")
     self.assertEqual(arbitrary_string.value, "bar")
 
-  def testSetValueAtField_singleCompositeValue_setsValue(self):
+  def test_set_value_at_field_single_composite_value_sets_value(self):
     """Test set_value_at_field with a singular compositie type."""
     patient = patient_pb2.Patient(active=datatypes_pb2.Boolean(value=False))
 
@@ -242,7 +248,7 @@ class ProtoUtilsTest(absltest.TestCase):
     )
     self.assertTrue(patient.active.value)
 
-  def testSetValueAtField_repeatedCompositeValue_setsList(self):
+  def test_set_value_at_field_repeated_composite_value_sets_list(self):
     """Test set_value_at_field with a repeated composite type."""
     old_names = [
         datatypes_pb2.HumanName(text=datatypes_pb2.String(value="A")),
@@ -260,7 +266,7 @@ class ProtoUtilsTest(absltest.TestCase):
     proto_utils.set_value_at_field(patient, "name", new_names)
     self.assertEqual(patient.name[:], new_names)
 
-  def testSetValueAtFieldIndex_singleCompositeField_setsValue(self):
+  def test_set_value_at_field_index_single_composite_field_sets_value(self):
     """Test set_value_at_field_index with a singular composite type."""
     known_gender = patient_pb2.Patient.GenderCode(
         value=codes_pb2.AdministrativeGenderCode.MALE
@@ -274,7 +280,7 @@ class ProtoUtilsTest(absltest.TestCase):
     proto_utils.set_value_at_field_index(patient, "gender", 0, known_gender)
     self.assertEqual(patient.gender, known_gender)
 
-  def testSetValueAtFieldIndex_repeatCompositeField_setsValue(self):
+  def test_set_value_at_field_index_repeat_composite_field_sets_value(self):
     """Test set_value_at_field_index with a repeated composite type."""
     patient = self._create_patient_with_names(["A", "B", "C"])
     new_name = datatypes_pb2.HumanName(
@@ -284,13 +290,13 @@ class ProtoUtilsTest(absltest.TestCase):
     proto_utils.set_value_at_field_index(patient, "name", 1, new_name)
     self.assertEqual(patient.name[1], new_name)
 
-  def testSetValueAtFieldIndex_singlePrimitiveField_setsValue(self):
+  def test_set_value_at_field_index_single_primitive_field_sets_value(self):
     """Test set_value_at_field_index with a singular primitive type."""
     arbitrary_string = datatypes_pb2.String(value="foo")
     proto_utils.set_value_at_field_index(arbitrary_string, "value", 0, "bar")
     self.assertEqual(arbitrary_string.value, "bar")
 
-  def testSetValueAtFieldIndex_invalidIndex_raisesException(self):
+  def test_set_value_at_field_index_invalid_index_raises_exception(self):
     """Test set_value_at_field_index with an invalid index."""
     patient = self._create_patient_with_names(["A", "B", "C"])
     new_name = datatypes_pb2.HumanName(
@@ -303,7 +309,7 @@ class ProtoUtilsTest(absltest.TestCase):
 
     self.assertIsInstance(ve.exception, ValueError)
 
-  def testCopyCommonField_differentMessageTypes_succeeds(self):
+  def test_copy_common_field_different_message_types_succeeds(self):
     """Tests that copy_common_field succeeds on a single Message field."""
     string_value = datatypes_pb2.String(id=datatypes_pb2.String(value="foo"))
     boolean_value = datatypes_pb2.Boolean(id=datatypes_pb2.String(value="bar"))
@@ -318,7 +324,9 @@ class ProtoUtilsTest(absltest.TestCase):
     self.assertEqual(string_value.id.value, "foo")
     self.assertEqual(boolean_value.id.value, "foo")
 
-  def testCopyCommonField_notPresentInBothMessages_raisesException(self):
+  def test_copy_common_field_not_present_in_both_messages_raises_exception(
+      self,
+  ):
     """Tests copy_common_field with an invalid descriptor raises."""
     first_patient = patient_pb2.Patient(
         active=datatypes_pb2.Boolean(value=True)
@@ -331,7 +339,7 @@ class ProtoUtilsTest(absltest.TestCase):
       proto_utils.copy_common_field(first_patient, second_patient, "value")
     self.assertIsInstance(ve.exception, ValueError)
 
-  def testGetMessageClassFromDescriptor_returnsMessageClass(self):
+  def test_get_message_class_from_descriptor_returns_message_class(self):
     """Tests that the correct class is returned for a message."""
     actual = proto_utils.get_message_class_from_descriptor(
         patient_pb2.Patient.DESCRIPTOR
@@ -342,7 +350,7 @@ class ProtoUtilsTest(absltest.TestCase):
         )
     )
 
-  def testCreateMessageFromDescriptor_returnsMessage(self):
+  def test_create_message_from_descriptor_returns_message(self):
     """Tests that the correct class is returned for a message."""
     self.assertEqual(
         proto_utils.create_message_from_descriptor(
@@ -351,7 +359,7 @@ class ProtoUtilsTest(absltest.TestCase):
         patient_pb2.Patient(),
     )
 
-  def testCreateMessageFromDescriptor_withArguments_returnsMessage(self):
+  def test_create_message_from_descriptor_with_arguments_returns_message(self):
     """Tests that the correct class is instantiated with kwargs."""
 
     patient_name = datatypes_pb2.HumanName(

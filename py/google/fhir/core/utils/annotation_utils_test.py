@@ -48,7 +48,9 @@ _R4_FHIR_VERSION = 4
 class AnnotationUtilsTest(absltest.TestCase):
   """Unit tests for functionality in annotation_utils.py."""
 
-  def testIsTypedReferenceField_withValidTypedReferenceField_returnsTrue(self):
+  def test_is_typed_reference_field_with_valid_typed_reference_field_returns_true(
+      self,
+  ):
     """Test is_typed_reference_field functionality on valid input."""
     reference = datatypes_pb2.Reference()
     practitioner_role_id_field = reference.DESCRIPTOR.fields_by_name[
@@ -58,7 +60,7 @@ class AnnotationUtilsTest(absltest.TestCase):
         annotation_utils.is_typed_reference_field(practitioner_role_id_field)
     )
 
-  def testIsTypedReferenceField_withInvalidTypedReferenceField_returnsFalse(
+  def test_is_typed_reference_field_with_invalid_typed_reference_field_returns_false(
       self,
   ):
     """Test is_typed_reference_field functionality on invalid input."""
@@ -66,13 +68,13 @@ class AnnotationUtilsTest(absltest.TestCase):
     uri_field = reference.DESCRIPTOR.fields_by_name['uri']
     self.assertFalse(annotation_utils.is_typed_reference_field(uri_field))
 
-  def testIsResource_withPatient_returnsTrue(self):
+  def test_is_resource_with_patient_returns_true(self):
     """Test is_resource functionality on non-primitive input."""
     patient = patient_pb2.Patient()
     self.assertTrue(annotation_utils.is_resource(patient))
     self.assertTrue(annotation_utils.is_resource(patient.DESCRIPTOR))
 
-  def testIsResource_withPrimitives_returnsFalse(self):
+  def test_is_resource_with_primitives_returns_false(self):
     """Test is_resource functionality on primitive input."""
     boolean = datatypes_pb2.Boolean()
     code = datatypes_pb2.Code()
@@ -81,7 +83,7 @@ class AnnotationUtilsTest(absltest.TestCase):
     self.assertFalse(annotation_utils.is_resource(code))
     self.assertFalse(annotation_utils.is_resource(code.DESCRIPTOR))
 
-  def testIsPrimitiveType_withPrimitives_returnsTrue(self):
+  def test_is_primitive_type_with_primitives_returns_true(self):
     """Test is_primitive_type functionality on primitive input."""
     boolean = datatypes_pb2.Boolean()
     code = datatypes_pb2.Code()
@@ -90,29 +92,29 @@ class AnnotationUtilsTest(absltest.TestCase):
     self.assertTrue(annotation_utils.is_primitive_type(code))
     self.assertTrue(annotation_utils.is_primitive_type(code.DESCRIPTOR))
 
-  def testIsPrimitiveType_withPatient_returnsFalse(self):
+  def test_is_primitive_type_with_patient_returns_false(self):
     """Test is_primitive_type functionality on non-primitive input."""
     patient = patient_pb2.Patient()
     self.assertFalse(annotation_utils.is_primitive_type(patient))
     self.assertFalse(annotation_utils.is_primitive_type(patient.DESCRIPTOR))
 
-  def testIsChoiceType_withChoiceMessage_returnsTrue(self):
+  def test_is_choice_type_with_choice_message_returns_true(self):
     dosage = datatypes_pb2.Dosage()
     as_needed = dosage.as_needed
     self.assertTrue(annotation_utils.is_choice_type(as_needed))
 
-  def testIsChoiceType_withNonChoiceMessage_returnsFalse(self):
+  def test_is_choice_type_with_non_choice_message_returns_false(self):
     dosage = datatypes_pb2.Dosage()
     timing = dosage.timing
     self.assertFalse(annotation_utils.is_choice_type(timing))
 
-  def testIsChoiceType_withValidChoiceType_returnsTrue(self):
+  def test_is_choice_type_with_valid_choice_type_returns_true(self):
     """Test is_choice_type functionality on valid input."""
     dosage = datatypes_pb2.Dosage()
     as_needed_fd = dosage.DESCRIPTOR.fields_by_name['as_needed']
     self.assertTrue(annotation_utils.is_choice_type_field(as_needed_fd))
 
-  def testIsChoiceType_withInvalidChoiceType_returnsFalse(self):
+  def test_is_choice_type_with_invalid_choice_type_returns_false(self):
     """Test is_choice_type functionality on invalid input."""
     boolean = datatypes_pb2.Boolean()
     value_fd = boolean.DESCRIPTOR.fields_by_name['value']
@@ -122,13 +124,13 @@ class AnnotationUtilsTest(absltest.TestCase):
     text_fd = patient.DESCRIPTOR.fields_by_name['text']
     self.assertFalse(annotation_utils.is_choice_type_field(text_fd))
 
-  def testIsReference_withValidReferenceType_returnsTrue(self):
+  def test_is_reference_with_valid_reference_type_returns_true(self):
     """Test is_reference functionality on valid input."""
     reference = datatypes_pb2.Reference()
     self.assertTrue(annotation_utils.is_reference(reference))
     self.assertTrue(annotation_utils.is_reference(reference.DESCRIPTOR))
 
-  def testIsReference_withInvalidReferenceType_returnsFalse(self):
+  def test_is_reference_with_invalid_reference_type_returns_false(self):
     """Test is_reference functionality on invalid input."""
     boolean = datatypes_pb2.Boolean()
     code = datatypes_pb2.Code()
@@ -141,7 +143,9 @@ class AnnotationUtilsTest(absltest.TestCase):
       'testdata' not in sys.modules,
       'google-fhir package does not build+install tertiary testdata protos.',
   )
-  def testGetFixedCodingSystem_withValidFixedCodingSystem_returnsValue(self):
+  def test_get_fixed_coding_system_with_valid_fixed_coding_system_returns_value(
+      self,
+  ):
     """Test get_fixed_coding_system functionality when annotation is present."""
     expected_system = 'http://hl7.org/fhir/metric-color'
     coding = (
@@ -155,7 +159,7 @@ class AnnotationUtilsTest(absltest.TestCase):
         expected_system,
     )
 
-  def testGetFixedCodingSystem_withInvalidMessage_returnsNone(self):
+  def test_get_fixed_coding_system_with_invalid_message_returns_none(self):
     """Test get_fixed_coding_system functionality with no annotation present."""
     boolean = datatypes_pb2.Boolean()
     self.assertIsNone(annotation_utils.get_fixed_coding_system(boolean))
@@ -163,7 +167,7 @@ class AnnotationUtilsTest(absltest.TestCase):
     code = datatypes_pb2.Code()
     self.assertIsNone(annotation_utils.get_fixed_coding_system(code))
 
-  def testGetSourceCodeSystem_withValidCodeSystem_returnsValue(self):
+  def test_get_source_code_system_with_valid_code_system_returns_value(self):
     """Test get_source_code_system when source_code_system is present."""
     birth_sex_valueset = uscore_codes_pb2.BirthSexValueSet()
     female_value_descriptor = (
@@ -194,7 +198,7 @@ class AnnotationUtilsTest(absltest.TestCase):
         'http://terminology.hl7.org/CodeSystem/v3-NullFlavor',
     )
 
-  def testGetSourceCodeSystem_withInvalidCodeSystem_returnsNone(self):
+  def test_get_source_code_system_with_invalid_code_system_returns_none(self):
     """Test get_source_code_system when source_code_system is not present."""
     year_value_descriptor = (
         datatypes_pb2.Date.Precision.DESCRIPTOR.values_by_number[
@@ -205,7 +209,7 @@ class AnnotationUtilsTest(absltest.TestCase):
         annotation_utils.get_source_code_system(year_value_descriptor)
     )
 
-  def testHasSourceCodeSystem_withValidCodeSystem_returnsTrue(self):
+  def test_has_source_code_system_with_valid_code_system_returns_true(self):
     """Test has_source_code_system when source_code_system is present."""
     birth_sex_valueset = uscore_codes_pb2.BirthSexValueSet()
     female_value_descriptor = (
@@ -233,7 +237,7 @@ class AnnotationUtilsTest(absltest.TestCase):
         annotation_utils.has_source_code_system(unk_value_descriptor)
     )
 
-  def testHasSourceCodeSystem_withInvalidCodeSystem_returnsFalse(self):
+  def test_has_source_code_system_with_invalid_code_system_returns_false(self):
     """Test has_source_code_system when source_code_system is not present."""
     year_value_descriptor = (
         datatypes_pb2.Date.Precision.DESCRIPTOR.values_by_number[
@@ -244,7 +248,9 @@ class AnnotationUtilsTest(absltest.TestCase):
         annotation_utils.has_source_code_system(year_value_descriptor)
     )
 
-  def testGetValueRegexForPrimitiveType_withPrimitive_returnsValue(self):
+  def test_get_value_regex_for_primitive_type_with_primitive_returns_value(
+      self,
+  ):
     """Test get_value_regex_for_primitive_type functionality on primitives."""
     boolean = datatypes_pb2.Boolean()
     code = datatypes_pb2.Code()
@@ -265,7 +271,7 @@ class AnnotationUtilsTest(absltest.TestCase):
         _CODE_VALUE_REGEX,
     )
 
-  def testGetValueRegexForPrimitiveType_withCompound_returnsNone(self):
+  def test_get_value_regex_for_primitive_type_with_compound_returns_none(self):
     """Test get_value_regex_for_primitive_type on non-primitives."""
     patient = patient_pb2.Patient()
     self.assertIsNone(
@@ -275,7 +281,7 @@ class AnnotationUtilsTest(absltest.TestCase):
         annotation_utils.get_value_regex_for_primitive_type(patient.DESCRIPTOR)
     )
 
-  def testGetStructureDefinitionUrl_withFhirType_returnsValue(self):
+  def test_get_structure_definition_url_with_fhir_type_returns_value(self):
     """Test get_structure_definition_url functionality on FHIR types."""
     boolean = datatypes_pb2.Boolean()
     code = datatypes_pb2.Code()
@@ -301,7 +307,9 @@ class AnnotationUtilsTest(absltest.TestCase):
         _PATIENT_STRUCTURE_DEFINITION_URL,
     )
 
-  def testGetFhirValuesetUrl_withFhirValueSet_returnsCorrectValue(self):
+  def test_get_fhir_valueset_url_with_fhir_value_set_returns_correct_value(
+      self,
+  ):
     """Tests get_fhir_valueset_url with a valid FHIR valueset."""
     use_code = datatypes_pb2.Address.UseCode()
     self.assertEqual(
@@ -313,13 +321,15 @@ class AnnotationUtilsTest(absltest.TestCase):
         _ADDRESS_USECODE_FHIR_VALUESET_URL,
     )
 
-  def testGetFhirValuesetUrl_withGenericCode_returnsNone(self):
+  def test_get_fhir_valueset_url_with_generic_code_returns_none(self):
     """Tests get_fhir_valueset_url with a generic instance of Code."""
     self.assertIsNone(
         annotation_utils.get_fhir_valueset_url(datatypes_pb2.Code())
     )
 
-  def testGetEnumValuesetUrl_withEnumValueSet_returnsCorrectValue(self):
+  def test_get_enum_valueset_url_with_enum_value_set_returns_correct_value(
+      self,
+  ):
     """Tests get_enum_valueset_url with a valid enum valueset."""
     body_length_descriptor = valuesets_pb2.BodyLengthUnitsValueSet().DESCRIPTOR
     value_enum_descriptor = body_length_descriptor.enum_types_by_name['Value']
@@ -328,13 +338,13 @@ class AnnotationUtilsTest(absltest.TestCase):
         _BODY_LENGTH_UNITS_VALUESET_URL,
     )
 
-  def testHasFhirValuesetUrl_withFhirValueSet_returnsTrue(self):
+  def test_has_fhir_valueset_url_with_fhir_value_set_returns_true(self):
     """Tests has_fhir_valueset_url with a valid FHIR valueset."""
     use_code = datatypes_pb2.Address.UseCode()
     self.assertTrue(annotation_utils.has_fhir_valueset_url(use_code))
     self.assertTrue(annotation_utils.has_fhir_valueset_url(use_code.DESCRIPTOR))
 
-  def testIsProfileOf_withValidProfile_returnsTrue(self):
+  def test_is_profile_of_with_valid_profile_returns_true(self):
     """Tests is_profile_of functionality with a valid Patient profile."""
     patient = patient_pb2.Patient()
     uscore_patient_profile = uscore_pb2.USCorePatientProfile()
@@ -357,7 +367,7 @@ class AnnotationUtilsTest(absltest.TestCase):
         )
     )
 
-  def testIsProfileOf_withInvalidProfile_returnsFalse(self):
+  def test_is_profile_of_with_invalid_profile_returns_false(self):
     """Tests is_profile_of functionality with an invalid profile of Patient."""
     patient = patient_pb2.Patient()
     observation = observation_pb2.Observation()
@@ -374,7 +384,7 @@ class AnnotationUtilsTest(absltest.TestCase):
         )
     )
 
-  def testGetFhirVersion_withValidInput_returnsCorrectVersion(self):
+  def test_get_fhir_version_with_valid_input_returns_correct_version(self):
     """Tests get_fhir_version to ensure that the correct version is returned."""
     patient = patient_pb2.Patient()
     uscore_patient = uscore_pb2.USCorePatientProfile()

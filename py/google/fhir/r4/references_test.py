@@ -23,7 +23,7 @@ from google.fhir.core.utils import proto_utils
 class ReferencesTest(absltest.TestCase):
   """A suite of tests to ensure proper FHIR reference handling."""
 
-  def testSplitIfRelativeReference_withRelativeReference_succeeds(self):
+  def test_split_if_relative_reference_with_relative_reference_succeeds(self):
     ref = datatypes_pb2.Reference(
         uri=datatypes_pb2.String(value='Practitioner/example'),
         display=datatypes_pb2.String(value='Dr Adam Careful'))
@@ -41,7 +41,7 @@ class ReferencesTest(absltest.TestCase):
         proto_utils.get_value_at_field(ref, practitioner_id_field),
         datatypes_pb2.ReferenceId(value='example'))
 
-  def testSplitIfRelativeReference_withFragmentReference_succeeds(self):
+  def test_split_if_relative_reference_with_fragment_reference_succeeds(self):
     ref = datatypes_pb2.Reference(uri=datatypes_pb2.String(value='#org-1'))
 
     uri_field = ref.DESCRIPTOR.fields_by_name['uri']
@@ -57,7 +57,7 @@ class ReferencesTest(absltest.TestCase):
         proto_utils.get_value_at_field(ref, fragment_field),
         datatypes_pb2.String(value='org-1'))
 
-  def testSplitIfRelativeReference_withUrlScheme_succeeds(self):
+  def test_split_if_relative_reference_with_url_scheme_succeeds(self):
     ref = datatypes_pb2.Reference(
         uri=datatypes_pb2.String(
             value='http://acme.com/ehr/fhir/Practitioner/2323-33-4'))

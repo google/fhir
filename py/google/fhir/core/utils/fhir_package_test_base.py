@@ -111,7 +111,7 @@ class FhirPackageTest(
     )
 
   @_parameterized_with_package_sources
-  def testFhirPackageLoad_withValidFhirPackage_isReadable(
+  def test_fhir_package_load_with_valid_fhir_package_is_readable(
       self, package_source_fn: PackageSourceFn
   ):
     """Ensure we can read resources following a load."""
@@ -268,7 +268,7 @@ class FhirPackageTest(
       package = self._load_package(package_source_fn(temp_file.name))
       check_contents(package)
 
-  def testFhirPackageGetResource_forMissingUri_isNone(self):
+  def test_fhir_package_get_resource_for_missing_uri_is_none(self):
     """Ensure we return None when requesting non-existent resource URIs."""
     package = fhir_package.FhirPackage(
         structure_definitions=self.empty_collection(),
@@ -278,7 +278,7 @@ class FhirPackageTest(
     )
     self.assertIsNone(package.get_resource('some_uri'))
 
-  def testFhirPackage_pickle_isSuccessful(self):
+  def test_fhir_package_pickle_is_successful(self):
     """Ensure FhirPackages are pickle-able."""
     package = fhir_package.FhirPackage(
         structure_definitions=self.empty_collection(),
@@ -288,7 +288,9 @@ class FhirPackageTest(
     )
     pickle.dumps(package)
 
-  def testGetStructureDefinition_withAddedPackages_retrievesResource(self):
+  def test_get_structure_definition_with_added_packages_retrieves_resource(
+      self,
+  ):
     """Ensures structure definitions are retrievable from packages."""
     r1 = self._structure_definition_cls()
     r1.url.value = 'r1'
@@ -307,7 +309,7 @@ class FhirPackageTest(
     self.assertEqual(package.get_structure_definition('r2'), r2)
     self.assertIsNone(package.get_structure_definition('mystery-url'))
 
-  def testGetSearchParameter_withAddedPackages_retrievesResource(self):
+  def test_get_search_parameter_with_added_packages_retrieves_resource(self):
     """Ensures search parameters are retrievable from packages."""
     r1 = self._search_parameter_cls()
     r1.url.value = 'r1'
@@ -326,7 +328,7 @@ class FhirPackageTest(
     self.assertEqual(package.get_search_parameter('r2'), r2)
     self.assertIsNone(package.get_search_parameter('mystery-url'))
 
-  def testGetCodeSystem_withAddedPackages_retrievesResource(self):
+  def test_get_code_system_with_added_packages_retrieves_resource(self):
     """Ensures code systems are retrievable from packages."""
     r1 = self._code_system_cls()
     r1.url.value = 'r1'
@@ -345,7 +347,7 @@ class FhirPackageTest(
     self.assertEqual(package.get_code_system('r2'), r2)
     self.assertIsNone(package.get_code_system('mystery-url'))
 
-  def testValueSet_withAddedPackages_retrievesResource(self):
+  def test_value_set_with_added_packages_retrieves_resource(self):
     """Ensures value sets are retrievable from packages."""
     r1 = self._valueset_cls()
     r1.url.value = 'r1'
@@ -377,7 +379,7 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
   def _valueset_cls(self):
     pass
 
-  def testResourceCollection_addGetResource(self):
+  def test_resource_collection_add_get_resource(self):
     """Ensure we can add and then get a resource."""
     uri = 'http://hl7.org/fhir/ValueSet/example-extensional'
     resource_json = {
@@ -397,7 +399,7 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
     self.assertEqual(resource.id.value, 'example-extensional')
     self.assertEqual(resource.url.value, uri)
 
-  def testResourceCollection_getBundles(self):
+  def test_resource_collection_get_bundles(self):
     """Ensure we can add and then get a resource from a bundle."""
     bundle = {
         'resourceType': 'Bundle',
@@ -424,7 +426,7 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
     self.assertEqual(resource.id.value, 'example-extensional')
     self.assertEqual(resource.url.value, 'http://value-in-a-bundle')
 
-  def testResourceCollection_getMissingResource(self):
+  def test_resource_collection_get_missing_resource(self):
     """Ensure we return None when requesing missing resources."""
     collection = fhir_package.ResourceCollection(
         self._valueset_cls, self._primitive_handler, 'Z'
@@ -433,7 +435,7 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
 
     self.assertIsNone(resource)
 
-  def testResourceCollection_cachedResource(self):
+  def test_resource_collection_cached_resource(self):
     """Ensure we cache the first access to a resource."""
     collection = fhir_package.ResourceCollection(
         self._valueset_cls, self._primitive_handler, 'Z'
@@ -478,7 +480,7 @@ class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
   def _valueset_cls(self):
     pass
 
-  def testGetResource_withAddedPackages_retrievesResource(self):
+  def test_get_resource_with_added_packages_retrieves_resource(self):
     """Test getting resources added to packages."""
     vs_1 = self._valueset_cls()
     vs_1.url.value = 'vs1'
@@ -507,7 +509,9 @@ class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
     self.assertEqual(manager.get_resource('vs2'), vs_2)
     self.assertIsNone(manager.get_resource('mystery-url'))
 
-  def testGetStructureDefinition_withAddedPackages_retrievesResource(self):
+  def test_get_structure_definition_with_added_packages_retrieves_resource(
+      self,
+  ):
     """Ensures structure definitions are retrievable from packages."""
     r1 = self._structure_definition_cls()
     r1.url.value = 'r1'
@@ -536,7 +540,7 @@ class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
     self.assertEqual(manager.get_structure_definition('r2'), r2)
     self.assertIsNone(manager.get_structure_definition('mystery-url'))
 
-  def testGetSearchParameter_withAddedPackages_retrievesResource(self):
+  def test_get_search_parameter_with_added_packages_retrieves_resource(self):
     """Ensures search parameters are retrievable from packages."""
     r1 = self._search_parameter_cls()
     r1.url.value = 'r1'
@@ -565,7 +569,7 @@ class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
     self.assertEqual(manager.get_search_parameter('r2'), r2)
     self.assertIsNone(manager.get_search_parameter('mystery-url'))
 
-  def testGetCodeSystem_withAddedPackages_retrievesResource(self):
+  def test_get_code_system_with_added_packages_retrieves_resource(self):
     """Ensures code systems are retrievable from packages."""
     r1 = self._code_system_cls()
     r1.url.value = 'r1'
@@ -594,7 +598,7 @@ class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
     self.assertEqual(manager.get_code_system('r2'), r2)
     self.assertIsNone(manager.get_code_system('mystery-url'))
 
-  def testValueSet_withAddedPackages_retrievesResource(self):
+  def test_value_set_with_added_packages_retrieves_resource(self):
     """Ensures value sets are retrievable from packages."""
     r1 = self._valueset_cls()
     r1.url.value = 'r1'
@@ -623,7 +627,9 @@ class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
     self.assertEqual(manager.get_value_set('r2'), r2)
     self.assertIsNone(manager.get_value_set('mystery-url'))
 
-  def testIterStructureDefinitions_withAddedPackages_retrievesResources(self):
+  def test_iter_structure_definitions_with_added_packages_retrieves_resources(
+      self,
+  ):
     """Ensures structure definitions are retrievable from packages."""
     r1 = self._structure_definition_cls()
     r1.url.value = 'r1'

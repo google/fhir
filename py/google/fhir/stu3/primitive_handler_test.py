@@ -55,7 +55,7 @@ class PrimitiveWrapperJsonValidationTest(
   def validation_dir(self) -> str:
     return _VALIDATION_DIR
 
-  def testValidateWrapped_withInvalidInstant_raises(self):
+  def test_validate_wrapped_with_invalid_instant_raises(self):
     # TODO(b/163387305): Re-enable once STU3 protos are re-generated for 3.0.2.
     pass
 

@@ -21,7 +21,7 @@ from google.fhir.core.utils import path_utils
 class PathUtilsTest(absltest.TestCase):
   """Unit tests for methods in path_util.py."""
 
-  def testCamelCaseToSnakeCase(self):
+  def test_camel_case_to_snake_case(self):
     """Tests camelCase to snake_case conversion."""
     self.assertEqual("", path_utils.camel_case_to_snake_case(""))
     self.assertEqual("apple", path_utils.camel_case_to_snake_case("apple"))
@@ -31,7 +31,7 @@ class PathUtilsTest(absltest.TestCase):
     self.assertEqual("apple_orange",
                      path_utils.camel_case_to_snake_case("AppleOrange"))
 
-  def testSnakeCaseToCamelCase(self):
+  def test_snake_case_to_camel_case(self):
     """Tests snake_case to camelCase conversion."""
     self.assertEqual("", path_utils.snake_case_to_camel_case(""))
     self.assertEqual("apple", path_utils.snake_case_to_camel_case("apple"))

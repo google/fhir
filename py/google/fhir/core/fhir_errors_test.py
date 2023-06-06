@@ -25,21 +25,21 @@ class ListErrorReporterTests(absltest.TestCase):
     super(ListErrorReporterTests, self).setUp()
     self.error_reporter = fhir_errors.ListErrorReporter()
 
-  def testListErrorReporter_reportConversionError_succeeds(self):
+  def test_list_error_reporter_report_conversion_error_succeeds(self):
     with self.assertLogs() as logs:
       self.error_reporter.report_conversion_error('some.element.path',
                                                   'Some error message.')
     self.assertLen(self.error_reporter.errors, 1)
     self.assertRegex(logs.output[0], r'some.element.path; Some error message.')
 
-  def testListErrorReporter_reportValidationError_succeeds(self):
+  def test_list_error_reporter_report_validation_error_succeeds(self):
     with self.assertLogs() as logs:
       self.error_reporter.report_validation_error('some.element.path',
                                                   'Some error message.')
     self.assertLen(self.error_reporter.errors, 1)
     self.assertRegex(logs.output[0], r'some.element.path; Some error message.')
 
-  def testListErrorReporter_reportValidationWarning_succeeds(self):
+  def test_list_error_reporter_report_validation_warning_succeeds(self):
     with self.assertLogs() as logs:
       self.error_reporter.report_validation_warning('some.element.path',
                                                     'Some validation warning.')
@@ -47,7 +47,7 @@ class ListErrorReporterTests(absltest.TestCase):
     self.assertRegex(logs.output[0],
                      r'some.element.path; Some validation warning.')
 
-  def testListErrorReporter_reportFhirPathError_succeeds(self):
+  def test_list_error_reporter_report_fhir_path_error_succeeds(self):
     with self.assertLogs() as logs:
       self.error_reporter.report_fhir_path_error('some.element.path',
                                                  'foo.bar = bats',
@@ -55,7 +55,7 @@ class ListErrorReporterTests(absltest.TestCase):
     self.assertLen(self.error_reporter.errors, 1)
     self.assertRegex(logs.output[0], r'foo.bar = bats; Some FHIRPath error.')
 
-  def testListErrorReporter_reportFhirPathWarning_succeeds(self):
+  def test_list_error_reporter_report_fhir_path_warning_succeeds(self):
     with self.assertLogs() as logs:
       self.error_reporter.report_fhir_path_warning('some.element.path',
                                                    'foo.bar = bats',
@@ -63,8 +63,7 @@ class ListErrorReporterTests(absltest.TestCase):
     self.assertLen(self.error_reporter.warnings, 1)
     self.assertRegex(logs.output[0], r'foo.bar = bats; Some FHIRPath warning.')
 
-  def testListErrorReporter_aggregateErrors_succeeds(self):
-
+  def test_list_error_reporter_aggregate_errors_succeeds(self):
     # Add errors.
     self.error_reporter.report_fhir_path_error('some.element.path',
                                                'foo.bar = bats',
@@ -96,8 +95,7 @@ class ListErrorReporterTests(absltest.TestCase):
          (('FHIR Path Warning: some.element.path; foo.bar = bats; Some FHIRPath'
            ' warning.'), 1)])
 
-  def testListErrorReporter_getErrorReport_succeeds(self):
-
+  def test_list_error_reporter_get_error_report_succeeds(self):
     # Add errors.
     self.error_reporter.report_fhir_path_error('some.element.path',
                                                'foo.bar = bats',

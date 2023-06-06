@@ -31,33 +31,33 @@ class PrimitiveWrapperPrimitiveHasNoValueTest(
   def primitive_handler(self) -> primitive_handler.PrimitiveHandler:
     return _PRIMITIVE_HANDLER
 
-  def testPrimitiveHasNoValue_withValidCanoncial_succeeds(self):
+  def test_primitive_has_no_value_with_valid_canoncial_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.canonical_cls)
 
-  def testPrimitiveHasNoValue_withInvalidCanonical_raises(self):
+  def test_primitive_has_no_value_with_invalid_canonical_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.canonical_cls)
 
-  def testPrimitiveHasNoValue_withInvalidUri_raises(self):
+  def test_primitive_has_no_value_with_invalid_uri_raises(self):
     # Note that URI had no REGEX validation pattern for STU3.
     # See more at: https://www.hl7.org/fhir/STU3/datatypes.html#uri.
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.uri_cls)
 
-  def testPrimitiveHasNoValue_withValidUrl_succeeds(self):
+  def test_primitive_has_no_value_with_valid_url_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.url_cls)
 
-  def testPrimitiveHasNoValue_withInvalidUrl_raises(self):
+  def test_primitive_has_no_value_with_invalid_url_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.url_cls)
 
-  def testPrimitiveHasNoValue_withValidUuid_succeeds(self):
+  def test_primitive_has_no_value_with_valid_uuid_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.uuid_cls)
 
-  def testPrimitiveHasNoValue_withInvalidUuid_raises(self):
+  def test_primitive_has_no_value_with_invalid_uuid_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.uuid_cls)
 
@@ -73,33 +73,33 @@ class PrimitiveWrapperProtoValidationTest(
   def validation_dir(self) -> str:
     return _VALIDATION_DIR
 
-  def testValidateWrapped_withValidCanonical_succeeds(self):
+  def test_validate_wrapped_with_valid_canonical_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.canonical_cls)
 
-  def testValidateWrapped_withInvalidCanonical_raises(self):
+  def test_validate_wrapped_with_invalid_canonical_raises(self):
     self.assert_validation_of_invalid_primitive_raises(
         self.primitive_handler.canonical_cls)
 
-  def testValidateWrapped_withInvalidUri_raises(self):
+  def test_validate_wrapped_with_invalid_uri_raises(self):
     # Note that URI had no REGEX validation pattern for STU3.
     # See more at: https://www.hl7.org/fhir/STU3/datatypes.html#uri.
     self.assert_validation_of_invalid_primitive_raises(
         self.primitive_handler.uri_cls)
 
-  def testValidateWrapped_withValidUrl_succeeds(self):
+  def test_validate_wrapped_with_valid_url_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.url_cls)
 
-  def testValidateWrapped_withInvalidUrl_raises(self):
+  def test_validate_wrapped_with_invalid_url_raises(self):
     self.assert_validation_of_invalid_primitive_raises(
         self.primitive_handler.url_cls)
 
-  def testValidateWrapped_withValidUuid_succeeds(self):
+  def test_validate_wrapped_with_valid_uuid_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.uuid_cls)
 
-  def testValidateWrapped_withInvalidUuid_raises(self):
+  def test_validate_wrapped_with_invalid_uuid_raises(self):
     self.assert_validation_of_invalid_primitive_raises(
         self.primitive_handler.uuid_cls)
 
@@ -115,27 +115,27 @@ class PrimitiveWrapperJsonValidationTest(
   def validation_dir(self) -> str:
     return _VALIDATION_DIR
 
-  def testValidateWrapped_withValidCanonical_succeeds(self):
+  def test_validate_wrapped_with_valid_canonical_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.canonical_cls)
 
-  def testValidateWrapped_withInvalidCanonical_raises(self):
+  def test_validate_wrapped_with_invalid_canonical_raises(self):
     self.assert_json_validation_with_invalid_primitive_raises(
         self.primitive_handler.canonical_cls)
 
-  def testValidateWrapped_withValidUrl_succeeds(self):
+  def test_validate_wrapped_with_valid_url_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.url_cls)
 
-  def testValidateWrapped_withInvalidUrl_raises(self):
+  def test_validate_wrapped_with_invalid_url_raises(self):
     self.assert_json_validation_with_invalid_primitive_raises(
         self.primitive_handler.url_cls)
 
-  def testValidateWrapped_withValidUuid_succeeds(self):
+  def test_validate_wrapped_with_valid_uuid_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.uuid_cls)
 
-  def testValidateWrapped_withInvalidUuid_raises(self):
+  def test_validate_wrapped_with_invalid_uuid_raises(self):
     self.assert_json_validation_with_invalid_primitive_raises(
         self.primitive_handler.uuid_cls)
 

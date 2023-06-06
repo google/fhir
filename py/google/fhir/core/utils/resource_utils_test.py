@@ -39,19 +39,21 @@ def _bundle_with_single_structure_definition(
 class ResourceUtilsTest(absltest.TestCase):
   """Performs unit tests targeting `resource_utils`."""
 
-  def testExtractResourcesFromBundle_withSetResource_succeeds(self):
+  def test_extract_resources_from_bundle_with_set_resource_succeeds(self):
     bundle = _bundle_with_single_structure_definition()
     actual = resource_utils.extract_resources_from_bundle(
         bundle, resource_type=structure_definition_pb2.StructureDefinition)
     self.assertLen(actual, 1)
 
-  def testExtractResourcesFromBundle_withUnsetResource_returnsEmpty(self):
+  def test_extract_resources_from_bundle_with_unset_resource_returns_empty(
+      self,
+  ):
     bundle = _bundle_with_single_structure_definition()
     actual = resource_utils.extract_resources_from_bundle(
         bundle, resource_type=account_pb2.Account)
     self.assertEmpty(actual)
 
-  def testExtractResourceFromBundle_withInvalidResource_raises(self):
+  def test_extract_resource_from_bundle_with_invalid_resource_raises(self):
     bundle = _bundle_with_single_structure_definition()
     with self.assertRaises(ValueError) as ve:
       # Use a nested message that has no mapping to ContainedResource oneof
@@ -59,14 +61,14 @@ class ResourceUtilsTest(absltest.TestCase):
           bundle, resource_type=account_pb2.Account.StatusCode)
     self.assertIsInstance(ve.exception, ValueError)
 
-  def testExtractResourceFromBundle_withNonBundle_raises(self):
+  def test_extract_resource_from_bundle_with_non_bundle_raises(self):
     non_bundle = account_pb2.Account()
     with self.assertRaises(TypeError) as te:
       _ = resource_utils.extract_resources_from_bundle(
           non_bundle, resource_type=activity_definition_pb2.ActivityDefinition)
     self.assertIsInstance(te.exception, TypeError)
 
-  def testGetContainedResource_withValidContainedResource_succeeds(self):
+  def test_get_contained_resource_with_valid_contained_resource_succeeds(self):
     expected_account = account_pb2.Account(
         name=datatypes_pb2.String(value='TestAccount'))
     contained_resource = bundle_and_contained_resource_pb2.ContainedResource(
@@ -74,7 +76,7 @@ class ResourceUtilsTest(absltest.TestCase):
     actual_account = resource_utils.get_contained_resource(contained_resource)
     self.assertEqual(actual_account, expected_account)
 
-  def testGetContainedResource_withInvalidContainedResource_raises(self):
+  def test_get_contained_resource_with_invalid_contained_resource_raises(self):
     not_contained_resource = account_pb2.Account()
     with self.assertRaises(TypeError) as te:
       _ = resource_utils.get_contained_resource(not_contained_resource)

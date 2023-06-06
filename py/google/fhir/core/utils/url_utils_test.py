@@ -24,18 +24,22 @@ class UrlUtilsTest(parameterized.TestCase):
 
   @parameterized.named_parameters(
       dict(
-          testcase_name='_withVersionSuffix_succeeds',
+          testcase_name='with_version_suffix_succeeds',
           url='http://hl7.org/fhir/ValueSet/value-set|1.0',
-          expected_parse=('http://hl7.org/fhir/ValueSet/value-set', '1.0')),
+          expected_parse=('http://hl7.org/fhir/ValueSet/value-set', '1.0'),
+      ),
       dict(
-          testcase_name='_withNoVersionSuffix_succeeds',
+          testcase_name='with_no_version_suffix_succeeds',
           url='http://hl7.org/fhir/ValueSet/value-set',
-          expected_parse=('http://hl7.org/fhir/ValueSet/value-set', None)))
-  def testParseUrlVersion(self, url: str, expected_parse: Tuple[str,
-                                                                Optional[str]]):
+          expected_parse=('http://hl7.org/fhir/ValueSet/value-set', None),
+      ),
+  )
+  def test_parse_url_version(
+      self, url: str, expected_parse: Tuple[str, Optional[str]]
+  ):
     self.assertEqual(url_utils.parse_url_version(url), expected_parse)
 
-  def testFilterUrlsToDomains_withFilter_succeeds(self):
+  def test_filter_urls_to_domains_with_filter_succeeds(self):
     urls = ('http://hl7.org/fhir/ValueSet/financial-taskcode',
             'http://loinc.org/fhir/ValueSet/loing-taskcode')
     result = url_utils.filter_urls_to_domains(urls, ['loinc.org'])

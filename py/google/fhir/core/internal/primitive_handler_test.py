@@ -40,127 +40,127 @@ class PrimitiveWrapperPrimitiveHasNoValueTest(
   def primitive_handler(self) -> primitive_handler.PrimitiveHandler:
     pass
 
-  def testPrimitiveHasNoValue_withValidBase64Binary_succeeds(self):
+  def test_primitive_has_no_value_with_valid_base64_binary_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.base64_binary_cls)
 
-  def testPrimitiveHasNoValue_withInvalidBase64Binary_raises(self):
+  def test_primitive_has_no_value_with_invalid_base64_binary_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.base64_binary_cls)
 
-  def testPrimitiveHasNoValue_withValidBoolean_succeeds(self):
+  def test_primitive_has_no_value_with_valid_boolean_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.boolean_cls)
 
-  def testPrimitiveHasNoValue_withInvalidBoolean_raises(self):
+  def test_primitive_has_no_value_with_invalid_boolean_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.boolean_cls)
 
-  def testPrimitiveHasNoValue_withValidCode_succeeds(self):
+  def test_primitive_has_no_value_with_valid_code_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.code_cls)
 
-  def testPrimitiveHasNoValue_withInvalidCode_raises(self):
+  def test_primitive_has_no_value_with_invalid_code_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.code_cls)
 
-  def testPrimitiveHasNoValue_withValidDate_succeeds(self):
+  def test_primitive_has_no_value_with_valid_date_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.date_cls)
 
-  def testPrimitiveHasNoValue_withInvalidDate_raises(self):
+  def test_primitive_has_no_value_with_invalid_date_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.date_cls)
 
-  def testPrimitiveHasNoValue_withValidDateTime_succeeds(self):
+  def test_primitive_has_no_value_with_valid_date_time_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.date_time_cls)
 
-  def testPrimitiveHasNoValue_withInvalidDateTime_raises(self):
+  def test_primitive_has_no_value_with_invalid_date_time_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.date_time_cls)
 
-  def testPrimitiveHasNoValue_withValidDecimal_succeeds(self):
+  def test_primitive_has_no_value_with_valid_decimal_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.decimal_cls)
 
-  def testPrimitiveHasNoValue_withInvalidDecimal_raises(self):
+  def test_primitive_has_no_value_with_invalid_decimal_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.decimal_cls)
 
-  def testPrimitiveHasNoValue_withValidId_succeeds(self):
+  def test_primitive_has_no_value_with_valid_id_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.id_cls)
 
-  def testPrimitiveHasNoValue_withInvalidId_raises(self):
+  def test_primitive_has_no_value_with_invalid_id_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.id_cls)
 
-  def testPrimitiveHasNoValue_withValidInstant_succeeds(self):
+  def test_primitive_has_no_value_with_valid_instant_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.instant_cls)
 
-  def testPrimitiveHasNoValue_withInvalidInstant_raises(self):
+  def test_primitive_has_no_value_with_invalid_instant_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.instant_cls)
 
-  def testPrimitiveHasNoValue_withValidInteger_succeeds(self):
+  def test_primitive_has_no_value_with_valid_integer_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.integer_cls)
 
-  def testPrimitiveHasNoValue_withInvalidInteger_raises(self):
+  def test_primitive_has_no_value_with_invalid_integer_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.integer_cls)
 
-  def testPrimitiveHasNoValue_withValidMarkdown_succeeds(self):
+  def test_primitive_has_no_value_with_valid_markdown_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.markdown_cls)
 
-  def testPrimitiveHasNoValue_withInvalidMarkdown_raises(self):
+  def test_primitive_has_no_value_with_invalid_markdown_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.markdown_cls)
 
-  def testPrimitiveHasNoValue_withValidOid_succeeds(self):
+  def test_primitive_has_no_value_with_valid_oid_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.oid_cls)
 
-  def testPrimitiveHasNoValue_withInvalidOid_raises(self):
+  def test_primitive_has_no_value_with_invalid_oid_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.oid_cls)
 
-  def testPrimitiveHasNoValue_withValidPositiveInt_succeeds(self):
+  def test_primitive_has_no_value_with_valid_positive_int_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.positive_int_cls)
 
-  def testPrimitiveHasNoValue_withInvalidPositiveInt_raises(self):
+  def test_primitive_has_no_value_with_invalid_positive_int_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.positive_int_cls)
 
-  def testPrimitiveHasNoValue_withValidString_succeeds(self):
+  def test_primitive_has_no_value_with_valid_string_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.string_cls)
 
-  def testPrimitiveHasNoValue_withInvalidString_raises(self):
+  def test_primitive_has_no_value_with_invalid_string_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.string_cls)
 
-  def testPrimitiveHasNoValue_withValidTime_succeeds(self):
+  def test_primitive_has_no_value_with_valid_time_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.time_cls)
 
-  def testPrimitiveHasNoValue_withInvalidTime_raises(self):
+  def test_primitive_has_no_value_with_invalid_time_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.time_cls)
 
-  def testPrimitiveHasNoValue_withValidUnsignedInt_succeeds(self):
+  def test_primitive_has_no_value_with_valid_unsigned_int_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.unsigned_int_cls)
 
-  def testPrimitiveHasNoValue_withInvalidUnsignedInt_raises(self):
+  def test_primitive_has_no_value_with_invalid_unsigned_int_raises(self):
     self.assert_set_invalid_primitive_has_no_value_raises(
         self.primitive_handler.unsigned_int_cls)
 
-  def testPrimitiveHasNoValue_withValidUri_succeeds(self):
+  def test_primitive_has_no_value_with_valid_uri_succeeds(self):
     self.assert_set_valid_primitive_has_no_value_succeeds(
         self.primitive_handler.uri_cls)
 
@@ -251,107 +251,107 @@ class PrimitiveWrapperProtoValidationTest(
   def validation_dir(self) -> str:
     pass
 
-  def testValidateWrapped_withValidBase64Binary_succeeds(self):
+  def test_validate_wrapped_with_valid_base64_binary_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.base64_binary_cls)
 
-  def testValidateWrapped_withValidBoolean_succeeds(self):
+  def test_validate_wrapped_with_valid_boolean_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.boolean_cls)
 
-  def testValidateWrapped_withValidCode_succeeds(self):
+  def test_validate_wrapped_with_valid_code_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.code_cls)
 
-  def testValidateWrapped_withInvalidCode_raises(self):
+  def test_validate_wrapped_with_invalid_code_raises(self):
     self.assert_validation_of_invalid_primitive_raises(
         self.primitive_handler.code_cls)
 
-  def testValidateWrapped_withValidDate_succeeds(self):
+  def test_validate_wrapped_with_valid_date_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.date_cls)
 
-  def testValidateWrapped_withInvalidDate_raises(self):
+  def test_validate_wrapped_with_invalid_date_raises(self):
     self.assert_validation_of_invalid_primitive_raises(
         self.primitive_handler.date_cls)
 
-  def testValidateWrapped_withValidDateTime_succeeds(self):
+  def test_validate_wrapped_with_valid_date_time_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.date_time_cls)
 
-  def testValidateWrapped_withInvalidDateTime_raises(self):
+  def test_validate_wrapped_with_invalid_date_time_raises(self):
     self.assert_validation_of_invalid_primitive_raises(
         self.primitive_handler.date_time_cls)
 
-  def testValidateWrapped_withValidDecimal_succeeds(self):
+  def test_validate_wrapped_with_valid_decimal_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.decimal_cls)
 
-  def testValidateWrapped_withInvalidDecimal_raises(self):
+  def test_validate_wrapped_with_invalid_decimal_raises(self):
     self.assert_validation_of_invalid_primitive_raises(
         self.primitive_handler.decimal_cls)
 
-  def testValidateWrapped_withValidId_succeeds(self):
+  def test_validate_wrapped_with_valid_id_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.id_cls)
 
-  def testValidateWrapped_withInvalidId_raises(self):
+  def test_validate_wrapped_with_invalid_id_raises(self):
     self.assert_validation_of_invalid_primitive_raises(
         self.primitive_handler.id_cls)
 
-  def testValidateWrapped_withValidInstant_succeeds(self):
+  def test_validate_wrapped_with_valid_instant_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.instant_cls)
 
-  def testValidateWrapped_withInvalidInstant_raises(self):
+  def test_validate_wrapped_with_invalid_instant_raises(self):
     self.assert_validation_of_invalid_primitive_raises(
         self.primitive_handler.instant_cls)
 
-  def testValidateWrapped_withValidInteger_succeeds(self):
+  def test_validate_wrapped_with_valid_integer_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.integer_cls)
 
-  def testValidateWrapped_withValidMarkdown_succeeds(self):
+  def test_validate_wrapped_with_valid_markdown_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.markdown_cls)
 
-  def testValidateWrapped_withValidOid_succeeds(self):
+  def test_validate_wrapped_with_valid_oid_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.oid_cls)
 
-  def testValidateWrapped_withInvalidOid_raises(self):
+  def test_validate_wrapped_with_invalid_oid_raises(self):
     self.assert_validation_of_invalid_primitive_raises(
         self.primitive_handler.oid_cls)
 
-  def testValidateWrapped_withValidPositiveInt_succeeds(self):
+  def test_validate_wrapped_with_valid_positive_int_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.positive_int_cls)
 
-  def testValidateWrapped_withInvalidPositiveInt_raises(self):
+  def test_validate_wrapped_with_invalid_positive_int_raises(self):
     self.assert_validation_of_invalid_primitive_raises(
         self.primitive_handler.positive_int_cls)
 
-  def testValidateWrapped_withValidString_succeeds(self):
+  def test_validate_wrapped_with_valid_string_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.string_cls)
 
-  def testValidateWrapped_withValidTime_succeeds(self):
+  def test_validate_wrapped_with_valid_time_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.time_cls)
 
-  def testValidateWrapped_withInvalidTime_raises(self):
+  def test_validate_wrapped_with_invalid_time_raises(self):
     self.assert_validation_of_invalid_primitive_raises(
         self.primitive_handler.time_cls)
 
-  def testValidateWrapped_withValidUnsignedInt_succeeds(self):
+  def test_validate_wrapped_with_valid_unsigned_int_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.unsigned_int_cls)
 
-  def testValidateWrapped_withValidUri_succeeds(self):
+  def test_validate_wrapped_with_valid_uri_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.uri_cls)
 
-  def testValidateWrapped_withValidXhtml_succeeds(self):
+  def test_validate_wrapped_with_valid_xhtml_succeeds(self):
     self.assert_validation_of_valid_primitive_succeeds(
         self.primitive_handler.xhtml_cls)
 
@@ -400,111 +400,111 @@ class PrimitiveWrapperJsonValidationTest(
   def validation_dir(self) -> str:
     pass
 
-  def testValidateWrapped_withValidBase64Binary_succeeds(self):
+  def test_validate_wrapped_with_valid_base64_binary_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.base64_binary_cls)
 
-  def testValidateWrapped_withInvalidBase64Binary_raises(self):
+  def test_validate_wrapped_with_invalid_base64_binary_raises(self):
     self.assert_json_validation_with_invalid_primitive_raises(
         self.primitive_handler.base64_binary_cls)
 
-  def testValidateWrapped_withValidBoolean_succeeds(self):
+  def test_validate_wrapped_with_valid_boolean_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.boolean_cls)
 
-  def testValidateWrapped_withValidCode_succeeds(self):
+  def test_validate_wrapped_with_valid_code_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.code_cls)
 
-  def testValidateWrapped_withInvalidCode_raises(self):
+  def test_validate_wrapped_with_invalid_code_raises(self):
     self.assert_json_validation_with_invalid_primitive_raises(
         self.primitive_handler.code_cls)
 
-  def testValidateWrapped_withValidDate_succeeds(self):
+  def test_validate_wrapped_with_valid_date_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.date_cls)
 
-  def testValidateWrapped_withInvalidDate_raises(self):
+  def test_validate_wrapped_with_invalid_date_raises(self):
     self.assert_json_validation_with_invalid_primitive_raises(
         self.primitive_handler.date_cls)
 
-  def testValidateWrapped_withValidDateTime_succeeds(self):
+  def test_validate_wrapped_with_valid_date_time_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.date_time_cls)
 
-  def testValidateWrapped_withInvalidDateTime_raises(self):
+  def test_validate_wrapped_with_invalid_date_time_raises(self):
     self.assert_json_validation_with_invalid_primitive_raises(
         self.primitive_handler.date_time_cls)
 
-  def testValidateWrapped_withValidDecimal_succeeds(self):
+  def test_validate_wrapped_with_valid_decimal_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.decimal_cls)
 
-  def testValidateWrapped_withInvalidDecimal_raises(self):
+  def test_validate_wrapped_with_invalid_decimal_raises(self):
     self.assert_json_validation_with_invalid_primitive_raises(
         self.primitive_handler.decimal_cls)
 
-  def testValidateWrapped_withValidId_succeeds(self):
+  def test_validate_wrapped_with_valid_id_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.id_cls)
 
-  def testValidateWrapped_withInvalidId_raises(self):
+  def test_validate_wrapped_with_invalid_id_raises(self):
     self.assert_json_validation_with_invalid_primitive_raises(
         self.primitive_handler.id_cls)
 
-  def testValidateWrapped_withValidInstant_succeeds(self):
+  def test_validate_wrapped_with_valid_instant_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.instant_cls)
 
-  def testValidateWrapped_withInvalidInstant_raises(self):
+  def test_validate_wrapped_with_invalid_instant_raises(self):
     self.assert_json_validation_with_invalid_primitive_raises(
         self.primitive_handler.instant_cls)
 
-  def testValidateWrapped_withValidInteger_succeeds(self):
+  def test_validate_wrapped_with_valid_integer_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.integer_cls)
 
-  def testValidateWrapped_withValidMarkdown_succeeds(self):
+  def test_validate_wrapped_with_valid_markdown_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.markdown_cls)
 
-  def testValidateWrapped_withValidOid_succeeds(self):
+  def test_validate_wrapped_with_valid_oid_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.oid_cls)
 
-  def testValidateWrapped_withInvalidOid_raises(self):
+  def test_validate_wrapped_with_invalid_oid_raises(self):
     self.assert_json_validation_with_invalid_primitive_raises(
         self.primitive_handler.oid_cls)
 
-  def testValidateWrapped_withValidPositiveInt_succeeds(self):
+  def test_validate_wrapped_with_valid_positive_int_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.positive_int_cls)
 
-  def testValidateWrapped_withInvalidPositiveInt_raises(self):
+  def test_validate_wrapped_with_invalid_positive_int_raises(self):
     self.assert_json_validation_with_invalid_primitive_raises(
         self.primitive_handler.positive_int_cls)
 
-  def testValidateWrapped_withValidString_succeeds(self):
+  def test_validate_wrapped_with_valid_string_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.string_cls)
 
-  def testValidateWrapped_withValidTime_succeeds(self):
+  def test_validate_wrapped_with_valid_time_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.time_cls)
 
-  def testValidateWrapped_withInvalidTime_raises(self):
+  def test_validate_wrapped_with_invalid_time_raises(self):
     self.assert_json_validation_with_invalid_primitive_raises(
         self.primitive_handler.time_cls)
 
-  def testValidateWrapped_withValidUnsignedInt_succeeds(self):
+  def test_validate_wrapped_with_valid_unsigned_int_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.unsigned_int_cls)
 
-  def testValidateWrapped_withValidUri_succeeds(self):
+  def test_validate_wrapped_with_valid_uri_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.uri_cls)
 
-  def testValidateWrapped_withValidXhtml_succeeds(self):
+  def test_validate_wrapped_with_valid_xhtml_succeeds(self):
     self.assert_json_validation_with_valid_primitive_succeeds(
         self.primitive_handler.xhtml_cls)
 
@@ -550,7 +550,7 @@ class DateTimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
   def primitive_handler(self) -> primitive_handler.PrimitiveHandler:
     pass
 
-  def testParseDateTime_withYearPrecision_succeeds(self):
+  def test_parse_date_time_with_year_precision_succeeds(self):
     datetime_str = '1971'
     expected = self.primitive_handler.new_date_time(
         value_us=31536000000000,
@@ -572,7 +572,7 @@ class DateTimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '1971')
     self.assertEqual(wrapper.wrapped, expected_alt_timezone)
 
-  def testParseDateTime_withMonthPrecision_succeeds(self):
+  def test_parse_date_time_with_month_precision_succeeds(self):
     datetime_str = '1970-02'
     expected = self.primitive_handler.new_date_time(
         value_us=2678400000000,
@@ -594,7 +594,7 @@ class DateTimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '1970-02')
     self.assertEqual(wrapper.wrapped, expected_alt_timezone)
 
-  def testParseDateTime_withDayPrecision_succeeds(self):
+  def test_parse_date_time_with_day_precision_succeeds(self):
     datetime_str = '1970-01-01'
     expected = self.primitive_handler.new_date_time(
         value_us=0,
@@ -616,7 +616,7 @@ class DateTimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '1970-01-01')
     self.assertEqual(wrapper.wrapped, expected_alt_timezone)
 
-  def testParseDateTime_withSecondPrecision_succeeds(self):
+  def test_parse_date_time_with_second_precision_succeeds(self):
     datetime_str = '2014-10-09T14:58:00+11:00'
     expected = self.primitive_handler.new_date_time(
         value_us=1412827080000000,
@@ -627,7 +627,7 @@ class DateTimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '2014-10-09T14:58:00+11:00')
     self.assertEqual(wrapper.wrapped, expected)
 
-  def testParseDateTime_withMillisecondPrecision_succeeds(self):
+  def test_parse_date_time_with_millisecond_precision_succeeds(self):
     datetime_str = '1970-01-01T12:00:00.123Z'
     expected = self.primitive_handler.new_date_time(
         value_us=43200123000,
@@ -658,7 +658,7 @@ class DateTimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '1970-01-01T12:00:00.123-00:00')
     self.assertEqual(wrapper.wrapped, expected)
 
-  def testParseDateTime_withMicrosecondPrecision_succeeds(self):
+  def test_parse_date_time_with_microsecond_precision_succeeds(self):
     datetime_str = '1970-01-01T12:00:00.123456Z'
     expected = self.primitive_handler.new_date_time(
         value_us=43200123456,
@@ -689,7 +689,7 @@ class DateTimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '1970-01-01T12:00:00.123000-00:00')
     self.assertEqual(wrapper.wrapped, expected)
 
-  def testPrintDateTime_withYearPrecision_succeeds(self):
+  def test_print_date_time_with_year_precision_succeeds(self):
     primitive = self.primitive_handler.new_date_time(
         value_us=0,
         precision=_primitive_time_utils.DateTimePrecision.YEAR,
@@ -704,7 +704,7 @@ class DateTimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     wrapper = self.primitive_handler.primitive_wrapper_from_primitive(primitive)
     self.assertEqual(wrapper.string_value(), '1970')
 
-  def testPrintDateTime_withMonthPrecision_succeeds(self):
+  def test_print_date_time_with_month_precision_succeeds(self):
     primitive = self.primitive_handler.new_date_time(
         value_us=0,
         precision=_primitive_time_utils.DateTimePrecision.MONTH,
@@ -719,7 +719,7 @@ class DateTimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     wrapper = self.primitive_handler.primitive_wrapper_from_primitive(primitive)
     self.assertEqual(wrapper.string_value(), '1970-01')
 
-  def testPrintDateTime_withDayPrecision_succeeds(self):
+  def test_print_date_time_with_day_precision_succeeds(self):
     primitive = self.primitive_handler.new_date_time(
         value_us=0,
         precision=_primitive_time_utils.DateTimePrecision.DAY,
@@ -734,7 +734,7 @@ class DateTimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     wrapper = self.primitive_handler.primitive_wrapper_from_primitive(primitive)
     self.assertEqual(wrapper.string_value(), '1970-01-01')
 
-  def testPrintDateTime_withSecondPrecision_succeeds(self):
+  def test_print_date_time_with_second_precision_succeeds(self):
     primitive = self.primitive_handler.new_date_time(
         value_us=1412827080000000,
         precision=_primitive_time_utils.DateTimePrecision.SECOND,
@@ -749,7 +749,7 @@ class DateTimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     wrapper = self.primitive_handler.primitive_wrapper_from_primitive(primitive)
     self.assertEqual(wrapper.string_value(), '2014-10-09T14:58:00+11:00')
 
-  def testPrintDateTime_withMillisecondPrecision_succeeds(self):
+  def test_print_date_time_with_millisecond_precision_succeeds(self):
     primitive = self.primitive_handler.new_date_time(
         value_us=43200123000,
         precision=_primitive_time_utils.DateTimePrecision.MILLISECOND,
@@ -778,7 +778,7 @@ class DateTimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     wrapper = self.primitive_handler.primitive_wrapper_from_primitive(primitive)
     self.assertEqual(wrapper.string_value(), '1970-01-01T12:00:00.123+00:00')
 
-  def testPrintDateTime_withMicrosecondPrecision_succeeds(self):
+  def test_print_date_time_with_microsecond_precision_succeeds(self):
     primitive = self.primitive_handler.new_date_time(
         value_us=43200123456,
         precision=_primitive_time_utils.DateTimePrecision.MICROSECOND,
@@ -816,7 +816,7 @@ class DateWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
   def primitive_handler(self) -> primitive_handler.PrimitiveHandler:
     pass
 
-  def testParseDate_withYearPrecision_succeeds(self):
+  def test_parse_date_with_year_precision_succeeds(self):
     date_str = '1971'
     expected = self.primitive_handler.new_date(
         value_us=31536000000000,
@@ -838,7 +838,7 @@ class DateWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '1971')
     self.assertEqual(wrapper.wrapped, expected)
 
-  def testParseDate_withMonthPrecision_succeeds(self):
+  def test_parse_date_with_month_precision_succeeds(self):
     date_str = '1970-02'
     expected = self.primitive_handler.new_date(
         value_us=2678400000000,
@@ -860,7 +860,7 @@ class DateWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '1970-02')
     self.assertEqual(wrapper.wrapped, expected)
 
-  def testParseDate_withDayPrecision_succeeds(self):
+  def test_parse_date_with_day_precision_succeeds(self):
     date_str = '1970-01-01'
     expected = self.primitive_handler.new_date(
         value_us=0,
@@ -891,7 +891,7 @@ class DateWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '1970-01-01')
     self.assertEqual(wrapper.wrapped, expected)
 
-  def testPrintDate_withYearPrecision_succeeds(self):
+  def test_print_date_with_year_precision_succeeds(self):
     primitive = self.primitive_handler.new_date(
         value_us=0,
         precision=_primitive_time_utils.DateTimePrecision.YEAR,
@@ -906,7 +906,7 @@ class DateWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     wrapper = self.primitive_handler.primitive_wrapper_from_primitive(primitive)
     self.assertEqual(wrapper.string_value(), '1970')
 
-  def testPrintDate_withMonthPrecision_succeeds(self):
+  def test_print_date_with_month_precision_succeeds(self):
     primitive = self.primitive_handler.new_date(
         value_us=0,
         precision=_primitive_time_utils.DateTimePrecision.MONTH,
@@ -921,7 +921,7 @@ class DateWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     wrapper = self.primitive_handler.primitive_wrapper_from_primitive(primitive)
     self.assertEqual(wrapper.string_value(), '1970-01')
 
-  def testPrintDate_withDayPrecision_succeeds(self):
+  def test_print_date_with_day_precision_succeeds(self):
     primitive = self.primitive_handler.new_date(
         value_us=0,
         precision=_primitive_time_utils.DateTimePrecision.DAY,
@@ -945,7 +945,7 @@ class InstantWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
   def primitive_handler(self) -> primitive_handler.PrimitiveHandler:
     pass
 
-  def testParseInstant_withSecondPrecision_succeeds(self):
+  def test_parse_instant_with_second_precision_succeeds(self):
     instant_str = '1970-01-01T00:00:00Z'
     expected = self.primitive_handler.new_instant(
         value_us=0,
@@ -976,7 +976,7 @@ class InstantWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '1970-01-01T00:00:00-00:00')
     self.assertEqual(wrapper.wrapped, expected)
 
-  def testParseInstant_withMillisecondPrecision_succeeds(self):
+  def test_parse_instant_with_millisecond_precision_succeeds(self):
     instant_str = '1970-01-01T00:00:00.123Z'
     expected = self.primitive_handler.new_instant(
         value_us=123000,
@@ -1007,7 +1007,7 @@ class InstantWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '1970-01-01T00:00:00.123-00:00')
     self.assertEqual(wrapper.wrapped, expected)
 
-  def testParseInstant_withMicrosecondPrecision_succeeds(self):
+  def test_parse_instant_with_microsecond_precision_succeeds(self):
     instant_str = '1970-01-01T00:00:00.123000Z'
     expected = self.primitive_handler.new_instant(
         value_us=123000,
@@ -1047,7 +1047,7 @@ class TimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
   def primitive_handler(self) -> primitive_handler.PrimitiveHandler:
     pass
 
-  def testParseTime_withSecondPrecision_succeeds(self):
+  def test_parse_time_with_second_precision_succeeds(self):
     timestamp = '12:00:00'
     expected = self.primitive_handler.new_time(
         value_us=43200000000,
@@ -1057,7 +1057,7 @@ class TimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '12:00:00')
     self.assertEqual(wrapper.wrapped, expected)
 
-  def testParseTime_withMillisecondPrecision_succeeds(self):
+  def test_parse_time_with_millisecond_precision_succeeds(self):
     timestamp = '12:00:00.123'
     expected = self.primitive_handler.new_time(
         value_us=43200123000,
@@ -1067,7 +1067,7 @@ class TimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '12:00:00.123')
     self.assertEqual(wrapper.wrapped, expected)
 
-  def testParseTime_withMicrosecondPrecision_succeeds(self):
+  def test_parse_time_with_microsecond_precision_succeeds(self):
     timestamp = '12:00:00.123000'
     expected = self.primitive_handler.new_time(
         value_us=43200123000,
@@ -1077,21 +1077,21 @@ class TimeWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '12:00:00.123000')
     self.assertEqual(wrapper.wrapped, expected)
 
-  def testPrintTime_withSecondPrecision_succeeds(self):
+  def test_print_time_with_second_precision_succeeds(self):
     primitive = self.primitive_handler.new_time(
         value_us=43200000000,
         precision=_primitive_time_utils.TimePrecision.SECOND)
     wrapper = self.primitive_handler.primitive_wrapper_from_primitive(primitive)
     self.assertEqual(wrapper.string_value(), '12:00:00')
 
-  def testPrintTime_withMillisecondPrecision_succeeds(self):
+  def test_print_time_with_millisecond_precision_succeeds(self):
     primitive = self.primitive_handler.new_time(
         value_us=43200123000,
         precision=_primitive_time_utils.TimePrecision.MILLISECOND)
     wrapper = self.primitive_handler.primitive_wrapper_from_primitive(primitive)
     self.assertEqual(wrapper.string_value(), '12:00:00.123')
 
-  def testPrintTime_withMicrosecondPrecision_succeeds(self):
+  def test_print_time_with_microsecond_precision_succeeds(self):
     primitive = self.primitive_handler.new_time(
         value_us=43200123000,
         precision=_primitive_time_utils.TimePrecision.MICROSECOND)
@@ -1107,7 +1107,7 @@ class DecimalWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
   def primitive_handler(self) -> primitive_handler.PrimitiveHandler:
     pass
 
-  def testParseDecimal_withPositiveInteger_succeeds(self):
+  def test_parse_decimal_with_positive_integer_succeeds(self):
     expected = self.primitive_handler.new_decimal(value='185')
     wrapper = self.primitive_handler.primitive_wrapper_from_json_value(
         decimal.Decimal('185'), self.primitive_handler.decimal_cls)
@@ -1120,14 +1120,14 @@ class DecimalWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '100')
     self.assertEqual(wrapper.wrapped, expected)
 
-  def testParseDecimal_withNegativeInteger_succeeds(self):
+  def test_parse_decimal_with_negative_integer_succeeds(self):
     expected = self.primitive_handler.new_decimal(value='-40')
     wrapper = self.primitive_handler.primitive_wrapper_from_json_value(
         decimal.Decimal('-40'), self.primitive_handler.decimal_cls)
     self.assertEqual(wrapper.string_value(), '-40')
     self.assertEqual(wrapper.wrapped, expected)
 
-  def testParseDecimal_withPositiveReal_succeeds(self):
+  def test_parse_decimal_with_positive_real_succeeds(self):
     expected = self.primitive_handler.new_decimal(value='0.0099')
     wrapper = self.primitive_handler.primitive_wrapper_from_json_value(
         decimal.Decimal('0.0099'), self.primitive_handler.decimal_cls)
@@ -1140,14 +1140,14 @@ class DecimalWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '100.00')
     self.assertEqual(wrapper.wrapped, expected)
 
-  def testParseDecimal_withZero_succeeds(self):
+  def test_parse_decimal_with_zero_succeeds(self):
     expected = self.primitive_handler.new_decimal(value='0')
     wrapper = self.primitive_handler.primitive_wrapper_from_json_value(
         decimal.Decimal('0'), self.primitive_handler.decimal_cls)
     self.assertEqual(wrapper.string_value(), '0')
     self.assertEqual(wrapper.wrapped, expected)
 
-  def testParseDecimal_withHighPrecisionReal_succeeds(self):
+  def test_parse_decimal_with_high_precision_real_succeeds(self):
     expected = self.primitive_handler.new_decimal(value='1.00065022141624642')
     wrapper = self.primitive_handler.primitive_wrapper_from_json_value(
         decimal.Decimal('1.00065022141624642'),
@@ -1155,7 +1155,7 @@ class DecimalWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     self.assertEqual(wrapper.string_value(), '1.00065022141624642')
     self.assertEqual(wrapper.wrapped, expected)
 
-  def testPrintDecimal_withPositiveInteger_succeeds(self):
+  def test_print_decimal_with_positive_integer_succeeds(self):
     primitive = self.primitive_handler.new_decimal(value='185')
     wrapper = self.primitive_handler.primitive_wrapper_from_primitive(primitive)
     self.assertEqual(wrapper.string_value(), '185')
@@ -1164,12 +1164,12 @@ class DecimalWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     wrapper = self.primitive_handler.primitive_wrapper_from_primitive(primitive)
     self.assertEqual(wrapper.string_value(), '100')
 
-  def testPrintDecimal_withNegativeInteger_succeeds(self):
+  def test_print_decimal_with_negative_integer_succeeds(self):
     primitive = self.primitive_handler.new_decimal(value='-40')
     wrapper = self.primitive_handler.primitive_wrapper_from_primitive(primitive)
     self.assertEqual(wrapper.string_value(), '-40')
 
-  def testPrintDecimal_withPositiveReal_succeeds(self):
+  def test_print_decimal_with_positive_real_succeeds(self):
     primitive = self.primitive_handler.new_decimal(value='0.0099')
     wrapper = self.primitive_handler.primitive_wrapper_from_primitive(primitive)
     self.assertEqual(wrapper.string_value(), '0.0099')
@@ -1178,7 +1178,7 @@ class DecimalWrapperTest(absltest.TestCase, metaclass=abc.ABCMeta):
     wrapper = self.primitive_handler.primitive_wrapper_from_primitive(primitive)
     self.assertEqual(wrapper.string_value(), '100.00')
 
-  def testPrintDecimal_withZero_succeeds(self):
+  def test_print_decimal_with_zero_succeeds(self):
     primitive = self.primitive_handler.new_decimal(value='0')
     wrapper = self.primitive_handler.primitive_wrapper_from_primitive(primitive)
     self.assertEqual(wrapper.string_value(), '0')

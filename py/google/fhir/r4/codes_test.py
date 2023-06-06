@@ -34,25 +34,25 @@ _CODES_DIR = os.path.join('testdata', 'r4', 'codes')
 class CodesTest(parameterized.TestCase):
   """Tests functionality provided by the codes module."""
 
-  def testGetCodeAsString_withStringValueType(self):
+  def test_get_code_as_string_with_string_value_type(self):
     """Tests get_code_as_string with a string value-field type."""
     code = datatypes_pb2.Code(value='foo')
     self.assertEqual('foo', codes.get_code_as_string(code))
 
-  def testGetCodeAsString_withEnumValueType(self):
+  def test_get_code_as_string_with_enum_value_type(self):
     """Tests get_code_as_string with an enum value-field type."""
     code = patient_pb2.Patient.GenderCode(
         value=codes_pb2.AdministrativeGenderCode.FEMALE)
     self.assertEqual('female', codes.get_code_as_string(code))
 
-  def testGetCodeAsString_withInvalidType(self):
+  def test_get_code_as_string_with_invalid_type(self):
     """Tests get_code_as_string with an invalid value-field type."""
     not_a_code = datatypes_pb2.String(value='foo')
     with self.assertRaises(ValueError) as ve:
       _ = codes.get_code_as_string(not_a_code)
     self.assertIsInstance(ve.exception, ValueError)
 
-  def testEnumValueDescriptorToCodeString(self):
+  def test_enum_value_descriptor_to_code_string(self):
     """Tests enum_value_descriptor_to_code_string functionality."""
     female_value_descriptor = (
         codes_pb2.AdministrativeGenderCode.Value.DESCRIPTOR.values_by_number[
@@ -67,14 +67,14 @@ class CodesTest(parameterized.TestCase):
     self.assertEqual(
         '>', codes.enum_value_descriptor_to_code_string(gt_value_descriptor))
 
-  def testCodeStringToEnumValueDescriptor_withValidCodeString(self):
+  def test_code_string_to_enum_value_descriptor_with_valid_code_string(self):
     """Tests code_string_to_enum_value_descriptor functionality."""
     enum_descriptor = codes_pb2.QuestionnaireItemOperatorCode.Value.DESCRIPTOR
     enum_value_descriptor = enum_descriptor.values_by_name['GREATER_THAN']
     result = codes.code_string_to_enum_value_descriptor('>', enum_descriptor)
     self.assertEqual(result.name, enum_value_descriptor.name)
 
-  def testCodeStringToEnumValueDescriptor_withInvalidCodeString(self):
+  def test_code_string_to_enum_value_descriptor_with_invalid_code_string(self):
     """Tests code_string_to_enum_value_descriptor error handling."""
     enum_descriptor = codes_pb2.AssertionOperatorTypeCode.Value.DESCRIPTOR
     with self.assertRaises(fhir_errors.InvalidFhirError) as fe:
@@ -82,7 +82,7 @@ class CodesTest(parameterized.TestCase):
                                                      enum_descriptor)
     self.assertIsInstance(fe.exception, fhir_errors.InvalidFhirError)
 
-  def testCopyCode_fromTypedToGeneric(self):
+  def test_copy_code_from_typed_to_generic(self):
     """Tests copy_code from a generic to typed Code."""
     typed_code = patient_pb2.Patient.GenderCode(
         value=codes_pb2.AdministrativeGenderCode.FEMALE)
@@ -90,7 +90,7 @@ class CodesTest(parameterized.TestCase):
     codes.copy_code(typed_code, generic_code)
     self.assertEqual('female', generic_code.value)
 
-  def testCopyCode_fromGenericToTyped(self):
+  def test_copy_code_from_generic_to_typed(self):
     """Tests copy_code from a typed to a generic Code."""
     typed_code = patient_pb2.Patient.GenderCode()
     generic_code = datatypes_pb2.Code(value='female')
@@ -98,14 +98,14 @@ class CodesTest(parameterized.TestCase):
     self.assertEqual(codes_pb2.AdministrativeGenderCode.FEMALE,
                      typed_code.value)
 
-  def testCopyCode_fromGenericToGeneric(self):
+  def test_copy_code_from_generic_to_generic(self):
     """Tests copy_code form a generic to a generic Code."""
     source = datatypes_pb2.Code(value='female')
     target = datatypes_pb2.Code()
     codes.copy_code(source, target)
     self.assertEqual('female', target.value)
 
-  def testCopyCode_fromTypedToTyped(self):
+  def test_copy_code_from_typed_to_typed(self):
     """Tests copy_code from a typed to a typed Code."""
     source = patient_pb2.Patient.GenderCode(
         value=codes_pb2.AdministrativeGenderCode.FEMALE)
@@ -117,7 +117,7 @@ class CodesTest(parameterized.TestCase):
       ('_withUsCoreOmb1', 'uscore_omb_1'),
       ('_withUsCoreOmb2', 'uscore_omb_2'),
   )
-  def testCopyCoding_fromGenericToTyped(self, name: str):
+  def test_copy_coding_from_generic_to_typed(self, name: str):
     """Tests copy_coding from a generic Coding to a typed Coding."""
     generic = self._coding_from_file(name + '_raw.prototxt',
                                      datatypes_pb2.Coding)
@@ -133,7 +133,7 @@ class CodesTest(parameterized.TestCase):
       ('_withUsCoreOmb1', 'uscore_omb_1'),
       ('_withUsCoreOmb2', 'uscore_omb_2'),
   )
-  def testCopyCoding_fromTypedToGeneric(self, name: str):
+  def test_copy_coding_from_typed_to_generic(self, name: str):
     """Tests copy_coding from a typed Coding to a generic Coding."""
     generic_golden = self._coding_from_file(name + '_raw.prototxt',
                                             datatypes_pb2.Coding)
@@ -149,7 +149,7 @@ class CodesTest(parameterized.TestCase):
       ('_withUsCoreOmb1', 'uscore_omb_1'),
       ('_withUsCoreOmb2', 'uscore_omb_2'),
   )
-  def testCopyCoding_fromGenericToGeneric(self, name: str):
+  def test_copy_coding_from_generic_to_generic(self, name: str):
     """Tests copy_coding from a generic Coding to a generic Coding."""
     source = self._coding_from_file(name + '_raw.prototxt',
                                     datatypes_pb2.Coding)
@@ -161,7 +161,7 @@ class CodesTest(parameterized.TestCase):
       ('_withUsCoreOmb1', 'uscore_omb_1'),
       ('_withUsCoreOmb2', 'uscore_omb_2'),
   )
-  def testCopyCoding_fromTypedToTyped(self, name: str):
+  def test_copy_coding_from_typed_to_typed(self, name: str):
     """Tests copy_coding from a typed Coding to a Typed Coding."""
     source = self._coding_from_file(
         name + '_typed.prototxt',
