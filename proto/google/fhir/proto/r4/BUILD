@@ -2,7 +2,7 @@ load("//bazel:proto.bzl", "fhir_proto_library")
 load("//bazel:protogen.bzl", "gen_fhir_protos")
 
 package(
-    
+    allow_incoming_cc_edges_to_proto = True,
     
     default_visibility = ["//visibility:public"],
 )
