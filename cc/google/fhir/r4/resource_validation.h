@@ -21,25 +21,12 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "google/fhir/error_reporter.h"
-#include "google/fhir/operation_error_reporter.h"
-#include "proto/google/fhir/proto/r4/core/codes.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/operation_outcome.pb.h"
 #include "proto/google/fhir/proto/r4/fhirproto.pb.h"
 
 namespace google {
 namespace fhir {
 namespace r4 {
-
-// Error handler that creates ValidationOutcome records (profiled
-// OperationOutcome that includes a subject resource reference).
-// Conversion issues that can result in data loss are reported as a "structure"
-// error type as described at https://www.hl7.org/fhir/valueset-issue-type.html,
-// since the item could not be converted into the target structure. Validation
-// issues that preserve data use a "value" error type from that value set.
-using ValidationOutcomeErrorHandler =
-    OutcomeErrorHandler<::google::fhir::r4::fhirproto::ValidationOutcome,
-                        ::google::fhir::r4::core::IssueSeverityCode,
-                        ::google::fhir::r4::core::IssueTypeCode>;
 
 // Run resource-specific validation on the given FHIR resource and
 // report all errors to the given error reporter. Validation will continue

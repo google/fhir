@@ -357,15 +357,14 @@ cc_library(
         ":operation_error_reporter",
         ":primitive_handler",
         ":profiles",
+        ":validation_error_handler",
         "//cc/google/fhir:error_reporter",
-        "//cc/google/fhir:operation_error_reporter",
         "//cc/google/fhir:references",
         "//cc/google/fhir:resource_validation",
         "//cc/google/fhir:util",
         "//cc/google/fhir/fhir_path:r4_fhir_path_validation",
         "//cc/google/fhir/status:statusor",
         "//proto/google/fhir/proto/r4:fhirproto_cc_proto",
-        "//proto/google/fhir/proto/r4/core:codes_cc_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:operation_outcome_cc_proto",
         "@com_google_absl//absl/status",
@@ -383,6 +382,17 @@ cc_library(
         "//proto/google/fhir/proto/r4/core:codes_cc_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:operation_outcome_cc_proto",
+    ],
+)
+
+cc_library(
+    name = "validation_error_handler",
+    hdrs = ["validation_error_handler.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "//cc/google/fhir:operation_error_reporter",
+        "//proto/google/fhir/proto/r4:fhirproto_cc_proto",
+        "//proto/google/fhir/proto/r4/core:codes_cc_proto",
     ],
 )
 

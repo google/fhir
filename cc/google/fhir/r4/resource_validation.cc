@@ -22,6 +22,7 @@
 #include "google/fhir/r4/operation_error_reporter.h"
 #include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/r4/profiles.h"
+#include "google/fhir/r4/validation_error_handler.h"
 #include "google/fhir/references.h"
 #include "google/fhir/resource_validation.h"
 #include "google/fhir/status/statusor.h"
@@ -33,6 +34,7 @@ namespace google {
 namespace fhir {
 namespace r4 {
 
+using ::google::fhir::r4::ValidationOutcomeErrorHandler;
 using ::google::fhir::r4::core::Reference;
 using ::google::fhir::r4::fhirproto::ValidationOutcome;
 
