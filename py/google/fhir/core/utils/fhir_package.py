@@ -18,7 +18,7 @@ import abc
 import decimal
 import json
 import tarfile
-from typing import Any, BinaryIO, Callable, Dict, Generic, Iterable, Iterator, List, Optional, Tuple, Union, Type, TypeVar
+from typing import Any, BinaryIO, Callable, Dict, Generic, Iterable, Iterator, List, Optional, Tuple, Type, TypeVar, Union
 import zipfile
 
 import logging
@@ -101,7 +101,7 @@ class ResourceCollection(Iterable[_T]):
     self.proto_cls = proto_cls
     self.handler = handler
     self.resource_time_zone = resource_time_zone
-    self.resources_by_uri: Dict[str, Union[_T, Dict[str, Any]]] = {}
+    self.resources_by_uri: Dict[str, Union[Optional[_T], Dict[str, Any]]] = {}
 
   def put(
       self,
@@ -148,7 +148,7 @@ class ResourceCollection(Iterable[_T]):
 
     # The resource needs to be parsed from JSON into a proto.
     parsed = self._parse_resource(uri, resource)
-    self.resources_by_uri[uri] = parsed  # pytype: disable=container-type-mismatch  # always-use-return-annotations
+    self.resources_by_uri[uri] = parsed
     return parsed
 
   def _parse_resource(self, uri: str, json_obj: Dict[str, Any]) -> Optional[_T]:
