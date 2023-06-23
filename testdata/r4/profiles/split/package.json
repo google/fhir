@@ -4,6 +4,7 @@
   "type": "IG",
   "date": "20221027175520",
   "canonical": "http://test/url/base",
+  "url": "http://test/url/base",
   "fhirVersions": [
     "4.0.1"
   ],
