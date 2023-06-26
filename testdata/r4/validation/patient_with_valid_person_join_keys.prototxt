@@ -1,0 +1,33 @@
+id {
+  value: "V-1"
+}
+extension {
+  url {
+    value: "https://g.co/fhir/medicalrecords/PersonJoinKeys"
+  }
+  extension {
+    url: { value: "canonicalId" },
+    value {
+        reference { patient_id: { value: "Patient/V-30001" } }
+      }
+  }
+}
+identifier {
+  system {
+    value: "https://g.co/fhir/datamapper-regtest/patients-subject_id"
+  }
+  value {
+    value: "V-1"
+  }
+}
+name {
+  family {
+    value: "Doe"
+  }
+  given {
+    value: "John"
+  }
+}
+gender {
+  value: MALE
+}
