@@ -12,19 +12,3 @@ issue {
     value: "Patient.extension[0].extension[0].value.reference.patientId.value"
   }
 }
-
-# Temporary issue, caused by a bug. Will be fixed in incoming cl.
-issue {
-  severity {
-    value: ERROR
-  }
-  code {
-    value: VALUE
-  }
-  diagnostics {
-    value: "invalid-reference-disallowed-type-Patient"
-  }
-  expression {
-    value: "Patient.extension[0].extension[0].value.reference"
-  }
-}
