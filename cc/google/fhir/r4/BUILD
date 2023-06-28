@@ -375,6 +375,7 @@ cc_library(
 
 cc_library(
     name = "operation_error_reporter",
+    srcs = ["operation_error_reporter.cc"],
     hdrs = ["operation_error_reporter.h"],
     strip_include_prefix = "//cc/",
     deps = [

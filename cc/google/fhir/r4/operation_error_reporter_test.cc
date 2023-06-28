@@ -37,6 +37,7 @@ using ::google::fhir::r4::core::IssueSeverityCode;
 using ::google::fhir::r4::core::IssueTypeCode;
 
 using ::google::fhir::testutil::EqualsProto;
+using ::testing::Eq;
 using ::testing::UnorderedElementsAre;
 
 Issue MakeWarning(const std::string& path, const std::string& diagnostics) {
@@ -243,6 +244,11 @@ TEST(OperationOutcomeErrorHandlerTest, HandleAPIsAddIssuesSuccessfully) {
   *expected.add_issue() = MakeWarning("ep6", "expr-6");
 
   EXPECT_THAT(outcome, EqualsProto(expected));
+}
+
+TEST(FormatIssue, ReturnsCorrectStringForAGivenIssue) {
+  EXPECT_THAT(FormatIssue(MakeError("p1", "m1")), Eq("[p1]: m1"));
+  EXPECT_THAT(FormatIssue(MakeFatal("p3", "m7")), Eq("[p3]: m7"));
 }
 
 }  // namespace

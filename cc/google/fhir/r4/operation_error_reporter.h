@@ -17,10 +17,11 @@
 #ifndef GOOGLE_FHIR_R4_OPERATION_ERROR_REPORTER_H_
 #define GOOGLE_FHIR_R4_OPERATION_ERROR_REPORTER_H_
 
+#include <string>
+
 #include "google/fhir/operation_error_reporter.h"
-#include "proto/google/fhir/proto/r4/core/resources/operation_outcome.pb.h"
 #include "proto/google/fhir/proto/r4/core/codes.pb.h"
-#include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/operation_outcome.pb.h"
 
 namespace google::fhir::r4 {
 
@@ -30,9 +31,16 @@ namespace google::fhir::r4 {
 // since the item could not be converted into the target structure. Validation
 // issues that preserve data use a "value" error type from that value set.
 using OperationOutcomeErrorHandler =
-    OutcomeErrorHandler<::google::fhir::r4::core::OperationOutcome,
-                        ::google::fhir::r4::core::IssueSeverityCode,
-                        ::google::fhir::r4::core::IssueTypeCode>;
+    OutcomeErrorHandler<google::fhir::r4::core::OperationOutcome,
+                        google::fhir::r4::core::IssueSeverityCode,
+                        google::fhir::r4::core::IssueTypeCode>;
+
+// Returns a formatted string of an issue for debugging and diff testing.
+// Potentially move the `FormatIssue` function from
+// `/fhir/cc/r4/operation_error_reporter.h` to
+// `/fhir/cc/operation_error_reporter.h`.
+std::string FormatIssue(
+    const google::fhir::r4::core::OperationOutcome::Issue& issue);
 
 }  // namespace google::fhir::r4
 
