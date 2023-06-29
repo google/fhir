@@ -208,6 +208,44 @@ TEST(ScopedErrorReporterTest, ScopesCreatedThroughFieldsSucceed) {
       ElementsAre("msg:error:Patient.contact[2].name:Patient.contact.name"));
 }
 
+TEST(FailFastErrorHandlerTest, ReturnsCorrectMsgOnFHIRFatal) {
+  absl::Status expected_error_fhir_fatal =
+      absl::InternalError("test error at path");
+  absl::Status actual_error =
+      FailFastErrorHandler::FailOnErrorOrFatal().HandleFhirFatal(
+          absl::InternalError("test error"), "path", "field");
+  EXPECT_EQ(expected_error_fhir_fatal, actual_error);
+}
+
+TEST(FailFastErrorHandlerTest, ReturnsCorrectMsgOnFHIRError) {
+  absl::Status expected_error_fhir_error =
+      absl::InvalidArgumentError("test.expression at path");
+  absl::Status actual_error =
+      FailFastErrorHandler::FailOnErrorOrFatal().HandleFhirError(
+          "test.expression", "path", "field");
+  EXPECT_EQ(expected_error_fhir_error, actual_error);
+}
+
+TEST(FailFastErrorHandlerTest, ReturnsCorrectMsgOnFHIRPathFatal) {
+  absl::Status expected_error_fhir_path_fatal = absl::InternalError(
+      "Error evaluating FHIRPath expression `test.expression`: test error at "
+      "path");
+  absl::Status actual_error =
+      FailFastErrorHandler::FailOnErrorOrFatal().HandleFhirPathFatal(
+          absl::InternalError("test error"), "test.expression", "path",
+          "field");
+  EXPECT_EQ(expected_error_fhir_path_fatal, actual_error);
+}
+
+TEST(FailFastErrorHandlerTest, ReturnsCorrectMsgOnFHIRPathError) {
+  absl::Status expected_error_fhir_path_error =
+      absl::InvalidArgumentError("Failed expression `test.expression` at path");
+  absl::Status actual_error =
+      FailFastErrorHandler::FailOnErrorOrFatal().HandleFhirPathError(
+          "test.expression", "path", "field");
+  EXPECT_EQ(expected_error_fhir_path_error, actual_error);
+}
+
 }  // namespace
 
 }  // namespace google::fhir
