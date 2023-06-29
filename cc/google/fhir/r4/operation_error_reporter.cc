@@ -17,7 +17,7 @@
 #include "google/fhir/r4/operation_error_reporter.h"
 
 #include <string>
-#include <vector>
+#include <utility>
 
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 
@@ -25,12 +25,15 @@ namespace google::fhir::r4 {
 
 std::string FormatIssue(
     const google::fhir::r4::core::OperationOutcome::Issue& issue) {
-  std::vector<std::string> err_loc;
-  err_loc.reserve(issue.expression_size());
-  for (const google::fhir::r4::core::String& expr : issue.expression()) {
-    err_loc.push_back(expr.value());
-  }
-  return absl::StrFormat("[%s]: %s", absl::StrJoin(err_loc, "."),
+  // Each element in the expression field references the full FHIR path of one
+  // affected element. And since our error reporting tools only report one field
+  // per issue right now, we only need the first expression.
+  // Note: Our tools only report one field per issue, but may (depending on the
+  // error handler) return an `Outcome` object with multiple(ScopedErrorHandler)
+  // `Issue`s or just one(FailFastErrorHandler) `Issue`.
+  std::string element_path =
+      issue.expression().empty() ? "" : issue.expression(0).value();
+  return absl::StrFormat("[%s]: %s", std::move(element_path),
                          issue.diagnostics().value());
 }
 
