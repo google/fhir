@@ -172,6 +172,7 @@ public final class JsonFormat {
       output.append(text);
     }
   }
+
   /** A TextGenerator adds indentation when writing formatted text. */
   private static final class PrettyTextGenerator implements TextGenerator {
     private final Appendable output;
