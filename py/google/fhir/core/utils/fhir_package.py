@@ -15,11 +15,12 @@
 """Utility class for abstracting over FHIR definitions."""
 
 import abc
+import dataclasses
 import decimal
 import json
 import os.path
 import tarfile
-from typing import Any, BinaryIO, Callable, Dict, Generic, Iterable, Iterator, List, Optional, Tuple, Type, TypeVar, Union
+from typing import Any, BinaryIO, Callable, Collection, Dict, Generic, Iterable, Iterator, List, Optional, Tuple, Type, TypeVar, Union
 import zipfile
 
 import logging
@@ -77,6 +78,21 @@ def _read_fhir_package_npm(npm_file: BinaryIO) -> Iterator[Tuple[str, str]]:
           yield member.name, content.read().decode('utf-8')
       else:
         logging.info('Skipping  entry: %s.', member.name)
+
+
+def _parse_ig_info(json_obj: Dict[str, Any]) -> 'IgInfo':
+  """Creates an IgInfo object given the contents of a package.json file."""
+  return IgInfo(
+      name=json_obj['name'],
+      version=json_obj['version'],
+      canonical=json_obj.get('canonical'),
+      title=json_obj.get('title'),
+      description=json_obj.get('description'),
+      dependencies=tuple(
+          IgDependency(url=url, version=version)
+          for url, version in json_obj.get('dependencies', {}).items()
+      ),
+  )
 
 
 class ResourceCollection(Iterable[_T]):
@@ -212,6 +228,30 @@ class FhirPackageAccessor(
     pass
 
 
+@dataclasses.dataclass(frozen=True)
+class IgInfo:
+  """Metadata parsed from a package's package.json file.
+
+  See documentation for the package.json file at:
+  https://confluence.hl7.org/pages/viewpage.action?pageId=35718629#NPMPackageSpecification-Packagemanifest
+  """
+
+  name: str
+  version: str
+  description: Optional[str] = None
+  canonical: Optional[str] = None
+  title: Optional[str] = None
+  dependencies: Collection['IgDependency'] = ()
+
+
+@dataclasses.dataclass(frozen=True)
+class IgDependency:
+  """The URL and version of a package dependency."""
+
+  url: str
+  version: str
+
+
 class FhirPackage(
     FhirPackageAccessor[
         _StructDefT, _SearchParameterT, _CodeSystemT, _ValueSetT
@@ -224,14 +264,14 @@ class FhirPackage(
   in `protogen.bzl`.
 
   Attributes:
-    ig_url: The URL identifying this package's implementation guide.
-    ig_version: The version number of this package's implementation guide.
+    ig_info: Metadata on the implementation guide defined by the package.
     structure_definitions: The structure definitions defined by the package.
     search_parameters: The search parameters defined by the package.
     code_systems: The code systems defined by the package.
     value_sets: The value sets defined by the package.
   """
 
+  ig_info: IgInfo
   structure_definitions: ResourceCollection[_StructDefT]
   search_parameters: ResourceCollection[_SearchParameterT]
   code_systems: ResourceCollection[_CodeSystemT]
@@ -293,30 +333,27 @@ class FhirPackage(
       else:
         raise ValueError(f'Unsupported file type from {fd.name}')
 
-      ig_url: Optional[str] = None
-      ig_version: Optional[str] = None
+      ig_info: Optional[IgInfo] = None
       for file_name, raw_json in json_files:
         json_obj = json.loads(
             raw_json, parse_float=decimal.Decimal, parse_int=decimal.Decimal
         )
 
         if os.path.basename(file_name) == 'package.json':
-          ig_url = ig_url or json_obj.get('url')
-          ig_version = ig_version or json_obj.get('version')
+          ig_info = _parse_ig_info(json_obj)
 
         _add_resource_to_collection(
             json_obj, json_obj, collections_per_resource_type
         )
 
-    if ig_url is None and ig_version is None:
+    if ig_info is None:
       raise ValueError(
           f'Package {fd.name} does not contain a package.json '
           'file stating its URL and version.'
       )
 
     return FhirPackage(
-        ig_url=ig_url,
-        ig_version=ig_version,
+        ig_info=ig_info,
         structure_definitions=collections_per_resource_type[
             'StructureDefinition'
         ],
@@ -329,16 +366,14 @@ class FhirPackage(
   def __init__(
       self,
       *,
-      ig_url: str,
-      ig_version: str,
+      ig_info: IgInfo,
       structure_definitions: ResourceCollection[_StructDefT],
       search_parameters: ResourceCollection[_SearchParameterT],
       code_systems: ResourceCollection[_CodeSystemT],
       value_sets: ResourceCollection[_ValueSetT],
   ) -> None:
     """Creates a new instance of `FhirPackage`. Callers should favor `load`."""
-    self.ig_url = ig_url
-    self.ig_version = ig_version
+    self.ig_info = ig_info
     self.structure_definitions = structure_definitions
     self.search_parameters = search_parameters
     self.code_systems = code_systems

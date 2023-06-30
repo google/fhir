@@ -210,6 +210,8 @@ class FhirPackageTest(
         'url': 'http://fhir.com',
         'version': 'version',
         'canonical': 'http://example.com/fhir',
+        'description': 'description',
+        'dependencies': {'child': '1.0'},
     }
 
     # Create zip and npm files containing the resources and our bundle.
@@ -259,8 +261,18 @@ class FhirPackageTest(
           [value_set_1['url'], value_set_2['url']],
       )
 
-      self.assertEqual(package.ig_url, 'http://fhir.com')
-      self.assertEqual(package.ig_version, 'version')
+      self.assertEqual(
+          package.ig_info,
+          fhir_package.IgInfo(
+              name='example',
+              version='version',
+              description='description',
+              canonical='http://example.com/fhir',
+              dependencies=(
+                  fhir_package.IgDependency(url='child', version='1.0'),
+              ),
+          ),
+      )
 
     with zipfile_containing(fhir_resource_contents) as temp_file:
       package = self._load_package(package_source_fn(temp_file.name))
@@ -273,8 +285,12 @@ class FhirPackageTest(
   def test_fhir_package_get_resource_for_missing_uri_is_none(self):
     """Ensure we return None when requesting non-existent resource URIs."""
     package = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=self.empty_collection(),
         search_parameters=self.empty_collection(),
         code_systems=self.empty_collection(),
@@ -285,8 +301,12 @@ class FhirPackageTest(
   def test_fhir_package_pickle_is_successful(self):
     """Ensure FhirPackages are pickle-able."""
     package = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=self.empty_collection(),
         search_parameters=self.empty_collection(),
         code_systems=self.empty_collection(),
@@ -305,8 +325,12 @@ class FhirPackageTest(
     r2.url.value = 'r2'
 
     package = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=mock_resource_collection_containing([r1, r2]),
         search_parameters=mock_resource_collection_containing([]),
         code_systems=mock_resource_collection_containing([]),
@@ -326,8 +350,12 @@ class FhirPackageTest(
     r2.url.value = 'r2'
 
     package = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=mock_resource_collection_containing([]),
         search_parameters=mock_resource_collection_containing([r1, r2]),
         code_systems=mock_resource_collection_containing([]),
@@ -347,8 +375,12 @@ class FhirPackageTest(
     r2.url.value = 'r2'
 
     package = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=mock_resource_collection_containing([]),
         search_parameters=mock_resource_collection_containing([]),
         code_systems=mock_resource_collection_containing([r1, r2]),
@@ -368,8 +400,12 @@ class FhirPackageTest(
     r2.url.value = 'r2'
 
     package = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=mock_resource_collection_containing([]),
         search_parameters=mock_resource_collection_containing([]),
         code_systems=mock_resource_collection_containing([]),
@@ -503,16 +539,24 @@ class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
     vs_2.url.value = 'vs2'
 
     package_1 = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=mock_resource_collection_containing([]),
         search_parameters=mock_resource_collection_containing([]),
         code_systems=mock_resource_collection_containing([]),
         value_sets=mock_resource_collection_containing([vs_1]),
     )
     package_2 = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=mock_resource_collection_containing([]),
         search_parameters=mock_resource_collection_containing([]),
         code_systems=mock_resource_collection_containing([]),
@@ -538,16 +582,24 @@ class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
     r2.url.value = 'r2'
 
     package_1 = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=mock_resource_collection_containing([r1]),
         search_parameters=mock_resource_collection_containing([]),
         code_systems=mock_resource_collection_containing([]),
         value_sets=mock_resource_collection_containing([]),
     )
     package_2 = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=mock_resource_collection_containing([r2]),
         search_parameters=mock_resource_collection_containing([]),
         code_systems=mock_resource_collection_containing([]),
@@ -571,16 +623,24 @@ class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
     r2.url.value = 'r2'
 
     package_1 = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=mock_resource_collection_containing([]),
         search_parameters=mock_resource_collection_containing([r1]),
         code_systems=mock_resource_collection_containing([]),
         value_sets=mock_resource_collection_containing([]),
     )
     package_2 = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=mock_resource_collection_containing([]),
         search_parameters=mock_resource_collection_containing([r2]),
         code_systems=mock_resource_collection_containing([]),
@@ -604,16 +664,24 @@ class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
     r2.url.value = 'r2'
 
     package_1 = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=mock_resource_collection_containing([]),
         search_parameters=mock_resource_collection_containing([]),
         code_systems=mock_resource_collection_containing([r1]),
         value_sets=mock_resource_collection_containing([]),
     )
     package_2 = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=mock_resource_collection_containing([]),
         search_parameters=mock_resource_collection_containing([]),
         code_systems=mock_resource_collection_containing([r2]),
@@ -637,16 +705,24 @@ class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
     r2.url.value = 'r2'
 
     package_1 = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=mock_resource_collection_containing([]),
         search_parameters=mock_resource_collection_containing([]),
         code_systems=mock_resource_collection_containing([]),
         value_sets=mock_resource_collection_containing([r1]),
     )
     package_2 = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=mock_resource_collection_containing([]),
         search_parameters=mock_resource_collection_containing([]),
         code_systems=mock_resource_collection_containing([]),
@@ -672,16 +748,24 @@ class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
     r2.url.value = 'r2'
 
     package_1 = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=mock.Mock(__iter__=lambda _: iter([r1])),
         search_parameters=mock.Mock(__iter__=lambda _: iter([])),
         code_systems=mock.Mock(__iter__=lambda _: iter([])),
         value_sets=mock.Mock(__iter__=lambda _: iter([])),
     )
     package_2 = fhir_package.FhirPackage(
-        ig_url='url',
-        ig_version='version',
+        ig_info=fhir_package.IgInfo(
+            name='name',
+            version='version',
+            description='description',
+            canonical='url',
+        ),
         structure_definitions=mock.Mock(__iter__=lambda _: iter([r2])),
         search_parameters=mock.Mock(__iter__=lambda _: iter([])),
         code_systems=mock.Mock(__iter__=lambda _: iter([])),
