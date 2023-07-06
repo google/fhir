@@ -17,12 +17,10 @@
 #ifndef GOOGLE_FHIR_R4_PROFILES_H_
 #define GOOGLE_FHIR_R4_PROFILES_H_
 
-#include "google/protobuf/message.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/status/status.h"
-#include "google/fhir/status/statusor.h"
 #include "proto/google/fhir/proto/r4/core/resources/operation_outcome.pb.h"
 
 namespace google {
@@ -78,8 +76,9 @@ absl::StatusOr<::google::fhir::r4::core::OperationOutcome> ConvertToProfile(
 // Any data that is in an inlined field in the profiled message,
 // that does not exists in the base message will be converted back to the
 // original format (e.g., extension).
-absl::Status ConvertToProfileR4(const ::google::protobuf::Message& source,
-                                ::google::protobuf::Message* target);
+absl::Status ConvertToProfileR4(
+    const ::google::protobuf::Message& source, ::google::protobuf::Message* target,
+    ErrorHandler& error_handler = FailFastErrorHandler::FailOnErrorOrFatal());
 
 // Deprecated. Lenient conversions never had well-defined semantics,
 // so users should move to other ConvertToProfile functions where they can
@@ -108,9 +107,11 @@ absl::StatusOr<T> NormalizeR4(const T& message) {
 // is both in normalized form, and valid according to all restrictions of
 // the profile.
 template <typename T>
-absl::StatusOr<T> NormalizeAndValidateR4(const T& message) {
+absl::StatusOr<T> NormalizeAndValidateR4(
+    const T& message,
+    ErrorHandler& error_handler = FailFastErrorHandler::FailOnErrorOrFatal()) {
   T normalized;
-  FHIR_RETURN_IF_ERROR(ConvertToProfileR4(message, &normalized));
+  FHIR_RETURN_IF_ERROR(ConvertToProfileR4(message, &normalized, error_handler));
   return normalized;
 }
 

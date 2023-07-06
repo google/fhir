@@ -18,11 +18,9 @@ cc_library(
         "//cc/google/fhir:error_reporter",
         "//cc/google/fhir:profiles_lib",
         "//cc/google/fhir/status",
-        "//cc/google/fhir/status:statusor",
         "//proto/google/fhir/proto/r4/core/resources:operation_outcome_cc_proto",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
-        "@com_google_protobuf//:protobuf",
     ],
 )
 

@@ -14,7 +14,6 @@
 
 #include "google/fhir/r4/profiles.h"
 
-#include "google/protobuf/message.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "google/fhir/error_reporter.h"
@@ -48,9 +47,10 @@ absl::StatusOr<OperationOutcome> ConvertToProfile(
 }  // namespace r4
 
 absl::Status ConvertToProfileR4(const ::google::protobuf::Message& source,
-                                ::google::protobuf::Message* target) {
-  return ConvertToProfileInternal<r4::R4PrimitiveHandler>(
-      source, target, FailFastErrorHandler::FailOnErrorOrFatal());
+                                ::google::protobuf::Message* target,
+                                ErrorHandler& error_handler) {
+  return ConvertToProfileInternal<r4::R4PrimitiveHandler>(source, target,
+                                                          error_handler);
 }
 
 // Identical to ConvertToProfile, except does not run the validation step.
