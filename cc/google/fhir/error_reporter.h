@@ -32,6 +32,9 @@ namespace google::fhir {
 
 // A handler interface for errors encountered during a FHIR process.
 //
+// Implementations of this class are expected to be thread compatible, but not
+// necessarily thread-safe.
+//
 // Top-level processes accept a reference to an ErrorHandler, and will invoke
 // Handle functions with information about the error, along with context
 // information about where the error occurred, including both `element_path`,
