@@ -1,0 +1,14 @@
+issue {
+  severity {
+    value: FATAL
+  }
+  code {
+    value: STRUCTURE
+  }
+  diagnostics {
+    value: "Unable to find field `comparator` in `google.fhir.r4.core.SimpleQuantity`"
+  }
+  expression {
+    value: "MedicationAdministration.dosage.rate.quantity"
+  }
+}

@@ -1,0 +1,20 @@
+status { value: STOPPED }
+medication {
+  reference {
+    medication_id { value: "1234" }
+  }
+}
+subject {
+    patient_id { value: "1234" }
+}
+effective {
+  period { }
+}
+
+dosage {
+  rate {
+    quantity {
+      value : { value: "2.5" }
+    }
+  }
+}

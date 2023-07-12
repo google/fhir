@@ -1,0 +1,14 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Input failed regex requirement for: google.fhir.r4.core.Id"
+  }
+  expression {
+    value: "Encounter.id"
+  }
+}
