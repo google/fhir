@@ -1,0 +1,26 @@
+id: { value: "123" }
+name: { family: { value: "test" } }
+identifier {
+  type {
+    coding {
+      system: { value: "http://terminology.hl7.org/CodeSystem/v2-0203" },
+      code: { value: "NPI" }
+    }
+  }
+  system: { value: "http://hl7.org/fhir/sid/us-npi" },
+  value: { value: "123" }
+}
+identifier {
+  type {
+    coding {
+      system: { value: "http://terminology.hl7.org/CodeSystem/v2-0203" },
+      code: { value: "TAX" }
+    }
+  }
+  system: { value: "urn:oid:2.16.840.1.113883.4.4" },
+  value: { value: "456" }
+}
+identifier {
+  system: { value: "https://g.co/fhir/us_dev_1/practitioner-id" },
+  value: { value: "2" }
+}
