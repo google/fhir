@@ -16,7 +16,6 @@ package com.google.fhir.protogen;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.Annotations;
@@ -40,7 +39,7 @@ public final class ProtoGeneratorTestUtils {
   public static ProtoGenerator makeProtoGenerator(
       String packageLocation,
       String codesProtoImport,
-      ImmutableMap<String, String> coreDepMap,
+      String coreDep,
       ImmutableSet<String> dependencyLocations)
       throws IOException, InvalidFhirException {
     FhirPackage packageToGenerate = FhirPackage.load(packageLocation);
@@ -52,11 +51,6 @@ public final class ProtoGeneratorTestUtils {
       packages.add(FhirPackage.load(location));
     }
 
-    String coreDep = coreDepMap.get(packageInfo.getFhirVersion().toString());
-    if (coreDep == null) {
-      throw new IllegalArgumentException(
-          "Unable to load core dep for fhir version: " + packageInfo.getFhirVersion());
-    }
     packages.add(FhirPackage.load(coreDep));
 
     return new ProtoGenerator(

@@ -13,7 +13,6 @@ java_test(
         "//java/com/google/fhir/common:json_format",
         "//java/com/google/fhir/common:proto_gen_transformer",
         "//java/com/google/fhir/common:resource_validator",
-        "//java/com/google/fhir/protogen",
         "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
         "@bazel_tools//tools/java/runfiles",

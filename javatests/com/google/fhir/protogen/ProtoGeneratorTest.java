@@ -21,7 +21,6 @@ import static org.junit.Assert.fail;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.io.Files;
@@ -75,7 +74,7 @@ public class ProtoGeneratorTest {
         ProtoGeneratorTestUtils.makeProtoGenerator(
             "spec/fhir_r4_package.zip",
             "codes.proto",
-            ImmutableMap.of("R4", "spec/fhir_r4_package.zip"),
+            "spec/fhir_r4_package.zip",
             ImmutableSet.of() /* no dependencies */);
   }
 
@@ -309,7 +308,7 @@ public class ProtoGeneratorTest {
   public void addContainedResource_noResourceTypes_emptyFileDescriptor() {
     FileDescriptorProto res =
         r4ProtoGenerator.addContainedResource(
-            FileDescriptorProto.getDefaultInstance(), /*resourceTypes=*/ ImmutableList.of());
+            FileDescriptorProto.getDefaultInstance(), /* resourceTypes= */ ImmutableList.of());
 
     assertThat(res)
         .isEqualTo(
@@ -530,8 +529,8 @@ public class ProtoGeneratorTest {
         ProtoGeneratorTestUtils.makeProtoGenerator(
             createNonCorePackage("google.foo"),
             "codes.proto",
-            /*coreDepMap=*/ ImmutableMap.of("R4", "spec/fhir_r4_package.zip"),
-            /*dependencyLocations=*/ ImmutableSet.of());
+            "spec/fhir_r4_package.zip",
+            /* dependencyLocations= */ ImmutableSet.of());
 
     ImmutableList<DescriptorProto> resourceTypes =
         ImmutableList.of(
@@ -596,8 +595,8 @@ public class ProtoGeneratorTest {
         ProtoGeneratorTestUtils.makeProtoGenerator(
             createNonCorePackage("google.foo"),
             "codes.proto",
-            /*coreDepMap=*/ ImmutableMap.of("R4", "spec/fhir_r4_package.zip"),
-            /*dependencyLocations=*/ ImmutableSet.of());
+            "spec/fhir_r4_package.zip",
+            /* dependencyLocations= */ ImmutableSet.of());
 
     ImmutableList<DescriptorProto> resourceTypes =
         ImmutableList.of(
@@ -644,8 +643,8 @@ public class ProtoGeneratorTest {
         ProtoGeneratorTestUtils.makeProtoGenerator(
             createNonCorePackage("google.foo"),
             "codes.proto",
-            /*coreDepMap=*/ ImmutableMap.of("R4", "spec/fhir_r4_package.zip"),
-            /*dependencyLocations=*/ ImmutableSet.of());
+            "spec/fhir_r4_package.zip",
+            /* dependencyLocations= */ ImmutableSet.of());
 
     StructureDefinition citizenshipExtension =
         readStructureDefinition("patient-citizenship", FhirVersion.R4);
@@ -674,8 +673,8 @@ public class ProtoGeneratorTest {
         ProtoGeneratorTestUtils.makeProtoGenerator(
             createNonCorePackage("google.foo"),
             "codes.proto",
-            /*coreDepMap=*/ ImmutableMap.of("R4", "spec/fhir_r4_package.zip"),
-            /*dependencyLocations=*/ ImmutableSet.of());
+            "spec/fhir_r4_package.zip",
+            /* dependencyLocations= */ ImmutableSet.of());
 
     // Make a version of citizenship extension that is closed on extension slicing
     StructureDefinition.Builder citizenshipExtension =
@@ -715,8 +714,8 @@ public class ProtoGeneratorTest {
         ProtoGeneratorTestUtils.makeProtoGenerator(
             createNonCorePackage("google.foo"),
             "codes.proto",
-            /*coreDepMap=*/ ImmutableMap.of("R4", "spec/fhir_r4_package.zip"),
-            /*dependencyLocations=*/ ImmutableSet.of());
+            "spec/fhir_r4_package.zip",
+            /* dependencyLocations= */ ImmutableSet.of());
 
     StructureDefinition bloodPressureProfile = readStructureDefinition("bp", FhirVersion.R4);
 
@@ -744,8 +743,8 @@ public class ProtoGeneratorTest {
         ProtoGeneratorTestUtils.makeProtoGenerator(
             createNonCorePackage("google.foo"),
             "codes.proto",
-            /*coreDepMap=*/ ImmutableMap.of("R4", "spec/fhir_r4_package.zip"),
-            /*dependencyLocations=*/ ImmutableSet.of());
+            "spec/fhir_r4_package.zip",
+            /* dependencyLocations= */ ImmutableSet.of());
 
     // Make a version of Blood Pressure that has closed slicing on Observation.code.coding.
     StructureDefinition.Builder bloodPressureProfile =

@@ -29,7 +29,6 @@ java_binary(
         ":protogen",
         "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/common:json_format",
-        "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto:profile_config_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
@@ -44,7 +43,6 @@ java_library(
     srcs = ["GeneratorUtils.java"],
     deps = [
         "//java/com/google/fhir/common:exceptions",
-        "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto/r4/core:codes_java_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:search_parameter_java_proto",
@@ -85,7 +83,6 @@ java_library(
         "//proto/google/fhir/proto/r4/core/resources:search_parameter_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:value_set_java_proto",
-        "//proto/google/fhir/proto/stu3:datatypes_java_proto",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_code_gson_gson",
         "@maven//:com_google_guava_guava",

@@ -312,43 +312,44 @@ public final class FhirPackageTest {
 
   private enum LoadCase {
     UNDEFINED_RESOURCE(
-        /*fileContents=*/ "{\"noResourceTypeField\":\"Foo\"}",
-        /*structureDefinitionsCount=*/ 0,
-        /*codeSystemsCount=*/ 0,
-        /*valueSetsCount=*/ 0,
-        /*searchParametersCount=*/ 0),
+        /* fileContents= */ "{\"noResourceTypeField\":\"Foo\"}",
+        /* structureDefinitionsCount= */ 0,
+        /* codeSystemsCount= */ 0,
+        /* valueSetsCount= */ 0,
+        /* searchParametersCount= */ 0),
     UNHANDLED_RESOURCE_TYPE(
-        /*fileContents=*/ "{\"resourceType\":\"Foo\", \"url\":\"http://foo.com\"}",
-        /*structureDefinitionsCount=*/ 0,
-        /*codeSystemsCount=*/ 0,
-        /*valueSetsCount=*/ 0,
-        /*searchParametersCount=*/ 0),
+        /* fileContents= */ "{\"resourceType\":\"Foo\", \"url\":\"http://foo.com\"}",
+        /* structureDefinitionsCount= */ 0,
+        /* codeSystemsCount= */ 0,
+        /* valueSetsCount= */ 0,
+        /* searchParametersCount= */ 0),
     VALUE_SET(
-        /*fileContents=*/ "{\"resourceType\":\"ValueSet\", \"url\":\"http://foo.com\"}",
-        /*structureDefinitionsCount=*/ 0,
-        /*codeSystemsCount=*/ 0,
-        /*valueSetsCount=*/ 1,
-        /*searchParametersCount=*/ 0),
+        /* fileContents= */ "{\"resourceType\":\"ValueSet\", \"url\":\"http://foo.com\"}",
+        /* structureDefinitionsCount= */ 0,
+        /* codeSystemsCount= */ 0,
+        /* valueSetsCount= */ 1,
+        /* searchParametersCount= */ 0),
     CODE_SYSTEM(
-        /*fileContents=*/ "{\"resourceType\":\"CodeSystem\", \"url\":\"http://foo.com\"}",
-        /*structureDefinitionsCount=*/ 0,
-        /*codeSystemsCount=*/ 1,
-        /*valueSetsCount=*/ 0,
-        /*searchParametersCount=*/ 0),
+        /* fileContents= */ "{\"resourceType\":\"CodeSystem\", \"url\":\"http://foo.com\"}",
+        /* structureDefinitionsCount= */ 0,
+        /* codeSystemsCount= */ 1,
+        /* valueSetsCount= */ 0,
+        /* searchParametersCount= */ 0),
     STRUCTURE_DEFINITION(
-        /*fileContents=*/ "{\"resourceType\":\"StructureDefinition\", \"url\":\"http://foo.com\"}",
-        /*structureDefinitionsCount=*/ 1,
-        /*codeSystemsCount=*/ 0,
-        /*valueSetsCount=*/ 0,
-        /*searchParametersCount=*/ 0),
+        /* fileContents= */ "{\"resourceType\":\"StructureDefinition\","
+            + " \"url\":\"http://foo.com\"}",
+        /* structureDefinitionsCount= */ 1,
+        /* codeSystemsCount= */ 0,
+        /* valueSetsCount= */ 0,
+        /* searchParametersCount= */ 0),
     SEARCH_PARAMETER(
-        /*fileContents=*/ "{\"resourceType\":\"SearchParameter\", \"url\":\"http://foo.com\"}",
-        /*structureDefinitionsCount=*/ 0,
-        /*codeSystemsCount=*/ 0,
-        /*valueSetsCount=*/ 0,
-        /*searchParametersCount=*/ 1),
+        /* fileContents= */ "{\"resourceType\":\"SearchParameter\", \"url\":\"http://foo.com\"}",
+        /* structureDefinitionsCount= */ 0,
+        /* codeSystemsCount= */ 0,
+        /* valueSetsCount= */ 0,
+        /* searchParametersCount= */ 1),
     BUNDLE_WITH_EACH(
-        /*fileContents=*/ "{\"resourceType\":\"Bundle\", \"entry\": [{\"resource\":"
+        /* fileContents= */ "{\"resourceType\":\"Bundle\", \"entry\": [{\"resource\":"
             + " {\"resourceType\":\"ValueSet\", \"url\":\"http://foo.com/valueset\"}},"
             + " {\"resource\": {\"resourceType\":\"CodeSystem\""
             + ", \"url\":\"http://foo.com/codesystem\"}}, {\"resource\":"
@@ -356,22 +357,22 @@ public final class FhirPackageTest {
             + ", \"url\":\"http://foo.com/strucdef\"}}, {\"resource\":"
             + " {\"resourceType\":\"SearchParameter\""
             + ", \"url\":\"http://foo.com/searchparam\"}}]}",
-        /*structureDefinitionsCount=*/ 1,
-        /*codeSystemsCount=*/ 1,
-        /*valueSetsCount=*/ 1,
-        /*searchParametersCount=*/ 1),
+        /* structureDefinitionsCount= */ 1,
+        /* codeSystemsCount= */ 1,
+        /* valueSetsCount= */ 1,
+        /* searchParametersCount= */ 1),
     BUNDLE_WITH_NO_ENTRIES(
-        /*fileContents=*/ "{\"resourceType\":\"Bundle\"}",
-        /*structureDefinitionsCount=*/ 0,
-        /*codeSystemsCount=*/ 0,
-        /*valueSetsCount=*/ 0,
-        /*searchParametersCount=*/ 0),
+        /* fileContents= */ "{\"resourceType\":\"Bundle\"}",
+        /* structureDefinitionsCount= */ 0,
+        /* codeSystemsCount= */ 0,
+        /* valueSetsCount= */ 0,
+        /* searchParametersCount= */ 0),
     BUNDLE_WITH_INVALID_ENTRIES(
-        /*fileContents=*/ "{\"resourceType\":\"Bundle\", \"entry\":\"Not an array\"}",
-        /*structureDefinitionsCount=*/ 0,
-        /*codeSystemsCount=*/ 0,
-        /*valueSetsCount=*/ 0,
-        /*searchParametersCount=*/ 0);
+        /* fileContents= */ "{\"resourceType\":\"Bundle\", \"entry\":\"Not an array\"}",
+        /* structureDefinitionsCount= */ 0,
+        /* codeSystemsCount= */ 0,
+        /* valueSetsCount= */ 0,
+        /* searchParametersCount= */ 0);
 
     final String fileContents;
     final int structureDefinitionsCount;

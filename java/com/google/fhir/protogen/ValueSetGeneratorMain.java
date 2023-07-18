@@ -22,7 +22,6 @@ import com.beust.jcommander.ParameterException;
 import com.google.common.io.Files;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
-import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.StructureDefinition;
@@ -108,13 +107,12 @@ final class ValueSetGeneratorMain {
 
     FhirPackage inputPackage = FhirPackage.load(args.inputPackage);
     PackageInfo packageInfo = inputPackage.packageInfo;
-    FhirVersion fhirVersion = packageInfo.getFhirVersion();
 
     ValueSetGenerator generator = new ValueSetGenerator(packageInfo, args.getDependencies());
 
     Set<StructureDefinition> codeUsers = new HashSet<>();
 
-    Set<Bundle> bundles = loadBundles(args.codeUsers, fhirVersion);
+    Set<Bundle> bundles = loadBundles(args.codeUsers);
     codeUsers.addAll(
         bundles.stream()
             .flatMap(bundle -> bundle.getEntryList().stream())
@@ -159,9 +157,9 @@ final class ValueSetGeneratorMain {
     }
   }
 
-  private static Set<Bundle> loadBundles(Set<String> filenames, FhirVersion fhirVersion)
+  private static Set<Bundle> loadBundles(Set<String> filenames)
       throws IOException, InvalidFhirException {
-    JsonFormat.Parser parser = JsonFormat.getSpecParser(fhirVersion);
+    JsonFormat.Parser parser = JsonFormat.getParser();
     Set<Bundle> bundles = new HashSet<>();
     for (String filename : filenames) {
       Bundle.Builder builder = Bundle.newBuilder();

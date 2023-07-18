@@ -19,7 +19,6 @@ import static com.google.common.truth.Truth.assertThat;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.common.JsonFormat.Parser;
-import com.google.fhir.protogen.FhirPackage;
 import com.google.fhir.r4.core.ElementDefinition;
 import com.google.fhir.r4.core.StructureDefinition;
 import java.io.File;
@@ -123,15 +122,5 @@ public final class ProtoGenTransformerTest {
     ElementDefinition element = def.getSnapshot().getElement(0);
 
     assertThat(element.getPath().getValue()).isEqualTo("AAA-BBB");
-  }
-
-  @Test
-  public void testStu3Transformer() throws Exception {
-    // Test to ensure that the STU3 transformer is capable of loading the entire STU3 spec.
-    FhirPackage fhirPackage = FhirPackage.load("spec/fhir_stu3_package.zip");
-
-    assertThat(fhirPackage.structureDefinitions()).hasSize(585);
-    assertThat(fhirPackage.codeSystems()).hasSize(941);
-    assertThat(fhirPackage.valueSets()).hasSize(1154);
   }
 }

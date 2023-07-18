@@ -25,7 +25,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.Annotations;
-import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
@@ -80,13 +79,6 @@ class ProtoGeneratorMain {
         names = {"--sort"},
         description = "If true, will sort messages within a file by message name.")
     private boolean sort = false;
-
-    @Parameter(
-        names = {"--stu3_core_dep"},
-        description =
-            "FhirPackage for core STU3 Definitions.  See --fhir_definition_dep flag for"
-                + " documentaton on format.")
-    private String stu3CoreDep = null;
 
     @Parameter(
         names = {"--r4_core_dep"},
@@ -152,32 +144,13 @@ class ProtoGeneratorMain {
             : applyFilter(unfilteredInputPackage, args.filter);
     PackageInfo packageInfo = inputPackage.packageInfo;
 
-    if (packageInfo.getProtoPackage().isEmpty()
-        || packageInfo.getFhirVersion() == FhirVersion.FHIR_VERSION_UNKNOWN) {
+    if (packageInfo.getProtoPackage().isEmpty()) {
       throw new IllegalArgumentException(
           "package_info must contain at least a proto_package and fhir_version.");
     }
 
     // Add in core FHIR types (e.g., datatypes and unprofiled resources)
-    switch (packageInfo.getFhirVersion()) {
-      case STU3:
-        if (args.stu3CoreDep == null) {
-          throw new IllegalArgumentException(
-              "Package is for STU3, but --stu3_core_dep is not specified.");
-        }
-        fhirPackages.add(FhirPackage.load(args.stu3CoreDep));
-        break;
-      case R4:
-        if (args.r4CoreDep == null) {
-          throw new IllegalArgumentException(
-              "Package is for R4, but --r4_core_dep is not specified.");
-        }
-        fhirPackages.add(FhirPackage.load(args.r4CoreDep));
-        break;
-      default:
-        throw new IllegalArgumentException(
-            "FHIR version not supported by ProfileGenerator: " + packageInfo.getFhirVersion());
-    }
+    fhirPackages.add(FhirPackage.load(args.r4CoreDep));
 
     List<StructureDefinition> inputDefinitions =
         stream(inputPackage.structureDefinitions().iterator())
@@ -189,16 +162,11 @@ class ProtoGeneratorMain {
 
     ValueSetGenerator valueSetGenerator = new ValueSetGenerator(packageInfo, fhirPackages);
     ProtoGenerator generator =
-        packageInfo.getFhirVersion() != FhirVersion.R4
-            ? new ProtoGenerator(
-                packageInfo,
-                args.directoryInSource + "/" + args.outputName + "_codes.proto",
-                fhirPackages)
-            : new ProtoGenerator(
-                packageInfo,
-                args.directoryInSource + "/" + args.outputName + "_codes.proto",
-                fhirPackages,
-                valueSetGenerator);
+        new ProtoGenerator(
+            packageInfo,
+            args.directoryInSource + "/" + args.outputName + "_codes.proto",
+            fhirPackages,
+            valueSetGenerator);
     ProtoFilePrinter printer = new ProtoFilePrinter(packageInfo);
 
     try (ZipOutputStream zipOutputStream =
@@ -373,9 +341,7 @@ class ProtoGeneratorMain {
         FileDescriptorProto fileProto =
             generator.generateFileDescriptor(ImmutableList.of(structDef), args.additionalImports);
         DescriptorProto type = fileProto.getMessageType(0);
-        String filename =
-            resourceNameToFileName(
-                GeneratorUtils.getTypeName(structDef, packageInfo.getFhirVersion()), generator);
+        String filename = resourceNameToFileName(GeneratorUtils.getTypeName(structDef), generator);
         if (type.getName().equals("Bundle")) {
           deferredBundleFile = fileProto;
         } else {

@@ -588,24 +588,6 @@ public final class JsonFormat {
   }
 
   /**
-   * Returns a specialized parser that is able of parsing non-R4 spec resources (CodeSystems,
-   * ValueSets, and StructureDefinitions) into R4 versions for useinprotogeneration. These are *NOT*
-   * all-purpose version converters, and should *NOT* be used for purposes other than
-   * protogeneration.
-   */
-  public static Parser getSpecParser(FhirVersion version) {
-    switch (version) {
-      case DSTU2:
-        throw new IllegalArgumentException(
-            "Fhir version not supported for getSpecParser: " + version);
-      case STU3:
-        return Parser.newBuilder().withStu3ProtoGenTransformer().build();
-      default:
-        return Parser.newBuilder().build();
-    }
-  }
-
-  /**
    * Parser for json-format FHIR proto instances. This class is thread-safe.
    *
    * <p>Use {@link JsonFormat#getParser()} to obtain the default parser, or {@link Builder} to

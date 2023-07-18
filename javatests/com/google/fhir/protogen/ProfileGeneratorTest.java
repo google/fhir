@@ -23,7 +23,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
-import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.CodeableConceptSlice;
 import com.google.fhir.proto.CodeableConceptSlice.CodingSlice;
 import com.google.fhir.proto.ElementData;
@@ -67,7 +66,6 @@ import org.junit.runners.JUnit4;
 public final class ProfileGeneratorTest {
   private final JsonFormat.Printer jsonPrinter = JsonFormat.getPrinter();
 
-  private static final String STU3_TESTDATA_DIR = "testdata/stu3/profiles/";
   private static final String R4_TESTDATA_DIR = "testdata/r4/profiles/";
 
   // TODO(b/244184211): consolidate these proto loading functions across test files.
@@ -100,12 +98,12 @@ public final class ProfileGeneratorTest {
     return projectInfo.build();
   }
 
-  private static StructureDefinition loadStructureDefinition(
-      String fullFilename, FhirVersion version) throws IOException, InvalidFhirException {
+  private static StructureDefinition loadStructureDefinition(String fullFilename)
+      throws IOException, InvalidFhirException {
     String structDefString =
         Files.asCharSource(new File(fullFilename), StandardCharsets.UTF_8).read();
     StructureDefinition.Builder structDefBuilder = StructureDefinition.newBuilder();
-    JsonFormat.getSpecParser(version).merge(structDefString, structDefBuilder);
+    JsonFormat.getParser().merge(structDefString, structDefBuilder);
     return structDefBuilder.build();
   }
 
@@ -113,16 +111,9 @@ public final class ProfileGeneratorTest {
     return Files.asCharSource(new File(filename), StandardCharsets.UTF_8).read();
   }
 
-  private static StructureDefinition loadStu3FhirStructureDefinition(String filename)
-      throws IOException, InvalidFhirException {
-    return loadStructureDefinition(
-        "spec/hl7.fhir.core/3.0.1/package/" + filename, FhirVersion.STU3);
-  }
-
   private static StructureDefinition loadR4FhirStructureDefinition(String filename)
       throws IOException, InvalidFhirException {
-    return loadStructureDefinition(
-        "spec/hl7.fhir.core/4.0.1/package/" + filename, FhirVersion.R4);
+    return loadStructureDefinition("spec/hl7.fhir.core/4.0.1/package/" + filename);
   }
 
   private static final Pattern DATE_PATTERN =
@@ -139,56 +130,6 @@ public final class ProfileGeneratorTest {
         Integer.parseInt(matcher.group(1)),
         Integer.parseInt(matcher.group(2)),
         Integer.parseInt(matcher.group(3)));
-  }
-
-  private static ProfileGenerator makeStu3Generator(String goldenJson) throws Exception {
-    List<StructureDefinition> knownTypes = new ArrayList<>();
-    knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Coding.json"));
-    knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-CodeableConcept.json"));
-    knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Element.json"));
-    knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Extension.json"));
-    knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Observation.json"));
-    knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Patient.json"));
-    knownTypes.add(loadStu3FhirStructureDefinition("StructureDefinition-Bundle.json"));
-
-    LocalDate creationDate = getCreationDate(goldenJson);
-
-    return new ProfileGenerator(
-        loadPackageInfoProto(STU3_TESTDATA_DIR + "test_package_info.prototxt"),
-        knownTypes,
-        creationDate);
-  }
-
-  @Test
-  public void testGenerateExtensionsStu3() throws Exception {
-    String goldenDefinition = loadGoldenJson(STU3_TESTDATA_DIR + "test_extensions.json").trim();
-    Bundle extensions =
-        makeStu3Generator(goldenDefinition)
-            .generateExtensions(
-                loadExtensionsProto(STU3_TESTDATA_DIR + "test_extensions.prototxt"));
-    String output = jsonPrinter.print(extensions).trim();
-    assertThat(output).isEqualTo(goldenDefinition);
-  }
-
-  @Test
-  public void testGenerateProfilesStu3() throws Exception {
-    String goldenDefinition = loadGoldenJson(STU3_TESTDATA_DIR + "test.json").trim();
-    Bundle profiles =
-        makeStu3Generator(goldenDefinition)
-            .generateProfiles(loadProfilesProto(STU3_TESTDATA_DIR + "test_profiles.prototxt"));
-    String output = jsonPrinter.print(profiles).trim();
-    assertThat(output).isEqualTo(goldenDefinition);
-  }
-
-  @Test
-  public void testGenerateTerminologiesStu3() throws Exception {
-    String goldenDefinition = loadGoldenJson(STU3_TESTDATA_DIR + "test_terminologies.json").trim();
-    Bundle terminologies =
-        makeStu3Generator(goldenDefinition)
-            .generateTerminologies(
-                loadTerminologiesProto(STU3_TESTDATA_DIR + "test_terminologies.prototxt"));
-    String output = jsonPrinter.print(terminologies).trim();
-    assertThat(output).isEqualTo(goldenDefinition);
   }
 
   private static ProfileGenerator makeR4Generator(String goldenJson) throws Exception {

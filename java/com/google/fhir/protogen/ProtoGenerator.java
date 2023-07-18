@@ -58,7 +58,6 @@ import com.google.fhir.r4.core.SlicingRulesCode;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
-import com.google.fhir.stu3.proto.CodingWithFixedSystem;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
@@ -224,7 +223,7 @@ public class ProtoGenerator {
 
   // The package to write new protos to.
   private final PackageInfo packageInfo;
-  // The fhir version to use (e.g., STU3, R4).
+  // The fhir version to use (e.g., R4, R5).
   // This determines which core dependencies (e.g., datatypes.proto) to use.
   private final FhirVersion fhirVersion;
 
@@ -300,7 +299,7 @@ public class ProtoGenerator {
         inlineType = qualifiedType.type;
         structDefPackage = qualifiedType.packageName;
       } else {
-        inlineType = getTypeName(def);
+        inlineType = GeneratorUtils.getTypeName(def);
         structDefPackage = protoPackage;
       }
 
@@ -319,11 +318,6 @@ public class ProtoGenerator {
                 def -> def.getDerivation().getValue() != TypeDerivationRuleCode.Value.CONSTRAINT)
             .filter(def -> knownUrls.add(def.getUrl().getValue()))
             .collect(toImmutableMap(def -> def.getId().getValue(), def -> def));
-  }
-
-  // Given a structure definition, gets the name of the top-level message that will be generated.
-  private String getTypeName(StructureDefinition def) {
-    return GeneratorUtils.getTypeName(def, packageInfo.getFhirVersion());
   }
 
   private StructureDefinitionData getDefinitionDataByUrl(String url) {
@@ -425,7 +419,7 @@ public class ProtoGenerator {
       generateMessage(allElements.get(0), builder);
 
       if (isProfile(structureDefinition)) {
-        String name = getTypeName(structureDefinition);
+        String name = GeneratorUtils.getTypeName(structureDefinition);
         // This is a profile on a pre-existing type.
         // Make sure any nested subtypes use the profile name, not the base name
         replaceType(builder, structureDefinition.getType().getValue(), name);
@@ -993,7 +987,7 @@ public class ProtoGenerator {
             }
             return Optional.of(new QualifiedType(containerName, packageInfo.getProtoPackage()));
           }
-          if (!useLegacyTypeNaming() && typeName.equals("Coding")) {
+          if (typeName.equals("Coding")) {
             return Optional.of(
                 new QualifiedType(containerName + "Coding", packageInfo.getProtoPackage()));
           }
@@ -1102,29 +1096,8 @@ public class ProtoGenerator {
         } else {
           // For codings with fixed systems, we should inline a custom Coding type that incorporates
           // this information, e.g., inlining a strongly-typed Code enum.
-          // For legacy reasons, we're only doing this for R4.
-          // TODO(b/244184211): Do this for all versions before 1.0 release.
-          if (packageInfo.getFhirVersion() == Annotations.FhirVersion.R4) {
-            addCodingFieldWithFixedSystem(
-                codeableConceptBuilder, qualifiedType, codingSlice, fixedSystem);
-          } else {
-            // Legacy "CodingWithFixedSystem"
-            FieldDescriptorProto.Builder codingField =
-                codeableConceptBuilder
-                    .addFieldBuilder()
-                    .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-                    .setTypeName(CodingWithFixedSystem.getDescriptor().getFullName())
-                    .setName(toFieldNameCase(codingSlice.getSliceName().getValue()))
-                    .setLabel(getFieldSize(codingSlice))
-                    .setNumber(codeableConceptBuilder.getFieldCount());
-            if (!snakeCaseToJsonCase(codingField.getName())
-                .equals(codingSlice.getSliceName().getValue())) {
-              codingField.setJsonName(codingSlice.getSliceName().getValue());
-            }
-            codingField
-                .getOptionsBuilder()
-                .setExtension(Annotations.fhirInlinedCodingSystem, fixedSystem);
-          }
+          addCodingFieldWithFixedSystem(
+              codeableConceptBuilder, qualifiedType, codingSlice, fixedSystem);
         }
       }
 
@@ -1215,10 +1188,6 @@ public class ProtoGenerator {
 
     private Optional<DescriptorProto> makeProfiledCodingIfRequired(ElementDefinition element)
         throws InvalidFhirException {
-      // Coding profiles don't exist in legacy type naming.
-      if (useLegacyTypeNaming()) {
-        return Optional.empty();
-      }
       // Note that in the case of sub extensions, the element will be an extension, but the field
       // we're using to generate the type will be the "value" field on that extension.
       // In all other cases, the value element is the same as the element passed in.
@@ -1461,8 +1430,7 @@ public class ProtoGenerator {
       if (isSimpleExtension(element)) {
         return getBindingValueSetUrl(getExtensionValueElement(element));
       }
-      if (!useLegacyTypeNaming()
-          && element.getBinding().getStrength().getValue() != BindingStrengthCode.Value.REQUIRED) {
+      if (element.getBinding().getStrength().getValue() != BindingStrengthCode.Value.REQUIRED) {
         return Optional.empty();
       }
       String url = GeneratorUtils.getCanonicalUri(element.getBinding().getValueSet());
@@ -1862,7 +1830,7 @@ public class ProtoGenerator {
     if (!packageInfo.getGoProtoPackage().isEmpty()) {
       options.setGoPackage(packageInfo.getGoProtoPackage());
     }
-    options.setExtension(Annotations.fhirVersion, fhirVersion.toAnnotation());
+    options.setExtension(Annotations.fhirVersion, FhirVersion.R4.toAnnotation());
     builder.setOptions(options);
     for (StructureDefinition def : defs) {
       validateDefinition(def);
@@ -2253,14 +2221,6 @@ public class ProtoGenerator {
     return Optional.empty();
   }
 
-  private boolean useLegacyTypeNaming() {
-    return useLegacyTypeNaming(packageInfo.getFhirVersion());
-  }
-
-  private static boolean useLegacyTypeNaming(Annotations.FhirVersion version) {
-    return version == Annotations.FhirVersion.DSTU2 || version == Annotations.FhirVersion.STU3;
-  }
-
   private void addReferenceType(FieldOptions.Builder options, String referenceUrl) {
     options.addExtension(
         Annotations.validReferenceType, getBaseStructureDefinitionData(referenceUrl).inlineType);
@@ -2409,12 +2369,13 @@ public class ProtoGenerator {
     // the "current" package (i.e., the package used in the constructor).  So, in the case where
     // getQualifiedFieldType returns a non-core package, replace it with the package this structure
     // definition belongs in.
-    if (!valueType.packageName.equals(fhirVersion.coreProtoPackage)) {
+    if (!valueType.packageName.equals(FhirVersion.R4.coreProtoPackage)) {
       valueType = new QualifiedType(valueType.type, protoPackage);
     }
 
     return new QualifiedType(
-        valueType.type.replaceFirst("Extension", getTypeName(def)), valueType.packageName);
+        valueType.type.replaceFirst("Extension", GeneratorUtils.getTypeName(def)),
+        valueType.packageName);
   }
 
   // TODO(b/139489684): consider supporting more types of slicing.
@@ -2428,12 +2389,7 @@ public class ProtoGenerator {
     if (info.getContainedResourceBehavior() != ContainedResourceBehavior.DEFAULT) {
       return info.getContainedResourceBehavior();
     }
-    switch (info.getFhirVersion()) {
-      case STU3:
-        return ContainedResourceBehavior.TYPED_CONTAINED_RESOURCE;
-      default:
-        return ContainedResourceBehavior.ANY;
-    }
+    return ContainedResourceBehavior.ANY;
   }
 
   private static final boolean PRINT_SNAPSHOT_DISCREPANCIES = false;

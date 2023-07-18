@@ -133,7 +133,7 @@ public class FhirPackage {
    *     Expected to end with ".zip" "tar.gz" or ".tgz".
    */
   public static FhirPackage load(String archiveFilePath) throws IOException, InvalidFhirException {
-    return load(archiveFilePath, /*packageInfo=*/ null);
+    return load(archiveFilePath, /* packageInfo= */ null);
   }
 
   /**
@@ -339,11 +339,7 @@ public class FhirPackage {
       }
     }
 
-    // TODO(b/239826351): Make Fhir Parser injectable.
-    JsonFormat.Parser parser =
-        packageInfo == null
-            ? JsonFormat.getParser()
-            : JsonFormat.getSpecParser(packageInfo.getFhirVersion());
+    JsonFormat.Parser parser = JsonFormat.getParser();
 
     ResourceCollections resourceCollections = new ResourceCollections();
     resourceCollections.structureDefinitions =

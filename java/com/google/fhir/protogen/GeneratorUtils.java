@@ -22,7 +22,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.fhir.common.InvalidFhirException;
-import com.google.fhir.proto.Annotations;
 import com.google.fhir.r4.core.Canonical;
 import com.google.fhir.r4.core.DateTime;
 import com.google.fhir.r4.core.ElementDefinition;
@@ -282,7 +281,7 @@ final class GeneratorUtils {
           .build();
 
   // Given a structure definition, gets the name of the top-level message that will be generated.
-  static String getTypeName(StructureDefinition def, Annotations.FhirVersion version) {
+  static String getTypeName(StructureDefinition def) {
     if (STRUCTURE_DEFINITION_RENAMINGS.containsKey(def.getUrl().getValue())) {
       return STRUCTURE_DEFINITION_RENAMINGS.get(def.getUrl().getValue());
     }

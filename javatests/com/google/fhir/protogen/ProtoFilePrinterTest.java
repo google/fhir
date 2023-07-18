@@ -208,7 +208,7 @@ public final class ProtoFilePrinterTest {
   @Before
   public void setUp() throws IOException, InvalidFhirException {
     String packageName = "google.fhir.r4.proto";
-    jsonParser = JsonFormat.getSpecParser(Annotations.FhirVersion.R4);
+    jsonParser = JsonFormat.getParser();
     runfiles = Runfiles.create();
     PackageInfo packageInfo =
         PackageInfo.newBuilder()

@@ -14,7 +14,6 @@
 
 """Rules for generating Protos from FHIR definitions"""
 
-STU3_PACKAGE_DEP = "@com_google_fhir//spec:fhir_stu3"
 R4_PACKAGE_DEP = "@com_google_fhir//spec:fhir_r4"
 PROTO_GENERATOR = "@com_google_fhir//java/com/google/fhir/protogen:ProtoGenerator"
 PROFILE_GENERATOR = "@com_google_fhir//java/com/google/fhir/protogen:ProfileGenerator"
@@ -103,7 +102,6 @@ def gen_fhir_protos(
     flags = [
         "--output_directory $(@D)",
         "--output_name " + name,
-        "--stu3_core_dep $(location %s)" % _get_zip_for_pkg(STU3_PACKAGE_DEP),
         "--r4_core_dep $(location %s)" % _get_zip_for_pkg(R4_PACKAGE_DEP),
         "--input_package $(location %s)" % _get_zip_for_pkg(package),
     ]
@@ -122,7 +120,6 @@ def gen_fhir_protos(
 
     all_fhir_pkgs = package_deps + [
         package,
-        STU3_PACKAGE_DEP,
         R4_PACKAGE_DEP,
     ]
     src_pkgs = [_get_zip_for_pkg(pkg) for pkg in all_fhir_pkgs]
@@ -221,7 +218,6 @@ def gen_fhir_definitions_and_protos(
 
     fhir_definition_srcs = ([
                                 package_info,
-                                _get_zip_for_pkg(STU3_PACKAGE_DEP),
                                 _get_zip_for_pkg(R4_PACKAGE_DEP),
                             ] +
                             profiles +
@@ -247,13 +243,11 @@ def gen_fhir_definitions_and_protos(
                 --output_directory $(@D) \
                 --name %s \
                 --package_info $(location %s) \
-                --stu3_struct_def_zip $(location %s) \
                 --r4_struct_def_zip $(location %s) \
                 %s %s %s %s""" % (
             PROFILE_GENERATOR,
             name,
             package_info,
-            _get_zip_for_pkg(STU3_PACKAGE_DEP),
             _get_zip_for_pkg(R4_PACKAGE_DEP),
             struct_def_dep_zip_flags,
             profile_flags,
