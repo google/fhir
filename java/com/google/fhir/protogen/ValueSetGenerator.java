@@ -162,7 +162,7 @@ public class ValueSetGenerator {
   private FileDescriptorProto generateCodeSystemFile(Collection<CodeSystem> codeSystemsToGenerate) {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
     builder.setPackage(packageInfo.getProtoPackage()).setSyntax("proto3");
-    builder.addDependency(new File(FhirVersion.ANNOTATION_PATH, "annotations.proto").toString());
+    builder.addDependency(new File(GeneratorUtils.ANNOTATION_PATH, "annotations.proto").toString());
     FileOptions.Builder options = FileOptions.newBuilder();
     if (!packageInfo.getJavaProtoPackage().isEmpty()) {
       options.setJavaPackage(packageInfo.getJavaProtoPackage()).setJavaMultipleFiles(true);
@@ -190,7 +190,7 @@ public class ValueSetGenerator {
   private FileDescriptorProto generateValueSetFile(Collection<ValueSet> valueSetsToGenerate) {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
     builder.setPackage(packageInfo.getProtoPackage()).setSyntax("proto3");
-    builder.addDependency(new File(FhirVersion.ANNOTATION_PATH, "annotations.proto").toString());
+    builder.addDependency(new File(GeneratorUtils.ANNOTATION_PATH, "annotations.proto").toString());
     FileOptions.Builder options = FileOptions.newBuilder();
     if (!packageInfo.getJavaProtoPackage().isEmpty()) {
       options.setJavaPackage(packageInfo.getJavaProtoPackage()).setJavaMultipleFiles(true);

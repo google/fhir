@@ -1840,7 +1840,7 @@ public class ProtoGenerator {
     }
     // Add imports. Annotations is always needed.
     NavigableSet<String> dependencies = new TreeSet<>();
-    dependencies.add(new File(FhirVersion.ANNOTATION_PATH, "annotations.proto").toString());
+    dependencies.add(new File(GeneratorUtils.ANNOTATION_PATH, "annotations.proto").toString());
     // Add the remaining FHIR dependencies if the file uses a type from the FHIR dep, but does not
     // define a type from that dep.
     for (Map.Entry<String, Set<String>> entry : coreTypeDefinitionsByFile.entrySet()) {
