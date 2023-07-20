@@ -1,0 +1,32 @@
+id { value: "test" }
+
+category {
+  coding {
+    system { value: "http://snomed.info/sct" }
+    code { value: "371527006" }
+    display { value: "Radiology report" }
+  }
+  coding {
+    system { value: "http://terminology.hl7.org/CodeSystem/v2-0074" }
+    code { value: "RAD" }
+    display { value: "Radiology" }
+  }
+}
+
+code { }
+
+subject {
+  patient_id { value: "12345" }
+}
+
+status { value: FINAL }
+
+effective {
+  period { }
+}
+
+issued {
+  value_us: 5515679100000000  # "2144-10-13T21:05:00+00:00"
+  timezone: "UTC"
+  precision: SECOND
+}
