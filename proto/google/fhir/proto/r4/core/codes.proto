@@ -4953,8 +4953,14 @@ message V3RoleCode {
     BILL = 54 [(.google.fhir.proto.fhir_original_code) = "BILL"];
     ORG = 55 [(.google.fhir.proto.fhir_original_code) = "ORG"];
     PAYOR = 56 [(.google.fhir.proto.fhir_original_code) = "PAYOR"];
-    ECON = 57 [(.google.fhir.proto.fhir_original_code) = "ECON"];
-    NOK = 58 [(.google.fhir.proto.fhir_original_code) = "NOK"];
+    ECON = 57 [
+      (.google.fhir.proto.deprecated_code) = true,
+      (.google.fhir.proto.fhir_original_code) = "ECON"
+    ];
+    NOK = 58 [
+      (.google.fhir.proto.deprecated_code) = true,
+      (.google.fhir.proto.fhir_original_code) = "NOK"
+    ];
     IDENTIFIED_ENTITY_TYPE = 59
         [(.google.fhir.proto.fhir_original_code) = "_IdentifiedEntityType"];
     LOCATION_IDENTIFIED_ENTITY_ROLE_CODE = 60
