@@ -110,7 +110,6 @@ import "proto/google/fhir/proto/r4/core/resources/medicinal_product_pharmaceutic
 import "proto/google/fhir/proto/r4/core/resources/medicinal_product_undesirable_effect.proto";
 import "proto/google/fhir/proto/r4/core/resources/message_definition.proto";
 import "proto/google/fhir/proto/r4/core/resources/message_header.proto";
-import "proto/google/fhir/proto/r4/core/resources/metadata_resource.proto";
 import "proto/google/fhir/proto/r4/core/resources/molecular_sequence.proto";
 import "proto/google/fhir/proto/r4/core/resources/naming_system.proto";
 import "proto/google/fhir/proto/r4/core/resources/nutrition_order.proto";
