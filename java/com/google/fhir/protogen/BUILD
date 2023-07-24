@@ -84,7 +84,9 @@ java_library(
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:value_set_java_proto",
         "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_beust_jcommander",
         "@maven//:com_google_code_gson_gson",
+        "@maven//:com_google_errorprone_error_prone_annotations",
         "@maven//:com_google_guava_guava",
         "@maven//:org_apache_commons_commons_compress",
     ],
@@ -129,6 +131,12 @@ java_binary(
         "@maven//:com_beust_jcommander",
         "@maven//:com_google_guava_guava",
     ],
+)
+
+java_binary(
+    name = "ProtoGeneratorV2",
+    main_class = "com.google.fhir.protogen.ProtoGeneratorMainV2",
+    runtime_deps = [":proto_generator_binary_lib"],
 )
 
 java_library(

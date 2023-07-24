@@ -14,7 +14,6 @@
 
 package com.google.fhir.protogen;
 
-
 import com.google.common.base.Ascii;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
@@ -28,6 +27,7 @@ import com.google.common.escape.Escaper;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
+import com.google.fhir.proto.ProtogenConfig;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumOptions;
@@ -40,9 +40,7 @@ import com.google.protobuf.DescriptorProtos.FileOptions;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Comparator;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +73,8 @@ public class ProtoFilePrinter {
   // The proto package that contains the annotation definitions for proto options.
   static final String ANNOTATION_PACKAGE = "google.fhir.proto";
 
-  private final PackageInfo packageInfo;
+  private final PackageInfo.License license;
+  private final String licenseDate;
 
   private final Syntax syntax;
 
@@ -110,19 +109,23 @@ public class ProtoFilePrinter {
 
   /** Creates a ProtoFilePrinter with default parameters. */
   public ProtoFilePrinter(PackageInfo packageInfo, Syntax syntax) {
-    this.packageInfo = packageInfo;
+    license = packageInfo.getLicense();
+    licenseDate = packageInfo.getLicenseDate();
     this.syntax = syntax;
+  }
+
+  /** Creates a ProtoFilePrinter with default parameters. */
+  public ProtoFilePrinter(ProtogenConfig protogenConfig) {
+    license = PackageInfo.License.APACHE;
+    licenseDate = protogenConfig.getLicenseDate();
+    this.syntax = Syntax.PROTO3;
   }
 
   /** Generate a .proto file corresponding to the provided FileDescriptorProto. */
   public String print(FileDescriptorProto fileDescriptor) {
     String fullyQualifiedPackageName = "." + fileDescriptor.getPackage();
     StringBuilder contents = new StringBuilder();
-    if (packageInfo.getLicense() == PackageInfo.License.APACHE) {
-      String licenseDate =
-          packageInfo.getLicenseDate().isEmpty()
-              ? ("" + new GregorianCalendar().get(Calendar.YEAR))
-              : packageInfo.getLicenseDate();
+    if (license == PackageInfo.License.APACHE) {
       contents.append(String.format(APACHE_LICENSE, licenseDate)).append("\n");
     }
     contents.append(printHeader(fileDescriptor)).append("\n");
@@ -266,7 +269,7 @@ public class ProtoFilePrinter {
                 descriptor, field, typePrefix, packageName, printedNestedTypeDefinitions));
         message.append(
             printField(
-                fieldBuilder.build(), fullName, fieldIndent, packageName, /*inOneof=*/ false));
+                fieldBuilder.build(), fullName, fieldIndent, packageName, /* inOneof= */ false));
         if (i != descriptor.getFieldCount() - 1) {
           message.append("\n");
         }
@@ -284,7 +287,8 @@ public class ProtoFilePrinter {
       // Loop over the elements.
       for (FieldDescriptorProto field : descriptor.getFieldList()) {
         if (field.getOneofIndex() == oneofIndex) {
-          message.append(printField(field, fullName, oneofIndent, packageName, /*inOneof=*/ true));
+          message.append(
+              printField(field, fullName, oneofIndent, packageName, /* inOneof= */ true));
         }
       }
       message.append(fieldIndent).append("}\n");
