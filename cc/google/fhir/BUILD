@@ -123,7 +123,6 @@ cc_library(
     deps = [
         ":annotations",
         ":codes",
-        ":core_resource_registry",
         ":error_reporter",
         ":extensions",
         ":fhir_types",

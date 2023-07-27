@@ -24,7 +24,6 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/synchronization/mutex.h"
-#include "google/fhir/core_resource_registry.h"
 #include "google/fhir/profiled_extensions.h"
 
 namespace google {
@@ -136,13 +135,24 @@ absl::StatusOr<const FieldDescriptor*> FindTargetField(
   }
   // If the source and target are contained resources, and the fields don't
   // match up, it can be a profile that exists in one but not the other.
-  // In this case, use the base resource type if available, otherwise fail.
+  // In this case, iterate over the target fields looking for a compatible type.
   if (IsContainedResource(*target) && IsContainedResource(source)) {
-    FHIR_ASSIGN_OR_RETURN(
-        const Descriptor* source_base_type,
-        GetBaseResourceDescriptor(source_field->message_type()));
-    const std::string base_field_name = ToSnakeCase(source_base_type->name());
-    return target_descriptor->FindFieldByName(base_field_name);
+    absl::flat_hash_set<std::string> base_types;
+    for (int i = 0; i < source_field->message_type()->options().ExtensionSize(
+                            proto::fhir_profile_base);
+         ++i) {
+      const std::string& base_type =
+          source_field->message_type()->options().GetExtension(
+              proto::fhir_profile_base, i);
+      base_types.insert(base_type);
+    }
+    for (int i = 0; i < target->GetDescriptor()->field_count(); ++i) {
+      if (base_types.find(GetStructureDefinitionUrl(
+              target->GetDescriptor()->field(i)->message_type())) !=
+          base_types.end()) {
+        return target->GetDescriptor()->field(i);
+      }
+    }
   }
   return nullptr;
 }
