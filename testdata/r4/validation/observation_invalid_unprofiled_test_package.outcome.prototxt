@@ -9,7 +9,7 @@ issue {
     value: "Invalid input for google.fhir.r4.core.Decimal"
   }
   expression {
-    value: "Observation.meta.extension[0].value.decimal"
+    value: "Observation.meta.extension[0].value.ofType(Decimal)"
   }
 }
 
@@ -24,6 +24,6 @@ issue {
     value: "Input failed regex requirement for: google.fhir.r4.core.Code"
   }
   expression {
-    value: "Observation.meta.extension[2].value.codeableConcept.coding[0].code"
+    value: "Observation.meta.extension[2].value.ofType(CodeableConcept).coding[0].code"
   }
 }

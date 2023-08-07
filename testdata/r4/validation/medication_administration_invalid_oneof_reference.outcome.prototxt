@@ -9,7 +9,7 @@ issue {
     value: "google.fhir.r4.core.DateTime is missing TimeZone."
   }
   expression {
-    value: "MedicationAdministration.effective.period.start"
+    value: "MedicationAdministration.effective.ofType(Period).start"
   }
 }
 
@@ -24,6 +24,6 @@ issue{
     value: "Input failed regex requirement for: google.fhir.r4.core.Id"
   }
   expression {
-    value: "MedicationAdministration.medication.reference.medicationId.value"
+    value: "MedicationAdministration.medication.ofType(Reference).medicationId.value"
   }
 }

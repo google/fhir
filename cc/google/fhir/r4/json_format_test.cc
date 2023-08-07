@@ -208,6 +208,7 @@ using ::google::fhir::testutil::EqualsProto;
 using ::google::fhir::testutil::IgnoringRepeatedFieldOrdering;
 using internal::JsonEq;
 using ::testing::Eq;
+using ::testing::UnorderedPointwise;
 
 static const char* const kTimeZoneString = "Australia/Sydney";
 
@@ -1836,12 +1837,13 @@ TEST(JsonFormatR4Test, ParserErrorHandlerAggregatesErrorsAndFatalsParseFails) {
       raw_json, &resource, absl::LocalTimeZone(), true, handler);
 
   OperationOutcome expected_outcome;
+  OperationOutcomeErrorHandler expected_outcome_handler(&expected_outcome);
 
   AddFatal(expected_outcome, "No field `squibalop` in CodeableConcept",
            "Observation.category[1]");
   AddFatal(expected_outcome,
            "Unparseable JSON string for google.fhir.r4.core.DateTime",
-           "Observation.dateTime");
+           "Observation.ofType(DateTime)");
   AddFatal(expected_outcome,
            "Failed to convert `finol` to "
            "google.fhir.r4.core.ObservationStatusCode.Value: No matching enum "
@@ -1864,8 +1866,10 @@ TEST(JsonFormatR4Test, ParserErrorHandlerAggregatesErrorsAndFatalsParseFails) {
   FHIR_ASSERT_STATUS(
       merge_status,
       "Merge failure when parsing JSON.  See ErrorHandler for more info.");
-  EXPECT_THAT(outcome,
-              IgnoringRepeatedFieldOrdering(EqualsProto(expected_outcome)));
+  EXPECT_THAT(
+      handler.GetErrorsAndFatals(),
+      UnorderedPointwise(EqualsProto(),
+                         expected_outcome_handler.GetErrorsAndFatals()));
 }
 
 TEST(JsonFormatR4Test,

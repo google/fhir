@@ -9,7 +9,7 @@ issue {
     value: "Failed to convert `invalid` to google.fhir.r4.core.Extension.ValueX.code: `invalid` is not one of the accepted codes in the bound value set: `http://hl7.org/fhir/us/core/ValueSet/birthsex`."
   }
   expression {
-    value: "Patient.extension[0].value.code"
+    value: "Patient.extension[0].value.ofType(Code)"
   }
 }
 issue {
@@ -23,6 +23,6 @@ issue {
     value: "Failed to convert `invalid` to google.fhir.r4.core.Extension.ValueX.code: `invalid` is not one of the accepted codes in the bound value set: `https://g.co/fhir/harmonized/ValueSet/SoftDelete`."
   }
   expression {
-    value: "Patient.extension[2].value.code"
+    value: "Patient.extension[2].value.ofType(Code)"
   }
 }

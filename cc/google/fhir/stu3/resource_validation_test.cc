@@ -46,7 +46,7 @@ T ParseFromString(const std::string& str) {
 }
 
 Observation ValidObservation() {
-  return ParseFromString<Observation>(R"proto(
+  return ParseFromString<Observation>(R"pb(
     status { value: FINAL }
     code {
       coding {
@@ -55,21 +55,21 @@ Observation ValidObservation() {
       }
     }
     id { value: "123" }
-  )proto");
+  )pb");
 }
 
 CodeableConcept ValidCodeableConcept() {
-  return ParseFromString<CodeableConcept>(R"proto(coding {
-                                                    system { value: "foo" }
-                                                    code { value: "bar" }
-                                                  })proto");
+  return ParseFromString<CodeableConcept>(R"pb(coding {
+                                                 system { value: "foo" }
+                                                 code { value: "bar" }
+                                               })pb");
 }
 
 Encounter ValidEncounter() {
-  return ParseFromString<Encounter>(R"proto(
+  return ParseFromString<Encounter>(R"pb(
     status { value: TRIAGED }
     id { value: "123" }
-  )proto");
+  )pb");
 }
 
 template <typename T>
@@ -109,18 +109,19 @@ TEST(ResourceValidationTest, InvalidPrimitiveField) {
   Observation observation = ValidObservation();
   observation.mutable_value()->mutable_quantity()->mutable_value()->set_value(
       "1.2.3");
-  InvalidTest("invalid-primitive",
-              R"pb(
-                issue {
-                  severity { value: ERROR }
-                  code { value: VALUE }
-                  diagnostics {
-                    value: "Invalid input for google.fhir.stu3.proto.Decimal"
-                  }
-                  expression { value: "Observation.value.quantity.value" }
-                }
-              )pb",
-              observation);
+  InvalidTest(
+      "invalid-primitive",
+      R"pb(
+        issue {
+          severity { value: ERROR }
+          code { value: VALUE }
+          diagnostics {
+            value: "Invalid input for google.fhir.stu3.proto.Decimal"
+          }
+          expression { value: "Observation.value.ofType(Quantity).value" }
+        }
+      )pb",
+      observation);
 }
 
 TEST(ResourceValidationTest, ValidReference) {
@@ -198,11 +199,12 @@ TEST(BundleValidationTest, Valid) {
   google::protobuf::TextFormat::Parser parser;
   parser.AllowPartialMessage(true);
   Bundle bundle;
-  ASSERT_TRUE(parser.ParseFromString(R"proto(
-    type { value: COLLECTION }
-    id { value: "123" }
-    entry { resource { patient {} } }
-  )proto", &bundle));
+  ASSERT_TRUE(parser.ParseFromString(R"pb(
+                                       type { value: COLLECTION }
+                                       id { value: "123" }
+                                       entry { resource { patient {} } }
+                                     )pb",
+                                     &bundle));
 
   ValidTest(bundle);
 }
@@ -211,23 +213,25 @@ TEST(EncounterValidationTest, Valid) {
   google::protobuf::TextFormat::Parser parser;
   parser.AllowPartialMessage(true);
   Encounter encounter;
-  ASSERT_TRUE(parser.ParseFromString(R"proto(
-    id { value: "123" }
-    status { value: FINISHED }
-    subject { patient_id { value: "4" } }
-    period {
-      start {
-        value_us: 5515679100000000  # "2144-10-13T21:05:00+00:00"
-        timezone: "UTC"
-        precision: SECOND
-      }
-      end {
-        value_us: 5515680100000000  # "2144-10-13T21:21:40+00:00"
-        timezone: "UTC"
-        precision: SECOND
-      }
-    }
-  )proto", &encounter));
+  ASSERT_TRUE(parser.ParseFromString(
+      R"pb(
+        id { value: "123" }
+        status { value: FINISHED }
+        subject { patient_id { value: "4" } }
+        period {
+          start {
+            value_us: 5515679100000000  # "2144-10-13T21:05:00+00:00"
+            timezone: "UTC"
+            precision: SECOND
+          }
+          end {
+            value_us: 5515680100000000  # "2144-10-13T21:21:40+00:00"
+            timezone: "UTC"
+            precision: SECOND
+          }
+        }
+      )pb",
+      &encounter));
 
   ValidTest(encounter);
 }

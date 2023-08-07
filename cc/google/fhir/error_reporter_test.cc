@@ -25,6 +25,8 @@
 #include "absl/status/status.h"
 #include "absl/strings/string_view.h"
 #include "google/fhir/status/status.h"
+#include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
 
 namespace google::fhir {
@@ -206,6 +208,32 @@ TEST(ScopedErrorReporterTest, ScopesCreatedThroughFieldsSucceed) {
   EXPECT_THAT(
       handler.reports_,
       ElementsAre("msg:error:Patient.contact[2].name:Patient.contact.name"));
+}
+
+TEST(ScopedErrorReporterTest,
+     ScopesCreatedThroughFieldsWithChoiceTypeSucceeds) {
+  TestErrorHandler handler;
+  ScopedErrorReporter foo_scope(&handler, "Observation");
+
+  auto observation_descriptor = r4::core::Observation::descriptor();
+
+  auto value_field = observation_descriptor->FindFieldByName("value");
+  ScopedErrorReporter value_choice_field_scope =
+      foo_scope.WithScope(value_field);
+
+  auto period_field =
+      r4::core::Observation::ValueX::descriptor()->FindFieldByName("period");
+  ScopedErrorReporter period_choice_field_scope =
+      value_choice_field_scope.WithScope(period_field);
+
+  auto start_field = r4::core::Period::descriptor()->FindFieldByName("start");
+
+  FHIR_ASSERT_OK(
+      period_choice_field_scope.WithScope(start_field).ReportFhirError("msg"));
+
+  EXPECT_THAT(handler.reports_,
+              ElementsAre("msg:error:Observation.value.ofType(Period).start:"
+                          "Observation.value.ofType(Period).start"));
 }
 
 TEST(FailFastErrorHandlerTest, ReturnsCorrectMsgOnFHIRFatal) {

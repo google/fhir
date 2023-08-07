@@ -231,6 +231,9 @@ class ScopedErrorReporter final {
 
   // Create a new ScopedErrorReporter which represents nesting the given scope
   // into the ScopedErrorReporter on which WithScope was called.
+  // NOTE: If a field descriptor is available, users should use the version of
+  // this function that takes a FieldDescriptor. Because this version of
+  // WithScope does not produce correct FHIR path when given a Choice type.
   const ScopedErrorReporter WithScope(
       absl::string_view scope, std::optional<uint> index = std::nullopt) const;
 

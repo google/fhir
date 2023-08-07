@@ -20,12 +20,20 @@
 #include <string>
 #include <string_view>
 
-#include "glog/logging.h"
+#include "google/protobuf/descriptor.pb.h"
 #include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
+#include "proto/google/fhir/proto/annotations.pb.h"
 
 namespace google::fhir {
+
+namespace {
+bool IsChoiceType(const google::protobuf::FieldDescriptor* field) {
+  return field->containing_type()->options().GetExtension(
+      google::fhir::proto::is_choice_type);
+}
+}  // namespace
 
 const ScopedErrorReporter ScopedErrorReporter::WithScope(
     absl::string_view scope, std::optional<uint> index) const {
@@ -35,6 +43,12 @@ const ScopedErrorReporter ScopedErrorReporter::WithScope(
 const ScopedErrorReporter ScopedErrorReporter::WithScope(
     const google::protobuf::FieldDescriptor* field,
     std::optional<std::uint8_t> index) const {
+  if (IsChoiceType(field)) {
+    std::string field_name =
+        absl::StrCat("ofType(", field->message_type()->name(), ")");
+    return WithScope(field_name, field->is_repeated() ? index : std::nullopt);
+  }
+
   return WithScope(field->json_name(),
                    field->is_repeated() ? index : std::nullopt);
 }

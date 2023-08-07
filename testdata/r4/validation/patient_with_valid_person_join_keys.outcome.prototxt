@@ -9,6 +9,6 @@ issue {
     value: "Input failed regex requirement for: google.fhir.r4.core.Id"
   }
   expression {
-    value: "Patient.extension[0].extension[0].value.reference.patientId.value"
+    value: "Patient.extension[0].extension[0].value.ofType(Reference).patientId.value"
   }
 }

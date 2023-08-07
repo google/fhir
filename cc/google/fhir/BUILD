@@ -493,7 +493,7 @@ cc_library(
     hdrs = ["error_reporter.h"],
     strip_include_prefix = "//cc/",
     deps = [
-        "@com_github_glog_glog//:glog",
+        "//proto/google/fhir/proto:annotations_cc_proto",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
         "@com_google_protobuf//:protobuf",
@@ -506,6 +506,8 @@ cc_test(
     deps = [
         ":error_reporter",
         "//cc/google/fhir/status",
+        "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:observation_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:patient_cc_proto",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/strings",
