@@ -1,0 +1,44 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Field size: `0` is lower than min size: `1`"
+  }
+  expression {
+    value: "Patient.identifier"
+  }
+}
+
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Field size: `0` is lower than min size: `1`"
+  }
+  expression {
+    value: "Patient.name"
+  }
+}
+
+issue{
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "missing-required-field"
+  }
+  expression {
+    value: "Patient.gender"
+  }
+}
