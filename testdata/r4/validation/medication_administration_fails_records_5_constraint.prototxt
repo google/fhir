@@ -1,0 +1,7 @@
+status { value: STOPPED }
+subject {
+    patient_id { value: "1234" }
+}
+effective {
+  period { }
+}

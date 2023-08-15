@@ -1,0 +1,42 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "medication.exists()"
+  }
+  expression {
+    value: "MedicationAdministration"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "(medication as Reference).reference.exists() or (medication as CodeableConcept).text.exists()"
+  }
+  expression {
+    value: "MedicationAdministration"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "missing-required-field"
+  }
+  expression {
+    value: "MedicationAdministration.medication"
+  }
+}
