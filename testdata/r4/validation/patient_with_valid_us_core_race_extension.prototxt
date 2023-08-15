@@ -1,0 +1,60 @@
+id {
+  value: "V-1"
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"
+  }
+  extension {
+    url {
+      value: "ombCategory"
+    }
+    value {
+      coding {
+        system {
+          value: "urn:oid:2.16.840.1.113883.6.238"
+        }
+        code {
+          value: "2106-3"
+        }
+      }
+    }
+  }
+  extension {
+    url {
+      value: "text"
+    }
+    value {
+      string_value {
+        value: "White"
+      }
+    }
+  }
+}
+identifier {
+  system {
+    value: "https://g.co/fhir/harmonized/observation/launch_context_identifier"
+  }
+  value {
+    value: "1001007"
+  }
+  assigner {
+    display {
+      value: "Patient CMRN"
+    }
+  }
+}
+active {
+  value: true
+}
+name {
+  family {
+    value: "Ailey"
+  }
+  given {
+    value: "Maeve"
+  }
+}
+gender {
+  value: UNKNOWN
+}
