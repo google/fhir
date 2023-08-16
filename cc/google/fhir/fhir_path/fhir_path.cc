@@ -17,6 +17,7 @@
 #include <algorithm>
 #include <any>
 #include <iterator>
+#include <memory>
 #include <type_traits>
 #include <utility>
 
@@ -538,7 +539,11 @@ class FunctionNode : public ExpressionNode {
 
     for (auto it = params.begin(); it != params.end(); ++it) {
       antlrcpp::Any param_any = (*it)->accept(visitor);
-      if (!AnyHasValue(param_any)) {
+      // Ensure param_any is an ExpressionNode and not, say, a nullptr, before
+      // attempting to cast it to an ExpressionNode below. AnyIs guards against
+      // nullptrs but AnyHasValue does not.
+      if (!AnyHasValue(param_any) ||
+          !AnyIs<std::shared_ptr<ExpressionNode>>(param_any)) {
         return InvalidArgumentError("Failed to compile parameter.");
       }
       compiled_params.push_back(
