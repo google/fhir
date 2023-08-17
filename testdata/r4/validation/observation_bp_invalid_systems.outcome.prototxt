@@ -1,0 +1,28 @@
+issue {
+  severity {
+  value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Constraint from slice Observation.code.coding:BPCode not met. The slice implies the following constraint: coding.where(system = 'http://loinc.org' and code = '85354-9').count() = 1"
+  }
+  expression {
+    value: "Observation.code.coding:BPCode"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Constraint from slice Observation.component:SystolicBP not met. The slice implies the following constraint: component.where(code.coding.system = 'http://loinc.org' and code.coding.code = '8480-6' and value.system = 'http://unitsofmeasure.org' and value.code = 'mm[Hg]').count() = 1"
+  }
+  expression {
+    value: "Observation.component:SystolicBP"
+  }
+}

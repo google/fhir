@@ -1,0 +1,59 @@
+id { value: "123" }
+status { value: FINAL }
+# wrong vital signs code
+category {
+  coding {
+    system { value: "http://terminology.hl7.org/CodeSystem/observation-category" }
+    code { value: "non-vital-signs" }
+  }
+}
+# wrong blood pressure code
+code {
+  coding {
+    system { value: "http://loinc.org" }
+    code { value: "blood-no-pressure" }
+  }
+}
+# wrong systolic code
+component {
+  code {
+    coding {
+      system { value: "http://loinc.org" }
+      code { value: "wrong-code" }
+    }
+  }
+  value {
+    quantity {
+      system { value: "http://unitsofmeasure.org" }
+      code { value: "mm[Hg]" }
+      value { value: "100" }
+    }
+  }
+}
+# wrong diastolic code
+component {
+  code {
+    coding {
+      system { value: "http://loinc.org" }
+      code { value: "another-wrong-code" }
+    }
+  }
+  value {
+    quantity {
+      system { value: "http://unitsofmeasure.org" }
+      code { value: "mm[Hg]" }
+      value { value: "70" }
+    }
+  }
+}
+effective {
+  date_time {
+    value_us: 0
+    timezone: "UTC"
+    precision: DAY
+  }
+}
+subject {
+  type { value: "http://a-person.com" }
+  uri { value: "http://person-id.com" }
+}

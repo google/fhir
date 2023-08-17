@@ -1,0 +1,56 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Constraint from slice Observation.category:VSCat not met. The slice implies the following constraint: category.where(coding.system = 'http://terminology.hl7.org/CodeSystem/observation-category' and coding.code = 'vital-signs').count() = 1"
+  }
+  expression {
+    value: "Observation.category:VSCat"
+  }
+}
+issue {
+  severity {
+  value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Constraint from slice Observation.code.coding:BPCode not met. The slice implies the following constraint: coding.where(system = 'http://loinc.org' and code = '85354-9').count() = 1"
+  }
+  expression {
+    value: "Observation.code.coding:BPCode"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Constraint from slice Observation.component:SystolicBP not met. The slice implies the following constraint: component.where(code.coding.system = 'http://loinc.org' and code.coding.code = '8480-6' and value.system = 'http://unitsofmeasure.org' and value.code = 'mm[Hg]').count() = 1"
+  }
+  expression {
+    value: "Observation.component:SystolicBP"
+  }
+}
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Constraint from slice Observation.component:DiastolicBP not met. The slice implies the following constraint: component.where(code.coding.system = 'http://loinc.org' and code.coding.code = '8462-4' and value.system = 'http://unitsofmeasure.org' and value.code = 'mm[Hg]').count() = 1"
+  }
+  expression {
+    value: "Observation.component:DiastolicBP"
+  }
+}
