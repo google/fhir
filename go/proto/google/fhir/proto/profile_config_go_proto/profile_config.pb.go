@@ -318,8 +318,7 @@ type ProtogenConfig struct {
 	// imports.
 	SourceDirectory string `protobuf:"bytes,4,opt,name=source_directory,json=sourceDirectory,proto3" json:"source_directory,omitempty"`
 	// The copyright date to be included in the license text, which
-	// may simply be a year. The generator will use the current year
-	// if this is unset.
+	// may simply be a year.
 	LicenseDate string `protobuf:"bytes,5,opt,name=license_date,json=licenseDate,proto3" json:"license_date,omitempty"`
 	// FhirVersion annotation to add to a file.
 	// TODO(b/292116008): This is included to match legacy behavior, and should
