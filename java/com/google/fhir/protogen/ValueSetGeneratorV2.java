@@ -619,10 +619,14 @@ public class ValueSetGeneratorV2 {
               "http://hl7.org/fhir/contract-security-classification",
               "ContractResourceSecurityClassificationCode")
           .put("http://hl7.org/fhir/device-definition-status", "FHIRDeviceDefinitionStatusCode")
-          // TODO(b/244184211): drop this rename - it's done to avoid a change in the 4.0.1 CL
+          // These CodeSystems have colliding names in R5
+          // See: https://jira.hl7.org/browse/FHIR-41817
+          .put("http://hl7.org/fhir/eligibility-outcome", "EligibilityOutcomeCode")
+          .put("http://hl7.org/fhir/payment-outcome", "PaymentOutcomeCode")
+          .put("http://hl7.org/fhir/enrollment-outcome", "EnrollmentOutcomeCode")
           .put(
-              "http://hl7.org/fhir/CodeSystem/medication-statement-status",
-              "MedicationStatementStatusCodes")
+              "http://hl7.org/fhir/deviceassociation-status-reason",
+              "DeviceAssociationStatusReason")
           .build();
 
   public String getCodeSystemName(CodeSystem codeSystem) {
