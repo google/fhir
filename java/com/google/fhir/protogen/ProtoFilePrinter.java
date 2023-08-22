@@ -285,10 +285,30 @@ public class ProtoFilePrinter {
           .append(descriptor.getOneofDecl(oneofIndex).getName())
           .append(" {\n");
       // Loop over the elements.
-      for (FieldDescriptorProto field : descriptor.getFieldList()) {
-        if (field.getOneofIndex() == oneofIndex) {
+      for (int i = 0; i < descriptor.getFieldCount(); i++) {
+        FieldDescriptorProto field = descriptor.getField(i);
+        if (field.hasOneofIndex() && field.getOneofIndex() == oneofIndex) {
+          // Use a mutable field in order to allow clearing protogenerator-only annotations.
+          FieldDescriptorProto.Builder fieldBuilder = field.toBuilder();
+          if (field.getOptions().hasExtension(ProtoGeneratorAnnotations.fieldDescription)) {
+            // Add a comment describing the field.
+            String description =
+                field.getOptions().getExtension(ProtoGeneratorAnnotations.fieldDescription);
+            message
+                .append(oneofIndent)
+                .append("// ")
+                .append(description.replaceAll("[\\n\\r]", "\n" + indent + "// "))
+                .append("\n");
+            fieldBuilder
+                .getOptionsBuilder()
+                .clearExtension(ProtoGeneratorAnnotations.fieldDescription);
+          }
           message.append(
-              printField(field, fullName, oneofIndent, packageName, /* inOneof= */ true));
+              printField(
+                  fieldBuilder.build(), fullName, oneofIndent, packageName, /* inOneof= */ true));
+          if (i != descriptor.getFieldCount() - 1) {
+            message.append("\n");
+          }
         }
       }
       message.append(fieldIndent).append("}\n");

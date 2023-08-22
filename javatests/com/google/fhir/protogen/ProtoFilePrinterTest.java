@@ -14,8 +14,10 @@
 
 package com.google.fhir.protogen;
 
+import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 
+import com.google.common.base.Ascii;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
@@ -28,10 +30,15 @@ import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.PackageInfo;
+import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.r4.core.ContainedResource;
 import com.google.fhir.r4.core.Extension;
 import com.google.fhir.r4.core.StructureDefinition;
+import com.google.protobuf.DescriptorProtos.DescriptorProto;
+import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
+import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
+import com.google.protobuf.DescriptorProtos.OneofDescriptorProto;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Descriptors.FileDescriptor;
@@ -68,7 +75,8 @@ public final class ProtoFilePrinterTest {
                     + resourceName
                     + ".json"));
     if (!file.exists()) {
-      String lowerCased = resourceName.substring(0, 1).toLowerCase() + resourceName.substring(1);
+      String lowerCased =
+          Ascii.toLowerCase(resourceName.substring(0, 1)) + resourceName.substring(1);
       file =
           new File(
               runfiles.rlocation(
@@ -101,13 +109,12 @@ public final class ProtoFilePrinterTest {
   }
 
   /** Collapse comments spread across multiple lines into single lines. */
-  private SortedMap<java.lang.Integer, String> collapseComments(
-      SortedMap<java.lang.Integer, String> input) {
-    TreeMap<java.lang.Integer, String> result = new TreeMap<>();
-    PeekingIterator<Map.Entry<java.lang.Integer, String>> iter =
+  private SortedMap<Integer, String> collapseComments(SortedMap<Integer, String> input) {
+    TreeMap<Integer, String> result = new TreeMap<>();
+    PeekingIterator<Map.Entry<Integer, String>> iter =
         Iterators.peekingIterator(input.entrySet().iterator());
     while (iter.hasNext()) {
-      Map.Entry<java.lang.Integer, String> current = iter.next();
+      Map.Entry<Integer, String> current = iter.next();
       result.put(current.getKey(), current.getValue().trim());
       if (current.getValue().trim().startsWith("//")) {
         while (iter.hasNext() && iter.peek().getValue().trim().startsWith("//")) {
@@ -126,12 +133,11 @@ public final class ProtoFilePrinterTest {
    * typically field definitions, along with annotations, and may be well over the maximum line
    * length allowed by the style guide.
    */
-  private SortedMap<java.lang.Integer, String> collapseStatements(
-      SortedMap<java.lang.Integer, String> input) {
-    TreeMap<java.lang.Integer, String> result = new TreeMap<>();
-    Iterator<Map.Entry<java.lang.Integer, String>> iter = input.entrySet().iterator();
+  private SortedMap<Integer, String> collapseStatements(SortedMap<Integer, String> input) {
+    TreeMap<Integer, String> result = new TreeMap<>();
+    Iterator<Map.Entry<Integer, String>> iter = input.entrySet().iterator();
     while (iter.hasNext()) {
-      Map.Entry<java.lang.Integer, String> current = iter.next();
+      Map.Entry<Integer, String> current = iter.next();
       String value = current.getValue();
       if (!value.trim().isEmpty() && !value.trim().startsWith("//")) {
         // Merge until we see the closing ';'
@@ -153,8 +159,8 @@ public final class ProtoFilePrinterTest {
     return result;
   }
 
-  private SortedMap<java.lang.Integer, String> splitIntoLines(String text) {
-    TreeMap<java.lang.Integer, String> result = new TreeMap<>();
+  private SortedMap<Integer, String> splitIntoLines(String text) {
+    TreeMap<Integer, String> result = new TreeMap<>();
     for (String line : Splitter.on('\n').split(text)) {
       result.put(result.size() + 1, line);
     }
@@ -166,13 +172,13 @@ public final class ProtoFilePrinterTest {
    * clang-format.
    */
   private void assertEqualsIgnoreClangFormat(String golden, String test) {
-    Iterator<Map.Entry<java.lang.Integer, String>> goldenIter =
+    Iterator<Map.Entry<Integer, String>> goldenIter =
         collapseStatements(collapseComments(splitIntoLines(golden))).entrySet().iterator();
-    Iterator<Map.Entry<java.lang.Integer, String>> testIter =
+    Iterator<Map.Entry<Integer, String>> testIter =
         collapseStatements(collapseComments(splitIntoLines(test))).entrySet().iterator();
     while (goldenIter.hasNext() && testIter.hasNext()) {
-      Map.Entry<java.lang.Integer, String> goldenEntry = goldenIter.next();
-      Map.Entry<java.lang.Integer, String> testEntry = testIter.next();
+      Map.Entry<Integer, String> goldenEntry = goldenIter.next();
+      Map.Entry<Integer, String> testEntry = testIter.next();
       assertWithMessage(
               "Test line "
                   + testEntry.getKey()
@@ -259,5 +265,50 @@ public final class ProtoFilePrinterTest {
       String generated = protoPrinter.print(descriptor);
       assertEqualsIgnoreClangFormat(golden, generated);
     }
+  }
+
+  @Test
+  public void testOneof() throws Exception {
+    String output =
+        protoPrinter.print(
+            FileDescriptorProto.newBuilder()
+                .addMessageType(
+                    DescriptorProto.newBuilder()
+                        .setName("Foo")
+                        .addField(
+                            FieldDescriptorProto.newBuilder()
+                                .setName("field_one")
+                                .setNumber(1)
+                                .setType(FieldDescriptorProto.Type.TYPE_STRING)
+                                .setOptions(
+                                    FieldOptions.newBuilder()
+                                        .setExtension(
+                                            ProtoGeneratorAnnotations.fieldDescription, "f1 desc")))
+                        .addOneofDecl(OneofDescriptorProto.newBuilder().setName("bar"))
+                        .addField(
+                            FieldDescriptorProto.newBuilder()
+                                .setName("field_two")
+                                .setNumber(2)
+                                .setType(FieldDescriptorProto.Type.TYPE_STRING)
+                                .setOneofIndex(0)
+                                .setOptions(
+                                    FieldOptions.newBuilder()
+                                        .setExtension(
+                                            ProtoGeneratorAnnotations.fieldDescription,
+                                            "f2 desc"))))
+                .build());
+
+    assertThat(output)
+        .contains(
+            ""
+                + "message Foo {\n"
+                + "  // f1 desc\n"
+                + "  string field_one = 1;\n"
+                + "\n"
+                + "  oneof bar {\n"
+                + "    // f2 desc\n"
+                + "    string field_two = 2;\n"
+                + "  }\n"
+                + "}");
   }
 }
