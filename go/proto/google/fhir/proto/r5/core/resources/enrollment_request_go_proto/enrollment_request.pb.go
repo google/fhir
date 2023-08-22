@@ -1,4 +1,4 @@
-//    Copyright 2020 Google Inc.
+//    Copyright 2023 Google Inc.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -38,9 +38,9 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// Auto-generated from StructureDefinition for EnrollmentRequest, last updated
-// 2019-12-31T21:03:40.621+11:00. Enroll in coverage. See
-// http://hl7.org/fhir/StructureDefinition/EnrollmentRequest
+// Auto-generated from StructureDefinition for EnrollmentRequest.
+// Enroll in coverage.
+// See http://hl7.org/fhir/StructureDefinition/EnrollmentRequest
 type EnrollmentRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

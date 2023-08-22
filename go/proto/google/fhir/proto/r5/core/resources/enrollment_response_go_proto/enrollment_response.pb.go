@@ -1,4 +1,4 @@
-//    Copyright 2020 Google Inc.
+//    Copyright 2023 Google Inc.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -38,9 +38,9 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// Auto-generated from StructureDefinition for EnrollmentResponse, last updated
-// 2019-12-31T21:03:40.621+11:00. EnrollmentResponse resource. See
-// http://hl7.org/fhir/StructureDefinition/EnrollmentResponse
+// Auto-generated from StructureDefinition for EnrollmentResponse.
+// EnrollmentResponse resource.
+// See http://hl7.org/fhir/StructureDefinition/EnrollmentResponse
 type EnrollmentResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -292,7 +292,7 @@ type EnrollmentResponse_OutcomeCode struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Value     codes_go_proto.RemittanceOutcomeCode_Value `protobuf:"varint,1,opt,name=value,proto3,enum=google.fhir.r5.core.RemittanceOutcomeCode_Value" json:"value,omitempty"`
+	Value     codes_go_proto.EnrollmentOutcomeCode_Value `protobuf:"varint,1,opt,name=value,proto3,enum=google.fhir.r5.core.EnrollmentOutcomeCode_Value" json:"value,omitempty"`
 	Id        *datatypes_go_proto.String                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
 	Extension []*datatypes_go_proto.Extension            `protobuf:"bytes,3,rep,name=extension,proto3" json:"extension,omitempty"`
 }
@@ -329,11 +329,11 @@ func (*EnrollmentResponse_OutcomeCode) Descriptor() ([]byte, []int) {
 	return file_proto_google_fhir_proto_r5_core_resources_enrollment_response_proto_rawDescGZIP(), []int{0, 1}
 }
 
-func (x *EnrollmentResponse_OutcomeCode) GetValue() codes_go_proto.RemittanceOutcomeCode_Value {
+func (x *EnrollmentResponse_OutcomeCode) GetValue() codes_go_proto.EnrollmentOutcomeCode_Value {
 	if x != nil {
 		return x.Value
 	}
-	return codes_go_proto.RemittanceOutcomeCode_Value(0)
+	return codes_go_proto.EnrollmentOutcomeCode_Value(0)
 }
 
 func (x *EnrollmentResponse_OutcomeCode) GetId() *datatypes_go_proto.String {
@@ -461,7 +461,7 @@ var file_proto_google_fhir_proto_r5_core_resources_enrollment_response_proto_raw
 	0xaf, 0x02, 0x0a, 0x0b, 0x4f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x43, 0x6f, 0x64, 0x65, 0x12,
 	0x46, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x30,
 	0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x66, 0x68, 0x69, 0x72, 0x2e, 0x72, 0x35, 0x2e,
-	0x63, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x6d, 0x69, 0x74, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x4f,
+	0x63, 0x6f, 0x72, 0x65, 0x2e, 0x45, 0x6e, 0x72, 0x6f, 0x6c, 0x6c, 0x6d, 0x65, 0x6e, 0x74, 0x4f,
 	0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x43, 0x6f, 0x64, 0x65, 0x2e, 0x56, 0x61, 0x6c, 0x75, 0x65,
 	0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x12, 0x2b, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x02, 0x20,
 	0x01, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x66, 0x68, 0x69,
@@ -472,8 +472,8 @@ var file_proto_google_fhir_proto_r5_core_resources_enrollment_response_proto_raw
 	0x74, 0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x09, 0x65, 0x78, 0x74, 0x65, 0x6e, 0x73, 0x69,
 	0x6f, 0x6e, 0x3a, 0x6d, 0x8a, 0xf9, 0x83, 0xb2, 0x05, 0x2f, 0x68, 0x74, 0x74, 0x70, 0x3a, 0x2f,
 	0x2f, 0x68, 0x6c, 0x37, 0x2e, 0x6f, 0x72, 0x67, 0x2f, 0x66, 0x68, 0x69, 0x72, 0x2f, 0x56, 0x61,
-	0x6c, 0x75, 0x65, 0x53, 0x65, 0x74, 0x2f, 0x72, 0x65, 0x6d, 0x69, 0x74, 0x74, 0x61, 0x6e, 0x63,
-	0x65, 0x2d, 0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0xc0, 0x9f, 0xe3, 0xb6, 0x05, 0x01, 0x9a,
+	0x6c, 0x75, 0x65, 0x53, 0x65, 0x74, 0x2f, 0x65, 0x6e, 0x72, 0x6f, 0x6c, 0x6c, 0x6d, 0x65, 0x6e,
+	0x74, 0x2d, 0x6f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0xc0, 0x9f, 0xe3, 0xb6, 0x05, 0x01, 0x9a,
 	0xb5, 0x8e, 0x93, 0x06, 0x2c, 0x68, 0x74, 0x74, 0x70, 0x3a, 0x2f, 0x2f, 0x68, 0x6c, 0x37, 0x2e,
 	0x6f, 0x72, 0x67, 0x2f, 0x66, 0x68, 0x69, 0x72, 0x2f, 0x53, 0x74, 0x72, 0x75, 0x63, 0x74, 0x75,
 	0x72, 0x65, 0x44, 0x65, 0x66, 0x69, 0x6e, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x2f, 0x63, 0x6f, 0x64,
@@ -522,7 +522,7 @@ var file_proto_google_fhir_proto_r5_core_resources_enrollment_response_proto_goT
 	(*datatypes_go_proto.String)(nil),                     // 12: google.fhir.r5.core.String
 	(*datatypes_go_proto.DateTime)(nil),                   // 13: google.fhir.r5.core.DateTime
 	(codes_go_proto.FinancialResourceStatusCode_Value)(0), // 14: google.fhir.r5.core.FinancialResourceStatusCode.Value
-	(codes_go_proto.RemittanceOutcomeCode_Value)(0),       // 15: google.fhir.r5.core.RemittanceOutcomeCode.Value
+	(codes_go_proto.EnrollmentOutcomeCode_Value)(0),       // 15: google.fhir.r5.core.EnrollmentOutcomeCode.Value
 }
 var file_proto_google_fhir_proto_r5_core_resources_enrollment_response_proto_depIdxs = []int32{
 	3,  // 0: google.fhir.r5.core.EnrollmentResponse.id:type_name -> google.fhir.r5.core.Id
@@ -544,7 +544,7 @@ var file_proto_google_fhir_proto_r5_core_resources_enrollment_response_proto_dep
 	14, // 16: google.fhir.r5.core.EnrollmentResponse.StatusCode.value:type_name -> google.fhir.r5.core.FinancialResourceStatusCode.Value
 	12, // 17: google.fhir.r5.core.EnrollmentResponse.StatusCode.id:type_name -> google.fhir.r5.core.String
 	9,  // 18: google.fhir.r5.core.EnrollmentResponse.StatusCode.extension:type_name -> google.fhir.r5.core.Extension
-	15, // 19: google.fhir.r5.core.EnrollmentResponse.OutcomeCode.value:type_name -> google.fhir.r5.core.RemittanceOutcomeCode.Value
+	15, // 19: google.fhir.r5.core.EnrollmentResponse.OutcomeCode.value:type_name -> google.fhir.r5.core.EnrollmentOutcomeCode.Value
 	12, // 20: google.fhir.r5.core.EnrollmentResponse.OutcomeCode.id:type_name -> google.fhir.r5.core.String
 	9,  // 21: google.fhir.r5.core.EnrollmentResponse.OutcomeCode.extension:type_name -> google.fhir.r5.core.Extension
 	22, // [22:22] is the sub-list for method output_type
