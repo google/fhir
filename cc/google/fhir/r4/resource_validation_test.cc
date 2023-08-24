@@ -175,6 +175,10 @@ TEST(CompositionValidationTest,
       "composition_invalid_reference_with_validate_reference_id_true", true);
 }
 
+TEST(BundleValidationTest, ValidEmptyBundle) {
+  InvalidTest<Bundle>("empty_bundle");
+}
+
 }  // namespace
 
 }  // namespace r4

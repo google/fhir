@@ -1,0 +1,70 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "missing-required-field"
+  }
+  expression {
+    value: "Bundle.type"
+  }
+}
+issue {
+  severity {
+    value: FATAL
+  }
+  code {
+    value: STRUCTURE
+  }
+  diagnostics {
+    value: "type = \'document\' implies (identifier.system.exists() and identifier.value.exists()):Cannot validate non-boolean FHIRPath expression"
+  }
+  expression {
+    value: "Bundle"
+  }
+}
+issue {
+  severity {
+    value: FATAL
+  }
+  code {
+    value: STRUCTURE
+  }
+  diagnostics {
+    value: "type = \'document\' implies (timestamp.hasValue()):Cannot validate non-boolean FHIRPath expression"
+  }
+  expression {
+    value: "Bundle"
+  }
+}
+issue {
+  severity {
+    value: FATAL
+  }
+  code {
+    value: STRUCTURE
+  }
+  diagnostics {
+    value: "type = \'document\' implies entry.first().resource.is(Composition):Cannot validate non-boolean FHIRPath expression"
+  }
+  expression {
+    value: "Bundle"
+  }
+}
+issue {
+  severity {
+    value: FATAL
+  }
+  code {
+    value: STRUCTURE
+  }
+  diagnostics {
+    value: "type = \'message\' implies entry.first().resource.is(MessageHeader):Cannot validate non-boolean FHIRPath expression"
+  }
+  expression {
+    value: "Bundle"
+  }
+}

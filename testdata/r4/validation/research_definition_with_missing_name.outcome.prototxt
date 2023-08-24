@@ -1,0 +1,14 @@
+issue {
+  severity {
+    value: FATAL
+  }
+  code {
+    value: STRUCTURE
+  }
+  diagnostics {
+    value: "name.matches(\'[A-Z]([A-Za-z0-9_]){0,254}\'):Cannot validate non-boolean FHIRPath expression"
+  }
+  expression {
+    value: "ResearchDefinition"
+  }
+}
