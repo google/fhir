@@ -15,7 +15,9 @@ java_test(
     test_class = "com.google.fhir.r4.JsonFormatTest",
     deps = [
         "//java/com/google/fhir/common:exceptions",
+        "//java/com/google/fhir/common:json_format",
         "//java/com/google/fhir/testing:json_format_test_base",
+        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:account_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:activity_definition_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:adverse_event_java_proto",
@@ -140,6 +142,7 @@ java_test(
         "//proto/google/fhir/proto/r4/core/resources:slot_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:specimen_definition_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:specimen_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:structure_map_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:subscription_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:substance_java_proto",
@@ -154,6 +157,7 @@ java_test(
         "//proto/google/fhir/proto/r4/core/resources:vision_prescription_java_proto",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_guava_guava",
+        "@maven//:com_google_truth_extensions_truth_proto_extension",
         "@maven//:junit_junit",
     ],
 )

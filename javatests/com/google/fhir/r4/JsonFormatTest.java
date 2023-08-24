@@ -14,8 +14,12 @@
 
 package com.google.fhir.r4;
 
+import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
+import static org.junit.Assert.assertThrows;
+
 import com.google.common.io.Files;
 import com.google.fhir.common.InvalidFhirException;
+import com.google.fhir.common.JsonFormat;
 import com.google.fhir.r4.core.Account;
 import com.google.fhir.r4.core.ActivityDefinition;
 import com.google.fhir.r4.core.AdverseEvent;
@@ -75,6 +79,7 @@ import com.google.fhir.r4.core.GraphDefinition;
 import com.google.fhir.r4.core.Group;
 import com.google.fhir.r4.core.GuidanceResponse;
 import com.google.fhir.r4.core.HealthcareService;
+import com.google.fhir.r4.core.Id;
 import com.google.fhir.r4.core.ImagingStudy;
 import com.google.fhir.r4.core.Immunization;
 import com.google.fhir.r4.core.ImmunizationEvaluation;
@@ -140,6 +145,7 @@ import com.google.fhir.r4.core.ServiceRequest;
 import com.google.fhir.r4.core.Slot;
 import com.google.fhir.r4.core.Specimen;
 import com.google.fhir.r4.core.SpecimenDefinition;
+import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureMap;
 import com.google.fhir.r4.core.Subscription;
 import com.google.fhir.r4.core.Substance;
@@ -200,6 +206,25 @@ public class JsonFormatTest extends JsonFormatTestBase {
         testPair(file, type);
       }
     }
+  }
+
+  @Test
+  public void testIgnoringUnrecognizedFields_false_failsOnUnrecognizedField() throws Exception {
+    JsonFormat.Parser parser = JsonFormat.Parser.newBuilder().build();
+    StructureDefinition.Builder builder = StructureDefinition.newBuilder();
+    assertThrows(
+        InvalidFhirException.class,
+        () -> parser.merge("{ \"id\": \"123\", \"garbage\": true}", builder));
+  }
+
+  @Test
+  public void testIgnoringUnrecognizedFields_true_succeedsOnUnrecognizedField() throws Exception {
+    JsonFormat.Parser parser =
+        JsonFormat.Parser.newBuilder().ignoreUnrecognizedFields(true).build();
+    StructureDefinition.Builder builder = StructureDefinition.newBuilder();
+    parser.merge("{ \"id\": \"123\", \"garbage\": true}", builder);
+    assertThat(builder.build())
+        .isEqualTo(StructureDefinition.newBuilder().setId(Id.newBuilder().setValue("123")).build());
   }
 
   /** Test the analytics output format. */
@@ -348,6 +373,7 @@ public class JsonFormatTest extends JsonFormatTestBase {
   public void testBundlePt4() throws Exception {
     testOrGenerate(new String[] {"Bundle-conceptmaps", "Bundle-dataelements"}, Bundle.newBuilder());
   }
+
   //   TODO(b/244184211): These tests don't seem to ever finish for some reason - while other large
   //   files finish in at most a couple seconds, these time out even at 15 minutes.
   //   Seems to be a problem with the printer.  Figure out why, and reneable these tests.

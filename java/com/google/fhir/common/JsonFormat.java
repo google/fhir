@@ -596,10 +596,15 @@ public final class JsonFormat {
   public static final class Parser {
     private final ProtoGenTransformer protoGenTransformer;
     private final ZoneId defaultTimeZone;
+    private final boolean ignoreUnrecognizedFields;
 
-    private Parser(ZoneId defaultTimeZone, ProtoGenTransformer protoGenTransformer) {
+    private Parser(
+        ZoneId defaultTimeZone,
+        ProtoGenTransformer protoGenTransformer,
+        boolean ignoreUnrecognizedFields) {
       this.protoGenTransformer = protoGenTransformer;
       this.defaultTimeZone = defaultTimeZone;
+      this.ignoreUnrecognizedFields = ignoreUnrecognizedFields;
     }
 
     public static Parser withDefaultTimeZone(ZoneId defaultTimeZone) {
@@ -612,9 +617,10 @@ public final class JsonFormat {
     }
 
     /** Builder that can be used to obtain new instances of {@link Parser}. */
-    static final class Builder {
+    public static final class Builder {
       private ZoneId defaultTimeZone;
       private ProtoGenTransformer protoGenTransformer;
+      private boolean ignoreUnrecognizedFields = false;
 
       Builder(ZoneId defaultTimeZone) {
         this.defaultTimeZone = defaultTimeZone;
@@ -642,8 +648,14 @@ public final class JsonFormat {
         return this;
       }
 
-      Parser build() {
-        return new Parser(defaultTimeZone, protoGenTransformer);
+      @CanIgnoreReturnValue
+      public Builder ignoreUnrecognizedFields(boolean ignoreUnrecognizedFields) {
+        this.ignoreUnrecognizedFields = ignoreUnrecognizedFields;
+        return this;
+      }
+
+      public Parser build() {
+        return new Parser(defaultTimeZone, protoGenTransformer, ignoreUnrecognizedFields);
       }
     }
 
@@ -754,17 +766,22 @@ public final class JsonFormat {
                     + descriptor.getFullName());
           }
         } else {
-          String names = "";
-          for (Map.Entry<String, FieldDescriptor> e : nameToDescriptorMap.entrySet()) {
-            names = names + " " + e.getKey();
+          if (ignoreUnrecognizedFields) {
+            continue;
+          } else {
+            String names = "";
+            for (Map.Entry<String, FieldDescriptor> e : nameToDescriptorMap.entrySet()) {
+              names = names + " " + e.getKey();
+            }
+
+            throw new InvalidFhirException(
+                "Unknown field "
+                    + fieldName
+                    + " in input of expected type "
+                    + builder.getDescriptorForType().getFullName()
+                    + ", known fields: "
+                    + names);
           }
-          throw new InvalidFhirException(
-              "Unknown field "
-                  + fieldName
-                  + " in input of expected type "
-                  + builder.getDescriptorForType().getFullName()
-                  + ", known fields: "
-                  + names);
         }
       }
       if (AnnotationUtils.isReference(builder.getDescriptorForType())) {

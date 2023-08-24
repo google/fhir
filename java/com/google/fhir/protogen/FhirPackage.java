@@ -151,6 +151,31 @@ public class FhirPackage {
    */
   public static FhirPackage load(String archiveFilePath, PackageInfo packageInfo)
       throws IOException, InvalidFhirException {
+    return load(archiveFilePath, packageInfo, /* ignoreUnrecognizedFields= */ false);
+  }
+
+  /**
+   * Loads a package ZIP into a FhirPackage.
+   *
+   * <p>Parses all defining resources that are part of the spec.
+   *
+   * <p>To read PackageInfo out of the ZIP itself, use the version of this that does not accept a
+   * PackageProto argument.
+   *
+   * @param archiveFilePath The absolute path to the archive file (ZIP or TAR) that is loaded.
+   *     Expected to end with ".zip" "tar.gz" or ".tgz".
+   * @param packageInfo The package information to load. This package information is used,
+   *     irrespective of whether the ZIP contains one.
+   * @param ignoreUnrecognizedFields If true, will not fail if unrecognized fields are encountered
+   *     while parsing JSON. This allows for loading a FhirPackage of a new version of the Core FHIR
+   *     spec using a FhirPackage binary build with the older version of the spec. For instance, you
+   *     could parse an R5 StructureDefinition into an R4 StructureDefinition proto, since
+   *     StructureDefinition was made normative in R4, since normative implies that fields can be
+   *     added but not removed.
+   */
+  public static FhirPackage load(
+      String archiveFilePath, PackageInfo packageInfo, boolean ignoreUnrecognizedFields)
+      throws IOException, InvalidFhirException {
     PackageInfo extractedPackageInfo = null;
     try (ArchiveInputStream archiveEntries = getZipOrTarInputStream(archiveFilePath)) {
       List<JsonFile> jsonFiles = new ArrayList<>();
@@ -178,7 +203,9 @@ public class FhirPackage {
       }
 
       return makeFromJsonAndPackageInfo(
-          jsonFiles, packageInfo == null ? extractedPackageInfo : packageInfo);
+          jsonFiles,
+          packageInfo == null ? extractedPackageInfo : packageInfo,
+          ignoreUnrecognizedFields);
     }
   }
 
@@ -327,7 +354,7 @@ public class FhirPackage {
   }
 
   private static FhirPackage makeFromJsonAndPackageInfo(
-      List<JsonFile> jsonFiles, PackageInfo packageInfo) {
+      List<JsonFile> jsonFiles, PackageInfo packageInfo, boolean ignoreUnrecognizedFields) {
     if (packageInfo != null) {
       if (packageInfo.getProtoPackage().isEmpty()) {
         throw new IllegalArgumentException(
@@ -338,8 +365,8 @@ public class FhirPackage {
             "When PackageInfo is provided, must specify `fhir_version`.");
       }
     }
-
-    JsonFormat.Parser parser = JsonFormat.getParser();
+    JsonFormat.Parser parser =
+        JsonFormat.Parser.newBuilder().ignoreUnrecognizedFields(ignoreUnrecognizedFields).build();
 
     ResourceCollections resourceCollections = new ResourceCollections();
     resourceCollections.structureDefinitions =

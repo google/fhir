@@ -133,6 +133,44 @@ public final class FhirPackageTest {
   }
 
   @Test
+  public void load_ignoringUnrecognizedFields() throws IOException, InvalidFhirException {
+    ImmutableList<PackageFile> files =
+        ImmutableList.of(
+            new PackageFile() {
+              {
+                fileName = "foo_package_info.prototxt";
+                fileContents =
+                    "proto_package: \"google.foo\""
+                        + "\njava_proto_package: \"com.google.foo\""
+                        + "\nfhir_version: R4"
+                        + "\nlicense: APACHE"
+                        + "\nlicense_date: \"2019\""
+                        + "\nlocal_contained_resource: true"
+                        + "\nfile_splitting_behavior: SPLIT_RESOURCES";
+              }
+            },
+            new PackageFile() {
+              {
+                fileName = "myStructDef.json";
+                fileContents =
+                    ""
+                        + "{ "
+                        + "  \"resourceType\": \"StructureDefinition\", "
+                        + "  \"id\": \"Patient\", "
+                        + "  \"url\": \"the-url.com\", "
+                        + "  \"garbage\": true"
+                        + "}";
+              }
+            });
+    String zipFile = createFhirPackageInfoZip("foo_package", files);
+    FhirPackage fhirPackage = FhirPackage.load(zipFile, null, /* ignoreUnrecognizedFields= */ true);
+
+    assertThat(fhirPackage.structureDefinitions()).hasSize(1);
+    assertThat(fhirPackage.structureDefinitions().iterator().next().getId().getValue())
+        .isEqualTo("Patient");
+  }
+
+  @Test
   public void isCorePackage_withLoadedCorePackage() throws IOException, InvalidFhirException {
     ImmutableList<PackageFile> files =
         ImmutableList.of(
