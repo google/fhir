@@ -19,7 +19,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
-import com.google.common.base.CaseFormat;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.ProtogenConfig;
@@ -30,6 +29,8 @@ import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -83,6 +84,15 @@ class ProtoGeneratorMainV2 {
         required = true)
     // TODO(b/292116008): Remove reliance on precompiled enums.
     private FhirVersion fhirVersion = null;
+
+    @Parameter(
+        names = {"--contained_resource_offset"},
+        description =
+            "Field number offset for ContainedResources.  This is used to ensure that"
+                + " ContainedResources from different versions of FHIR don't use overlapping"
+                + " numbers, so they can eventually be combined.  See: go/StableFhirProtos",
+        required = true)
+    private int containedResourceOffset = 0;
   }
 
   ProtoGeneratorMainV2(Args args) {
@@ -121,24 +131,46 @@ class ProtoGeneratorMainV2 {
       try {
         addEntry(zipOutputStream, printer, codesFileDescriptor, "codes.proto");
         addEntry(zipOutputStream, printer, valueSetsFileDescriptor, "valuesets.proto");
-        addEntry(
-            zipOutputStream,
-            printer,
-            generator.generateDatatypesFileDescriptor(),
-            "datatypes.proto");
 
+        List<String> resourceNames = new ArrayList<>();
+        StructureDefinition bundleDefinition = null;
+        // Iterate over all non-bundle Resources, and generate a single file per resource.
+        // Aggregate resource names for use in generating a "Bundle and ContainedResource" file,
+        // as well as generating a typed reference datatype.
         for (StructureDefinition structDef : inputPackage.structureDefinitions()) {
-          if (structDef.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE
-              && structDef.getDerivation().getValue() == TypeDerivationRuleCode.Value.SPECIALIZATION
-              && !structDef.getUrl().getValue().equals(BUNDLE_STRUCTURE_DEFINITION_URL)) {
-            addEntry(
-                zipOutputStream,
-                printer,
-                generator.generateResourceFileDescriptor(structDef),
-                "resources/" + resourceNameToFileName(GeneratorUtils.getTypeName(structDef)));
+          if (structDef.getUrl().getValue().equals(BUNDLE_STRUCTURE_DEFINITION_URL)) {
+            bundleDefinition = structDef;
+          } else {
+            if (structDef.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE
+                && structDef.getDerivation().getValue()
+                    == TypeDerivationRuleCode.Value.SPECIALIZATION
+                && !structDef.getAbstract().getValue()) {
+              String resourceName = GeneratorUtils.getTypeName(structDef);
+              resourceNames.add(resourceName);
+              addEntry(
+                  zipOutputStream,
+                  printer,
+                  generator.generateResourceFileDescriptor(structDef),
+                  "resources/" + GeneratorUtils.resourceNameToFileName(resourceName));
+            }
           }
         }
 
+        // Generate the "Bundle and Contained Resource" file.
+        addEntry(
+            zipOutputStream,
+            printer,
+            generator.generateBundleAndContainedResource(
+                bundleDefinition, resourceNames, args.containedResourceOffset),
+            "resources/bundle_and_contained_resource.proto");
+
+        // Generate the Datatypes file.  Pass all resource names, for use in generating the
+        // Reference datatype.
+        addEntry(
+            zipOutputStream,
+            printer,
+            generator.generateDatatypesFileDescriptor(resourceNames),
+            "datatypes.proto");
       } finally {
         zipOutputStream.closeEntry();
       }
@@ -154,13 +186,6 @@ class ProtoGeneratorMainV2 {
     zipOutputStream.putNextEntry(new ZipEntry(name));
     byte[] entryBytes = printer.print(fileDescriptor).getBytes(UTF_8);
     zipOutputStream.write(entryBytes, 0, entryBytes.length);
-  }
-
-  private String resourceNameToFileName(String resourceName) {
-    return CaseFormat.UPPER_CAMEL.to(
-            CaseFormat.LOWER_UNDERSCORE,
-            GeneratorUtils.resolveAcronyms(GeneratorUtils.toFieldTypeCase(resourceName)))
-        + ".proto";
   }
 
   public static void main(String[] argv) throws IOException, InvalidFhirException {

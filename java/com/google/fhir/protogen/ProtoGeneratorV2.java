@@ -33,7 +33,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.Extensions;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.Annotations;
@@ -59,6 +58,7 @@ import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileOptions;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
 import com.google.protobuf.DescriptorProtos.OneofDescriptorProto;
+import com.google.protobuf.DescriptorProtos.OneofOptions;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.Message;
@@ -137,7 +137,14 @@ public class ProtoGeneratorV2 {
               + ".trace('unmatched', id).empty()",
           "text.div.exists()",
           "text.`div`.exists()",
-          "contained.meta.security.empty()");
+          "contained.meta.security.empty()",
+          "contained.where((('#'+id in (%resource.descendants().reference |"
+              + " %resource.descendants().ofType(canonical) |"
+              + " %resource.descendants().ofType(uri) | %resource.descendants().ofType(url)))"
+              + " or descendants().where(reference = '#').exists() or"
+              + " descendants().where(ofType(canonical) = '#').exists() or"
+              + " descendants().where(ofType(canonical) ="
+              + " '#').exists()).not()).trace('unmatched', id).empty()");
 
   // FHIR elements may have core constraint definitions that do not add
   // value to protocol buffers, so we exclude them.
@@ -164,7 +171,13 @@ public class ProtoGeneratorV2 {
               // but unlikely to be backported.
               "element.all(definition and min and max)",
               // See https://jira.hl7.org/browse/FHIR-25796
-              "probability is decimal implies (probability as decimal) <= 100")
+              "probability is decimal implies (probability as decimal) <= 100",
+              // Contains an invalid double-quoted string.
+              // See: https://jira.hl7.org/browse/FHIR-41873
+              "binding.empty() or type.code.empty() or type.code.contains(\":\") or"
+                  + " type.select((code = 'code') or (code = 'Coding') or (code='CodeableConcept')"
+                  + " or (code = 'Quantity') or (code = 'string') or (code = 'uri') or (code ="
+                  + " 'Duration')).exists()")
           .build();
 
   private static final String FHIRPATH_TYPE_PREFIX = "http://hl7.org/fhirpath/";
@@ -713,7 +726,9 @@ public class ProtoGeneratorV2 {
       }
 
       Optional<String> boundValueSetUrl = getBindingValueSetUrl(element);
-      if (!boundValueSetUrl.isPresent()) {
+      if (!boundValueSetUrl.isPresent()
+          // TODO(b/297040090): We treat Language code as untyped, to match R4 behavior.
+          || boundValueSetUrl.get().equals("http://hl7.org/fhir/ValueSet/all-languages")) {
         return Optional.empty();
       }
 
@@ -898,7 +913,13 @@ public class ProtoGeneratorV2 {
     }
 
     private Optional<String> getBindingValueSetUrl(ElementDefinition element) {
-      if (element.getBinding().getStrength().getValue() != BindingStrengthCode.Value.REQUIRED) {
+      // TODO(b/297040090): We treat Language code as untyped, to match R4 behavior.
+      if (element.getBinding().getStrength().getValue() != BindingStrengthCode.Value.REQUIRED
+          || element
+              .getBinding()
+              .getValueSet()
+              .getValue()
+              .startsWith("http://hl7.org/fhir/ValueSet/all-languages")) {
         return Optional.empty();
       }
       String url = GeneratorUtils.getCanonicalUri(element.getBinding().getValueSet());
@@ -952,27 +973,6 @@ public class ProtoGeneratorV2 {
         System.out.println("Unexpected minimum field count: " + element.getMin().getValue());
       }
 
-      Optional<ElementDefinition> choiceTypeBase = getChoiceTypeBase(element);
-      if (choiceTypeBase.isPresent()) {
-        ElementDefinition choiceTypeBaseElement = choiceTypeBase.get();
-        String baseName = getNameForElement(choiceTypeBaseElement);
-        String baseContainerType = getContainerType(choiceTypeBaseElement);
-        String containerType = getContainerType(element);
-        containerType =
-            containerType.substring(0, containerType.lastIndexOf(".") + 1)
-                + baseContainerType.substring(baseContainerType.lastIndexOf(".") + 1);
-
-        return Optional.of(
-            buildFieldInternal(
-                    baseName,
-                    containerType,
-                    protogenConfig.getProtoPackage(),
-                    nextTag,
-                    fieldSize,
-                    options.build())
-                .build());
-      }
-
       // Add typed reference options
       if (!isChoiceType(element)
           && element.getTypeCount() > 0
@@ -981,7 +981,7 @@ public class ProtoGeneratorV2 {
           if (type.getCode().getValue().equals("Reference") && type.getTargetProfileCount() > 0) {
             for (Canonical referenceType : type.getTargetProfileList()) {
               if (!referenceType.getValue().isEmpty()) {
-                addReferenceType(options, referenceType.getValue());
+                addReferenceTypeExtension(options, referenceType.getValue());
               }
             }
           }
@@ -1096,7 +1096,7 @@ public class ProtoGeneratorV2 {
           FieldOptions.Builder options = FieldOptions.newBuilder();
           if (fieldName.equals("reference")) {
             for (String referenceType : referenceTypes) {
-              addReferenceType(options, referenceType);
+              addReferenceTypeExtension(options, referenceType);
             }
           }
           FieldDescriptorProto.Builder fieldBuilder =
@@ -1121,26 +1121,250 @@ public class ProtoGeneratorV2 {
 
   private static final ImmutableSet<String> DATATYPES_TO_SKIP =
       ImmutableSet.of(
+          // References are handled separately, by addReferenceType, since they have typed reference
+          // ID fields that are not a part of the FHIR spec.
           "http://hl7.org/fhir/StructureDefinition/Reference",
-          "http://hl7.org/fhir/StructureDefinition/Element",
-          "http://hl7.org/fhir/StructureDefinition/elementdefinition-de",
-          "http://hl7.org/fhir/StructureDefinition/Extension");
+          // Skip over profile of ElementDefinition for Data Elements - we just use
+          // ElementDefinition.
+          "http://hl7.org/fhir/StructureDefinition/elementdefinition-de");
 
-  public FileDescriptorProto generateDatatypesFileDescriptor() throws InvalidFhirException {
-    return generateFileDescriptor(
-            stream(inputPackage.structureDefinitions())
-                .filter(
-                    def ->
-                        (def.getKind().getValue()
-                                    == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE
-                                || def.getKind().getValue()
-                                    == StructureDefinitionKindCode.Value.COMPLEX_TYPE)
-                            && !DATATYPES_TO_SKIP.contains(def.getUrl().getValue())
-                            && !def.getBaseDefinition()
-                                .getValue()
-                                .equals("http://hl7.org/fhir/StructureDefinition/Extension"))
-                .collect(toImmutableList()))
-        .build();
+  public FileDescriptorProto generateDatatypesFileDescriptor(List<String> resourceNames)
+      throws InvalidFhirException {
+    ImmutableList<StructureDefinition> messages =
+        stream(inputPackage.structureDefinitions())
+            .filter(
+                def ->
+                    (def.getKind().getValue() == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE
+                            || def.getKind().getValue()
+                                == StructureDefinitionKindCode.Value.COMPLEX_TYPE)
+                        && !DATATYPES_TO_SKIP.contains(def.getUrl().getValue())
+                        && !def.getBaseDefinition()
+                            .getValue()
+                            .equals("http://hl7.org/fhir/StructureDefinition/Extension"))
+            .collect(toImmutableList());
+
+    FileDescriptorProto.Builder fileBuilder = generateFileDescriptor(messages);
+
+    addReferenceType(fileBuilder, resourceNames);
+    addReferenceIdType(fileBuilder);
+
+    return fileBuilder.build();
+  }
+
+  // We generate a custom Reference datatype, since we have typed reference ID fields that are
+  // not a part of the FHIR spec.
+  // For instance, a JSON FHIR Reference of {"reference: "Patient/1234"} is represented in FhirProto
+  // as {patientId: "1234"}, where patientId is a a ReferenceId.
+  private void addReferenceType(
+      FileDescriptorProto.Builder fileBuilder, List<String> resourceNames) {
+    int nextTag = 1;
+    DescriptorProto.Builder reference =
+        fileBuilder
+            .addMessageTypeBuilder()
+            .setName("Reference")
+            .setOptions(
+                MessageOptions.newBuilder()
+                    .setExtension(
+                        ProtoGeneratorAnnotations.messageDescription,
+                        " A reference from one resource to another."
+                            + " See https://www.hl7.org/fhir/datatypes.html#Reference.")
+                    .setExtension(
+                        Annotations.structureDefinitionKind,
+                        Annotations.StructureDefinitionKindValue.KIND_PRIMITIVE_TYPE));
+
+    reference
+        .addFieldBuilder()
+        .setName("id")
+        .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+        .setTypeName("String")
+        .setOptions(
+            FieldOptions.newBuilder()
+                .setExtension(
+                    ProtoGeneratorAnnotations.fieldDescription, "xml:id (or equivalent in JSON)"))
+        .setNumber(nextTag++);
+    reference
+        .addFieldBuilder()
+        .setName("extension")
+        .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+        .setTypeName("Extension")
+        .setOptions(
+            FieldOptions.newBuilder()
+                .setExtension(
+                    ProtoGeneratorAnnotations.fieldDescription,
+                    "Additional Content defined by implementations"))
+        .setNumber(nextTag++);
+    reference
+        .addFieldBuilder()
+        .setName("type")
+        .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+        .setTypeName("Uri")
+        .setOptions(
+            FieldOptions.newBuilder()
+                .setExtension(
+                    ProtoGeneratorAnnotations.fieldDescription,
+                    "Type the reference refers to (e.g. \"Patient\")"
+                        + " - must be a resource in resources"))
+        .setNumber(nextTag++);
+
+    reference
+        .addOneofDeclBuilder()
+        .setName("reference")
+        .setOptions(OneofOptions.newBuilder().setExtension(Annotations.fhirOneofIsOptional, true));
+
+    reference.addField(
+        FieldDescriptorProto.newBuilder()
+            .setName("uri")
+            .setJsonName("reference")
+            .setNumber(nextTag++)
+            .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+            .setTypeName("String")
+            .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+            .setOptions(
+                FieldOptions.newBuilder()
+                    .setExtension(
+                        ProtoGeneratorAnnotations.fieldDescription,
+                        "Field representing absolute URIs, which are untyped."))
+            .setOneofIndex(0)
+            .build());
+
+    reference.addField(
+        FieldDescriptorProto.newBuilder()
+            .setName("fragment")
+            .setNumber(nextTag++)
+            .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+            .setTypeName("String")
+            .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+            .setOptions(
+                FieldOptions.newBuilder()
+                    .setExtension(
+                        ProtoGeneratorAnnotations.fieldDescription,
+                        "Field representing fragment URIs, which are untyped, and represented here"
+                            + " without the leading '#'"))
+            .setOneofIndex(0)
+            .build());
+
+    reference.addField(
+        FieldDescriptorProto.newBuilder()
+            .setName("resource_id")
+            .setNumber(nextTag++)
+            .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+            .setTypeName("ReferenceId")
+            .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+            .setOptions(
+                FieldOptions.newBuilder()
+                    .setExtension(Annotations.referencedFhirType, "Resource")
+                    .setExtension(
+                        ProtoGeneratorAnnotations.fieldDescription,
+                        "Typed relative urls are represented here."))
+            .setOneofIndex(0)
+            .build());
+
+    TreeSet<String> sortedResources = new TreeSet<>(resourceNames);
+    for (String type : sortedResources) {
+      reference.addField(
+          FieldDescriptorProto.newBuilder()
+              .setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type) + "_id")
+              .setNumber(nextTag++)
+              .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+              .setTypeName("ReferenceId")
+              .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+              .setOptions(
+                  FieldOptions.newBuilder().setExtension(Annotations.referencedFhirType, type))
+              .setOneofIndex(0)
+              .build());
+    }
+
+    reference.addField(
+        FieldDescriptorProto.newBuilder()
+            .setName("identifier")
+            .setNumber(nextTag++)
+            .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+            .setTypeName("Identifier")
+            .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+            .setOptions(
+                FieldOptions.newBuilder()
+                    .setExtension(
+                        ProtoGeneratorAnnotations.fieldDescription,
+                        "Logical reference, when literal reference is not known"))
+            .build());
+
+    reference.addField(
+        FieldDescriptorProto.newBuilder()
+            .setName("display")
+            .setNumber(nextTag++)
+            .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+            .setTypeName("String")
+            .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+            .setOptions(
+                FieldOptions.newBuilder()
+                    .setExtension(
+                        ProtoGeneratorAnnotations.fieldDescription,
+                        "Text alternative for the resource."))
+            .build());
+  }
+
+  // Adds the "Reference ID" Struct.  This is a more-strongly typed representation for the
+  // the Reference.reference field when used for relative reference.
+  // For instance, if Reference.reference is "Patient/1234" in pure JSON FHIR, this is
+  // represented in FhirProto as {patientId: "1234"}, where patientId is a a ReferenceId.
+  private void addReferenceIdType(FileDescriptorProto.Builder fileBuilder) {
+    DescriptorProto.Builder referenceId =
+        fileBuilder
+            .addMessageTypeBuilder()
+            .setName("ReferenceId")
+            .setOptions(
+                MessageOptions.newBuilder()
+                    .setExtension(
+                        ProtoGeneratorAnnotations.messageDescription,
+                        "Typed representation of relative references for the Reference.reference "
+                            + " field. For instance, a JSON FHIR reference of 'Patient/1234' is"
+                            + " represented in FhirProto as {patientId {value:'1234'} },"
+                            + " where patientId is a field of type ReferenceId.")
+                    .setExtension(
+                        Annotations.structureDefinitionKind,
+                        Annotations.StructureDefinitionKindValue.KIND_PRIMITIVE_TYPE));
+
+    referenceId
+        .addFieldBuilder()
+        .setName("value")
+        .setType(FieldDescriptorProto.Type.TYPE_STRING)
+        .setOptions(
+            FieldOptions.newBuilder()
+                .setExtension(
+                    ProtoGeneratorAnnotations.fieldDescription,
+                    "Id of the resource being referenced."))
+        .setNumber(1);
+    referenceId
+        .addFieldBuilder()
+        .setName("history")
+        .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+        .setTypeName("Id")
+        .setOptions(
+            FieldOptions.newBuilder()
+                .setExtension(
+                    ProtoGeneratorAnnotations.fieldDescription, "History version, if present."))
+        .setNumber(2);
+    referenceId
+        .addFieldBuilder()
+        .setName("id")
+        .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+        .setTypeName("String")
+        .setOptions(
+            FieldOptions.newBuilder()
+                .setExtension(
+                    ProtoGeneratorAnnotations.fieldDescription, "xml:id (or equivalent in JSON)"))
+        .setNumber(3);
+    referenceId
+        .addFieldBuilder()
+        .setName("extension")
+        .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+        .setTypeName("Extension")
+        .setOptions(
+            FieldOptions.newBuilder()
+                .setExtension(
+                    ProtoGeneratorAnnotations.fieldDescription,
+                    "Additional Content defined by implementations"))
+        .setNumber(4);
   }
 
   public FileDescriptorProto generateResourceFileDescriptor(StructureDefinition def)
@@ -1149,6 +1373,42 @@ public class ProtoGeneratorV2 {
         .addDependency(protogenConfig.getSourceDirectory() + "/datatypes.proto")
         .addDependency("google/protobuf/any.proto")
         .build();
+  }
+
+  // Generates a single file for two types: the Bundle type, and the ContainedResource type.
+  public FileDescriptorProto generateBundleAndContainedResource(
+      StructureDefinition bundleDefinition, List<String> resourceTypes, int fieldNumberOffset)
+      throws InvalidFhirException {
+    FileDescriptorProto.Builder fileBuilder =
+        generateResourceFileDescriptor(bundleDefinition).toBuilder();
+
+    DescriptorProto.Builder contained =
+        fileBuilder
+            .addMessageTypeBuilder()
+            .setName("ContainedResource")
+            .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource"));
+    // When generating contained resources, iterate through all the resources sorted alphabetically,
+    // assigning tag numbers as you go
+    TreeSet<String> sortedResources = new TreeSet<>(resourceTypes);
+    int tagNumber = 1 + fieldNumberOffset;
+    for (String type : sortedResources) {
+      fileBuilder.addDependency(
+          new File(
+                  protogenConfig.getSourceDirectory()
+                      + "/resources/"
+                      + GeneratorUtils.resourceNameToFileName(type))
+              .toString());
+      contained.addField(
+          FieldDescriptorProto.newBuilder()
+              .setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type))
+              .setNumber(tagNumber++)
+              .setTypeName(type)
+              .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+              .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+              .setOneofIndex(0 /* the oneof_resource */)
+              .build());
+    }
+    return fileBuilder.build();
   }
 
   private FileDescriptorProto.Builder generateFileDescriptor(List<StructureDefinition> defs)
@@ -1193,41 +1453,6 @@ public class ProtoGeneratorV2 {
       }
     }
     return false;
-  }
-
-  /**
-   * Returns a version of the passed-in FileDescriptor that contains a ContainedResource message,
-   * which contains only the resource types present in the generated FileDescriptorProto.
-   */
-  public FileDescriptorProto addContainedResource(
-      FileDescriptorProto fileDescriptor, List<DescriptorProto> resourceTypes) {
-    DescriptorProto.Builder contained =
-        DescriptorProto.newBuilder()
-            .setName("ContainedResource")
-            .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource"));
-    // When generating contained resources for the core type (resources.proto),
-    // iterate through all the non-abstract resources sorted alphabetically, assigning tag numbers
-    // as you go
-    TreeSet<DescriptorProto> sortedResources =
-        new TreeSet<>((a, b) -> a.getName().compareTo(b.getName()));
-    sortedResources.addAll(resourceTypes);
-    int tagNumber = 1;
-    for (DescriptorProto type : sortedResources) {
-      if (AnnotationUtils.isResource(type)
-          && !type.getOptions().getExtension(Annotations.isAbstractType)) {
-        contained.addField(
-            FieldDescriptorProto.newBuilder()
-                .setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type.getName()))
-                .setNumber(tagNumber++)
-                .setTypeName(type.getName())
-                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
-                .setOneofIndex(0 /* the oneof_resource */)
-                .build());
-      }
-    }
-
-    return fileDescriptor.toBuilder().addMessageType(contained).build();
   }
 
   private static Optional<String> getPrimitiveRegex(ElementDefinition element)
@@ -1366,7 +1591,7 @@ public class ProtoGeneratorV2 {
     return Optional.empty();
   }
 
-  private void addReferenceType(FieldOptions.Builder options, String referenceUrl) {
+  private void addReferenceTypeExtension(FieldOptions.Builder options, String referenceUrl) {
     options.addExtension(
         Annotations.validReferenceType, getBaseStructureDefinitionData(referenceUrl).inlineType);
   }

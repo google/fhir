@@ -346,4 +346,14 @@ final class GeneratorUtils {
             Collectors.groupingBy(
                 Map.Entry::getKey, Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
   }
+
+  //  Converts an UpperCamel resource name to a lower_underscore name with .proto at the end,
+  // as well as resolving acronyms.
+  // E.g., FHIRIsGreat -> fhir_is_great.proto
+  static String resourceNameToFileName(String resourceName) {
+    return CaseFormat.UPPER_CAMEL.to(
+            CaseFormat.LOWER_UNDERSCORE,
+            resolveAcronyms(GeneratorUtils.toFieldTypeCase(resourceName)))
+        + ".proto";
+  }
 }
