@@ -32,6 +32,7 @@
 #include "proto/google/fhir/proto/r4/core/resources/coverage_eligibility_request.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/encounter.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/practitioner_role.pb.h"
 #include "proto/google/fhir/proto/r4/fhirproto.pb.h"
 #include "testdata/r4/profiles/test.pb.h"
 
@@ -177,6 +178,11 @@ TEST(CompositionValidationTest,
 
 TEST(BundleValidationTest, ValidEmptyBundle) {
   InvalidTest<Bundle>("empty_bundle");
+}
+
+TEST(PractitionerRole, PractitionerRoleWithNonBoolExpression) {
+  ValidTest<PractitionerRole>(
+      "practitioner_role_with_ignored_invalid_constraint");
 }
 
 }  // namespace

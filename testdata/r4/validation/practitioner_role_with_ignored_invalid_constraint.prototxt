@@ -1,0 +1,61 @@
+id {
+  value: "12345"
+}
+meta {
+  extension {
+    url {
+      value: "https://g.co/fhir/medicalrecords/sourceIdentifier"
+    }
+    value {
+      identifier {
+        system {
+          value: "test"
+          }
+        value {
+          value: "12345"
+        }
+      }
+    }
+  }
+}
+active {
+  value: 0
+}
+period {
+  start {
+    value_us: 1663853259000000
+    timezone: "+00:00"
+    precision: SECOND
+    }
+  end {
+    value_us: 4133894400000000
+    timezone: "+00:00"
+    precision: SECOND
+    }
+  }
+practitioner {
+  practitioner_id {
+    value: "12345"
+  }
+}
+organization {
+  display {
+    value: "test"
+    }
+  }
+code {
+  coding {
+    system {
+      value: "https://test.com"
+    }
+    code {
+      value: "123"
+    }
+    display {
+      value: "1234"
+      }
+  }
+  text {
+    value: "1234"
+  }
+}
