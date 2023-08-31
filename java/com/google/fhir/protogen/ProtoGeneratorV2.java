@@ -33,6 +33,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import com.google.fhir.common.Codes;
 import com.google.fhir.common.Extensions;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.Annotations;
@@ -45,6 +46,8 @@ import com.google.fhir.r4.core.Canonical;
 import com.google.fhir.r4.core.ConstraintSeverityCode;
 import com.google.fhir.r4.core.ElementDefinition;
 import com.google.fhir.r4.core.Extension;
+import com.google.fhir.r4.core.ResourceTypeCode;
+import com.google.fhir.r4.core.SearchParameter;
 import com.google.fhir.r4.core.SlicingRulesCode;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
@@ -61,6 +64,7 @@ import com.google.protobuf.DescriptorProtos.OneofDescriptorProto;
 import com.google.protobuf.DescriptorProtos.OneofOptions;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.EnumDescriptor;
+import com.google.protobuf.Descriptors.EnumValueDescriptor;
 import com.google.protobuf.Message;
 import java.io.File;
 import java.util.ArrayList;
@@ -210,6 +214,10 @@ public class ProtoGeneratorV2 {
   private final FhirPackage inputPackage;
 
   private final BoundCodeGenerator boundCodeGenerator;
+  private final Map<ResourceTypeCode.Value, List<SearchParameter>> searchParameterMap =
+      new HashMap<>();
+
+  private boolean addSearchParameters = false;
 
   private static class StructureDefinitionData {
     final StructureDefinition structDef;
@@ -234,6 +242,9 @@ public class ProtoGeneratorV2 {
     allDefinitions.putAll(
         stream(inputPackage.structureDefinitions().iterator())
             .collect(toImmutableMap(def -> def, def -> protogenConfig.getProtoPackage())));
+    searchParameterMap.putAll(
+        GeneratorUtils.getSearchParameterMap(
+            ImmutableList.copyOf(inputPackage.searchParameters())));
 
     Map<String, StructureDefinitionData> mutableStructDefDataByUrl = new HashMap<>();
     for (Map.Entry<StructureDefinition, String> knownType : allDefinitions.entrySet()) {
@@ -258,6 +269,10 @@ public class ProtoGeneratorV2 {
                 def -> def.getDerivation().getValue() != TypeDerivationRuleCode.Value.CONSTRAINT)
             .filter(def -> knownUrls.add(def.getUrl().getValue()))
             .collect(toImmutableMap(def -> def.getId().getValue(), def -> def));
+  }
+
+  void addSearchParameters() {
+    addSearchParameters = true;
   }
 
   // Given a structure definition, gets the name of the top-level message that will be generated.
@@ -306,6 +321,24 @@ public class ProtoGeneratorV2 {
       }
     }
     return defBuilder.build();
+  }
+
+  private List<SearchParameter> getSearchParameters(StructureDefinition def) {
+    if (def.getKind().getValue() != StructureDefinitionKindCode.Value.RESOURCE) {
+      // Not a resource - no search parameters to add.
+      return new ArrayList<>();
+    }
+    String resourceTypeId = def.getSnapshot().getElementList().get(0).getId().getValue();
+    // Get the string representation of the enum value for the resource type.
+    try {
+      EnumValueDescriptor enumValueDescriptor =
+          Codes.codeStringToEnumValue(ResourceTypeCode.Value.getDescriptor(), resourceTypeId);
+      return searchParameterMap.getOrDefault(
+          ResourceTypeCode.Value.forNumber(enumValueDescriptor.getNumber()), new ArrayList<>());
+    } catch (InvalidFhirException e) {
+      throw new IllegalArgumentException(
+          "Encountered unrecognized resource id: " + resourceTypeId, e);
+    }
   }
 
   // Class for generating a single message from a single StructureDefinition.
@@ -367,6 +400,27 @@ public class ProtoGeneratorV2 {
       if (structureDefinition.getAbstract().getValue()) {
         optionsBuilder.setExtension(
             Annotations.isAbstractType, structureDefinition.getAbstract().getValue());
+      }
+
+      if (addSearchParameters) {
+        // Add search parameters
+        List<Annotations.SearchParameter> searchParameterAnnotations = new ArrayList<>();
+        for (SearchParameter searchParameter :
+            ImmutableList.sortedCopyOf(
+                (p1, p2) -> p1.getName().getValue().compareTo(p2.getName().getValue()),
+                getSearchParameters(structureDefinition))) {
+          searchParameterAnnotations.add(
+              Annotations.SearchParameter.newBuilder()
+                  .setName(searchParameter.getName().getValue())
+                  .setType(
+                      Annotations.SearchParameterType.forNumber(
+                          searchParameter.getType().getValue().getNumber()))
+                  .setExpression(searchParameter.getExpression().getValue())
+                  .build());
+        }
+        if (!searchParameterAnnotations.isEmpty()) {
+          optionsBuilder.setExtension(Annotations.searchParameter, searchParameterAnnotations);
+        }
       }
       return optionsBuilder.build();
     }

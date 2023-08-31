@@ -90,9 +90,13 @@ class ProtoGeneratorMainV2 {
         description =
             "Field number offset for ContainedResources.  This is used to ensure that"
                 + " ContainedResources from different versions of FHIR don't use overlapping"
-                + " numbers, so they can eventually be combined.  See: go/StableFhirProtos",
-        required = true)
+                + " numbers, so they can eventually be combined.  See: go/StableFhirProtos")
     private int containedResourceOffset = 0;
+
+    @Parameter(
+        names = {"--add_search_parameters"},
+        description = "If true, add search parameter annotations.  Defaults to false.")
+    private boolean addSearchParameters = false;
   }
 
   ProtoGeneratorMainV2(Args args) {
@@ -123,6 +127,10 @@ class ProtoGeneratorMainV2 {
             config,
             inputPackage,
             valueSetGenerator.getBoundCodeGenerator(codesFileDescriptor, valueSetsFileDescriptor));
+
+    if (args.addSearchParameters) {
+      generator.addSearchParameters();
+    }
 
     ProtoFilePrinter printer = new ProtoFilePrinter(config);
 
