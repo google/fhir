@@ -1205,6 +1205,32 @@ public class ProtoGeneratorV2 {
     return fileBuilder.build();
   }
 
+  // To match v1 proto generator behavior, skip generating a few extra datatypes that are hardcoded
+  // in supplemental files: Element, Extension, Reference
+  public FileDescriptorProto generateLegacyDatatypesFileDescriptor(List<String> resourceNames)
+      throws InvalidFhirException {
+    ImmutableList<StructureDefinition> messages =
+        stream(inputPackage.structureDefinitions())
+            .filter(
+                def ->
+                    (def.getKind().getValue() == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE
+                            || def.getKind().getValue()
+                                == StructureDefinitionKindCode.Value.COMPLEX_TYPE)
+                        && !DATATYPES_TO_SKIP.contains(def.getUrl().getValue())
+                        && !def.getUrl()
+                            .getValue()
+                            .equals("http://hl7.org/fhir/StructureDefinition/Element")
+                        && !def.getUrl()
+                            .getValue()
+                            .equals("http://hl7.org/fhir/StructureDefinition/Extension")
+                        && !def.getBaseDefinition()
+                            .getValue()
+                            .equals("http://hl7.org/fhir/StructureDefinition/Extension"))
+            .collect(toImmutableList());
+
+    return generateFileDescriptor(messages).build();
+  }
+
   // We generate a custom Reference datatype, since we have typed reference ID fields that are
   // not a part of the FHIR spec.
   // For instance, a JSON FHIR Reference of {"reference: "Patient/1234"} is represented in FhirProto
@@ -1444,14 +1470,18 @@ public class ProtoGeneratorV2 {
     // When generating contained resources, iterate through all the resources sorted alphabetically,
     // assigning tag numbers as you go
     TreeSet<String> sortedResources = new TreeSet<>(resourceTypes);
+    sortedResources.add("Bundle");
     int tagNumber = 1 + fieldNumberOffset;
     for (String type : sortedResources) {
-      fileBuilder.addDependency(
-          new File(
-                  protogenConfig.getSourceDirectory()
-                      + "/resources/"
-                      + GeneratorUtils.resourceNameToFileName(type))
-              .toString());
+      if (!type.equals("Bundle")) {
+        // Don't add a dep for Bundle since it's defined in the same file.
+        fileBuilder.addDependency(
+            new File(
+                    protogenConfig.getSourceDirectory()
+                        + "/resources/"
+                        + GeneratorUtils.resourceNameToFileName(type))
+                .toString());
+      }
       contained.addField(
           FieldDescriptorProto.newBuilder()
               .setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type))

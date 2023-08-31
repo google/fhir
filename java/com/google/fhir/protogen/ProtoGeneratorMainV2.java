@@ -97,6 +97,13 @@ class ProtoGeneratorMainV2 {
         names = {"--add_search_parameters"},
         description = "If true, add search parameter annotations.  Defaults to false.")
     private boolean addSearchParameters = false;
+
+    @Parameter(
+        names = {"--legacy_datatype_generation"},
+        description =
+            "If true, skips generating Element, Reference, and Extension, which are hardcoded in "
+                + "legacy behavior.  Defaults to false.")
+    private boolean legacyDatatypeGeneration = false;
   }
 
   ProtoGeneratorMainV2(Args args) {
@@ -177,7 +184,9 @@ class ProtoGeneratorMainV2 {
         addEntry(
             zipOutputStream,
             printer,
-            generator.generateDatatypesFileDescriptor(resourceNames),
+            args.legacyDatatypeGeneration
+                ? generator.generateLegacyDatatypesFileDescriptor(resourceNames)
+                : generator.generateDatatypesFileDescriptor(resourceNames),
             "datatypes.proto");
       } finally {
         zipOutputStream.closeEntry();

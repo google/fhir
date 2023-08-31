@@ -37,6 +37,7 @@ $PROTO_GENERATOR \
   --license_date "2019" \
   --fhir_version "R4" \
   --add_search_parameters \
+  --legacy_datatype_generation \
   --output_directory "${OUTPUT_PATH}"
 
 unzip -qo "${OUTPUT_PATH}/output.zip" -d "${OUTPUT_PATH}"

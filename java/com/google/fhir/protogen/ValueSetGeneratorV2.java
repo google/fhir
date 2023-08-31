@@ -627,6 +627,9 @@ public class ValueSetGeneratorV2 {
           .put(
               "http://hl7.org/fhir/deviceassociation-status-reason",
               "DeviceAssociationStatusReason")
+          .put(
+              "http://hl7.org/fhir/CodeSystem/medication-statement-status",
+              "MedicationStatementStatusCodes")
           .build();
 
   public String getCodeSystemName(CodeSystem codeSystem) {

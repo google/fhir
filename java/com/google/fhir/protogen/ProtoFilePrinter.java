@@ -306,7 +306,9 @@ public class ProtoFilePrinter {
           message.append(
               printField(
                   fieldBuilder.build(), fullName, oneofIndent, packageName, /* inOneof= */ true));
-          if (i != descriptor.getFieldCount() - 1) {
+          // If this oneof field had a description, and is not the last field, add a newline after.
+          if (field.getOptions().hasExtension(ProtoGeneratorAnnotations.fieldDescription)
+              && i != descriptor.getFieldCount() - 1) {
             message.append("\n");
           }
         }
