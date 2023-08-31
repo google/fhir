@@ -21,6 +21,7 @@ import (
 	"io/ioutil"
 	"math"
 	"path"
+	"regexp"
 
 	"path/filepath"
 	"strconv"
@@ -1457,7 +1458,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			"gender": ["male", "female"]
     }`,
 			vers: []Version{fhirversion.STU3, fhirversion.R4},
-			errs: []string{`error at "Patient.gender": invalid JSON`},
+			errs: []string{`error at "Patient.gender": invalid value \(expected a (AdministrativeGenderCode|GenderCode) object\)`},
 		},
 		{
 			name: "Invalid code",
@@ -1817,7 +1818,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 					}
 					matched := false
 					for _, wantErr := range test.errs {
-						if err.Error() == wantErr {
+						if err.Error() == wantErr || regexp.MustCompile(wantErr).Match([]byte(err.Error())) {
 							matched = true
 							break
 						}

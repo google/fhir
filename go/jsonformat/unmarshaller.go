@@ -270,7 +270,7 @@ func (u *Unmarshaller) mergeRawMessage(jsonPath string, rm json.RawMessage, pb p
 	if err := jsp.Unmarshal(rm, &decmap); err != nil {
 		return &jsonpbhelper.UnmarshalError{
 			Path:        jsonPath,
-			Details:     "invalid JSON",
+			Details:     fmt.Sprintf("invalid value (expected a %s object)", pb.Descriptor().Name()),
 			Diagnostics: fmt.Sprintf("%.50s", rm),
 		}
 	}
