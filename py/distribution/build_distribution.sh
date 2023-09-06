@@ -36,7 +36,7 @@ readonly PROTOC_SHA='4a3b26d1ebb9c1d23e933694a6669295f6a39ddc64c3db2adf671f0a602
 readonly PROTOC_VERSION='3.13.0'
 readonly PYENV_VERSION='1.2.26'
 readonly PYTHON_BUILD_VERSION='3.9.0'
-readonly PYTHON_VERSIONS=('3.8.10' '3.9.0')
+readonly PYTHON_VERSIONS=('3.8.10' '3.9.0' '3.10.12')
 readonly SIX_VERSION='1.16.0'
 
 # Helper around print statements.
