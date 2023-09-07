@@ -29,12 +29,12 @@ option java_multiple_files = true;
 // package) and therefore not contian information that can be found in the FHIR
 // definitions themselves.
 message ProtogenConfig {
+  reserved 3;
+
   // Package for the generated protos for the resources.
   string proto_package = 1;
   // Java package for the generated protos for the resources.
   string java_proto_package = 2;
-  // Go package for the generated protos for the resources.
-  string go_proto_package = 3;
 
   // Directory to place generated package.  This is needed for intra-package
   // imports.
@@ -52,6 +52,8 @@ message ProtogenConfig {
 
 // Metadata for generating FHIR packages
 message PackageInfo {
+  reserved 5;
+
   // FHIR version for the package (e.g., STU3, R4, R5, etc).
   proto.FhirVersion fhir_version = 1;
   // Base url to use for all profiles defined here.
@@ -62,8 +64,6 @@ message PackageInfo {
   string proto_package = 3;
   // Java package for the generated protos for the resources.
   string java_proto_package = 4;
-  // Go package for the generated protos for the resources.
-  string go_proto_package = 5;
 
   // Defines whether to generate a local ContainedResource proto or reuse one.
   // If neither of these fields are set, use the core contained resource on

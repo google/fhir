@@ -1503,9 +1503,6 @@ public class ProtoGeneratorV2 {
     if (!protogenConfig.getJavaProtoPackage().isEmpty()) {
       options.setJavaPackage(protogenConfig.getJavaProtoPackage()).setJavaMultipleFiles(true);
     }
-    if (!protogenConfig.getGoProtoPackage().isEmpty()) {
-      options.setGoPackage(protogenConfig.getGoProtoPackage());
-    }
 
     // TODO(b/267772954292116008): Don't rely on precompiled version enum.
     options.setExtension(Annotations.fhirVersion, protogenConfig.getFhirVersion());

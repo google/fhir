@@ -1827,9 +1827,6 @@ public class ProtoGenerator {
     if (!packageInfo.getJavaProtoPackage().isEmpty()) {
       options.setJavaPackage(packageInfo.getJavaProtoPackage()).setJavaMultipleFiles(true);
     }
-    if (!packageInfo.getGoProtoPackage().isEmpty()) {
-      options.setGoPackage(packageInfo.getGoProtoPackage());
-    }
     options.setExtension(Annotations.fhirVersion, FhirVersion.R4.toAnnotation());
     builder.setOptions(options);
     for (StructureDefinition def : defs) {

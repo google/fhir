@@ -144,8 +144,8 @@ class ProtoGeneratorMainV2 {
     try (ZipOutputStream zipOutputStream =
         new ZipOutputStream(new FileOutputStream(new File(args.outputDirectory, "output.zip")))) {
       try {
-        addEntry(zipOutputStream, printer, codesFileDescriptor, "codes.proto");
-        addEntry(zipOutputStream, printer, valueSetsFileDescriptor, "valuesets.proto");
+        addEntry(zipOutputStream, printer, config, codesFileDescriptor, "codes.proto");
+        addEntry(zipOutputStream, printer, config, valueSetsFileDescriptor, "valuesets.proto");
 
         List<String> resourceNames = new ArrayList<>();
         StructureDefinition bundleDefinition = null;
@@ -165,6 +165,7 @@ class ProtoGeneratorMainV2 {
               addEntry(
                   zipOutputStream,
                   printer,
+                  config,
                   generator.generateResourceFileDescriptor(structDef),
                   "resources/" + GeneratorUtils.resourceNameToFileName(resourceName));
             }
@@ -175,6 +176,7 @@ class ProtoGeneratorMainV2 {
         addEntry(
             zipOutputStream,
             printer,
+            config,
             generator.generateBundleAndContainedResource(
                 bundleDefinition, resourceNames, args.containedResourceOffset),
             "resources/bundle_and_contained_resource.proto");
@@ -184,6 +186,7 @@ class ProtoGeneratorMainV2 {
         addEntry(
             zipOutputStream,
             printer,
+            config,
             args.legacyDatatypeGeneration
                 ? generator.generateLegacyDatatypesFileDescriptor(resourceNames)
                 : generator.generateDatatypesFileDescriptor(resourceNames),
@@ -197,9 +200,11 @@ class ProtoGeneratorMainV2 {
   private static void addEntry(
       ZipOutputStream zipOutputStream,
       ProtoFilePrinter printer,
+      ProtogenConfig config,
       FileDescriptorProto fileDescriptor,
       String name)
       throws IOException {
+    fileDescriptor = GeneratorUtils.setGoPackage(fileDescriptor, config.getSourceDirectory(), name);
     zipOutputStream.putNextEntry(new ZipEntry(name));
     byte[] entryBytes = printer.print(fileDescriptor).getBytes(UTF_8);
     zipOutputStream.write(entryBytes, 0, entryBytes.length);

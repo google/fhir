@@ -167,9 +167,6 @@ public class ValueSetGenerator {
     if (!packageInfo.getJavaProtoPackage().isEmpty()) {
       options.setJavaPackage(packageInfo.getJavaProtoPackage()).setJavaMultipleFiles(true);
     }
-    if (!packageInfo.getGoProtoPackage().isEmpty()) {
-      options.setGoPackage(packageInfo.getGoProtoPackage());
-    }
     builder.setOptions(options);
     List<DescriptorProto> messages = new ArrayList<>();
     for (CodeSystem codeSystem : codeSystemsToGenerate) {
@@ -194,9 +191,6 @@ public class ValueSetGenerator {
     FileOptions.Builder options = FileOptions.newBuilder();
     if (!packageInfo.getJavaProtoPackage().isEmpty()) {
       options.setJavaPackage(packageInfo.getJavaProtoPackage()).setJavaMultipleFiles(true);
-    }
-    if (!packageInfo.getGoProtoPackage().isEmpty()) {
-      options.setGoPackage(packageInfo.getGoProtoPackage());
     }
     builder.setOptions(options);
     valueSetsToGenerate.stream()

@@ -42,11 +42,13 @@ java_library(
     name = "generator_utils",
     srcs = ["GeneratorUtils.java"],
     deps = [
+        "//java/com/google/common/util",
         "//java/com/google/fhir/common:exceptions",
         "//proto/google/fhir/proto/r4/core:codes_java_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:search_parameter_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
+        "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_guava_guava",
     ],
 )

@@ -24,6 +24,7 @@ import "proto/google/fhir/proto/r4/core/datatypes.proto";
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
 option (.google.fhir.proto.fhir_version) = R4;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/device_metric_go_proto";
 
 // Auto-generated from StructureDefinition for DeviceMetric.
 // Measurement, calculation or setting capability of a medical device.

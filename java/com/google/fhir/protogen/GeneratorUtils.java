@@ -21,6 +21,7 @@ import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
+import com.google.common.util.PathUtil;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.r4.core.Canonical;
 import com.google.fhir.r4.core.DateTime;
@@ -30,6 +31,7 @@ import com.google.fhir.r4.core.ResourceTypeCode;
 import com.google.fhir.r4.core.SearchParameter;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
+import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import java.time.LocalDate;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashSet;
@@ -48,6 +50,7 @@ final class GeneratorUtils {
   // The path for annotation definition of proto options.
   public static final String ANNOTATION_PATH = "proto/google/fhir/proto";
 
+  private static final String GO_PACKAGE_PREFIX = "github.com/google/fhir/go";
   private static final Pattern WORD_BREAK_PATTERN = Pattern.compile("[^A-Za-z0-9]+([A-Za-z0-9])");
   private static final Pattern ACRONYM_PATTERN = Pattern.compile("([A-Z])([A-Z]+)(?![a-z])");
 
@@ -355,5 +358,15 @@ final class GeneratorUtils {
             CaseFormat.LOWER_UNDERSCORE,
             resolveAcronyms(GeneratorUtils.toFieldTypeCase(resourceName)))
         + ".proto";
+  }
+
+  static FileDescriptorProto setGoPackage(
+      FileDescriptorProto fileProto, String sourceDirectory, String fileName) {
+    // Strip .proto suffix
+    fileName = fileName.substring(0, fileName.length() - 6);
+    String goPackage = PathUtil.join(GO_PACKAGE_PREFIX, sourceDirectory, fileName + "_go_proto");
+    FileDescriptorProto.Builder fileProtoBuilder = fileProto.toBuilder();
+    fileProtoBuilder.getOptionsBuilder().setGoPackage(goPackage);
+    return fileProtoBuilder.build();
   }
 }

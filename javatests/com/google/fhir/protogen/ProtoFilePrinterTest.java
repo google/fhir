@@ -244,6 +244,9 @@ public final class ProtoFilePrinterTest {
     List<StructureDefinition> resourceDefinitions =
         getResourcesInFile(Extension.getDescriptor().getFile());
     FileDescriptorProto descriptor = protoGenerator.generateFileDescriptor(resourceDefinitions);
+    descriptor =
+        GeneratorUtils.setGoPackage(
+            descriptor, "proto/google/fhir/proto/r4/core", "datatypes.proto");
     String generated = protoPrinter.print(descriptor);
     String golden = readGolden("datatypes", false);
     assertEqualsIgnoreClangFormat(golden, generated);
@@ -261,6 +264,10 @@ public final class ProtoFilePrinterTest {
       FileDescriptorProto descriptor =
           protoGenerator.generateFileDescriptor(
               ImmutableList.of(readStructureDefinition(resourceName)));
+      String resourceFileName = GeneratorUtils.resourceNameToFileName(resourceName);
+      descriptor =
+          GeneratorUtils.setGoPackage(
+              descriptor, "proto/google/fhir/proto/r4/core", "resources/" + resourceFileName);
       String golden = readGolden(resourceName, true);
       String generated = protoPrinter.print(descriptor);
       assertEqualsIgnoreClangFormat(golden, generated);

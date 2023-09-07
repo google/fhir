@@ -20,6 +20,7 @@ import "proto/google/fhir/proto/annotations.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.r4.core";
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/valuesets_go_proto";
 
 // UCUM units for recording body length measures such as height and head
 // circumference See http://hl7.org/fhir/ValueSet/ucum-bodylength

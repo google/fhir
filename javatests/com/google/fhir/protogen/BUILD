@@ -16,6 +16,7 @@ java_test(
         "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/common:json_format",
         "//java/com/google/fhir/protogen",
+        "//java/com/google/fhir/protogen:generator_utils",
         "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto:profile_config_java_proto",
         "//proto/google/fhir/proto:protogenerator_annotations_java_proto",

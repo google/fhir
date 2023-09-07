@@ -183,6 +183,9 @@ public class ProtoFilePrinter {
           .append(fileOptions.getExtension(Annotations.fhirVersion))
           .append(";\n");
     }
+    if (fileOptions.hasGoPackage()) {
+      options.append("option go_package = \"").append(fileOptions.getGoPackage()).append("\";\n");
+    }
     return options.toString();
   }
 
