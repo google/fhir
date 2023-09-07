@@ -24,6 +24,7 @@ import "proto/google/fhir/proto/stu3/metadatatypes.proto";
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.proto";
 option (.google.fhir.proto.fhir_version) = STU3;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto";
 
 // Auto-generated from StructureDefinition for Account, last updated
 // 2017-04-19T07:44:43.294+10:00. Tracks balance, charges, for patient or cost
@@ -1355,10 +1356,9 @@ message Bundle {
     }
     Response response = 9;
   }
-  repeated Entry entry = 9 [
-    (.google.fhir.proto.fhir_path_constraint) =
-        "resource.exists() or request.exists() or response.exists()"
-  ];
+  repeated Entry entry = 9
+      [(.google.fhir.proto.fhir_path_constraint) =
+           "resource.exists() or request.exists() or response.exists()"];
 
   // Digital Signature
   Signature signature = 10;

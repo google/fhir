@@ -20,6 +20,7 @@ import "proto/google/fhir/proto/stu3/datatypes.proto";
 
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.testing";
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/stu3/primitive_test_suite_go_proto";
 
 // Union type of all primitives that can be tested for STU3 FHIR.
 message PrimitiveProtoUnion {

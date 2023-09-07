@@ -21,6 +21,7 @@ import "proto/google/fhir/proto/annotations.proto";
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.proto";
 option (.google.fhir.proto.fhir_version) = STU3;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto";
 
 // Auto-generated from StructureDefinition for base64Binary, last updated
 // 2017-04-19T07:44:43.294+10:00. Primitive Type base64Binary. See

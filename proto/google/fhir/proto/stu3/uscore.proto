@@ -26,6 +26,7 @@ import "proto/google/fhir/proto/stu3/uscore_codes.proto";
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.uscore";
 option (.google.fhir.proto.fhir_version) = STU3;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/stu3/uscore_go_proto";
 
 // Auto-generated from StructureDefinition for US Core Allergies Profile.
 // US Core Allergies Profile.

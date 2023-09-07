@@ -26,6 +26,7 @@ import "proto/google/fhir/proto/stu3/resources.proto";
 option java_multiple_files = true;
 option java_package = "com.google.fhir.stu3.proto";
 option (.google.fhir.proto.fhir_version) = STU3;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/stu3/profiles_go_proto";
 
 // Auto-generated from StructureDefinition for Vital Signs Profile.
 // FHIR Body Mass Index (BMI) Profile.
