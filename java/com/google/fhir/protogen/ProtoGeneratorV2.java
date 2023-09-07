@@ -17,7 +17,6 @@ package com.google.fhir.protogen;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static com.google.common.collect.Streams.stream;
-import static com.google.fhir.protogen.GeneratorUtils.getElementById;
 import static com.google.fhir.protogen.GeneratorUtils.isProfile;
 import static com.google.fhir.protogen.GeneratorUtils.lastIdToken;
 import static com.google.fhir.protogen.GeneratorUtils.nameFromQualifiedName;
@@ -51,7 +50,6 @@ import com.google.fhir.r4.core.SearchParameter;
 import com.google.fhir.r4.core.SlicingRulesCode;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
-import com.google.fhir.r4.core.TypeDerivationRuleCode;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
@@ -194,8 +192,6 @@ public class ProtoGeneratorV2 {
 
   // Mapping from urls for StructureDefinition to data about that StructureDefinition.
   private final ImmutableMap<String, StructureDefinitionData> structDefDataByUrl;
-  // Mapping from id to StructureDefinition data about all known base (i.e., not profile) types.
-  private final ImmutableMap<String, StructureDefinition> baseStructDefsById;
 
   private static Set<String> getTypesDefinedInType(Descriptor type) {
     Set<String> types = new HashSet<>();
@@ -262,13 +258,6 @@ public class ProtoGeneratorV2 {
 
     // Used to ensure each structure definition is unique by url.
     final Set<String> knownUrls = new HashSet<>();
-
-    this.baseStructDefsById =
-        allDefinitions.keySet().stream()
-            .filter(
-                def -> def.getDerivation().getValue() != TypeDerivationRuleCode.Value.CONSTRAINT)
-            .filter(def -> knownUrls.add(def.getUrl().getValue()))
-            .collect(toImmutableMap(def -> def.getId().getValue(), def -> def));
   }
 
   void addSearchParameters() {
@@ -697,8 +686,9 @@ public class ProtoGeneratorV2 {
 
     private Optional<DescriptorProto> buildNestedTypeIfNeeded(ElementDefinition element)
         throws InvalidFhirException {
-      Optional<DescriptorProto> choiceType = buildChoiceTypeIfRequired(element);
-      return choiceType.isPresent() ? choiceType : buildNonChoiceTypeNestedTypeIfNeeded(element);
+      return isChoiceType(element)
+          ? Optional.of(makeChoiceType(element))
+          : buildNonChoiceTypeNestedTypeIfNeeded(element);
     }
 
     private Optional<DescriptorProto> buildNonChoiceTypeNestedTypeIfNeeded(
@@ -716,60 +706,6 @@ public class ProtoGeneratorV2 {
       if (isContainer(element)) {
         return Optional.of(generateMessage(element, DescriptorProto.newBuilder()));
       }
-      return Optional.empty();
-    }
-
-    // Generates the nested type descriptor proto for a choice type if required.
-    private Optional<DescriptorProto> buildChoiceTypeIfRequired(ElementDefinition element)
-        throws InvalidFhirException {
-      Optional<ElementDefinition> choiceTypeBase = getChoiceTypeBase(element);
-      if (choiceTypeBase.isPresent()) {
-        List<ElementDefinition.TypeRef> baseTypes = choiceTypeBase.get().getTypeList();
-        Map<String, Integer> baseTypesToIndex = new HashMap<>();
-        for (int i = 0; i < baseTypes.size(); i++) {
-          String code = baseTypes.get(i).getCode().getValue();
-          // Only add each code type once.  This is only relevant for references, which can appear
-          // multiple times.
-          baseTypesToIndex.putIfAbsent(code, i);
-        }
-        DescriptorProto baseChoiceType = makeChoiceType(choiceTypeBase.get());
-        final Set<String> uniqueTypes = new HashSet<>();
-        ImmutableList<FieldDescriptorProto> matchingFields =
-            element.getTypeList().stream()
-                .filter(type -> uniqueTypes.add(type.getCode().getValue()))
-                .map(
-                    type ->
-                        baseChoiceType.getField(baseTypesToIndex.get(type.getCode().getValue())))
-                .collect(toImmutableList());
-
-        // TODO(b/244184211): If a choice type is a slice of another choice type (not a pure
-        // constraint, but actual slice) we'll need to update the name and type name as well.
-        DescriptorProto.Builder newChoiceType =
-            baseChoiceType.toBuilder().clearField().addAllField(matchingFields);
-
-        // Constraints may be on the choice base element rather than the value element,
-        // so reflect that here.
-        ImmutableList<String> expressions = getFhirPathErrorConstraints(element);
-        if (!expressions.isEmpty()) {
-          newChoiceType.setOptions(
-              baseChoiceType.getOptions().toBuilder()
-                  .setExtension(Annotations.fhirPathMessageConstraint, expressions));
-        }
-        // Add warning constraints.
-        ImmutableList<String> warnings = getFhirPathWarningConstraints(element);
-        if (!warnings.isEmpty()) {
-          newChoiceType.setOptions(
-              baseChoiceType.getOptions().toBuilder()
-                  .setExtension(Annotations.fhirPathMessageWarningConstraint, warnings));
-        }
-
-        return Optional.of(newChoiceType.build());
-      }
-
-      if (isChoiceType(element)) {
-        return Optional.of(makeChoiceType(element));
-      }
-
       return Optional.empty();
     }
 
@@ -1636,40 +1572,6 @@ public class ProtoGeneratorV2 {
               + fieldName.substring(i + 2);
     }
     return fieldName;
-  }
-
-  // TODO(b/244184211): memoize
-  private Optional<ElementDefinition> getChoiceTypeBase(ElementDefinition element)
-      throws InvalidFhirException {
-    if (!element.hasBase()) {
-      return Optional.empty();
-    }
-    String basePath = element.getBase().getPath().getValue();
-    if (basePath.equals("Extension.value[x]")) {
-      // Extension value fields extend from choice-types, but since single-typed extensions will be
-      // inlined as that type anyway, there's no point in generating a choice type for them.
-      return Optional.empty();
-    }
-    String baseType = Splitter.on(".").splitToList(basePath).get(0);
-    if (basePath.endsWith("[x]")) {
-      ElementDefinition choiceTypeBase =
-          getElementById(basePath, baseStructDefsById.get(baseType).getSnapshot().getElementList());
-      return Optional.of(choiceTypeBase);
-    }
-    if (!baseType.equals("Element")) {
-      // Traverse up the tree to check for a choice type in this element's ancestry.
-      if (!baseStructDefsById.containsKey(baseType)) {
-        throw new IllegalArgumentException("Unknown StructureDefinition id: " + baseType);
-      }
-      ElementDefinition baseElement =
-          getElementById(basePath, baseStructDefsById.get(baseType).getSnapshot().getElementList());
-      if (baseElement.getId().equals(element.getId())) {
-        // Starting with r4, elements that don't inherit from anything list themselves as base :/
-        return Optional.empty();
-      }
-      return getChoiceTypeBase(baseElement);
-    }
-    return Optional.empty();
   }
 
   private void addReferenceTypeExtension(FieldOptions.Builder options, String referenceUrl) {
