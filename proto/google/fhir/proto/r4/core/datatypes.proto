@@ -703,9 +703,10 @@ message Date {
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/date";
 
-  // Primitive value for date
+  // The absolute time of the event as a Unix epoch in mircoseconds.
   int64 value_us = 1;
 
+  // The local timezone in which the event was recorded.
   string timezone = 2;
 
   enum Precision {
@@ -733,9 +734,10 @@ message DateTime {
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/dateTime";
 
-  // Primitive value for dateTime
+  // The absolute time of the event as a Unix epoch in mircoseconds.
   int64 value_us = 1;
 
+  // The local timezone in which the event was recorded.
   string timezone = 2;
 
   enum Precision {
@@ -1819,9 +1821,10 @@ message Instant {
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/instant";
 
-  // Primitive value for instant
+  // The absolute time of the event as a Unix epoch in mircoseconds.
   int64 value_us = 1;
 
+  // The local timezone in which the event was recorded.
   string timezone = 2;
 
   enum Precision {
@@ -2772,7 +2775,7 @@ message Time {
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/time";
 
-  // Primitive value for time
+  // The absolute time of the event as a Unix epoch in mircoseconds.
   int64 value_us = 1;
 
   enum Precision {

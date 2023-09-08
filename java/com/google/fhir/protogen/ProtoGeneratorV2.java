@@ -73,6 +73,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Supplier;
 import org.jspecify.nullness.Nullable;
 
 /** A class which turns FHIR StructureDefinitions into protocol messages. */
@@ -109,12 +110,22 @@ public class ProtoGeneratorV2 {
           .build();
 
   private static final FieldDescriptorProto TIMEZONE_FIELD =
-      FieldDescriptorProto.newBuilder()
-          .setName("timezone")
-          .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
-          .setType(FieldDescriptorProto.Type.TYPE_STRING)
-          .setNumber(2)
-          .build();
+      ((Supplier<FieldDescriptorProto>)
+              () -> {
+                FieldDescriptorProto.Builder builder =
+                    FieldDescriptorProto.newBuilder()
+                        .setName("timezone")
+                        .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                        .setType(FieldDescriptorProto.Type.TYPE_STRING)
+                        .setNumber(2);
+                builder
+                    .getOptionsBuilder()
+                    .setExtension(
+                        ProtoGeneratorAnnotations.fieldDescription,
+                        "The local timezone in which the event was recorded.");
+                return builder.build();
+              })
+          .get();
 
   private static final ImmutableMap<String, FieldDescriptorProto.Type> PRIMITIVE_TYPE_OVERRIDES =
       ImmutableMap.of(
@@ -580,7 +591,8 @@ public class ProtoGeneratorV2 {
         valueField
             .getOptionsBuilder()
             .setExtension(
-                ProtoGeneratorAnnotations.fieldDescription, "Primitive value for " + defId);
+                ProtoGeneratorAnnotations.fieldDescription,
+                "The absolute time of the event as a Unix epoch in mircoseconds.");
         fieldsToAdd.add(valueField.build());
         if (TYPES_WITH_TIMEZONE.contains(defId)) {
           fieldsToAdd.add(TIMEZONE_FIELD);

@@ -1759,8 +1759,9 @@ type Date struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Primitive value for date
-	ValueUs   int64          `protobuf:"varint,1,opt,name=value_us,json=valueUs,proto3" json:"value_us,omitempty"`
+	// The absolute time of the event as a Unix epoch in mircoseconds.
+	ValueUs int64 `protobuf:"varint,1,opt,name=value_us,json=valueUs,proto3" json:"value_us,omitempty"`
+	// The local timezone in which the event was recorded.
 	Timezone  string         `protobuf:"bytes,2,opt,name=timezone,proto3" json:"timezone,omitempty"`
 	Precision Date_Precision `protobuf:"varint,3,opt,name=precision,proto3,enum=google.fhir.r4.core.Date_Precision" json:"precision,omitempty"`
 	// xml:id (or equivalent in JSON)
@@ -1844,8 +1845,9 @@ type DateTime struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Primitive value for dateTime
-	ValueUs   int64              `protobuf:"varint,1,opt,name=value_us,json=valueUs,proto3" json:"value_us,omitempty"`
+	// The absolute time of the event as a Unix epoch in mircoseconds.
+	ValueUs int64 `protobuf:"varint,1,opt,name=value_us,json=valueUs,proto3" json:"value_us,omitempty"`
+	// The local timezone in which the event was recorded.
 	Timezone  string             `protobuf:"bytes,2,opt,name=timezone,proto3" json:"timezone,omitempty"`
 	Precision DateTime_Precision `protobuf:"varint,3,opt,name=precision,proto3,enum=google.fhir.r4.core.DateTime_Precision" json:"precision,omitempty"`
 	// xml:id (or equivalent in JSON)
@@ -3162,8 +3164,9 @@ type Instant struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Primitive value for instant
-	ValueUs   int64             `protobuf:"varint,1,opt,name=value_us,json=valueUs,proto3" json:"value_us,omitempty"`
+	// The absolute time of the event as a Unix epoch in mircoseconds.
+	ValueUs int64 `protobuf:"varint,1,opt,name=value_us,json=valueUs,proto3" json:"value_us,omitempty"`
+	// The local timezone in which the event was recorded.
 	Timezone  string            `protobuf:"bytes,2,opt,name=timezone,proto3" json:"timezone,omitempty"`
 	Precision Instant_Precision `protobuf:"varint,3,opt,name=precision,proto3,enum=google.fhir.r4.core.Instant_Precision" json:"precision,omitempty"`
 	// xml:id (or equivalent in JSON)
@@ -5544,7 +5547,7 @@ type Time struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Primitive value for time
+	// The absolute time of the event as a Unix epoch in mircoseconds.
 	ValueUs   int64          `protobuf:"varint,1,opt,name=value_us,json=valueUs,proto3" json:"value_us,omitempty"`
 	Precision Time_Precision `protobuf:"varint,2,opt,name=precision,proto3,enum=google.fhir.r4.core.Time_Precision" json:"precision,omitempty"`
 	// xml:id (or equivalent in JSON)
