@@ -109,6 +109,20 @@ class ResourceCollection(Iterable[_T]):
       rather than the resource itself.
   """
 
+  @classmethod
+  def from_iterable(
+      cls,
+      resources: Iterable[_T],
+      proto_cls: Type[_T],
+      handler: primitive_handler.PrimitiveHandler,
+      resource_time_zone: str,
+  ) -> 'ResourceCollection[_T]':
+    """Creates a resource collection containing the protos in `resources`."""
+    collection = cls(proto_cls, handler, resource_time_zone)
+    for resource in resources:
+      collection.resources_by_uri[resource.url.value] = resource
+    return collection
+
   def __init__(
       self,
       proto_cls: Type[_T],
