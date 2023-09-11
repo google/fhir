@@ -153,15 +153,15 @@ class ProtoGeneratorMainV2 {
         // Aggregate resource names for use in generating a "Bundle and ContainedResource" file,
         // as well as generating a typed reference datatype.
         for (StructureDefinition structDef : inputPackage.structureDefinitions()) {
-          if (structDef.getUrl().getValue().equals(BUNDLE_STRUCTURE_DEFINITION_URL)) {
-            bundleDefinition = structDef;
-          } else {
-            if (structDef.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE
-                && structDef.getDerivation().getValue()
-                    == TypeDerivationRuleCode.Value.SPECIALIZATION
-                && !structDef.getAbstract().getValue()) {
-              String resourceName = GeneratorUtils.getTypeName(structDef);
-              resourceNames.add(resourceName);
+          if (structDef.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE
+              && structDef.getDerivation().getValue() == TypeDerivationRuleCode.Value.SPECIALIZATION
+              && !structDef.getAbstract().getValue()) {
+            String resourceName = GeneratorUtils.getTypeName(structDef);
+            resourceNames.add(resourceName);
+            if (structDef.getUrl().getValue().equals(BUNDLE_STRUCTURE_DEFINITION_URL)) {
+              // Don't make a bundle resource - it will be generated with the ContainedResource.
+              bundleDefinition = structDef;
+            } else {
               addEntry(
                   zipOutputStream,
                   printer,

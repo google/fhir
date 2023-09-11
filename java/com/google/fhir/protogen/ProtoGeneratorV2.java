@@ -266,9 +266,6 @@ public class ProtoGeneratorV2 {
       mutableStructDefDataByUrl.put(def.getUrl().getValue(), structDefData);
     }
     this.structDefDataByUrl = ImmutableMap.copyOf(mutableStructDefDataByUrl);
-
-    // Used to ensure each structure definition is unique by url.
-    final Set<String> knownUrls = new HashSet<>();
   }
 
   void addSearchParameters() {
@@ -1167,16 +1164,25 @@ public class ProtoGeneratorV2 {
                         && !DATATYPES_TO_SKIP.contains(def.getUrl().getValue())
                         && !def.getUrl()
                             .getValue()
-                            .equals("http://hl7.org/fhir/StructureDefinition/Element")
-                        && !def.getUrl()
-                            .getValue()
                             .equals("http://hl7.org/fhir/StructureDefinition/Extension")
                         && !def.getBaseDefinition()
                             .getValue()
                             .equals("http://hl7.org/fhir/StructureDefinition/Extension"))
             .collect(toImmutableList());
 
-    return generateFileDescriptor(messages).build();
+    FileDescriptorProto.Builder fileBuilder = generateFileDescriptor(messages);
+
+    // Old R4 had a few reference types to non-concrete resources.  Include these to be backwards
+    // compatible during transition.
+    // TODO(b/299644315): Consider dropping these fields and reserving the field numbers instead.
+    List<String> supplementedResourceNames = new ArrayList<>(resourceNames);
+    supplementedResourceNames.add("DomainResource");
+    supplementedResourceNames.add("MetadataResource");
+
+    addReferenceType(fileBuilder, supplementedResourceNames);
+    addReferenceIdType(fileBuilder);
+
+    return fileBuilder.build();
   }
 
   // We generate a custom Reference datatype, since we have typed reference ID fields that are
@@ -1198,13 +1204,18 @@ public class ProtoGeneratorV2 {
                             + " See https://www.hl7.org/fhir/datatypes.html#Reference.")
                     .setExtension(
                         Annotations.structureDefinitionKind,
-                        Annotations.StructureDefinitionKindValue.KIND_PRIMITIVE_TYPE));
+                        Annotations.StructureDefinitionKindValue.KIND_COMPLEX_TYPE)
+                    .addExtension(Annotations.fhirReferenceType, "Resource")
+                    .setExtension(
+                        Annotations.fhirStructureDefinitionUrl,
+                        "http://hl7.org/fhir/StructureDefinition/Reference"));
 
     reference
         .addFieldBuilder()
         .setName("id")
         .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
         .setTypeName("String")
+        .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
         .setOptions(
             FieldOptions.newBuilder()
                 .setExtension(
@@ -1215,6 +1226,7 @@ public class ProtoGeneratorV2 {
         .setName("extension")
         .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
         .setTypeName("Extension")
+        .setLabel(FieldDescriptorProto.Label.LABEL_REPEATED)
         .setOptions(
             FieldOptions.newBuilder()
                 .setExtension(
@@ -1226,6 +1238,7 @@ public class ProtoGeneratorV2 {
         .setName("type")
         .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
         .setTypeName("Uri")
+        .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
         .setOptions(
             FieldOptions.newBuilder()
                 .setExtension(
@@ -1288,16 +1301,39 @@ public class ProtoGeneratorV2 {
             .build());
 
     TreeSet<String> sortedResources = new TreeSet<>(resourceNames);
+    // To match legacy R4 ordering, ensure MetdataResource is last (if present.
+    boolean hasMetadataResource = false;
     for (String type : sortedResources) {
+      if (type.equals("MetadataResource")) {
+        hasMetadataResource = true;
+      } else {
+        reference.addField(
+            FieldDescriptorProto.newBuilder()
+                .setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type) + "_id")
+                .setNumber(nextTag++)
+                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                .setTypeName("ReferenceId")
+                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                .setOptions(
+                    FieldOptions.newBuilder().setExtension(Annotations.referencedFhirType, type))
+                .setOneofIndex(0)
+                .build());
+      }
+    }
+
+    if (hasMetadataResource) {
       reference.addField(
           FieldDescriptorProto.newBuilder()
-              .setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type) + "_id")
+              .setName(
+                  CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, "MetadataResource")
+                      + "_id")
               .setNumber(nextTag++)
               .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
               .setTypeName("ReferenceId")
               .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
               .setOptions(
-                  FieldOptions.newBuilder().setExtension(Annotations.referencedFhirType, type))
+                  FieldOptions.newBuilder()
+                      .setExtension(Annotations.referencedFhirType, "MetadataResource"))
               .setOneofIndex(0)
               .build());
     }
@@ -1356,6 +1392,7 @@ public class ProtoGeneratorV2 {
         .addFieldBuilder()
         .setName("value")
         .setType(FieldDescriptorProto.Type.TYPE_STRING)
+        .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
         .setOptions(
             FieldOptions.newBuilder()
                 .setExtension(
@@ -1367,6 +1404,7 @@ public class ProtoGeneratorV2 {
         .setName("history")
         .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
         .setTypeName("Id")
+        .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
         .setOptions(
             FieldOptions.newBuilder()
                 .setExtension(
@@ -1377,6 +1415,7 @@ public class ProtoGeneratorV2 {
         .setName("id")
         .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
         .setTypeName("String")
+        .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
         .setOptions(
             FieldOptions.newBuilder()
                 .setExtension(
@@ -1387,6 +1426,7 @@ public class ProtoGeneratorV2 {
         .setName("extension")
         .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
         .setTypeName("Extension")
+        .setLabel(FieldDescriptorProto.Label.LABEL_REPEATED)
         .setOptions(
             FieldOptions.newBuilder()
                 .setExtension(

@@ -14,6 +14,7 @@
 
 package com.google.fhir.protogen;
 
+import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 
@@ -29,25 +30,22 @@ import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Annotations;
+import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
+import com.google.fhir.proto.ProtogenConfig;
 import com.google.fhir.r4.core.ContainedResource;
-import com.google.fhir.r4.core.Extension;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.DescriptorProtos.OneofDescriptorProto;
-import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
-import com.google.protobuf.Descriptors.FileDescriptor;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -61,7 +59,7 @@ import org.junit.runners.JUnit4;
 public final class ProtoFilePrinterTest {
 
   private JsonFormat.Parser jsonParser;
-  private ProtoGenerator protoGenerator;
+  private FhirPackage r4Package;
   private ProtoFilePrinter protoPrinter;
   private Runfiles runfiles;
 
@@ -189,28 +187,6 @@ public final class ProtoFilePrinterTest {
     }
   }
 
-  private static final ImmutableSet<String> TYPES_TO_IGNORE =
-      ImmutableSet.of(
-          "Extension",
-          "Reference",
-          "ReferenceId",
-          "CodingWithFixedCode",
-          "CodingWithFixedSystem",
-          "Element");
-
-  private List<StructureDefinition> getResourcesInFile(FileDescriptor compiled)
-      throws IOException, InvalidFhirException {
-    List<StructureDefinition> resourceDefinitions = new ArrayList<>();
-    for (Descriptor message : compiled.getMessageTypes()) {
-      if (!message.getFields().isEmpty()
-          && !TYPES_TO_IGNORE.contains(message.getName())
-          && !message.getOptions().hasExtension(Annotations.fhirValuesetUrl)) {
-        resourceDefinitions.add(readStructureDefinition(message.getName()));
-      }
-    }
-    return resourceDefinitions;
-  }
-
   @Before
   public void setUp() throws IOException, InvalidFhirException {
     String packageName = "google.fhir.r4.proto";
@@ -224,14 +200,7 @@ public final class ProtoFilePrinterTest {
             .setLicense(PackageInfo.License.APACHE)
             .setLicenseDate("2019")
             .build();
-    FhirPackage fhirPackage = FhirPackage.load("spec/fhir_r4_package.zip");
-
-    protoGenerator =
-        new ProtoGenerator(
-            fhirPackage.packageInfo,
-            "codes.proto",
-            ImmutableSet.of(fhirPackage),
-            new ValueSetGenerator(fhirPackage.packageInfo, ImmutableSet.of(fhirPackage)));
+    r4Package = FhirPackage.load("spec/fhir_r4_package.zip");
 
     protoPrinter = new ProtoFilePrinter(packageInfo);
   }
@@ -241,9 +210,32 @@ public final class ProtoFilePrinterTest {
   /** Test generating datatypes.proto. */
   @Test
   public void generateDataTypes() throws Exception {
-    List<StructureDefinition> resourceDefinitions =
-        getResourcesInFile(Extension.getDescriptor().getFile());
-    FileDescriptorProto descriptor = protoGenerator.generateFileDescriptor(resourceDefinitions);
+    ProtogenConfig config =
+        ProtogenConfig.newBuilder()
+            .setProtoPackage("google.fhir.r4.core")
+            .setJavaProtoPackage("com.google.fhir.r4.core")
+            .setLicenseDate("1995")
+            .setSourceDirectory("proto/google/fhir/proto/r4/core")
+            .setFhirVersion(FhirVersion.R4)
+            .build();
+
+    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(config, r4Package);
+    FileDescriptorProto codesFileDescriptor = valueSetGenerator.forCodesUsedIn(r4Package);
+    FileDescriptorProto valueSetsFileDescriptor = valueSetGenerator.forValueSetsUsedIn(r4Package);
+
+    ProtoGeneratorV2 protoGenerator =
+        new ProtoGeneratorV2(
+            config,
+            r4Package,
+            valueSetGenerator.getBoundCodeGenerator(codesFileDescriptor, valueSetsFileDescriptor));
+
+    ImmutableList<String> resourceNames =
+        ContainedResource.getDescriptor().getFields().stream()
+            .map(field -> field.getMessageType().getName())
+            .collect(toImmutableList());
+
+    FileDescriptorProto descriptor =
+        protoGenerator.generateLegacyDatatypesFileDescriptor(resourceNames);
     descriptor =
         GeneratorUtils.setGoPackage(
             descriptor, "proto/google/fhir/proto/r4/core", "datatypes.proto");
@@ -260,6 +252,13 @@ public final class ProtoFilePrinterTest {
       if (resourceName.equals("Bundle")) {
         continue;
       }
+
+      ProtoGenerator protoGenerator =
+          new ProtoGenerator(
+              r4Package.packageInfo,
+              "codes.proto",
+              ImmutableSet.of(r4Package),
+              new ValueSetGenerator(r4Package.packageInfo, ImmutableSet.of(r4Package)));
 
       FileDescriptorProto descriptor =
           protoGenerator.generateFileDescriptor(

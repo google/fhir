@@ -38,6 +38,7 @@ import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileOptions;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
+import com.google.protobuf.DescriptorProtos.OneofOptions;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -287,6 +288,18 @@ public class ProtoFilePrinter {
           .append("oneof ")
           .append(descriptor.getOneofDecl(oneofIndex).getName())
           .append(" {\n");
+      // Add options.
+      List<String> oneofExtensions =
+          addExtensions(
+              "." + OneofOptions.getDescriptor().getFullName(),
+              descriptor.getOneofDecl(oneofIndex).getOptions().getAllFields(),
+              packageName,
+              fieldIndent,
+              ImmutableList.of());
+      if (!oneofExtensions.isEmpty()) {
+        Joiner.on(";\n").appendTo(message, oneofExtensions).append(";\n");
+      }
+
       // Loop over the elements.
       for (int i = 0; i < descriptor.getFieldCount(); i++) {
         FieldDescriptorProto field = descriptor.getField(i);
@@ -571,6 +584,7 @@ public class ProtoFilePrinter {
             fieldIndent
                 + (extendeeType.equals("." + MessageOptions.getDescriptor().getFullName())
                         || extendeeType.equals("." + EnumOptions.getDescriptor().getFullName())
+                        || extendeeType.equals("." + OneofOptions.getDescriptor().getFullName())
                     ? "option ("
                     : "(")
                 + optionPackage

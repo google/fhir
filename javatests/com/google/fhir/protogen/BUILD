@@ -20,7 +20,6 @@ java_test(
         "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto:profile_config_java_proto",
         "//proto/google/fhir/proto:protogenerator_annotations_java_proto",
-        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
         "@bazel_tools//tools/java/runfiles",
