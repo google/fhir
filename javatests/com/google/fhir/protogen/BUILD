@@ -146,23 +146,6 @@ java_test(
 )
 
 java_test(
-    name = "FhirPackageManagerTest",
-    srcs = ["FhirPackageManagerTest.java"],
-    test_class = "com.google.fhir.protogen.FhirPackageManagerTest",
-    deps = [
-        "//java/com/google/fhir/protogen",
-        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
-        "//proto/google/fhir/proto/r4/core/resources:code_system_java_proto",
-        "//proto/google/fhir/proto/r4/core/resources:search_parameter_java_proto",
-        "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
-        "//proto/google/fhir/proto/r4/core/resources:value_set_java_proto",
-        "@maven//:com_google_guava_guava",
-        "@maven//:com_google_truth_truth",
-        "@maven//:junit_junit",
-    ],
-)
-
-java_test(
     name = "FieldRetaggerTest",
     size = "medium",
     srcs = ["FieldRetaggerTest.java"],
