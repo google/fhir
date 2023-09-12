@@ -67,6 +67,33 @@ java_test(
 )
 
 java_test(
+    name = "ProtoGeneratorV2Test",
+    size = "large",
+    srcs = ["ProtoGeneratorV2Test.java"],
+    data = [
+        "//spec:fhir_r4_package.zip",
+    ],
+    test_class = "com.google.fhir.protogen.ProtoGeneratorV2Test",
+    deps = [
+        "//java/com/google/fhir/common:exceptions",
+        "//java/com/google/fhir/protogen",
+        "//proto/google/fhir/proto:annotations_java_proto",
+        "//proto/google/fhir/proto:profile_config_java_proto",
+        "//proto/google/fhir/proto:protogenerator_annotations_java_proto",
+        "//proto/google/fhir/proto/r4/core:codes_java_proto",
+        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_errorprone_error_prone_annotations",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_testparameterinjector_test_parameter_injector",
+        "@maven//:com_google_truth_extensions_truth_proto_extension",
+        "@maven//:junit_junit",
+    ],
+)
+
+java_test(
     name = "ProfileGeneratorTest",
     size = "medium",
     testonly = 1,

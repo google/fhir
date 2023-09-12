@@ -1214,7 +1214,7 @@ public class ProtoGeneratorV2 {
         .addFieldBuilder()
         .setName("id")
         .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-        .setTypeName("String")
+        .setTypeName("." + protogenConfig.getProtoPackage() + ".String")
         .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
         .setOptions(
             FieldOptions.newBuilder()
@@ -1225,7 +1225,7 @@ public class ProtoGeneratorV2 {
         .addFieldBuilder()
         .setName("extension")
         .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-        .setTypeName("Extension")
+        .setTypeName("." + protogenConfig.getProtoPackage() + ".Extension")
         .setLabel(FieldDescriptorProto.Label.LABEL_REPEATED)
         .setOptions(
             FieldOptions.newBuilder()
@@ -1237,7 +1237,7 @@ public class ProtoGeneratorV2 {
         .addFieldBuilder()
         .setName("type")
         .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-        .setTypeName("Uri")
+        .setTypeName("." + protogenConfig.getProtoPackage() + ".Uri")
         .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
         .setOptions(
             FieldOptions.newBuilder()
@@ -1258,7 +1258,7 @@ public class ProtoGeneratorV2 {
             .setJsonName("reference")
             .setNumber(nextTag++)
             .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-            .setTypeName("String")
+            .setTypeName("." + protogenConfig.getProtoPackage() + ".String")
             .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
             .setOptions(
                 FieldOptions.newBuilder()
@@ -1273,7 +1273,7 @@ public class ProtoGeneratorV2 {
             .setName("fragment")
             .setNumber(nextTag++)
             .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-            .setTypeName("String")
+            .setTypeName("." + protogenConfig.getProtoPackage() + ".String")
             .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
             .setOptions(
                 FieldOptions.newBuilder()
@@ -1289,7 +1289,7 @@ public class ProtoGeneratorV2 {
             .setName("resource_id")
             .setNumber(nextTag++)
             .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-            .setTypeName("ReferenceId")
+            .setTypeName("." + protogenConfig.getProtoPackage() + ".ReferenceId")
             .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
             .setOptions(
                 FieldOptions.newBuilder()
@@ -1312,7 +1312,7 @@ public class ProtoGeneratorV2 {
                 .setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type) + "_id")
                 .setNumber(nextTag++)
                 .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-                .setTypeName("ReferenceId")
+                .setTypeName("." + protogenConfig.getProtoPackage() + ".ReferenceId")
                 .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
                 .setOptions(
                     FieldOptions.newBuilder().setExtension(Annotations.referencedFhirType, type))
@@ -1329,7 +1329,7 @@ public class ProtoGeneratorV2 {
                       + "_id")
               .setNumber(nextTag++)
               .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-              .setTypeName("ReferenceId")
+              .setTypeName("." + protogenConfig.getProtoPackage() + ".ReferenceId")
               .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
               .setOptions(
                   FieldOptions.newBuilder()
@@ -1343,7 +1343,7 @@ public class ProtoGeneratorV2 {
             .setName("identifier")
             .setNumber(nextTag++)
             .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-            .setTypeName("Identifier")
+            .setTypeName("." + protogenConfig.getProtoPackage() + ".Identifier")
             .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
             .setOptions(
                 FieldOptions.newBuilder()
@@ -1357,7 +1357,7 @@ public class ProtoGeneratorV2 {
             .setName("display")
             .setNumber(nextTag++)
             .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-            .setTypeName("String")
+            .setTypeName("." + protogenConfig.getProtoPackage() + ".String")
             .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
             .setOptions(
                 FieldOptions.newBuilder()
@@ -1403,7 +1403,7 @@ public class ProtoGeneratorV2 {
         .addFieldBuilder()
         .setName("history")
         .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-        .setTypeName("Id")
+        .setTypeName("." + protogenConfig.getProtoPackage() + ".Id")
         .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
         .setOptions(
             FieldOptions.newBuilder()
@@ -1414,7 +1414,7 @@ public class ProtoGeneratorV2 {
         .addFieldBuilder()
         .setName("id")
         .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-        .setTypeName("String")
+        .setTypeName("." + protogenConfig.getProtoPackage() + ".String")
         .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
         .setOptions(
             FieldOptions.newBuilder()
@@ -1425,7 +1425,7 @@ public class ProtoGeneratorV2 {
         .addFieldBuilder()
         .setName("extension")
         .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-        .setTypeName("Extension")
+        .setTypeName("." + protogenConfig.getProtoPackage() + ".Extension")
         .setLabel(FieldDescriptorProto.Label.LABEL_REPEATED)
         .setOptions(
             FieldOptions.newBuilder()
@@ -1474,7 +1474,7 @@ public class ProtoGeneratorV2 {
           FieldDescriptorProto.newBuilder()
               .setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type))
               .setNumber(tagNumber++)
-              .setTypeName(type)
+              .setTypeName("." + protogenConfig.getProtoPackage() + "." + type)
               .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
               .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
               .setOneofIndex(0 /* the oneof_resource */)
