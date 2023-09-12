@@ -166,7 +166,6 @@ java_test(
     srcs = ["ResourceCollectionTest.java"],
     test_class = "com.google.fhir.protogen.ResourceCollectionTest",
     deps = [
-        "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/common:json_format",
         "//java/com/google/fhir/protogen:ResourceCollection",
         "//proto/google/fhir/proto/r4/core:datatypes_java_proto",

@@ -80,19 +80,16 @@ class ResourceCollection<T extends Message> implements Iterable<T> {
           // Calling `get` parses the resource, removing it from the `jsonResourceByUri`
           // collection. We can simply read from the front of that entry set each iteration.
           Map.Entry<String, JsonElement> unparsed = jsonResourcesByUri.entrySet().iterator().next();
-          try {
-            unfilteredNext = get(unparsed.getKey());
-            if (!unfilteredNext.isPresent()) {
-              return hasNext();
-            }
-          } catch (InvalidFhirException e) {
-            throw new IllegalStateException(e);
+
+          unfilteredNext = get(unparsed.getKey());
+          if (!unfilteredNext.isPresent()) {
+            return hasNext();
           }
         } else {
           return false;
         }
 
-        if (filter == null || filter.test(unfilteredNext.get())) {
+        if (unfilteredNext != null && (filter == null || filter.test(unfilteredNext.get()))) {
           next = unfilteredNext;
           return true;
         }
@@ -142,12 +139,12 @@ class ResourceCollection<T extends Message> implements Iterable<T> {
 
   /**
    * Returns the resource to which the specified `uri` is registered with, or an empty `Optional` if
-   * this collection does not contain a resource for the `uri`.
+   * this collection does not contain a resource for the `uri` or if the resource is invalid.
    *
    * <p>If a filter is set, the retrieved resource will only be returned if it matches.
    */
   @SuppressWarnings("unchecked") // newBuilderForType().build() produces a T.
-  public Optional<T> get(String uri) throws InvalidFhirException {
+  public Optional<T> get(String uri) {
     T resource = parsedResourcesByUri.get(uri);
     if (resource == null) {
       JsonElement jsonResource = jsonResourcesByUri.get(uri);
@@ -156,14 +153,20 @@ class ResourceCollection<T extends Message> implements Iterable<T> {
       }
 
       Message.Builder builder = Internal.getDefaultInstance(protoClass).newBuilderForType();
-      resource = (T) jsonParser.merge(jsonResource.toString(), builder).build();
-      parsedResourcesByUri.put(uri, resource);
+
+      try {
+        resource = (T) jsonParser.merge(jsonResource.toString(), builder).build();
+        parsedResourcesByUri.put(uri, resource);
+      } catch (InvalidFhirException e) {
+        System.out.println(
+            "Warning - Skipping " + uri + ", which failed to parse:\n" + e.getMessage());
+      }
 
       // Now that the resource is parsed, remove it from the unparsed JSON resources.
       jsonResourcesByUri.remove(uri);
     }
 
-    if (filter != null && !filter.test(resource)) {
+    if (resource == null || (filter != null && !filter.test(resource))) {
       return Optional.empty();
     }
 

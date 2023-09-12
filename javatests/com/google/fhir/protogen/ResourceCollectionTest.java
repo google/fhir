@@ -17,7 +17,6 @@ package com.google.fhir.protogen;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
-import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.Uri;
@@ -27,8 +26,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.testing.junit.testparameterinjector.TestParameter;
 import com.google.testing.junit.testparameterinjector.TestParameterInjector;
+import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -165,7 +166,7 @@ public final class ResourceCollectionTest {
   }
 
   @Test
-  public void get_unparsableResource_throws() {
+  public void get_unparsableResource_returnsEmpty() {
     JsonObject jsonObject = new JsonObject();
     jsonObject.add("url", new JsonPrimitive("http://foo.com"));
     jsonObject.add("notASupportedField", new JsonPrimitive("bar"));
@@ -174,10 +175,7 @@ public final class ResourceCollectionTest {
 
     resourceCollection.put(jsonObject);
 
-    InvalidFhirException thrown =
-        assertThrows(InvalidFhirException.class, () -> resourceCollection.get("http://foo.com"));
-
-    assertThat(thrown).hasMessageThat().startsWith("Unknown field notASupportedField");
+    assertThat(resourceCollection.get("http://foo.com")).isEqualTo(Optional.empty());
   }
 
   @Test
@@ -187,6 +185,45 @@ public final class ResourceCollectionTest {
 
     assertThat(resourceCollection).isEmpty();
     assertThrows(NoSuchElementException.class, () -> resourceCollection.iterator().next());
+  }
+
+  @Test
+  public void iterator_skipsUnparseableResources() throws Exception {
+    JsonElement jsonValid0 = buildJsonResource("http://foo.com");
+
+    JsonObject jsonInvalid1 = new JsonObject();
+    jsonInvalid1.add("url", new JsonPrimitive("http://bar.com"));
+    jsonInvalid1.add("notASupportedField", new JsonPrimitive("bar"));
+
+    JsonElement jsonValid2 = buildJsonResource("http://baz.com");
+
+    ResourceCollection<StructureDefinition> resourceCollection =
+        new ResourceCollection<>(JsonFormat.getParser(), StructureDefinition.class);
+    resourceCollection.put(jsonValid0);
+    resourceCollection.put(jsonInvalid1);
+    resourceCollection.put(jsonValid2);
+
+    assertThat(resourceCollection).hasSize(2);
+
+    {
+      // Test with all json unparsed
+      Set<String> resultUrls = new HashSet<>();
+      var it = resourceCollection.iterator();
+      resultUrls.add(it.next().getUrl().getValue());
+      resultUrls.add(it.next().getUrl().getValue());
+      assertThat(it.hasNext()).isFalse();
+      assertThat(resultUrls).containsExactly("http://foo.com", "http://baz.com");
+    }
+
+    {
+      // Repeat tests, now that resources are parsed.
+      Set<String> resultUrls = new HashSet<>();
+      var it = resourceCollection.iterator();
+      resultUrls.add(it.next().getUrl().getValue());
+      resultUrls.add(it.next().getUrl().getValue());
+      assertThat(it.hasNext()).isFalse();
+      assertThat(resultUrls).containsExactly("http://foo.com", "http://baz.com");
+    }
   }
 
   @Test
