@@ -29,6 +29,7 @@ import zipfile
 from absl import flags
 
 from google.protobuf import message
+from google.protobuf import text_format
 from absl.testing import absltest
 from absl.testing import parameterized
 from google.fhir.core.utils import fhir_package
@@ -102,6 +103,17 @@ class FhirPackageTest(
   @abc.abstractmethod
   def _load_package(
       self, package_source: fhir_package.PackageSource
+  ) -> fhir_package.FhirPackage:
+    pass
+
+  @abc.abstractmethod
+  def _package_from_iterables(
+      self,
+      ig_info,
+      structure_definitions,
+      search_parameters,
+      code_systems,
+      value_sets,
   ) -> fhir_package.FhirPackage:
     pass
 
@@ -281,6 +293,94 @@ class FhirPackageTest(
     with npmfile_containing(fhir_resource_contents) as temp_file:
       package = self._load_package(package_source_fn(temp_file.name))
       check_contents(package)
+
+  def test_fhir_package_from_iterables_creates_requested_fhir_package(self):
+    """Ensures packages can be created from iterables."""
+    package = self._package_from_iterables(
+        ig_info=fhir_package.IgInfo(name='name', version='version'),
+        structure_definitions=[
+            text_format.Parse(
+                'url { value: "sd1" }', self._structure_definition_cls()
+            ),
+            text_format.Parse(
+                'url { value: "sd2" }', self._structure_definition_cls()
+            ),
+        ],
+        search_parameters=[
+            text_format.Parse(
+                'url { value: "sp1" }', self._search_parameter_cls()
+            ),
+            text_format.Parse(
+                'url { value: "sp2" }', self._search_parameter_cls()
+            ),
+        ],
+        code_systems=[
+            text_format.Parse('url { value: "cs1" }', self._code_system_cls()),
+            text_format.Parse('url { value: "cs2" }', self._code_system_cls()),
+        ],
+        value_sets=[
+            text_format.Parse('url { value: "vs1" }', self._valueset_cls()),
+            text_format.Parse('url { value: "vs2" }', self._valueset_cls()),
+        ],
+    )
+
+    self.assertCountEqual(
+        list(package.structure_definitions),
+        [
+            text_format.Parse(
+                'url { value: "sd1" }', self._structure_definition_cls()
+            ),
+            text_format.Parse(
+                'url { value: "sd2" }', self._structure_definition_cls()
+            ),
+        ],
+    )
+    self.assertEqual(
+        package.get_structure_definition('sd1'),
+        text_format.Parse(
+            'url { value: "sd1" }', self._structure_definition_cls()
+        ),
+    )
+
+    self.assertCountEqual(
+        list(package.search_parameters),
+        [
+            text_format.Parse(
+                'url { value: "sp1" }', self._search_parameter_cls()
+            ),
+            text_format.Parse(
+                'url { value: "sp2" }', self._search_parameter_cls()
+            ),
+        ],
+    )
+    self.assertEqual(
+        package.get_search_parameter('sp1'),
+        text_format.Parse('url { value: "sp1" }', self._search_parameter_cls()),
+    )
+
+    self.assertCountEqual(
+        list(package.code_systems),
+        [
+            text_format.Parse('url { value: "cs1" }', self._code_system_cls()),
+            text_format.Parse('url { value: "cs2" }', self._code_system_cls()),
+        ],
+    )
+    self.assertEqual(
+        package.get_code_system('cs1'),
+        text_format.Parse('url { value: "cs1" }', self._code_system_cls()),
+    )
+
+    self.assertCountEqual(
+        list(package.value_sets),
+        [
+            text_format.Parse('url { value: "vs1" }', self._valueset_cls()),
+            text_format.Parse('url { value: "vs2" }', self._valueset_cls()),
+        ],
+    )
+    self.assertEqual(
+        package.get_value_set('vs1'),
+        text_format.Parse('url { value: "vs1" }', self._valueset_cls()),
+    )
 
   def test_fhir_package_get_resource_for_missing_uri_is_none(self):
     """Ensure we return None when requesting non-existent resource URIs."""
@@ -505,6 +605,30 @@ class ResourceCollectionTest(absltest.TestCase, abc.ABC):
     cached_resource = collection.get(uri)
     self.assertIsNotNone(cached_resource)
     self.assertEqual(cached_resource, resource)
+
+  def test_from_iterables(self):
+    """Ensures we can build a ResourceCollection from an iterables of protos."""
+    collection = fhir_package.ResourceCollection.from_iterable(
+        [
+            text_format.Parse('url { value: "vs1" }', self._valueset_cls()),
+            text_format.Parse('url { value: "vs2" }', self._valueset_cls()),
+        ],
+        self._valueset_cls,
+        self._primitive_handler,
+        'Z',
+    )
+
+    self.assertCountEqual(
+        list(collection),
+        [
+            text_format.Parse('url { value: "vs1" }', self._valueset_cls()),
+            text_format.Parse('url { value: "vs2" }', self._valueset_cls()),
+        ],
+    )
+    self.assertEqual(
+        collection.get('vs1'),
+        text_format.Parse('url { value: "vs1" }', self._valueset_cls()),
+    )
 
 
 class FhirPackageManagerTest(absltest.TestCase, abc.ABC):
