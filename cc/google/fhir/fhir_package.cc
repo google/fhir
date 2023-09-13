@@ -14,13 +14,10 @@
 
 #include "google/fhir/fhir_package.h"
 
-#include <stddef.h>
-
 #include <functional>
 #include <memory>
 #include <string>
 #include <utility>
-#include <vector>
 
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
@@ -32,7 +29,8 @@
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json/json_sax_handler.h"
 #include "google/fhir/status/status.h"
-#include "proto/google/fhir/proto/r4/core/resources/structure_definition.pb.h"
+#include "google/fhir/status/statusor.h"
+#include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/value_set.pb.h"
 #include "libarchive/archive.h"
 #include "libarchive/archive_entry.h"
@@ -48,12 +46,12 @@ namespace {
 // `parent_resource` will be the bundle containing the resource. Otherwise,
 // `resource_json` and `parent_resource` will be the same JSON object.
 // If the JSON is not a FHIR resource, or not a resource type tracked by the
-// PackageManager, does nothing and returns an OK status.
+// FhirPackage, does nothing and returns an OK status.
 absl::Status MaybeAddResourceToFhirPackage(
     std::shared_ptr<const internal::FhirJson> parent_resource,
     const internal::FhirJson& resource_json, FhirPackage& fhir_package) {
   if (!resource_json.isObject()) {
-    // Not a json object - definitly not a resource.
+    // Not a json object - definitely not a resource.
     return absl::OkStatus();
   }
 
@@ -102,8 +100,7 @@ absl::Status MaybeAddEntryToFhirPackage(absl::string_view entry_name,
   }
 
   auto parsed_json = std::make_unique<internal::FhirJson>();
-  FHIR_RETURN_IF_ERROR(
-      internal::ParseJsonValue(std::string(resource_json), *parsed_json));
+  FHIR_RETURN_IF_ERROR(internal::ParseJsonValue(resource_json, *parsed_json));
   internal::FhirJson const* parsed_json_ptr = parsed_json.get();
   return MaybeAddResourceToFhirPackage(std::move(parsed_json), *parsed_json_ptr,
                                        fhir_package);
@@ -303,17 +300,6 @@ absl::StatusOr<std::unique_ptr<FhirPackage>> FhirPackage::Load(
   FHIR_RETURN_IF_ERROR(
       LoadPackage(archive_file_path, handle_entry_wrapper, *fhir_package));
   return std::move(fhir_package);
-}
-
-void FhirPackageManager::AddPackage(std::unique_ptr<FhirPackage> package) {
-  packages_.push_back(std::move(package));
-}
-
-absl::Status FhirPackageManager::AddPackageAtPath(absl::string_view path) {
-  FHIR_ASSIGN_OR_RETURN(std::unique_ptr<FhirPackage> package,
-                        FhirPackage::Load(path));
-  AddPackage(std::move(package));
-  return absl::OkStatus();
 }
 
 absl::StatusOr<std::unique_ptr<google::fhir::r4::core::ValueSet>>
