@@ -4,7 +4,6 @@ load("//bazel:protogen.bzl", "gen_fhir_definitions_and_protos")
 licenses(["notice"])
 
 package(
-    allow_incoming_cc_edges_to_proto = True,
     
     default_visibility = ["//visibility:public"],
 )
