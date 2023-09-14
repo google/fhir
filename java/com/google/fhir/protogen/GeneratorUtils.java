@@ -21,7 +21,6 @@ import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
-import com.google.common.util.PathUtil;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.r4.core.Canonical;
 import com.google.fhir.r4.core.DateTime;
@@ -364,7 +363,7 @@ final class GeneratorUtils {
       FileDescriptorProto fileProto, String sourceDirectory, String fileName) {
     // Strip .proto suffix
     fileName = fileName.substring(0, fileName.length() - 6);
-    String goPackage = PathUtil.join(GO_PACKAGE_PREFIX, sourceDirectory, fileName + "_go_proto");
+    String goPackage = GO_PACKAGE_PREFIX + "/" + sourceDirectory + "/" + fileName + "_go_proto";
     FileDescriptorProto.Builder fileProtoBuilder = fileProto.toBuilder();
     fileProtoBuilder.getOptionsBuilder().setGoPackage(goPackage);
     return fileProtoBuilder.build();
