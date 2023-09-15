@@ -381,6 +381,7 @@ cc_library(
         "//proto/google/fhir/proto/r4/core:codes_cc_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:operation_outcome_cc_proto",
+        "@com_google_absl//absl/strings:str_format",
     ],
 )
 

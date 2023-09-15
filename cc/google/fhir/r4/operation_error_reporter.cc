@@ -19,6 +19,7 @@
 #include <string>
 #include <utility>
 
+#include "absl/strings/str_format.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 
 namespace google::fhir::r4 {
