@@ -74,7 +74,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Supplier;
-import org.jspecify.nullness.Nullable;
 
 /** A class which turns FHIR StructureDefinitions into protocol messages. */
 // TODO(b/244184211): Move a bunch of the public static methods into ProtoGeneratorUtils.
@@ -1125,7 +1124,10 @@ public class ProtoGeneratorV2 {
           "http://hl7.org/fhir/StructureDefinition/Reference",
           // Skip over profile of ElementDefinition for Data Elements - we just use
           // ElementDefinition.
-          "http://hl7.org/fhir/StructureDefinition/elementdefinition-de");
+          "http://hl7.org/fhir/StructureDefinition/elementdefinition-de",
+          // R4 mistakenly labels these example profiles as datatypes.
+          "http://hl7.org/fhir/StructureDefinition/example-section-library",
+          "http://hl7.org/fhir/StructureDefinition/example-composition");
 
   public FileDescriptorProto generateDatatypesFileDescriptor(List<String> resourceNames)
       throws InvalidFhirException {
@@ -1605,7 +1607,7 @@ public class ProtoGeneratorV2 {
         .collect(toImmutableList());
   }
 
-  private static FieldDescriptorProto.@Nullable Label getFieldSize(ElementDefinition element) {
+  private static FieldDescriptorProto.Label getFieldSize(ElementDefinition element) {
     if (element.getMax().getValue().equals("0")) {
       // This field doesn't actually exist.
       return null;

@@ -7,21 +7,19 @@ java_test(
     data = [
         "//proto/google/fhir/proto/r4/core:testdata",
         "//proto/google/fhir/proto/r4/core/resources:testdata",
-        "//spec:fhir_r4_filegroup",
-        "//spec:fhir_r4_package.zip",
         "//testdata/r4:descriptors",
+        "@hl7.fhir.r4.core_4.0.1//file",
     ],
     test_class = "com.google.fhir.protogen.ProtoFilePrinterTest",
     deps = [
+        "//java/com/google/fhir/common:annotation_utils",
         "//java/com/google/fhir/common:exceptions",
-        "//java/com/google/fhir/common:json_format",
         "//java/com/google/fhir/protogen",
         "//java/com/google/fhir/protogen:generator_utils",
         "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto:profile_config_java_proto",
         "//proto/google/fhir/proto:protogenerator_annotations_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_java_proto",
-        "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
         "@bazel_tools//tools/java/runfiles",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_guava_guava",
@@ -71,7 +69,7 @@ java_test(
     size = "large",
     srcs = ["ProtoGeneratorV2Test.java"],
     data = [
-        "//spec:fhir_r4_package.zip",
+        "@hl7.fhir.r4.core_4.0.1//file",
     ],
     test_class = "com.google.fhir.protogen.ProtoGeneratorV2Test",
     deps = [

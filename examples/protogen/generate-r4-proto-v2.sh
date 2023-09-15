@@ -18,8 +18,8 @@ set -eu
 SRC_ROOT="proto/r4/core"
 PROTO_GENERATOR=bazel-bin/java/ProtoGenerator
 OUTPUT_PATH="proto/google/fhir/proto/r4/core"
-FHIR_PACKAGE="bazel-genfiles/spec/fhir_r4_definitions.zip"
-bazel build //spec/fhir_r4_definitions.zip
+# Replace this line with a location of an R4 NPM
+FHIR_PACKAGE="Set npm location here!"
 bazel build //java/com/google/fhir/protogen:ProtoGeneratorV2
 
 

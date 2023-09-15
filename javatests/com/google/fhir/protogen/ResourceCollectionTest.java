@@ -27,6 +27,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.testing.junit.testparameterinjector.TestParameter;
 import com.google.testing.junit.testparameterinjector.TestParameterInjector;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
@@ -208,7 +209,7 @@ public final class ResourceCollectionTest {
     {
       // Test with all json unparsed
       Set<String> resultUrls = new HashSet<>();
-      var it = resourceCollection.iterator();
+      Iterator<StructureDefinition> it = resourceCollection.iterator();
       resultUrls.add(it.next().getUrl().getValue());
       resultUrls.add(it.next().getUrl().getValue());
       assertThat(it.hasNext()).isFalse();
@@ -218,7 +219,7 @@ public final class ResourceCollectionTest {
     {
       // Repeat tests, now that resources are parsed.
       Set<String> resultUrls = new HashSet<>();
-      var it = resourceCollection.iterator();
+      Iterator<StructureDefinition> it = resourceCollection.iterator();
       resultUrls.add(it.next().getUrl().getValue());
       resultUrls.add(it.next().getUrl().getValue());
       assertThat(it.hasNext()).isFalse();

@@ -74,6 +74,14 @@ message Patient {
     expression: "Patient.address.use | Person.address.use | Practitioner.address.use | RelatedPerson.address.use"
   };
   option (.google.fhir.proto.search_parameter) = {
+    name: "age"
+    type: NUMBER
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "birthOrderBoolean"
+    type: TOKEN
+  };
+  option (.google.fhir.proto.search_parameter) = {
     name: "birthdate"
     type: DATE
     expression: "Patient.birthDate | Person.birthDate | RelatedPerson.birthDate"
@@ -127,6 +135,11 @@ message Patient {
     name: "link"
     type: REFERENCE
     expression: "Patient.link.other"
+  };
+  option (.google.fhir.proto.search_parameter) = {
+    name: "mothersMaidenName"
+    type: STRING
+    expression: "Patient.extension('http://hl7.org/fhir/StructureDefinition/patient-extensions-Patient-mothersMaidenName')"
   };
   option (.google.fhir.proto.search_parameter) = {
     name: "name"

@@ -16,13 +16,9 @@ package com.google.fhir.protogen;
 
 import static com.google.common.truth.Truth.assertThat;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.fail;
 
-import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.common.InvalidFhirException;
@@ -33,24 +29,15 @@ import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.r4.core.SlicingRulesCode;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
-import com.google.protobuf.DescriptorProtos.DescriptorProto.ReservedRange;
 import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
-import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
 import com.google.protobuf.DescriptorProtos.OneofDescriptorProto;
 import com.google.protobuf.ExtensionRegistry;
-import com.google.protobuf.Message;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.junit.Before;
@@ -78,7 +65,7 @@ public class ProtoGeneratorTest {
             ImmutableSet.of() /* no dependencies */);
   }
 
-  /** Read the specifed file from the testdata directory into a String. */
+  /** Read the specified file from the testdata directory into a String. */
   private String loadFile(String relativePath) throws IOException {
     File file = new File(runfiles.rlocation(relativePath));
     return Files.asCharSource(file, UTF_8).read();
@@ -115,52 +102,6 @@ public class ProtoGeneratorTest {
     ProtoGeneratorTestUtils.initializeRegistry(registry);
   }
 
-  // Clears ProtoGeneratorAnnotation extensions from generated descriptor protos.
-  // These are directives to the {@link ProtoFilePrinter}, and do no appear in the printed protos.
-  // Also replaces annotated reserved fields with ReservedRanges, as they appear in the printed
-  // proto.
-  private DescriptorProto.Builder clearProtogenAnnotations(DescriptorProto.Builder original) {
-    original.getOptionsBuilder().clearExtension(ProtoGeneratorAnnotations.messageDescription);
-    if (original.getOptions().equals(MessageOptions.getDefaultInstance())) {
-      original.clearOptions();
-    }
-
-    for (DescriptorProto.Builder submessage : original.getNestedTypeBuilderList()) {
-      clearProtogenAnnotations(submessage);
-    }
-
-    Set<Integer> fieldsToRemove = new HashSet<>();
-    for (FieldDescriptorProto.Builder field : original.getFieldBuilderList()) {
-      FieldOptions.Builder fieldOptionsBuilder = field.getOptionsBuilder();
-      if (fieldOptionsBuilder.hasExtension(ProtoGeneratorAnnotations.reservedReason)) {
-        original.addReservedRange(
-            ReservedRange.newBuilder()
-                .setStart(field.getNumber())
-                .setEnd(field.getNumber() + 1)
-                .build());
-        fieldsToRemove.add(field.getNumber());
-      }
-      fieldOptionsBuilder.clearExtension(ProtoGeneratorAnnotations.fieldDescription);
-      if (field.getOptions().equals(FieldOptions.getDefaultInstance())) {
-        field.clearOptions();
-      }
-    }
-    List<FieldDescriptorProto> finalFields =
-        original.getFieldList().stream()
-            .filter(field -> !fieldsToRemove.contains(field.getNumber()))
-            .collect(toList());
-    return original.clearField().addAllField(finalFields);
-  }
-
-  private static final ImmutableSet<String> RESOURCES_TO_SKIP =
-      ImmutableSet.of(
-          "ContainedResource", // Contained resource isn't generated from struct def.
-          "Extension", // Extension type is hard coded.
-          "Reference", // Reference type is hard coded.
-          "ReferenceId", // ReferenceId type is hard coded.
-          "CodingWithFixedCode", // CodingWithFixedCode is a custom data struct for profiling.
-          "CodingWithFixedSystem"); // CodingWithFixedSystem is a custom data struct for profiling.
-
   // Builds a `DescriptorProto` as a StructureDefinition resource.
   private DescriptorProto buildResourceDescriptor(String resourceName) {
     return DescriptorProto.newBuilder()
@@ -171,137 +112,6 @@ public class ProtoGeneratorTest {
                     Annotations.structureDefinitionKind,
                     Annotations.StructureDefinitionKindValue.KIND_RESOURCE))
         .build();
-  }
-
-  private void testGeneratedR4Proto(ProtoGenerator protoGenerator, String resourceName)
-      throws IOException, ReflectiveOperationException, InvalidFhirException {
-    DescriptorProto golden =
-        ((Message)
-                Class.forName("com.google.fhir.r4.core." + resourceName)
-                    .getMethod("getDefaultInstance")
-                    .invoke(null))
-            .getDescriptorForType()
-            .toProto();
-    String structDefName =
-        Iterables.getLast(
-            Splitter.on("/")
-                .splitToList(
-                    golden.getOptions().getExtension(Annotations.fhirStructureDefinitionUrl)));
-    StructureDefinition resource = readStructureDefinition(structDefName, FhirVersion.R4);
-    DescriptorProto generatedProto =
-        clearProtogenAnnotations(protoGenerator.generateProto(resource).toBuilder()).build();
-
-    if (!generatedProto.equals(golden)) {
-      System.out.println("Failed on: " + resourceName);
-      assertThat(generatedProto).isEqualTo(golden);
-    }
-  }
-
-  private static final Pattern MESSAGE_PATTERN =
-      Pattern.compile("^message ([A-Za-z][A-Za-z0-9_]*) \\{", Pattern.MULTILINE);
-
-  private int testDirectoryOfProtoFiles(String testdir)
-      throws IOException, ReflectiveOperationException, InvalidFhirException {
-    String suffix = ".proto";
-    int count = 0;
-    for (File file :
-        new File(runfiles.rlocation(testdir)).listFiles((listDir, name) -> name.endsWith(suffix))) {
-      count += testProtoFile(file);
-    }
-    return count;
-  }
-
-  // Given a .proto file, finds all messages along with corresponding structure definitions, and
-  // generates protos from the structure definitions, and asserts that they match messages in the
-  // file.
-  // Returns the number of messages verified.
-  private int testProtoFile(File file)
-      throws IOException, ReflectiveOperationException, InvalidFhirException {
-    int count = 0;
-
-    String protoFileContents = Files.asCharSource(file, UTF_8).read();
-    Matcher nameMatcher = MESSAGE_PATTERN.matcher(protoFileContents);
-    List<String> resourceNames = new ArrayList<>();
-    while (nameMatcher.find()) {
-      resourceNames.add(nameMatcher.group(1));
-      if (nameMatcher.group(1).isEmpty()) {
-        throw new IllegalArgumentException();
-      }
-    }
-    if (resourceNames.isEmpty()) {
-      fail("Unable to locate message name in " + file.getAbsolutePath());
-    }
-    for (String resourceName : resourceNames) {
-      if (RESOURCES_TO_SKIP.contains(resourceName)) {
-        continue;
-      }
-      testGeneratedR4Proto(r4ProtoGenerator, resourceName);
-      count++;
-    }
-    return count;
-  }
-
-  private static final int EXPECTED_R4_RESOURCE_COUNT = 149;
-  private static final int EXPECTED_R4_PROFILE_COUNT = 42;
-  private static final int EXPECTED_R4_EXTENSION_COUNT = 393;
-  private static final int EXPECTED_R4_DATATYPE_COUNT = 61;
-
-  /** Test generating R4 core profile files. */
-  @Test
-  public void testGenerateR4Datatypes() throws Exception {
-    File file =
-        new File(runfiles.rlocation("com_google_fhir/proto/google/fhir/proto/r4/core/datatypes.proto"));
-    int resourceCount = testProtoFile(file);
-    if (resourceCount != EXPECTED_R4_DATATYPE_COUNT) {
-      fail(
-          "Expected "
-              + EXPECTED_R4_DATATYPE_COUNT
-              + " R4 descriptors to test, but found "
-              + resourceCount);
-    }
-  }
-
-  /** Test generating R4 resource files. */
-  @Test
-  public void testGenerateR4Resources() throws Exception {
-    int resourceCount =
-        testDirectoryOfProtoFiles("com_google_fhir/proto/google/fhir/proto/r4/core/resources/");
-    if (resourceCount != EXPECTED_R4_RESOURCE_COUNT) {
-      fail(
-          "Expected "
-              + EXPECTED_R4_RESOURCE_COUNT
-              + " R4 descriptors to test, but found "
-              + resourceCount);
-    }
-  }
-
-  /** Test generating R4 core profile files. */
-  @Test
-  public void testGenerateR4Extensions() throws Exception {
-    File file =
-        new File(runfiles.rlocation("com_google_fhir/proto/google/fhir/proto/r4/core/extensions.proto"));
-    int resourceCount = testProtoFile(file);
-    if (resourceCount != EXPECTED_R4_EXTENSION_COUNT) {
-      fail(
-          "Expected "
-              + EXPECTED_R4_EXTENSION_COUNT
-              + " R4 descriptors to test, but found "
-              + resourceCount);
-    }
-  }
-
-  /** Test generating R4 core profile files. */
-  @Test
-  public void testGenerateR4Profiles() throws Exception {
-    int resourceCount =
-        testDirectoryOfProtoFiles("com_google_fhir/proto/google/fhir/proto/r4/core/profiles/");
-    if (resourceCount != EXPECTED_R4_PROFILE_COUNT) {
-      fail(
-          "Expected "
-              + EXPECTED_R4_PROFILE_COUNT
-              + " R4 descriptors to test, but found "
-              + resourceCount);
-    }
   }
 
   @Test

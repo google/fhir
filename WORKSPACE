@@ -34,7 +34,7 @@ load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 
 gazelle_dependencies()
 
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive","http_file")
 
 http_archive(
     name = "google_bazel_common",
@@ -47,3 +47,11 @@ http_archive(
 load("@google_bazel_common//:workspace_defs.bzl", "google_common_workspace_rules")
 
 google_common_workspace_rules()
+
+# Core FHIR spec dependencies.
+http_file(
+    name = "hl7.fhir.r4.core_4.0.1",
+    url = "https://hl7.org/fhir/R4/hl7.fhir.r4.core.tgz",
+    sha256 = "b090bf929e1f665cf2c91583720849695bc38d2892a7c5037c56cb00817fb091",
+    downloaded_file_path = "npms/hl7.fhir.r4.core@4.0.1.tgz"
+)

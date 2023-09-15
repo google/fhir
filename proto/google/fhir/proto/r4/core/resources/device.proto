@@ -39,6 +39,11 @@ message Device {
     expression: "Device.deviceName.name | Device.type.coding.display | Device.type.text"
   };
   option (.google.fhir.proto.search_parameter) = {
+    name: "din"
+    type: TOKEN
+    expression: "Device.extension('http://hl7.org/fhir/SearchParameter/device-extensions-Device-din')"
+  };
+  option (.google.fhir.proto.search_parameter) = {
     name: "identifier"
     type: TOKEN
     expression: "Device.identifier"

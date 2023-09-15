@@ -18,24 +18,21 @@ import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 
-import com.google.common.base.Ascii;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
 import com.google.common.io.Files;
 import com.google.devtools.build.runfiles.Runfiles;
+import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.InvalidFhirException;
-import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.proto.ProtogenConfig;
 import com.google.fhir.r4.core.ContainedResource;
-import com.google.fhir.r4.core.StructureDefinition;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldOptions;
@@ -58,35 +55,9 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class ProtoFilePrinterTest {
 
-  private JsonFormat.Parser jsonParser;
   private FhirPackage r4Package;
   private ProtoFilePrinter protoPrinter;
   private Runfiles runfiles;
-
-  /** Read and parse the specified StructureDefinition. */
-  private StructureDefinition readStructureDefinition(String resourceName)
-      throws IOException, InvalidFhirException {
-    File file =
-        new File(
-            runfiles.rlocation(
-                "com_google_fhir/spec/hl7.fhir.core/4.0.1/package/StructureDefinition-"
-                    + resourceName
-                    + ".json"));
-    if (!file.exists()) {
-      String lowerCased =
-          Ascii.toLowerCase(resourceName.substring(0, 1)) + resourceName.substring(1);
-      file =
-          new File(
-              runfiles.rlocation(
-                  "com_google_fhir/spec/hl7.fhir.core/4.0.1/package/StructureDefinition-"
-                      + lowerCased
-                      + ".json"));
-    }
-    String json = Files.asCharSource(file, StandardCharsets.UTF_8).read();
-    StructureDefinition.Builder builder = StructureDefinition.newBuilder();
-    jsonParser.merge(json, builder);
-    return builder.build();
-  }
 
   /**
    * Read the expected golden output for a specific message, either from the .proto file, or from a
@@ -104,6 +75,11 @@ public final class ProtoFilePrinterTest {
                     + filename
                     + ".proto"));
     return Files.asCharSource(file, StandardCharsets.UTF_8).read();
+  }
+
+  /** Drops import lines, since these are modified by post-processing cleaning tools. */
+  private String dropImports(String input) {
+    return input.replaceAll("(?m)^import.*;\\n", "");
   }
 
   /** Collapse comments spread across multiple lines into single lines. */
@@ -171,9 +147,13 @@ public final class ProtoFilePrinterTest {
    */
   private void assertEqualsIgnoreClangFormat(String golden, String test) {
     Iterator<Map.Entry<Integer, String>> goldenIter =
-        collapseStatements(collapseComments(splitIntoLines(golden))).entrySet().iterator();
+        collapseStatements(collapseComments(splitIntoLines(dropImports(golden))))
+            .entrySet()
+            .iterator();
     Iterator<Map.Entry<Integer, String>> testIter =
-        collapseStatements(collapseComments(splitIntoLines(test))).entrySet().iterator();
+        collapseStatements(collapseComments(splitIntoLines(dropImports(test))))
+            .entrySet()
+            .iterator();
     while (goldenIter.hasNext() && testIter.hasNext()) {
       Map.Entry<Integer, String> goldenEntry = goldenIter.next();
       Map.Entry<Integer, String> testEntry = testIter.next();
@@ -190,7 +170,6 @@ public final class ProtoFilePrinterTest {
   @Before
   public void setUp() throws IOException, InvalidFhirException {
     String packageName = "google.fhir.r4.proto";
-    jsonParser = JsonFormat.getParser();
     runfiles = Runfiles.create();
     PackageInfo packageInfo =
         PackageInfo.newBuilder()
@@ -200,7 +179,7 @@ public final class ProtoFilePrinterTest {
             .setLicense(PackageInfo.License.APACHE)
             .setLicenseDate("2019")
             .build();
-    r4Package = FhirPackage.load("spec/fhir_r4_package.zip");
+    r4Package = FhirPackage.load("npms/hl7.fhir.r4.core@4.0.1.tgz");
 
     protoPrinter = new ProtoFilePrinter(packageInfo);
   }
@@ -253,16 +232,33 @@ public final class ProtoFilePrinterTest {
         continue;
       }
 
-      ProtoGenerator protoGenerator =
-          new ProtoGenerator(
-              r4Package.packageInfo,
-              "codes.proto",
-              ImmutableSet.of(r4Package),
-              new ValueSetGenerator(r4Package.packageInfo, ImmutableSet.of(r4Package)));
+      ProtogenConfig config =
+          ProtogenConfig.newBuilder()
+              .setProtoPackage("google.fhir.r4.core")
+              .setJavaProtoPackage("com.google.fhir.r4.core")
+              .setLicenseDate("1995")
+              .setSourceDirectory("proto/google/fhir/proto/r4/core")
+              .setFhirVersion(FhirVersion.R4)
+              .build();
+
+      ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(config, r4Package);
+      FileDescriptorProto codesFileDescriptor = valueSetGenerator.forCodesUsedIn(r4Package);
+      FileDescriptorProto valueSetsFileDescriptor = valueSetGenerator.forValueSetsUsedIn(r4Package);
+
+      ProtoGeneratorV2 protoGenerator =
+          new ProtoGeneratorV2(
+              config,
+              r4Package,
+              valueSetGenerator.getBoundCodeGenerator(
+                  codesFileDescriptor, valueSetsFileDescriptor));
+      protoGenerator.addSearchParameters();
 
       FileDescriptorProto descriptor =
-          protoGenerator.generateFileDescriptor(
-              ImmutableList.of(readStructureDefinition(resourceName)));
+          protoGenerator.generateResourceFileDescriptor(
+              r4Package
+                  .getStructureDefinition(
+                      AnnotationUtils.getStructureDefinitionUrl(resource.getMessageType()))
+                  .get());
       String resourceFileName = GeneratorUtils.resourceNameToFileName(resourceName);
       descriptor =
           GeneratorUtils.setGoPackage(

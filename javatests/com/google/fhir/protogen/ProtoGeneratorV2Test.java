@@ -29,6 +29,7 @@ import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
+import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.testing.junit.testparameterinjector.TestParameter;
@@ -50,7 +51,8 @@ public final class ProtoGeneratorV2Test {
    */
   private static FhirPackage getR4Package() throws IOException, InvalidFhirException {
     if (r4Package == null) {
-      r4Package = FhirPackage.load("spec/fhir_r4_package.zip");
+      r4Package =
+          FhirPackage.load("npms/hl7.fhir.r4.core@4.0.1.tgz");
     }
     return r4Package;
   }
@@ -82,7 +84,7 @@ public final class ProtoGeneratorV2Test {
    * that it is very hard to read the diff.
    */
   FileDescriptorProto sorted(FileDescriptorProto descriptor) {
-    var messages = new ArrayList<>(descriptor.getMessageTypeList());
+    List<DescriptorProto> messages = new ArrayList<>(descriptor.getMessageTypeList());
     messages.sort((a, b) -> a.getName().compareTo(b.getName()));
     return descriptor.toBuilder().clearMessageType().addAllMessageType(messages).build();
   }
@@ -93,11 +95,11 @@ public final class ProtoGeneratorV2Test {
    * datatypes that are hardcoded rather than generated.
    */
   FileDescriptorProto cleaned(FileDescriptorProto file) {
-    var builder = file.toBuilder().clearName().clearDependency();
+    FileDescriptorProto.Builder builder = file.toBuilder().clearName().clearDependency();
     builder.getOptionsBuilder().clearGoPackage();
 
     builder.clearMessageType();
-    for (var message : file.getMessageTypeList()) {
+    for (DescriptorProto message : file.getMessageTypeList()) {
       // Some datatypes are still hardcoded and added in the generation script, rather than by
       // the protogenerator.
       if (!message.getName().equals("CodingWithFixedCode")
@@ -119,16 +121,16 @@ public final class ProtoGeneratorV2Test {
     builder.getOptionsBuilder().clearExtension(ProtoGeneratorAnnotations.messageDescription);
     builder.clearReservedRange();
 
-    var fields = new ArrayList<>(builder.getFieldBuilderList());
+    List<FieldDescriptorProto.Builder> fields = new ArrayList<>(builder.getFieldBuilderList());
     builder.clearField();
 
-    for (var field : fields) {
+    for (FieldDescriptorProto.Builder field : fields) {
       field.getOptionsBuilder().clearExtension(ProtoGeneratorAnnotations.fieldDescription);
       if (!field.getOptions().hasExtension(ProtoGeneratorAnnotations.reservedReason)) {
         builder.addField(field);
       }
     }
-    for (var nested : builder.getNestedTypeBuilderList()) {
+    for (DescriptorProto.Builder nested : builder.getNestedTypeBuilderList()) {
       clean(nested);
     }
     return builder;
@@ -222,8 +224,8 @@ public final class ProtoGeneratorV2Test {
   /**
    * Tests that generating the R4 bundle_and_contained_resource file using
    * generateBundleAndContainedResource generates file descriptors that match the currently-checked
-   * in R4 bundle_and_contained_resources file. This serves as both a unit tests, and
-   * as a regression test to guard against checking in a change that would alter the R4 Core protos.
+   * in R4 bundle_and_contained_resources file. This serves as both a unit tests, and as a
+   * regression test to guard against checking in a change that would alter the R4 Core protos.
    */
   @Test
   public void r4RegressionTest_generateBundleAndContainedResource() throws Exception {
