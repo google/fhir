@@ -38,8 +38,6 @@ java_test(
         "//proto/google/fhir/proto/r4/core/resources:testdata",
         "//spec:fhir_r4_filegroup",
         "//spec:fhir_r4_package.zip",
-        "//spec:fhir_stu3_filegroup",
-        "//spec:fhir_stu3_package.zip",
         "//testdata/r4:descriptors",
     ],
     test_class = "com.google.fhir.protogen.ProtoGeneratorTest",
