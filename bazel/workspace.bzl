@@ -51,10 +51,6 @@ def fhirproto_workspace(core_lib = False):
 
     protogen_prefix = "//" if core_lib else "@com_google_fhir//"
     native.bind(
-        name = "proto_generator_test_utils",
-        actual = protogen_prefix + "java/com/google/fhir/protogen:proto_generator_test_utils",
-    )
-    native.bind(
         name = "protogen",
         actual = protogen_prefix + "java/com/google/fhir/protogen:protogen",
     )

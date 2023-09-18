@@ -25,6 +25,7 @@ import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.Annotations.FhirVersion;
+import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.r4.core.SlicingRulesCode;
 import com.google.fhir.r4.core.StructureDefinition;
@@ -33,11 +34,12 @@ import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
 import com.google.protobuf.DescriptorProtos.OneofDescriptorProto;
-import com.google.protobuf.ExtensionRegistry;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.junit.Before;
@@ -56,9 +58,33 @@ public class ProtoGeneratorTest {
   private Runfiles runfiles;
   private final ProtoGenerator r4ProtoGenerator;
 
+  private static ProtoGenerator makeProtoGenerator(
+      String packageLocation,
+      String codesProtoImport,
+      String coreDep,
+      ImmutableSet<String> dependencyLocations)
+      throws IOException, InvalidFhirException {
+    FhirPackage packageToGenerate = FhirPackage.load(packageLocation);
+    PackageInfo packageInfo = packageToGenerate.packageInfo;
+
+    Set<FhirPackage> packages = new HashSet<>();
+    packages.add(packageToGenerate);
+    for (String location : dependencyLocations) {
+      packages.add(FhirPackage.load(location));
+    }
+
+    packages.add(FhirPackage.load(coreDep));
+
+    return new ProtoGenerator(
+        packageInfo,
+        codesProtoImport,
+        ImmutableSet.copyOf(packages),
+        new ValueSetGenerator(packageInfo, packages));
+  }
+
   public ProtoGeneratorTest() throws Exception {
     r4ProtoGenerator =
-        ProtoGeneratorTestUtils.makeProtoGenerator(
+        makeProtoGenerator(
             "spec/fhir_r4_package.zip",
             "codes.proto",
             "spec/fhir_r4_package.zip",
@@ -97,9 +123,6 @@ public class ProtoGeneratorTest {
   public void setUp() throws IOException, InvalidFhirException {
     jsonParser = JsonFormat.getParser();
     runfiles = Runfiles.create();
-
-    ExtensionRegistry registry = ExtensionRegistry.newInstance();
-    ProtoGeneratorTestUtils.initializeRegistry(registry);
   }
 
   // Builds a `DescriptorProto` as a StructureDefinition resource.
@@ -336,7 +359,7 @@ public class ProtoGeneratorTest {
   public void addContainedResource_derivedResources_sorted()
       throws IOException, InvalidFhirException {
     ProtoGenerator generator =
-        ProtoGeneratorTestUtils.makeProtoGenerator(
+        makeProtoGenerator(
             createNonCorePackage("google.foo"),
             "codes.proto",
             "spec/fhir_r4_package.zip",
@@ -402,7 +425,7 @@ public class ProtoGeneratorTest {
   public void addContainedResource_derivedResourcesWithBaseResources_maintainBaseResourceNumbers()
       throws IOException, InvalidFhirException {
     ProtoGenerator generator =
-        ProtoGeneratorTestUtils.makeProtoGenerator(
+        makeProtoGenerator(
             createNonCorePackage("google.foo"),
             "codes.proto",
             "spec/fhir_r4_package.zip",
@@ -450,7 +473,7 @@ public class ProtoGeneratorTest {
   public void generateProto_genericFieldAddedForOpenExtension()
       throws IOException, InvalidFhirException {
     ProtoGenerator generator =
-        ProtoGeneratorTestUtils.makeProtoGenerator(
+        makeProtoGenerator(
             createNonCorePackage("google.foo"),
             "codes.proto",
             "spec/fhir_r4_package.zip",
@@ -480,7 +503,7 @@ public class ProtoGeneratorTest {
   public void generateProto_noGenericFieldAddedForClosedExtension()
       throws IOException, InvalidFhirException {
     ProtoGenerator generator =
-        ProtoGeneratorTestUtils.makeProtoGenerator(
+        makeProtoGenerator(
             createNonCorePackage("google.foo"),
             "codes.proto",
             "spec/fhir_r4_package.zip",
@@ -521,7 +544,7 @@ public class ProtoGeneratorTest {
   public void generateProto_genericFieldAddedForOpenCoding()
       throws IOException, InvalidFhirException {
     ProtoGenerator generator =
-        ProtoGeneratorTestUtils.makeProtoGenerator(
+        makeProtoGenerator(
             createNonCorePackage("google.foo"),
             "codes.proto",
             "spec/fhir_r4_package.zip",
@@ -550,7 +573,7 @@ public class ProtoGeneratorTest {
   public void generateProto_genericFieldNotAddedForClosedCoding()
       throws IOException, InvalidFhirException {
     ProtoGenerator generator =
-        ProtoGeneratorTestUtils.makeProtoGenerator(
+        makeProtoGenerator(
             createNonCorePackage("google.foo"),
             "codes.proto",
             "spec/fhir_r4_package.zip",

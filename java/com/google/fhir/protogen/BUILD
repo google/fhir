@@ -5,22 +5,6 @@ package(
 
 licenses(["notice"])
 
-java_library(
-    name = "proto_generator_test_utils",
-    testonly = 1,
-    srcs = ["ProtoGeneratorTestUtils.java"],
-    deps = [
-        ":protogen",
-        "//java/com/google/fhir/common:exceptions",
-        "//proto/google/fhir/proto:annotations_java_proto",
-        "//proto/google/fhir/proto:profile_config_java_proto",
-        "//proto/google/fhir/proto:protogenerator_annotations_java_proto",
-        "@com_google_protobuf//:protobuf_java",
-        "@maven//:com_google_guava_guava",
-        "@maven//:com_google_truth_truth",
-    ],
-)
-
 java_binary(
     name = "ValueSetGenerator",
     srcs = ["ValueSetGeneratorMain.java"],
@@ -59,7 +43,6 @@ java_library(
         exclude = [
             "GeneratorUtils.java",
             "*Main.java",
-            "ProtoGeneratorTestUtils.java",
             "ResourceCollection.java",
         ],
     ),

@@ -67,8 +67,25 @@ public final class GeneratedProtoTest {
 
     for (String filename : generatedContentsByFilename.keySet()) {
       assertThat(goldenContentsByFilename).containsKey(filename);
-      ProtoGeneratorTestUtils.testProtoFiles(
-          generatedContentsByFilename.get(filename), goldenContentsByFilename.get(filename));
+      assertThat(cleanProtoFile(generatedContentsByFilename.get(filename)))
+          .isEqualTo(cleanProtoFile(goldenContentsByFilename.get(filename)));
     }
+  }
+
+  // Removes discrepancies from generated code introduced by formatting tools. Includes:
+  // * Removing comment lines.  This is because they can be reformatted into multiline comments,
+  //   with double-slashes added.
+  // * Removes import statements.  This is because sometimes the protogenerator will include an
+  //   extra dep (such as extensions or codes imports) that can be pruned by a clean-up tool.
+  //   TODO(b/185161283): be smarter about which imports we include per resource.
+  // * Replaces any repeated whitespace with a single white space
+  // * Removes insignificant whitespace between control symbols.
+  private static String cleanProtoFile(String protoFile) {
+    return protoFile
+        .replaceAll("(?m)^\\s*//.*$", "")
+        .replaceAll("(?m)^import \".*\";$", "")
+        .replaceAll("\\s+", " ")
+        .replace("[ (", "[(")
+        .replace("\" ]", "\"]");
   }
 }
