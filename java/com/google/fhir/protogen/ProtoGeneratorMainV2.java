@@ -111,7 +111,13 @@ class ProtoGeneratorMainV2 {
   }
 
   void run() throws IOException, InvalidFhirException {
-    FhirPackage inputPackage = FhirPackage.load(args.inputPackageLocation);
+    // Read the new package.  Use option ignoreUnrecognizedFieldsAndCodes to account for new
+    // fields/code in the new version of StructureDefinition.
+    FhirPackage inputPackage =
+        FhirPackage.load(
+            args.inputPackageLocation,
+            /* no manually added package info - read from package */ null,
+            /* ignoreUnrecognizedFieldsAndCodes= */ true);
     ProtogenConfig config =
         ProtogenConfig.newBuilder()
             .setProtoPackage(args.protoPackage)

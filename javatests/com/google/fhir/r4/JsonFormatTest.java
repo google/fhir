@@ -220,11 +220,24 @@ public class JsonFormatTest extends JsonFormatTestBase {
   @Test
   public void testIgnoringUnrecognizedFields_true_succeedsOnUnrecognizedField() throws Exception {
     JsonFormat.Parser parser =
-        JsonFormat.Parser.newBuilder().ignoreUnrecognizedFields(true).build();
+        JsonFormat.Parser.newBuilder().ignoreUnrecognizedFieldsAndCodes(true).build();
     StructureDefinition.Builder builder = StructureDefinition.newBuilder();
     parser.merge("{ \"id\": \"123\", \"garbage\": true}", builder);
     assertThat(builder.build())
         .isEqualTo(StructureDefinition.newBuilder().setId(Id.newBuilder().setValue("123")).build());
+  }
+
+  @Test
+  public void testIgnoringUnrecognizedFields_true_succeedsOnUnrecognizedCode() throws Exception {
+    JsonFormat.Parser parser =
+        JsonFormat.Parser.newBuilder().ignoreUnrecognizedFieldsAndCodes(true).build();
+    StructureDefinition.Builder builder = StructureDefinition.newBuilder();
+    parser.merge("{ \"id\": \"123\", \"fhirVersion\": \"garbage\"}", builder);
+    StructureDefinition.Builder expected =
+        StructureDefinition.newBuilder().setId(Id.newBuilder().setValue("123"));
+    // Touch the FhirVersion to make it be set but empty.
+    expected.getFhirVersionBuilder();
+    assertThat(builder.build()).isEqualTo(expected.build());
   }
 
   /** Test the analytics output format. */

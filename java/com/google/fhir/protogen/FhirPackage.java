@@ -151,7 +151,7 @@ public class FhirPackage {
    */
   public static FhirPackage load(String archiveFilePath, PackageInfo packageInfo)
       throws IOException, InvalidFhirException {
-    return load(archiveFilePath, packageInfo, /* ignoreUnrecognizedFields= */ false);
+    return load(archiveFilePath, packageInfo, /* ignoreUnrecognizedFieldsAndCodes= */ false);
   }
 
   /**
@@ -166,16 +166,16 @@ public class FhirPackage {
    *     Expected to end with ".zip" "tar.gz" or ".tgz".
    * @param packageInfo The package information to load. This package information is used,
    *     irrespective of whether the ZIP contains one.
-   * @param ignoreUnrecognizedFields If true, will not fail if unrecognized fields are encountered
-   *     while parsing JSON. This allows for loading a FhirPackage of a new version of the Core FHIR
-   *     spec using a FhirPackage binary build with the older version of the spec. For instance, you
-   *     could parse an R5 StructureDefinition into an R4 StructureDefinition proto, since
-   *     StructureDefinition was made normative in R4, since normative implies that fields can be
-   *     added but not removed.
+   * @param ignoreUnrecognizedFieldsAndCodes If true, will not fail if unrecognized fields are
+   *     encountered while parsing JSON. This allows for loading a FhirPackage of a new version of
+   *     the Core FHIR spec using a FhirPackage binary build with the older version of the spec. For
+   *     instance, you could parse an R5 StructureDefinition into an R4 StructureDefinition proto,
+   *     since StructureDefinition was made normative in R4, since normative implies that fields can
+   *     be added but not removed.
    */
   public static FhirPackage load(
-      String archiveFilePath, PackageInfo packageInfo, boolean ignoreUnrecognizedFields)
-      throws IOException, InvalidFhirException {
+      String archiveFilePath, PackageInfo packageInfo, boolean ignoreUnrecognizedFieldsAndCodes)
+      throws IOException {
     PackageInfo extractedPackageInfo = null;
     try (ArchiveInputStream archiveEntries = getZipOrTarInputStream(archiveFilePath)) {
       List<JsonFile> jsonFiles = new ArrayList<>();
@@ -205,7 +205,7 @@ public class FhirPackage {
       return makeFromJsonAndPackageInfo(
           jsonFiles,
           packageInfo == null ? extractedPackageInfo : packageInfo,
-          ignoreUnrecognizedFields);
+          ignoreUnrecognizedFieldsAndCodes);
     }
   }
 
@@ -354,7 +354,7 @@ public class FhirPackage {
   }
 
   private static FhirPackage makeFromJsonAndPackageInfo(
-      List<JsonFile> jsonFiles, PackageInfo packageInfo, boolean ignoreUnrecognizedFields) {
+      List<JsonFile> jsonFiles, PackageInfo packageInfo, boolean ignoreUnrecognizedFieldsAndCodes) {
     if (packageInfo != null) {
       if (packageInfo.getProtoPackage().isEmpty()) {
         throw new IllegalArgumentException(
@@ -366,7 +366,9 @@ public class FhirPackage {
       }
     }
     JsonFormat.Parser parser =
-        JsonFormat.Parser.newBuilder().ignoreUnrecognizedFields(ignoreUnrecognizedFields).build();
+        JsonFormat.Parser.newBuilder()
+            .ignoreUnrecognizedFieldsAndCodes(ignoreUnrecognizedFieldsAndCodes)
+            .build();
 
     ResourceCollections resourceCollections = new ResourceCollections();
     resourceCollections.structureDefinitions =

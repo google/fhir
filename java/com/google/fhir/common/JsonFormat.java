@@ -596,15 +596,15 @@ public final class JsonFormat {
   public static final class Parser {
     private final ProtoGenTransformer protoGenTransformer;
     private final ZoneId defaultTimeZone;
-    private final boolean ignoreUnrecognizedFields;
+    private final boolean ignoreUnrecognizedFieldsAndCodes;
 
     private Parser(
         ZoneId defaultTimeZone,
         ProtoGenTransformer protoGenTransformer,
-        boolean ignoreUnrecognizedFields) {
+        boolean ignoreUnrecognizedFieldsAndCodes) {
       this.protoGenTransformer = protoGenTransformer;
       this.defaultTimeZone = defaultTimeZone;
-      this.ignoreUnrecognizedFields = ignoreUnrecognizedFields;
+      this.ignoreUnrecognizedFieldsAndCodes = ignoreUnrecognizedFieldsAndCodes;
     }
 
     public static Parser withDefaultTimeZone(ZoneId defaultTimeZone) {
@@ -620,7 +620,7 @@ public final class JsonFormat {
     public static final class Builder {
       private ZoneId defaultTimeZone;
       private ProtoGenTransformer protoGenTransformer;
-      private boolean ignoreUnrecognizedFields = false;
+      private boolean ignoreUnrecognizedFieldsAndCodes = false;
 
       Builder(ZoneId defaultTimeZone) {
         this.defaultTimeZone = defaultTimeZone;
@@ -649,13 +649,13 @@ public final class JsonFormat {
       }
 
       @CanIgnoreReturnValue
-      public Builder ignoreUnrecognizedFields(boolean ignoreUnrecognizedFields) {
-        this.ignoreUnrecognizedFields = ignoreUnrecognizedFields;
+      public Builder ignoreUnrecognizedFieldsAndCodes(boolean ignoreUnrecognizedFieldsAndCodes) {
+        this.ignoreUnrecognizedFieldsAndCodes = ignoreUnrecognizedFieldsAndCodes;
         return this;
       }
 
       public Parser build() {
-        return new Parser(defaultTimeZone, protoGenTransformer, ignoreUnrecognizedFields);
+        return new Parser(defaultTimeZone, protoGenTransformer, ignoreUnrecognizedFieldsAndCodes);
       }
     }
 
@@ -766,7 +766,7 @@ public final class JsonFormat {
                     + descriptor.getFullName());
           }
         } else {
-          if (ignoreUnrecognizedFields) {
+          if (ignoreUnrecognizedFieldsAndCodes) {
             continue;
           } else {
             String names = "";
@@ -954,7 +954,12 @@ public final class JsonFormat {
           return PrimitiveWrappers.parseAndWrap(json, subBuilder, defaultTimeZone)
               .copyInto(subBuilder)
               .build();
-        } catch (InvalidFhirException e) {
+        } catch (InvalidFhirException | IllegalArgumentException e) {
+          if (ignoreUnrecognizedFieldsAndCodes
+              && FhirTypes.isTypeOrProfileOfCode(field.getMessageType())) {
+            return subBuilder.build();
+          }
+
           throw new InvalidFhirException("Error parsing field: " + field.getFullName(), e);
         }
       }

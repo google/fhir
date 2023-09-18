@@ -71,6 +71,7 @@ java_library(
     deps = [
         ":annotation_utils",
         ":exceptions",
+        ":fhir_types",
         ":proto_gen_transformer",
         ":proto_utils",
         ":resource_utils",
