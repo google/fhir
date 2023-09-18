@@ -53,5 +53,5 @@ http_file(
     name = "hl7.fhir.r4.core_4.0.1",
     url = "https://hl7.org/fhir/R4/hl7.fhir.r4.core.tgz",
     sha256 = "b090bf929e1f665cf2c91583720849695bc38d2892a7c5037c56cb00817fb091",
-    downloaded_file_path = "npms/hl7.fhir.r4.core@4.0.1.tgz"
+    downloaded_file_path = "hl7.fhir.r4.core@4.0.1.tgz"
 )

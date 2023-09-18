@@ -52,7 +52,7 @@ public final class ProtoGeneratorV2Test {
   private static FhirPackage getR4Package() throws IOException, InvalidFhirException {
     if (r4Package == null) {
       r4Package =
-          FhirPackage.load("npms/hl7.fhir.r4.core@4.0.1.tgz");
+          FhirPackage.load("external/hl7.fhir.r4.core_4.0.1/file/hl7.fhir.r4.core@4.0.1.tgz");
     }
     return r4Package;
   }
