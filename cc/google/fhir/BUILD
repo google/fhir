@@ -533,7 +533,7 @@ cc_test(
     name = "fhir_package_test",
     srcs = ["fhir_package_test.cc"],
     data = [
-        "//spec:fhir_r4_package.tgz",
+        "@hl7.fhir.r4.core_4.0.1//file",
     ],
     deps = [
         ":fhir_package",
