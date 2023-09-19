@@ -96,7 +96,16 @@ public class ProtoGeneratorV2 {
 
   // Certain field names are reserved symbols in various languages.
   private static final ImmutableSet<String> RESERVED_FIELD_NAMES =
-      ImmutableSet.of("assert", "for", "hasAnswer", "package", "string", "class");
+      ImmutableSet.of(
+          "assert",
+          "for",
+          "hasAnswer",
+          "hasSeverity",
+          "hasStage",
+          "hasBodySite",
+          "package",
+          "string",
+          "class");
 
   private static final EnumDescriptorProto PRECISION_ENUM =
       EnumDescriptorProto.newBuilder()

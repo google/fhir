@@ -160,7 +160,6 @@ def gen_fhir_protos(
             data = src_pkgs + [":%s.zip" % name, "%s_proto_golden_files" % name],
             test_class = "com.google.fhir.protogen.GeneratedProtoTest",
             deps = [
-                "//external:proto_generator_test_utils",
                 "//external:protogen",
                 "@maven//:com_google_guava_guava",
                 "@maven//:com_google_truth_truth",

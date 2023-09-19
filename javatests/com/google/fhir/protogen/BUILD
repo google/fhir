@@ -68,6 +68,7 @@ java_test(
     srcs = ["ProtoGeneratorV2Test.java"],
     data = [
         "@hl7.fhir.r4.core_4.0.1//file",
+        "@hl7.fhir.r5.core_5.0.0//file",
     ],
     test_class = "com.google.fhir.protogen.ProtoGeneratorV2Test",
     deps = [
@@ -80,6 +81,8 @@ java_test(
         "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
+        "//proto/google/fhir/proto/r5/core:datatypes_java_proto",
+        "//proto/google/fhir/proto/r5/core/resources:bundle_and_contained_resource_java_proto",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_errorprone_error_prone_annotations",
         "@maven//:com_google_guava_guava",

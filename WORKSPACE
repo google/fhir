@@ -55,3 +55,10 @@ http_file(
     sha256 = "b090bf929e1f665cf2c91583720849695bc38d2892a7c5037c56cb00817fb091",
     downloaded_file_path = "hl7.fhir.r4.core@4.0.1.tgz"
 )
+
+http_file(
+    name = "hl7.fhir.r5.core_5.0.0",
+    url = "https://hl7.org/fhir/R5/hl7.fhir.r5.core.tgz",
+    sha256 = "74b27cd1bfce9e80eaceac431edf230b0945a443564fbf5512f82e5fa50a80d4",
+    downloaded_file_path = "hl7.fhir.r5.core@5.0.0.tgz"
+)
