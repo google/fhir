@@ -176,7 +176,7 @@ class PrimitiveWrapper(abc.ABC):
     if not isinstance(json_value,
                       cast(Tuple[Type[Any], ...], cls._PARSABLE_TYPES)):
       raise fhir_errors.InvalidFhirError(
-          'Unable to parse JSON. {type(json_value)} is invalid FHIR JSON.')
+          f'Unable to parse JSON. {type(json_value)} is invalid FHIR JSON.')
 
     return cls.from_json_str(str(json_value), primitive_cls, context)
 
