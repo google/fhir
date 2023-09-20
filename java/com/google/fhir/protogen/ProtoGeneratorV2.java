@@ -44,7 +44,6 @@ import com.google.fhir.r4.core.Canonical;
 import com.google.fhir.r4.core.ConstraintSeverityCode;
 import com.google.fhir.r4.core.ElementDefinition;
 import com.google.fhir.r4.core.Extension;
-import com.google.fhir.r4.core.SlicingRulesCode;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
@@ -376,19 +375,6 @@ public class ProtoGeneratorV2 {
       return optionsBuilder.build();
     }
 
-    private void makeClosedExtensionReservedField(
-        FieldDescriptorProto.Builder field, ElementDefinition element, int tagNumber) {
-      field
-          .setNumber(tagNumber)
-          .getOptionsBuilder()
-          .setExtension(
-              ProtoGeneratorAnnotations.reservedReason,
-              "Field "
-                  + tagNumber
-                  + " reserved for unsliced field for element with closed slicing: "
-                  + element.getId().getValue());
-    }
-
     @CanIgnoreReturnValue
     private DescriptorProto generateMessage(
         ElementDefinition currentElement, DescriptorProto.Builder builder)
@@ -414,13 +400,6 @@ public class ProtoGeneratorV2 {
       // When generating a descriptor for a primitive type, the value part may already be present.
       int nextTag = builder.getFieldCount() + 1;
 
-      // Some repeated fields can have profiled elements in them, that get inlined as fields.
-      // The most common case of this is typed extensions.  We defer adding these to the end of the
-      // message, so that non-profiled messages will be binary compatiple with this proto.
-      // Note that the inverse is not true - loading a profiled message bytes into the non-profiled
-      // will result in the data in the typed fields being dropped.
-      List<ElementDefinition> deferredElements = new ArrayList<>();
-
       // Loop over the direct children of this element.
       for (ElementDefinition element : getDirectChildren(currentElement)) {
         if (element.getId().getValue().matches("[^.]*\\.value")
@@ -437,12 +416,6 @@ public class ProtoGeneratorV2 {
         // fhir_structure_definition_url, we can skip over it here.
         if (element.getBase().getPath().getValue().equals("Extension.url")
             && element.getFixed().hasUri()) {
-          continue;
-        }
-
-        // Slices on choice types are handled during the creation of the choice type itself.
-        // Ignore them here.
-        if (GeneratorUtils.isChoiceTypeSlice(element)) {
           continue;
         }
 
@@ -464,38 +437,8 @@ public class ProtoGeneratorV2 {
                       + " reserved for strongly-typed ContainedResource for id: "
                       + element.getId().getValue());
           nextTag++;
-        } else if (!isChoiceType(element)
-            && element.getSlicing().getRules().getValue() == SlicingRulesCode.Value.CLOSED
-            && element.getType(0).getCode().getValue().equals("Extension")) {
-          // If this is an extension field that has closed slicing (i.e., all elements
-          // should belong to a slice), don't generate an unsliced extension field, but reserve tag
-          // number to avoid reassigning.
-          makeClosedExtensionReservedField(builder.addFieldBuilder(), element, nextTag);
-          nextTag++;
         } else {
           buildAndAddField(element, nextTag++, builder);
-        }
-      }
-
-      for (ElementDefinition deferredElement : deferredElements) {
-        // Currently we only support slicing for Extensions and Codings
-        if (isElementSupportedForSlicing(deferredElement)
-            || isContainedResourceField(deferredElement)) {
-          buildAndAddField(deferredElement, nextTag++, builder);
-        } else {
-          builder
-              .addFieldBuilder()
-              .setNumber(nextTag)
-              .getOptionsBuilder()
-              .setExtension(
-                  ProtoGeneratorAnnotations.reservedReason,
-                  "field "
-                      + nextTag
-                      + " reserved for "
-                      + deferredElement.getId().getValue()
-                      + " which uses an unsupported slicing on "
-                      + deferredElement.getType(0).getCode().getValue());
-          nextTag++;
         }
       }
       return builder.build();
@@ -727,17 +670,6 @@ public class ProtoGeneratorV2 {
           throw new IllegalArgumentException(
               "ContentReference does not reference a container: " + element.getContentReference());
         }
-        if (lastIdToken(referencedElementId).slicename != null
-            && !isElementSupportedForSlicing(referencedElement)) {
-          // This is a reference to a slice of a field, but the slice isn't a supported slice type.
-          // Just use a reference to the base field.
-
-          // TODO(b/244184211):  This logic assumes only a single level of slicing is present - the
-          // base element could theoretically also be unsupported for slicing.
-          referencedElement =
-              getElementById(
-                  referencedElementId.substring(0, referencedElementId.lastIndexOf(":")));
-        }
         return getContainerType(referencedElement);
       }
 
@@ -950,18 +882,6 @@ public class ProtoGeneratorV2 {
               nextTag,
               fieldSize,
               options.build());
-      if (isExtensionBackboneElement(element)) {
-        // For internal extension, the default is to assume the url is equal to the jsonName of the
-        // field. The json name of the field is the snake-to-json fieldName, unless a jsonName was
-        // explicitly set.
-        String url =
-            getElementById(element.getId().getValue() + ".url").getFixed().getUri().getValue();
-        if (fieldBuilder.hasJsonName()
-            ? !fieldBuilder.getJsonName().equals(url)
-            : !snakeCaseToJsonCase(fieldBuilder.getName()).equals(url)) {
-          fieldBuilder.getOptionsBuilder().setExtension(Annotations.fhirInlinedExtensionUrl, url);
-        }
-      }
       return Optional.of(fieldBuilder.build());
     }
 
@@ -1042,10 +962,6 @@ public class ProtoGeneratorV2 {
           choiceType.addField(fieldBuilder);
         } else {
           // If no custom type was generated, just use the type name from the core FHIR types.
-          // TODO(b/244184211):  This assumes all types in a oneof are core FHIR types.  In order to
-          // support custom types, we'll need to load the structure definition for the type and
-          // check
-          // against knownStructureDefinitionPackages
           FieldOptions.Builder options = FieldOptions.newBuilder();
           if (fieldName.equals("reference")) {
             for (String referenceType : referenceTypes) {
@@ -1690,30 +1606,5 @@ public class ProtoGeneratorV2 {
       return refType + "Reference";
     }
     return "Reference";
-  }
-
-  private static boolean isExtensionBackboneElement(ElementDefinition element) {
-    // An element is an extension element if either
-    // A) it is a root element with id "Extension" and is a derivation from a base element or
-    // B) it is a slice on an extension that is not defined by an external profile.
-    if (!element.hasBase()) {
-      return false;
-    }
-    String idString = element.getId().getValue();
-    boolean isRootExtensionElement =
-        idString.equals("Extension")
-            || (!idString.contains(".") && idString.startsWith("Extension:"));
-    boolean isInternallyDefinedExtension =
-        (element.getBase().getPath().getValue().endsWith(".extension")
-            && lastIdToken(element).slicename != null
-            && element.getType(0).getProfileCount() == 0);
-    return isRootExtensionElement || isInternallyDefinedExtension;
-  }
-
-  // TODO(b/139489684): consider supporting more types of slicing.
-  private static boolean isElementSupportedForSlicing(ElementDefinition element) {
-    return element.getTypeCount() == 1
-        && (element.getType(0).getCode().getValue().equals("Extension")
-            || element.getType(0).getCode().getValue().equals("Coding"));
   }
 }
