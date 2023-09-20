@@ -31,6 +31,7 @@ go_test(
     deps = [
         "//go/fhirversion",
         "//go/jsonformat/errorreporter",
+        "//go/jsonformat/internal/jsonpbhelper",
         "//proto/google/fhir/proto/dstu2:codes_go_proto",
         "//proto/google/fhir/proto/dstu2:datatypes_go_proto",
         "//proto/google/fhir/proto/dstu2:resources_go_proto",

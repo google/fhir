@@ -20,6 +20,7 @@ import (
 
 	"github.com/google/fhir/go/fhirversion"
 	"github.com/google/fhir/go/jsonformat/errorreporter"
+	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/go-cmp/cmp"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/testing/protocmp"
@@ -100,6 +101,44 @@ func TestReferenceTypes(t *testing.T) {
 		} else if err.Error() != wantErr {
 			t.Errorf("Validate %v: got error %q, want: %q", test, err.Error(), wantErr)
 		}
+	}
+}
+
+func TestValidatePrimitive_Success(t *testing.T) {
+	tests := []struct {
+		name string
+		msgs []proto.Message
+	}{
+		{
+			name: "primitive with no value",
+			msgs: []proto.Message{
+				&d2pb.Code{
+					Extension: []*d2pb.Extension{{
+						Url: &d2pb.Uri{Value: jsonpbhelper.PrimitiveHasNoValueURL},
+					}},
+				},
+				&d3pb.Code{
+					Extension: []*d3pb.Extension{{
+						Url: &d3pb.Uri{Value: jsonpbhelper.PrimitiveHasNoValueURL},
+					}},
+				},
+				&d4pb.Code{
+					Extension: []*d4pb.Extension{{
+						Url: &d4pb.Uri{Value: jsonpbhelper.PrimitiveHasNoValueURL},
+					}},
+				},
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			for _, msg := range test.msgs {
+				err := Validate(msg)
+				if err != nil {
+					t.Errorf("Validate(): failed %v", err)
+				}
+			}
+		})
 	}
 }
 

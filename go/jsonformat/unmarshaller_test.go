@@ -965,6 +965,81 @@ func TestUnmarshal(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "data absent extension",
+			json: []byte(`{
+        "resourceType": "Observation",
+        "_status": {
+          "extension": [{
+            "url": "http://hl7.org/fhir/ValueSet/data-absent-reason",
+            "valueCode": "unsupported"
+          }]
+        },
+        "code": {
+          "coding": []
+        }
+      }`),
+			wants: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.ContainedResource{
+						OneofResource: &r3pb.ContainedResource_Observation{
+							Observation: &r3pb.Observation{
+								Status: &c3pb.ObservationStatusCode{
+									Extension: []*d3pb.Extension{{
+										Url: &d3pb.Uri{Value: jsonpbhelper.PrimitiveHasNoValueURL},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_Boolean{
+												Boolean: &d3pb.Boolean{Value: true},
+											},
+										},
+									}, {
+										Url: &d3pb.Uri{Value: "http://hl7.org/fhir/ValueSet/data-absent-reason"},
+										Value: &d3pb.Extension_ValueX{
+											Choice: &d3pb.Extension_ValueX_Code{
+												Code: &d3pb.Code{Value: "unsupported"},
+											},
+										},
+									}},
+								},
+								Code: &d3pb.CodeableConcept{
+									Coding: []*d3pb.Coding{},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4pb.ContainedResource{
+						OneofResource: &r4pb.ContainedResource_Observation{
+							Observation: &r4observationpb.Observation{
+								Status: &r4observationpb.Observation_StatusCode{
+									Extension: []*d4pb.Extension{{
+										Url: &d4pb.Uri{Value: jsonpbhelper.PrimitiveHasNoValueURL},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_Boolean{
+												Boolean: &d4pb.Boolean{Value: true},
+											},
+										},
+									}, {
+										Url: &d4pb.Uri{Value: "http://hl7.org/fhir/ValueSet/data-absent-reason"},
+										Value: &d4pb.Extension_ValueX{
+											Choice: &d4pb.Extension_ValueX_Code{
+												Code: &d4pb.Code{Value: "unsupported"},
+											},
+										},
+									}},
+								},
+								Code: &d4pb.CodeableConcept{
+									Coding: []*d4pb.Coding{},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {

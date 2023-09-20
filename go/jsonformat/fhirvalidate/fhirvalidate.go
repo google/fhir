@@ -144,6 +144,9 @@ func validatePrimitives(_ protoreflect.FieldDescriptor, msg protoreflect.Message
 	if !validatedTypes.Contains(string(msg.Descriptor().FullName())) {
 		return nil
 	}
+	if jsonpbhelper.HasExtension(msg.Interface(), jsonpbhelper.PrimitiveHasNoValueURL) {
+		return nil
+	}
 	name := string(msg.Descriptor().FullName())
 	switch {
 	case stringMessageNames.Contains(name):
