@@ -33,36 +33,6 @@ message TestReport {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/TestReport";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "TestReport.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "issued"
-    type: DATE
-    expression: "TestReport.issued"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "participant"
-    type: URI
-    expression: "TestReport.participant.uri"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "result"
-    type: TOKEN
-    expression: "TestReport.result"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "tester"
-    type: STRING
-    expression: "TestReport.tester"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "testscript"
-    type: REFERENCE
-    expression: "TestReport.testScript"
-  };
 
   // Logical id of this artifact
   Id id = 1;

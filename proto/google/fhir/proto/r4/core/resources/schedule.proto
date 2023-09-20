@@ -32,41 +32,6 @@ message Schedule {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Schedule";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "active"
-    type: TOKEN
-    expression: "Schedule.active"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "actor"
-    type: REFERENCE
-    expression: "Schedule.actor"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "date"
-    type: DATE
-    expression: "Schedule.planningHorizon"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "Schedule.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "service-category"
-    type: TOKEN
-    expression: "Schedule.serviceCategory"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "service-type"
-    type: TOKEN
-    expression: "Schedule.serviceType"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "specialty"
-    type: TOKEN
-    expression: "Schedule.specialty"
-  };
 
   // Logical id of this artifact
   Id id = 1;

@@ -33,61 +33,6 @@ message QuestionnaireResponse {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "author"
-    type: REFERENCE
-    expression: "QuestionnaireResponse.author"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "authored"
-    type: DATE
-    expression: "QuestionnaireResponse.authored"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "based-on"
-    type: REFERENCE
-    expression: "QuestionnaireResponse.basedOn"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "encounter"
-    type: REFERENCE
-    expression: "QuestionnaireResponse.encounter"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "QuestionnaireResponse.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "part-of"
-    type: REFERENCE
-    expression: "QuestionnaireResponse.partOf"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "QuestionnaireResponse.subject.where(resolve() is Patient)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "questionnaire"
-    type: REFERENCE
-    expression: "QuestionnaireResponse.questionnaire"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "source"
-    type: REFERENCE
-    expression: "QuestionnaireResponse.source"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "QuestionnaireResponse.status"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "subject"
-    type: REFERENCE
-    expression: "QuestionnaireResponse.subject"
-  };
 
   // Logical id of this artifact
   Id id = 1;

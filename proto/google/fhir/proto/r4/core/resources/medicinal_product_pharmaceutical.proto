@@ -32,21 +32,6 @@ message MedicinalProductPharmaceutical {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/MedicinalProductPharmaceutical";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "MedicinalProductPharmaceutical.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "route"
-    type: TOKEN
-    expression: "MedicinalProductPharmaceutical.routeOfAdministration.code"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "target-species"
-    type: TOKEN
-    expression: "MedicinalProductPharmaceutical.routeOfAdministration.targetSpecies.code"
-  };
 
   // Logical id of this artifact
   Id id = 1;

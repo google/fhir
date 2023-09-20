@@ -33,46 +33,6 @@ message Account {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Account";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "Account.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "name"
-    type: STRING
-    expression: "Account.name"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "owner"
-    type: REFERENCE
-    expression: "Account.owner"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "Account.subject.where(resolve() is Patient)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "period"
-    type: DATE
-    expression: "Account.servicePeriod"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "Account.status"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "subject"
-    type: REFERENCE
-    expression: "Account.subject"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "type"
-    type: TOKEN
-    expression: "Account.type"
-  };
 
   // Logical id of this artifact
   Id id = 1;

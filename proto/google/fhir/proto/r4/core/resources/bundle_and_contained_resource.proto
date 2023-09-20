@@ -195,31 +195,6 @@ message Bundle {
       "type = 'document' implies entry.first().resource.is(Composition)";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "type = 'message' implies entry.first().resource.is(MessageHeader)";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "composition"
-    type: REFERENCE
-    expression: "Bundle.entry[0].resource"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "Bundle.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "message"
-    type: REFERENCE
-    expression: "Bundle.entry[0].resource"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "timestamp"
-    type: DATE
-    expression: "Bundle.timestamp"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "type"
-    type: TOKEN
-    expression: "Bundle.type"
-  };
 
   // Logical id of this artifact
   Id id = 1;

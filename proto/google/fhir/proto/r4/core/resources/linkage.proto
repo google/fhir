@@ -34,21 +34,6 @@ message Linkage {
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Linkage";
   option (.google.fhir.proto.fhir_path_message_constraint) = "item.count()>1";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "author"
-    type: REFERENCE
-    expression: "Linkage.author"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "item"
-    type: REFERENCE
-    expression: "Linkage.item.resource"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "source"
-    type: REFERENCE
-    expression: "Linkage.item.resource"
-  };
 
   // Logical id of this artifact
   Id id = 1;

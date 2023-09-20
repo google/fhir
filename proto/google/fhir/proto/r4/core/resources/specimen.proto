@@ -33,66 +33,6 @@ message Specimen {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Specimen";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "accession"
-    type: TOKEN
-    expression: "Specimen.accessionIdentifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "bodysite"
-    type: TOKEN
-    expression: "Specimen.collection.bodySite"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "collected"
-    type: DATE
-    expression: "Specimen.collection.collected"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "collector"
-    type: REFERENCE
-    expression: "Specimen.collection.collector"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "container"
-    type: TOKEN
-    expression: "Specimen.container.type"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "container-id"
-    type: TOKEN
-    expression: "Specimen.container.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "Specimen.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "parent"
-    type: REFERENCE
-    expression: "Specimen.parent"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "Specimen.subject.where(resolve() is Patient)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "Specimen.status"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "subject"
-    type: REFERENCE
-    expression: "Specimen.subject"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "type"
-    type: TOKEN
-    expression: "Specimen.type"
-  };
 
   // Logical id of this artifact
   Id id = 1;

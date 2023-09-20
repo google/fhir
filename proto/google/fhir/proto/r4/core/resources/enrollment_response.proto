@@ -33,21 +33,6 @@ message EnrollmentResponse {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/EnrollmentResponse";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "EnrollmentResponse.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "request"
-    type: REFERENCE
-    expression: "EnrollmentResponse.request"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "EnrollmentResponse.status"
-  };
 
   // Logical id of this artifact
   Id id = 1;

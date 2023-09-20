@@ -33,41 +33,6 @@ message PaymentNotice {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/PaymentNotice";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "created"
-    type: DATE
-    expression: "PaymentNotice.created"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "PaymentNotice.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "payment-status"
-    type: TOKEN
-    expression: "PaymentNotice.paymentStatus"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "provider"
-    type: REFERENCE
-    expression: "PaymentNotice.provider"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "request"
-    type: REFERENCE
-    expression: "PaymentNotice.request"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "response"
-    type: REFERENCE
-    expression: "PaymentNotice.response"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "PaymentNotice.status"
-  };
 
   // Logical id of this artifact
   Id id = 1;

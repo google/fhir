@@ -87,11 +87,6 @@ class ProtoGeneratorMainV2 {
     private int containedResourceOffset = 0;
 
     @Parameter(
-        names = {"--add_search_parameters"},
-        description = "If true, add search parameter annotations.  Defaults to false.")
-    private boolean addSearchParameters = false;
-
-    @Parameter(
         names = {"--legacy_datatype_generation"},
         description =
             "If true, skips generating Element, Reference, and Extension, which are hardcoded in "
@@ -141,10 +136,6 @@ class ProtoGeneratorMainV2 {
             config,
             inputPackage,
             valueSetGenerator.getBoundCodeGenerator(codesFileDescriptor, valueSetsFileDescriptor));
-
-    if (args.addSearchParameters) {
-      generator.addSearchParameters();
-    }
 
     ProtoFilePrinter printer = new ProtoFilePrinter(config);
 

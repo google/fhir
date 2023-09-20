@@ -33,36 +33,6 @@ message Subscription {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Subscription";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "contact"
-    type: TOKEN
-    expression: "Subscription.contact"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "criteria"
-    type: STRING
-    expression: "Subscription.criteria"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "payload"
-    type: TOKEN
-    expression: "Subscription.channel.payload"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "Subscription.status"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "type"
-    type: TOKEN
-    expression: "Subscription.channel.type"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "url"
-    type: URI
-    expression: "Subscription.channel.endpoint"
-  };
 
   // Logical id of this artifact
   Id id = 1;

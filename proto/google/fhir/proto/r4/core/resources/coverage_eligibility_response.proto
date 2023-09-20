@@ -33,51 +33,6 @@ message CoverageEligibilityResponse {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/CoverageEligibilityResponse";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "created"
-    type: DATE
-    expression: "CoverageEligibilityResponse.created"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "disposition"
-    type: STRING
-    expression: "CoverageEligibilityResponse.disposition"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "CoverageEligibilityResponse.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "insurer"
-    type: REFERENCE
-    expression: "CoverageEligibilityResponse.insurer"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "outcome"
-    type: TOKEN
-    expression: "CoverageEligibilityResponse.outcome"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "CoverageEligibilityResponse.patient"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "request"
-    type: REFERENCE
-    expression: "CoverageEligibilityResponse.request"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "requestor"
-    type: REFERENCE
-    expression: "CoverageEligibilityResponse.requestor"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "CoverageEligibilityResponse.status"
-  };
 
   // Logical id of this artifact
   Id id = 1;

@@ -33,66 +33,6 @@ message HealthcareService {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/HealthcareService";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "active"
-    type: TOKEN
-    expression: "HealthcareService.active"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "characteristic"
-    type: TOKEN
-    expression: "HealthcareService.characteristic"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "coverage-area"
-    type: REFERENCE
-    expression: "HealthcareService.coverageArea"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "endpoint"
-    type: REFERENCE
-    expression: "HealthcareService.endpoint"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "HealthcareService.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "location"
-    type: REFERENCE
-    expression: "HealthcareService.location"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "name"
-    type: STRING
-    expression: "HealthcareService.name"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "organization"
-    type: REFERENCE
-    expression: "HealthcareService.providedBy"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "program"
-    type: TOKEN
-    expression: "HealthcareService.program"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "service-category"
-    type: TOKEN
-    expression: "HealthcareService.category"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "service-type"
-    type: TOKEN
-    expression: "HealthcareService.type"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "specialty"
-    type: TOKEN
-    expression: "HealthcareService.specialty"
-  };
 
   // Logical id of this artifact
   Id id = 1;

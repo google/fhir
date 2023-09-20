@@ -36,41 +36,6 @@ message AppointmentResponse {
       "http://hl7.org/fhir/StructureDefinition/AppointmentResponse";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "participantType.exists() or actor.exists()";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "actor"
-    type: REFERENCE
-    expression: "AppointmentResponse.actor"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "appointment"
-    type: REFERENCE
-    expression: "AppointmentResponse.appointment"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "AppointmentResponse.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "location"
-    type: REFERENCE
-    expression: "AppointmentResponse.actor.where(resolve() is Location)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "part-status"
-    type: TOKEN
-    expression: "AppointmentResponse.participantStatus"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "AppointmentResponse.actor.where(resolve() is Patient)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "practitioner"
-    type: REFERENCE
-    expression: "AppointmentResponse.actor.where(resolve() is Practitioner)"
-  };
 
   // Logical id of this artifact
   Id id = 1;

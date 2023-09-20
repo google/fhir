@@ -33,66 +33,6 @@ message AdverseEvent {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/AdverseEvent";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "actuality"
-    type: TOKEN
-    expression: "AdverseEvent.actuality"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "category"
-    type: TOKEN
-    expression: "AdverseEvent.category"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "date"
-    type: DATE
-    expression: "AdverseEvent.date"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "event"
-    type: TOKEN
-    expression: "AdverseEvent.event"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "location"
-    type: REFERENCE
-    expression: "AdverseEvent.location"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "recorder"
-    type: REFERENCE
-    expression: "AdverseEvent.recorder"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "resultingcondition"
-    type: REFERENCE
-    expression: "AdverseEvent.resultingCondition"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "seriousness"
-    type: TOKEN
-    expression: "AdverseEvent.seriousness"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "severity"
-    type: TOKEN
-    expression: "AdverseEvent.severity"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "study"
-    type: REFERENCE
-    expression: "AdverseEvent.study"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "subject"
-    type: REFERENCE
-    expression: "AdverseEvent.subject"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "substance"
-    type: REFERENCE
-    expression: "AdverseEvent.suspectEntity.instance"
-  };
 
   // Logical id of this artifact
   Id id = 1;

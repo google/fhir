@@ -265,7 +265,6 @@ public final class ProtoGeneratorV2Test {
       @TestParameter(valuesProvider = R4ResourceProvider.class) StructureDefinition resource)
       throws Exception {
     ProtoGeneratorV2 protoGenerator = makeR4ProtoGenerator();
-    protoGenerator.addSearchParameters();
 
     FileDescriptorProto file = protoGenerator.generateResourceFileDescriptor(resource);
 
@@ -288,7 +287,6 @@ public final class ProtoGeneratorV2Test {
   @Test
   public void r4RegressionTest_generateBundleAndContainedResource() throws Exception {
     ProtoGeneratorV2 protoGenerator = makeR4ProtoGenerator();
-    protoGenerator.addSearchParameters();
 
     List<String> resourceNames = new ArrayList<>();
     StructureDefinition bundle = null;

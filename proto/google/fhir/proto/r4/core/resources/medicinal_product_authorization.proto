@@ -32,31 +32,6 @@ message MedicinalProductAuthorization {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/MedicinalProductAuthorization";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "country"
-    type: TOKEN
-    expression: "MedicinalProductAuthorization.country"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "holder"
-    type: REFERENCE
-    expression: "MedicinalProductAuthorization.holder"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "MedicinalProductAuthorization.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "MedicinalProductAuthorization.status"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "subject"
-    type: REFERENCE
-    expression: "MedicinalProductAuthorization.subject"
-  };
 
   // Logical id of this artifact
   Id id = 1;

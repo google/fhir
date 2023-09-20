@@ -33,56 +33,6 @@ message Contract {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Contract";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "authority"
-    type: REFERENCE
-    expression: "Contract.authority"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "domain"
-    type: REFERENCE
-    expression: "Contract.domain"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "Contract.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "instantiates"
-    type: URI
-    expression: "Contract.instantiatesUri"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "issued"
-    type: DATE
-    expression: "Contract.issued"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "Contract.subject.where(resolve() is Patient)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "signer"
-    type: REFERENCE
-    expression: "Contract.signer.party"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "Contract.status"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "subject"
-    type: REFERENCE
-    expression: "Contract.subject"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "url"
-    type: URI
-    expression: "Contract.url"
-  };
 
   // Logical id of this artifact
   Id id = 1;

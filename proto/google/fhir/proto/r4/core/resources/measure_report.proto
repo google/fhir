@@ -37,51 +37,6 @@ message MeasureReport {
       "(type != 'data-collection') or group.exists().not()";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "group.stratifier.stratum.all(value.exists() xor component.exists())";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "date"
-    type: DATE
-    expression: "MeasureReport.date"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "evaluated-resource"
-    type: REFERENCE
-    expression: "MeasureReport.evaluatedResource"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "MeasureReport.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "measure"
-    type: REFERENCE
-    expression: "MeasureReport.measure"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "MeasureReport.subject.where(resolve() is Patient)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "period"
-    type: DATE
-    expression: "MeasureReport.period"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "reporter"
-    type: REFERENCE
-    expression: "MeasureReport.reporter"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "MeasureReport.status"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "subject"
-    type: REFERENCE
-    expression: "MeasureReport.subject"
-  };
 
   // Logical id of this artifact
   Id id = 1;

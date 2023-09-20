@@ -35,66 +35,6 @@ message NutritionOrder {
       "http://hl7.org/fhir/StructureDefinition/NutritionOrder";
   option (.google.fhir.proto.fhir_path_message_warning_constraint) =
       "oralDiet.exists() or supplement.exists() or enteralFormula.exists()";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "additive"
-    type: TOKEN
-    expression: "NutritionOrder.enteralFormula.additiveType"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "datetime"
-    type: DATE
-    expression: "NutritionOrder.dateTime"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "encounter"
-    type: REFERENCE
-    expression: "Composition.encounter | DeviceRequest.encounter | DiagnosticReport.encounter | DocumentReference.context.encounter | Flag.encounter | List.encounter | NutritionOrder.encounter | Observation.encounter | Procedure.encounter | RiskAssessment.encounter | ServiceRequest.encounter | VisionPrescription.encounter"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "formula"
-    type: TOKEN
-    expression: "NutritionOrder.enteralFormula.baseFormulaType"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "AllergyIntolerance.identifier | CarePlan.identifier | CareTeam.identifier | Composition.identifier | Condition.identifier | Consent.identifier | DetectedIssue.identifier | DeviceRequest.identifier | DiagnosticReport.identifier | DocumentManifest.masterIdentifier | DocumentManifest.identifier | DocumentReference.masterIdentifier | DocumentReference.identifier | Encounter.identifier | EpisodeOfCare.identifier | FamilyMemberHistory.identifier | Goal.identifier | ImagingStudy.identifier | Immunization.identifier | List.identifier | MedicationAdministration.identifier | MedicationDispense.identifier | MedicationRequest.identifier | MedicationStatement.identifier | NutritionOrder.identifier | Observation.identifier | Procedure.identifier | RiskAssessment.identifier | ServiceRequest.identifier | SupplyDelivery.identifier | SupplyRequest.identifier | VisionPrescription.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "instantiates-canonical"
-    type: REFERENCE
-    expression: "NutritionOrder.instantiatesCanonical"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "instantiates-uri"
-    type: URI
-    expression: "NutritionOrder.instantiatesUri"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "oraldiet"
-    type: TOKEN
-    expression: "NutritionOrder.oralDiet.type"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "AllergyIntolerance.patient | CarePlan.subject.where(resolve() is Patient) | CareTeam.subject.where(resolve() is Patient) | ClinicalImpression.subject.where(resolve() is Patient) | Composition.subject.where(resolve() is Patient) | Condition.subject.where(resolve() is Patient) | Consent.patient | DetectedIssue.patient | DeviceRequest.subject.where(resolve() is Patient) | DeviceUseStatement.subject | DiagnosticReport.subject.where(resolve() is Patient) | DocumentManifest.subject.where(resolve() is Patient) | DocumentReference.subject.where(resolve() is Patient) | Encounter.subject.where(resolve() is Patient) | EpisodeOfCare.patient | FamilyMemberHistory.patient | Flag.subject.where(resolve() is Patient) | Goal.subject.where(resolve() is Patient) | ImagingStudy.subject.where(resolve() is Patient) | Immunization.patient | List.subject.where(resolve() is Patient) | MedicationAdministration.subject.where(resolve() is Patient) | MedicationDispense.subject.where(resolve() is Patient) | MedicationRequest.subject.where(resolve() is Patient) | MedicationStatement.subject.where(resolve() is Patient) | NutritionOrder.patient | Observation.subject.where(resolve() is Patient) | Procedure.subject.where(resolve() is Patient) | RiskAssessment.subject.where(resolve() is Patient) | ServiceRequest.subject.where(resolve() is Patient) | SupplyDelivery.patient | VisionPrescription.patient"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "provider"
-    type: REFERENCE
-    expression: "NutritionOrder.orderer"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "NutritionOrder.status"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "supplement"
-    type: TOKEN
-    expression: "NutritionOrder.supplement.type"
-  };
 
   // Logical id of this artifact
   Id id = 1;

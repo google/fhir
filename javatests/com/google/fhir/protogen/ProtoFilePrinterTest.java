@@ -251,7 +251,6 @@ public final class ProtoFilePrinterTest {
               r4Package,
               valueSetGenerator.getBoundCodeGenerator(
                   codesFileDescriptor, valueSetsFileDescriptor));
-      protoGenerator.addSearchParameters();
 
       FileDescriptorProto descriptor =
           protoGenerator.generateResourceFileDescriptor(

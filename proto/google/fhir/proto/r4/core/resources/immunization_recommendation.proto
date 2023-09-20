@@ -32,46 +32,6 @@ message ImmunizationRecommendation {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "date"
-    type: DATE
-    expression: "ImmunizationRecommendation.date"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "ImmunizationRecommendation.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "information"
-    type: REFERENCE
-    expression: "ImmunizationRecommendation.recommendation.supportingPatientInformation"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "ImmunizationRecommendation.patient"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "ImmunizationRecommendation.recommendation.forecastStatus"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "support"
-    type: REFERENCE
-    expression: "ImmunizationRecommendation.recommendation.supportingImmunization"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "target-disease"
-    type: TOKEN
-    expression: "ImmunizationRecommendation.recommendation.targetDisease"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "vaccine-type"
-    type: TOKEN
-    expression: "ImmunizationRecommendation.recommendation.vaccineCode"
-  };
 
   // Logical id of this artifact
   Id id = 1;

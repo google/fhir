@@ -33,46 +33,6 @@ message Substance {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Substance";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "category"
-    type: TOKEN
-    expression: "Substance.category"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "code"
-    type: TOKEN
-    expression: "Substance.code | (Substance.ingredient.substance as CodeableConcept)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "container-identifier"
-    type: TOKEN
-    expression: "Substance.instance.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "expiry"
-    type: DATE
-    expression: "Substance.instance.expiry"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "Substance.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "quantity"
-    type: QUANTITY
-    expression: "Substance.instance.quantity"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "Substance.status"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "substance-reference"
-    type: REFERENCE
-    expression: "(Substance.ingredient.substance as Reference)"
-  };
 
   // Logical id of this artifact
   Id id = 1;

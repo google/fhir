@@ -33,46 +33,6 @@ message PaymentReconciliation {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/PaymentReconciliation";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "created"
-    type: DATE
-    expression: "PaymentReconciliation.created"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "disposition"
-    type: STRING
-    expression: "PaymentReconciliation.disposition"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "PaymentReconciliation.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "outcome"
-    type: TOKEN
-    expression: "PaymentReconciliation.outcome"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "payment-issuer"
-    type: REFERENCE
-    expression: "PaymentReconciliation.paymentIssuer"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "request"
-    type: REFERENCE
-    expression: "PaymentReconciliation.request"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "requestor"
-    type: REFERENCE
-    expression: "PaymentReconciliation.requestor"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "PaymentReconciliation.status"
-  };
 
   // Logical id of this artifact
   Id id = 1;

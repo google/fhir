@@ -33,31 +33,6 @@ message DeviceMetric {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/DeviceMetric";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "category"
-    type: TOKEN
-    expression: "DeviceMetric.category"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "DeviceMetric.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "parent"
-    type: REFERENCE
-    expression: "DeviceMetric.parent"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "source"
-    type: REFERENCE
-    expression: "DeviceMetric.source"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "type"
-    type: TOKEN
-    expression: "DeviceMetric.type"
-  };
 
   // Logical id of this artifact
   Id id = 1;

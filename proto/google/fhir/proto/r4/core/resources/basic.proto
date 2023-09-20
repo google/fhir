@@ -32,36 +32,6 @@ message Basic {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Basic";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "author"
-    type: REFERENCE
-    expression: "Basic.author"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "code"
-    type: TOKEN
-    expression: "Basic.code"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "created"
-    type: DATE
-    expression: "Basic.created"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "Basic.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "Basic.subject.where(resolve() is Patient)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "subject"
-    type: REFERENCE
-    expression: "Basic.subject"
-  };
 
   // Logical id of this artifact
   Id id = 1;

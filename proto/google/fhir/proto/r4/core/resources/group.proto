@@ -35,56 +35,6 @@ message Group {
       "http://hl7.org/fhir/StructureDefinition/Group";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "member.empty() or (actual = true)";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "actual"
-    type: TOKEN
-    expression: "Group.actual"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "characteristic"
-    type: TOKEN
-    expression: "Group.characteristic.code"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "characteristic-value"
-    type: COMPOSITE
-    expression: "Group.characteristic"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "code"
-    type: TOKEN
-    expression: "Group.code"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "exclude"
-    type: TOKEN
-    expression: "Group.characteristic.exclude"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "Group.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "managing-entity"
-    type: REFERENCE
-    expression: "Group.managingEntity"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "member"
-    type: REFERENCE
-    expression: "Group.member.entity"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "type"
-    type: TOKEN
-    expression: "Group.type"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "value"
-    type: TOKEN
-    expression: "(Group.characteristic.value as CodeableConcept) | (Group.characteristic.value as boolean)"
-  };
 
   // Logical id of this artifact
   Id id = 1;

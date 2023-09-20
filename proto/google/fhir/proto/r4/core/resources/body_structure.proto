@@ -32,26 +32,6 @@ message BodyStructure {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/BodyStructure";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "BodyStructure.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "location"
-    type: TOKEN
-    expression: "BodyStructure.location"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "morphology"
-    type: TOKEN
-    expression: "BodyStructure.morphology"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "BodyStructure.patient"
-  };
 
   // Logical id of this artifact
   Id id = 1;

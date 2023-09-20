@@ -33,56 +33,6 @@ message Provenance {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Provenance";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "agent"
-    type: REFERENCE
-    expression: "Provenance.agent.who"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "agent-role"
-    type: TOKEN
-    expression: "Provenance.agent.role"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "agent-type"
-    type: TOKEN
-    expression: "Provenance.agent.type"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "entity"
-    type: REFERENCE
-    expression: "Provenance.entity.what"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "location"
-    type: REFERENCE
-    expression: "Provenance.location"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "Provenance.target.where(resolve() is Patient)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "recorded"
-    type: DATE
-    expression: "Provenance.recorded"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "signature-type"
-    type: TOKEN
-    expression: "Provenance.signature.type"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "target"
-    type: REFERENCE
-    expression: "Provenance.target"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "when"
-    type: DATE
-    expression: "(Provenance.occurred as dateTime)"
-  };
 
   // Logical id of this artifact
   Id id = 1;

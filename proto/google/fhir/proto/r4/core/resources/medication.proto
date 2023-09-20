@@ -33,51 +33,6 @@ message Medication {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Medication";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "code"
-    type: TOKEN
-    expression: "AllergyIntolerance.code | AllergyIntolerance.reaction.substance | Condition.code | (DeviceRequest.code as CodeableConcept) | DiagnosticReport.code | FamilyMemberHistory.condition.code | List.code | Medication.code | (MedicationAdministration.medication as CodeableConcept) | (MedicationDispense.medication as CodeableConcept) | (MedicationRequest.medication as CodeableConcept) | (MedicationStatement.medication as CodeableConcept) | Observation.code | Procedure.code | ServiceRequest.code"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "expiration-date"
-    type: DATE
-    expression: "Medication.batch.expirationDate"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "form"
-    type: TOKEN
-    expression: "Medication.form"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "Medication.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "ingredient"
-    type: REFERENCE
-    expression: "(Medication.ingredient.item as Reference)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "ingredient-code"
-    type: TOKEN
-    expression: "(Medication.ingredient.item as CodeableConcept)"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "lot-number"
-    type: TOKEN
-    expression: "Medication.batch.lotNumber"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "manufacturer"
-    type: REFERENCE
-    expression: "Medication.manufacturer"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "Medication.status"
-  };
 
   // Logical id of this artifact
   Id id = 1;

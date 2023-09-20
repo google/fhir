@@ -33,41 +33,6 @@ message CoverageEligibilityRequest {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/CoverageEligibilityRequest";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "created"
-    type: DATE
-    expression: "CoverageEligibilityRequest.created"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "enterer"
-    type: REFERENCE
-    expression: "CoverageEligibilityRequest.enterer"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "facility"
-    type: REFERENCE
-    expression: "CoverageEligibilityRequest.facility"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "CoverageEligibilityRequest.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "CoverageEligibilityRequest.patient"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "provider"
-    type: REFERENCE
-    expression: "CoverageEligibilityRequest.provider"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "CoverageEligibilityRequest.status"
-  };
 
   // Logical id of this artifact
   Id id = 1;

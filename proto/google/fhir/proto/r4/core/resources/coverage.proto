@@ -33,61 +33,6 @@ message Coverage {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/Coverage";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "beneficiary"
-    type: REFERENCE
-    expression: "Coverage.beneficiary"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "class-type"
-    type: TOKEN
-    expression: "Coverage.class.type"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "class-value"
-    type: STRING
-    expression: "Coverage.class.value"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "dependent"
-    type: STRING
-    expression: "Coverage.dependent"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "Coverage.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "Coverage.beneficiary"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "payor"
-    type: REFERENCE
-    expression: "Coverage.payor"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "policy-holder"
-    type: REFERENCE
-    expression: "Coverage.policyHolder"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "Coverage.status"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "subscriber"
-    type: REFERENCE
-    expression: "Coverage.subscriber"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "type"
-    type: TOKEN
-    expression: "Coverage.type"
-  };
 
   // Logical id of this artifact
   Id id = 1;

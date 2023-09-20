@@ -33,61 +33,6 @@ message ClaimResponse {
   option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
   option (.google.fhir.proto.fhir_structure_definition_url) =
       "http://hl7.org/fhir/StructureDefinition/ClaimResponse";
-  option (.google.fhir.proto.search_parameter) = {
-    name: "created"
-    type: DATE
-    expression: "ClaimResponse.created"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "disposition"
-    type: STRING
-    expression: "ClaimResponse.disposition"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "identifier"
-    type: TOKEN
-    expression: "ClaimResponse.identifier"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "insurer"
-    type: REFERENCE
-    expression: "ClaimResponse.insurer"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "outcome"
-    type: TOKEN
-    expression: "ClaimResponse.outcome"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "patient"
-    type: REFERENCE
-    expression: "ClaimResponse.patient"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "payment-date"
-    type: DATE
-    expression: "ClaimResponse.payment.date"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "request"
-    type: REFERENCE
-    expression: "ClaimResponse.request"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "requestor"
-    type: REFERENCE
-    expression: "ClaimResponse.requestor"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "status"
-    type: TOKEN
-    expression: "ClaimResponse.status"
-  };
-  option (.google.fhir.proto.search_parameter) = {
-    name: "use"
-    type: TOKEN
-    expression: "ClaimResponse.use"
-  };
 
   // Logical id of this artifact
   Id id = 1;
