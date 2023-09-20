@@ -75,7 +75,9 @@ def _read_fhir_package_npm(npm_file: BinaryIO) -> Iterator[Tuple[str, str]]:
       if member.name.endswith('.json'):
         content = f.extractfile(member)
         if content is not None:
-          yield member.name, content.read().decode('utf-8')
+          # Note that decoding as utf-8-sig works for both utf-8-sig and normal
+          # utf-8.
+          yield member.name, content.read().decode('utf-8-sig')
       else:
         logging.info('Skipping  entry: %s.', member.name)
 
