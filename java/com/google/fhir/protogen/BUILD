@@ -117,10 +117,26 @@ java_binary(
     ],
 )
 
+java_library(
+    name = "proto_generator_main_v2_binary_lib",
+    srcs = ["ProtoGeneratorMainV2.java"],
+    deps = [
+        ":generator_utils",
+        ":protogen",
+        "//java/com/google/fhir/common:exceptions",
+        "//proto/google/fhir/proto:annotations_java_proto",
+        "//proto/google/fhir/proto:profile_config_java_proto",
+        "//proto/google/fhir/proto/r4/core:codes_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_beust_jcommander",
+    ],
+)
+
 java_binary(
     name = "ProtoGeneratorV2",
     main_class = "com.google.fhir.protogen.ProtoGeneratorMainV2",
-    runtime_deps = [":proto_generator_binary_lib"],
+    runtime_deps = [":proto_generator_main_v2_binary_lib"],
 )
 
 java_library(

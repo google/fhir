@@ -163,7 +163,8 @@ public final class FhirPackageTest {
               }
             });
     String zipFile = createFhirPackageInfoZip("foo_package", files);
-    FhirPackage fhirPackage = FhirPackage.load(zipFile, null, /* ignoreUnrecognizedFields= */ true);
+    FhirPackage fhirPackage =
+        FhirPackage.load(zipFile, null, /* ignoreUnrecognizedFieldsAndCodes= */ true);
 
     assertThat(fhirPackage.structureDefinitions()).hasSize(1);
     assertThat(fhirPackage.structureDefinitions().iterator().next().getId().getValue())
@@ -500,6 +501,16 @@ public final class FhirPackageTest {
     assertThat(fhirPackage.searchParameters()).isEmpty();
   }
 
+  private void addTarEntry(TarArchiveOutputStream archive, String filename, String content)
+      throws IOException {
+    TarArchiveEntry t = new TarArchiveEntry(new File(filename));
+    byte[] contentBytes = content.getBytes(Charset.forName(UTF_8.name()));
+    t.setSize(contentBytes.length);
+    archive.putArchiveEntry(t);
+    archive.write(contentBytes);
+    archive.closeArchiveEntry();
+  }
+
   @Test
   public void load_withTarGzFile(@TestParameter({".tar.gz", ".tgz"}) String tarFileExtension)
       throws IOException, InvalidFhirException {
@@ -510,19 +521,42 @@ public final class FhirPackageTest {
                 new BufferedOutputStream(
                     Channels.newOutputStream(
                         new FileOutputStream(tarGzFile.getAbsolutePath()).getChannel()))))) {
-      TarArchiveEntry t = new TarArchiveEntry(new File("foo.json"));
-      byte[] content =
-          "{\"resourceType\":\"StructureDefinition\", \"url\":\"http://foo.com\"}"
-              .getBytes(Charset.forName(UTF_8.name()));
-      t.setSize(content.length);
-      tOut.putArchiveEntry(t);
-      tOut.write(content);
-      tOut.closeArchiveEntry();
+      addTarEntry(
+          tOut,
+          "foo.json",
+          "{\"resourceType\":\"StructureDefinition\", \"url\":\"http://foo.com\"}");
     }
 
     FhirPackage fhirPackage = FhirPackage.load(tarGzFile.getAbsolutePath());
 
     assertThat(fhirPackage.packageInfo).isNull();
+    assertThat(fhirPackage.structureDefinitions()).hasSize(1);
+    assertThat(fhirPackage.codeSystems()).isEmpty();
+    assertThat(fhirPackage.valueSets()).isEmpty();
+    assertThat(fhirPackage.searchParameters()).isEmpty();
+  }
+
+  @Test
+  public void load_withPackageJson() throws IOException, InvalidFhirException {
+    File tarGzFile = File.createTempFile("foo", ".tgz");
+    try (TarArchiveOutputStream tOut =
+        new TarArchiveOutputStream(
+            new GzipCompressorOutputStream(
+                new BufferedOutputStream(
+                    Channels.newOutputStream(
+                        new FileOutputStream(tarGzFile.getAbsolutePath()).getChannel()))))) {
+      addTarEntry(
+          tOut,
+          "foo.json",
+          "{\"resourceType\":\"StructureDefinition\", \"url\":\"http://foo.com\"}");
+      addTarEntry(tOut, "package/package.json", "{\"name\":\"foo.bar.baz\"}");
+    }
+
+    FhirPackage fhirPackage = FhirPackage.load(tarGzFile.getAbsolutePath());
+
+    assertThat(fhirPackage.packageInfo).isNull();
+    assertThat(fhirPackage.packageJson.get("name").getAsString()).isEqualTo("foo.bar.baz");
+
     assertThat(fhirPackage.structureDefinitions()).hasSize(1);
     assertThat(fhirPackage.codeSystems()).isEmpty();
     assertThat(fhirPackage.valueSets()).isEmpty();

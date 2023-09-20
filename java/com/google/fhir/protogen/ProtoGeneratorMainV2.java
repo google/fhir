@@ -20,7 +20,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.google.fhir.common.InvalidFhirException;
-import com.google.fhir.proto.Annotations.FhirVersion;
+import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.ProtogenConfig;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
@@ -79,13 +79,6 @@ class ProtoGeneratorMainV2 {
     private String licenseDate = null;
 
     @Parameter(
-        names = {"--fhir_version"},
-        description = "FHIR version annotation to add to the generated file.",
-        required = true)
-    // TODO(b/292116008): Remove reliance on precompiled enums.
-    private FhirVersion fhirVersion = null;
-
-    @Parameter(
         names = {"--contained_resource_offset"},
         description =
             "Field number offset for ContainedResources.  This is used to ensure that"
@@ -118,13 +111,21 @@ class ProtoGeneratorMainV2 {
             args.inputPackageLocation,
             /* no manually added package info - read from package */ null,
             /* ignoreUnrecognizedFieldsAndCodes= */ true);
+
+    if (inputPackage.packageJson == null) {
+      throw new InvalidFhirException(
+          "V2 Generator requires input packages to have package.json file.");
+    }
+
     ProtogenConfig config =
         ProtogenConfig.newBuilder()
             .setProtoPackage(args.protoPackage)
             .setJavaProtoPackage(args.javaProtoPackage)
             .setLicenseDate(args.licenseDate)
             .setSourceDirectory(args.outputDirectory)
-            .setFhirVersion(args.fhirVersion)
+            .setFhirVersion(
+                convertSemanticVersionToAnnotation(
+                    inputPackage.packageJson.get("version").getAsString()))
             .build();
 
     // Generate the proto file.
@@ -227,5 +228,25 @@ class ProtoGeneratorMainV2 {
       System.exit(1);
     }
     new ProtoGeneratorMainV2(args).run();
+  }
+
+  /** Converts from a semantic version id, e.g., "4.0.1". */
+  // TODO(b/292116008): Deprecate FhirVersion annotation and eliminate this method, since
+  // this does not automatically adapt to new versions.
+  private static Annotations.FhirVersion convertSemanticVersionToAnnotation(
+      String semanticVersion) {
+    if (semanticVersion.startsWith("2.")) {
+      return Annotations.FhirVersion.DSTU2;
+    } else if (semanticVersion.startsWith("3.")) {
+      return Annotations.FhirVersion.STU3;
+    } else if (semanticVersion.startsWith("4.")) {
+      if (semanticVersion.startsWith("4.3.")) {
+        return Annotations.FhirVersion.R4B;
+      }
+      return Annotations.FhirVersion.R4;
+    } else if (semanticVersion.startsWith("5.")) {
+      return Annotations.FhirVersion.R5;
+    }
+    return Annotations.FhirVersion.FHIR_VERSION_UNKNOWN;
   }
 }

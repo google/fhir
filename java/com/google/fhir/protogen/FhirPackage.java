@@ -28,6 +28,7 @@ import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.ValueSet;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.google.protobuf.TextFormat;
@@ -56,7 +57,10 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
  * <p>TODO(b/235876918): Support NPM-based FHIR Packages for proto generation.
  */
 public class FhirPackage {
+  // TODO(b/292116008): Eliminate packageInfo in favor of packageJson.
   public final PackageInfo packageInfo;
+  public final JsonObject packageJson;
+
   private final ResourceCollection<StructureDefinition> structureDefinitionCollection;
   private final ResourceCollection<SearchParameter> searchParameterCollection;
   private final ResourceCollection<CodeSystem> codeSystemCollection;
@@ -80,11 +84,13 @@ public class FhirPackage {
 
   private FhirPackage(
       PackageInfo packageInfo,
+      JsonObject packageJson,
       ResourceCollection<StructureDefinition> structureDefinitions,
       ResourceCollection<SearchParameter> searchParameters,
       ResourceCollection<CodeSystem> codeSystems,
       ResourceCollection<ValueSet> valueSets) {
     this.packageInfo = packageInfo;
+    this.packageJson = packageJson;
     this.structureDefinitionCollection = structureDefinitions;
     this.searchParameterCollection = searchParameters;
     this.codeSystemCollection = codeSystems;
@@ -150,7 +156,7 @@ public class FhirPackage {
    *     irrespective of whether the ZIP contains one.
    */
   public static FhirPackage load(String archiveFilePath, PackageInfo packageInfo)
-      throws IOException, InvalidFhirException {
+      throws IOException {
     return load(archiveFilePath, packageInfo, /* ignoreUnrecognizedFieldsAndCodes= */ false);
   }
 
@@ -220,6 +226,7 @@ public class FhirPackage {
     structureDefinitionCollection.setFilter(filter);
     return new FhirPackage(
         packageInfo,
+        packageJson,
         structureDefinitionCollection,
         searchParameterCollection,
         codeSystemCollection,
@@ -317,7 +324,6 @@ public class FhirPackage {
       JsonElement json = jsonFile.json;
       Optional<String> expectedType = getResourceType(json);
       if (expectedType.isEmpty()) {
-        System.out.println("Unhandled JSON entry: " + jsonFile.name);
         continue;
       }
       switch (expectedType.get()) {
@@ -379,8 +385,17 @@ public class FhirPackage {
 
     buildResourceCollections(jsonFiles, parser, resourceCollections);
 
+    JsonObject packageJson = null;
+    for (JsonFile jsonFile : jsonFiles) {
+      if (jsonFile.name.equals("package.json") || jsonFile.name.equals("package/package.json")) {
+        packageJson = jsonFile.json.getAsJsonObject();
+        break;
+      }
+    }
+
     return new FhirPackage(
         packageInfo,
+        packageJson,
         resourceCollections.structureDefinitions,
         resourceCollections.searchParameters,
         resourceCollections.codeSystems,
