@@ -1,6 +1,0 @@
-# Files needed when creating sdist or bdist_wheel distributions.
-include requirements.txt
-include README.md
-include google/fhir/py.typed
-include proto/google/fhir/proto/py.typed
-recursive-include proto/google/fhir/proto *.pyi
