@@ -20,7 +20,6 @@ import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
 import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.fhir.common.InvalidFhirException;
-import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.proto.ProtogenConfig;
 import com.google.fhir.r4.core.Bundle;
@@ -83,7 +82,6 @@ public final class ProtoGeneratorV2Test {
             .setJavaProtoPackage("com.google.fhir.r4.core")
             .setLicenseDate("1995")
             .setSourceDirectory("proto/google/fhir/proto/r4/core")
-            .setFhirVersion(FhirVersion.R4)
             .build();
 
     FhirPackage r4Package = getR4Package();
@@ -93,7 +91,6 @@ public final class ProtoGeneratorV2Test {
 
     return new ProtoGeneratorV2(
         config,
-        r4Package,
         valueSetGenerator.getBoundCodeGenerator(codesFileDescriptor, valueSetsFileDescriptor));
   }
 
@@ -104,7 +101,6 @@ public final class ProtoGeneratorV2Test {
             .setJavaProtoPackage("com.google.fhir.r5.core")
             .setLicenseDate("1995")
             .setSourceDirectory("proto/google/fhir/proto/r5/core")
-            .setFhirVersion(FhirVersion.R5)
             .build();
     FhirPackage r5Package = getR5Package();
 
@@ -114,7 +110,6 @@ public final class ProtoGeneratorV2Test {
 
     return new ProtoGeneratorV2(
         config,
-        r5Package,
         valueSetGenerator.getBoundCodeGenerator(codesFileDescriptor, valueSetsFileDescriptor));
   }
 
@@ -195,7 +190,7 @@ public final class ProtoGeneratorV2Test {
             .map(field -> field.getMessageType().getName())
             .collect(toImmutableList());
     FileDescriptorProto descriptor =
-        makeR4ProtoGenerator().generateLegacyDatatypesFileDescriptor(resourceNames);
+        makeR4ProtoGenerator().generateLegacyDatatypesFileDescriptor(getR4Package(), resourceNames);
     assertThat(sorted(cleaned(descriptor)))
         .ignoringRepeatedFieldOrder()
         .isEqualTo(
@@ -266,7 +261,9 @@ public final class ProtoGeneratorV2Test {
       throws Exception {
     ProtoGeneratorV2 protoGenerator = makeR4ProtoGenerator();
 
-    FileDescriptorProto file = protoGenerator.generateResourceFileDescriptor(resource);
+    FileDescriptorProto file =
+        protoGenerator.generateResourceFileDescriptor(
+            resource, getR4Package().getSemanticVersion());
 
     // Get the checked-in FileDescriptor for the resource.
     String name = file.getOptions().getJavaPackage() + "." + file.getMessageType(0).getName();
@@ -303,7 +300,10 @@ public final class ProtoGeneratorV2Test {
       throw new AssertionError("No Bundle found");
     }
 
-    assertThat(cleaned(protoGenerator.generateBundleAndContainedResource(bundle, resourceNames, 0)))
+    assertThat(
+            cleaned(
+                protoGenerator.generateBundleAndContainedResource(
+                    bundle, getR4Package().getSemanticVersion(), resourceNames, 0)))
         .ignoringRepeatedFieldOrder()
         .isEqualTo(cleaned(Bundle.getDescriptor().getFile().toProto()));
   }
@@ -321,7 +321,7 @@ public final class ProtoGeneratorV2Test {
             .map(field -> field.getMessageType().getName())
             .collect(toImmutableList());
     FileDescriptorProto descriptor =
-        makeR5ProtoGenerator().generateDatatypesFileDescriptor(resourceNames);
+        makeR5ProtoGenerator().generateDatatypesFileDescriptor(getR5Package(), resourceNames);
     assertThat(sorted(cleaned(descriptor)))
         .ignoringRepeatedFieldOrder()
         .isEqualTo(
@@ -355,7 +355,9 @@ public final class ProtoGeneratorV2Test {
       throws Exception {
     ProtoGeneratorV2 protoGenerator = makeR5ProtoGenerator();
 
-    FileDescriptorProto file = protoGenerator.generateResourceFileDescriptor(resource);
+    FileDescriptorProto file =
+        protoGenerator.generateResourceFileDescriptor(
+            resource, getR5Package().getSemanticVersion());
 
     // Get the checked-in FileDescriptor for the resource.
     String name = file.getOptions().getJavaPackage() + "." + file.getMessageType(0).getName();
@@ -393,7 +395,9 @@ public final class ProtoGeneratorV2Test {
     }
 
     assertThat(
-            cleaned(protoGenerator.generateBundleAndContainedResource(bundle, resourceNames, 5000)))
+            cleaned(
+                protoGenerator.generateBundleAndContainedResource(
+                    bundle, getR5Package().getSemanticVersion(), resourceNames, 5000)))
         .ignoringRepeatedFieldOrder()
         .isEqualTo(cleaned(com.google.fhir.r5.core.Bundle.getDescriptor().getFile().toProto()));
   }

@@ -124,7 +124,6 @@ java_library(
         ":generator_utils",
         ":protogen",
         "//java/com/google/fhir/common:exceptions",
-        "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto:profile_config_java_proto",
         "//proto/google/fhir/proto/r4/core:codes_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",

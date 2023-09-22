@@ -20,7 +20,6 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.google.fhir.common.InvalidFhirException;
-import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.ProtogenConfig;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
@@ -107,10 +106,12 @@ class ProtoGeneratorMainV2 {
             /* no manually added package info - read from package */ null,
             /* ignoreUnrecognizedFieldsAndCodes= */ true);
 
-    if (inputPackage.packageJson == null) {
+    if (inputPackage.packageJson == null || inputPackage.getSemanticVersion() == null) {
       throw new InvalidFhirException(
-          "V2 Generator requires input packages to have package.json file.");
+          "V2 Generator requires input packages to have package.json file, with fhirVersion set.");
     }
+
+    String semanticVersion = inputPackage.getSemanticVersion();
 
     ProtogenConfig config =
         ProtogenConfig.newBuilder()
@@ -118,9 +119,6 @@ class ProtoGeneratorMainV2 {
             .setJavaProtoPackage(args.javaProtoPackage)
             .setLicenseDate(args.licenseDate)
             .setSourceDirectory(args.outputDirectory)
-            .setFhirVersion(
-                convertSemanticVersionToAnnotation(
-                    inputPackage.packageJson.get("version").getAsString()))
             .build();
 
     // Generate the proto file.
@@ -134,7 +132,6 @@ class ProtoGeneratorMainV2 {
     ProtoGeneratorV2 generator =
         new ProtoGeneratorV2(
             config,
-            inputPackage,
             valueSetGenerator.getBoundCodeGenerator(codesFileDescriptor, valueSetsFileDescriptor));
 
     ProtoFilePrinter printer = new ProtoFilePrinter(config);
@@ -164,7 +161,7 @@ class ProtoGeneratorMainV2 {
                   zipOutputStream,
                   printer,
                   config,
-                  generator.generateResourceFileDescriptor(structDef),
+                  generator.generateResourceFileDescriptor(structDef, semanticVersion),
                   "resources/" + GeneratorUtils.resourceNameToFileName(resourceName));
             }
           }
@@ -176,7 +173,7 @@ class ProtoGeneratorMainV2 {
             printer,
             config,
             generator.generateBundleAndContainedResource(
-                bundleDefinition, resourceNames, args.containedResourceOffset),
+                bundleDefinition, semanticVersion, resourceNames, args.containedResourceOffset),
             "resources/bundle_and_contained_resource.proto");
 
         // Generate the Datatypes file.  Pass all resource names, for use in generating the
@@ -186,8 +183,8 @@ class ProtoGeneratorMainV2 {
             printer,
             config,
             args.legacyDatatypeGeneration
-                ? generator.generateLegacyDatatypesFileDescriptor(resourceNames)
-                : generator.generateDatatypesFileDescriptor(resourceNames),
+                ? generator.generateLegacyDatatypesFileDescriptor(inputPackage, resourceNames)
+                : generator.generateDatatypesFileDescriptor(inputPackage, resourceNames),
             "datatypes.proto");
       } finally {
         zipOutputStream.closeEntry();
@@ -219,25 +216,5 @@ class ProtoGeneratorMainV2 {
       System.exit(1);
     }
     new ProtoGeneratorMainV2(args).run();
-  }
-
-  /** Converts from a semantic version id, e.g., "4.0.1". */
-  // TODO(b/292116008): Deprecate FhirVersion annotation and eliminate this method, since
-  // this does not automatically adapt to new versions.
-  private static Annotations.FhirVersion convertSemanticVersionToAnnotation(
-      String semanticVersion) {
-    if (semanticVersion.startsWith("2.")) {
-      return Annotations.FhirVersion.DSTU2;
-    } else if (semanticVersion.startsWith("3.")) {
-      return Annotations.FhirVersion.STU3;
-    } else if (semanticVersion.startsWith("4.")) {
-      if (semanticVersion.startsWith("4.3.")) {
-        return Annotations.FhirVersion.R4B;
-      }
-      return Annotations.FhirVersion.R4;
-    } else if (semanticVersion.startsWith("5.")) {
-      return Annotations.FhirVersion.R5;
-    }
-    return Annotations.FhirVersion.FHIR_VERSION_UNKNOWN;
   }
 }

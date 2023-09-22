@@ -28,7 +28,6 @@ import com.google.devtools.build.runfiles.Runfiles;
 import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.Annotations;
-import com.google.fhir.proto.Annotations.FhirVersion;
 import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.proto.ProtogenConfig;
@@ -195,7 +194,6 @@ public final class ProtoFilePrinterTest {
             .setJavaProtoPackage("com.google.fhir.r4.core")
             .setLicenseDate("1995")
             .setSourceDirectory("proto/google/fhir/proto/r4/core")
-            .setFhirVersion(FhirVersion.R4)
             .build();
 
     ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(config, r4Package);
@@ -205,7 +203,6 @@ public final class ProtoFilePrinterTest {
     ProtoGeneratorV2 protoGenerator =
         new ProtoGeneratorV2(
             config,
-            r4Package,
             valueSetGenerator.getBoundCodeGenerator(codesFileDescriptor, valueSetsFileDescriptor));
 
     ImmutableList<String> resourceNames =
@@ -214,7 +211,7 @@ public final class ProtoFilePrinterTest {
             .collect(toImmutableList());
 
     FileDescriptorProto descriptor =
-        protoGenerator.generateLegacyDatatypesFileDescriptor(resourceNames);
+        protoGenerator.generateLegacyDatatypesFileDescriptor(r4Package, resourceNames);
     descriptor =
         GeneratorUtils.setGoPackage(
             descriptor, "proto/google/fhir/proto/r4/core", "datatypes.proto");
@@ -238,7 +235,6 @@ public final class ProtoFilePrinterTest {
               .setJavaProtoPackage("com.google.fhir.r4.core")
               .setLicenseDate("1995")
               .setSourceDirectory("proto/google/fhir/proto/r4/core")
-              .setFhirVersion(FhirVersion.R4)
               .build();
 
       ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(config, r4Package);
@@ -248,7 +244,6 @@ public final class ProtoFilePrinterTest {
       ProtoGeneratorV2 protoGenerator =
           new ProtoGeneratorV2(
               config,
-              r4Package,
               valueSetGenerator.getBoundCodeGenerator(
                   codesFileDescriptor, valueSetsFileDescriptor));
 
@@ -257,7 +252,8 @@ public final class ProtoFilePrinterTest {
               r4Package
                   .getStructureDefinition(
                       AnnotationUtils.getStructureDefinitionUrl(resource.getMessageType()))
-                  .get());
+                  .get(),
+              "4.0.1");
       String resourceFileName = GeneratorUtils.resourceNameToFileName(resourceName);
       descriptor =
           GeneratorUtils.setGoPackage(

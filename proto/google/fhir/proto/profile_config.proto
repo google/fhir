@@ -43,11 +43,6 @@ message ProtogenConfig {
   // The copyright date to be included in the license text, which
   // may simply be a year.
   string license_date = 5;
-
-  // FhirVersion annotation to add to a file.
-  // TODO(b/292116008): This is included to match legacy behavior, and should
-  // be deprecated.
-  FhirVersion fhir_version = 6;
 }
 
 // Metadata for generating FHIR packages

@@ -74,7 +74,6 @@ java_test(
     deps = [
         "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/protogen",
-        "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto:profile_config_java_proto",
         "//proto/google/fhir/proto:protogenerator_annotations_java_proto",
         "//proto/google/fhir/proto/r4/core:codes_java_proto",

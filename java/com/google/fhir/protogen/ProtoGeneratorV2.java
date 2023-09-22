@@ -15,14 +15,12 @@
 package com.google.fhir.protogen;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
-import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static com.google.common.collect.Streams.stream;
 import static com.google.fhir.protogen.GeneratorUtils.isProfile;
 import static com.google.fhir.protogen.GeneratorUtils.lastIdToken;
 import static com.google.fhir.protogen.GeneratorUtils.nameFromQualifiedName;
 import static com.google.fhir.protogen.GeneratorUtils.toFieldNameCase;
 import static com.google.fhir.protogen.GeneratorUtils.toFieldTypeCase;
-import static java.util.stream.Collectors.toCollection;
 
 import com.google.common.base.Ascii;
 import com.google.common.base.CaseFormat;
@@ -61,10 +59,8 @@ import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.Message;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -204,9 +200,6 @@ public class ProtoGeneratorV2 {
   // Should we use custom types for constrained references?
   private static final boolean USE_TYPED_REFERENCES = false;
 
-  // Mapping from urls for StructureDefinition to data about that StructureDefinition.
-  private final ImmutableMap<String, StructureDefinitionData> structDefDataByUrl;
-
   private static Set<String> getTypesDefinedInType(Descriptor type) {
     Set<String> types = new HashSet<>();
     types.add(type.getFullName());
@@ -221,59 +214,12 @@ public class ProtoGeneratorV2 {
 
   // The package to write new protos to.
   private final ProtogenConfig protogenConfig;
-  private final FhirPackage inputPackage;
 
   private final BoundCodeGenerator boundCodeGenerator;
 
-  private static class StructureDefinitionData {
-    final StructureDefinition structDef;
-    final String inlineType;
-
-    StructureDefinitionData(StructureDefinition structDef, String inlineType) {
-      this.structDef = structDef;
-      this.inlineType = inlineType;
-    }
-  }
-
-  public ProtoGeneratorV2(
-      ProtogenConfig protogenConfig,
-      FhirPackage inputPackage,
-      BoundCodeGenerator boundCodeGenerator) {
+  public ProtoGeneratorV2(ProtogenConfig protogenConfig, BoundCodeGenerator boundCodeGenerator) {
     this.protogenConfig = protogenConfig;
-    this.inputPackage = inputPackage;
     this.boundCodeGenerator = boundCodeGenerator;
-
-    Map<StructureDefinition, String> allDefinitions = new HashMap<>();
-
-    allDefinitions.putAll(
-        stream(inputPackage.structureDefinitions().iterator())
-            .collect(toImmutableMap(def -> def, def -> protogenConfig.getProtoPackage())));
-
-    Map<String, StructureDefinitionData> mutableStructDefDataByUrl = new HashMap<>();
-    for (Map.Entry<StructureDefinition, String> knownType : allDefinitions.entrySet()) {
-      StructureDefinition def = knownType.getKey();
-      String url = def.getUrl().getValue();
-      if (url.isEmpty()) {
-        throw new IllegalArgumentException(
-            "Invalid FHIR structure definition: " + def.getId().getValue() + " has no url");
-      }
-
-      StructureDefinitionData structDefData = new StructureDefinitionData(def, getTypeName(def));
-      mutableStructDefDataByUrl.put(def.getUrl().getValue(), structDefData);
-    }
-    this.structDefDataByUrl = ImmutableMap.copyOf(mutableStructDefDataByUrl);
-  }
-
-  // Given a structure definition, gets the name of the top-level message that will be generated.
-  private String getTypeName(StructureDefinition def) {
-    return GeneratorUtils.getTypeName(def);
-  }
-
-  private StructureDefinitionData getDefinitionDataByUrl(String url) {
-    if (!structDefDataByUrl.containsKey(url)) {
-      throw new IllegalArgumentException("Unrecognized resource URL: " + url);
-    }
-    return structDefDataByUrl.get(url);
   }
 
   /**
@@ -331,13 +277,10 @@ public class ProtoGeneratorV2 {
       generateMessage(allElements.get(0), builder);
 
       if (isProfile(structureDefinition)) {
-        // Add all base structure definition url annotations
-        StructureDefinition defInChain = structureDefinition;
-        while (isProfile(defInChain)) {
-          String baseUrl = defInChain.getBaseDefinition().getValue();
-          builder.getOptionsBuilder().addExtension(Annotations.fhirProfileBase, baseUrl);
-          defInChain = getDefinitionDataByUrl(baseUrl).structDef;
-        }
+        builder
+            .getOptionsBuilder()
+            .addExtension(
+                Annotations.fhirProfileBase, structureDefinition.getBaseDefinition().getValue());
       }
       return builder.build();
     }
@@ -741,10 +684,6 @@ public class ProtoGeneratorV2 {
       } else if (element.hasContentReference()) {
         // Get the type for this container from a named reference to another element.
         return new QualifiedType(getContainerType(element), protogenConfig.getProtoPackage());
-      } else if (element.getType(0).getCode().getValue().equals("Reference")) {
-        return new QualifiedType(
-            USE_TYPED_REFERENCES ? getTypedReferenceName(element.getTypeList()) : "Reference",
-            protogenConfig.getProtoPackage());
       } else {
         if (element.getTypeCount() > 1) {
           throw new IllegalArgumentException(
@@ -1000,8 +939,8 @@ public class ProtoGeneratorV2 {
           "http://hl7.org/fhir/StructureDefinition/example-section-library",
           "http://hl7.org/fhir/StructureDefinition/example-composition");
 
-  public FileDescriptorProto generateDatatypesFileDescriptor(List<String> resourceNames)
-      throws InvalidFhirException {
+  public FileDescriptorProto generateDatatypesFileDescriptor(
+      FhirPackage inputPackage, List<String> resourceNames) throws InvalidFhirException {
     ImmutableList<StructureDefinition> messages =
         stream(inputPackage.structureDefinitions())
             .filter(
@@ -1015,7 +954,8 @@ public class ProtoGeneratorV2 {
                             .equals("http://hl7.org/fhir/StructureDefinition/Extension"))
             .collect(toImmutableList());
 
-    FileDescriptorProto.Builder fileBuilder = generateFileDescriptor(messages);
+    FileDescriptorProto.Builder fileBuilder =
+        generateFileDescriptor(messages, inputPackage.getSemanticVersion());
 
     addReferenceType(fileBuilder, resourceNames);
     addReferenceIdType(fileBuilder);
@@ -1025,8 +965,8 @@ public class ProtoGeneratorV2 {
 
   // To match v1 proto generator behavior, skip generating a few extra datatypes that are hardcoded
   // in supplemental files: Element, Extension, Reference
-  public FileDescriptorProto generateLegacyDatatypesFileDescriptor(List<String> resourceNames)
-      throws InvalidFhirException {
+  public FileDescriptorProto generateLegacyDatatypesFileDescriptor(
+      FhirPackage inputPackage, List<String> resourceNames) throws InvalidFhirException {
     ImmutableList<StructureDefinition> messages =
         stream(inputPackage.structureDefinitions())
             .filter(
@@ -1043,7 +983,8 @@ public class ProtoGeneratorV2 {
                             .equals("http://hl7.org/fhir/StructureDefinition/Extension"))
             .collect(toImmutableList());
 
-    FileDescriptorProto.Builder fileBuilder = generateFileDescriptor(messages);
+    FileDescriptorProto.Builder fileBuilder =
+        generateFileDescriptor(messages, inputPackage.getSemanticVersion());
 
     // Old R4 had a few reference types to non-concrete resources.  Include these to be backwards
     // compatible during transition.
@@ -1308,9 +1249,11 @@ public class ProtoGeneratorV2 {
         .setNumber(4);
   }
 
-  public FileDescriptorProto generateResourceFileDescriptor(StructureDefinition def)
-      throws InvalidFhirException {
-    return generateFileDescriptor(ImmutableList.of(def))
+  // TODO(b/292116008): Infer version directly from Structure Definition directly.  Currently not
+  // possible since this uses R4 StructureDefinition, which can't parse R5 version code.
+  public FileDescriptorProto generateResourceFileDescriptor(
+      StructureDefinition def, String semanticVersion) throws InvalidFhirException {
+    return generateFileDescriptor(ImmutableList.of(def), semanticVersion)
         .addDependency(protogenConfig.getSourceDirectory() + "/datatypes.proto")
         .addDependency("google/protobuf/any.proto")
         .build();
@@ -1318,10 +1261,13 @@ public class ProtoGeneratorV2 {
 
   // Generates a single file for two types: the Bundle type, and the ContainedResource type.
   public FileDescriptorProto generateBundleAndContainedResource(
-      StructureDefinition bundleDefinition, List<String> resourceTypes, int fieldNumberOffset)
+      StructureDefinition bundleDefinition,
+      String semanticVersion,
+      List<String> resourceTypes,
+      int fieldNumberOffset)
       throws InvalidFhirException {
     FileDescriptorProto.Builder fileBuilder =
-        generateResourceFileDescriptor(bundleDefinition).toBuilder();
+        generateResourceFileDescriptor(bundleDefinition, semanticVersion).toBuilder();
 
     DescriptorProto.Builder contained =
         fileBuilder
@@ -1356,8 +1302,8 @@ public class ProtoGeneratorV2 {
     return fileBuilder.build();
   }
 
-  private FileDescriptorProto.Builder generateFileDescriptor(List<StructureDefinition> defs)
-      throws InvalidFhirException {
+  private FileDescriptorProto.Builder generateFileDescriptor(
+      List<StructureDefinition> defs, String semanticVersion) throws InvalidFhirException {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
     builder.setPackage(protogenConfig.getProtoPackage()).setSyntax("proto3");
     FileOptions.Builder options = FileOptions.newBuilder();
@@ -1365,8 +1311,9 @@ public class ProtoGeneratorV2 {
       options.setJavaPackage(protogenConfig.getJavaProtoPackage()).setJavaMultipleFiles(true);
     }
 
-    // TODO(b/267772954292116008): Don't rely on precompiled version enum.
-    options.setExtension(Annotations.fhirVersion, protogenConfig.getFhirVersion());
+    // TODO(b/292116008): Don't rely on precompiled version enum.
+    options.setExtension(
+        Annotations.fhirVersion, convertSemanticVersionToAnnotation(semanticVersion));
 
     builder.setOptions(options);
     for (StructureDefinition def : defs) {
@@ -1501,19 +1448,7 @@ public class ProtoGeneratorV2 {
 
   private void addReferenceTypeExtension(FieldOptions.Builder options, String referenceUrl) {
     options.addExtension(
-        Annotations.validReferenceType, getBaseStructureDefinitionData(referenceUrl).inlineType);
-  }
-
-  /**
-   * Given a structure definition url, returns the base (FHIR) structure definition data for that
-   * type.
-   */
-  private StructureDefinitionData getBaseStructureDefinitionData(String url) {
-    StructureDefinitionData defData = getDefinitionDataByUrl(url);
-    while (isProfile(defData.structDef)) {
-      defData = getDefinitionDataByUrl(defData.structDef.getBaseDefinition().getValue());
-    }
-    return defData;
+        Annotations.validReferenceType, referenceUrl.substring(referenceUrl.lastIndexOf('/') + 1));
   }
 
   private static FieldDescriptorProto.Builder buildFieldInternal(
@@ -1563,11 +1498,7 @@ public class ProtoGeneratorV2 {
       return toFieldTypeCase(code);
     }
     String profileUrl = type.getProfile(0).getValue();
-    if (structDefDataByUrl.containsKey(profileUrl)) {
-      return structDefDataByUrl.get(profileUrl).inlineType;
-    }
-    throw new IllegalArgumentException(
-        "Unable to deduce typename for profile: " + profileUrl + " on " + type);
+    return profileUrl.substring(profileUrl.lastIndexOf('/') + 1);
   }
 
   private static String snakeCaseToJsonCase(String snakeString) {
@@ -1578,33 +1509,23 @@ public class ProtoGeneratorV2 {
     return element.getBase().getPath().getValue().equals("DomainResource.contained");
   }
 
-  private String getTypedReferenceName(List<ElementDefinition.TypeRef> typeList) {
-    // Use a Tree Set to have a stable sort.
-    TreeSet<String> refTypes =
-        typeList.stream()
-            .flatMap(type -> type.getTargetProfileList().stream())
-            .map(Canonical::getValue)
-            .collect(toCollection(TreeSet::new));
-
-    String refType = null;
-    for (String r : refTypes) {
-      if (!r.isEmpty()) {
-        if (structDefDataByUrl.containsKey(r)) {
-          r = structDefDataByUrl.get(r).inlineType;
-        } else {
-          throw new IllegalArgumentException("Unsupported reference profile: " + r);
-        }
-        if (refType == null) {
-          refType = r;
-        } else {
-          refType = refType + "Or" + r;
-        }
+  /** Converts from a semantic version id, e.g., "4.0.1". */
+  // TODO(b/292116008): Deprecate FhirVersion annotation and eliminate this method, since
+  // this does not automatically adapt to new versions.
+  private static Annotations.FhirVersion convertSemanticVersionToAnnotation(
+      String semanticVersion) {
+    if (semanticVersion.startsWith("2.")) {
+      return Annotations.FhirVersion.DSTU2;
+    } else if (semanticVersion.startsWith("3.")) {
+      return Annotations.FhirVersion.STU3;
+    } else if (semanticVersion.startsWith("4.")) {
+      if (semanticVersion.startsWith("4.3.")) {
+        return Annotations.FhirVersion.R4B;
       }
+      return Annotations.FhirVersion.R4;
+    } else if (semanticVersion.startsWith("5.")) {
+      return Annotations.FhirVersion.R5;
     }
-    if (refType != null && !refType.equals("Resource")) {
-      // Specialize the reference type.
-      return refType + "Reference";
-    }
-    return "Reference";
+    return Annotations.FhirVersion.FHIR_VERSION_UNKNOWN;
   }
 }

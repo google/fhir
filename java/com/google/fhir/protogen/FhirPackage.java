@@ -274,6 +274,12 @@ public class FhirPackage {
     return valueSetCollection.get(uri);
   }
 
+  public String getSemanticVersion() {
+    return packageJson == null || !packageJson.has("version")
+        ? null
+        : packageJson.getAsJsonObject().get("version").getAsString();
+  }
+
   private static class JsonFile {
     JsonFile(String name, JsonElement json) {
       this.name = name;
