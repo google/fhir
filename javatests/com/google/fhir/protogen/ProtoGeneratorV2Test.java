@@ -16,11 +16,11 @@ package com.google.fhir.protogen;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
+import static com.google.fhir.protogen.ProtoGeneratorTestUtils.cleaned;
+import static com.google.fhir.protogen.ProtoGeneratorTestUtils.sorted;
 
 import com.google.common.collect.ImmutableList;
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.fhir.common.InvalidFhirException;
-import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.proto.ProtogenConfig;
 import com.google.fhir.r4.core.Bundle;
 import com.google.fhir.r4.core.ContainedResource;
@@ -28,7 +28,6 @@ import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
-import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.testing.junit.testparameterinjector.TestParameter;
@@ -113,62 +112,19 @@ public final class ProtoGeneratorV2Test {
         valueSetGenerator.getBoundCodeGenerator(codesFileDescriptor, valueSetsFileDescriptor));
   }
 
-  /**
-   * Sorts all messages in a file, to make it easier to compare. This is not technically necessary
-   * if we compare with ignoringRepeatedFieldOrder, but the diffs are so large if order is wrong
-   * that it is very hard to read the diff.
-   */
-  FileDescriptorProto sorted(FileDescriptorProto descriptor) {
-    List<DescriptorProto> messages = new ArrayList<>(descriptor.getMessageTypeList());
-    messages.sort((a, b) -> a.getName().compareTo(b.getName()));
-    return descriptor.toBuilder().clearMessageType().addAllMessageType(messages).build();
-  }
-
-  /**
-   * Cleans up some elements of the file that cause false diffs, such as protogenerator annotations,
-   * which are only used for printing comments, dependencies that are pruned by post-processing, and
-   * datatypes that are hardcoded rather than generated.
-   */
-  FileDescriptorProto cleaned(FileDescriptorProto file) {
-    FileDescriptorProto.Builder builder = file.toBuilder().clearName().clearDependency();
-    builder.getOptionsBuilder().clearGoPackage();
-
-    builder.clearMessageType();
+  /** Cleans up some datatypes that are hardcoded rather than generated. */
+  FileDescriptorProto filtered(FileDescriptorProto file) {
+    FileDescriptorProto.Builder builder = file.toBuilder().clearMessageType();
     for (DescriptorProto message : file.getMessageTypeList()) {
       // Some datatypes are still hardcoded and added in the generation script, rather than by
       // the protogenerator.
       if (!message.getName().equals("CodingWithFixedCode")
           && !message.getName().equals("CodingWithFixedSystem")
           && !message.getName().equals("Extension")) {
-        builder.addMessageType(clean(message.toBuilder()));
+        builder.addMessageType(message);
       }
     }
     return builder.build();
-  }
-
-  /**
-   * Cleans up protogenerator annotations, which are only used for printing comments. Also removes
-   * reserved ranges, since the ProtoGenerator represents these using the reservedReason annotation
-   * (and so doesn't have reserved ranges until printing).
-   */
-  @CanIgnoreReturnValue
-  DescriptorProto.Builder clean(DescriptorProto.Builder builder) {
-    builder.getOptionsBuilder().clearExtension(ProtoGeneratorAnnotations.messageDescription);
-    builder.clearReservedRange();
-
-    List<FieldDescriptorProto.Builder> fields = new ArrayList<>(builder.getFieldBuilderList());
-    builder.clearField();
-
-    for (FieldDescriptorProto.Builder field : fields) {
-      field.getOptionsBuilder().clearExtension(ProtoGeneratorAnnotations.fieldDescription);
-      if (!field.getOptions().hasExtension(ProtoGeneratorAnnotations.reservedReason)) {
-        builder.addField(field);
-      }
-    }
-    for (DescriptorProto.Builder nested : builder.getNestedTypeBuilderList()) {
-      clean(nested);
-    }
-    return builder;
   }
 
   private static boolean isCoreResource(StructureDefinition def) {
@@ -194,7 +150,9 @@ public final class ProtoGeneratorV2Test {
     assertThat(sorted(cleaned(descriptor)))
         .ignoringRepeatedFieldOrder()
         .isEqualTo(
-            sorted(cleaned(com.google.fhir.r4.core.String.getDescriptor().getFile().toProto())));
+            sorted(
+                cleaned(
+                    filtered(com.google.fhir.r4.core.String.getDescriptor().getFile().toProto()))));
   }
 
   /**
@@ -325,7 +283,9 @@ public final class ProtoGeneratorV2Test {
     assertThat(sorted(cleaned(descriptor)))
         .ignoringRepeatedFieldOrder()
         .isEqualTo(
-            sorted(cleaned(com.google.fhir.r5.core.String.getDescriptor().getFile().toProto())));
+            sorted(
+                cleaned(
+                    filtered(com.google.fhir.r5.core.String.getDescriptor().getFile().toProto()))));
   }
 
   private static final class R5ResourceProvider extends ResourceProvider {

@@ -157,3 +157,13 @@ java_library(
         "@maven//:com_google_code_gson_gson",
     ],
 )
+
+java_library(
+    name = "ProtoGeneratorTestUtils",
+    srcs = ["ProtoGeneratorTestUtils.java"],
+    deps = [
+        "//proto/google/fhir/proto:protogenerator_annotations_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_errorprone_error_prone_annotations",
+    ],
+)

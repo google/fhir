@@ -75,7 +75,6 @@ java_test(
         "//java/com/google/fhir/common:exceptions",
         "//java/com/google/fhir/protogen",
         "//proto/google/fhir/proto:profile_config_java_proto",
-        "//proto/google/fhir/proto:protogenerator_annotations_java_proto",
         "//proto/google/fhir/proto/r4/core:codes_java_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_java_proto",
@@ -83,7 +82,6 @@ java_test(
         "//proto/google/fhir/proto/r5/core:datatypes_java_proto",
         "//proto/google/fhir/proto/r5/core/resources:bundle_and_contained_resource_java_proto",
         "@com_google_protobuf//:protobuf_java",
-        "@maven//:com_google_errorprone_error_prone_annotations",
         "@maven//:com_google_guava_guava",
         "@maven//:com_google_testparameterinjector_test_parameter_injector",
         "@maven//:com_google_truth_extensions_truth_proto_extension",
@@ -171,6 +169,30 @@ java_test(
         "@maven//:com_google_code_gson_gson",
         "@maven//:com_google_testparameterinjector_test_parameter_injector",
         "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
+    ],
+)
+
+java_test(
+    name = "ValueSetGeneratorV2Test",
+    size = "small",
+    srcs = ["ValueSetGeneratorV2Test.java"],
+    data = [
+        "@hl7.fhir.r4.core_4.0.1//file",
+        "@hl7.fhir.r5.core_5.0.0//file",
+    ],
+    deps = [
+        "//java/com/google/fhir/common:exceptions",
+        "//java/com/google/fhir/protogen",
+        "//proto/google/fhir/proto:profile_config_java_proto",
+        "//proto/google/fhir/proto/r4/core:codes_java_proto",
+        "//proto/google/fhir/proto/r4/core:valuesets_java_proto",
+        "//proto/google/fhir/proto/r5/core:codes_java_proto",
+        "//proto/google/fhir/proto/r5/core:valuesets_java_proto",
+        "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_testparameterinjector_test_parameter_injector",
+        "@maven//:com_google_truth_extensions_truth_proto_extension",
         "@maven//:junit_junit",
     ],
 )
