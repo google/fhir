@@ -54,8 +54,6 @@ import com.google.protobuf.DescriptorProtos.FileOptions;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
 import com.google.protobuf.DescriptorProtos.OneofDescriptorProto;
 import com.google.protobuf.DescriptorProtos.OneofOptions;
-import com.google.protobuf.Descriptors.Descriptor;
-import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.Message;
 import java.io.File;
 import java.util.ArrayList;
@@ -197,21 +195,6 @@ public class ProtoGeneratorV2 {
   private static final String FHIR_TYPE_EXTENSION_URL =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type";
 
-  // Should we use custom types for constrained references?
-  private static final boolean USE_TYPED_REFERENCES = false;
-
-  private static Set<String> getTypesDefinedInType(Descriptor type) {
-    Set<String> types = new HashSet<>();
-    types.add(type.getFullName());
-    for (Descriptor subType : type.getNestedTypes()) {
-      types.addAll(getTypesDefinedInType(subType));
-    }
-    for (EnumDescriptor enumType : type.getEnumTypes()) {
-      types.add(enumType.getFullName());
-    }
-    return types;
-  }
-
   // The package to write new protos to.
   private final ProtogenConfig protogenConfig;
 
@@ -220,17 +203,6 @@ public class ProtoGeneratorV2 {
   public ProtoGeneratorV2(ProtogenConfig protogenConfig, BoundCodeGenerator boundCodeGenerator) {
     this.protogenConfig = protogenConfig;
     this.boundCodeGenerator = boundCodeGenerator;
-  }
-
-  /**
-   * Generate a proto descriptor from a StructureDefinition, using the snapshot form of the
-   * definition. For a more elaborate discussion of these versions, see
-   * https://www.hl7.org/fhir/structuredefinition.html.
-   */
-  public DescriptorProto generateProto(StructureDefinition def) throws InvalidFhirException {
-    DescriptorProto generatedProto = new PerDefinitionGenerator(def).generate();
-
-    return generatedProto;
   }
 
   private StructureDefinition fixIdBug(StructureDefinition def) {
@@ -767,7 +739,7 @@ public class ProtoGeneratorV2 {
 
     private long getDistinctTypeCount(ElementDefinition element) {
       // Don't do fancier logic if fast logic is sufficient.
-      if (element.getTypeCount() < 2 || USE_TYPED_REFERENCES) {
+      if (element.getTypeCount() < 2) {
         return element.getTypeCount();
       }
       return element.getTypeList().stream().map(type -> type.getCode()).distinct().count();
@@ -1317,7 +1289,7 @@ public class ProtoGeneratorV2 {
 
     builder.setOptions(options);
     for (StructureDefinition def : defs) {
-      builder.addMessageType(generateProto(def));
+      builder.addMessageType(new PerDefinitionGenerator(def).generate());
     }
 
     builder.addDependency(new File(GeneratorUtils.ANNOTATION_PATH, "annotations.proto").toString());
