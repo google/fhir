@@ -124,10 +124,9 @@ class ProtoGeneratorMainV2 {
     // Generate the proto file.
     System.out.println("Generating proto descriptors...");
 
-    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(config, inputPackage);
-    FileDescriptorProto codesFileDescriptor = valueSetGenerator.forCodesUsedIn(inputPackage);
-    FileDescriptorProto valueSetsFileDescriptor =
-        valueSetGenerator.forValueSetsUsedIn(inputPackage);
+    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(inputPackage);
+    FileDescriptorProto codesFileDescriptor = valueSetGenerator.makeCodeSystemFile(config);
+    FileDescriptorProto valueSetsFileDescriptor = valueSetGenerator.makeValueSetFile(config);
 
     ProtoGeneratorV2 generator =
         new ProtoGeneratorV2(

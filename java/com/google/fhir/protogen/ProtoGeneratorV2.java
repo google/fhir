@@ -550,7 +550,9 @@ public class ProtoGeneratorV2 {
 
       return Optional.of(
           boundCodeGenerator.generateCodeBoundToValueSet(
-              typeWithBoundValueSet.get().getName(), boundValueSetUrl.get()));
+              typeWithBoundValueSet.get().getName(),
+              boundValueSetUrl.get(),
+              protogenConfig.getProtoPackage()));
     }
 
     private Optional<QualifiedType> checkForTypeWithBoundValueSet(ElementDefinition element)

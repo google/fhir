@@ -14,18 +14,14 @@
 
 package com.google.fhir.protogen;
 
-import static com.google.common.collect.ImmutableSet.toImmutableSet;
-import static com.google.common.collect.Streams.stream;
-
 import com.google.common.base.Ascii;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.Codes;
+import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.proto.ProtogenConfig;
@@ -54,15 +50,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /** Generator for FHIR Terminology protos. */
-public class ValueSetGeneratorV2 {
-  private final ProtogenConfig protogenConfig;
-  private final Map<String, CodeSystem> codeSystemsByUrl;
-  private final Map<String, ValueSet> valueSetsByUrl;
+class ValueSetGeneratorV2 {
+  private final FhirPackage fhirPackage;
 
   // From http://hl7.org/fhir/concept-properties to tag code values as deprecated
   public static final String CODE_VALUE_STATUS_PROPERTY =
@@ -70,29 +65,23 @@ public class ValueSetGeneratorV2 {
   public static final String CODE_VALUE_STATUS = "status";
   public static final String CODE_VALUE_STATUS_DEPRECATED = "deprecated";
 
-  public ValueSetGeneratorV2(ProtogenConfig protogenConfig, FhirPackage inputPackage) {
-    this.protogenConfig = protogenConfig;
-
-    this.codeSystemsByUrl =
-        stream(inputPackage.codeSystems().iterator())
-            .collect(Collectors.toMap(cs -> cs.getUrl().getValue(), cs -> cs));
-
-    this.valueSetsByUrl =
-        stream(inputPackage.valueSets().iterator())
-            .collect(Collectors.toMap(vs -> vs.getUrl().getValue(), vs -> vs));
+  public ValueSetGeneratorV2(FhirPackage inputPackage) {
+    this.fhirPackage = inputPackage;
   }
 
-  public FileDescriptorProto forCodesUsedIn(FhirPackage codeUsers) {
-    ImmutableSet<CodeSystem> codeSystemsToGenerate = getCodeSystemsUsedInPackage(codeUsers);
-    return generateCodeSystemFile(codeSystemsToGenerate);
+  public FileDescriptorProto makeCodeSystemFile(ProtogenConfig protogenConfig)
+      throws InvalidFhirException {
+    return generateCodeSystemFile(getCodeSystemsUsedInPackage(), protogenConfig);
   }
 
-  public FileDescriptorProto forValueSetsUsedIn(FhirPackage valueSetUsers) {
-    Set<ValueSet> valueSetsToGenerate = getValueSetsUsedInPackage(valueSetUsers);
-    return generateValueSetFile(valueSetsToGenerate);
+  public FileDescriptorProto makeValueSetFile(ProtogenConfig protogenConfig)
+      throws InvalidFhirException {
+    Set<ValueSet> valueSetsToGenerate = getValueSetsUsedInPackage();
+    return generateValueSetFile(valueSetsToGenerate, protogenConfig);
   }
 
-  private FileDescriptorProto generateCodeSystemFile(Collection<CodeSystem> codeSystemsToGenerate) {
+  private FileDescriptorProto generateCodeSystemFile(
+      Collection<CodeSystem> codeSystemsToGenerate, ProtogenConfig protogenConfig) {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
     builder.setPackage(protogenConfig.getProtoPackage()).setSyntax("proto3");
     builder.addDependency(new File(GeneratorUtils.ANNOTATION_PATH, "annotations.proto").toString());
@@ -113,11 +102,9 @@ public class ValueSetGeneratorV2 {
     return builder.build();
   }
 
-  public FileDescriptorProto generateValueSetFile(FhirPackage fhirPackage) {
-    return generateValueSetFile(ImmutableList.copyOf(fhirPackage.valueSets()));
-  }
-
-  private FileDescriptorProto generateValueSetFile(Collection<ValueSet> valueSetsToGenerate) {
+  private FileDescriptorProto generateValueSetFile(
+      Collection<ValueSet> valueSetsToGenerate, ProtogenConfig protogenConfig)
+      throws InvalidFhirException {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
     builder.setPackage(protogenConfig.getProtoPackage()).setSyntax("proto3");
     builder.addDependency(new File(GeneratorUtils.ANNOTATION_PATH, "annotations.proto").toString());
@@ -126,20 +113,21 @@ public class ValueSetGeneratorV2 {
       options.setJavaPackage(protogenConfig.getJavaProtoPackage()).setJavaMultipleFiles(true);
     }
     builder.setOptions(options);
-    valueSetsToGenerate.stream()
-        .filter(vs -> !getOneToOneCodeSystem(vs).isPresent())
-        .map(vs -> generateValueSetProto(vs))
-        .filter(op -> op.isPresent())
-        .map(op -> op.get())
-        .sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
-        .forEach(proto -> builder.addMessageType(proto));
 
-    return builder.build();
+    Set<DescriptorProto> messages = new TreeSet<>((p1, p2) -> p1.getName().compareTo(p2.getName()));
+    for (ValueSet vs : valueSetsToGenerate) {
+      if (!getOneToOneCodeSystem(vs).isPresent()) {
+        Optional<DescriptorProto> proto = generateValueSetProto(vs);
+        if (proto.isPresent()) {
+          messages.add(proto.get());
+        }
+      }
+    }
+    return builder.addAllMessageType(messages).build();
   }
 
   private DescriptorProto generateCodeSystemProto(CodeSystem codeSystem) {
     String codeSystemName = getCodeSystemName(codeSystem);
-    String url = codeSystem.getUrl().getValue();
     DescriptorProto.Builder descriptor = DescriptorProto.newBuilder().setName(codeSystemName);
 
     // Build a top-level message description.
@@ -149,14 +137,11 @@ public class ValueSetGeneratorV2 {
         .getOptionsBuilder()
         .setExtension(ProtoGeneratorAnnotations.messageDescription, comment);
 
-    if (!codeSystemsByUrl.containsKey(url)) {
-      throw new IllegalArgumentException("Unrecognized CodeSystem: " + url);
-    }
-
     return descriptor.addEnumType(generateCodeSystemEnum(codeSystem)).build();
   }
 
-  private Optional<DescriptorProto> generateValueSetProto(ValueSet valueSet) {
+  private Optional<DescriptorProto> generateValueSetProto(ValueSet valueSet)
+      throws InvalidFhirException {
     String valueSetName = getValueSetName(valueSet);
     String url = valueSet.getUrl().getValue();
     DescriptorProto.Builder descriptor = DescriptorProto.newBuilder().setName(valueSetName);
@@ -166,10 +151,6 @@ public class ValueSetGeneratorV2 {
     descriptor
         .getOptionsBuilder()
         .setExtension(ProtoGeneratorAnnotations.messageDescription, comment);
-
-    if (!valueSetsByUrl.containsKey(url)) {
-      throw new IllegalArgumentException("Unrecognized ValueSet: " + url);
-    }
 
     Optional<EnumDescriptorProto> valueSetEnum = generateValueSetEnum(valueSet);
     if (!valueSetEnum.isPresent()) {
@@ -199,7 +180,8 @@ public class ValueSetGeneratorV2 {
     return enumDescriptor.build();
   }
 
-  private Optional<EnumDescriptorProto> generateValueSetEnum(ValueSet valueSet) {
+  private Optional<EnumDescriptorProto> generateValueSetEnum(ValueSet valueSet)
+      throws InvalidFhirException {
     String url = valueSet.getUrl().getValue();
     List<ValueSet.Compose.ConceptSet> includes = valueSet.getCompose().getIncludeList();
     Map<String, ValueSet.Compose.ConceptSet> excludesBySystem =
@@ -319,15 +301,16 @@ public class ValueSetGeneratorV2 {
   }
 
   private List<EnumValueDescriptorProto.Builder> getEnumsForValueConceptSet(
-      ValueSet.Compose.ConceptSet conceptSet, ValueSet.Compose.ConceptSet excludeSet) {
-    String system = conceptSet.getSystem().getValue();
-    boolean isKnownSystem = codeSystemsByUrl.containsKey(system);
+      ValueSet.Compose.ConceptSet conceptSet, ValueSet.Compose.ConceptSet excludeSet)
+      throws InvalidFhirException {
+    String systemUrl = conceptSet.getSystem().getValue();
+    Optional<CodeSystem> knownSystem = fhirPackage.getCodeSystem(systemUrl);
     Set<String> excludeCodes =
         excludeSet.getConceptList().stream()
             .map(concept -> concept.getCode().getValue())
             .collect(Collectors.toSet());
-    if (isKnownSystem) {
-      CodeSystem codeSystem = codeSystemsByUrl.get(system);
+    if (knownSystem.isPresent()) {
+      CodeSystem codeSystem = knownSystem.get();
       boolean codeSystemHasConcepts = !codeSystem.getConceptList().isEmpty();
       boolean valueSetHasConcepts = !conceptSet.getConceptList().isEmpty();
       if (valueSetHasConcepts) {
@@ -336,8 +319,7 @@ public class ValueSetGeneratorV2 {
           // lists concepts.
           // Only include those Codes from the code system that are explicitly mentioned
           final Map<String, EnumValueDescriptorProto.Builder> valuesByCode =
-              buildEnumValues(codeSystemsByUrl.get(system), system, conceptSet.getFilterList())
-                  .stream()
+              buildEnumValues(codeSystem, systemUrl, conceptSet.getFilterList()).stream()
                   .collect(Collectors.toMap(Codes::enumValueToCodeString, c -> c));
           return conceptSet.getConceptList().stream()
               .map(concept -> valuesByCode.get(concept.getCode().getValue()))
@@ -352,20 +334,20 @@ public class ValueSetGeneratorV2 {
                   .map(
                       concept ->
                           buildEnumValue(
-                              concept.getCode(), concept.getDisplay().getValue(), system))
+                              concept.getCode(), concept.getDisplay().getValue(), systemUrl))
                   .collect(Collectors.toList()));
         }
       } else {
         if (codeSystemHasConcepts) {
           // There are CodeSystem enums, but no explicit concept list on the ValueSet, so default
           // to all codes from that system that aren't in the excludes set.
-          return buildEnumValues(codeSystem, system, conceptSet.getFilterList()).stream()
+          return buildEnumValues(codeSystem, systemUrl, conceptSet.getFilterList()).stream()
               .filter(enumValue -> !excludeCodes.contains(Codes.enumValueToCodeString(enumValue)))
               .collect(Collectors.toList());
         } else {
           // There are no enums listed on the code system, and no enums listed in the value set
           // include list.  This is not a valid definition.
-          printNoEnumWarning(system, "Could not find any valid codes for CodeSystem");
+          printNoEnumWarning(systemUrl, "Could not find any valid codes for CodeSystem");
           return new ArrayList<>();
         }
       }
@@ -374,7 +356,7 @@ public class ValueSetGeneratorV2 {
           conceptSet.getConceptList().stream()
               .map(
                   concept ->
-                      buildEnumValue(concept.getCode(), concept.getDisplay().getValue(), system))
+                      buildEnumValue(concept.getCode(), concept.getDisplay().getValue(), systemUrl))
               .collect(Collectors.toList()));
     }
   }
@@ -655,7 +637,7 @@ public class ValueSetGeneratorV2 {
     return name + "ValueSet";
   }
 
-  private Set<ValueSet> getValueSetsUsedInPackage(FhirPackage fhirPackage) {
+  private Set<ValueSet> getValueSetsUsedInPackage() throws InvalidFhirException {
     final Set<String> valueSetUrls = new HashSet<>();
     for (StructureDefinition def : fhirPackage.structureDefinitions()) {
       def.getSnapshot().getElementList().stream()
@@ -665,32 +647,38 @@ public class ValueSetGeneratorV2 {
               optionalUrl ->
                   valueSetUrls.add(Iterables.get(Splitter.on('|').split(optionalUrl.get()), 0)));
     }
-    return valueSetUrls.stream()
-        .map(url -> valueSetsByUrl.get(url))
-        .filter(vs -> vs != null)
-        .collect(Collectors.toSet());
+    Set<ValueSet> valueSets = new HashSet<>();
+    for (String url : valueSetUrls) {
+      Optional<ValueSet> valueSet = fhirPackage.getValueSet(url);
+      if (valueSet.isPresent()) {
+        valueSets.add(valueSet.get());
+      }
+    }
+    return valueSets;
   }
 
-  private ImmutableSet<CodeSystem> getCodeSystemsUsedInPackage(FhirPackage fhirPackage) {
-    Set<ValueSet> valueSets = getValueSetsUsedInPackage(fhirPackage);
-
-    return valueSets.stream()
-        .flatMap(vs -> getReferencedCodeSystems(vs).stream())
-        .collect(toImmutableSet());
+  private Set<CodeSystem> getCodeSystemsUsedInPackage() throws InvalidFhirException {
+    Set<CodeSystem> codeSystems = new HashSet<>();
+    for (ValueSet vs : getValueSetsUsedInPackage()) {
+      codeSystems.addAll(getReferencedCodeSystems(vs));
+    }
+    return codeSystems;
   }
 
-  private Set<CodeSystem> getReferencedCodeSystems(ValueSet valueSet) {
+  private Set<CodeSystem> getReferencedCodeSystems(ValueSet valueSet) throws InvalidFhirException {
     Set<CodeSystem> systems = new HashSet<>();
     for (ValueSet.Compose.ConceptSet include : valueSet.getCompose().getIncludeList()) {
       String systemUrl = include.getSystem().getValue();
-      if (codeSystemsByUrl.containsKey(systemUrl)) {
-        systems.add(codeSystemsByUrl.get(systemUrl));
+      Optional<CodeSystem> system = fhirPackage.getCodeSystem(systemUrl);
+      if (system.isPresent()) {
+        systems.add(system.get());
       }
     }
     return systems;
   }
 
-  private Optional<CodeSystem> getOneToOneCodeSystem(ValueSet valueSet) {
+  private Optional<CodeSystem> getOneToOneCodeSystem(ValueSet valueSet)
+      throws InvalidFhirException {
     if (!valueSet.getCompose().getExcludeList().isEmpty()) {
       return Optional.empty();
     }
@@ -699,20 +687,12 @@ public class ValueSetGeneratorV2 {
     }
     ValueSet.Compose.ConceptSet include = valueSet.getCompose().getIncludeList().get(0);
 
-    if (!include.getValueSetList().isEmpty() || !include.getFilterList().isEmpty()) {
+    if (!include.getValueSetList().isEmpty()
+        || !include.getFilterList().isEmpty()
+        || !include.getConceptList().isEmpty()) {
       return Optional.empty();
     }
-    String systemUrl = include.getSystem().getValue();
-    if (!codeSystemsByUrl.containsKey(systemUrl)) {
-      return Optional.empty();
-    }
-    CodeSystem system = codeSystemsByUrl.get(systemUrl);
-
-    if (!include.getConceptList().isEmpty()) {
-      return Optional.empty();
-    }
-
-    return Optional.of(system);
+    return fhirPackage.getCodeSystem(include.getSystem().getValue());
   }
 
   private static Optional<String> getBindingValueSetUrl(ElementDefinition element) {
@@ -739,23 +719,27 @@ public class ValueSetGeneratorV2 {
         EnumDescriptorProto enumDescriptor = descriptor.getEnumType(0);
         protoTypesByUrl.put(
             enumDescriptor.getOptions().getExtension(Annotations.fhirCodeSystemUrl),
-            "." + protogenConfig.getProtoPackage() + "." + descriptor.getName());
+            "." + codeSystemFileDescriptor.getPackage() + "." + descriptor.getName());
       }
       for (DescriptorProto descriptor : valueSetFileDescriptor.getMessageTypeList()) {
         EnumDescriptorProto enumDescriptor = descriptor.getEnumType(0);
         protoTypesByUrl.put(
             enumDescriptor.getOptions().getExtension(Annotations.enumValuesetUrl),
-            "." + protogenConfig.getProtoPackage() + "." + descriptor.getName());
+            "." + valueSetFileDescriptor.getPackage() + "." + descriptor.getName());
       }
     }
 
-    public DescriptorProto generateCodeBoundToValueSet(String typeName, String url) {
+    public DescriptorProto generateCodeBoundToValueSet(
+        String typeName, String url, String protoPackage) throws InvalidFhirException {
 
-      if (!valueSetsByUrl.containsKey(url)) {
-        throw new IllegalArgumentException("Encountered unrecognized ValueSet url: " + url);
-      }
+      ValueSet valueSet =
+          fhirPackage
+              .getValueSet(url)
+              .orElseThrow(
+                  () ->
+                      new IllegalArgumentException(
+                          "Encountered unrecognized ValueSet url: " + url));
 
-      ValueSet valueSet = valueSetsByUrl.get(url);
       DescriptorProto.Builder descriptor = DescriptorProto.newBuilder().setName(typeName);
 
       FieldDescriptorProto.Builder enumField = descriptor.addFieldBuilder().setNumber(1);
@@ -765,14 +749,14 @@ public class ValueSetGeneratorV2 {
               FieldDescriptorProto.newBuilder()
                   .setNumber(2)
                   .setName("id")
-                  .setTypeName("." + protogenConfig.getProtoPackage() + ".String")
+                  .setTypeName("." + protoPackage + ".String")
                   .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
                   .setType(FieldDescriptorProto.Type.TYPE_MESSAGE))
           .addField(
               FieldDescriptorProto.newBuilder()
                   .setNumber(3)
                   .setName("extension")
-                  .setTypeName("." + protogenConfig.getProtoPackage() + ".Extension")
+                  .setTypeName("." + protoPackage + ".Extension")
                   .setLabel(FieldDescriptorProto.Label.LABEL_REPEATED)
                   .setType(FieldDescriptorProto.Type.TYPE_MESSAGE));
 

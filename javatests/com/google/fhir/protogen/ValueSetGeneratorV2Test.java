@@ -65,14 +65,11 @@ public final class ValueSetGeneratorV2Test {
     return r5Package;
   }
 
-  public static ValueSetGeneratorV2 makeGenerator(TestEnv testEnv) throws Exception {
-    ProtogenConfig config =
-        ProtogenConfig.newBuilder()
-            .setProtoPackage(testEnv.protoPackage)
-            .setJavaProtoPackage(testEnv.javaProtoPackage)
-            .build();
-
-    return new ValueSetGeneratorV2(config, testEnv.fhirPackage);
+  public static ProtogenConfig makeConfig(TestEnv testEnv) throws Exception {
+    return ProtogenConfig.newBuilder()
+        .setProtoPackage(testEnv.protoPackage)
+        .setJavaProtoPackage(testEnv.javaProtoPackage)
+        .build();
   }
 
   static class TestEnv {
@@ -129,7 +126,8 @@ public final class ValueSetGeneratorV2Test {
   @Test
   public void regressionTest_generateCodeSystems(
       @TestParameter(valuesProvider = TestEnvProvider.class) TestEnv testEnv) throws Exception {
-    FileDescriptorProto codeSystemFile = makeGenerator(testEnv).forCodesUsedIn(testEnv.fhirPackage);
+    FileDescriptorProto codeSystemFile =
+        new ValueSetGeneratorV2(testEnv.fhirPackage).makeCodeSystemFile(makeConfig(testEnv));
 
     assertThat(sorted(cleaned(codeSystemFile))).isEqualTo(sorted(cleaned(testEnv.codeSystemFile)));
   }
@@ -138,7 +136,7 @@ public final class ValueSetGeneratorV2Test {
   public void regressionTest_generateValueSets(
       @TestParameter(valuesProvider = TestEnvProvider.class) TestEnv testEnv) throws Exception {
     FileDescriptorProto valueSetFile =
-        makeGenerator(testEnv).forValueSetsUsedIn(testEnv.fhirPackage);
+        new ValueSetGeneratorV2(testEnv.fhirPackage).makeValueSetFile(makeConfig(testEnv));
 
     assertThat(sorted(cleaned(valueSetFile))).isEqualTo(sorted(cleaned(testEnv.valueSetFile)));
   }

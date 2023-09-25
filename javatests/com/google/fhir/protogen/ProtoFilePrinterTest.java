@@ -196,9 +196,9 @@ public final class ProtoFilePrinterTest {
             .setSourceDirectory("proto/google/fhir/proto/r4/core")
             .build();
 
-    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(config, r4Package);
-    FileDescriptorProto codesFileDescriptor = valueSetGenerator.forCodesUsedIn(r4Package);
-    FileDescriptorProto valueSetsFileDescriptor = valueSetGenerator.forValueSetsUsedIn(r4Package);
+    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(r4Package);
+    FileDescriptorProto codesFileDescriptor = valueSetGenerator.makeCodeSystemFile(config);
+    FileDescriptorProto valueSetsFileDescriptor = valueSetGenerator.makeValueSetFile(config);
 
     ProtoGeneratorV2 protoGenerator =
         new ProtoGeneratorV2(
@@ -237,9 +237,9 @@ public final class ProtoFilePrinterTest {
               .setSourceDirectory("proto/google/fhir/proto/r4/core")
               .build();
 
-      ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(config, r4Package);
-      FileDescriptorProto codesFileDescriptor = valueSetGenerator.forCodesUsedIn(r4Package);
-      FileDescriptorProto valueSetsFileDescriptor = valueSetGenerator.forValueSetsUsedIn(r4Package);
+    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(r4Package);
+    FileDescriptorProto codesFileDescriptor = valueSetGenerator.makeCodeSystemFile(config);
+    FileDescriptorProto valueSetsFileDescriptor = valueSetGenerator.makeValueSetFile(config);
 
       ProtoGeneratorV2 protoGenerator =
           new ProtoGeneratorV2(

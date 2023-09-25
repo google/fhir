@@ -84,9 +84,9 @@ public final class ProtoGeneratorV2Test {
             .build();
 
     FhirPackage r4Package = getR4Package();
-    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(config, r4Package);
-    FileDescriptorProto codesFileDescriptor = valueSetGenerator.forCodesUsedIn(r4Package);
-    FileDescriptorProto valueSetsFileDescriptor = valueSetGenerator.forValueSetsUsedIn(r4Package);
+    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(r4Package);
+    FileDescriptorProto codesFileDescriptor = valueSetGenerator.makeCodeSystemFile(config);
+    FileDescriptorProto valueSetsFileDescriptor = valueSetGenerator.makeValueSetFile(config);
 
     return new ProtoGeneratorV2(
         config,
@@ -102,10 +102,9 @@ public final class ProtoGeneratorV2Test {
             .setSourceDirectory("proto/google/fhir/proto/r5/core")
             .build();
     FhirPackage r5Package = getR5Package();
-
-    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(config, r5Package);
-    FileDescriptorProto codesFileDescriptor = valueSetGenerator.forCodesUsedIn(r5Package);
-    FileDescriptorProto valueSetsFileDescriptor = valueSetGenerator.forValueSetsUsedIn(r5Package);
+    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(r5Package);
+    FileDescriptorProto codesFileDescriptor = valueSetGenerator.makeCodeSystemFile(config);
+    FileDescriptorProto valueSetsFileDescriptor = valueSetGenerator.makeValueSetFile(config);
 
     return new ProtoGeneratorV2(
         config,
