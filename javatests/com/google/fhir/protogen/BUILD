@@ -175,7 +175,7 @@ java_test(
 
 java_test(
     name = "ValueSetGeneratorV2Test",
-    size = "small",
+    size = "large",
     srcs = ["ValueSetGeneratorV2Test.java"],
     data = [
         "@hl7.fhir.r4.core_4.0.1//file",
