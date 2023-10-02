@@ -34,7 +34,6 @@ $PROTO_GENERATOR \
   --proto_package "google.fhir.r5.core" \
   --java_proto_package "com.google.fhir.r5.core" \
   --license_date "2023" \
-  --fhir_version "r5" \
   --contained_resource_offset 5000 \
   --output_directory "${OUTPUT_PATH}"
 
