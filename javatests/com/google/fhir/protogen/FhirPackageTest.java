@@ -14,6 +14,7 @@
 
 package com.google.fhir.protogen;
 
+import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.collect.Streams.stream;
 import static com.google.common.truth.Truth.assertThat;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -44,6 +45,7 @@ import java.nio.channels.Channels;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Optional;
+import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
@@ -792,5 +794,47 @@ public final class FhirPackageTest {
                     .setUrl(Uri.newBuilder().setValue("http://foo.com"))
                     .setId(Id.newBuilder().setValue("Foo"))
                     .build()));
+  }
+
+  FhirPackage makePackageWithVersion(String version) throws IOException, InvalidFhirException {
+    File tarGzFile = File.createTempFile("foo", ".tgz");
+    try (TarArchiveOutputStream tOut =
+        new TarArchiveOutputStream(
+            new GzipCompressorOutputStream(
+                new BufferedOutputStream(
+                    Channels.newOutputStream(
+                        new FileOutputStream(tarGzFile.getAbsolutePath()).getChannel()))))) {
+      addTarEntry(
+          tOut,
+          "package/package.json",
+          "{\"name\":\"foo.bar.baz\", \"version\":\"" + version + "\"}");
+    }
+    return FhirPackage.load(tarGzFile.getAbsolutePath());
+  }
+
+  @Test
+  public void testOrdering() throws IOException, InvalidFhirException {
+    TreeSet<FhirPackage> sortedSet = new TreeSet<>();
+    sortedSet.add(makePackageWithVersion("1.0.1"));
+    sortedSet.add(makePackageWithVersion("1.0"));
+    sortedSet.add(makePackageWithVersion("2.0"));
+    sortedSet.add(makePackageWithVersion("1"));
+    sortedSet.add(makePackageWithVersion("1.5"));
+    sortedSet.add(makePackageWithVersion("1.2.0"));
+    sortedSet.add(makePackageWithVersion("0.5"));
+
+    assertThat(sortedSet.stream().map(pkg -> pkg.getSemanticVersion()).collect(toImmutableList()))
+        .containsExactly("0.5", "1", "1.0", "1.0.1", "1.2.0", "1.5", "2.0")
+        .inOrder();
+  }
+
+  @Test
+  public void testOrdering_invalidVersionThrowsException()
+      throws IOException, InvalidFhirException {
+    TreeSet<FhirPackage> sortedSet = new TreeSet<>();
+    sortedSet.add(makePackageWithVersion("1.0.1"));
+
+    assertThrows(
+        NumberFormatException.class, () -> sortedSet.add(makePackageWithVersion("baloney")));
   }
 }

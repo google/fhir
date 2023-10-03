@@ -17,6 +17,7 @@ package com.google.fhir.protogen;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.google.common.base.Ascii;
+import com.google.common.base.Splitter;
 import com.google.common.io.ByteStreams;
 import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.common.JsonFormat;
@@ -56,7 +57,7 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
  *
  * <p>TODO(b/235876918): Support NPM-based FHIR Packages for proto generation.
  */
-public class FhirPackage {
+public class FhirPackage implements Comparable<FhirPackage> {
   // TODO(b/292116008): Eliminate packageInfo in favor of packageJson.
   public final PackageInfo packageInfo;
   public final JsonObject packageJson;
@@ -280,6 +281,24 @@ public class FhirPackage {
         : packageJson.getAsJsonObject().get("version").getAsString();
   }
 
+  /**
+   * Compare packages by semantic version. This considers later packages to be "greater" than
+   * earlier packages. Considers any package without a valid semantic version to be smallest. Throws
+   * a NumberFormatException if a package has a version that is not a valid semantic version.
+   */
+  @Override
+  public int compareTo(FhirPackage other) {
+    List<String> thisTokens = Splitter.on('.').splitToList(getSemanticVersion());
+    List<String> otherTokens = Splitter.on('.').splitToList(other.getSemanticVersion());
+    for (int i = 0; i < Math.min(thisTokens.size(), otherTokens.size()); i++) {
+      if (!thisTokens.get(i).equals(otherTokens.get(i))) {
+        return Integer.parseInt(thisTokens.get(i)) - Integer.parseInt(otherTokens.get(i));
+      }
+    }
+    // All tokens match up until one ran out of tokens.  Whichever has the extra tokens is bigger.
+    return thisTokens.size() - otherTokens.size();
+  }
+
   private static class JsonFile {
     JsonFile(String name, JsonElement json) {
       this.name = name;
@@ -359,8 +378,6 @@ public class FhirPackage {
           }
           buildResourceCollections(bundleEntries, parser, resourceCollections);
           break;
-        default:
-          System.out.println("Unhandled JSON entry: " + jsonFile.name);
       }
     }
   }
