@@ -196,14 +196,7 @@ public final class ProtoFilePrinterTest {
             .setSourceDirectory("proto/google/fhir/proto/r4/core")
             .build();
 
-    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(r4Package);
-    FileDescriptorProto codesFileDescriptor = valueSetGenerator.makeCodeSystemFile(config);
-    FileDescriptorProto valueSetsFileDescriptor = valueSetGenerator.makeValueSetFile(config);
-
-    ProtoGeneratorV2 protoGenerator =
-        new ProtoGeneratorV2(
-            config,
-            valueSetGenerator.getBoundCodeGenerator(codesFileDescriptor, valueSetsFileDescriptor));
+    ProtoGeneratorV2 protoGenerator = new ProtoGeneratorV2(r4Package, config);
 
     ImmutableList<String> resourceNames =
         ContainedResource.getDescriptor().getFields().stream()
@@ -211,7 +204,7 @@ public final class ProtoFilePrinterTest {
             .collect(toImmutableList());
 
     FileDescriptorProto descriptor =
-        protoGenerator.generateLegacyDatatypesFileDescriptor(r4Package, resourceNames);
+        protoGenerator.generateLegacyDatatypesFileDescriptor(resourceNames);
     descriptor =
         GeneratorUtils.setGoPackage(
             descriptor, "proto/google/fhir/proto/r4/core", "datatypes.proto");
@@ -237,15 +230,7 @@ public final class ProtoFilePrinterTest {
               .setSourceDirectory("proto/google/fhir/proto/r4/core")
               .build();
 
-    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(r4Package);
-    FileDescriptorProto codesFileDescriptor = valueSetGenerator.makeCodeSystemFile(config);
-    FileDescriptorProto valueSetsFileDescriptor = valueSetGenerator.makeValueSetFile(config);
-
-      ProtoGeneratorV2 protoGenerator =
-          new ProtoGeneratorV2(
-              config,
-              valueSetGenerator.getBoundCodeGenerator(
-                  codesFileDescriptor, valueSetsFileDescriptor));
+      ProtoGeneratorV2 protoGenerator = new ProtoGeneratorV2(r4Package, config);
 
       FileDescriptorProto descriptor =
           protoGenerator.generateResourceFileDescriptor(

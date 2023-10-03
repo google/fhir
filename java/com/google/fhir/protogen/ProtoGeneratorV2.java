@@ -36,7 +36,6 @@ import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.proto.ProtogenConfig;
 import com.google.fhir.protogen.GeneratorUtils.QualifiedType;
-import com.google.fhir.protogen.ValueSetGeneratorV2.BoundCodeGenerator;
 import com.google.fhir.r4.core.BindingStrengthCode;
 import com.google.fhir.r4.core.Canonical;
 import com.google.fhir.r4.core.ConstraintSeverityCode;
@@ -195,14 +194,19 @@ public class ProtoGeneratorV2 {
   private static final String FHIR_TYPE_EXTENSION_URL =
       "http://hl7.org/fhir/StructureDefinition/structuredefinition-fhir-type";
 
-  // The package to write new protos to.
+  // The package being generated.
+  private final FhirPackage fhirPackage;
+
+  // Config information for generating the protos
   private final ProtogenConfig protogenConfig;
 
-  private final BoundCodeGenerator boundCodeGenerator;
+  // A valueset generator for the package, using the same config info.
+  private final ValueSetGeneratorV2 valueSetGenerator;
 
-  public ProtoGeneratorV2(ProtogenConfig protogenConfig, BoundCodeGenerator boundCodeGenerator) {
+  public ProtoGeneratorV2(FhirPackage fhirPackage, ProtogenConfig protogenConfig) {
+    this.fhirPackage = fhirPackage;
     this.protogenConfig = protogenConfig;
-    this.boundCodeGenerator = boundCodeGenerator;
+    this.valueSetGenerator = new ValueSetGeneratorV2(fhirPackage, protogenConfig);
   }
 
   private StructureDefinition fixIdBug(StructureDefinition def) {
@@ -549,10 +553,8 @@ public class ProtoGeneratorV2 {
       }
 
       return Optional.of(
-          boundCodeGenerator.generateCodeBoundToValueSet(
-              typeWithBoundValueSet.get().getName(),
-              boundValueSetUrl.get(),
-              protogenConfig.getProtoPackage()));
+          valueSetGenerator.generateCodeBoundToValueSet(
+              typeWithBoundValueSet.get().getName(), boundValueSetUrl.get()));
     }
 
     private Optional<QualifiedType> checkForTypeWithBoundValueSet(ElementDefinition element)
@@ -913,10 +915,10 @@ public class ProtoGeneratorV2 {
           "http://hl7.org/fhir/StructureDefinition/example-section-library",
           "http://hl7.org/fhir/StructureDefinition/example-composition");
 
-  public FileDescriptorProto generateDatatypesFileDescriptor(
-      FhirPackage inputPackage, List<String> resourceNames) throws InvalidFhirException {
+  public FileDescriptorProto generateDatatypesFileDescriptor(List<String> resourceNames)
+      throws InvalidFhirException {
     ImmutableList<StructureDefinition> messages =
-        stream(inputPackage.structureDefinitions())
+        stream(fhirPackage.structureDefinitions())
             .filter(
                 def ->
                     (def.getKind().getValue() == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE
@@ -929,7 +931,7 @@ public class ProtoGeneratorV2 {
             .collect(toImmutableList());
 
     FileDescriptorProto.Builder fileBuilder =
-        generateFileDescriptor(messages, inputPackage.getSemanticVersion());
+        generateFileDescriptor(messages, fhirPackage.getSemanticVersion());
 
     addReferenceType(fileBuilder, resourceNames);
     addReferenceIdType(fileBuilder);
@@ -939,10 +941,10 @@ public class ProtoGeneratorV2 {
 
   // To match v1 proto generator behavior, skip generating a few extra datatypes that are hardcoded
   // in supplemental files: Element, Extension, Reference
-  public FileDescriptorProto generateLegacyDatatypesFileDescriptor(
-      FhirPackage inputPackage, List<String> resourceNames) throws InvalidFhirException {
+  public FileDescriptorProto generateLegacyDatatypesFileDescriptor(List<String> resourceNames)
+      throws InvalidFhirException {
     ImmutableList<StructureDefinition> messages =
-        stream(inputPackage.structureDefinitions())
+        stream(fhirPackage.structureDefinitions())
             .filter(
                 def ->
                     (def.getKind().getValue() == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE
@@ -958,7 +960,7 @@ public class ProtoGeneratorV2 {
             .collect(toImmutableList());
 
     FileDescriptorProto.Builder fileBuilder =
-        generateFileDescriptor(messages, inputPackage.getSemanticVersion());
+        generateFileDescriptor(messages, fhirPackage.getSemanticVersion());
 
     // Old R4 had a few reference types to non-concrete resources.  Include these to be backwards
     // compatible during transition.

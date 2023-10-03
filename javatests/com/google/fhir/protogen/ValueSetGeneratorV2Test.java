@@ -127,7 +127,7 @@ public final class ValueSetGeneratorV2Test {
   public void regressionTest_generateCodeSystems(
       @TestParameter(valuesProvider = TestEnvProvider.class) TestEnv testEnv) throws Exception {
     FileDescriptorProto codeSystemFile =
-        new ValueSetGeneratorV2(testEnv.fhirPackage).makeCodeSystemFile(makeConfig(testEnv));
+        new ValueSetGeneratorV2(testEnv.fhirPackage, makeConfig(testEnv)).makeCodeSystemFile();
 
     assertThat(sorted(cleaned(codeSystemFile))).isEqualTo(sorted(cleaned(testEnv.codeSystemFile)));
   }
@@ -136,7 +136,7 @@ public final class ValueSetGeneratorV2Test {
   public void regressionTest_generateValueSets(
       @TestParameter(valuesProvider = TestEnvProvider.class) TestEnv testEnv) throws Exception {
     FileDescriptorProto valueSetFile =
-        new ValueSetGeneratorV2(testEnv.fhirPackage).makeValueSetFile(makeConfig(testEnv));
+        new ValueSetGeneratorV2(testEnv.fhirPackage, makeConfig(testEnv)).makeValueSetFile();
 
     assertThat(sorted(cleaned(valueSetFile))).isEqualTo(sorted(cleaned(testEnv.valueSetFile)));
   }

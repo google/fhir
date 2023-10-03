@@ -43,7 +43,6 @@ import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileOptions;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -57,7 +56,10 @@ import java.util.stream.Collectors;
 
 /** Generator for FHIR Terminology protos. */
 class ValueSetGeneratorV2 {
+  // The input FHIR package.
   private final FhirPackage fhirPackage;
+  // Config information to use for generating protos.
+  private final ProtogenConfig protogenConfig;
 
   // From http://hl7.org/fhir/concept-properties to tag code values as deprecated
   public static final String CODE_VALUE_STATUS_PROPERTY =
@@ -65,23 +67,12 @@ class ValueSetGeneratorV2 {
   public static final String CODE_VALUE_STATUS = "status";
   public static final String CODE_VALUE_STATUS_DEPRECATED = "deprecated";
 
-  public ValueSetGeneratorV2(FhirPackage inputPackage) {
+  public ValueSetGeneratorV2(FhirPackage inputPackage, ProtogenConfig protogenConfig) {
     this.fhirPackage = inputPackage;
+    this.protogenConfig = protogenConfig;
   }
 
-  public FileDescriptorProto makeCodeSystemFile(ProtogenConfig protogenConfig)
-      throws InvalidFhirException {
-    return generateCodeSystemFile(getCodeSystemsUsedInPackage(), protogenConfig);
-  }
-
-  public FileDescriptorProto makeValueSetFile(ProtogenConfig protogenConfig)
-      throws InvalidFhirException {
-    Set<ValueSet> valueSetsToGenerate = getValueSetsUsedInPackage();
-    return generateValueSetFile(valueSetsToGenerate, protogenConfig);
-  }
-
-  private FileDescriptorProto generateCodeSystemFile(
-      Collection<CodeSystem> codeSystemsToGenerate, ProtogenConfig protogenConfig) {
+  FileDescriptorProto makeCodeSystemFile() throws InvalidFhirException {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
     builder.setPackage(protogenConfig.getProtoPackage()).setSyntax("proto3");
     builder.addDependency(new File(GeneratorUtils.ANNOTATION_PATH, "annotations.proto").toString());
@@ -90,8 +81,9 @@ class ValueSetGeneratorV2 {
       options.setJavaPackage(protogenConfig.getJavaProtoPackage()).setJavaMultipleFiles(true);
     }
     builder.setOptions(options);
+
     List<DescriptorProto> messages = new ArrayList<>();
-    for (CodeSystem codeSystem : codeSystemsToGenerate) {
+    for (CodeSystem codeSystem : getCodeSystemsUsedInPackage()) {
       messages.add(generateCodeSystemProto(codeSystem));
     }
 
@@ -102,9 +94,7 @@ class ValueSetGeneratorV2 {
     return builder.build();
   }
 
-  private FileDescriptorProto generateValueSetFile(
-      Collection<ValueSet> valueSetsToGenerate, ProtogenConfig protogenConfig)
-      throws InvalidFhirException {
+  FileDescriptorProto makeValueSetFile() throws InvalidFhirException {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
     builder.setPackage(protogenConfig.getProtoPackage()).setSyntax("proto3");
     builder.addDependency(new File(GeneratorUtils.ANNOTATION_PATH, "annotations.proto").toString());
@@ -115,8 +105,12 @@ class ValueSetGeneratorV2 {
     builder.setOptions(options);
 
     Set<DescriptorProto> messages = new TreeSet<>((p1, p2) -> p1.getName().compareTo(p2.getName()));
-    for (ValueSet vs : valueSetsToGenerate) {
-      if (!getOneToOneCodeSystem(vs).isPresent()) {
+
+    for (ValueSet vs : getValueSetsUsedInPackage()) {
+      // Check if there is a one-to-one code system for this value set.  If so, we don't bother
+      // generating a value set and just use the enums from the code system.
+      Optional<CodeSystem> oneToOneCodeSystem = getOneToOneCodeSystem(vs);
+      if (!oneToOneCodeSystem.isPresent()) {
         Optional<DescriptorProto> proto = generateValueSetProto(vs);
         if (proto.isPresent()) {
           messages.add(proto.get());
@@ -157,6 +151,14 @@ class ValueSetGeneratorV2 {
       return Optional.empty();
     }
     return Optional.of(descriptor.addEnumType(valueSetEnum.get()).build());
+  }
+
+  private boolean valueSetHasProto(ValueSet valueSet) {
+    try {
+      return generateValueSetProto(valueSet).isPresent();
+    } catch (InvalidFhirException e) {
+      return false;
+    }
   }
 
   private static EnumDescriptorProto generateCodeSystemEnum(CodeSystem codeSystem) {
@@ -217,7 +219,6 @@ class ValueSetGeneratorV2 {
     }
     if (builder.getValueCount() == 1) {
       // Note: 1 because we start by adding the INVALID_UNINITIALIZED code
-      printNoEnumWarning(url, "no codes found");
       return Optional.empty();
     }
     builder = dedupValueSetEnum(builder);
@@ -584,7 +585,7 @@ class ValueSetGeneratorV2 {
         .replaceAll("__+", "_");
   }
 
-  // CodeSystems that we hard-code to specific names, e.g., to avoid a colision.
+  // CodeSystems that we hard-code to specific names, e.g., to avoid a collision.
   private static final ImmutableMap<String, String> CODE_SYSTEM_RENAMES =
       ImmutableMap.<String, String>builder()
           .put("http://hl7.org/fhir/secondary-finding", "ObservationSecondaryFindingCode")
@@ -703,113 +704,90 @@ class ValueSetGeneratorV2 {
     return url.isEmpty() ? Optional.empty() : Optional.<String>of(url);
   }
 
-  public BoundCodeGenerator getBoundCodeGenerator(
-      FileDescriptorProto codeSystemFileDescriptor, FileDescriptorProto valueSetFileDescriptor) {
-    return new BoundCodeGenerator(codeSystemFileDescriptor, valueSetFileDescriptor);
-  }
+  public DescriptorProto generateCodeBoundToValueSet(String typeName, String valueSetUrl)
+      throws InvalidFhirException {
 
-  final class BoundCodeGenerator {
+    ValueSet valueSet =
+        fhirPackage
+            .getValueSet(valueSetUrl)
+            .orElseThrow(
+                () ->
+                    new IllegalArgumentException(
+                        "Encountered unrecognized ValueSet url: " + valueSetUrl));
 
-    private final Map<String, String> protoTypesByUrl;
+    DescriptorProto.Builder descriptor = DescriptorProto.newBuilder().setName(typeName);
 
-    private BoundCodeGenerator(
-        FileDescriptorProto codeSystemFileDescriptor, FileDescriptorProto valueSetFileDescriptor) {
-      protoTypesByUrl = new HashMap<>();
-      for (DescriptorProto descriptor : codeSystemFileDescriptor.getMessageTypeList()) {
-        EnumDescriptorProto enumDescriptor = descriptor.getEnumType(0);
-        protoTypesByUrl.put(
-            enumDescriptor.getOptions().getExtension(Annotations.fhirCodeSystemUrl),
-            "." + codeSystemFileDescriptor.getPackage() + "." + descriptor.getName());
-      }
-      for (DescriptorProto descriptor : valueSetFileDescriptor.getMessageTypeList()) {
-        EnumDescriptorProto enumDescriptor = descriptor.getEnumType(0);
-        protoTypesByUrl.put(
-            enumDescriptor.getOptions().getExtension(Annotations.enumValuesetUrl),
-            "." + valueSetFileDescriptor.getPackage() + "." + descriptor.getName());
-      }
-    }
+    FieldDescriptorProto.Builder enumField = descriptor.addFieldBuilder().setNumber(1);
 
-    public DescriptorProto generateCodeBoundToValueSet(
-        String typeName, String url, String protoPackage) throws InvalidFhirException {
+    descriptor
+        .addField(
+            FieldDescriptorProto.newBuilder()
+                .setNumber(2)
+                .setName("id")
+                .setTypeName("." + protogenConfig.getProtoPackage() + ".String")
+                .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE))
+        .addField(
+            FieldDescriptorProto.newBuilder()
+                .setNumber(3)
+                .setName("extension")
+                .setTypeName("." + protogenConfig.getProtoPackage() + ".Extension")
+                .setLabel(FieldDescriptorProto.Label.LABEL_REPEATED)
+                .setType(FieldDescriptorProto.Type.TYPE_MESSAGE));
 
-      ValueSet valueSet =
-          fhirPackage
-              .getValueSet(url)
-              .orElseThrow(
-                  () ->
-                      new IllegalArgumentException(
-                          "Encountered unrecognized ValueSet url: " + url));
+    descriptor
+        .getOptionsBuilder()
+        .setExtension(
+            Annotations.structureDefinitionKind,
+            Annotations.StructureDefinitionKindValue.KIND_PRIMITIVE_TYPE)
+        .addExtension(
+            Annotations.fhirProfileBase,
+            AnnotationUtils.getStructureDefinitionUrl(Code.getDescriptor()))
+        .setExtension(Annotations.fhirValuesetUrl, valueSet.getUrl().getValue());
 
-      DescriptorProto.Builder descriptor = DescriptorProto.newBuilder().setName(typeName);
-
-      FieldDescriptorProto.Builder enumField = descriptor.addFieldBuilder().setNumber(1);
-
-      descriptor
-          .addField(
-              FieldDescriptorProto.newBuilder()
-                  .setNumber(2)
-                  .setName("id")
-                  .setTypeName("." + protoPackage + ".String")
-                  .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
-                  .setType(FieldDescriptorProto.Type.TYPE_MESSAGE))
-          .addField(
-              FieldDescriptorProto.newBuilder()
-                  .setNumber(3)
-                  .setName("extension")
-                  .setTypeName("." + protoPackage + ".Extension")
-                  .setLabel(FieldDescriptorProto.Label.LABEL_REPEATED)
-                  .setType(FieldDescriptorProto.Type.TYPE_MESSAGE));
-
-      descriptor
-          .getOptionsBuilder()
-          .setExtension(
-              Annotations.structureDefinitionKind,
-              Annotations.StructureDefinitionKindValue.KIND_PRIMITIVE_TYPE)
-          .addExtension(
-              Annotations.fhirProfileBase,
-              AnnotationUtils.getStructureDefinitionUrl(Code.getDescriptor()))
-          .setExtension(Annotations.fhirValuesetUrl, valueSet.getUrl().getValue());
-
-      if (protoTypesByUrl.containsKey(url)) {
-        enumField
-            .setName("value")
-            .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
-            .setType(FieldDescriptorProto.Type.TYPE_ENUM)
-            .setTypeName(protoTypesByUrl.get(url) + ".Value");
-        return descriptor.build();
-      }
-
-      Optional<CodeSystem> oneToOneCodeSystem = getOneToOneCodeSystem(valueSet);
-      if (oneToOneCodeSystem.isPresent()
-          && protoTypesByUrl.containsKey(oneToOneCodeSystem.get().getUrl().getValue())) {
-        enumField
-            .setName("value")
-            .setType(FieldDescriptorProto.Type.TYPE_ENUM)
-            .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
-            .setTypeName(
-                protoTypesByUrl.get(oneToOneCodeSystem.get().getUrl().getValue()) + ".Value");
-        return descriptor.build();
-      }
-
-      enumField.setOptions(
-          FieldOptions.newBuilder()
-              .setExtension(
-                  ProtoGeneratorAnnotations.reservedReason,
-                  "Field 1 reserved to allow enumeration in the future."));
-      descriptor.addField(
-          FieldDescriptorProto.newBuilder()
-              .setNumber(4)
-              .setName("value")
-              .setType(FieldDescriptorProto.Type.TYPE_STRING)
-              .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
-              .setOptions(
-                  FieldOptions.newBuilder()
-                      .setExtension(
-                          ProtoGeneratorAnnotations.fieldDescription,
-                          "This valueset is not enumerable, and so is represented as a"
-                              + " string.")));
-
+    Optional<CodeSystem> oneToOneCodeSystem = getOneToOneCodeSystem(valueSet);
+    if (oneToOneCodeSystem.isPresent()) {
+      enumField
+          .setName("value")
+          .setType(FieldDescriptorProto.Type.TYPE_ENUM)
+          .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+          .setTypeName(
+              "."
+                  + protogenConfig.getProtoPackage()
+                  + "."
+                  + getCodeSystemName(oneToOneCodeSystem.get())
+                  + ".Value");
       return descriptor.build();
     }
+
+    if (valueSetHasProto(valueSet)) {
+      enumField
+          .setName("value")
+          .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+          .setType(FieldDescriptorProto.Type.TYPE_ENUM)
+          .setTypeName(
+              "." + protogenConfig.getProtoPackage() + "." + getValueSetName(valueSet) + ".Value");
+      return descriptor.build();
+    }
+
+    enumField.setOptions(
+        FieldOptions.newBuilder()
+            .setExtension(
+                ProtoGeneratorAnnotations.reservedReason,
+                "Field 1 reserved to allow enumeration in the future."));
+    descriptor.addField(
+        FieldDescriptorProto.newBuilder()
+            .setNumber(4)
+            .setName("value")
+            .setType(FieldDescriptorProto.Type.TYPE_STRING)
+            .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+            .setOptions(
+                FieldOptions.newBuilder()
+                    .setExtension(
+                        ProtoGeneratorAnnotations.fieldDescription,
+                        "This valueset is not enumerable, and so is represented as a"
+                            + " string.")));
+
+    return descriptor.build();
   }
 }

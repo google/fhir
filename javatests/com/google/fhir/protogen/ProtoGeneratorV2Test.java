@@ -84,13 +84,7 @@ public final class ProtoGeneratorV2Test {
             .build();
 
     FhirPackage r4Package = getR4Package();
-    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(r4Package);
-    FileDescriptorProto codesFileDescriptor = valueSetGenerator.makeCodeSystemFile(config);
-    FileDescriptorProto valueSetsFileDescriptor = valueSetGenerator.makeValueSetFile(config);
-
-    return new ProtoGeneratorV2(
-        config,
-        valueSetGenerator.getBoundCodeGenerator(codesFileDescriptor, valueSetsFileDescriptor));
+    return new ProtoGeneratorV2(r4Package, config);
   }
 
   public static ProtoGeneratorV2 makeR5ProtoGenerator() throws Exception {
@@ -102,13 +96,7 @@ public final class ProtoGeneratorV2Test {
             .setSourceDirectory("proto/google/fhir/proto/r5/core")
             .build();
     FhirPackage r5Package = getR5Package();
-    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(r5Package);
-    FileDescriptorProto codesFileDescriptor = valueSetGenerator.makeCodeSystemFile(config);
-    FileDescriptorProto valueSetsFileDescriptor = valueSetGenerator.makeValueSetFile(config);
-
-    return new ProtoGeneratorV2(
-        config,
-        valueSetGenerator.getBoundCodeGenerator(codesFileDescriptor, valueSetsFileDescriptor));
+    return new ProtoGeneratorV2(r5Package, config);
   }
 
   /** Cleans up some datatypes that are hardcoded rather than generated. */
@@ -145,7 +133,7 @@ public final class ProtoGeneratorV2Test {
             .map(field -> field.getMessageType().getName())
             .collect(toImmutableList());
     FileDescriptorProto descriptor =
-        makeR4ProtoGenerator().generateLegacyDatatypesFileDescriptor(getR4Package(), resourceNames);
+        makeR4ProtoGenerator().generateLegacyDatatypesFileDescriptor(resourceNames);
     assertThat(sorted(cleaned(descriptor)))
         .ignoringRepeatedFieldOrder()
         .isEqualTo(
@@ -278,7 +266,7 @@ public final class ProtoGeneratorV2Test {
             .map(field -> field.getMessageType().getName())
             .collect(toImmutableList());
     FileDescriptorProto descriptor =
-        makeR5ProtoGenerator().generateDatatypesFileDescriptor(getR5Package(), resourceNames);
+        makeR5ProtoGenerator().generateDatatypesFileDescriptor(resourceNames);
     assertThat(sorted(cleaned(descriptor)))
         .ignoringRepeatedFieldOrder()
         .isEqualTo(

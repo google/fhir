@@ -124,22 +124,25 @@ class ProtoGeneratorMainV2 {
     // Generate the proto file.
     System.out.println("Generating proto descriptors...");
 
-    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(inputPackage);
-    FileDescriptorProto codesFileDescriptor = valueSetGenerator.makeCodeSystemFile(config);
-    FileDescriptorProto valueSetsFileDescriptor = valueSetGenerator.makeValueSetFile(config);
-
-    ProtoGeneratorV2 generator =
-        new ProtoGeneratorV2(
-            config,
-            valueSetGenerator.getBoundCodeGenerator(codesFileDescriptor, valueSetsFileDescriptor));
-
+    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(inputPackage, config);
+    ProtoGeneratorV2 generator = new ProtoGeneratorV2(inputPackage, config);
     ProtoFilePrinter printer = new ProtoFilePrinter(config);
 
     try (ZipOutputStream zipOutputStream =
         new ZipOutputStream(new FileOutputStream(new File(args.outputDirectory, "output.zip")))) {
       try {
-        addEntry(zipOutputStream, printer, config, codesFileDescriptor, "codes.proto");
-        addEntry(zipOutputStream, printer, config, valueSetsFileDescriptor, "valuesets.proto");
+        addEntry(
+            zipOutputStream,
+            printer,
+            config,
+            valueSetGenerator.makeCodeSystemFile(),
+            "codes.proto");
+        addEntry(
+            zipOutputStream,
+            printer,
+            config,
+            valueSetGenerator.makeValueSetFile(),
+            "valuesets.proto");
 
         List<String> resourceNames = new ArrayList<>();
         StructureDefinition bundleDefinition = null;
@@ -182,8 +185,8 @@ class ProtoGeneratorMainV2 {
             printer,
             config,
             args.legacyDatatypeGeneration
-                ? generator.generateLegacyDatatypesFileDescriptor(inputPackage, resourceNames)
-                : generator.generateDatatypesFileDescriptor(inputPackage, resourceNames),
+                ? generator.generateLegacyDatatypesFileDescriptor(resourceNames)
+                : generator.generateDatatypesFileDescriptor(resourceNames),
             "datatypes.proto");
       } finally {
         zipOutputStream.closeEntry();
