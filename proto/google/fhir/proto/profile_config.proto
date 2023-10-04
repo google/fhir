@@ -26,23 +26,29 @@ option java_multiple_files = true;
 // Config containing all info needed to generate the core protos for a FHIR
 // version (e.g., R4, R5).
 // This should only contain info that is unique to proto generation (like proto
-// package) and therefore not contian information that can be found in the FHIR
+// package) and therefore not contain information that can be found in the FHIR
 // definitions themselves.
 message ProtogenConfig {
-  reserved 3;
-
   // Package for the generated protos for the resources.
   string proto_package = 1;
   // Java package for the generated protos for the resources.
   string java_proto_package = 2;
 
+  // The package to reference for normative protos.  This can be the same as
+  // proto_package for single-version mode.
+  string normative_package = 3;
+
   // Directory to place generated package.  This is needed for intra-package
   // imports.
   string source_directory = 4;
 
+  // Directory to use for normative resources.  This can be the same as
+  // source_directory for single-version mode.
+  string normative_directory = 5;
+
   // The copyright date to be included in the license text, which
   // may simply be a year.
-  string license_date = 5;
+  string license_date = 6;
 }
 
 // Metadata for generating FHIR packages
