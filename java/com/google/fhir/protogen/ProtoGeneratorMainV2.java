@@ -97,22 +97,17 @@ class ProtoGeneratorMainV2 {
     this.args = args;
   }
 
-  void run() throws IOException, InvalidFhirException {
-    // Read the new package.  Use option ignoreUnrecognizedFieldsAndCodes to account for new
-    // fields/code in the new version of StructureDefinition.
-    FhirPackage inputPackage =
-        FhirPackage.load(
-            args.inputPackageLocation,
-            /* no manually added package info - read from package */ null,
-            /* ignoreUnrecognizedFieldsAndCodes= */ true);
+  private static class ProtoFile {
+    final String filepath;
+    FileDescriptorProto fileDescriptor;
 
-    if (inputPackage.packageJson == null || inputPackage.getSemanticVersion() == null) {
-      throw new InvalidFhirException(
-          "V2 Generator requires input packages to have package.json file, with fhirVersion set.");
+    ProtoFile(String filepath, FileDescriptorProto fileDescriptor) {
+      this.filepath = filepath;
+      this.fileDescriptor = fileDescriptor;
     }
+  }
 
-    String semanticVersion = inputPackage.getSemanticVersion();
-
+  void runSingleVersionMode(FhirPackage inputPackage) throws IOException, InvalidFhirException {
     ProtogenConfig config =
         ProtogenConfig.newBuilder()
             .setProtoPackage(args.protoPackage)
@@ -121,90 +116,94 @@ class ProtoGeneratorMainV2 {
             .setSourceDirectory(args.outputDirectory)
             .build();
 
-    // Generate the proto file.
-    System.out.println("Generating proto descriptors...");
-
-    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(inputPackage, config);
-    ProtoGeneratorV2 generator = new ProtoGeneratorV2(inputPackage, config);
-    ProtoFilePrinter printer = new ProtoFilePrinter(config);
+    List<ProtoFile> files = makePackageFiles(inputPackage, config);
 
     try (ZipOutputStream zipOutputStream =
         new ZipOutputStream(new FileOutputStream(new File(args.outputDirectory, "output.zip")))) {
-      try {
-        addEntry(
-            zipOutputStream,
-            printer,
-            config,
-            valueSetGenerator.makeCodeSystemFile(),
-            "codes.proto");
-        addEntry(
-            zipOutputStream,
-            printer,
-            config,
-            valueSetGenerator.makeValueSetFile(),
-            "valuesets.proto");
-
-        List<String> resourceNames = new ArrayList<>();
-        StructureDefinition bundleDefinition = null;
-        // Iterate over all non-bundle Resources, and generate a single file per resource.
-        // Aggregate resource names for use in generating a "Bundle and ContainedResource" file,
-        // as well as generating a typed reference datatype.
-        for (StructureDefinition structDef : inputPackage.structureDefinitions()) {
-          if (structDef.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE
-              && structDef.getDerivation().getValue() == TypeDerivationRuleCode.Value.SPECIALIZATION
-              && !structDef.getAbstract().getValue()) {
-            String resourceName = GeneratorUtils.getTypeName(structDef);
-            resourceNames.add(resourceName);
-            if (structDef.getUrl().getValue().equals(BUNDLE_STRUCTURE_DEFINITION_URL)) {
-              // Don't make a bundle resource - it will be generated with the ContainedResource.
-              bundleDefinition = structDef;
-            } else {
-              addEntry(
-                  zipOutputStream,
-                  printer,
-                  config,
-                  generator.generateResourceFileDescriptor(structDef, semanticVersion),
-                  "resources/" + GeneratorUtils.resourceNameToFileName(resourceName));
-            }
-          }
-        }
-
-        // Generate the "Bundle and Contained Resource" file.
-        addEntry(
-            zipOutputStream,
-            printer,
-            config,
-            generator.generateBundleAndContainedResource(
-                bundleDefinition, semanticVersion, resourceNames, args.containedResourceOffset),
-            "resources/bundle_and_contained_resource.proto");
-
-        // Generate the Datatypes file.  Pass all resource names, for use in generating the
-        // Reference datatype.
-        addEntry(
-            zipOutputStream,
-            printer,
-            config,
-            args.legacyDatatypeGeneration
-                ? generator.generateLegacyDatatypesFileDescriptor(resourceNames)
-                : generator.generateDatatypesFileDescriptor(resourceNames),
-            "datatypes.proto");
-      } finally {
-        zipOutputStream.closeEntry();
-      }
+      addFilesToZip(zipOutputStream, new ProtoFilePrinter(config), files);
     }
   }
 
-  private static void addEntry(
-      ZipOutputStream zipOutputStream,
-      ProtoFilePrinter printer,
-      ProtogenConfig config,
-      FileDescriptorProto fileDescriptor,
-      String name)
+  private List<ProtoFile> makePackageFiles(FhirPackage fhirPackage, ProtogenConfig config)
+      throws InvalidFhirException {
+    List<ProtoFile> files = new ArrayList<>();
+
+    // Add Terminology files.  These are generated by the ValueSetGenerator using the package and
+    // config passed during construction.
+    ValueSetGeneratorV2 valueSetGenerator = new ValueSetGeneratorV2(fhirPackage, config);
+    // Contains all non-trivial ValueSets used by the FhirPackage for bindings (i.e., the
+    // FhirPackage contains a code bound to that ValueSet.
+    // A ValueSet is considered trivial if its contents are 1-1 with a CodeSystem.
+    files.add(new ProtoFile("valuesets.proto", valueSetGenerator.makeValueSetFile()));
+    // All CodeSystems corresponding to trivial ValueSets from the above step.
+    // We break these down this way because the spec contains many duplicate ValueSets that
+    // are trivially identical to a single CodeSystem.  Making Codes that are bound to these
+    // ValueSets use a common CodeSystem definition results in many fewer redundant ValueSets.
+    files.add(new ProtoFile("codes.proto", valueSetGenerator.makeCodeSystemFile()));
+
+    ProtoGeneratorV2 generator = new ProtoGeneratorV2(fhirPackage, config);
+
+    List<String> resourceNames = new ArrayList<>();
+    StructureDefinition bundleDefinition = null;
+    String semanticVersion = fhirPackage.getSemanticVersion();
+    // Iterate over all non-bundle Resources, and generate a single file per resource.
+    // Aggregate resource names for use in generating a "Bundle and ContainedResource" file,
+    // as well as generating a typed reference datatype.
+    for (StructureDefinition structDef : fhirPackage.structureDefinitions()) {
+      if (structDef.getKind().getValue() == StructureDefinitionKindCode.Value.RESOURCE
+          && structDef.getDerivation().getValue() == TypeDerivationRuleCode.Value.SPECIALIZATION
+          && !structDef.getAbstract().getValue()) {
+        String resourceName = GeneratorUtils.getTypeName(structDef);
+        resourceNames.add(resourceName);
+        if (structDef.getUrl().getValue().equals(BUNDLE_STRUCTURE_DEFINITION_URL)) {
+          // Don't make a bundle resource - it will be generated with the ContainedResource.
+          if (bundleDefinition != null) {
+            throw new InvalidFhirException("More than one bundle resource found");
+          }
+          bundleDefinition = structDef;
+        } else {
+          files.add(
+              new ProtoFile(
+                  "resources/" + GeneratorUtils.resourceNameToFileName(resourceName),
+                  generator.generateResourceFileDescriptor(structDef, semanticVersion)));
+        }
+      }
+    }
+
+    // Generate the "Bundle and Contained Resource" file.
+    files.add(
+        new ProtoFile(
+            "resources/bundle_and_contained_resource.proto",
+            generator.generateBundleAndContainedResource(
+                bundleDefinition, semanticVersion, resourceNames, args.containedResourceOffset)));
+
+    // Generate the Datatypes file.  Pass all resource names, for use in generating the
+    // Reference datatype.
+    files.add(
+        new ProtoFile(
+            "datatypes.proto",
+            args.legacyDatatypeGeneration
+                ? generator.generateLegacyDatatypesFileDescriptor(resourceNames)
+                : generator.generateDatatypesFileDescriptor(resourceNames)));
+
+    // Set the Go Package.
+    // Note that Go package is set outside of the generator, since it needs to know the filepath.
+    files.forEach(
+        file ->
+            file.fileDescriptor =
+                GeneratorUtils.setGoPackage(
+                    file.fileDescriptor, config.getSourceDirectory(), file.filepath));
+    return files;
+  }
+
+  private static void addFilesToZip(
+      ZipOutputStream zipOutputStream, ProtoFilePrinter printer, List<ProtoFile> protoFiles)
       throws IOException {
-    fileDescriptor = GeneratorUtils.setGoPackage(fileDescriptor, config.getSourceDirectory(), name);
-    zipOutputStream.putNextEntry(new ZipEntry(name));
-    byte[] entryBytes = printer.print(fileDescriptor).getBytes(UTF_8);
-    zipOutputStream.write(entryBytes, 0, entryBytes.length);
+    for (ProtoFile protoFile : protoFiles) {
+      zipOutputStream.putNextEntry(new ZipEntry(protoFile.filepath));
+      byte[] entryBytes = printer.print(protoFile.fileDescriptor).getBytes(UTF_8);
+      zipOutputStream.write(entryBytes, 0, entryBytes.length);
+    }
   }
 
   public static void main(String[] argv) throws IOException, InvalidFhirException {
@@ -217,6 +216,11 @@ class ProtoGeneratorMainV2 {
       System.err.printf("Invalid usage: %s\n", exception.getMessage());
       System.exit(1);
     }
-    new ProtoGeneratorMainV2(args).run();
+    new ProtoGeneratorMainV2(args)
+        .runSingleVersionMode(
+            FhirPackage.load(
+                args.inputPackageLocation,
+                /* no manually added package info - read from package */ null,
+                /* ignoreUnrecognizedFieldsAndCodes= */ true));
   }
 }
