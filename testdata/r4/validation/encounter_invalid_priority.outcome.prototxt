@@ -1,0 +1,14 @@
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Failed to convert `invalid` to google.fhir.r4.core.Coding.code: `invalid` is not one of the accepted codes in the bound ValueSet or CodeSystem: `http://terminology.hl7.org/CodeSystem/v3-ActPriority`."
+  }
+  expression {
+    value: "Encounter.priority.coding[0].code"
+  }
+}

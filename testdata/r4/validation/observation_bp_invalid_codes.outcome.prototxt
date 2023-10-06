@@ -54,3 +54,17 @@ issue {
     value: "Observation.component:DiastolicBP"
   }
 }
+issue {
+  severity {
+    value: ERROR
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Failed to convert `non-vital-signs` to google.fhir.r4.core.Coding.code: `non-vital-signs` is not one of the accepted codes in the bound ValueSet or CodeSystem: `http://terminology.hl7.org/CodeSystem/observation-category`."
+  }
+  expression {
+    value: "Observation.category[0].coding[0].code"
+  }
+}
