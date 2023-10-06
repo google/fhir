@@ -120,14 +120,14 @@ void TestPrintForAnalytics(const std::string& proto_filepath,
   ASSERT_TRUE(internal::ParseJsonValue(result.value(), from_proto).ok());
   ASSERT_TRUE(
       internal::ParseJsonValue(ReadFile(json_filepath), from_json).ok());
-  EXPECT_THAT(from_proto, JsonEq(&from_json));
+  EXPECT_THAT(from_proto.toString(), Eq(from_json.toString()));
 }
 
 template <typename R>
 void TestPrintForAnalyticsWithFilepath(const std::string& proto_filepath,
-                                       const std::string& json_filepath) {
-  TestPrintForAnalytics<R>(proto_filepath, json_filepath, true);
-  TestPrintForAnalytics<R>(proto_filepath, json_filepath, false);
+                                       const std::string& json_filepath,
+                                       bool pretty = false) {
+  TestPrintForAnalytics<R>(proto_filepath, json_filepath, pretty);
 }
 
 template <typename R>
@@ -135,6 +135,14 @@ void TestPrintForAnalytics(const std::string& name) {
   TestPrintForAnalyticsWithFilepath<R>(
       absl::StrCat("testdata/stu3/examples/", name, ".prototxt"),
       absl::StrCat("testdata/stu3/bigquery/", name + ".json"));
+}
+
+template <typename R>
+void TestPrettyPrintForAnalytics(const std::string& name) {
+  TestPrintForAnalyticsWithFilepath<R>(
+      absl::StrCat("testdata/stu3/examples/", name, ".prototxt"),
+      absl::StrCat("testdata/stu3/bigquery/", name + ".json"),
+      /*pretty=*/true);
 }
 
 template <typename R>
@@ -161,9 +169,16 @@ TEST(JsonFormatStu3Test, EdgeCasesPrint) { TestPrint<Patient>("Patient-null"); }
 
 TEST(JsonFormatStu3Test, PrintForAnalytics) {
   TestPrintForAnalytics<Composition>("Composition-example");
-  TestPrintForAnalytics<Encounter>("Encounter-home");
+  TestPrintForAnalytics<Encounter>("Encounter-home-contained");
   TestPrintForAnalytics<Observation>("Observation-example-genetics-1");
   TestPrintForAnalytics<Patient>("patient-example");
+}
+
+TEST(JsonFormatStu3Test, PrettyPrintForAnalytics) {
+  TestPrettyPrintForAnalytics<Composition>("Composition-example");
+  TestPrettyPrintForAnalytics<Encounter>("Encounter-home-pretty");
+  TestPrettyPrintForAnalytics<Observation>("Observation-example-genetics-1");
+  TestPrettyPrintForAnalytics<Patient>("patient-example");
 }
 
 TEST(JsonFormatStu3Test, PrintAnalyticsElementIdsDropped) {

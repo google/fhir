@@ -1,0 +1,102 @@
+id {
+  value: "home"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">Encounter with patient @example who is at home</div>"
+  }
+}
+contained {
+  location {
+    id {
+      value: "home"
+    }
+    description {
+      value: "Client\'s home"
+    }
+    mode {
+      value: KIND
+    }
+  }
+}
+status {
+  value: FINISHED
+}
+class_value {
+  system {
+    value: "http://hl7.org/fhir/v3/ActCode"
+  }
+  code {
+    value: "HH"
+  }
+  display {
+    value: "home health"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+participant {
+  period {
+    start {
+      value_us: 1421474400000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1421476200000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+  }
+  individual {
+    practitioner_id {
+      value: "example"
+    }
+    display {
+      value: "Dr Adam Careful"
+    }
+  }
+}
+period {
+  start {
+    value_us: 1421474400000000
+    timezone: "+10:00"
+    precision: SECOND
+  }
+  end {
+    value_us: 1421476200000000
+    timezone: "+10:00"
+    precision: SECOND
+  }
+}
+location {
+  location {
+    fragment {
+      value: "home"
+    }
+    display {
+      value: "Client\'s home"
+    }
+  }
+  status {
+    value: COMPLETED
+  }
+  period {
+    start {
+      value_us: 1421474400000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+    end {
+      value_us: 1421476200000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+  }
+}
