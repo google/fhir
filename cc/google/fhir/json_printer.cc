@@ -15,6 +15,7 @@
  */
 #include <ctype.h>
 
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <unordered_set>
@@ -176,6 +177,7 @@ class Printer {
         // use Strings.
         continue;
       }
+      int64_t size_before_call = output_.size();
       // Choice types in proto form have a containing message that is not part
       // of the FHIR spec, so we need a special method to print them as valid
       // fhir.
@@ -187,7 +189,8 @@ class Printer {
       } else {
         FHIR_RETURN_IF_ERROR(PrintField(proto, field));
       }
-      if (i < set_fields.size() - 1) {
+      bool output_changed = output_.size() > size_before_call;
+      if (i < set_fields.size() - 1 && output_changed) {
         output_ += ",";
         AddNewline();
       }
@@ -237,9 +240,11 @@ class Printer {
         AddNewline();
 
         for (int i = 0; i < field_size; i++) {
+          int64_t size_before_call = output_.size();
           FHIR_RETURN_IF_ERROR(PrintNonPrimitive(
               reflection->GetRepeatedMessage(containing_proto, field, i)));
-          if (i != field_size - 1) {
+          bool output_changed = output_.size() > size_before_call;
+          if (i != field_size - 1 && output_changed) {
             output_ += ",";
             AddNewline();
           }
