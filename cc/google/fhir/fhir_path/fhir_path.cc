@@ -3540,6 +3540,18 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
     const Descriptor* descriptor = descriptor_stack_.back();
 
+    // Handle base types:
+    //   Resource -> DomainResource -> resourceType
+    //   Element -> complexType/primitiveType
+    if (descriptor != nullptr &&
+        ((IsResource(descriptor) && (definition->name == "Resource" ||
+                                     definition->name == "DomainResource" ||
+                                     definition->name == descriptor->name())) ||
+         ((IsComplex(descriptor) || IsPrimitive(descriptor)) &&
+          definition->name == "Element"))) {
+      return visitThisInvocation(nullptr);
+    }
+
     // If we know the return type of the expression, and the return type
     // doesn't have the referenced field, set an error and return.
     if (descriptor != nullptr &&

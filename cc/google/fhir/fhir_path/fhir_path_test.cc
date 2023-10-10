@@ -363,6 +363,101 @@ TYPED_TEST(FhirPathTest, TestGetDirectChild) {
       UnorderedElementsAreArray({EqualsProto(test_encounter.status())}));
 }
 
+TYPED_TEST(FhirPathTest, TestExpressionsStartingWithOptionalType) {
+  auto expr = TestFixture::Compile(TypeParam::Encounter::descriptor(),
+                                   "Patient.status");
+  EXPECT_THAT(expr, HasStatusCode(StatusCode::kNotFound));
+  EXPECT_NE(expr.status().message().find("Patient"), std::string::npos);
+
+  auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
+
+  EXPECT_THAT(
+      TestFixture::Evaluate(test_encounter, "Encounter.status")
+          .value()
+          .GetMessages(),
+      UnorderedElementsAreArray({EqualsProto(test_encounter.status())}));
+
+  EXPECT_THAT(
+      TestFixture::Evaluate(test_encounter, "Encounter").value().GetMessages(),
+      UnorderedElementsAreArray({EqualsProto(test_encounter)}));
+  EXPECT_THAT(
+      TestFixture::Evaluate(test_encounter, "DomainResource.ofType(Encounter)")
+          .value()
+          .GetMessages(),
+      UnorderedElementsAreArray({EqualsProto(test_encounter)}));
+  EXPECT_THAT(TestFixture::Evaluate(test_encounter, ("Resource as Encounter"))
+                  .value()
+                  .GetMessages(),
+              UnorderedElementsAreArray({EqualsProto(test_encounter)}));
+  EXPECT_THAT(
+      TestFixture::Evaluate(test_encounter, "Resource.select(Encounter)")
+          .value()
+          .GetMessages(),
+      UnorderedElementsAreArray({EqualsProto(test_encounter)}));
+
+  EXPECT_THAT(
+      TestFixture::Evaluate(test_encounter,
+                            ("Encounter.period | status | period"))
+          .value()
+          .GetMessages(),
+      UnorderedElementsAreArray({EqualsProto(test_encounter.status()),
+                                 EqualsProto(test_encounter.period())}));
+  EXPECT_THAT(
+      TestFixture::Evaluate(
+          test_encounter,
+          ("Encounter.period | DomainResource.status | Resource.period"))
+          .value()
+          .GetMessages(),
+      UnorderedElementsAreArray({EqualsProto(test_encounter.status()),
+                                 EqualsProto(test_encounter.period())}));
+  EXPECT_THAT(
+      TestFixture::Evaluate(test_encounter,
+                            ("period | status | Encounter.period"))
+          .value()
+          .GetMessages(),
+      UnorderedElementsAreArray({EqualsProto(test_encounter.status()),
+                                 EqualsProto(test_encounter.period())}));
+
+  EXPECT_THAT(
+      TestFixture::Evaluate(test_encounter,
+                            ("DomainResource.period.union(Resource.period)"))
+          .value()
+          .GetMessages(),
+      UnorderedElementsAreArray({EqualsProto(test_encounter.period())}));
+
+  EXPECT_THAT(TestFixture::Evaluate(
+                  test_encounter,
+                  ("Resource.period.start.exists() implies "
+                   "(Encounter.status='triaged' or status.exists().not())")),
+              EvalsToTrue());
+}
+
+TYPED_TEST(FhirPathTest, TestElementDefinition) {
+  auto expr = TestFixture::Compile(TypeParam::Encounter::descriptor(),
+                                   "Element.exists()");
+  EXPECT_THAT(expr, HasStatusCode(StatusCode::kNotFound));
+  EXPECT_NE(expr.status().message().find("Element"), std::string::npos);
+
+  auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
+
+  EXPECT_THAT(
+      TestFixture::Evaluate(test_encounter, "period.where(Element.exists())")
+          .value()
+          .GetMessages(),
+      UnorderedElementsAreArray({EqualsProto(test_encounter.period())}));
+  EXPECT_THAT(
+      TestFixture::Evaluate(test_encounter, "id.where(Element = '123')")
+          .value()
+          .GetMessages(),
+      UnorderedElementsAreArray({EqualsProto(test_encounter.id())}));
+  EXPECT_THAT(
+      TestFixture::Evaluate(test_encounter, "period.select(Element.start)")
+          .value()
+          .GetMessages(),
+      UnorderedElementsAreArray(
+          {EqualsProto(test_encounter.period().start())}));
+}
+
 TYPED_TEST(FhirPathTest, TestGetGrandchild) {
   auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
   EvaluationResult result =
