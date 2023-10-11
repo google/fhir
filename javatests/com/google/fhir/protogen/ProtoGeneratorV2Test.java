@@ -18,6 +18,7 @@ import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
 import static com.google.fhir.protogen.ProtoGeneratorTestUtils.cleaned;
 import static com.google.fhir.protogen.ProtoGeneratorTestUtils.sorted;
+import static java.util.stream.Collectors.toList;
 
 import com.google.common.collect.ImmutableList;
 import com.google.fhir.common.InvalidFhirException;
@@ -106,7 +107,6 @@ public final class ProtoGeneratorV2Test {
       // Some datatypes are still hardcoded and added in the generation script, rather than by
       // the protogenerator.
       if (!message.getName().equals("CodingWithFixedCode")
-          && !message.getName().equals("CodingWithFixedSystem")
           && !message.getName().equals("Extension")) {
         builder.addMessageType(message);
       }
@@ -121,19 +121,26 @@ public final class ProtoGeneratorV2Test {
   }
 
   /**
-   * Tests that generating the R4 Datatypes file using generateLegacyDatatypesFileDescriptor
-   * generates descriptors that match the currently-checked in R4 datatypes. This serves as both a
-   * whole lot of unit tests, and as a regression test to guard against checking in a change that
-   * would alter the R4 Core protos.
+   * Tests that generating the R4 Datatypes file using generateDatatypesFileDescriptor generates
+   * descriptors that match the currently-checked in R4 datatypes. This serves as both a whole lot
+   * of unit tests, and as a regression test to guard against checking in a change that would alter
+   * the R4 Core protos.
    */
   @Test
   public void r4RegressionTest_generateLegacyDatatypesFileDescriptor() throws Exception {
-    ImmutableList<String> resourceNames =
+    List<String> resourceNames =
         ContainedResource.getDescriptor().getFields().stream()
             .map(field -> field.getMessageType().getName())
-            .collect(toImmutableList());
+            .collect(toList());
+
+    // Old R4 had a few reference types to non-concrete resources.  Include these to be backwards
+    // compatible during transition.
+    // TODO(b/299644315): Consider dropping these fields and reserving the field numbers instead.
+    resourceNames.add("DomainResource");
+    resourceNames.add("MetadataResource");
+
     FileDescriptorProto descriptor =
-        makeR4ProtoGenerator().generateLegacyDatatypesFileDescriptor(resourceNames);
+        makeR4ProtoGenerator().generateDatatypesFileDescriptor(resourceNames);
     assertThat(sorted(cleaned(descriptor)))
         .ignoringRepeatedFieldOrder()
         .isEqualTo(

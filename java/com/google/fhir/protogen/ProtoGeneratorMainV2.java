@@ -84,13 +84,6 @@ class ProtoGeneratorMainV2 {
                 + " ContainedResources from different versions of FHIR don't use overlapping"
                 + " numbers, so they can eventually be combined.  See: go/StableFhirProtos")
     private int containedResourceOffset = 0;
-
-    @Parameter(
-        names = {"--legacy_datatype_generation"},
-        description =
-            "If true, skips generating Element, Reference, and Extension, which are hardcoded in "
-                + "legacy behavior.  Defaults to false.")
-    private boolean legacyDatatypeGeneration = false;
   }
 
   ProtoGeneratorMainV2(Args args) {
@@ -177,14 +170,19 @@ class ProtoGeneratorMainV2 {
             generator.generateBundleAndContainedResource(
                 bundleDefinition, semanticVersion, resourceNames, args.containedResourceOffset)));
 
+    if (fhirPackage.getSemanticVersion().equals("4.0.1")) {
+      // Old R4 had a few reference types to non-concrete resources.  Include these to be
+      // backwards
+      // compatible during transition.
+      // TODO(b/299644315): Consider dropping these fields and reserving the field numbers
+      // instead.
+      resourceNames.add("DomainResource");
+      resourceNames.add("MetadataResource");
+    }
     // Generate the Datatypes file.  Pass all resource names, for use in generating the
     // Reference datatype.
     files.add(
-        new ProtoFile(
-            "datatypes.proto",
-            args.legacyDatatypeGeneration
-                ? generator.generateLegacyDatatypesFileDescriptor(resourceNames)
-                : generator.generateDatatypesFileDescriptor(resourceNames)));
+        new ProtoFile("datatypes.proto", generator.generateDatatypesFileDescriptor(resourceNames)));
 
     // Set the Go Package.
     // Note that Go package is set outside of the generator, since it needs to know the filepath.

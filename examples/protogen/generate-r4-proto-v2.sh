@@ -35,7 +35,6 @@ $PROTO_GENERATOR \
   --proto_package "google.fhir.r4.core" \
   --java_proto_package "com.google.fhir.r4.core" \
   --license_date "2019" \
-  --legacy_datatype_generation \
   --output_directory "${OUTPUT_PATH}"
 
 unzip -qo "${OUTPUT_PATH}/output.zip" -d "${OUTPUT_PATH}"

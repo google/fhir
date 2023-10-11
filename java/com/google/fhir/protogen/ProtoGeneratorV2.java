@@ -330,14 +330,6 @@ public class ProtoGeneratorV2 {
           continue;
         }
 
-        // Per spec, the fixed Extension.url on a top-level extension must match the
-        // StructureDefinition url.  Since that is already added to the message via the
-        // fhir_structure_definition_url, we can skip over it here.
-        if (element.getBase().getPath().getValue().equals("Extension.url")
-            && element.getFixed().hasUri()) {
-          continue;
-        }
-
         if (!isChoiceType(element) && !isSingleType(element)) {
           throw new IllegalArgumentException(
               "Illegal field has multiple types but is not a Choice Type:\n" + element);
@@ -357,7 +349,17 @@ public class ProtoGeneratorV2 {
                       + element.getId().getValue());
           nextTag++;
         } else {
-          buildAndAddField(element, nextTag++, builder);
+          int thisTag = nextTag;
+          nextTag++;
+          // For legacy reasons, hard-code Extension.url and Extension.extension
+          // tag numbers.  This makes them match the old, R4 hardcoded Extension message.
+          if (element.getId().getValue().equals("Extension.url")) {
+            thisTag = 2;
+          }
+          if (element.getId().getValue().equals("Extension.extension")) {
+            thisTag = 3;
+          }
+          buildAndAddField(element, thisTag, builder);
         }
       }
       return builder.build();
@@ -830,6 +832,12 @@ public class ProtoGeneratorV2 {
       List<String> referenceTypes = new ArrayList<>();
       Set<String> foundTypes = new HashSet<>();
       for (ElementDefinition.TypeRef type : element.getTypeList()) {
+        if (fhirPackage.getSemanticVersion().equals("4.0.1")
+            && element.getId().getValue().equals("Extension.value[x]")
+            && type.getCode().getValue().equals("Meta")) {
+          // To match legacy behavior, skip the meta field in extension value.
+          continue;
+        }
         if (!foundTypes.contains(type.getCode().getValue())) {
           types.add(type);
           foundTypes.add(type.getCode().getValue());
@@ -934,42 +942,6 @@ public class ProtoGeneratorV2 {
         generateFileDescriptor(messages, fhirPackage.getSemanticVersion());
 
     addReferenceType(fileBuilder, resourceNames);
-    addReferenceIdType(fileBuilder);
-
-    return fileBuilder.build();
-  }
-
-  // To match v1 proto generator behavior, skip generating a few extra datatypes that are hardcoded
-  // in supplemental files: Element, Extension, Reference
-  public FileDescriptorProto generateLegacyDatatypesFileDescriptor(List<String> resourceNames)
-      throws InvalidFhirException {
-    ImmutableList<StructureDefinition> messages =
-        stream(fhirPackage.structureDefinitions())
-            .filter(
-                def ->
-                    (def.getKind().getValue() == StructureDefinitionKindCode.Value.PRIMITIVE_TYPE
-                            || def.getKind().getValue()
-                                == StructureDefinitionKindCode.Value.COMPLEX_TYPE)
-                        && !DATATYPES_TO_SKIP.contains(def.getUrl().getValue())
-                        && !def.getUrl()
-                            .getValue()
-                            .equals("http://hl7.org/fhir/StructureDefinition/Extension")
-                        && !def.getBaseDefinition()
-                            .getValue()
-                            .equals("http://hl7.org/fhir/StructureDefinition/Extension"))
-            .collect(toImmutableList());
-
-    FileDescriptorProto.Builder fileBuilder =
-        generateFileDescriptor(messages, fhirPackage.getSemanticVersion());
-
-    // Old R4 had a few reference types to non-concrete resources.  Include these to be backwards
-    // compatible during transition.
-    // TODO(b/299644315): Consider dropping these fields and reserving the field numbers instead.
-    List<String> supplementedResourceNames = new ArrayList<>(resourceNames);
-    supplementedResourceNames.add("DomainResource");
-    supplementedResourceNames.add("MetadataResource");
-
-    addReferenceType(fileBuilder, supplementedResourceNames);
     addReferenceIdType(fileBuilder);
 
     return fileBuilder.build();

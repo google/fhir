@@ -1712,6 +1712,82 @@ message Expression {
   Uri reference = 7;
 }
 
+// Auto-generated from StructureDefinition for Extension.
+// Optional Extensions Element.
+// See http://hl7.org/fhir/StructureDefinition/Extension
+message Extension {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+
+  // Unique id for inter-element referencing
+  String id = 1;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 3;
+
+  // identifies the meaning of the extension
+  Uri url = 2 [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Value of extension
+  message ValueX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Base64Binary base64_binary = 1;
+      Boolean boolean = 2;
+      Canonical canonical = 3;
+      Code code = 4;
+      Date date = 5;
+      DateTime date_time = 6;
+      Decimal decimal = 7;
+      Id id = 8;
+      Instant instant = 9;
+      Integer integer = 10;
+      Markdown markdown = 11;
+      Oid oid = 12;
+      PositiveInt positive_int = 13;
+      String string_value = 14 [json_name = "string"];
+      Time time = 15;
+      UnsignedInt unsigned_int = 16;
+      Uri uri = 17;
+      Url url = 18;
+      Uuid uuid = 19;
+      Address address = 20;
+      Age age = 21;
+      Annotation annotation = 22;
+      Attachment attachment = 23;
+      CodeableConcept codeable_concept = 24;
+      Coding coding = 25;
+      ContactPoint contact_point = 26;
+      Count count = 27;
+      Distance distance = 28;
+      Duration duration = 29;
+      HumanName human_name = 30;
+      Identifier identifier = 31;
+      Money money = 32;
+      Period period = 33;
+      Quantity quantity = 34;
+      Range range = 35;
+      Ratio ratio = 36;
+      Reference reference = 37;
+      SampledData sampled_data = 38;
+      Signature signature = 39;
+      Timing timing = 40;
+      ContactDetail contact_detail = 41;
+      Contributor contributor = 42;
+      DataRequirement data_requirement = 43;
+      Expression expression = 44;
+      ParameterDefinition parameter_definition = 45;
+      RelatedArtifact related_artifact = 46;
+      TriggerDefinition trigger_definition = 47;
+      UsageContext usage_context = 48;
+      Dosage dosage = 49;
+    }
+  }
+  ValueX value = 4;
+}
+
 // Auto-generated from StructureDefinition for HumanName.
 // Name of a human - parts and usage.
 // See http://hl7.org/fhir/StructureDefinition/HumanName
@@ -3544,81 +3620,6 @@ message Xhtml {
 }
 
 // End of auto-generated messages.
-
-// Optional Extensions Element. See
-// http://hl7.org/fhir/StructureDefinition/Extension
-message Extension {
-  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
-  option (.google.fhir.proto.fhir_structure_definition_url) =
-      "http://hl7.org/fhir/StructureDefinition/Extension";
-
-  // Unique id for inter-element referencing
-  String id = 1;
-
-  // identifies the meaning of the extension
-  Uri url = 2 [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
-
-  // Additional content defined by implementations
-  repeated Extension extension = 3;
-
-  // Value of extension
-  message ValueX {
-    option (.google.fhir.proto.is_choice_type) = true;
-
-    oneof choice {
-      Base64Binary base64_binary = 1;
-      Boolean boolean = 2;
-      Canonical canonical = 3;
-      Code code = 4;
-      Date date = 5;
-      DateTime date_time = 6;
-      Decimal decimal = 7;
-      Id id = 8;
-      Instant instant = 9;
-      Integer integer = 10;
-      Markdown markdown = 11;
-      Oid oid = 12;
-      PositiveInt positive_int = 13;
-      String string_value = 14 [json_name = "string"];
-      Time time = 15;
-      UnsignedInt unsigned_int = 16;
-      Uri uri = 17;
-      Url url = 18;
-      Uuid uuid = 19;
-      Address address = 20;
-      Age age = 21;
-      Annotation annotation = 22;
-      Attachment attachment = 23;
-      CodeableConcept codeable_concept = 24;
-      Coding coding = 25;
-      ContactPoint contact_point = 26;
-      Count count = 27;
-      Distance distance = 28;
-      Duration duration = 29;
-      HumanName human_name = 30;
-      Identifier identifier = 31;
-      Money money = 32;
-      Period period = 33;
-      Quantity quantity = 34;
-      Range range = 35;
-      Ratio ratio = 36;
-      Reference reference = 37;
-      SampledData sampled_data = 38;
-      Signature signature = 39;
-      Timing timing = 40;
-      ContactDetail contact_detail = 41;
-      Contributor contributor = 42;
-      DataRequirement data_requirement = 43;
-      Expression expression = 44;
-      ParameterDefinition parameter_definition = 45;
-      RelatedArtifact related_artifact = 46;
-      TriggerDefinition trigger_definition = 47;
-      UsageContext usage_context = 48;
-      Dosage dosage = 49;
-    }
-  }
-  ValueX value = 4;
-}
 
 // Specialization of Coding that drops the system and code fields.
 // Fields that use this message must be annotated with

@@ -14,13 +14,12 @@
 
 package com.google.fhir.protogen;
 
-import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
+import static java.util.stream.Collectors.toList;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
 import com.google.common.io.Files;
@@ -42,6 +41,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -198,13 +198,18 @@ public final class ProtoFilePrinterTest {
 
     ProtoGeneratorV2 protoGenerator = new ProtoGeneratorV2(r4Package, config);
 
-    ImmutableList<String> resourceNames =
+    List<String> resourceNames =
         ContainedResource.getDescriptor().getFields().stream()
             .map(field -> field.getMessageType().getName())
-            .collect(toImmutableList());
+            .collect(toList());
 
-    FileDescriptorProto descriptor =
-        protoGenerator.generateLegacyDatatypesFileDescriptor(resourceNames);
+    // Old R4 had a few reference types to non-concrete resources.  Include these to be backwards
+    // compatible during transition.
+    // TODO(b/299644315): Consider dropping these fields and reserving the field numbers instead.
+    resourceNames.add("DomainResource");
+    resourceNames.add("MetadataResource");
+
+    FileDescriptorProto descriptor = protoGenerator.generateDatatypesFileDescriptor(resourceNames);
     descriptor =
         GeneratorUtils.setGoPackage(
             descriptor, "proto/google/fhir/proto/r4/core", "datatypes.proto");
