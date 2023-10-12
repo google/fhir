@@ -15,8 +15,10 @@
  */
 #include <ctype.h>
 
+#include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -25,8 +27,11 @@
 #include "google/protobuf/any.pb.h"
 #include "google/protobuf/descriptor.pb.h"
 #include "absl/memory/memory.h"
+#include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/str_replace.h"
+#include "absl/strings/string_view.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/core_resource_registry.h"
 #include "google/fhir/extensions.h"
@@ -110,7 +115,8 @@ class Printer {
     absl::StrAppend(&output_, "\"", name, "\": ");
   }
 
-  absl::Status PrintNonPrimitive(const Message& proto) {
+  absl::Status PrintNonPrimitive(const Message& proto,
+                                 bool print_as_string = false) {
     if (IsReference(proto.GetDescriptor()) && json_format_ == kFormatPure) {
       // For printing reference, we don't want typed reference fields,
       // just standard FHIR reference fields.
@@ -125,12 +131,79 @@ class Printer {
         IsProfileOfCodeableConcept(proto.GetDescriptor())) {
       FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> analytic_codeable_concept,
                             MakeAnalyticCodeableConcept(proto));
-      return PrintStandardNonPrimitive(*analytic_codeable_concept);
+      return PrintStandardNonPrimitive(*analytic_codeable_concept,
+                                       print_as_string);
     }
-    return PrintStandardNonPrimitive(proto);
+    return PrintStandardNonPrimitive(proto, print_as_string);
   }
 
-  absl::Status PrintStandardNonPrimitive(const Message& proto) {
+  std::optional<std::unique_ptr<Message>> ExtractConcreteMessage(
+      const google::protobuf::Any& any_message) {
+    const google::protobuf::Descriptor* descriptor;
+    google::protobuf::Message* concrete_msg;
+    std::string full_name;
+    // Resolve types in generated pool.
+    if (!google::protobuf::Any::ParseAnyTypeUrl(any_message.type_url(),
+                                                &full_name)) {
+      return std::nullopt;
+    }
+
+    // Get the descriptor of the embedded message.
+    descriptor =
+        google::protobuf::DescriptorPool::generated_pool()->FindMessageTypeByName(
+            full_name);
+    if (descriptor == nullptr) {
+      return std::nullopt;
+    }
+
+    // Construct a default object of the embedded type.
+    const google::protobuf::Message* default_embedded_msg =
+        google::protobuf::MessageFactory::generated_factory()->GetPrototype(descriptor);
+    if (default_embedded_msg == nullptr) {
+      return std::nullopt;
+    }
+    concrete_msg = default_embedded_msg->New();
+
+    if (any_message.UnpackTo(concrete_msg)) {
+      return absl::WrapUnique(concrete_msg);
+    }
+
+    return std::nullopt;
+  }
+
+  absl::Status PrintContainedResourceOneOf(const Message& contained_one_of) {
+    std::unique_ptr<Message> contained =
+        absl::WrapUnique(primitive_handler_->NewContainedResource());
+
+    const FieldDescriptor* resource_field = nullptr;
+    const google::protobuf::OneofDescriptor*  // NOLINT: The direct import breaks kokoro.
+        resource_oneof =
+            contained->GetDescriptor()->FindOneofByName("oneof_resource");
+    for (int i = 0; i < resource_oneof->field_count(); i++) {
+      const ::google::protobuf::FieldDescriptor* field = resource_oneof->field(i);
+
+      if (field->message_type()->name() ==
+          contained_one_of.GetDescriptor()->name()) {
+        resource_field = field;
+      }
+    }
+
+    if (resource_field == nullptr) {
+      // One of resource not found in ContainedResource. This could happen if
+      // the proto is not a core FHIR resource. In this case we drop the
+      // resource.
+      return absl::OkStatus();
+    }
+
+    const ::google::protobuf::Reflection* ref = contained->GetReflection();
+    ref->MutableMessage(contained.get(), resource_field)
+        ->CopyFrom(contained_one_of);
+
+    return PrintContainedResource(*contained);
+  }
+
+  absl::Status PrintStandardNonPrimitive(const Message& proto,
+                                         bool print_as_string = false) {
     const Descriptor* descriptor = proto.GetDescriptor();
     const Reflection* reflection = proto.GetReflection();
 
@@ -141,13 +214,25 @@ class Printer {
     if (descriptor->full_name() == Any::descriptor()->full_name()) {
       std::unique_ptr<Message> contained =
           absl::WrapUnique(primitive_handler_->NewContainedResource());
-      if (!dynamic_cast<const Any&>(proto).UnpackTo(contained.get())) {
-        // If we can't unpack the Any, drop it.
-        // TODO(b/148916862): Use a registry to determine the correct
-        // ContainedResource to unpack to
+
+      // TODO(b/148916862): Use a registry to determine the correct
+      // ContainedResource to unpack to.
+      if (dynamic_cast<const Any&>(proto).UnpackTo(contained.get())) {
+        return PrintContainedResource(*contained);
+      }
+
+      // If we can't unpack the Any proto as a contained resource, try to unpack
+      // it as a contained resource `one of` field.
+      std::optional<std::unique_ptr<google::protobuf::Message>> resource_msg =
+          ExtractConcreteMessage(dynamic_cast<const Any&>(proto));
+      if (resource_msg == std::nullopt) {
+        // Unable to extract Any proto into a concrete message. This could
+        // happen if the proto is not a core FHIR resource. In this case we
+        // drop the resource.
         return absl::OkStatus();
       }
-      return PrintContainedResource(*contained);
+
+      return PrintContainedResourceOneOf(**resource_msg);
     }
 
     if (json_format_ == kFormatAnalytic && IsExtension(proto)) {
@@ -187,7 +272,7 @@ class Printer {
         FHIR_RETURN_IF_ERROR(PrintChoiceTypeField(
             reflection->GetMessage(proto, field), field->json_name()));
       } else {
-        FHIR_RETURN_IF_ERROR(PrintField(proto, field));
+        FHIR_RETURN_IF_ERROR(PrintField(proto, field, print_as_string));
       }
       bool output_changed = output_.size() > size_before_call;
       if (i < set_fields.size() - 1 && output_changed) {
@@ -196,7 +281,19 @@ class Printer {
       }
     }
     CloseJsonObject();
+
     return absl::OkStatus();
+  }
+
+  // Escape a section of our output string to allow it to be used as a string
+  // literal:
+  // E.g. {"name": "test"} -> "{ \"name\": \"test\" }"
+  std::string EscapeSubstringForUseAsString(absl::string_view output,
+                                            size_t start, size_t end) {
+    std::string new_string = output_.substr(start, end - start);
+    new_string =
+        absl::StrReplaceAll(new_string, {{"\"", "\\\""}, {"\n", "\\n"}});
+    return output_.replace(start, end, new_string);
   }
 
   absl::Status PrintContainedResource(const Message& proto) {
@@ -207,10 +304,23 @@ class Printer {
       const Message& field_value =
           proto.GetReflection()->GetMessage(proto, field);
       if (json_format_ == kFormatAnalytic) {
-        // Only print resource url if in analytic mode.
-        absl::StrAppend(&output_, "\"",
-                        GetStructureDefinitionUrl(field_value.GetDescriptor()),
-                        "\"");
+        // If print as string is set, wrap the output created here in opening
+        // quotes. Use single quotes to avoid being escaped by the double quotes
+        // created in the functions below.
+        absl::StrAppend(&output_, "\"");
+
+        size_t size_before_call = output_.size();
+        // Print a string of the resource in analytic mode.
+        FHIR_RETURN_IF_ERROR(
+            PrintNonPrimitive(field_value, /*print_as_string=*/true));
+        size_t size_after_call = output_.size();
+        output_ = EscapeSubstringForUseAsString(output_, size_before_call,
+                                                size_after_call);
+
+        // If print as string is set, wrap the output created here in closing
+        // quotes.
+        absl::StrAppend(&output_, "\"");
+
       } else {
         FHIR_RETURN_IF_ERROR(PrintNonPrimitive(field_value));
       }
@@ -219,7 +329,8 @@ class Printer {
   }
 
   absl::Status PrintField(const Message& containing_proto,
-                          const FieldDescriptor* field) {
+                          const FieldDescriptor* field,
+                          bool print_as_string = false) {
     if (field->containing_type() != containing_proto.GetDescriptor()) {
       return InvalidArgumentError(
           absl::StrCat("Field ", field->full_name(), " not found on ",
