@@ -10,8 +10,19 @@ text {
   }
 }
 contained {
-  type_url: "type.googleapis.com/google.fhir.r4.core.ContainedResource"
-  value: "\272\004\036\n\006\n\004homez\017\n\rClient\'s home\202\001\002\b\002"
+  [type.googleapis.com/google.fhir.r4.core.ContainedResource] {
+    location {
+      id {
+        value: "home"
+      }
+      description {
+        value: "Client's \n \"home\""
+      }
+      mode {
+        value: KIND
+      }
+    }
+  }
 }
 status {
   value: FINISHED

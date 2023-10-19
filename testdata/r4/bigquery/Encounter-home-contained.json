@@ -5,7 +5,7 @@
     "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Encounter with patient @example who is at home</div>"
   },
   "contained": [
-    "{\"id\": \"home\",\"description\": \"Client's home\",\"mode\": \"kind\"}"
+    "{\"id\": \"home\",\"description\": \"Client's \\n \\\"home\\\"\",\"mode\": \"kind\"}"
   ],
   "status": "finished",
   "class": {

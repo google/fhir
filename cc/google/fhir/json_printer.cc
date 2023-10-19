@@ -20,7 +20,6 @@
 #include <memory>
 #include <optional>
 #include <string>
-#include <unordered_set>
 #include <vector>
 
 
@@ -291,8 +290,11 @@ class Printer {
   std::string EscapeSubstringForUseAsString(absl::string_view output,
                                             size_t start, size_t end) {
     std::string new_string = output_.substr(start, end - start);
-    new_string =
-        absl::StrReplaceAll(new_string, {{"\"", "\\\""}, {"\n", "\\n"}});
+    new_string = absl::StrReplaceAll(new_string, {{"\\", "\\\\"},
+                                                  {"\"", "\\\""},
+                                                  {"\n", "\\n"},
+                                                  {"\r", "\\r"},
+                                                  {"\b", "\\b"}});
     return output_.replace(start, end, new_string);
   }
 
