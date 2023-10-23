@@ -397,7 +397,7 @@ class Printer {
     FHIR_ASSIGN_OR_RETURN(const JsonPrimitive json_primitive,
                           primitive_handler_->WrapPrimitiveProto(proto));
 
-    if (json_primitive.is_non_null()) {
+    if (json_primitive.is_non_null() && !json_primitive.value.empty()) {
       PrintFieldPreamble(field_name);
       output_ += json_primitive.value;
     }

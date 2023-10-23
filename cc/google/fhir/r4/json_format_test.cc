@@ -373,6 +373,7 @@ TEST(JsonFormatR4Test, PrintForAnalytics) {
   // parsers to print a string representation of contained resources.
   TestPrintForAnalytics<Encounter>("Encounter-home-contained");
   TestPrintForAnalytics<Observation>("Observation-example-genetics-1");
+  TestPrintForAnalytics<Observation>("Observation-example-2");
   TestPrintForAnalytics<Patient>("Patient-example");
 }
 
@@ -380,6 +381,7 @@ TEST(JsonFormatR4Test, PrettyPrintForAnalytics) {
   TestPrettyPrintForAnalytics<Encounter>("Encounter-home-pretty");
   TestPrettyPrintForAnalytics<Composition>("Composition-example");
   TestPrettyPrintForAnalytics<Observation>("Observation-example-genetics-1");
+  TestPrettyPrintForAnalytics<Observation>("Observation-example-2");
   TestPrettyPrintForAnalytics<Patient>("Patient-example");
 }
 

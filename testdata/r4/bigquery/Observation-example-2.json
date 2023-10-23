@@ -1,0 +1,37 @@
+{
+  "code": {
+    "text": "Further analysis"
+  },
+  "derivedFrom": [
+    {
+      "display": "ObservationForGenetics profile example 1",
+      "observationId": "example-genetics-1"
+    }
+  ],
+  "id": "example-genetics-3",
+  "issued": "2013-04-03T15:30:10+01:00",
+  "note": [
+    {
+      "text": "The EGFR p.L858R mutation has been associated with response to anti-EGFR therapy"
+    }
+  ],
+  "performer": [
+    {
+      "display": "Sequence Analysis Laboratory",
+      "practitionerId": "example"
+    }
+  ],
+  "status": "final",
+  "subject": {
+    "display": "Molecular Lab Patient ID: HOSP-23456",
+    "patientId": "example"
+  },
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-genetics-3</p><p><b>status</b>: final</p><p><b>code</b>: Further analysis <span>(Details )</span></p><p><b>subject</b>: <a>Molecular Lab Patient ID: HOSP-23456</a></p><p><b>issued</b>: 03/04/2013 3:30:10 PM</p><p><b>performer</b>: <a>Sequence Analysis Laboratory</a></p><p><b>note</b>: The EGFR p.L858R mutation has been associated with response to anti-EGFR therapy</p><p><b>derivedFrom</b>: <a>ObservationForGenetics profile example 1</a></p></div>",
+    "status": "generated"
+  },
+  "value": {
+    "quantity": {
+    }
+  }
+}
