@@ -112,11 +112,6 @@ func TestValidatePrimitive_Success(t *testing.T) {
 		{
 			name: "primitive with no value",
 			msgs: []proto.Message{
-				&d2pb.Code{
-					Extension: []*d2pb.Extension{{
-						Url: &d2pb.Uri{Value: jsonpbhelper.PrimitiveHasNoValueURL},
-					}},
-				},
 				&d3pb.Code{
 					Extension: []*d3pb.Extension{{
 						Url: &d3pb.Uri{Value: jsonpbhelper.PrimitiveHasNoValueURL},

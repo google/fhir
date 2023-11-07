@@ -26,15 +26,14 @@ go_library(
 go_test(
     name = "fhirvalidate_test",
     size = "small",
-    srcs = ["fhirvalidate_test.go"],
+    srcs = [
+        "fhirvalidate_test.go",
+    ],
     embed = [":fhirvalidate"],
     deps = [
         "//go/fhirversion",
         "//go/jsonformat/errorreporter",
         "//go/jsonformat/internal/jsonpbhelper",
-        "//proto/google/fhir/proto/dstu2:codes_go_proto",
-        "//proto/google/fhir/proto/dstu2:datatypes_go_proto",
-        "//proto/google/fhir/proto/dstu2:resources_go_proto",
         "//proto/google/fhir/proto/r4/core:codes_go_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_go_proto",

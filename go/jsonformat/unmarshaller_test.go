@@ -41,7 +41,6 @@ import (
 	"google.golang.org/protobuf/testing/protocmp"
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
-
 	c4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/codes_go_proto"
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	r4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
@@ -64,6 +63,7 @@ var (
 		return v
 	})
 	basePath = "testdata/jsonformat"
+	allVers  = []fhirversion.Version{fhirversion.STU3, fhirversion.R4}
 )
 
 // TODO(b/135148603): Find a better way to maintain the versioned unit tests.
@@ -111,7 +111,7 @@ func TestUnmarshal(t *testing.T) {
 		wants []mvr
 	}{
 		{
-			name: "R3/R4 SearchParameter",
+			name: "SearchParameter",
 			json: []byte(`
     {
       "resourceType": "SearchParameter",
@@ -255,7 +255,7 @@ func TestUnmarshal(t *testing.T) {
 			},
 		},
 		{
-			name: "R3/R4 RepeatedResources",
+			name: "RepeatedResources",
 			json: []byte(`
     {
 		  "resourceType": "Bundle",
@@ -582,7 +582,7 @@ func TestUnmarshal(t *testing.T) {
 			},
 		},
 		{
-			name: "DataElement",
+			name: "STU3 DataElement",
 			json: []byte(`
 			{
 			 "status":"draft",
@@ -1052,9 +1052,6 @@ func TestUnmarshal(t *testing.T) {
 						t.Fatalf("unmarshal %v failed: %v", test.name, err)
 					}
 					sortExtensions := cmp.Options{
-						protocmp.SortRepeated(func(e1, e2 *d2pb.Extension) bool {
-							return e1.GetUrl().GetValue() < e2.GetUrl().GetValue()
-						}),
 						protocmp.SortRepeated(func(e1, e2 *d3pb.Extension) bool {
 							return e1.GetUrl().GetValue() < e2.GetUrl().GetValue()
 						}),
@@ -1514,6 +1511,53 @@ func TestUnmarshalWithErrorReporter_Errors(t *testing.T) {
 	}
 }
 
+func TestUnmarshal_ErrorsFromFile(t *testing.T) {
+	tests := []struct {
+		name     string
+		jsonFile string
+		vers     []fhirversion.Version
+		// Due to the random ordering of map keys we don't know which key will be
+		// processed first, but for extension fields it doesn't matter if the
+		// primitive or extension is processed first, both will cause an error but
+		// the error will be different.
+		errs []string
+	}{
+		{
+			name:     "Multiple choice[x] values provided",
+			jsonFile: "observation_invalid_multiple_choicex_provided.json",
+			vers:     allVers,
+			errs:     []string{`error at "Observation": cannot accept multiple values for value field`},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			for _, v := range test.vers {
+				t.Run(v.String(), func(t *testing.T) {
+					u := setupUnmarshaller(t, v)
+					json, err := readFile(basePath, test.jsonFile)
+					if err != nil {
+						t.Fatalf("Failed to get JSON data for test case %v", err)
+					}
+					_, err = u.Unmarshal(json)
+					if err == nil {
+						t.Fatalf("unmarshal %s failed: got error < nil >, want %q", test.name, test.errs)
+					}
+					matched := false
+					for _, wantErr := range test.errs {
+						if err.Error() == wantErr {
+							matched = true
+							break
+						}
+					}
+					if !matched {
+						t.Errorf("unmarshal %s: got error %q, want one of: %q", test.name, err.Error(), strings.Join(test.errs, ", "))
+					}
+				})
+			}
+		})
+	}
+}
+
 func TestUnmarshal_Errors(t *testing.T) {
 	tests := []struct {
 		name string
@@ -1532,7 +1576,7 @@ func TestUnmarshal_Errors(t *testing.T) {
       "resourceType": "Patient",
 			"gender": ["male", "female"]
     }`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient.gender": invalid value \(expected a (AdministrativeGenderCode|GenderCode) object\)`},
 		},
 		{
@@ -1542,7 +1586,7 @@ func TestUnmarshal_Errors(t *testing.T) {
       "resourceType": "Patient",
 			"gender": "f"
     }`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient.gender": code type mismatch`},
 		},
 		{
@@ -1552,7 +1596,7 @@ func TestUnmarshal_Errors(t *testing.T) {
       "resourceType": "Patient",
 			"gender": true
     }`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient.gender": expected code`},
 		},
 		{
@@ -1561,7 +1605,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 		{
       "resourceType": "Patient",
     }`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`invalid JSON`},
 		},
 		{
@@ -1570,7 +1614,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 		{
       "resourceType": 1
     }`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{"invalid resource type"},
 		},
 		{
@@ -1579,13 +1623,13 @@ func TestUnmarshal_Errors(t *testing.T) {
 		{
       "resourceType": "Patient1"
     }`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient1": unknown resource type`},
 		},
 		{
 			name: "Missing resource type",
 			json: "{}",
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`missing required field "resourceType"`},
 		},
 		{
@@ -1595,7 +1639,7 @@ func TestUnmarshal_Errors(t *testing.T) {
       "resourceType": "Patient",
 			"foo": [1, 2]
     }`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient": unknown field`},
 		},
 		{
@@ -1605,7 +1649,7 @@ func TestUnmarshal_Errors(t *testing.T) {
       "resourceType": "Patient",
 			"fooBar": "1"
     }`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient": unknown field`},
 		},
 		{
@@ -1616,7 +1660,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			"managingOrganization": {"reference": "Org/1"},
 			"_managingOrganization": {"foo": "bar"}
     }`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient": unknown field`},
 		},
 		{
@@ -1629,7 +1673,7 @@ func TestUnmarshal_Errors(t *testing.T) {
           "_given": {"id": "1"}
       }]
     }`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient.name[0]._given": expected array`},
 		},
 		{
@@ -1642,7 +1686,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 					"_given": [{"id": "1"}, {"id": "2"}]
 				}]
 			}`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{
 				`error at "Patient.name[0]._given": array length mismatch, expected 1, found 2`,
 				`error at "Patient.name[0].given": array length mismatch, expected 2, found 1`,
@@ -1655,7 +1699,7 @@ func TestUnmarshal_Errors(t *testing.T) {
       "resourceType": "Patient",
 			"managingOrganization": {"foo": "bar"}
     }`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient.managingOrganization": unknown field`},
 		},
 		{
@@ -1667,11 +1711,11 @@ func TestUnmarshal_Errors(t *testing.T) {
 				"given": [1]
 			}]
     }`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient.name[0].given[0]": expected string`},
 		},
 		{
-			name: "R2/R3 error in nested object",
+			name: "R3 error in nested object",
 			json: `
 		{
       "resourceType": "Patient",
@@ -1682,7 +1726,7 @@ func TestUnmarshal_Errors(t *testing.T) {
       }
     }
     `,
-			vers: []Version{fhirversion.STU3},
+			vers: []fhirversion.Version{fhirversion.STU3},
 			errs: []string{`error at "Patient.animal.species.coding": expected array`},
 		},
 		{
@@ -1712,7 +1756,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			}]
     }
     `,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient.name[0].given[0]": string contains invalid characters: U+0008`},
 		},
 		{
@@ -1723,7 +1767,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			"implicitRules": "http://\u0000"
     }
     `,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient.implicitRules": invalid uri`},
 		},
 		{
@@ -1734,7 +1778,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			"implicitRules": " http://example.com/"
     }
     `,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient.implicitRules": invalid uri`},
 		},
 		{
@@ -1745,7 +1789,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			"effectiveDateTime": "invalid"
     }
     `,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Observation.effectiveDateTime": expected datetime`},
 		},
 		{
@@ -1758,7 +1802,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 				"value": "x"
 			}]
 		}`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient.extension[0]": unknown field`},
 		},
 		{
@@ -1769,7 +1813,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 				"name": [{ "text": "` + "\xa0\xa1" + `"}]
 			}
 			`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient.name[0].text": expected UTF-8 encoding`},
 		},
 		{
@@ -1780,7 +1824,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 				"language": "` + "\xa0\xa1" + `"
 			}
 			`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient.language": expected UTF-8 encoding`},
 		},
 		// TODO(b/161479338): add test for rejecting upper camel case fields once deprecated.
@@ -1791,7 +1835,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 				"resourceType": "Patient",
 				"GENDER": "female"
 			}`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient": unknown field`},
 		},
 		{
@@ -1801,7 +1845,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 				"resourceType": "Patient",
 				"managingorganization": {"reference": "Org/1"}
 			}`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient": unknown field`},
 		},
 		{
@@ -1811,7 +1855,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 				"resourceType": "Patient",
 				"gEnDeR": "female"
 			}`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient": unknown field`},
 		},
 		{
@@ -1821,7 +1865,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 				"ResourceType": "Patient",
 				"gender": "female"
 			}`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`missing required field "resourceType"`},
 		},
 		{
@@ -1848,7 +1892,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 					"value": "female"
 				}
 			}`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient.gender.value": invalid field`},
 		},
 		{
@@ -1872,13 +1916,13 @@ func TestUnmarshal_Errors(t *testing.T) {
 					"organizationId": "2810efe9-f993-489d-8d07-86ad32e54923"
 				}
 			}`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{`error at "Patient.managingOrganization.organizationId": invalid type: ReferenceId`},
 		},
 		{
 			name: "trailing characters",
 			json: `{"resourceType": "Patient"}{}`,
-			vers: []Version{fhirversion.STU3, fhirversion.R4},
+			vers: allVers,
 			errs: []string{"invalid JSON"},
 		},
 	}
@@ -1908,7 +1952,6 @@ func TestUnmarshal_Errors(t *testing.T) {
 }
 
 func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
-	[]Version{fhirversion.STU3, fhirversion.R4}
 	tests := []struct {
 		name string
 		json string
@@ -2787,8 +2830,7 @@ func TestUnmarshal_NestingDepth(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			versions := []Version{fhirversion.STU3, fhirversion.R4}
-			for _, v := range versions {
+			for _, v := range allVers {
 				t.Run(v.String(), func(t *testing.T) {
 					u := setupUnmarshaller(t, v)
 					u.MaxNestingDepth = test.maxDepth
