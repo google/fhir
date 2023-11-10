@@ -1,0 +1,698 @@
+name: "MedicationOrder"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Id"
+  options {
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Meta"
+  options {
+    [google.fhir.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Uri"
+  options {
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.AllLanguageCode"
+  options {
+    [google.fhir.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Narrative"
+  options {
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ContainedResource"
+  options {
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "identifier"
+  number: 9
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Identifier"
+  options {
+    [google.fhir.proto.field_description]: "External identifier"
+  }
+}
+field {
+  name: "date_written"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.DateTime"
+  options {
+    [google.fhir.proto.field_description]: "When prescription was authorized"
+  }
+}
+field {
+  name: "status"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.MedicationOrderStatusCode"
+  options {
+    [google.fhir.proto.field_description]: "active | on-hold | completed | entered-in-error | stopped | draft"
+  }
+}
+field {
+  name: "date_ended"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.DateTime"
+  options {
+    [google.fhir.proto.field_description]: "When prescription was stopped"
+  }
+}
+field {
+  name: "reason_ended"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "Why prescription was stopped"
+  }
+}
+field {
+  name: "patient"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Who prescription is for"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+  }
+}
+field {
+  name: "prescriber"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Who ordered the medication(s)"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+  }
+}
+field {
+  name: "encounter"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Created during encounter/admission/stay"
+    [google.fhir.proto.valid_reference_type]: "Encounter"
+  }
+}
+field {
+  name: "reason"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.MedicationOrder.Reason"
+  options {
+    [google.fhir.proto.field_description]: "Reason or indication for writing the prescription"
+  }
+}
+field {
+  name: "note"
+  number: 18
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.String"
+  options {
+    [google.fhir.proto.field_description]: "Information about the prescription"
+  }
+}
+field {
+  name: "medication"
+  number: 19
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.MedicationOrder.Medication"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Medication to be taken"
+  }
+}
+field {
+  name: "dosage_instruction"
+  number: 20
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.MedicationOrder.DosageInstruction"
+  options {
+    [google.fhir.proto.field_description]: "How medication should be taken"
+  }
+}
+field {
+  name: "dispense_request"
+  number: 21
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.MedicationOrder.DispenseRequest"
+  options {
+    [google.fhir.proto.field_description]: "Medication supply authorization"
+  }
+}
+field {
+  name: "substitution"
+  number: 22
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.MedicationOrder.Substitution"
+  options {
+    [google.fhir.proto.field_description]: "Any restrictions on medication substitution"
+  }
+}
+field {
+  name: "prior_prescription"
+  number: 23
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "An order/prescription that this supersedes"
+    [google.fhir.proto.valid_reference_type]: "MedicationOrder"
+  }
+}
+nested_type {
+  name: "Reason"
+  field {
+    name: "codeable_concept"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+    oneof_index: 0
+  }
+  field {
+    name: "reference"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Reference"
+    options {
+      [google.fhir.proto.valid_reference_type]: "Condition"
+    }
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "reason"
+  }
+}
+nested_type {
+  name: "Medication"
+  field {
+    name: "codeable_concept"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+    oneof_index: 0
+  }
+  field {
+    name: "reference"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Reference"
+    options {
+      [google.fhir.proto.valid_reference_type]: "Medication"
+    }
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "medication"
+  }
+}
+nested_type {
+  name: "DosageInstruction"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "text"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Dosage instructions expressed as text"
+    }
+  }
+  field {
+    name: "additional_instructions"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+    options {
+      [google.fhir.proto.field_description]: "Supplemental instructions - e.g. \"with meals\""
+    }
+  }
+  field {
+    name: "timing"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Timing"
+    options {
+      [google.fhir.proto.field_description]: "When medication should be administered"
+    }
+  }
+  field {
+    name: "as_needed"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.MedicationOrder.DosageInstruction.AsNeeded"
+    options {
+      [google.fhir.proto.field_description]: "Take \"as needed\" (for x)"
+    }
+  }
+  field {
+    name: "site"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.MedicationOrder.DosageInstruction.Site"
+    options {
+      [google.fhir.proto.field_description]: "Body site to administer to"
+    }
+  }
+  field {
+    name: "route"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+    options {
+      [google.fhir.proto.field_description]: "How drug should enter body"
+    }
+  }
+  field {
+    name: "method"
+    number: 10
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+    options {
+      [google.fhir.proto.field_description]: "Technique for administering medication"
+    }
+  }
+  field {
+    name: "dose"
+    number: 11
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.MedicationOrder.DosageInstruction.Dose"
+    options {
+      [google.fhir.proto.field_description]: "Amount of medication per dose"
+    }
+  }
+  field {
+    name: "rate"
+    number: 12
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.MedicationOrder.DosageInstruction.Rate"
+    options {
+      [google.fhir.proto.field_description]: "Amount of medication per unit of time"
+    }
+  }
+  field {
+    name: "max_dose_per_period"
+    number: 13
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Ratio"
+    options {
+      [google.fhir.proto.field_description]: "Upper limit on medication per unit of time"
+    }
+  }
+  nested_type {
+    name: "AsNeeded"
+    field {
+      name: "boolean"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Boolean"
+      oneof_index: 0
+    }
+    field {
+      name: "codeable_concept"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+      oneof_index: 0
+    }
+    options {
+      [google.fhir.proto.is_choice_type]: true
+    }
+    oneof_decl {
+      name: "as_needed"
+    }
+  }
+  nested_type {
+    name: "Site"
+    field {
+      name: "codeable_concept"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+      oneof_index: 0
+    }
+    field {
+      name: "reference"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Reference"
+      options {
+        [google.fhir.proto.valid_reference_type]: "BodySite"
+      }
+      oneof_index: 0
+    }
+    options {
+      [google.fhir.proto.is_choice_type]: true
+    }
+    oneof_decl {
+      name: "site"
+    }
+  }
+  nested_type {
+    name: "Dose"
+    field {
+      name: "range"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Range"
+      oneof_index: 0
+    }
+    field {
+      name: "quantity"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Quantity"
+      oneof_index: 0
+    }
+    options {
+      [google.fhir.proto.is_choice_type]: true
+    }
+    oneof_decl {
+      name: "dose"
+    }
+  }
+  nested_type {
+    name: "Rate"
+    field {
+      name: "ratio"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Ratio"
+      oneof_index: 0
+    }
+    field {
+      name: "range"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Range"
+      oneof_index: 0
+    }
+    options {
+      [google.fhir.proto.is_choice_type]: true
+    }
+    oneof_decl {
+      name: "rate"
+    }
+  }
+}
+nested_type {
+  name: "DispenseRequest"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "medication"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.MedicationOrder.DispenseRequest.Medication"
+    options {
+      [google.fhir.proto.field_description]: "Product to be supplied"
+    }
+  }
+  field {
+    name: "validity_period"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Period"
+    options {
+      [google.fhir.proto.field_description]: "Time period supply is authorized for"
+    }
+  }
+  field {
+    name: "number_of_repeats_allowed"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.PositiveInt"
+    options {
+      [google.fhir.proto.field_description]: "Number of refills authorized"
+    }
+  }
+  field {
+    name: "quantity"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Quantity"
+    options {
+      [google.fhir.proto.field_description]: "Amount of medication to supply per dispense"
+    }
+  }
+  field {
+    name: "expected_supply_duration"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Quantity"
+    options {
+      [google.fhir.proto.field_description]: "Number of days supply per dispense"
+    }
+  }
+  nested_type {
+    name: "Medication"
+    field {
+      name: "codeable_concept"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+      oneof_index: 0
+    }
+    field {
+      name: "reference"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Reference"
+      options {
+        [google.fhir.proto.valid_reference_type]: "Medication"
+      }
+      oneof_index: 0
+    }
+    options {
+      [google.fhir.proto.is_choice_type]: true
+    }
+    oneof_decl {
+      name: "medication"
+    }
+  }
+}
+nested_type {
+  name: "Substitution"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "type"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "generic | formulary +"
+    }
+  }
+  field {
+    name: "reason"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+    options {
+      [google.fhir.proto.field_description]: "Why should (not) substitution be made"
+    }
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MedicationOrder.\nPrescription of medication to for patient.\nSee http://hl7.org/fhir/StructureDefinition/MedicationOrder"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MedicationOrder"
+}

@@ -1,0 +1,27 @@
+name: "PrimitiveType"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for PrimitiveType, last updated 2019-12-31T21:03:40.621+11:00.\nParent type for DataTypes with a simple value.\nSee http://hl7.org/fhir/StructureDefinition/PrimitiveType"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/PrimitiveType"
+  [google.fhir.proto.is_abstract_type]: true
+}

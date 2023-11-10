@@ -1,0 +1,19 @@
+
+value_us: 32503640400000000
+timezone: "Australia/Sydney"
+precision: YEAR
+
+---
+value_us: -5362020292000000
+timezone: "Australia/Sydney"
+precision: MONTH
+
+---
+value_us: -36000000000
+timezone: "Australia/Sydney"
+precision: DAY
+
+---
+value_us: 43200123000
+timezone: "Z"
+precision: MILLISECOND

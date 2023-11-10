@@ -1,0 +1,7 @@
+{"reference": "Patient/spaces not allowed"}
+{"reference": "Patient/\"notallowed"}
+{"reference": "Unknown/resourceType"}
+{"reference": "#spaces not allowed"}
+{"uri": "invalidField"}
+{"patient_id": "unknownField"}
+{"patientId": "unknownField"}

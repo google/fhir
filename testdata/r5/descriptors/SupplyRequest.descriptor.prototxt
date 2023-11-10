@@ -1,0 +1,458 @@
+name: "SupplyRequest"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Id"
+  options {
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Meta"
+  options {
+    [google.fhir.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Uri"
+  options {
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Code"
+  options {
+    [google.fhir.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Narrative"
+  options {
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.protobuf.Any"
+  options {
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  number: 7
+  options {
+    [google.fhir.proto.reserved_reason]: "Field 7 reserved for strongly-typed ContainedResource for id: SupplyRequest.contained"
+  }
+}
+field {
+  name: "extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 9
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "identifier"
+  number: 10
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Identifier"
+  options {
+    [google.fhir.proto.field_description]: "Business Identifier for SupplyRequest"
+  }
+}
+field {
+  name: "status"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.SupplyRequest.StatusCode"
+  options {
+    [google.fhir.proto.field_description]: "draft | active | suspended +"
+  }
+}
+field {
+  name: "category"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "The kind of supply (central, non-stock, etc.)"
+  }
+}
+field {
+  name: "priority"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.SupplyRequest.PriorityCode"
+  options {
+    [google.fhir.proto.field_description]: "routine | urgent | asap | stat"
+  }
+}
+field {
+  name: "item"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.SupplyRequest.ItemX"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Medication, Substance, or Device requested to be supplied"
+  }
+}
+field {
+  name: "quantity"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Quantity"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "The requested amount of the item indicated"
+  }
+}
+field {
+  name: "parameter"
+  number: 16
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.SupplyRequest.Parameter"
+  options {
+    [google.fhir.proto.field_description]: "Ordered item details"
+  }
+}
+field {
+  name: "occurrence"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.SupplyRequest.OccurrenceX"
+  options {
+    [google.fhir.proto.field_description]: "When the request should be fulfilled"
+  }
+}
+field {
+  name: "authored_on"
+  number: 18
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.DateTime"
+  options {
+    [google.fhir.proto.field_description]: "When the request was made"
+  }
+}
+field {
+  name: "requester"
+  number: 19
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Individual making the request"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.valid_reference_type]: "PractitionerRole"
+    [google.fhir.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "RelatedPerson"
+    [google.fhir.proto.valid_reference_type]: "Device"
+  }
+}
+field {
+  name: "supplier"
+  number: 20
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Who is intended to fulfill the request"
+    [google.fhir.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.valid_reference_type]: "HealthcareService"
+  }
+}
+field {
+  name: "reason"
+  number: 21
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.CodeableReference"
+  options {
+    [google.fhir.proto.field_description]: "The reason why the supply item was requested"
+  }
+}
+field {
+  name: "deliver_from"
+  number: 22
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "The origin of the supply"
+    [google.fhir.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.valid_reference_type]: "Location"
+  }
+}
+field {
+  name: "deliver_to"
+  number: 23
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "The destination of the supply"
+    [google.fhir.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.valid_reference_type]: "Location"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+  }
+}
+nested_type {
+  name: "StatusCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r5.core.SupplyRequestStatusCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/supplyrequest-status"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
+  name: "PriorityCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r5.core.RequestPriorityCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/request-priority"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
+  name: "ItemX"
+  field {
+    name: "codeable_concept"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.CodeableConcept"
+    oneof_index: 0
+  }
+  field {
+    name: "reference"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Reference"
+    options {
+      [google.fhir.proto.valid_reference_type]: "Medication"
+      [google.fhir.proto.valid_reference_type]: "Substance"
+      [google.fhir.proto.valid_reference_type]: "Device"
+    }
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+nested_type {
+  name: "Parameter"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Id"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
+    }
+  }
+  field {
+    name: "code"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.CodeableConcept"
+    options {
+      [google.fhir.proto.field_description]: "Item detail"
+    }
+  }
+  field {
+    name: "value"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.SupplyRequest.Parameter.ValueX"
+    options {
+      [google.fhir.proto.field_description]: "Value of detail"
+    }
+  }
+  nested_type {
+    name: "ValueX"
+    field {
+      name: "codeable_concept"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.CodeableConcept"
+      oneof_index: 0
+    }
+    field {
+      name: "quantity"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Quantity"
+      oneof_index: 0
+    }
+    field {
+      name: "range"
+      number: 3
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Range"
+      oneof_index: 0
+    }
+    field {
+      name: "boolean"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Boolean"
+      oneof_index: 0
+    }
+    options {
+      [google.fhir.proto.is_choice_type]: true
+    }
+    oneof_decl {
+      name: "choice"
+    }
+  }
+}
+nested_type {
+  name: "OccurrenceX"
+  field {
+    name: "date_time"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.DateTime"
+    oneof_index: 0
+  }
+  field {
+    name: "period"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Period"
+    oneof_index: 0
+  }
+  field {
+    name: "timing"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Timing"
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for SupplyRequest, last updated 2019-12-31T21:03:40.621+11:00.\nRequest for a medication, substance or device.\nSee http://hl7.org/fhir/StructureDefinition/SupplyRequest"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/SupplyRequest"
+}

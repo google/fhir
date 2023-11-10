@@ -1,0 +1,74 @@
+id {
+  value: "father"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>Father died of a heart attack aged 74</div>"
+  }
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter Patient"
+  }
+}
+date {
+  value_us: 1300366800000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+status {
+  value: COMPLETED
+}
+relationship {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/familial-relationship"
+    }
+    code {
+      value: "father"
+    }
+  }
+}
+condition {
+  code {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "315619001"
+      }
+      display {
+        value: "Myocardial Infarction"
+      }
+    }
+    text {
+      value: "Heart Attack"
+    }
+  }
+  onset {
+    quantity {
+      value {
+        value: "74"
+      }
+      unit {
+        value: "a"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+    }
+  }
+  note {
+    text {
+      value: "Was fishing at the time. At least he went doing someting he loved."
+    }
+  }
+}
+

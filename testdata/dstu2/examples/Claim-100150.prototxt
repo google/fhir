@@ -1,0 +1,133 @@
+id {
+  value: "100150"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>A human-readable rendering of the Oral Health Claim</div>"
+  }
+}
+type {
+  value: ORAL
+}
+identifier {
+  system {
+    value: "http://happyvalley.com/claim"
+  }
+  value {
+    value: "12345"
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+target {
+  organization_id {
+    value: "2"
+  }
+}
+organization {
+  organization_id {
+    value: "1"
+  }
+}
+use {
+  value: COMPLETE
+}
+priority {
+  code {
+    value: "normal"
+  }
+}
+payee {
+  type {
+    code {
+      value: "provider"
+    }
+  }
+}
+diagnosis {
+  sequence {
+    value: 1
+  }
+  diagnosis {
+    code {
+      value: "123456"
+    }
+  }
+}
+patient {
+  patient_id {
+    value: "1"
+  }
+}
+coverage {
+  sequence {
+    value: 1
+  }
+  focal {
+    value: true
+  }
+  coverage {
+    coverage_id {
+      value: "9876B1"
+    }
+  }
+  relationship {
+    code {
+      value: "self"
+    }
+  }
+}
+item {
+  sequence {
+    value: 1
+  }
+  type {
+    code {
+      value: "service"
+    }
+  }
+  provider {
+    practitioner_id {
+      value: "example"
+    }
+  }
+  service {
+    code {
+      value: "1200"
+    }
+  }
+  service_date {
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  unit_price {
+    value {
+      value: "135.57"
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+  net {
+    value {
+      value: "135.57"
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+}
+

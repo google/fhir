@@ -1,0 +1,69 @@
+name: "CapabilityStatementOauthUris"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "authorize"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Uri"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "OAuth2 \"authorize\" endpoint"
+  }
+}
+field {
+  name: "token"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Uri"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "OAuth2 \"token\" endpoint"
+  }
+}
+field {
+  name: "register"
+  number: 6
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Uri"
+  options {
+    [google.fhir.proto.field_description]: "OAuth2 dynamic registration endpoint"
+  }
+}
+field {
+  name: "manage"
+  number: 7
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Uri"
+  options {
+    [google.fhir.proto.field_description]: "User-facing authorization management entry point"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for oauth-uris.\nAutomated discovery of OAuth2 endpoints.\nSee http://fhir-registry.smarthealthit.org/StructureDefinition/oauth-uris"
+  [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Extension"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://fhir-registry.smarthealthit.org/StructureDefinition/oauth-uris"
+}

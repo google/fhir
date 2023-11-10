@@ -1,0 +1,133 @@
+id {
+  value: "102"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>\n\t\t\t\n      \n      <h2>DXA BONE DENSITOMETRY</h2>\n\t\t\t\n      \n      <table>\n\t\t\t\t\n        \n        <tr>\n\t\t\t\t\t\n          \n          <td>NAME</td>\n\t\t\t\t\t\n          \n          <td>XXXXXXX</td>\n\t\t\t\t\n        \n        </tr>\n\t\t\t\t\n        \n        <tr>\n\t\t\t\t\t\n          \n          <td>DOB</td>\n\t\t\t\t\t\n          \n          <td>10/02/1974</td>\n\t\t\t\t\n        \n        </tr>\n\t\t\t\t\n        \n        <tr>\n\t\t\t\t\t\n          \n          <td>REFERRING DR</td>\n\t\t\t\t\t\n          \n          <td>Smith, Jane</td>\n\t\t\t\t\n        \n        </tr>\n\t\t\t\t\n        \n        <tr>\n\t\t\t\t\t\n          \n          <td>INDICATIONS</td>\n\t\t\t\t\t\n          \n          <td>Early menopause on estrogen levels. No period  for 18 months</td>\n\t\t\t\t\n        \n        </tr>\n\t\t\t\t\n        \n        <tr>\n\t\t\t\t\t\n          \n          <td>PROCEDURE</td>\n\t\t\t\t\t\n          \n          <td>Dual energy x-ray absorptiometry (DEXA)</td>\n\t\t\t\t\n        \n        </tr>\n\t\t\t\n      \n      </table>\n\t\t\t\n      \n      <h3>Bone Mineral Density</h3>\n\t\t\t\n      \n      <table>\n\t\t\t\t\n        \n        <tr>\n\t\t\t\t\t\n          \n          <td>Scan Type</td>\n\t\t\t\t\t\n          \n          <td>Region</td>\n\t\t\t\t\t\n          \n          <td>Measured</td>\n\t\t\t\t\t\n          \n          <td>Age</td>\n\t\t\t\t\t\n          \n          <td>BMD</td>\n\t\t\t\t\t\n          \n          <td>T-Score</td>\n\t\t\t\t\t\n          \n          <td>Z-Score</td>\n\t\t\t\t\t\n          \n          <td>?BMD(g/cm2)</td>\n\t\t\t\t\t\n          \n          <td>?BMD(%)</td>\n\t\t\t\t\n        \n        </tr>\n\t\t\t\t\n        \n        <tr>\n\t\t\t\t\t\n          \n          <td>AP Spine</td>\n\t\t\t\t\t\n          \n          <td>L1-L4</td>\n\t\t\t\t\t\n          \n          <td>17/06/2008</td>\n\t\t\t\t\t\n          \n          <td>34.4</td>\n\t\t\t\t\t\n          \n          <td>1.148 g/cm\302\262</td>\n\t\t\t\t\t\n          \n          <td>-0.4</td>\n\t\t\t\t\t\n          \n          <td>-0.5</td>\n\t\t\t\t\t\n          \n          <td>-</td>\n\t\t\t\t\t\n          \n          <td>-</td>\n\t\t\t\t\n        \n        </tr>\n\t\t\t\t\n        \n        <tr>\n\t\t\t\t\t\n          \n          <td>Left Femur</td>\n\t\t\t\t\t\n          \n          <td>Neck</td>\n\t\t\t\t\t\n          \n          <td>17/06/2008</td>\n\t\t\t\t\t\n          \n          <td>34.4</td>\n\t\t\t\t\t\n          \n          <td>0.891 g/cm\302\262</td>\n\t\t\t\t\t\n          \n          <td>-1.0</td>\n\t\t\t\t\t\n          \n          <td>-0.9</td>\n\t\t\t\t\t\n          \n          <td>-</td>\n\t\t\t\t\t\n          \n          <td>-</td>\n\t\t\t\t\n        \n        </tr>\n\t\t\t\t\n        \n        <tr>\n\t\t\t\t\t\n          \n          <td>Left Femur</td>\n\t\t\t\t\t\n          \n          <td>Total</td>\n\t\t\t\t\t\n          \n          <td>17/06/2008</td>\n\t\t\t\t\t\n          \n          <td>34.4</td>\n\t\t\t\t\t\n          \n          <td>0.887 g/cm\302\262</td>\n\t\t\t\t\t\n          \n          <td>-1.2</td>\n\t\t\t\t\t\n          \n          <td>-1.3</td>\n\t\t\t\t\t\n          \n          <td>-</td>\n\t\t\t\t\t\n          \n          <td>-</td>\n\t\t\t\t\n        \n        </tr>\n\t\t\t\t\n        \n        <tr>\n\t\t\t\t\t\n          \n          <td>Right Femur</td>\n\t\t\t\t\t\n          \n          <td>Neck</td>\n\t\t\t\t\t\n          \n          <td>17/06/2008</td>\n\t\t\t\t\t\n          \n          <td>34.4</td>\n\t\t\t\t\t\n          \n          <td>0.885 g/cm\302\262</td>\n\t\t\t\t\t\n          \n          <td>-1.0</td>\n\t\t\t\t\t\n          \n          <td>-1.0</td>\n\t\t\t\t\t\n          \n          <td>-</td>\n\t\t\t\t\t\n          \n          <td>-</td>\n\t\t\t\t\n        \n        </tr>\n\t\t\t\t\n        \n        <tr>\n\t\t\t\t\t\n          \n          <td>Right Femur</td>\n\t\t\t\t\t\n          \n          <td>Total</td>\n\t\t\t\t\t\n          \n          <td>17/06/2008</td>\n\t\t\t\t\t\n          \n          <td>34.4</td>\n\t\t\t\t\t\n          \n          <td>0.867 g/cm\302\262</td>\n\t\t\t\t\t\n          \n          <td>-1.4</td>\n\t\t\t\t\t\n          \n          <td>-1.4</td>\n\t\t\t\t\t\n          \n          <td>-</td>\n\t\t\t\t\t\n          \n          <td>-</td>\n\t\t\t\t\n        \n        </tr>\n\t\t\t\n      \n      </table>\n\t\t\t\n      \n      <p>Assessment:</p>\n\t\t\t\n      \n      <ul>\n\t\t\t\t\n        \n        <li>The Spine L1-L4 BMD is normal.</li>\n\t\t\t\t\n        \n        <li>The Left Femur Neck BMD is in the osteopenic range. Relative fracture risk is about 2.</li>\n\t\t\t\t\n        \n        <li>The Left Femur Total BMD is in the osteopenic range. Relative fracture risk is about 2.</li>\n\t\t\t\t\n        \n        <li>The Right Femur Neck BMD is in the osteopenic range. Relative fracture risk is about 2.</li>\n\t\t\t\t\n        \n        <li>The Right Femur Total BMD is in the osteopenic range. Relative fracture risk is about 2.</li>\n\t\t\t\n      \n      </ul>\n\t\t\t\n      \n      <p>\n\t\t\t\t\n        \n        <b>COMMENT</b>\n\t\t\t\n      \n      </p>\n\t\t\t\n      \n      <p>Osteopenia on measured BMD. The estimated 10-year probability of fracture based on present age, gender and measured BMD is less than 10%. This absolute fracture risk remains low. A follow-up assessment may be considered in 2 to 3 years to monitor the trend in BMD.</p>\n\t\t\t\n      \n      <p>Thank you for your referral.  Dr Peter Ng  17/06/2008</p>\n\t\t\t\n      \n      <pre>\nNote:\nWHO classification of osteoporosis (WHO Technical Report Series 1994: 843)\n- Normal: T-score equal to -1.0 s.d. or higher\n- Osteopenia: T-score  between -1.0 and -2.5 s.d.\n- Osteoporosis: T-score equal to -2.5 s.d. or lower\n- Severe/Established osteoporosis: Osteoporosis with one or more fragility fracture.\nT-score: The number of s.d. from the mean BMD for a gender-matched young adult population.\nZ-score: The number of s.d. from the mean BMD for an age-, weight- and gender-matched population.\nReference for 10-year probability of fracture risk: Kanis JA, Johnell O, Oden A, Dawson A,  De Laet C, Jonsson B. Ten year probabilities of osteoporotic fractures according to BMD and diagnostic thresholds. Osteoporos.Int. 2001;12(12):989-995.\nGE LUNAR PRODIGY DENSITOMETER\n</pre>\n\t\t\n    \n    </div>"
+  }
+}
+contained {
+  observation {
+    id {
+      value: "r1"
+    }
+    status {
+      value: FINAL
+    }
+    code {
+      coding {
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "24701-5"
+        }
+        display {
+          value: "Femur DXA Bone density"
+        }
+      }
+    }
+    subject {
+      patient_id {
+        value: "pat2"
+      }
+    }
+    performer {
+      organization_id {
+        value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+      }
+      display {
+        value: "Acme Imaging Diagnostics"
+      }
+    }
+    value {
+      quantity {
+        value {
+          value: "0.887"
+        }
+        unit {
+          value: "g/cm\302\262"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "g/cm-2"
+        }
+      }
+    }
+    body_site {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "71341001:272741003=7771000"
+        }
+      }
+    }
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "38269-7"
+    }
+  }
+  text {
+    value: "DXA BONE DENSITOMETRY"
+  }
+}
+subject {
+  patient_id {
+    value: "pat2"
+  }
+}
+effective {
+  date_time {
+    value_us: 1213624800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+issued {
+  value_us: 1213744980000000
+  timezone: "+10:00"
+  precision: SECOND
+}
+performer {
+  organization_id {
+    value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+  }
+  display {
+    value: "Acme Imaging Diagnostics"
+  }
+}
+result {
+  fragment {
+    value: "r1"
+  }
+}
+coded_diagnosis {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "391040000"
+    }
+    display {
+      value: "At risk of osteoporotic fracture"
+    }
+  }
+}
+

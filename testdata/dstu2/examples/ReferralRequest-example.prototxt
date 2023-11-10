@@ -1,0 +1,115 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>Referral to Dr Dave for Beverly weaver to have grommets inserted in her r) ear</div>"
+  }
+}
+status {
+  value: REQUESTED
+}
+identifier {
+  system {
+    value: "http://orionhealth.com/fhir/apps/referralids"
+  }
+  value {
+    value: "ret4421"
+  }
+}
+type {
+  coding {
+    system {
+      value: "http://orionhealth.com/fhir/apps/referraltypes"
+    }
+    code {
+      value: "rfs"
+    }
+    display {
+      value: "Referral for service"
+    }
+  }
+}
+specialty {
+  coding {
+    system {
+      value: "http://orionhealth.com/fhir/apps/specialties"
+    }
+    code {
+      value: "ent"
+    }
+    display {
+      value: "ENT"
+    }
+  }
+}
+priority {
+  coding {
+    system {
+      value: "http://orionhealth.com/fhir/apps/prioritycodes"
+    }
+    code {
+      value: "med"
+    }
+    display {
+      value: "Medium"
+    }
+  }
+}
+patient {
+  uri {
+    value: "https://fhir.orionhealth.com/blaze/fhir/Patient/77662"
+  }
+  display {
+    value: "Beverly Weaver"
+  }
+}
+requester {
+  uri {
+    value: "https://fhir.orionhealth.com/blaze/fhir/Practitioner/77272"
+  }
+  display {
+    value: "Serena Shrink"
+  }
+}
+recipient {
+  uri {
+    value: "https://fhir.orionhealth.com/blaze/fhir/Practitioner/76597"
+  }
+  display {
+    value: "Dr Dave"
+  }
+}
+date_sent {
+  value_us: 1392296400000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+reason {
+  text {
+    value: "For consideration of Grommets"
+  }
+}
+description {
+  value: "In the past 2 years Beverly has had 6 instances of r) sided Otitis media. She is     falling behind her peers at school, and displaying some learning difficulties."
+}
+service_requested {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "172676009"
+    }
+    display {
+      value: "Myringotomy and insertion of tympanic ventilation tube"
+    }
+  }
+  text {
+    value: "Insertion of grommets"
+  }
+}
+

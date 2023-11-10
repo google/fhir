@@ -22,6 +22,9 @@ import (
 
 	"github.com/google/fhir/go/fhirversion"
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
+	c2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/codes_go_proto"     // _strip
+	d2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/datatypes_go_proto" // _strip
+	r2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/resources_go_proto" // _strip
 	c4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/codes_go_proto"
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	r4outcomepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/operation_outcome_go_proto"
@@ -48,6 +51,32 @@ func TestReportValidationError(t *testing.T) {
 		ver  fhirversion.Version
 		want *MultiVersionOperationOutcome
 	}{
+		// _strip_begin
+		{
+			name: "r2 ErrorReporter",
+			err:  &jsonpbhelper.UnmarshalError{Details: detail1},
+			ver:  fhirversion.DSTU2,
+			want: &MultiVersionOperationOutcome{
+				Version: fhirversion.DSTU2,
+				R2Outcome: &r2pb.OperationOutcome{
+					Issue: []*r2pb.OperationOutcome_Issue{
+						&r2pb.OperationOutcome_Issue{
+							Code: &c2pb.IssueTypeCode{
+								Value: c2pb.IssueTypeCode_VALUE,
+							},
+							Severity: &c2pb.IssueSeverityCode{
+								Value: c2pb.IssueSeverityCode_ERROR,
+							},
+							Diagnostics: &d2pb.String{Value: detail1},
+							Location: []*d2pb.String{
+								&d2pb.String{Value: elementPath1},
+							},
+						},
+					},
+				},
+			},
+		},
+		// _strip_end
 		{
 			name: "r3 ErrorReporter",
 			err:  &jsonpbhelper.UnmarshalError{Details: detail1},
@@ -118,6 +147,32 @@ func TestReportValidationWarning(t *testing.T) {
 		ver  fhirversion.Version
 		want *MultiVersionOperationOutcome
 	}{
+		// _strip_begin
+		{
+			name: "r2 ErrorReporter",
+			err:  &jsonpbhelper.UnmarshalError{Details: detail1},
+			ver:  fhirversion.DSTU2,
+			want: &MultiVersionOperationOutcome{
+				Version: fhirversion.DSTU2,
+				R2Outcome: &r2pb.OperationOutcome{
+					Issue: []*r2pb.OperationOutcome_Issue{
+						&r2pb.OperationOutcome_Issue{
+							Code: &c2pb.IssueTypeCode{
+								Value: c2pb.IssueTypeCode_VALUE,
+							},
+							Severity: &c2pb.IssueSeverityCode{
+								Value: c2pb.IssueSeverityCode_WARNING,
+							},
+							Diagnostics: &d2pb.String{Value: detail1},
+							Location: []*d2pb.String{
+								&d2pb.String{Value: elementPath1},
+							},
+						},
+					},
+				},
+			},
+		},
+		// _strip_end
 		{
 			name: "r3 ErrorReporter",
 			err:  &jsonpbhelper.UnmarshalError{Details: detail1},
@@ -189,6 +244,67 @@ func TestReportValidationError_Accumulate(t *testing.T) {
 		ver          fhirversion.Version
 		want         *MultiVersionOperationOutcome
 	}{
+		// _strip_begin
+		{
+			name:         "r2 ErrorReporter, multiple errors",
+			elementPaths: []string{elementPath1, elementPath2, elementPath3},
+			err: jsonpbhelper.UnmarshalErrorList{
+				&jsonpbhelper.UnmarshalError{
+					Details: detail1,
+				},
+				&jsonpbhelper.UnmarshalError{
+					Details: detail2,
+				},
+				&jsonpbhelper.UnmarshalError{
+					Details: detail3,
+				},
+			},
+			ver: fhirversion.DSTU2,
+			want: &MultiVersionOperationOutcome{
+				Version: fhirversion.DSTU2,
+				R2Outcome: &r2pb.OperationOutcome{
+					Issue: []*r2pb.OperationOutcome_Issue{
+						&r2pb.OperationOutcome_Issue{
+							Code: &c2pb.IssueTypeCode{
+								Value: c2pb.IssueTypeCode_VALUE,
+							},
+							Severity: &c2pb.IssueSeverityCode{
+								Value: c2pb.IssueSeverityCode_ERROR,
+							},
+							Diagnostics: &d2pb.String{Value: detail1},
+							Location: []*d2pb.String{
+								&d2pb.String{Value: elementPath1},
+							},
+						},
+						&r2pb.OperationOutcome_Issue{
+							Code: &c2pb.IssueTypeCode{
+								Value: c2pb.IssueTypeCode_VALUE,
+							},
+							Severity: &c2pb.IssueSeverityCode{
+								Value: c2pb.IssueSeverityCode_ERROR,
+							},
+							Diagnostics: &d2pb.String{Value: detail2},
+							Location: []*d2pb.String{
+								&d2pb.String{Value: elementPath2},
+							},
+						},
+						&r2pb.OperationOutcome_Issue{
+							Code: &c2pb.IssueTypeCode{
+								Value: c2pb.IssueTypeCode_VALUE,
+							},
+							Severity: &c2pb.IssueSeverityCode{
+								Value: c2pb.IssueSeverityCode_ERROR,
+							},
+							Diagnostics: &d2pb.String{Value: detail3},
+							Location: []*d2pb.String{
+								&d2pb.String{Value: elementPath3},
+							},
+						},
+					},
+				},
+			},
+		},
+		// _strip_end
 		{
 			name:         "r3 ErrorReporter, multiple errors",
 			elementPaths: []string{elementPath1, elementPath2, elementPath3},

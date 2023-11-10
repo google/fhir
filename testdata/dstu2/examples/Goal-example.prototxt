@@ -1,0 +1,96 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: ADDITIONAL
+  }
+  div {
+    value: "<div>\n\t\t\t<p> A simple care goal for a patient to lose weight due to obesity.</p>\n\t\t</div>"
+  }
+}
+extension {
+  extension {
+    url {
+      value: "measure"
+    }
+    value {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://loinc.org"
+          }
+          code {
+            value: "3141-9"
+          }
+          display {
+            value: "Weight Measured"
+          }
+        }
+      }
+    }
+  }
+  extension {
+    url {
+      value: "detail"
+    }
+    value {
+      range {
+        low {
+          value {
+            value: "160"
+          }
+          unit {
+            value: "lbs"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "[lb_av]"
+          }
+        }
+        high {
+          value {
+            value: "180"
+          }
+          unit {
+            value: "lbs"
+          }
+          system {
+            value: "http://unitsofmeasure.org"
+          }
+          code {
+            value: "[lb_av]"
+          }
+        }
+      }
+    }
+  }
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/goal-target"
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter James Chalmers"
+  }
+}
+description {
+  value: "Target weight is 160 to 180 lbs."
+}
+status {
+  value: IN_PROGRESS
+}
+addresses {
+  condition_id {
+    value: "12345"
+  }
+  display {
+    value: "obesity"
+  }
+}
+

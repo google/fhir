@@ -1,0 +1,77 @@
+name: "Narrative"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "status"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Narrative.StatusCode"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "generated | extensions | additional | empty"
+  }
+}
+field {
+  name: "div"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Xhtml"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Limited xhtml content"
+    [google.fhir.proto.fhir_path_constraint]: "htmlChecks()"
+    [google.fhir.proto.fhir_path_constraint]: "htmlChecks()"
+  }
+}
+nested_type {
+  name: "StatusCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r5.core.NarrativeStatusCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/narrative-status"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Narrative, last updated 2019-12-31T21:03:40.621+11:00.\nHuman-readable summary of the resource (essential clinical and business information).\nSee http://hl7.org/fhir/StructureDefinition/Narrative"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Narrative"
+}

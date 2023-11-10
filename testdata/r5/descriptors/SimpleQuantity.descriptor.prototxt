@@ -1,0 +1,75 @@
+name: "SimpleQuantity"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "value"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Decimal"
+  options {
+    [google.fhir.proto.field_description]: "Numerical value (with implicit precision)"
+  }
+}
+field {
+  number: 4
+  options {
+    [google.fhir.proto.reserved_reason]: "Quantity.comparator not present on profile."
+  }
+}
+field {
+  name: "unit"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Unit representation"
+  }
+}
+field {
+  name: "system"
+  number: 6
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Uri"
+  options {
+    [google.fhir.proto.field_description]: "System that defines coded unit form"
+  }
+}
+field {
+  name: "code"
+  number: 7
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Code"
+  options {
+    [google.fhir.proto.field_description]: "Coded form of the unit"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for SimpleQuantity, last updated 2019-12-31T21:03:40.621+11:00.\nA fixed quantity (no comparator).\nSee http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
+  [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Quantity"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
+  [google.fhir.proto.fhir_path_message_constraint]: "code.empty() or system.exists()"
+  [google.fhir.proto.fhir_path_message_constraint]: "comparator.empty()"
+}

@@ -1,0 +1,389 @@
+name: "DataRequirement"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "type"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.DataRequirement.TypeCode"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "The type of the required data"
+  }
+}
+field {
+  name: "profile"
+  number: 4
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Canonical"
+  options {
+    [google.fhir.proto.field_description]: "The profile of the required data"
+  }
+}
+field {
+  name: "subject"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.DataRequirement.SubjectX"
+  options {
+    [google.fhir.proto.field_description]: "E.g. Patient, Practitioner, RelatedPerson, Organization, Location, Device"
+  }
+}
+field {
+  name: "must_support"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Indicates specific structure elements that are referenced by the knowledge module"
+  }
+}
+field {
+  name: "code_filter"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.DataRequirement.CodeFilter"
+  options {
+    [google.fhir.proto.field_description]: "What codes are expected"
+  }
+}
+field {
+  name: "date_filter"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.DataRequirement.DateFilter"
+  options {
+    [google.fhir.proto.field_description]: "What dates/date ranges are expected"
+  }
+}
+field {
+  name: "limit"
+  number: 9
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.PositiveInt"
+  options {
+    [google.fhir.proto.field_description]: "Number of results"
+  }
+}
+field {
+  name: "sort"
+  number: 10
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.DataRequirement.Sort"
+  options {
+    [google.fhir.proto.field_description]: "Order of the results"
+  }
+}
+nested_type {
+  name: "TypeCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r5.core.FHIRAllTypesValueSet.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/all-types"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
+  name: "SubjectX"
+  field {
+    name: "codeable_concept"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.CodeableConcept"
+    oneof_index: 0
+  }
+  field {
+    name: "reference"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Reference"
+    options {
+      [google.fhir.proto.valid_reference_type]: "Group"
+    }
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+nested_type {
+  name: "CodeFilter"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "path"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "A code-valued attribute to filter on"
+    }
+  }
+  field {
+    name: "search_param"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "A coded (token) parameter to search on"
+    }
+  }
+  field {
+    name: "value_set"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Canonical"
+    options {
+      [google.fhir.proto.field_description]: "Valueset for the filter"
+    }
+  }
+  field {
+    name: "code"
+    number: 6
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Coding"
+    options {
+      [google.fhir.proto.field_description]: "What code is expected"
+    }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "path.exists() xor searchParam.exists()"
+  }
+}
+nested_type {
+  name: "DateFilter"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "path"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "A date-valued attribute to filter on"
+    }
+  }
+  field {
+    name: "search_param"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "A date valued parameter to search on"
+    }
+  }
+  field {
+    name: "value"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.DataRequirement.DateFilter.ValueX"
+    options {
+      [google.fhir.proto.field_description]: "The value of the filter, as a Period, DateTime, or Duration value"
+    }
+  }
+  nested_type {
+    name: "ValueX"
+    field {
+      name: "date_time"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.DateTime"
+      oneof_index: 0
+    }
+    field {
+      name: "period"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Period"
+      oneof_index: 0
+    }
+    field {
+      name: "duration"
+      number: 3
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Duration"
+      oneof_index: 0
+    }
+    options {
+      [google.fhir.proto.is_choice_type]: true
+    }
+    oneof_decl {
+      name: "choice"
+    }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "path.exists() xor searchParam.exists()"
+  }
+}
+nested_type {
+  name: "Sort"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "path"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "The name of the attribute to perform the sort"
+    }
+  }
+  field {
+    name: "direction"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.DataRequirement.Sort.DirectionCode"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "ascending | descending"
+    }
+  }
+  nested_type {
+    name: "DirectionCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r5.core.SortDirectionCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/sort-direction"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+    }
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for DataRequirement, last updated 2019-12-31T21:03:40.621+11:00.\nDescribes a required data item.\nSee http://hl7.org/fhir/StructureDefinition/DataRequirement"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/DataRequirement"
+}

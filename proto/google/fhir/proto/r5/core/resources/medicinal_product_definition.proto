@@ -1,0 +1,325 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/medicinal_product_definition_go_proto";
+
+// Auto-generated from StructureDefinition for MedicinalProductDefinition.
+// Detailed definition of a medicinal product.
+// See http://hl7.org/fhir/StructureDefinition/MedicinalProductDefinition
+message MedicinalProductDefinition {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MedicinalProductDefinition";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // MedicinalProductDefinition.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business identifier for this product. Could be an MPID
+  repeated Identifier identifier = 10;
+
+  // Regulatory type, e.g. Investigational or Authorized
+  CodeableConcept type = 11;
+
+  // If this medicine applies to human or veterinary uses
+  CodeableConcept domain = 12;
+
+  // A business identifier relating to a specific version of the product
+  String version = 13;
+
+  // The status within the lifecycle of this product record
+  CodeableConcept status = 14;
+
+  // The date at which the given status became applicable
+  DateTime status_date = 15;
+
+  // General description of this product
+  Markdown description = 16;
+
+  // The dose form for a single part product, or combined form of a multiple
+  // part product
+  CodeableConcept combined_pharmaceutical_dose_form = 17;
+
+  // The path by which the product is taken into or makes contact with the body
+  repeated CodeableConcept route = 18;
+
+  // Description of indication(s) for this product, used when structured
+  // indications are not required
+  Markdown indication = 19;
+
+  // The legal status of supply of the medicinal product as classified by the
+  // regulator
+  CodeableConcept legal_status_of_supply = 20;
+
+  // Whether the Medicinal Product is subject to additional monitoring for
+  // regulatory reasons
+  CodeableConcept additional_monitoring_indicator = 21;
+
+  // Whether the Medicinal Product is subject to special measures for regulatory
+  // reasons
+  repeated CodeableConcept special_measures = 22;
+
+  // If authorised for use in children
+  CodeableConcept pediatric_use_indicator = 23;
+
+  // Allows the product to be classified by various systems
+  repeated CodeableConcept classification = 24;
+
+  // Marketing status of the medicinal product, in contrast to marketing
+  // authorization
+  repeated MarketingStatus marketing_status = 25;
+
+  // Package type for the product
+  repeated CodeableConcept packaged_medicinal_product = 26;
+
+  // Types of medicinal manufactured items and/or devices that this product
+  // consists of, such as tablets, capsule, or syringes
+  repeated Reference comprised_of = 27 [
+    (.google.fhir.proto.valid_reference_type) = "ManufacturedItemDefinition",
+    (.google.fhir.proto.valid_reference_type) = "DeviceDefinition"
+  ];
+
+  // The ingredients of this medicinal product - when not detailed in other
+  // resources
+  repeated CodeableConcept ingredient = 28;
+
+  // Any component of the drug product which is not the chemical entity defined
+  // as the drug substance, or an excipient in the drug product
+  repeated CodeableReference impurity = 29;
+
+  // Additional documentation about the medicinal product
+  repeated Reference attached_document = 30
+      [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
+
+  // A master file for the medicinal product (e.g. Pharmacovigilance System
+  // Master File)
+  repeated Reference master_file = 31
+      [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
+
+  // A product specific contact, person (in a role), or an organization
+  message Contact {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Allows the contact to be classified, for example QPPV, Pharmacovigilance
+    // Enquiry Information
+    CodeableConcept type = 4;
+
+    // A product specific contact, person (in a role), or an organization
+    Reference contact = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+    ];
+  }
+  repeated Contact contact = 32;
+
+  // Clinical trials or studies that this product is involved in
+  repeated Reference clinical_trial = 33
+      [(.google.fhir.proto.valid_reference_type) = "ResearchStudy"];
+
+  // A code that this product is known by, within some formal terminology
+  repeated Coding code = 34;
+
+  // The product's name, including full name and possibly coded parts
+  message Name {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The full product name
+    String product_name = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Type of product name, such as rINN, BAN, Proprietary, Non-Proprietary
+    CodeableConcept type = 5;
+
+    // Coding words or phrases of the name
+    message Part {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // A fragment of a product name
+      String part = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Identifying type for this part of the name (e.g. strength part)
+      CodeableConcept type = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated Part part = 6;
+
+    // Country and jurisdiction where the name applies
+    message Usage {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Country code for where this name applies
+      CodeableConcept country = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Jurisdiction code for where this name applies
+      CodeableConcept jurisdiction = 5;
+
+      // Language code for this name
+      CodeableConcept language = 6
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated Usage usage = 7;
+  }
+  repeated Name name = 35
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Reference to another product, e.g. for linking authorised to
+  // investigational product
+  message CrossReference {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Reference to another product, e.g. for linking authorised to
+    // investigational product
+    CodeableReference product = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // The type of relationship, for instance branded to generic or virtual to
+    // actual product
+    CodeableConcept type = 5;
+  }
+  repeated CrossReference cross_reference = 36;
+
+  // A manufacturing or administrative process for the medicinal product
+  message Operation {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The type of manufacturing operation e.g. manufacturing itself,
+    // re-packaging
+    CodeableReference type = 4;
+
+    // Date range of applicability
+    Period effective_date = 5;
+
+    // The organization responsible for the particular process, e.g. the
+    // manufacturer or importer
+    repeated Reference organization = 6
+        [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+    // Specifies whether this process is considered proprietary or confidential
+    CodeableConcept confidentiality_indicator = 7;
+  }
+  repeated Operation operation = 37;
+
+  // Key product features such as "sugar free", "modified release"
+  message Characteristic {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // A code expressing the type of characteristic
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // A value for the characteristic
+    message ValueX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        CodeableConcept codeable_concept = 1;
+        Markdown markdown = 2;
+        Quantity quantity = 3;
+        Integer integer = 4;
+        Date date = 5;
+        Boolean boolean = 6;
+        Attachment attachment = 7;
+      }
+    }
+    ValueX value = 5;
+  }
+  repeated Characteristic characteristic = 38;
+}

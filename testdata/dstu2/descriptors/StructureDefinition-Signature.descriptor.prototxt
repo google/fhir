@@ -1,0 +1,113 @@
+name: "Signature"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Id"
+  options {
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "type"
+  number: 3
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Coding"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Indication of the reason the entity signed the object(s)"
+  }
+}
+field {
+  name: "when"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Instant"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "When the signature was created"
+  }
+}
+field {
+  name: "who"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Signature.Who"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Who signed the signature"
+  }
+}
+field {
+  name: "content_type"
+  number: 6
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.MimeTypeCode"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "The technical format of the signature"
+  }
+}
+field {
+  name: "blob"
+  number: 7
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Base64Binary"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "The actual signature content (XML DigSig. JWT, picture, etc.)"
+  }
+}
+nested_type {
+  name: "Who"
+  field {
+    name: "uri"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Uri"
+    oneof_index: 0
+  }
+  field {
+    name: "reference"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Reference"
+    options {
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.valid_reference_type]: "RelatedPerson"
+      [google.fhir.proto.valid_reference_type]: "Patient"
+      [google.fhir.proto.valid_reference_type]: "Device"
+      [google.fhir.proto.valid_reference_type]: "Organization"
+    }
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "who"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Signature.\nA digital Signature - XML DigSig, JWT, Graphical image of signature, etc.\nSee http://hl7.org/fhir/StructureDefinition/Signature"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Signature"
+}

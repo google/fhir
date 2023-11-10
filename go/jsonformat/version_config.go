@@ -35,6 +35,10 @@ type config interface {
 // getConfig returns the converter config for the given FHIR version.
 func getConfig(ver fhirversion.Version) (config, error) {
 	switch ver {
+	// _strip_begin
+	case fhirversion.DSTU2:
+		return r2Config{}, nil
+	// _strip_end
 	case fhirversion.STU3:
 		return r3Config{}, nil
 	case fhirversion.R4:

@@ -29,6 +29,11 @@ import (
 	"google.golang.org/protobuf/testing/protocmp"
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
+	// _strip_begin
+	d2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/datatypes_go_proto"
+	r2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/resources_go_proto"
+
+	// _strip_end
 	c4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/codes_go_proto"
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	r4binarypb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/binary_go_proto"
@@ -177,6 +182,40 @@ func TestMarshalContainedResource(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.ContainedResource{
+						OneofResource: &r2pb.ContainedResource_Patient{
+							Patient: &r2pb.Patient{
+								Active: &d2pb.Boolean{
+									Value: true,
+								},
+								Name: []*d2pb.HumanName{{
+									Given: []*d2pb.String{{
+										Value: "Toby",
+										Id: &d2pb.Id{
+											Value: "a3",
+										},
+										Extension: []*d2pb.Extension{{
+											Url: &d2pb.Uri{
+												Value: "http://hl7.org/fhir/StructureDefinition/qualifier",
+											},
+											Value: &d2pb.Extension_ValueX{
+												Choice: &d2pb.Extension_ValueX_Code{
+													Code: &d2pb.Code{
+														Value: "MID",
+													},
+												},
+											},
+										}},
+									}},
+								}},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4pb.ContainedResource{
@@ -416,6 +455,36 @@ func TestMarshalContainedResource(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.ContainedResource{
+						OneofResource: &r2pb.ContainedResource_Patient{
+							Patient: &r2pb.Patient{
+								Id: &d2pb.Id{Value: "wan"},
+								Contained: []*r2pb.ContainedResource{
+									{
+										OneofResource: &r2pb.ContainedResource_Patient{
+											Patient: &r2pb.Patient{
+												Id: &d2pb.Id{Value: "nat"},
+												Contained: []*r2pb.ContainedResource{
+													{
+														OneofResource: &r2pb.ContainedResource_Patient{
+															Patient: &r2pb.Patient{
+																Id: &d2pb.Id{Value: "double-nat"},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.STU3,
 					r: &r3pb.ContainedResource{
@@ -531,6 +600,36 @@ func TestMarshalResource(t *testing.T) {
 						}},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Active: &d2pb.Boolean{
+							Value: true,
+						},
+						Name: []*d2pb.HumanName{{
+							Given: []*d2pb.String{{
+								Value: "Toby",
+								Id: &d2pb.Id{
+									Value: "a3",
+								},
+								Extension: []*d2pb.Extension{{
+									Url: &d2pb.Uri{
+										Value: "http://hl7.org/fhir/StructureDefinition/qualifier",
+									},
+									Value: &d2pb.Extension_ValueX{
+										Choice: &d2pb.Extension_ValueX_Code{
+											Code: &d2pb.Code{
+												Value: "MID",
+											},
+										},
+									},
+								}},
+							}},
+						}},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -700,6 +799,33 @@ func TestMarshalMessage(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Bundle{
+						Entry: []*r2pb.Bundle_Entry{{
+							Resource: &r2pb.ContainedResource{
+								OneofResource: &r2pb.ContainedResource_SearchParameter{
+									SearchParameter: &r2pb.SearchParameter{
+										Id: &d2pb.Id{
+											Value: "DomainResource-text",
+										},
+									},
+								},
+							}},
+							{Resource: &r2pb.ContainedResource{
+								OneofResource: &r2pb.ContainedResource_SearchParameter{
+									SearchParameter: &r2pb.SearchParameter{
+										Id: &d2pb.Id{
+											Value: "Resource-content",
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4pb.Bundle{
@@ -773,6 +899,34 @@ func TestMarshalMessage(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						BirthDate: &d2pb.Date{
+							ValueUs:   1463529600000000,
+							Precision: d2pb.Date_DAY,
+							Id: &d2pb.Id{
+								Value: "a3",
+							},
+							Extension: []*d2pb.Extension{{
+								Url: &d2pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_DateTime{
+										DateTime: &d2pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d2pb.DateTime_SECOND,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -840,6 +994,31 @@ func TestMarshalMessage(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						BirthDate: &d2pb.Date{
+							ValueUs:   1463529600000000,
+							Precision: d2pb.Date_DAY,
+							Extension: []*d2pb.Extension{{
+								Url: &d2pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_DateTime{
+										DateTime: &d2pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d2pb.DateTime_SECOND,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -912,6 +1091,40 @@ func TestMarshalMessage(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						BirthDate: &d2pb.Date{
+							Extension: []*d2pb.Extension{{
+								Url: &d2pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_DateTime{
+										DateTime: &d2pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d2pb.DateTime_SECOND,
+										},
+									},
+								},
+							}, {
+								Url: &d2pb.Uri{
+									Value: jsonpbhelper.PrimitiveHasNoValueURL,
+								},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_Boolean{
+										Boolean: &d2pb.Boolean{
+											Value: true,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -989,6 +1202,37 @@ func TestMarshalMessage(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Binary{
+						Content: &d2pb.Base64Binary{
+							Value: []byte{1, 2, 3, 4},
+							Extension: []*d2pb.Extension{{
+								Url: &d2pb.Uri{Value: jsonpbhelper.Base64BinarySeparatorStrideURL},
+								Extension: []*d2pb.Extension{
+									{
+										Url: &d2pb.Uri{Value: "separator"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_StringValue{
+												StringValue: &d2pb.String{Value: "  "},
+											},
+										},
+									},
+									{
+										Url: &d2pb.Uri{Value: "stride"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_PositiveInt{
+												PositiveInt: &d2pb.PositiveInt{Value: 2},
+											},
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				// _strip_end
 			},
 			want: map[string]interface{}{
 				"resourceType": "Binary",
@@ -1120,6 +1364,20 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						ManagingOrganization: &d2pb.Reference{
+							Reference: &d2pb.Reference_Uri{
+								Uri: &d2pb.String{
+									Value: "Organization/1",
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -1151,6 +1409,16 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Deceased: &r2pb.Patient_Deceased{
+							Deceased: &r2pb.Patient_Deceased_Boolean{Boolean: &d2pb.Boolean{Value: false}},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -1205,6 +1473,43 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d2pb.Extension{
+									{
+										Url: &d2pb.Uri{Value: "ombCategory"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_Coding{
+												Coding: &d2pb.Coding{
+													System: &d2pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d2pb.Code{Value: "2106-3"},
+												},
+											},
+										},
+									},
+									{
+										Url: &d2pb.Uri{Value: "text"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "White"}},
+										},
+									},
+								},
+							},
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "Rosie"}},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -1278,6 +1583,34 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						BirthDate: &d2pb.Date{
+							ValueUs:   1463529600000000,
+							Precision: d2pb.Date_DAY,
+							Id: &d2pb.Id{
+								Value: "a3",
+							},
+							Extension: []*d2pb.Extension{{
+								Url: &d2pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_DateTime{
+										DateTime: &d2pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d2pb.DateTime_SECOND,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -1345,6 +1678,40 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						BirthDate: &d2pb.Date{
+							Extension: []*d2pb.Extension{{
+								Url: &d2pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_DateTime{
+										DateTime: &d2pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d2pb.DateTime_SECOND,
+										},
+									},
+								},
+							}, {
+								Url: &d2pb.Uri{
+									Value: jsonpbhelper.PrimitiveHasNoValueURL,
+								},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_Boolean{
+										Boolean: &d2pb.Boolean{
+											Value: true,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -1410,6 +1777,34 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.ValueSet_CodeSystem{
+						Concept: []*r2pb.ValueSet_CodeSystem_Concept{
+							{
+								Code: &d2pb.Code{
+									Value: "code1",
+								},
+								Concept: []*r2pb.ValueSet_CodeSystem_Concept{
+									{
+										Code: &d2pb.Code{
+											Value: "code2",
+										},
+										Concept: []*r2pb.ValueSet_CodeSystem_Concept{
+											{
+												Code: &d2pb.Code{
+													Value: "code3",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4codesystempb.CodeSystem{
@@ -1480,6 +1875,34 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.ValueSet_CodeSystem{
+						Concept: []*r2pb.ValueSet_CodeSystem_Concept{
+							{
+								Code: &d2pb.Code{
+									Value: "code1",
+								},
+								Concept: []*r2pb.ValueSet_CodeSystem_Concept{
+									{
+										Code: &d2pb.Code{
+											Value: "code2",
+										},
+										Concept: []*r2pb.ValueSet_CodeSystem_Concept{
+											{
+												Code: &d2pb.Code{
+													Value: "code3",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4codesystempb.CodeSystem{
@@ -1599,6 +2022,20 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						ManagingOrganization: &d2pb.Reference{
+							Reference: &d2pb.Reference_Uri{
+								Uri: &d2pb.String{
+									Value: "Organization/1",
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -1630,6 +2067,16 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Deceased: &r2pb.Patient_Deceased{
+							Deceased: &r2pb.Patient_Deceased_Boolean{Boolean: &d2pb.Boolean{Value: false}},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -1684,6 +2131,43 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d2pb.Extension{
+									{
+										Url: &d2pb.Uri{Value: "ombCategory"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_Coding{
+												Coding: &d2pb.Coding{
+													System: &d2pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d2pb.Code{Value: "2106-3"},
+												},
+											},
+										},
+									},
+									{
+										Url: &d2pb.Uri{Value: "text"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "White"}},
+										},
+									},
+								},
+							},
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "Rosie"}},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -1778,6 +2262,39 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d2pb.Extension{
+									{
+										Url: &d2pb.Uri{Value: "ombCategory"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_Coding{
+												Coding: &d2pb.Coding{
+													System: &d2pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d2pb.Code{Value: "2106-3"},
+												},
+											},
+										},
+										Extension: []*d2pb.Extension{
+											{
+												Url: &d2pb.Uri{Value: "text"},
+												Value: &d2pb.Extension_ValueX{
+													Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "White"}},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -1853,6 +2370,34 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						BirthDate: &d2pb.Date{
+							ValueUs:   1463529600000000,
+							Precision: d2pb.Date_DAY,
+							Id: &d2pb.Id{
+								Value: "a3",
+							},
+							Extension: []*d2pb.Extension{{
+								Url: &d2pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_DateTime{
+										DateTime: &d2pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d2pb.DateTime_SECOND,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -1927,6 +2472,40 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						BirthDate: &d2pb.Date{
+							Extension: []*d2pb.Extension{{
+								Url: &d2pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_DateTime{
+										DateTime: &d2pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d2pb.DateTime_SECOND,
+										},
+									},
+								},
+							}, {
+								Url: &d2pb.Uri{
+									Value: jsonpbhelper.PrimitiveHasNoValueURL,
+								},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_Boolean{
+										Boolean: &d2pb.Boolean{
+											Value: true,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -2000,6 +2579,34 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.ValueSet_CodeSystem{
+						Concept: []*r2pb.ValueSet_CodeSystem_Concept{
+							{
+								Code: &d2pb.Code{
+									Value: "code1",
+								},
+								Concept: []*r2pb.ValueSet_CodeSystem_Concept{
+									{
+										Code: &d2pb.Code{
+											Value: "code2",
+										},
+										Concept: []*r2pb.ValueSet_CodeSystem_Concept{
+											{
+												Code: &d2pb.Code{
+													Value: "code3",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4codesystempb.CodeSystem{
@@ -2070,6 +2677,34 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.ValueSet_CodeSystem{
+						Concept: []*r2pb.ValueSet_CodeSystem_Concept{
+							{
+								Code: &d2pb.Code{
+									Value: "code1",
+								},
+								Concept: []*r2pb.ValueSet_CodeSystem_Concept{
+									{
+										Code: &d2pb.Code{
+											Value: "code2",
+										},
+										Concept: []*r2pb.ValueSet_CodeSystem_Concept{
+											{
+												Code: &d2pb.Code{
+													Value: "code3",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4codesystempb.CodeSystem{
@@ -2119,6 +2754,22 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Id: &d2pb.Id{Value: "id1"},
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -2165,6 +2816,27 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition1/id"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/id"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -2220,6 +2892,27 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition1/id"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/ID"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -2306,6 +2999,27 @@ func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/extension-field"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/extension-field"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -2343,6 +3057,21 @@ func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: ""},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "id1"}},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -2373,6 +3102,20 @@ func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Extension: []*d2pb.Extension{
+							{
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "id1"}},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -2465,6 +3208,54 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d2pb.Extension{
+									{
+										Url: &d2pb.Uri{Value: "ombCategory"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_Coding{
+												Coding: &d2pb.Coding{
+													System: &d2pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d2pb.Code{Value: "2076-8"},
+												},
+											},
+										},
+									},
+									{
+										Url: &d2pb.Uri{Value: "text"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "Native Hawaiian or Other Pacific Islander"}},
+										},
+									},
+									{
+										Url: &d2pb.Uri{Value: "ombCategory"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_Coding{
+												Coding: &d2pb.Coding{
+													System: &d2pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d2pb.Code{Value: "2028-9"},
+												},
+											},
+										},
+									},
+									{
+										Url: &d2pb.Uri{Value: "text"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "Asian"}},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -2616,6 +3407,73 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/StructureDefinition/test"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{
+										StringValue: &d2pb.String{Value: "a"},
+									},
+								},
+							},
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/StructureDefinition/test"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{
+										StringValue: &d2pb.String{Value: "b"},
+									},
+								},
+							},
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/StructureDefinition/test"},
+								Extension: []*d2pb.Extension{
+									{
+										Url: &d2pb.Uri{Value: "test"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_StringValue{
+												StringValue: &d2pb.String{Value: "c"},
+											},
+										},
+									},
+									{
+										Url: &d2pb.Uri{Value: "test"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_StringValue{
+												StringValue: &d2pb.String{Value: "d"},
+											},
+										},
+									},
+									{
+										Url: &d2pb.Uri{Value: "test"},
+										Extension: []*d2pb.Extension{
+											{
+												Url: &d2pb.Uri{Value: "test"},
+												Value: &d2pb.Extension_ValueX{
+													Choice: &d2pb.Extension_ValueX_StringValue{
+														StringValue: &d2pb.String{Value: "e"},
+													},
+												},
+											},
+											{
+												Url: &d2pb.Uri{Value: "test"},
+												Value: &d2pb.Extension_ValueX{
+													Choice: &d2pb.Extension_ValueX_StringValue{
+														StringValue: &d2pb.String{Value: "f"},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -2793,6 +3651,73 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: "http://example.com/Extension/QueryData"},
+								Extension: []*d2pb.Extension{
+									{
+										Url: &d2pb.Uri{Value: "https://example.com/Extension/QueryMnemonic"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_StringValue{
+												StringValue: &d2pb.String{Value: "a"},
+											},
+										},
+									},
+									{
+										Url: &d2pb.Uri{Value: "https://example.com/Extension/QueryQuestion"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_StringValue{
+												StringValue: &d2pb.String{Value: "b"},
+											},
+										},
+									},
+									{
+										Url: &d2pb.Uri{Value: "https://example.com/Extension/QueryResponse"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_StringValue{
+												StringValue: &d2pb.String{Value: "c"},
+											},
+										},
+									},
+								},
+							},
+							{
+								Url: &d2pb.Uri{Value: "http://example.com/Extension/QueryData"},
+								Extension: []*d2pb.Extension{
+									{
+										Url: &d2pb.Uri{Value: "https://example.com/Extension/QueryMnemonic"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_StringValue{
+												StringValue: &d2pb.String{Value: "d"},
+											},
+										},
+									},
+									{
+										Url: &d2pb.Uri{Value: "https://example.com/Extension/QueryQuestion"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_StringValue{
+												StringValue: &d2pb.String{Value: "e"},
+											},
+										},
+									},
+									{
+										Url: &d2pb.Uri{Value: "https://example.com/Extension/QueryResponse"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_StringValue{
+												StringValue: &d2pb.String{Value: "f"},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -2927,6 +3852,22 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Id: &d2pb.Id{Value: "id1"},
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -2975,6 +3916,27 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition1/id"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/id"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -3030,6 +3992,27 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition1/id"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/ID"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -3097,6 +4080,39 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d2pb.Extension{
+									{
+										Url: &d2pb.Uri{Value: "ombCategory"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_Coding{
+												Coding: &d2pb.Coding{
+													System: &d2pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d2pb.Code{Value: "2106-3"},
+												},
+											},
+										},
+										Extension: []*d2pb.Extension{
+											{
+												Url: &d2pb.Uri{Value: "text"},
+												Value: &d2pb.Extension_ValueX{
+													Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "White"}},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -3174,6 +4190,29 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "Asian"}},
+								},
+								Extension: []*d2pb.Extension{
+									{
+										Url: &d2pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race/value"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "Asian"}},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -3238,6 +4277,34 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						BirthDate: &d2pb.Date{
+							ValueUs:   1463529600000000,
+							Precision: d2pb.Date_DAY,
+							Id: &d2pb.Id{
+								Value: "a3",
+							},
+							Extension: []*d2pb.Extension{{
+								Url: &d2pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_DateTime{
+										DateTime: &d2pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d2pb.DateTime_SECOND,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -3311,6 +4378,40 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						BirthDate: &d2pb.Date{
+							Extension: []*d2pb.Extension{{
+								Url: &d2pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_DateTime{
+										DateTime: &d2pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d2pb.DateTime_SECOND,
+										},
+									},
+								},
+							}, {
+								Url: &d2pb.Uri{
+									Value: jsonpbhelper.PrimitiveHasNoValueURL,
+								},
+								Value: &d2pb.Extension_ValueX{
+									Choice: &d2pb.Extension_ValueX_Boolean{
+										Boolean: &d2pb.Boolean{
+											Value: true,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -3394,6 +4495,43 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Condition{
+						Contained: []*r2pb.ContainedResource{
+							{
+								OneofResource: &r2pb.ContainedResource_Patient{
+									Patient: &r2pb.Patient{
+										Id: &d2pb.Id{
+											Value: "p1",
+										},
+										Extension: []*d2pb.Extension{{
+											Url: &d2pb.Uri{
+												Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+											},
+											Value: &d2pb.Extension_ValueX{
+												Choice: &d2pb.Extension_ValueX_DateTime{
+													DateTime: &d2pb.DateTime{
+														ValueUs:   1463567325000000,
+														Timezone:  "Z",
+														Precision: d2pb.DateTime_SECOND,
+													},
+												},
+											},
+										}},
+									},
+								},
+							},
+						},
+						Asserter: &d2pb.Reference{
+							Reference: &d2pb.Reference_Fragment{
+								Fragment: &d2pb.String{Value: "p1"},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.STU3,
 					r: &r3pb.Condition{
@@ -3505,6 +4643,39 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema_Error(t *testing.T) {
 						},
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &r2pb.Patient{
+						Extension: []*d2pb.Extension{
+							{
+								Url: &d2pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d2pb.Extension{
+									{
+										Url: &d2pb.Uri{Value: "ombCategory"},
+										Value: &d2pb.Extension_ValueX{
+											Choice: &d2pb.Extension_ValueX_Coding{
+												Coding: &d2pb.Coding{
+													System: &d2pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d2pb.Code{Value: "2106-3"},
+												},
+											},
+										},
+										Extension: []*d2pb.Extension{
+											{
+												Url: &d2pb.Uri{Value: "value"},
+												Value: &d2pb.Extension_ValueX{
+													Choice: &d2pb.Extension_ValueX_StringValue{StringValue: &d2pb.String{Value: "White"}},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &r4patientpb.Patient{
@@ -3576,6 +4747,14 @@ func TestMarshalPrimitiveType(t *testing.T) {
 						Value: true,
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &d2pb.Boolean{
+						Value: true,
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.Boolean{
@@ -3594,6 +4773,14 @@ func TestMarshalPrimitiveType(t *testing.T) {
 						Value: 1,
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &d2pb.Integer{
+						Value: 1,
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.Integer{
@@ -3624,6 +4811,14 @@ func TestMarshalPrimitiveType(t *testing.T) {
 						Value: "some code",
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &d2pb.Code{
+						Value: "some code",
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.Code{
@@ -3642,6 +4837,14 @@ func TestMarshalPrimitiveType(t *testing.T) {
 						Value: "patient1234",
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &d2pb.Id{
+						Value: "patient1234",
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.Id{
@@ -3660,6 +4863,14 @@ func TestMarshalPrimitiveType(t *testing.T) {
 						Value: "This is a string",
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &d2pb.String{
+						Value: "This is a string",
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.String{
@@ -3678,6 +4889,14 @@ func TestMarshalPrimitiveType(t *testing.T) {
 						Value: "md",
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &d2pb.Markdown{
+						Value: "md",
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.Markdown{
@@ -3708,6 +4927,14 @@ func TestMarshalPrimitiveType(t *testing.T) {
 						Value: "uuid",
 					},
 				},
+				// _strip_begin
+				{
+					ver: fhirversion.DSTU2,
+					r: &d2pb.Uuid{
+						Value: "uuid",
+					},
+				},
+				// _strip_end
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.Uuid{
@@ -3738,6 +4965,9 @@ func TestMarshalPrimitiveType(t *testing.T) {
 						Value: c3pb.ResearchStudyStatusCode_INVALID_UNINITIALIZED,
 					},
 				},
+				// _strip_begin
+				// There is no ResearchStudyStatusCode in DSTU2
+				// _strip_end
 			},
 			want: nil,
 		},

@@ -1,0 +1,54 @@
+id {
+  value: "example-encounter"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>Follow Infection Control Level 3 Protocol</div>"
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://example.org/local"
+    }
+    code {
+      value: "infection"
+    }
+    display {
+      value: "Infection Control Level"
+    }
+  }
+}
+status {
+  value: ACTIVE
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter Patient"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://example.org/local/if1"
+    }
+    code {
+      value: "l3"
+    }
+    display {
+      value: "Follow Level 3 Protocol"
+    }
+  }
+}
+

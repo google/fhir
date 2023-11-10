@@ -1,0 +1,143 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>Application Start for under service login &quot;Grahame&quot; (id: Grahame\'s Test HL7Connect)</div>"
+  }
+}
+event {
+  type {
+    system {
+      value: "http://nema.org/dicom/dicm"
+    }
+    code {
+      value: "110100"
+    }
+    display {
+      value: "Application Activity"
+    }
+  }
+  subtype {
+    system {
+      value: "http://nema.org/dicom/dicm"
+    }
+    code {
+      value: "110120"
+    }
+    display {
+      value: "Application Start"
+    }
+  }
+  action {
+    value: E
+  }
+  date_time {
+    value_us: 1351163067000000
+    timezone: "+11:00"
+    precision: SECOND
+  }
+  outcome {
+    value: SUCCESS
+  }
+}
+participant {
+  role {
+    text {
+      value: "Service User (Logon)"
+    }
+  }
+  user_id {
+    value {
+      value: "Grahame"
+    }
+  }
+  requestor {
+  }
+  network {
+    address {
+      value: "127.0.0.1"
+    }
+    type {
+      value: IP_ADDRESS
+    }
+  }
+}
+source {
+  site {
+    value: "Development"
+  }
+  identifier {
+    value {
+      value: "Grahame\'s Laptop"
+    }
+  }
+  type {
+    system {
+      value: "http://hl7.org/fhir/audit-event-sub-type"
+    }
+    code {
+      value: "1"
+    }
+  }
+}
+object {
+  identifier {
+    type {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/identifier-type"
+        }
+        code {
+          value: "SNO"
+        }
+      }
+      text {
+        value: "Dell Serial Number"
+      }
+    }
+    value {
+      value: "ABCDEF"
+    }
+  }
+  type {
+    system {
+      value: "http://hl7.org/fhir/object-type"
+    }
+    code {
+      value: "4"
+    }
+    display {
+      value: "Other"
+    }
+  }
+  role {
+    system {
+      value: "http://hl7.org/fhir/object-role"
+    }
+    code {
+      value: "4"
+    }
+    display {
+      value: "DomainResource"
+    }
+  }
+  lifecycle {
+    system {
+      value: "http://hl7.org/fhir/object-lifecycle"
+    }
+    code {
+      value: "6"
+    }
+    display {
+      value: "Access / Use"
+    }
+  }
+  name {
+    value: "Grahame\'s Laptop"
+  }
+}
+

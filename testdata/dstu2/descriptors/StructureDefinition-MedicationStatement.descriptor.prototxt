@@ -1,0 +1,528 @@
+name: "MedicationStatement"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Id"
+  options {
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Meta"
+  options {
+    [google.fhir.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Uri"
+  options {
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.AllLanguageCode"
+  options {
+    [google.fhir.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Narrative"
+  options {
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ContainedResource"
+  options {
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "identifier"
+  number: 9
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Identifier"
+  options {
+    [google.fhir.proto.field_description]: "External identifier"
+  }
+}
+field {
+  name: "patient"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Reference"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Who is/was taking  the medication"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+  }
+}
+field {
+  name: "information_source"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Reference"
+  options {
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.valid_reference_type]: "RelatedPerson"
+  }
+}
+field {
+  name: "date_asserted"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.DateTime"
+  options {
+    [google.fhir.proto.field_description]: "When the statement was asserted?"
+  }
+}
+field {
+  name: "status"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.MedicationStatementStatusCode"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "active | completed | entered-in-error | intended"
+  }
+}
+field {
+  name: "was_not_taken"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Boolean"
+  options {
+    [google.fhir.proto.field_description]: "True if medication is/was not being taken"
+  }
+}
+field {
+  name: "reason_not_taken"
+  number: 15
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "True if asserting medication was not given"
+  }
+}
+field {
+  name: "reason_for_use"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.MedicationStatement.ReasonForUse"
+}
+field {
+  name: "effective"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.MedicationStatement.Effective"
+  options {
+    [google.fhir.proto.field_description]: "Over what period was medication consumed?"
+  }
+}
+field {
+  name: "note"
+  number: 18
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.String"
+  options {
+    [google.fhir.proto.field_description]: "Further information about the statement"
+  }
+}
+field {
+  name: "supporting_information"
+  number: 19
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Additional supporting information"
+    [google.fhir.proto.valid_reference_type]: "Resource"
+  }
+}
+field {
+  name: "medication"
+  number: 20
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.MedicationStatement.Medication"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "What medication was taken"
+  }
+}
+field {
+  name: "dosage"
+  number: 21
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.MedicationStatement.Dosage"
+  options {
+    [google.fhir.proto.field_description]: "Details of how medication was taken"
+  }
+}
+nested_type {
+  name: "ReasonForUse"
+  field {
+    name: "codeable_concept"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+    oneof_index: 0
+  }
+  field {
+    name: "reference"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Reference"
+    options {
+      [google.fhir.proto.valid_reference_type]: "Condition"
+    }
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "reason_for_use"
+  }
+}
+nested_type {
+  name: "Effective"
+  field {
+    name: "date_time"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.DateTime"
+    oneof_index: 0
+  }
+  field {
+    name: "period"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Period"
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "effective"
+  }
+}
+nested_type {
+  name: "Medication"
+  field {
+    name: "codeable_concept"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+    oneof_index: 0
+  }
+  field {
+    name: "reference"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Reference"
+    options {
+      [google.fhir.proto.valid_reference_type]: "Medication"
+    }
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "medication"
+  }
+}
+nested_type {
+  name: "Dosage"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "text"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Reported dosage information"
+    }
+  }
+  field {
+    name: "timing"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Timing"
+    options {
+      [google.fhir.proto.field_description]: "When/how often was medication taken"
+    }
+  }
+  field {
+    name: "as_needed"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.MedicationStatement.Dosage.AsNeeded"
+    options {
+      [google.fhir.proto.field_description]: "Take \"as needed\" (for x)"
+    }
+  }
+  field {
+    name: "site"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.MedicationStatement.Dosage.Site"
+    options {
+      [google.fhir.proto.field_description]: "Where (on body) medication is/was administered"
+    }
+  }
+  field {
+    name: "route"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+    options {
+      [google.fhir.proto.field_description]: "How the medication entered the body"
+    }
+  }
+  field {
+    name: "method"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+    options {
+      [google.fhir.proto.field_description]: "Technique used to administer medication"
+    }
+  }
+  field {
+    name: "quantity"
+    number: 10
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.MedicationStatement.Dosage.Quantity"
+    options {
+      [google.fhir.proto.field_description]: "Amount administered in one dose"
+    }
+  }
+  field {
+    name: "rate"
+    number: 11
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.MedicationStatement.Dosage.Rate"
+    options {
+      [google.fhir.proto.field_description]: "Dose quantity per unit of time"
+    }
+  }
+  field {
+    name: "max_dose_per_period"
+    number: 12
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Ratio"
+    options {
+      [google.fhir.proto.field_description]: "Maximum dose that was consumed per unit of time"
+    }
+  }
+  nested_type {
+    name: "AsNeeded"
+    field {
+      name: "boolean"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Boolean"
+      oneof_index: 0
+    }
+    field {
+      name: "codeable_concept"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+      oneof_index: 0
+    }
+    options {
+      [google.fhir.proto.is_choice_type]: true
+    }
+    oneof_decl {
+      name: "as_needed"
+    }
+  }
+  nested_type {
+    name: "Site"
+    field {
+      name: "codeable_concept"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+      oneof_index: 0
+    }
+    field {
+      name: "reference"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Reference"
+      options {
+        [google.fhir.proto.valid_reference_type]: "BodySite"
+      }
+      oneof_index: 0
+    }
+    options {
+      [google.fhir.proto.is_choice_type]: true
+    }
+    oneof_decl {
+      name: "site"
+    }
+  }
+  nested_type {
+    name: "Quantity"
+    field {
+      name: "quantity_value"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Quantity"
+      oneof_index: 0
+      json_name: "quantity"
+    }
+    field {
+      name: "range"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Range"
+      oneof_index: 0
+    }
+    options {
+      [google.fhir.proto.is_choice_type]: true
+    }
+    oneof_decl {
+      name: "quantity"
+    }
+  }
+  nested_type {
+    name: "Rate"
+    field {
+      name: "ratio"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Ratio"
+      oneof_index: 0
+    }
+    field {
+      name: "range"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Range"
+      oneof_index: 0
+    }
+    options {
+      [google.fhir.proto.is_choice_type]: true
+    }
+    oneof_decl {
+      name: "rate"
+    }
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for MedicationStatement.\nRecord of medication being taken by a patient.\nSee http://hl7.org/fhir/StructureDefinition/MedicationStatement"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/MedicationStatement"
+}

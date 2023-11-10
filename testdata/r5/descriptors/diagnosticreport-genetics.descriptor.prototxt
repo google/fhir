@@ -1,0 +1,447 @@
+name: "DiagnosticReportGenetics"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Id"
+  options {
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Meta"
+  options {
+    [google.fhir.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Uri"
+  options {
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Code"
+  options {
+    [google.fhir.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Narrative"
+  options {
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.protobuf.Any"
+  options {
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  number: 7
+  options {
+    [google.fhir.proto.reserved_reason]: "Field 7 reserved for strongly-typed ContainedResource for id: DiagnosticReport.contained"
+  }
+}
+field {
+  name: "extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Extension"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 9
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "identifier"
+  number: 10
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Identifier"
+  options {
+    [google.fhir.proto.field_description]: "Business identifier for report"
+  }
+}
+field {
+  name: "based_on"
+  number: 11
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "What was requested"
+    [google.fhir.proto.valid_reference_type]: "CarePlan"
+    [google.fhir.proto.valid_reference_type]: "ImmunizationRecommendation"
+    [google.fhir.proto.valid_reference_type]: "MedicationRequest"
+    [google.fhir.proto.valid_reference_type]: "NutritionOrder"
+    [google.fhir.proto.valid_reference_type]: "ServiceRequest"
+  }
+}
+field {
+  name: "status"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.DiagnosticReportGenetics.StatusCode"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "registered | partial | preliminary | final +"
+  }
+}
+field {
+  name: "category"
+  number: 13
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "Service category"
+  }
+}
+field {
+  name: "code"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.CodeableConcept"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Name/Code for this diagnostic report"
+  }
+}
+field {
+  name: "subject"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "The subject of the report - usually, but not always, the patient"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "Group"
+    [google.fhir.proto.valid_reference_type]: "Device"
+    [google.fhir.proto.valid_reference_type]: "Location"
+  }
+}
+field {
+  name: "encounter"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Health care event when test ordered"
+    [google.fhir.proto.valid_reference_type]: "Encounter"
+  }
+}
+field {
+  name: "effective"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.DiagnosticReportGenetics.EffectiveX"
+  options {
+    [google.fhir.proto.field_description]: "Clinically relevant time/time-period for report"
+  }
+}
+field {
+  name: "issued"
+  number: 18
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Instant"
+  options {
+    [google.fhir.proto.field_description]: "DateTime this version was made"
+  }
+}
+field {
+  name: "performer"
+  number: 19
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Responsible Diagnostic Service"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.valid_reference_type]: "PractitionerRole"
+    [google.fhir.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.valid_reference_type]: "CareTeam"
+  }
+}
+field {
+  name: "results_interpreter"
+  number: 20
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Primary result interpreter"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.valid_reference_type]: "PractitionerRole"
+    [google.fhir.proto.valid_reference_type]: "Organization"
+    [google.fhir.proto.valid_reference_type]: "CareTeam"
+  }
+}
+field {
+  name: "specimen"
+  number: 21
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Specimens this report is based on"
+    [google.fhir.proto.valid_reference_type]: "Specimen"
+  }
+}
+field {
+  name: "result"
+  number: 22
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Observations"
+    [google.fhir.proto.valid_reference_type]: "Observation"
+  }
+}
+field {
+  name: "imaging_study"
+  number: 23
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Reference to full details of imaging associated with the diagnostic report"
+    [google.fhir.proto.valid_reference_type]: "ImagingStudy"
+  }
+}
+field {
+  name: "media"
+  number: 24
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.DiagnosticReportGenetics.Media"
+  options {
+    [google.fhir.proto.field_description]: "Key images associated with this report"
+  }
+}
+field {
+  name: "conclusion"
+  number: 25
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Clinical conclusion (interpretation) of test results"
+  }
+}
+field {
+  number: 26
+  options {
+    [google.fhir.proto.reserved_reason]: "DiagnosticReport.conclusionCode not present on profile."
+  }
+}
+field {
+  name: "presented_form"
+  number: 27
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Attachment"
+  options {
+    [google.fhir.proto.field_description]: "Entire report as issued"
+  }
+}
+field {
+  name: "assessed_condition"
+  number: 28
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "AssessedCondition"
+    [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAssessedCondition"
+  }
+  json_name: "AssessedCondition"
+}
+field {
+  name: "family_member_history"
+  number: 29
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "FamilyHistory"
+    [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsFamilyMemberHistory"
+  }
+  json_name: "FamilyMemberHistory"
+}
+field {
+  name: "analysis"
+  number: 30
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.DiagnosticReportAnalysis"
+  options {
+    [google.fhir.proto.field_description]: "Analysis"
+    [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsAnalysis"
+  }
+  json_name: "Analysis"
+}
+field {
+  name: "references"
+  number: 31
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.DiagnosticReportReferences"
+  options {
+    [google.fhir.proto.field_description]: "References"
+    [google.fhir.proto.fhir_inlined_extension_url]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport-geneticsReferences"
+  }
+  json_name: "References"
+}
+nested_type {
+  name: "StatusCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r5.core.DiagnosticReportStatusCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/diagnostic-report-status"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
+  name: "EffectiveX"
+  field {
+    name: "date_time"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.DateTime"
+    oneof_index: 0
+  }
+  field {
+    name: "period"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Period"
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+nested_type {
+  name: "Media"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Id"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
+    }
+  }
+  field {
+    name: "comment"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Comment about the image (e.g. explanation)"
+    }
+  }
+  field {
+    name: "link"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Reference"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Reference to the image source"
+      [google.fhir.proto.valid_reference_type]: "DocumentReference"
+    }
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for DiagnosticReport-Genetics.\nA Diagnostic report - a combination of request information, atomic results, images, interpretation, as well as formatted reports.\nSee http://hl7.org/fhir/StructureDefinition/diagnosticreport-genetics"
+  [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/DiagnosticReport"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/diagnosticreport-genetics"
+}

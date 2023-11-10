@@ -1,0 +1,185 @@
+id {
+  value: "list-example-codes"
+}
+meta {
+  last_updated {
+    value_us: 1445632863495000
+    timezone: "+11:00"
+    precision: MILLISECOND
+  }
+  profile {
+    value: "http://hl7.org/fhir/StructureDefinition/valueset-shareable-definition"
+  }
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <h2>Example Use Codes for List</h2>\n            <p>Example use codes for the List resource - typical kinds of use.</p>\n            <p>This value set has an inline code system http://hl7.org/fhir/list-example-use-codes, which defines the following codes:</p>\n            <table class=\"codes\">\n              <tr>\n                <td>\n                  <b>Code</b>\n                </td>\n                <td>\n                  <b>Display</b>\n                </td>\n                <td>\n                  <b>Definition</b>\n                </td>\n              </tr>\n              <tr>\n                <td>alerts\n                  <a name=\"alerts\"> </a>\n                </td>\n                <td>Alerts</td>\n                <td>A list of alerts for the patient.</td>\n              </tr>\n              <tr>\n                <td>adverserxns\n                  <a name=\"adverserxns\"> </a>\n                </td>\n                <td>Adverse Reactions</td>\n                <td>A list of part adverse reactions.</td>\n              </tr>\n              <tr>\n                <td>allergies\n                  <a name=\"allergies\"> </a>\n                </td>\n                <td>Allergies</td>\n                <td>A list of Allergies for the patient.</td>\n              </tr>\n              <tr>\n                <td>medications\n                  <a name=\"medications\"> </a>\n                </td>\n                <td>Medication List</td>\n                <td>A list of medication statements for the patient.</td>\n              </tr>\n              <tr>\n                <td>problems\n                  <a name=\"problems\"> </a>\n                </td>\n                <td>Problem List</td>\n                <td>A list of problems that the patient is known of have (or have had in the past).</td>\n              </tr>\n              <tr>\n                <td>worklist\n                  <a name=\"worklist\"> </a>\n                </td>\n                <td>Worklist</td>\n                <td>A list of items that constitute a set of work to be performed (typically this code would be specialized for more specific uses, such as a ward round list).</td>\n              </tr>\n              <tr>\n                <td>waiting\n                  <a name=\"waiting\"> </a>\n                </td>\n                <td>Waiting List</td>\n                <td>A list of items waiting for an event (perhaps a surgical patient waiting list).</td>\n              </tr>\n              <tr>\n                <td>protocols\n                  <a name=\"protocols\"> </a>\n                </td>\n                <td>Protocols</td>\n                <td>A set of protocols to be followed.</td>\n              </tr>\n              <tr>\n                <td>plans\n                  <a name=\"plans\"> </a>\n                </td>\n                <td>Care Plans</td>\n                <td>A set of care plans that apply in a particular context of care.</td>\n              </tr>\n            </table>\n          </div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/valueset-oid"
+  }
+  value {
+    uri {
+      value: "urn:oid:2.16.840.1.113883.4.642.2.173"
+    }
+  }
+}
+url {
+  value: "http://hl7.org/fhir/ValueSet/list-example-codes"
+}
+version {
+  value: "1.0.2"
+}
+name {
+  value: "Example Use Codes for List"
+}
+status {
+  value: DRAFT
+}
+experimental {
+  value: true
+}
+publisher {
+  value: "FHIR Project"
+}
+contact {
+  telecom {
+    system {
+      value: OTHER
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+}
+date {
+  value_us: 1445632863000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+description {
+  value: "Example use codes for the List resource - typical kinds of use."
+}
+code_system {
+  extension {
+    url {
+      value: "http://hl7.org/fhir/StructureDefinition/valueset-oid"
+    }
+    value {
+      uri {
+        value: "urn:oid:2.16.840.1.113883.4.642.1.173"
+      }
+    }
+  }
+  system {
+    value: "http://hl7.org/fhir/list-example-use-codes"
+  }
+  case_sensitive {
+    value: true
+  }
+  concept {
+    code {
+      value: "alerts"
+    }
+    display {
+      value: "Alerts"
+    }
+    definition {
+      value: "A list of alerts for the patient."
+    }
+  }
+  concept {
+    code {
+      value: "adverserxns"
+    }
+    display {
+      value: "Adverse Reactions"
+    }
+    definition {
+      value: "A list of part adverse reactions."
+    }
+  }
+  concept {
+    code {
+      value: "allergies"
+    }
+    display {
+      value: "Allergies"
+    }
+    definition {
+      value: "A list of Allergies for the patient."
+    }
+  }
+  concept {
+    code {
+      value: "medications"
+    }
+    display {
+      value: "Medication List"
+    }
+    definition {
+      value: "A list of medication statements for the patient."
+    }
+  }
+  concept {
+    code {
+      value: "problems"
+    }
+    display {
+      value: "Problem List"
+    }
+    definition {
+      value: "A list of problems that the patient is known of have (or have had in the past)."
+    }
+  }
+  concept {
+    code {
+      value: "worklist"
+    }
+    display {
+      value: "Worklist"
+    }
+    definition {
+      value: "A list of items that constitute a set of work to be performed (typically this code would be specialized for more specific uses, such as a ward round list)."
+    }
+  }
+  concept {
+    code {
+      value: "waiting"
+    }
+    display {
+      value: "Waiting List"
+    }
+    definition {
+      value: "A list of items waiting for an event (perhaps a surgical patient waiting list)."
+    }
+  }
+  concept {
+    code {
+      value: "protocols"
+    }
+    display {
+      value: "Protocols"
+    }
+    definition {
+      value: "A set of protocols to be followed."
+    }
+  }
+  concept {
+    code {
+      value: "plans"
+    }
+    display {
+      value: "Care Plans"
+    }
+    definition {
+      value: "A set of care plans that apply in a particular context of care."
+    }
+  }
+}
+

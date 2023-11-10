@@ -1,0 +1,63 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>Large Dog warning for Peter Patient</div>"
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://example.org/local"
+    }
+    code {
+      value: "admin"
+    }
+    display {
+      value: "Admin"
+    }
+  }
+  text {
+    value: "admin"
+  }
+}
+status {
+  value: ACTIVE
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+  display {
+    value: "Peter Patient"
+  }
+}
+author {
+  practitioner_id {
+    value: "example"
+  }
+  display {
+    value: "Nancy Nurse"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://example.org/local"
+    }
+    code {
+      value: "bigdog"
+    }
+    display {
+      value: "Big dog"
+    }
+  }
+  text {
+    value: "Patient has a big dog at his home. Always always wear a suit of armor or take other active counter-measures"
+  }
+}
+

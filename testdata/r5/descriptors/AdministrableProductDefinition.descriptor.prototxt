@@ -1,0 +1,533 @@
+name: "AdministrableProductDefinition"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Id"
+  options {
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Meta"
+  options {
+    [google.fhir.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Uri"
+  options {
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Code"
+  options {
+    [google.fhir.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Narrative"
+  options {
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.protobuf.Any"
+  options {
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  number: 7
+  options {
+    [google.fhir.proto.reserved_reason]: "Field 7 reserved for strongly-typed ContainedResource for id: AdministrableProductDefinition.contained"
+  }
+}
+field {
+  name: "extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 9
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "identifier"
+  number: 10
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Identifier"
+  options {
+    [google.fhir.proto.field_description]: "An identifier for the pharmaceutical medicinal product"
+  }
+}
+field {
+  name: "subject"
+  number: 11
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "The product that this is a pharmaceutical product of"
+    [google.fhir.proto.valid_reference_type]: "MedicinalProductDefinition"
+  }
+}
+field {
+  name: "administrable_dose_form"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.CodeableConcept"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "The administrable dose form, after necessary reconstitution"
+  }
+}
+field {
+  name: "unit_of_presentation"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "Todo"
+  }
+}
+field {
+  name: "produced_from"
+  number: 14
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "The manufactured item(s) that this administrable product is produced from. Either a single item, or several that are mixed before administration (e.g. a power item and a solution item). Note that these are not raw ingredients"
+    [google.fhir.proto.valid_reference_type]: "ManufacturedItemDefinition"
+  }
+}
+field {
+  name: "ingredient"
+  number: 15
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "The ingredients of this administrable pharmaceutical product"
+    [google.fhir.proto.valid_reference_type]: "Ingredient"
+  }
+}
+field {
+  name: "device"
+  number: 16
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Accompanying device"
+    [google.fhir.proto.valid_reference_type]: "DeviceDefinition"
+  }
+}
+field {
+  name: "characteristic"
+  number: 17
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.AdministrableProductDefinition.Characteristic"
+  options {
+    [google.fhir.proto.field_description]: "Characteristics e.g. a products onset of action"
+  }
+}
+field {
+  name: "route_of_administration"
+  number: 18
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.AdministrableProductDefinition.RouteOfAdministration"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "The path by which the pharmaceutical product is taken into or makes contact with the body"
+  }
+}
+nested_type {
+  name: "Characteristic"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Id"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
+    }
+  }
+  field {
+    name: "code"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.CodeableConcept"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "A code expressing the type of characteristic"
+    }
+  }
+  field {
+    name: "value"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.AdministrableProductDefinition.Characteristic.ValueX"
+    options {
+      [google.fhir.proto.field_description]: "A value for the characteristic"
+    }
+  }
+  field {
+    name: "status"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.CodeableConcept"
+    options {
+      [google.fhir.proto.field_description]: "The status of characteristic e.g. assigned or pending"
+    }
+  }
+  nested_type {
+    name: "ValueX"
+    field {
+      name: "coding"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Coding"
+      oneof_index: 0
+    }
+    field {
+      name: "quantity"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Quantity"
+      oneof_index: 0
+    }
+    field {
+      name: "string_value"
+      number: 3
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.String"
+      oneof_index: 0
+      json_name: "string"
+    }
+    field {
+      name: "date"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Date"
+      oneof_index: 0
+    }
+    field {
+      name: "boolean"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Boolean"
+      oneof_index: 0
+    }
+    field {
+      name: "attachment"
+      number: 6
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Attachment"
+      oneof_index: 0
+    }
+    options {
+      [google.fhir.proto.is_choice_type]: true
+    }
+    oneof_decl {
+      name: "choice"
+    }
+  }
+}
+nested_type {
+  name: "RouteOfAdministration"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Id"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
+    }
+  }
+  field {
+    name: "code"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.CodeableConcept"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Coded expression for the route"
+    }
+  }
+  field {
+    name: "first_dose"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Quantity"
+    options {
+      [google.fhir.proto.field_description]: "The first dose (dose quantity) administered in humans can be specified, for a product under investigation, using a numerical value and its unit of measurement"
+    }
+  }
+  field {
+    name: "max_single_dose"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Quantity"
+    options {
+      [google.fhir.proto.field_description]: "The maximum single dose that can be administered as per the protocol of a clinical trial can be specified using a numerical value and its unit of measurement"
+    }
+  }
+  field {
+    name: "max_dose_per_day"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Quantity"
+    options {
+      [google.fhir.proto.field_description]: "The maximum dose per day (maximum dose quantity to be administered in any one 24-h period) that can be administered as per the protocol referenced in the clinical trial authorisation"
+    }
+  }
+  field {
+    name: "max_dose_per_treatment_period"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Ratio"
+    options {
+      [google.fhir.proto.field_description]: "The maximum dose per treatment period that can be administered as per the protocol referenced in the clinical trial authorisation"
+    }
+  }
+  field {
+    name: "max_treatment_period"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Duration"
+    options {
+      [google.fhir.proto.field_description]: "The maximum treatment period during which an Investigational Medicinal Product can be administered as per the protocol referenced in the clinical trial authorisation"
+    }
+  }
+  field {
+    name: "target_species"
+    number: 10
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.AdministrableProductDefinition.RouteOfAdministration.TargetSpecies"
+    options {
+      [google.fhir.proto.field_description]: "A species for which this route applies"
+    }
+  }
+  nested_type {
+    name: "TargetSpecies"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Id"
+      options {
+        [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Extension"
+      options {
+        [google.fhir.proto.field_description]: "Additional content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Extension"
+      options {
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
+      }
+    }
+    field {
+      name: "code"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.CodeableConcept"
+      options {
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "Coded expression for the species"
+      }
+    }
+    field {
+      name: "withdrawal_period"
+      number: 5
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.AdministrableProductDefinition.RouteOfAdministration.TargetSpecies.WithdrawalPeriod"
+      options {
+        [google.fhir.proto.field_description]: "A species specific time during which consumption of animal product is not appropriate"
+      }
+    }
+    nested_type {
+      name: "WithdrawalPeriod"
+      field {
+        name: "id"
+        number: 1
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r5.core.Id"
+        options {
+          [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+        }
+      }
+      field {
+        name: "extension"
+        number: 2
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r5.core.Extension"
+        options {
+          [google.fhir.proto.field_description]: "Additional content defined by implementations"
+        }
+      }
+      field {
+        name: "modifier_extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r5.core.Extension"
+        options {
+          [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
+        }
+      }
+      field {
+        name: "tissue"
+        number: 4
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r5.core.CodeableConcept"
+        options {
+          [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+          [google.fhir.proto.field_description]: "Coded expression for the type of tissue for which the withdrawal period applues, e.g. meat, milk"
+        }
+      }
+      field {
+        name: "value"
+        number: 5
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r5.core.Quantity"
+        options {
+          [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+          [google.fhir.proto.field_description]: "A value for the time"
+        }
+      }
+      field {
+        name: "supporting_information"
+        number: 6
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r5.core.String"
+        options {
+          [google.fhir.proto.field_description]: "Extra information about the withdrawal period"
+        }
+      }
+    }
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for AdministrableProductDefinition, last updated 2019-12-31T21:03:40.621+11:00.\nA pharmaceutical product described in terms of its composition and dose form.\nSee http://hl7.org/fhir/StructureDefinition/AdministrableProductDefinition"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/AdministrableProductDefinition"
+}

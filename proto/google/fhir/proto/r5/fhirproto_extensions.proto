@@ -1,0 +1,63 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.fhirproto;
+
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.fhirproto";
+option (.google.fhir.proto.fhir_version) = R5;
+
+// Auto-generated from StructureDefinition for PrimitiveHasNoValue.
+// Whether or not the primitive is missing a value.
+// See https://g.co/fhir/StructureDefinition/primitiveHasNoValue
+message PrimitiveHasNoValue {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "https://g.co/fhir/StructureDefinition/primitiveHasNoValue";
+
+  // Unique id for inter-element referencing
+  core.String id = 1;
+
+  // Value of extension
+  core.Boolean value_boolean = 3;
+}
+
+// Auto-generated from StructureDefinition for Base64BinarySeparatorStride.
+// Base64Binary rendering parameters.
+// See https://g.co/fhir/StructureDefinition/base64Binary-separatorStride
+message Base64BinarySeparatorStride {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride";
+
+  // Unique id for inter-element referencing
+  core.String id = 1;
+
+  // The separator, usually a sequence of spaces.
+  core.String separator = 4
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The stride.
+  core.PositiveInt stride = 5
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+}

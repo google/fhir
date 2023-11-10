@@ -1,0 +1,152 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>contained</b>: </p><p><b>subject</b>: <a>Patient/example</a></p><p><b>orderer</b>: <a>Practitioner/example</a></p><p><b>identifier</b>: Placer = 2345234234234</p><p><b>encounter</b>: <a>Encounter/example</a></p><p><b>reason</b>: Fam hx-ischem heart dis <span>(Details : {ICD-9 code \'V173\' = \'??\', given as \'Fam hx-ischem heart dis\'})</span></p><p><b>supportingInformation</b>: id: fasting; status: final; Fasting status - Reported <span>(Details : {LOINC code \'49541-6\' = \'Fasting status - Reported\', given as \'Fasting status - Reported\'})</span>; Patient/example; Yes <span>(Details : {http://hl7.org/fhir/v2/0136 code \'Y\' = \'Yes\', given as \'Yes\'})</span></p><p><b>status</b>: received</p><h3>Events</h3><table><tr><td>-</td><td><b>Status</b></td><td><b>DateTime</b></td><td><b>Actor</b></td></tr><tr><td>*</td><td>requested</td><td>02/05/2013 4:16:00 PM</td><td><a>Practitioner/example</a></td></tr></table><h3>Items</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Specimen</b></td></tr><tr><td>*</td><td>Lipid Panel <span>(Details : {http://acme.org/tests code \'LIPID\' = \'??)</span></td><td><a>Specimen/101</a></td></tr></table><p><b>note</b>: patient is afraid of needles</p></div>"
+  }
+}
+contained {
+  observation {
+    id {
+      value: "fasting"
+    }
+    status {
+      value: FINAL
+    }
+    code {
+      coding {
+        system {
+          value: "http://loinc.org"
+        }
+        code {
+          value: "49541-6"
+        }
+        display {
+          value: "Fasting status - Reported"
+        }
+      }
+    }
+    subject {
+      patient_id {
+        value: "example"
+      }
+    }
+    value {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/v2/0136"
+          }
+          code {
+            value: "Y"
+          }
+          display {
+            value: "Yes"
+          }
+        }
+      }
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "example"
+  }
+}
+orderer {
+  practitioner_id {
+    value: "example"
+  }
+}
+identifier {
+  type {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/identifier-type"
+      }
+      code {
+        value: "PLAC"
+      }
+    }
+    text {
+      value: "Placer"
+    }
+  }
+  system {
+    value: "urn:oid:1.3.4.5.6.7"
+  }
+  value {
+    value: "2345234234234"
+  }
+}
+encounter {
+  encounter_id {
+    value: "example"
+  }
+}
+reason {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/sid/icd-9"
+    }
+    code {
+      value: "V173"
+    }
+    display {
+      value: "Fam hx-ischem heart dis"
+    }
+  }
+}
+supporting_information {
+  fragment {
+    value: "fasting"
+  }
+}
+status {
+  value: RECEIVED
+}
+event {
+  status {
+    value: REQUESTED
+  }
+  date_time {
+    value_us: 1367536560000000
+    timezone: "-07:00"
+    precision: SECOND
+  }
+  actor {
+    practitioner_id {
+      value: "example"
+    }
+  }
+}
+item {
+  code {
+    coding {
+      system {
+        value: "http://acme.org/tests"
+      }
+      code {
+        value: "LIPID"
+      }
+    }
+    text {
+      value: "Lipid Panel"
+    }
+  }
+  specimen {
+    specimen_id {
+      value: "101"
+    }
+  }
+}
+note {
+  text {
+    value: "patient is afraid of needles"
+  }
+}
+

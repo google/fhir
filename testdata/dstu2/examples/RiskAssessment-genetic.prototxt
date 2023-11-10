@@ -1,0 +1,367 @@
+id {
+  value: "genetic"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>\n      <p>Probability of developing breast cancer before the age indicated:</p>\n      <table>\n        <thead>\n          <tr>\n            <th>Age</th>\n            <th>Probability (%)</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr>\n            <td>current-53</td>\n            <td>0.0168</td>\n          </tr>\n          <tr>\n            <td>54-57</td>\n            <td>0.0368</td>\n          </tr>\n          <tr>\n            <td>58-62</td>\n            <td>0.0594</td>\n          </tr>\n          <tr>\n            <td>63-67</td>\n            <td>0.0838</td>\n          </tr>\n          <tr>\n            <td>68-72</td>\n            <td>0.1089</td>\n          </tr>\n          <tr>\n            <td>73-77</td>\n            <td>0.1327</td>\n          </tr>\n          <tr>\n            <td>78-82</td>\n            <td>0.1530</td>\n          </tr>\n          <tr>\n            <td>83-87</td>\n            <td>0.1663</td>\n          </tr>\n        </tbody>\n      </table>\n    </div>"
+  }
+}
+date {
+  value_us: 1137193260000000
+  timezone: "Z"
+  precision: SECOND
+}
+method {
+  coding {
+    code {
+      value: "BRCAPRO"
+    }
+  }
+}
+basis {
+  list_id {
+    value: "prognosis"
+  }
+}
+prediction {
+  outcome {
+    text {
+      value: "Breast Cancer"
+    }
+  }
+  probability {
+    decimal {
+      value: "0.000168"
+    }
+  }
+  when {
+    range {
+      high {
+        value {
+          value: "53"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+    }
+  }
+}
+prediction {
+  outcome {
+    text {
+      value: "Breast Cancer"
+    }
+  }
+  probability {
+    decimal {
+      value: "0.000368"
+    }
+  }
+  when {
+    range {
+      low {
+        value {
+          value: "54"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+      high {
+        value {
+          value: "57"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+    }
+  }
+}
+prediction {
+  outcome {
+    text {
+      value: "Breast Cancer"
+    }
+  }
+  probability {
+    decimal {
+      value: "0.000594"
+    }
+  }
+  when {
+    range {
+      low {
+        value {
+          value: "58"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+      high {
+        value {
+          value: "62"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+    }
+  }
+}
+prediction {
+  outcome {
+    text {
+      value: "Breast Cancer"
+    }
+  }
+  probability {
+    decimal {
+      value: "0.000838"
+    }
+  }
+  when {
+    range {
+      low {
+        value {
+          value: "63"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+      high {
+        value {
+          value: "67"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+    }
+  }
+}
+prediction {
+  outcome {
+    text {
+      value: "Breast Cancer"
+    }
+  }
+  probability {
+    decimal {
+      value: "0.001089"
+    }
+  }
+  when {
+    range {
+      low {
+        value {
+          value: "68"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+      high {
+        value {
+          value: "72"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+    }
+  }
+}
+prediction {
+  outcome {
+    text {
+      value: "Breast Cancer"
+    }
+  }
+  probability {
+    decimal {
+      value: "0.001327"
+    }
+  }
+  when {
+    range {
+      low {
+        value {
+          value: "73"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+      high {
+        value {
+          value: "77"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+    }
+  }
+}
+prediction {
+  outcome {
+    text {
+      value: "Breast Cancer"
+    }
+  }
+  probability {
+    decimal {
+      value: "0.001530"
+    }
+  }
+  when {
+    range {
+      low {
+        value {
+          value: "78"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+      high {
+        value {
+          value: "82"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+    }
+  }
+}
+prediction {
+  outcome {
+    text {
+      value: "Breast Cancer"
+    }
+  }
+  probability {
+    decimal {
+      value: "0.001663"
+    }
+  }
+  when {
+    range {
+      low {
+        value {
+          value: "83"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+      high {
+        value {
+          value: "88"
+        }
+        unit {
+          value: "years"
+        }
+        system {
+          value: "http://unitsofmeasure.org"
+        }
+        code {
+          value: "a"
+        }
+      }
+    }
+  }
+}
+

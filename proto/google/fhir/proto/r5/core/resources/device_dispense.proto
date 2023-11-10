@@ -1,0 +1,187 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/device_dispense_go_proto";
+
+// Auto-generated from StructureDefinition for DeviceDispense.
+// A record of dispensation of a device.
+// See http://hl7.org/fhir/StructureDefinition/DeviceDispense
+message DeviceDispense {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/DeviceDispense";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // DeviceDispense.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business identifier for this dispensation
+  repeated Identifier identifier = 10;
+
+  // The order or request that this dispense is fulfilling
+  repeated Reference based_on = 11 [
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "DeviceRequest"
+  ];
+
+  // The bigger event that this dispense is a part of
+  repeated Reference part_of = 12
+      [(.google.fhir.proto.valid_reference_type) = "Procedure"];
+
+  // preparation | in-progress | cancelled | on-hold | completed |
+  // entered-in-error | stopped | declined | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/devicedispense-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    DeviceDispenseStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 13
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Why a dispense was or was not performed
+  CodeableReference status_reason = 14;
+
+  // Type of device dispense
+  repeated CodeableConcept category = 15;
+
+  // What device was supplied
+  CodeableReference device = 16
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who the dispense is for
+  Reference subject = 17 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner"
+  ];
+
+  // Who collected the device or where the medication was delivered
+  Reference receiver = 18 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.proto.valid_reference_type) = "Location",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  ];
+
+  // Encounter associated with event
+  Reference encounter = 19
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // Information that supports the dispensing of the device
+  repeated Reference supporting_information = 20
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Who performed event
+  message Performer {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Who performed the dispense and what they did
+    CodeableConcept function = 4;
+
+    // Individual who was performing
+    Reference actor = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Device",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+      (.google.fhir.proto.valid_reference_type) = "CareTeam"
+    ];
+  }
+  repeated Performer performer = 21;
+
+  // Where the dispense occurred
+  Reference location = 22
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Trial fill, partial fill, emergency fill, etc
+  CodeableConcept type = 23;
+
+  // Amount dispensed
+  SimpleQuantity quantity = 24;
+
+  // When product was packaged and reviewed
+  DateTime prepared_date = 25;
+
+  // When product was given out
+  DateTime when_handed_over = 26;
+
+  // Where the device was sent or should be sent
+  Reference destination = 27
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Information about the dispense
+  repeated Annotation note = 28;
+
+  // Full representation of the usage instructions
+  Markdown usage_instruction = 29;
+
+  // A list of relevant lifecycle events
+  repeated Reference event_history = 30
+      [(.google.fhir.proto.valid_reference_type) = "Provenance"];
+}

@@ -1,0 +1,12 @@
+id {
+  value: "allergy"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>[Put rendering here]</div>"
+  }
+}
+

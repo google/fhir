@@ -1,0 +1,89 @@
+name: "Annotation"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "author"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Annotation.AuthorX"
+  options {
+    [google.fhir.proto.field_description]: "Individual responsible for the annotation"
+  }
+}
+field {
+  name: "time"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.DateTime"
+  options {
+    [google.fhir.proto.field_description]: "When the annotation was made"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Markdown"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "The annotation  - text content (as markdown)"
+  }
+}
+nested_type {
+  name: "AuthorX"
+  field {
+    name: "reference"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Reference"
+    options {
+      [google.fhir.proto.valid_reference_type]: "Practitioner"
+      [google.fhir.proto.valid_reference_type]: "Patient"
+      [google.fhir.proto.valid_reference_type]: "RelatedPerson"
+      [google.fhir.proto.valid_reference_type]: "Organization"
+    }
+    oneof_index: 0
+  }
+  field {
+    name: "string_value"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    oneof_index: 0
+    json_name: "string"
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Annotation, last updated 2019-12-31T21:03:40.621+11:00.\nText node with attribution.\nSee http://hl7.org/fhir/StructureDefinition/Annotation"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Annotation"
+}

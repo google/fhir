@@ -1,0 +1,111 @@
+id {
+  value: "example-search"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example-search</p><h3>Events</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Subtype</b></td><td><b>Action</b></td><td><b>DateTime</b></td><td><b>Outcome</b></td></tr><tr><td>*</td><td>Restful Operation (Details: http://hl7.org/fhir/audit-event-type code rest = \'RESTful Operation\', stated as \'Restful Operation\')</td><td>search (Details: http://hl7.org/fhir/restful-interaction code search = \'search\', stated as \'search\')</td><td>E</td><td>23/08/2015 9:42:24 AM</td><td>0</td></tr></table><h3>Participants</h3><table><tr><td>-</td><td><b>UserId</b></td><td><b>AltId</b></td><td><b>Name</b></td><td><b>Requestor</b></td></tr><tr><td>*</td><td>95</td><td>601847123</td><td>Grahame Grieve</td><td>true</td></tr></table><h3>Sources</h3><table><tr><td>-</td><td><b>Site</b></td><td><b>Identifier</b></td><td><b>Type</b></td></tr><tr><td>*</td><td>Cloud</td><td>hl7connect.healthintersections.com.au</td><td>Web Server (Details: http://hl7.org/fhir/security-source-type code 3 = \'Web Server\', stated as \'Web Server\')</td></tr></table><h3>Objects</h3><table><tr><td>-</td><td><b>Type</b></td><td><b>Role</b></td><td><b>Query</b></td></tr><tr><td>*</td><td>System Object (Details: http://hl7.org/fhir/object-type code 2 = \'System Object\', stated as \'System Object\')</td><td>Query (Details: http://hl7.org/fhir/object-role code 24 = \'Query\', stated as \'Query\')</td><td>aHR0cDovL2ZoaXItZGV2LmhlYWx0aGludGVyc2VjdGlvbnMuY29tLmF1L29wZW4vRW5jb3VudGVyP3BhcnRpY2lwYW50PTEz</td></tr></table></div>"
+  }
+}
+event {
+  type {
+    system {
+      value: "http://hl7.org/fhir/audit-event-type"
+    }
+    code {
+      value: "rest"
+    }
+    display {
+      value: "Restful Operation"
+    }
+  }
+  subtype {
+    system {
+      value: "http://hl7.org/fhir/restful-interaction"
+    }
+    code {
+      value: "search"
+    }
+    display {
+      value: "search"
+    }
+  }
+  action {
+    value: E
+  }
+  date_time {
+    value_us: 1440286944000000
+    timezone: "Z"
+    precision: SECOND
+  }
+  outcome {
+    value: SUCCESS
+  }
+}
+participant {
+  user_id {
+    value {
+      value: "95"
+    }
+  }
+  alt_id {
+    value: "601847123"
+  }
+  name {
+    value: "Grahame Grieve"
+  }
+  requestor {
+    value: true
+  }
+}
+source {
+  site {
+    value: "Cloud"
+  }
+  identifier {
+    value {
+      value: "hl7connect.healthintersections.com.au"
+    }
+  }
+  type {
+    system {
+      value: "http://hl7.org/fhir/security-source-type"
+    }
+    code {
+      value: "3"
+    }
+    display {
+      value: "Web Server"
+    }
+  }
+}
+object {
+  type {
+    system {
+      value: "http://hl7.org/fhir/object-type"
+    }
+    code {
+      value: "2"
+    }
+    display {
+      value: "System Object"
+    }
+  }
+  role {
+    system {
+      value: "http://hl7.org/fhir/object-role"
+    }
+    code {
+      value: "24"
+    }
+    display {
+      value: "Query"
+    }
+  }
+  query {
+    value: "http://fhir-dev.healthintersections.com.au/open/Encounter?participant=13"
+  }
+}
+

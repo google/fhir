@@ -1,0 +1,35 @@
+name: "Boolean"
+field {
+  name: "value"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_BOOL
+  options {
+    [google.fhir.proto.field_description]: "Primitive value for boolean"
+  }
+}
+field {
+  name: "id"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Id"
+  options {
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  name: "extension"
+  number: 3
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for boolean.\nPrimitive Type boolean.\nSee http://hl7.org/fhir/StructureDefinition/boolean"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/boolean"
+}

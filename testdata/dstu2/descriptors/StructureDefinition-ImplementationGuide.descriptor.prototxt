@@ -1,0 +1,722 @@
+name: "ImplementationGuide"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Id"
+  options {
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Meta"
+  options {
+    [google.fhir.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Uri"
+  options {
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.AllLanguageCode"
+  options {
+    [google.fhir.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Narrative"
+  options {
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ContainedResource"
+  options {
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "url"
+  number: 9
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Uri"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Absolute URL used to reference this Implementation Guide"
+  }
+}
+field {
+  name: "version"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.String"
+  options {
+    [google.fhir.proto.field_description]: "Logical id for this version of the Implementation Guide"
+  }
+}
+field {
+  name: "name"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.String"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Informal name for this Implementation Guide"
+  }
+}
+field {
+  name: "status"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ConformanceResourceStatusCode"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "draft | active | retired"
+  }
+}
+field {
+  name: "experimental"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Boolean"
+  options {
+    [google.fhir.proto.field_description]: "If for testing purposes, not real usage"
+  }
+}
+field {
+  name: "publisher"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.String"
+  options {
+    [google.fhir.proto.field_description]: "Name of the publisher (Organization or individual)"
+  }
+}
+field {
+  name: "contact"
+  number: 15
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ImplementationGuide.Contact"
+  options {
+    [google.fhir.proto.field_description]: "Contact details of the publisher"
+  }
+}
+field {
+  name: "date"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.DateTime"
+  options {
+    [google.fhir.proto.field_description]: "Date for this version of the Implementation Guide"
+  }
+}
+field {
+  name: "description"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.String"
+  options {
+    [google.fhir.proto.field_description]: "Natural language description of the Implementation Guide"
+  }
+}
+field {
+  name: "use_context"
+  number: 18
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "The implementation guide is intended to support these contexts"
+  }
+}
+field {
+  name: "copyright"
+  number: 19
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.String"
+  options {
+    [google.fhir.proto.field_description]: "Use and/or publishing restrictions"
+  }
+}
+field {
+  name: "fhir_version"
+  number: 20
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Id"
+  options {
+    [google.fhir.proto.field_description]: "FHIR Version this Implementation Guide targets"
+  }
+}
+field {
+  name: "dependency"
+  number: 21
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ImplementationGuide.Dependency"
+  options {
+    [google.fhir.proto.field_description]: "Another Implementation guide this depends on"
+  }
+}
+field {
+  name: "package_value"
+  number: 22
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ImplementationGuide.Package"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Group of resources as used in .page.package"
+  }
+  json_name: "package"
+}
+field {
+  name: "global"
+  number: 23
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ImplementationGuide.Global"
+  options {
+    [google.fhir.proto.field_description]: "Profiles that apply globally"
+  }
+}
+field {
+  name: "binary"
+  number: 24
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Uri"
+  options {
+    [google.fhir.proto.field_description]: "Image, css, script, etc."
+  }
+}
+field {
+  name: "page"
+  number: 25
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ImplementationGuide.Page"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Page/Section in the Guide"
+  }
+}
+nested_type {
+  name: "Contact"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "name"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Name of a individual to contact"
+    }
+  }
+  field {
+    name: "telecom"
+    number: 5
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.ContactPoint"
+    options {
+      [google.fhir.proto.field_description]: "Contact details for individual or publisher"
+    }
+  }
+}
+nested_type {
+  name: "Dependency"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "type"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.GuideDependencyTypeCode"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "reference | inclusion"
+    }
+  }
+  field {
+    name: "uri"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Uri"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Where to find dependency"
+    }
+  }
+}
+nested_type {
+  name: "Package"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "name"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.String"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Name used .page.package"
+    }
+  }
+  field {
+    name: "description"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Human readable text describing the package"
+    }
+  }
+  field {
+    name: "resource"
+    number: 6
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.ImplementationGuide.Package.Resource"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Resource in the implementation guide"
+    }
+  }
+  nested_type {
+    name: "Resource"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Id"
+      options {
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Extension"
+      options {
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Extension"
+      options {
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "purpose"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.GuideResourcePurposeCode"
+      options {
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "example | terminology | profile | extension | dictionary | logical"
+      }
+    }
+    field {
+      name: "name"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.String"
+      options {
+        [google.fhir.proto.field_description]: "Human Name for the resource"
+      }
+    }
+    field {
+      name: "description"
+      number: 6
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.String"
+      options {
+        [google.fhir.proto.field_description]: "Reason why included in guide"
+      }
+    }
+    field {
+      name: "acronym"
+      number: 7
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.String"
+      options {
+        [google.fhir.proto.field_description]: "Short code to identify the resource"
+      }
+    }
+    field {
+      name: "source"
+      number: 8
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.ImplementationGuide.Package.Resource.Source"
+      options {
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "Location of the resource"
+      }
+    }
+    field {
+      name: "example_for"
+      number: 9
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Reference"
+      options {
+        [google.fhir.proto.field_description]: "Resource this is an example of (if applicable)"
+        [google.fhir.proto.valid_reference_type]: "StructureDefinition"
+      }
+    }
+    nested_type {
+      name: "Source"
+      field {
+        name: "uri"
+        number: 1
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Uri"
+        oneof_index: 0
+      }
+      field {
+        name: "reference"
+        number: 2
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Reference"
+        options {
+          [google.fhir.proto.valid_reference_type]: "Resource"
+        }
+        oneof_index: 0
+      }
+      options {
+        [google.fhir.proto.is_choice_type]: true
+      }
+      oneof_decl {
+        name: "source"
+      }
+    }
+  }
+}
+nested_type {
+  name: "Global"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "type"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.ResourceTypeCode"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Type this profiles applies to"
+    }
+  }
+  field {
+    name: "profile"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Reference"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Profile that all resources must conform to"
+      [google.fhir.proto.valid_reference_type]: "StructureDefinition"
+    }
+  }
+}
+nested_type {
+  name: "Page"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "source"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Uri"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Where to find that page"
+    }
+  }
+  field {
+    name: "name"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.String"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Short name shown for navigational assistance"
+    }
+  }
+  field {
+    name: "kind"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.GuidePageKindCode"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "page | example | list | include | directory | dictionary | toc | resource"
+    }
+  }
+  field {
+    name: "type"
+    number: 7
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.ResourceTypeCode"
+    options {
+      [google.fhir.proto.field_description]: "Kind of resource to include in the list"
+    }
+  }
+  field {
+    name: "package_value"
+    number: 8
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Name of package to include"
+    }
+    json_name: "package"
+  }
+  field {
+    name: "format"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.MimeTypeCode"
+    options {
+      [google.fhir.proto.field_description]: "Format of the page (e.g. html, markdown, etc.)"
+    }
+  }
+  field {
+    name: "page"
+    number: 10
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.ImplementationGuide.Page"
+    options {
+      [google.fhir.proto.field_description]: "Nested Pages / Sections"
+    }
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ImplementationGuide.\nA set of rules about how FHIR is used.\nSee http://hl7.org/fhir/StructureDefinition/ImplementationGuide"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ImplementationGuide"
+}

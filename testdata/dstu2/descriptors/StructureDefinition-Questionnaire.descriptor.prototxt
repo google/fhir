@@ -1,0 +1,405 @@
+name: "Questionnaire"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Id"
+  options {
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Meta"
+  options {
+    [google.fhir.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Uri"
+  options {
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.AllLanguageCode"
+  options {
+    [google.fhir.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Narrative"
+  options {
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ContainedResource"
+  options {
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "identifier"
+  number: 9
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Identifier"
+  options {
+    [google.fhir.proto.field_description]: "External identifiers for this questionnaire"
+  }
+}
+field {
+  name: "version"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.String"
+  options {
+    [google.fhir.proto.field_description]: "Logical identifier for this version of Questionnaire"
+  }
+}
+field {
+  name: "status"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.QuestionnaireStatusCode"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "draft | published | retired"
+  }
+}
+field {
+  name: "date"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.DateTime"
+  options {
+    [google.fhir.proto.field_description]: "Date this version was authored"
+  }
+}
+field {
+  name: "publisher"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.String"
+  options {
+    [google.fhir.proto.field_description]: "Organization/individual who designed the questionnaire"
+  }
+}
+field {
+  name: "telecom"
+  number: 14
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ContactPoint"
+  options {
+    [google.fhir.proto.field_description]: "Contact information of the publisher"
+  }
+}
+field {
+  name: "subject_type"
+  number: 15
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ResourceTypeCode"
+  options {
+    [google.fhir.proto.field_description]: "Resource that can be subject of QuestionnaireResponse"
+  }
+}
+field {
+  name: "group"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Questionnaire.Group"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Grouped questions"
+  }
+}
+nested_type {
+  name: "Group"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "link_id"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "To link questionnaire with questionnaire response"
+    }
+  }
+  field {
+    name: "title"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Name to be displayed for group"
+    }
+  }
+  field {
+    name: "concept"
+    number: 6
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Coding"
+    options {
+      [google.fhir.proto.field_description]: "Concept that represents this section in a questionnaire"
+    }
+  }
+  field {
+    name: "text"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Additional text for the group"
+    }
+  }
+  field {
+    name: "required"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Boolean"
+    options {
+      [google.fhir.proto.field_description]: "Whether the group must be included in data results"
+    }
+  }
+  field {
+    name: "repeats"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Boolean"
+    options {
+      [google.fhir.proto.field_description]: "Whether the group may repeat"
+    }
+  }
+  field {
+    name: "group"
+    number: 10
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Questionnaire.Group"
+    options {
+      [google.fhir.proto.field_description]: "Nested questionnaire group"
+    }
+  }
+  field {
+    name: "question"
+    number: 11
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Questionnaire.Group.Question"
+    options {
+      [google.fhir.proto.field_description]: "Questions in this group"
+    }
+  }
+  nested_type {
+    name: "Question"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Id"
+      options {
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Extension"
+      options {
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Extension"
+      options {
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "link_id"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.String"
+      options {
+        [google.fhir.proto.field_description]: "To link questionnaire with questionnaire response"
+      }
+    }
+    field {
+      name: "concept"
+      number: 5
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Coding"
+      options {
+        [google.fhir.proto.field_description]: "Concept that represents this question on a questionnaire"
+      }
+    }
+    field {
+      name: "text"
+      number: 6
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.String"
+      options {
+        [google.fhir.proto.field_description]: "Text of the question as it is shown to the user"
+      }
+    }
+    field {
+      name: "type"
+      number: 7
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.AnswerFormatCode"
+      options {
+        [google.fhir.proto.field_description]: "boolean | decimal | integer | date | dateTime +"
+      }
+    }
+    field {
+      name: "required"
+      number: 8
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Boolean"
+      options {
+        [google.fhir.proto.field_description]: "Whether the question must be answered in data results"
+      }
+    }
+    field {
+      name: "repeats"
+      number: 9
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Boolean"
+      options {
+        [google.fhir.proto.field_description]: "Whether the question  can have multiple answers"
+      }
+    }
+    field {
+      name: "options"
+      number: 10
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Reference"
+      options {
+        [google.fhir.proto.field_description]: "Valueset containing permitted answers"
+        [google.fhir.proto.valid_reference_type]: "ValueSet"
+      }
+    }
+    field {
+      name: "option"
+      number: 11
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Coding"
+      options {
+        [google.fhir.proto.field_description]: "Permitted answer"
+      }
+    }
+    field {
+      name: "group"
+      number: 12
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Questionnaire.Group"
+      options {
+        [google.fhir.proto.field_description]: "Nested questionnaire group"
+      }
+    }
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Questionnaire.\nA structured set of questions.\nSee http://hl7.org/fhir/StructureDefinition/Questionnaire"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Questionnaire"
+}

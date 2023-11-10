@@ -1,0 +1,112 @@
+id {
+  value: "genetics-example3-mutationlist-3"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div><p><b>Generated Narrative with Details</b></p><p><b>id</b>: genetics-example3-mutationlist-3</p><p><b>status</b>: final</p><p><b>code</b>: ABCB4 gene mutation analysis <span>(Details : {LOINC code \'49874-1\' = \'ABCB4 gene mutation analysis in Blood or Tissue by Molecular genetics method Narrative\', given as \'ABCB4 gene mutation analysis\'})</span></p><p><b>subject</b>: <a>Molecular Lab Patient ID: HOSP-23456</a></p><p><b>performer</b>: <a>Molecular Diagnostic Laboratory</a></p><p><b>specimen</b>: <a>Molecular Specimen ID: MLD45-Z4-1234</a></p><h3>Components</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Value[x]</b></td></tr><tr><td>*</td><td>Genetic disease sequence variation interpretation <span>(Details : {LOINC code \'53037-8\' = \'Genetic disease sequence variation interpretation [interpretation] in Blood or Tissue by Molecular genetics method\', given as \'Genetic disease sequence variation interpretation\'})</span></td><td>Benign <span>(Details : {http://www.genenames.org code \'LA6675-8\' = \'??\', given as \'Benign\'})</span></td></tr></table></div>"
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/geneticsDNARegionName"
+  }
+  value {
+    string_value {
+      value: "intron 16"
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/geneticsVariationId"
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.ncbi.nlm.nih.gov/projects/SNP"
+        }
+        code {
+          value: "31668"
+        }
+        display {
+          value: "c.2211+16C>T"
+        }
+      }
+    }
+  }
+}
+status {
+  value: FINAL
+}
+code {
+  coding {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "49874-1"
+    }
+    display {
+      value: "ABCB4 gene mutation analysis"
+    }
+  }
+}
+subject {
+  patient_id {
+    value: "genetics-example2"
+  }
+  display {
+    value: "Molecular Lab Patient ID: HOSP-23456"
+  }
+}
+performer {
+  practitioner_id {
+    value: "genetics-example2"
+  }
+  display {
+    value: "Molecular Diagnostic Laboratory"
+  }
+}
+specimen {
+  specimen_id {
+    value: "genetics-example2"
+  }
+  display {
+    value: "Molecular Specimen ID: MLD45-Z4-1234"
+  }
+}
+component {
+  code {
+    coding {
+      system {
+        value: "http://loinc.org"
+      }
+      code {
+        value: "53037-8"
+      }
+      display {
+        value: "Genetic disease sequence variation interpretation"
+      }
+    }
+  }
+  value {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://www.genenames.org"
+        }
+        code {
+          value: "LA6675-8"
+        }
+        display {
+          value: "Benign"
+        }
+      }
+    }
+  }
+}
+

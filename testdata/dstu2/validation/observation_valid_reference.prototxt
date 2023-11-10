@@ -1,0 +1,9 @@
+status { value: FINAL }
+code {
+  coding {
+    system { value: "foo" }
+    code { value: "bar" }
+  }
+}
+id { value: "123" }
+specimen { specimen_id { value: "12345" } }

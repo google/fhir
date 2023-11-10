@@ -1,0 +1,56 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>\n      Burgers UMC, South Wing, second floor Physiotherapy Schedule\n    </div>"
+  }
+}
+identifier {
+  use {
+    value: USUAL
+  }
+  system {
+    value: "http://example.org/scheduleid"
+  }
+  value {
+    value: "45"
+  }
+}
+type {
+  coding {
+    code {
+      value: "45"
+    }
+    display {
+      value: "Physiotherapy"
+    }
+  }
+}
+actor {
+  location_id {
+    value: "1"
+  }
+  display {
+    value: "Burgers UMC, South Wing, second floor"
+  }
+}
+planning_horizon {
+  start {
+    value_us: 1387962900000000
+    timezone: "Z"
+    precision: SECOND
+  }
+  end {
+    value_us: 1387963800000000
+    timezone: "Z"
+    precision: SECOND
+  }
+}
+comment {
+  value: "Assessments should be performed before requesting appointments in this slot."
+}
+

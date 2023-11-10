@@ -1,0 +1,81 @@
+name: "Money"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "value"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Decimal"
+  options {
+    [google.fhir.proto.field_description]: "Numerical value (with implicit precision)"
+  }
+}
+field {
+  name: "currency"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Money.CurrencyCode"
+  options {
+    [google.fhir.proto.field_description]: "ISO 4217 Currency Code"
+  }
+}
+nested_type {
+  name: "CurrencyCode"
+  field {
+    number: 1
+    options {
+      [google.fhir.proto.reserved_reason]: "Field 1 reserved to allow enumeration in the future."
+    }
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+  }
+  field {
+    name: "value"
+    number: 4
+    type: TYPE_STRING
+    options {
+      [google.fhir.proto.field_description]: "This valueset is not enumerable, and so is represented as a string."
+    }
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/currencies"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Money, last updated 2019-12-31T21:03:40.621+11:00.\nAn amount of economic utility in some recognized currency.\nSee http://hl7.org/fhir/StructureDefinition/Money"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Money"
+}

@@ -1,0 +1,261 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/permission_go_proto";
+
+// Auto-generated from StructureDefinition for Permission.
+// Access Rules.
+// See http://hl7.org/fhir/StructureDefinition/Permission
+message Permission {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Permission";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Permission.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // active | entered-in-error | draft | rejected
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/permission-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PermissionStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 10
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The person or entity that asserts the permission
+  Reference asserter = 11 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "CareTeam",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.proto.valid_reference_type) = "HealthcareService"
+  ];
+
+  // The date that permission was asserted
+  repeated DateTime date = 12;
+
+  // The period in which the permission is active
+  Period validity = 13;
+
+  // The asserted justification for using the data
+  message Justification {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The regulatory grounds upon which this Permission builds
+    repeated CodeableConcept basis = 4;
+
+    // Justifing rational
+    repeated Reference evidence = 5
+        [(.google.fhir.proto.valid_reference_type) = "Resource"];
+  }
+  Justification justification = 14;
+
+  // deny-overrides | permit-overrides | ordered-deny-overrides |
+  // ordered-permit-overrides | deny-unless-permit | permit-unless-deny
+  message CombiningCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/permission-rule-combining";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PermissionRuleCombiningCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  CombiningCode combining = 15
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Constraints to the Permission
+  message Rule {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // deny | permit
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/consent-provision-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ConsentProvisionTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 4;
+
+    // The selection criteria to identify data that is within scope of this
+    // provision
+    message Data {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Explicit FHIR Resource references
+      message Resource {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // instance | related | dependents | authoredby
+        message MeaningCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/consent-data-meaning";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          ConsentDataMeaningCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        MeaningCode meaning = 4
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+        // The actual data reference
+        Reference reference = 5 [
+          (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+          (.google.fhir.proto.valid_reference_type) = "Resource"
+        ];
+      }
+      repeated Resource resource = 4;
+
+      // Security tag code on .meta.security
+      repeated Coding security = 5;
+
+      // Timeframe encompasing data create/update
+      repeated Period period = 6;
+
+      // Expression identifying the data
+      Expression expression = 7;
+    }
+    repeated Data data = 5;
+
+    // A description or definition of which activities are allowed to be done on
+    // the data
+    message Activity {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Authorized actor(s)
+      repeated Reference actor = 4 [
+        (.google.fhir.proto.valid_reference_type) = "Device",
+        (.google.fhir.proto.valid_reference_type) = "Group",
+        (.google.fhir.proto.valid_reference_type) = "CareTeam",
+        (.google.fhir.proto.valid_reference_type) = "Organization",
+        (.google.fhir.proto.valid_reference_type) = "Patient",
+        (.google.fhir.proto.valid_reference_type) = "Practitioner",
+        (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+        (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+      ];
+
+      // Actions controlled by this rule
+      repeated CodeableConcept action = 5;
+
+      // The purpose for which the permission is given
+      repeated CodeableConcept purpose = 6;
+    }
+    repeated Activity activity = 6;
+
+    // What limits apply to the use of the data
+    repeated CodeableConcept limit = 7;
+  }
+  repeated Rule rule = 16;
+}

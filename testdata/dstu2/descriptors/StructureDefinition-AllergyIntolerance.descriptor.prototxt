@@ -1,0 +1,348 @@
+name: "AllergyIntolerance"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Id"
+  options {
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Meta"
+  options {
+    [google.fhir.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Uri"
+  options {
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.AllLanguageCode"
+  options {
+    [google.fhir.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Narrative"
+  options {
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ContainedResource"
+  options {
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "identifier"
+  number: 9
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Identifier"
+  options {
+    [google.fhir.proto.field_description]: "External ids for this item"
+  }
+}
+field {
+  name: "onset"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.DateTime"
+  options {
+    [google.fhir.proto.field_description]: "Date(/time) when manifestations showed"
+  }
+}
+field {
+  name: "recorded_date"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.DateTime"
+  options {
+    [google.fhir.proto.field_description]: "When recorded"
+  }
+}
+field {
+  name: "recorder"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Who recorded the sensitivity"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+  }
+}
+field {
+  name: "patient"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Reference"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Who the sensitivity is for"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+  }
+}
+field {
+  name: "reporter"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Source of the information about the allergy"
+    [google.fhir.proto.valid_reference_type]: "Patient"
+    [google.fhir.proto.valid_reference_type]: "RelatedPerson"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+  }
+}
+field {
+  name: "substance"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Substance, (or class) considered to be responsible for risk"
+  }
+}
+field {
+  name: "status"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.AllergyIntoleranceStatusCode"
+  options {
+    [google.fhir.proto.field_description]: "active | unconfirmed | confirmed | inactive | resolved | refuted | entered-in-error"
+  }
+}
+field {
+  name: "criticality"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.AllergyIntoleranceCriticalityCode"
+  options {
+    [google.fhir.proto.field_description]: "CRITL | CRITH | CRITU"
+  }
+}
+field {
+  name: "type"
+  number: 18
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.AllergyIntoleranceTypeCode"
+  options {
+    [google.fhir.proto.field_description]: "allergy | intolerance - Underlying mechanism (if known)"
+  }
+}
+field {
+  name: "category"
+  number: 19
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.AllergyIntoleranceCategoryCode"
+  options {
+    [google.fhir.proto.field_description]: "food | medication | environment | other - Category of Substance"
+  }
+}
+field {
+  name: "last_occurence"
+  number: 20
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.DateTime"
+  options {
+    [google.fhir.proto.field_description]: "Date(/time) of last known occurrence of a reaction"
+  }
+}
+field {
+  name: "note"
+  number: 21
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Annotation"
+  options {
+    [google.fhir.proto.field_description]: "Additional text not captured in other fields"
+  }
+}
+field {
+  name: "reaction"
+  number: 22
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.AllergyIntolerance.Reaction"
+  options {
+    [google.fhir.proto.field_description]: "Adverse Reaction Events linked to exposure to substance"
+  }
+}
+nested_type {
+  name: "Reaction"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "substance"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+    options {
+      [google.fhir.proto.field_description]: "Specific substance considered to be responsible for event"
+    }
+  }
+  field {
+    name: "certainty"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.AllergyIntoleranceCertaintyCode"
+    options {
+      [google.fhir.proto.field_description]: "unlikely | likely | confirmed - clinical certainty about the specific substance"
+    }
+  }
+  field {
+    name: "manifestation"
+    number: 6
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Clinical symptoms/signs associated with the Event"
+    }
+  }
+  field {
+    name: "description"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Description of the event as a whole"
+    }
+  }
+  field {
+    name: "onset"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.DateTime"
+    options {
+      [google.fhir.proto.field_description]: "Date(/time) when manifestations showed"
+    }
+  }
+  field {
+    name: "severity"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.AllergyIntoleranceSeverityCode"
+    options {
+      [google.fhir.proto.field_description]: "mild | moderate | severe (of event as a whole)"
+    }
+  }
+  field {
+    name: "exposure_route"
+    number: 10
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+    options {
+      [google.fhir.proto.field_description]: "How the subject was exposed to the substance"
+    }
+  }
+  field {
+    name: "note"
+    number: 11
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Annotation"
+    options {
+      [google.fhir.proto.field_description]: "Text about event not captured in other fields"
+    }
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for AllergyIntolerance.\nAllergy or Intolerance (generally: Risk Of Adverse reaction to a substance).\nSee http://hl7.org/fhir/StructureDefinition/AllergyIntolerance"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/AllergyIntolerance"
+}

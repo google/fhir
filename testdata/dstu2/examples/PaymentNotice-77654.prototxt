@@ -1,0 +1,43 @@
+id {
+  value: "77654"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>A human-readable rendering of the PaymentNotice</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://benefitsinc.com/paymentnotice"
+  }
+  value {
+    value: "776543"
+  }
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+organization {
+  organization_id {
+    value: "1"
+  }
+}
+request {
+  uri {
+    value: "http://benefitsinc.com/fhir/oralhealthclaim/12345"
+  }
+}
+payment_status {
+  system {
+    value: "http://hl7.org/fhir/paymentstatus"
+  }
+  code {
+    value: "paid"
+  }
+}
+

@@ -1,0 +1,62 @@
+name: "Time"
+field {
+  name: "value_us"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_INT64
+  options {
+    [google.fhir.proto.field_description]: "Primitive value for time"
+  }
+}
+field {
+  name: "precision"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_ENUM
+  type_name: ".google.fhir.r5.core.Time.Precision"
+}
+field {
+  name: "id"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  name: "extension"
+  number: 4
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+enum_type {
+  name: "Precision"
+  value {
+    name: "PRECISION_UNSPECIFIED"
+    number: 0
+  }
+  value {
+    name: "SECOND"
+    number: 1
+  }
+  value {
+    name: "MILLISECOND"
+    number: 2
+  }
+  value {
+    name: "MICROSECOND"
+    number: 3
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for time, last updated 2019-12-31T21:03:40.621+11:00.\nPrimitive Type time.\nSee http://hl7.org/fhir/StructureDefinition/time"
+  [google.fhir.proto.value_regex]: "([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/time"
+}

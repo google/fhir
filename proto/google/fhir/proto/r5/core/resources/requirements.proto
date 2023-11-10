@@ -1,0 +1,219 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/requirements_go_proto";
+
+// Auto-generated from StructureDefinition for Requirements.
+// A set of requirements - features of systems that are necessary.
+// See http://hl7.org/fhir/StructureDefinition/Requirements
+message Requirements {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Requirements";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.exists() implies name.matches('^[A-Z]([A-Za-z0-9_]){1,254}$')";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Requirements.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this Requirements, represented as a URI (globally
+  // unique)
+  Uri url = 10 [(.google.fhir.proto.fhir_path_warning_constraint) =
+                    "exists() implies matches('^[^|# ]+$')"];
+
+  // Additional identifier for the Requirements (business identifier)
+  repeated Identifier identifier = 11;
+
+  // Business version of the Requirements
+  String version = 12;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 13;
+
+  // Name for this Requirements (computer friendly)
+  String name = 14;
+
+  // Name for this Requirements (human friendly)
+  String title = 15;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 17;
+
+  // Date last changed
+  DateTime date = 18;
+
+  // Name of the publisher/steward (organization or individual)
+  String publisher = 19;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 20;
+
+  // Natural language description of the requirements
+  Markdown description = 21;
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 22;
+
+  // Intended jurisdiction for Requirements (if applicable)
+  repeated CodeableConcept jurisdiction = 23;
+
+  // Why this Requirements is defined
+  Markdown purpose = 24;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 25;
+
+  // Copyright holder and year(s)
+  String copyright_label = 26;
+
+  // Other set of Requirements this builds on
+  repeated Canonical derived_from = 27;
+
+  // External artifact (rule/document etc. that) created this set of
+  // requirements
+  repeated Url reference = 28;
+
+  // Actor for these requirements
+  repeated Canonical actor = 29;
+
+  // Actual statement as markdown
+  message Statement {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Key that identifies this statement
+    Id key = 4 [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Short Human label for this statement
+    String label = 5;
+
+    // SHALL | SHOULD | MAY | SHOULD-NOT
+    message ConformanceCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/conformance-expectation";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ConformanceExpectationCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    repeated ConformanceCode conformance = 6;
+
+    // Set to true if requirements statement is conditional
+    Boolean conditionality = 7;
+
+    // The actual requirement
+    Markdown requirement = 8
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Another statement this clarifies/restricts ([url#]key)
+    String derived_from = 9;
+
+    // A larger requirement that this requirement helps to refine and enable
+    String parent = 10;
+
+    // Design artifact that satisfies this requirement
+    repeated Url satisfied_by = 11;
+
+    // External artifact (rule/document etc. that) created this requirement
+    repeated Url reference = 12;
+
+    // Who asked for this statement
+    repeated Reference source = 13 [
+      (.google.fhir.proto.valid_reference_type) = "CareTeam",
+      (.google.fhir.proto.valid_reference_type) = "Device",
+      (.google.fhir.proto.valid_reference_type) = "Group",
+      (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+    ];
+  }
+  repeated Statement statement = 30;
+}

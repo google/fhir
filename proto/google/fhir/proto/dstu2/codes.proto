@@ -1,0 +1,3639 @@
+//    Copyright 2018 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.dstu2.proto;
+
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/dstu2/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.dstu2.proto";
+option (.google.fhir.proto.fhir_version) = DSTU2;
+
+// The actionlist.
+// See http://hl7.org/fhir/ValueSet/actionlist.
+message ActionListCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/actionlist";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    CANCEL = 1 [(.google.fhir.proto.fhir_original_code) = "cancel"];
+    POLL = 2 [(.google.fhir.proto.fhir_original_code) = "poll"];
+    REPROCESS = 3 [(.google.fhir.proto.fhir_original_code) = "reprocess"];
+    STATUS = 4 [(.google.fhir.proto.fhir_original_code) = "status"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The adjudication error.
+// See http://hl7.org/fhir/ValueSet/adjudication-error.
+message AdjudicationErrorCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/adjudication-error";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    A001 = 1 [(.google.fhir.proto.fhir_original_code) = "A001"];
+    A002 = 2 [(.google.fhir.proto.fhir_original_code) = "A002"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The administrative gender.
+// See http://hl7.org/fhir/ValueSet/administrative-gender.
+message AdministrativeGenderCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/administrative-gender";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    MALE = 1 [(.google.fhir.proto.fhir_original_code) = "male"];
+    FEMALE = 2 [(.google.fhir.proto.fhir_original_code) = "female"];
+    OTHER = 3 [(.google.fhir.proto.fhir_original_code) = "other"];
+    UNKNOWN = 4 [(.google.fhir.proto.fhir_original_code) = "unknown"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The allergy intolerance category.
+// See http://hl7.org/fhir/ValueSet/allergy-intolerance-category.
+message AllergyIntoleranceCategoryCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/allergy-intolerance-category";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    FOOD = 1 [(.google.fhir.proto.fhir_original_code) = "food"];
+    MEDICATION = 2 [(.google.fhir.proto.fhir_original_code) = "medication"];
+    ENVIRONMENT = 3 [(.google.fhir.proto.fhir_original_code) = "environment"];
+    OTHER = 4 [(.google.fhir.proto.fhir_original_code) = "other"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The allergy intolerance criticality.
+// See http://hl7.org/fhir/ValueSet/allergy-intolerance-criticality.
+message AllergyIntoleranceCriticalityCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/allergy-intolerance-criticality";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    CRITL = 1 [(.google.fhir.proto.fhir_original_code) = "CRITL"];
+    CRITH = 2 [(.google.fhir.proto.fhir_original_code) = "CRITH"];
+    CRITU = 3 [(.google.fhir.proto.fhir_original_code) = "CRITU"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The allergy intolerance status.
+// See http://hl7.org/fhir/ValueSet/allergy-intolerance-status.
+message AllergyIntoleranceStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/allergy-intolerance-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ACTIVE = 1 [(.google.fhir.proto.fhir_original_code) = "active"];
+    UNCONFIRMED = 2 [(.google.fhir.proto.fhir_original_code) = "unconfirmed"];
+    CONFIRMED = 3 [(.google.fhir.proto.fhir_original_code) = "confirmed"];
+    INACTIVE = 4 [(.google.fhir.proto.fhir_original_code) = "inactive"];
+    RESOLVED = 5 [(.google.fhir.proto.fhir_original_code) = "resolved"];
+    REFUTED = 6 [(.google.fhir.proto.fhir_original_code) = "refuted"];
+    ENTERED_IN_ERROR = 7
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The allergy intolerance type.
+// See http://hl7.org/fhir/ValueSet/allergy-intolerance-type.
+message AllergyIntoleranceTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/allergy-intolerance-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ALLERGY = 1 [(.google.fhir.proto.fhir_original_code) = "allergy"];
+    INTOLERANCE = 2 [(.google.fhir.proto.fhir_original_code) = "intolerance"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The answer format.
+// See http://hl7.org/fhir/ValueSet/answer-format.
+message AnswerFormatCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/answer-format";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    BOOLEAN = 1 [(.google.fhir.proto.fhir_original_code) = "boolean"];
+    DECIMAL = 2 [(.google.fhir.proto.fhir_original_code) = "decimal"];
+    INTEGER = 3 [(.google.fhir.proto.fhir_original_code) = "integer"];
+    DATE = 4 [(.google.fhir.proto.fhir_original_code) = "date"];
+    DATETIME = 5 [(.google.fhir.proto.fhir_original_code) = "dateTime"];
+    INSTANT = 6 [(.google.fhir.proto.fhir_original_code) = "instant"];
+    TIME = 7 [(.google.fhir.proto.fhir_original_code) = "time"];
+    STRING = 8 [(.google.fhir.proto.fhir_original_code) = "string"];
+    TEXT = 9 [(.google.fhir.proto.fhir_original_code) = "text"];
+    URL = 10 [(.google.fhir.proto.fhir_original_code) = "url"];
+    CHOICE = 11 [(.google.fhir.proto.fhir_original_code) = "choice"];
+    OPEN_CHOICE = 12 [(.google.fhir.proto.fhir_original_code) = "open-choice"];
+    ATTACHMENT = 13 [(.google.fhir.proto.fhir_original_code) = "attachment"];
+    REFERENCE = 14 [(.google.fhir.proto.fhir_original_code) = "reference"];
+    QUANTITY = 15 [(.google.fhir.proto.fhir_original_code) = "quantity"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The appointmentstatus.
+// See http://hl7.org/fhir/ValueSet/appointmentstatus.
+message AppointmentStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/appointmentstatus";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PROPOSED = 1 [(.google.fhir.proto.fhir_original_code) = "proposed"];
+    PENDING = 2 [(.google.fhir.proto.fhir_original_code) = "pending"];
+    BOOKED = 3 [(.google.fhir.proto.fhir_original_code) = "booked"];
+    ARRIVED = 4 [(.google.fhir.proto.fhir_original_code) = "arrived"];
+    FULFILLED = 5 [(.google.fhir.proto.fhir_original_code) = "fulfilled"];
+    CANCELLED = 6 [(.google.fhir.proto.fhir_original_code) = "cancelled"];
+    NOSHOW = 7 [(.google.fhir.proto.fhir_original_code) = "noshow"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The assert direction codes.
+// See http://hl7.org/fhir/ValueSet/assert-direction-codes.
+message AssertionDirectionTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/assert-direction-codes";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    RESPONSE = 1 [(.google.fhir.proto.fhir_original_code) = "response"];
+    REQUEST = 2 [(.google.fhir.proto.fhir_original_code) = "request"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The assert operator codes.
+// See http://hl7.org/fhir/ValueSet/assert-operator-codes.
+message AssertionOperatorTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/assert-operator-codes";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    EQUALS = 1 [(.google.fhir.proto.fhir_original_code) = "equals"];
+    NOTEQUALS = 2 [(.google.fhir.proto.fhir_original_code) = "notEquals"];
+    IN = 3 [(.google.fhir.proto.fhir_original_code) = "in"];
+    NOTIN = 4 [(.google.fhir.proto.fhir_original_code) = "notIn"];
+    GREATERTHAN = 5 [(.google.fhir.proto.fhir_original_code) = "greaterThan"];
+    LESSTHAN = 6 [(.google.fhir.proto.fhir_original_code) = "lessThan"];
+    EMPTY = 7 [(.google.fhir.proto.fhir_original_code) = "empty"];
+    NOTEMPTY = 8 [(.google.fhir.proto.fhir_original_code) = "notEmpty"];
+    CONTAINS = 9 [(.google.fhir.proto.fhir_original_code) = "contains"];
+    NOTCONTAINS = 10 [(.google.fhir.proto.fhir_original_code) = "notContains"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The assert response code types.
+// See http://hl7.org/fhir/ValueSet/assert-response-code-types.
+message AssertionResponseTypesCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/assert-response-code-types";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    OKAY = 1 [(.google.fhir.proto.fhir_original_code) = "okay"];
+    CREATED = 2 [(.google.fhir.proto.fhir_original_code) = "created"];
+    NOCONTENT = 3 [(.google.fhir.proto.fhir_original_code) = "noContent"];
+    NOTMODIFIED = 4 [(.google.fhir.proto.fhir_original_code) = "notModified"];
+    BAD = 5 [(.google.fhir.proto.fhir_original_code) = "bad"];
+    FORBIDDEN = 6 [(.google.fhir.proto.fhir_original_code) = "forbidden"];
+    NOTFOUND = 7 [(.google.fhir.proto.fhir_original_code) = "notFound"];
+    METHODNOTALLOWED = 8
+        [(.google.fhir.proto.fhir_original_code) = "methodNotAllowed"];
+    CONFLICT = 9 [(.google.fhir.proto.fhir_original_code) = "conflict"];
+    GONE = 10 [(.google.fhir.proto.fhir_original_code) = "gone"];
+    PRECONDITIONFAILED = 11
+        [(.google.fhir.proto.fhir_original_code) = "preconditionFailed"];
+    UNPROCESSABLE = 12
+        [(.google.fhir.proto.fhir_original_code) = "unprocessable"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The audit event action.
+// See http://hl7.org/fhir/ValueSet/audit-event-action.
+message AuditEventActionCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/audit-event-action";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    C = 1 [(.google.fhir.proto.fhir_original_code) = "C"];
+    R = 2 [(.google.fhir.proto.fhir_original_code) = "R"];
+    U = 3 [(.google.fhir.proto.fhir_original_code) = "U"];
+    D = 4 [(.google.fhir.proto.fhir_original_code) = "D"];
+    E = 5 [(.google.fhir.proto.fhir_original_code) = "E"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The audit event outcome.
+// See http://hl7.org/fhir/ValueSet/audit-event-outcome.
+message AuditEventOutcomeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/audit-event-outcome";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    SUCCESS = 1 [(.google.fhir.proto.fhir_original_code) = "0"];
+    MINOR_FAILURE = 2 [(.google.fhir.proto.fhir_original_code) = "4"];
+    SERIOUS_FAILURE = 3 [(.google.fhir.proto.fhir_original_code) = "8"];
+    MAJOR_FAILURE = 4 [(.google.fhir.proto.fhir_original_code) = "12"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The binding strength.
+// See http://hl7.org/fhir/ValueSet/binding-strength.
+message BindingStrengthCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/binding-strength";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    REQUIRED = 1 [(.google.fhir.proto.fhir_original_code) = "required"];
+    EXTENSIBLE = 2 [(.google.fhir.proto.fhir_original_code) = "extensible"];
+    PREFERRED = 3 [(.google.fhir.proto.fhir_original_code) = "preferred"];
+    EXAMPLE = 4 [(.google.fhir.proto.fhir_original_code) = "example"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The bundle type.
+// See http://hl7.org/fhir/ValueSet/bundle-type.
+message BundleTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/bundle-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    DOCUMENT = 1 [(.google.fhir.proto.fhir_original_code) = "document"];
+    MESSAGE = 2 [(.google.fhir.proto.fhir_original_code) = "message"];
+    TRANSACTION = 3 [(.google.fhir.proto.fhir_original_code) = "transaction"];
+    TRANSACTION_RESPONSE = 4
+        [(.google.fhir.proto.fhir_original_code) = "transaction-response"];
+    BATCH = 5 [(.google.fhir.proto.fhir_original_code) = "batch"];
+    BATCH_RESPONSE = 6
+        [(.google.fhir.proto.fhir_original_code) = "batch-response"];
+    HISTORY = 7 [(.google.fhir.proto.fhir_original_code) = "history"];
+    SEARCHSET = 8 [(.google.fhir.proto.fhir_original_code) = "searchset"];
+    COLLECTION = 9 [(.google.fhir.proto.fhir_original_code) = "collection"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The care plan activity status.
+// See http://hl7.org/fhir/ValueSet/care-plan-activity-status.
+message CarePlanActivityStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/care-plan-activity-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    NOT_STARTED = 1 [(.google.fhir.proto.fhir_original_code) = "not-started"];
+    SCHEDULED = 2 [(.google.fhir.proto.fhir_original_code) = "scheduled"];
+    IN_PROGRESS = 3 [(.google.fhir.proto.fhir_original_code) = "in-progress"];
+    ON_HOLD = 4 [(.google.fhir.proto.fhir_original_code) = "on-hold"];
+    COMPLETED = 5 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    CANCELLED = 6 [(.google.fhir.proto.fhir_original_code) = "cancelled"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The care plan relationship.
+// See http://hl7.org/fhir/ValueSet/care-plan-relationship.
+message CarePlanRelationshipCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/care-plan-relationship";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    INCLUDES = 1 [(.google.fhir.proto.fhir_original_code) = "includes"];
+    REPLACES = 2 [(.google.fhir.proto.fhir_original_code) = "replaces"];
+    FULFILLS = 3 [(.google.fhir.proto.fhir_original_code) = "fulfills"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The care plan status.
+// See http://hl7.org/fhir/ValueSet/care-plan-status.
+message CarePlanStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/care-plan-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PROPOSED = 1 [(.google.fhir.proto.fhir_original_code) = "proposed"];
+    DRAFT = 2 [(.google.fhir.proto.fhir_original_code) = "draft"];
+    ACTIVE = 3 [(.google.fhir.proto.fhir_original_code) = "active"];
+    COMPLETED = 4 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    CANCELLED = 5 [(.google.fhir.proto.fhir_original_code) = "cancelled"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The claim type link.
+// See http://hl7.org/fhir/ValueSet/claim-type-link.
+message ClaimTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/claim-type-link";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    INSTITUTIONAL = 1
+        [(.google.fhir.proto.fhir_original_code) = "institutional"];
+    ORAL = 2 [(.google.fhir.proto.fhir_original_code) = "oral"];
+    PHARMACY = 3 [(.google.fhir.proto.fhir_original_code) = "pharmacy"];
+    PROFESSIONAL = 4 [(.google.fhir.proto.fhir_original_code) = "professional"];
+    VISION = 5 [(.google.fhir.proto.fhir_original_code) = "vision"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The claim use link.
+// See http://hl7.org/fhir/ValueSet/claim-use-link.
+message UseCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/claim-use-link";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    COMPLETE = 1 [(.google.fhir.proto.fhir_original_code) = "complete"];
+    PROPOSED = 2 [(.google.fhir.proto.fhir_original_code) = "proposed"];
+    EXPLORATORY = 3 [(.google.fhir.proto.fhir_original_code) = "exploratory"];
+    OTHER = 4 [(.google.fhir.proto.fhir_original_code) = "other"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The clinical impression status.
+// See http://hl7.org/fhir/ValueSet/clinical-impression-status.
+message ClinicalImpressionStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/clinical-impression-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    IN_PROGRESS = 1 [(.google.fhir.proto.fhir_original_code) = "in-progress"];
+    COMPLETED = 2 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    ENTERED_IN_ERROR = 3
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The communication request status.
+// See http://hl7.org/fhir/ValueSet/communication-request-status.
+message CommunicationRequestStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/communication-request-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PROPOSED = 1 [(.google.fhir.proto.fhir_original_code) = "proposed"];
+    PLANNED = 2 [(.google.fhir.proto.fhir_original_code) = "planned"];
+    REQUESTED = 3 [(.google.fhir.proto.fhir_original_code) = "requested"];
+    RECEIVED = 4 [(.google.fhir.proto.fhir_original_code) = "received"];
+    ACCEPTED = 5 [(.google.fhir.proto.fhir_original_code) = "accepted"];
+    IN_PROGRESS = 6 [(.google.fhir.proto.fhir_original_code) = "in-progress"];
+    COMPLETED = 7 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    SUSPENDED = 8 [(.google.fhir.proto.fhir_original_code) = "suspended"];
+    REJECTED = 9 [(.google.fhir.proto.fhir_original_code) = "rejected"];
+    FAILED = 10 [(.google.fhir.proto.fhir_original_code) = "failed"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The communication status.
+// See http://hl7.org/fhir/ValueSet/communication-status.
+message CommunicationStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/communication-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    IN_PROGRESS = 1 [(.google.fhir.proto.fhir_original_code) = "in-progress"];
+    COMPLETED = 2 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    SUSPENDED = 3 [(.google.fhir.proto.fhir_original_code) = "suspended"];
+    REJECTED = 4 [(.google.fhir.proto.fhir_original_code) = "rejected"];
+    FAILED = 5 [(.google.fhir.proto.fhir_original_code) = "failed"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The composition attestation mode.
+// See http://hl7.org/fhir/ValueSet/composition-attestation-mode.
+message CompositionAttestationModeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/composition-attestation-mode";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PERSONAL = 1 [(.google.fhir.proto.fhir_original_code) = "personal"];
+    PROFESSIONAL = 2 [(.google.fhir.proto.fhir_original_code) = "professional"];
+    LEGAL = 3 [(.google.fhir.proto.fhir_original_code) = "legal"];
+    OFFICIAL = 4 [(.google.fhir.proto.fhir_original_code) = "official"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The composition status.
+// See http://hl7.org/fhir/ValueSet/composition-status.
+message CompositionStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/composition-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PRELIMINARY = 1 [(.google.fhir.proto.fhir_original_code) = "preliminary"];
+    FINAL = 2 [(.google.fhir.proto.fhir_original_code) = "final"];
+    AMENDED = 3 [(.google.fhir.proto.fhir_original_code) = "amended"];
+    ENTERED_IN_ERROR = 4
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The concept map equivalence.
+// See http://hl7.org/fhir/ValueSet/concept-map-equivalence.
+message ConceptMapEquivalenceCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/concept-map-equivalence";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    EQUIVALENT = 1 [(.google.fhir.proto.fhir_original_code) = "equivalent"];
+    EQUAL = 2 [(.google.fhir.proto.fhir_original_code) = "equal"];
+    WIDER = 3 [(.google.fhir.proto.fhir_original_code) = "wider"];
+    SUBSUMES = 4 [(.google.fhir.proto.fhir_original_code) = "subsumes"];
+    NARROWER = 5 [(.google.fhir.proto.fhir_original_code) = "narrower"];
+    SPECIALIZES = 6 [(.google.fhir.proto.fhir_original_code) = "specializes"];
+    INEXACT = 7 [(.google.fhir.proto.fhir_original_code) = "inexact"];
+    UNMATCHED = 8 [(.google.fhir.proto.fhir_original_code) = "unmatched"];
+    DISJOINT = 9 [(.google.fhir.proto.fhir_original_code) = "disjoint"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The condition ver status.
+// See http://hl7.org/fhir/ValueSet/condition-ver-status.
+message ConditionVerificationStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/condition-ver-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PROVISIONAL = 1 [(.google.fhir.proto.fhir_original_code) = "provisional"];
+    DIFFERENTIAL = 2 [(.google.fhir.proto.fhir_original_code) = "differential"];
+    CONFIRMED = 3 [(.google.fhir.proto.fhir_original_code) = "confirmed"];
+    REFUTED = 4 [(.google.fhir.proto.fhir_original_code) = "refuted"];
+    ENTERED_IN_ERROR = 5
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+    UNKNOWN = 6 [(.google.fhir.proto.fhir_original_code) = "unknown"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The conditional delete status.
+// See http://hl7.org/fhir/ValueSet/conditional-delete-status.
+message ConditionalDeleteStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/conditional-delete-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    NOT_SUPPORTED = 1
+        [(.google.fhir.proto.fhir_original_code) = "not-supported"];
+    SINGLE = 2 [(.google.fhir.proto.fhir_original_code) = "single"];
+    MULTIPLE = 3 [(.google.fhir.proto.fhir_original_code) = "multiple"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The conformance resource status.
+// See http://hl7.org/fhir/ValueSet/conformance-resource-status.
+message ConformanceResourceStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/conformance-resource-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    DRAFT = 1 [(.google.fhir.proto.fhir_original_code) = "draft"];
+    ACTIVE = 2 [(.google.fhir.proto.fhir_original_code) = "active"];
+    RETIRED = 3 [(.google.fhir.proto.fhir_original_code) = "retired"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The conformance statement kind.
+// See http://hl7.org/fhir/ValueSet/conformance-statement-kind.
+message ConformanceStatementKindCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/conformance-statement-kind";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    INSTANCE = 1 [(.google.fhir.proto.fhir_original_code) = "instance"];
+    CAPABILITY = 2 [(.google.fhir.proto.fhir_original_code) = "capability"];
+    REQUIREMENTS = 3 [(.google.fhir.proto.fhir_original_code) = "requirements"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The constraint severity.
+// See http://hl7.org/fhir/ValueSet/constraint-severity.
+message ConstraintSeverityCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/constraint-severity";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ERROR = 1 [(.google.fhir.proto.fhir_original_code) = "error"];
+    WARNING = 2 [(.google.fhir.proto.fhir_original_code) = "warning"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The content type.
+// See http://hl7.org/fhir/ValueSet/content-type.
+message ContentTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/content-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    XML = 1 [(.google.fhir.proto.fhir_original_code) = "xml"];
+    JSON = 2 [(.google.fhir.proto.fhir_original_code) = "json"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The dataelement stringency.
+// See http://hl7.org/fhir/ValueSet/dataelement-stringency.
+message DataElementStringencyCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/dataelement-stringency";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    COMPARABLE = 1 [(.google.fhir.proto.fhir_original_code) = "comparable"];
+    FULLY_SPECIFIED = 2
+        [(.google.fhir.proto.fhir_original_code) = "fully-specified"];
+    EQUIVALENT = 3 [(.google.fhir.proto.fhir_original_code) = "equivalent"];
+    CONVERTABLE = 4 [(.google.fhir.proto.fhir_original_code) = "convertable"];
+    SCALEABLE = 5 [(.google.fhir.proto.fhir_original_code) = "scaleable"];
+    FLEXIBLE = 6 [(.google.fhir.proto.fhir_original_code) = "flexible"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The days of week.
+// See http://hl7.org/fhir/ValueSet/days-of-week.
+message DaysOfWeekCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/days-of-week";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    MON = 1 [(.google.fhir.proto.fhir_original_code) = "mon"];
+    TUE = 2 [(.google.fhir.proto.fhir_original_code) = "tue"];
+    WED = 3 [(.google.fhir.proto.fhir_original_code) = "wed"];
+    THU = 4 [(.google.fhir.proto.fhir_original_code) = "thu"];
+    FRI = 5 [(.google.fhir.proto.fhir_original_code) = "fri"];
+    SAT = 6 [(.google.fhir.proto.fhir_original_code) = "sat"];
+    SUN = 7 [(.google.fhir.proto.fhir_original_code) = "sun"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The detectedissue severity.
+// See http://hl7.org/fhir/ValueSet/detectedissue-severity.
+message DetectedIssueSeverityCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/detectedissue-severity";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    HIGH = 1 [(.google.fhir.proto.fhir_original_code) = "high"];
+    MODERATE = 2 [(.google.fhir.proto.fhir_original_code) = "moderate"];
+    LOW = 3 [(.google.fhir.proto.fhir_original_code) = "low"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The device action.
+// See http://hl7.org/fhir/ValueSet/device-action.
+message DeviceActionCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/device-action";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    IMPLANTED = 1 [(.google.fhir.proto.fhir_original_code) = "implanted"];
+    EXPLANTED = 2 [(.google.fhir.proto.fhir_original_code) = "explanted"];
+    MANIPULATED = 3 [(.google.fhir.proto.fhir_original_code) = "manipulated"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The device use request priority.
+// See http://hl7.org/fhir/ValueSet/device-use-request-priority.
+message DeviceUseRequestPriorityCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/device-use-request-priority";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ROUTINE = 1 [(.google.fhir.proto.fhir_original_code) = "routine"];
+    URGENT = 2 [(.google.fhir.proto.fhir_original_code) = "urgent"];
+    STAT = 3 [(.google.fhir.proto.fhir_original_code) = "stat"];
+    ASAP = 4 [(.google.fhir.proto.fhir_original_code) = "asap"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The device use request status.
+// See http://hl7.org/fhir/ValueSet/device-use-request-status.
+message DeviceUseRequestStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/device-use-request-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PROPOSED = 1 [(.google.fhir.proto.fhir_original_code) = "proposed"];
+    PLANNED = 2 [(.google.fhir.proto.fhir_original_code) = "planned"];
+    REQUESTED = 3 [(.google.fhir.proto.fhir_original_code) = "requested"];
+    RECEIVED = 4 [(.google.fhir.proto.fhir_original_code) = "received"];
+    ACCEPTED = 5 [(.google.fhir.proto.fhir_original_code) = "accepted"];
+    IN_PROGRESS = 6 [(.google.fhir.proto.fhir_original_code) = "in-progress"];
+    COMPLETED = 7 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    SUSPENDED = 8 [(.google.fhir.proto.fhir_original_code) = "suspended"];
+    REJECTED = 9 [(.google.fhir.proto.fhir_original_code) = "rejected"];
+    ABORTED = 10 [(.google.fhir.proto.fhir_original_code) = "aborted"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The devicestatus.
+// See http://hl7.org/fhir/ValueSet/devicestatus.
+message DeviceStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/devicestatus";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    AVAILABLE = 1 [(.google.fhir.proto.fhir_original_code) = "available"];
+    NOT_AVAILABLE = 2
+        [(.google.fhir.proto.fhir_original_code) = "not-available"];
+    ENTERED_IN_ERROR = 3
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The diagnostic order priority.
+// See http://hl7.org/fhir/ValueSet/diagnostic-order-priority.
+message DiagnosticOrderPriorityCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/diagnostic-order-priority";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ROUTINE = 1 [(.google.fhir.proto.fhir_original_code) = "routine"];
+    URGENT = 2 [(.google.fhir.proto.fhir_original_code) = "urgent"];
+    STAT = 3 [(.google.fhir.proto.fhir_original_code) = "stat"];
+    ASAP = 4 [(.google.fhir.proto.fhir_original_code) = "asap"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The diagnostic order status.
+// See http://hl7.org/fhir/ValueSet/diagnostic-order-status.
+message DiagnosticOrderStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/diagnostic-order-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PROPOSED = 1 [(.google.fhir.proto.fhir_original_code) = "proposed"];
+    DRAFT = 2 [(.google.fhir.proto.fhir_original_code) = "draft"];
+    PLANNED = 3 [(.google.fhir.proto.fhir_original_code) = "planned"];
+    REQUESTED = 4 [(.google.fhir.proto.fhir_original_code) = "requested"];
+    RECEIVED = 5 [(.google.fhir.proto.fhir_original_code) = "received"];
+    ACCEPTED = 6 [(.google.fhir.proto.fhir_original_code) = "accepted"];
+    IN_PROGRESS = 7 [(.google.fhir.proto.fhir_original_code) = "in-progress"];
+    REVIEW = 8 [(.google.fhir.proto.fhir_original_code) = "review"];
+    COMPLETED = 9 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    CANCELLED = 10 [(.google.fhir.proto.fhir_original_code) = "cancelled"];
+    SUSPENDED = 11 [(.google.fhir.proto.fhir_original_code) = "suspended"];
+    REJECTED = 12 [(.google.fhir.proto.fhir_original_code) = "rejected"];
+    FAILED = 13 [(.google.fhir.proto.fhir_original_code) = "failed"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The diagnostic report status.
+// See http://hl7.org/fhir/ValueSet/diagnostic-report-status.
+message DiagnosticReportStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/diagnostic-report-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    REGISTERED = 1 [(.google.fhir.proto.fhir_original_code) = "registered"];
+    PARTIAL = 2 [(.google.fhir.proto.fhir_original_code) = "partial"];
+    FINAL = 3 [(.google.fhir.proto.fhir_original_code) = "final"];
+    CORRECTED = 4 [(.google.fhir.proto.fhir_original_code) = "corrected"];
+    APPENDED = 5 [(.google.fhir.proto.fhir_original_code) = "appended"];
+    CANCELLED = 6 [(.google.fhir.proto.fhir_original_code) = "cancelled"];
+    ENTERED_IN_ERROR = 7
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The digital media type.
+// See http://hl7.org/fhir/ValueSet/digital-media-type.
+message DigitalMediaTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/digital-media-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PHOTO = 1 [(.google.fhir.proto.fhir_original_code) = "photo"];
+    VIDEO = 2 [(.google.fhir.proto.fhir_original_code) = "video"];
+    AUDIO = 3 [(.google.fhir.proto.fhir_original_code) = "audio"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The document mode.
+// See http://hl7.org/fhir/ValueSet/document-mode.
+message DocumentModeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/document-mode";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PRODUCER = 1 [(.google.fhir.proto.fhir_original_code) = "producer"];
+    CONSUMER = 2 [(.google.fhir.proto.fhir_original_code) = "consumer"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The document reference status.
+// See http://hl7.org/fhir/ValueSet/document-reference-status.
+message DocumentReferenceStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/document-reference-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    CURRENT = 1 [(.google.fhir.proto.fhir_original_code) = "current"];
+    SUPERSEDED = 2 [(.google.fhir.proto.fhir_original_code) = "superseded"];
+    ENTERED_IN_ERROR = 3
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The document relationship type.
+// See http://hl7.org/fhir/ValueSet/document-relationship-type.
+message DocumentRelationshipTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/document-relationship-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    REPLACES = 1 [(.google.fhir.proto.fhir_original_code) = "replaces"];
+    TRANSFORMS = 2 [(.google.fhir.proto.fhir_original_code) = "transforms"];
+    SIGNS = 3 [(.google.fhir.proto.fhir_original_code) = "signs"];
+    APPENDS = 4 [(.google.fhir.proto.fhir_original_code) = "appends"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The encounter class.
+// See http://hl7.org/fhir/ValueSet/encounter-class.
+message EncounterClassCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/encounter-class";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    INPATIENT = 1 [(.google.fhir.proto.fhir_original_code) = "inpatient"];
+    OUTPATIENT = 2 [(.google.fhir.proto.fhir_original_code) = "outpatient"];
+    AMBULATORY = 3 [(.google.fhir.proto.fhir_original_code) = "ambulatory"];
+    EMERGENCY = 4 [(.google.fhir.proto.fhir_original_code) = "emergency"];
+    HOME = 5 [(.google.fhir.proto.fhir_original_code) = "home"];
+    FIELD = 6 [(.google.fhir.proto.fhir_original_code) = "field"];
+    DAYTIME = 7 [(.google.fhir.proto.fhir_original_code) = "daytime"];
+    VIRTUAL = 8 [(.google.fhir.proto.fhir_original_code) = "virtual"];
+    OTHER = 9 [(.google.fhir.proto.fhir_original_code) = "other"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The encounter location status.
+// See http://hl7.org/fhir/ValueSet/encounter-location-status.
+message EncounterLocationStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/encounter-location-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PLANNED = 1 [(.google.fhir.proto.fhir_original_code) = "planned"];
+    ACTIVE = 2 [(.google.fhir.proto.fhir_original_code) = "active"];
+    RESERVED = 3 [(.google.fhir.proto.fhir_original_code) = "reserved"];
+    COMPLETED = 4 [(.google.fhir.proto.fhir_original_code) = "completed"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The encounter participant type.
+// See http://hl7.org/fhir/ValueSet/encounter-participant-type.
+message ParticipantTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/encounter-participant-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    TRANSLATOR = 1 [(.google.fhir.proto.fhir_original_code) = "translator"];
+    EMERGENCY = 2 [(.google.fhir.proto.fhir_original_code) = "emergency"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The encounter state.
+// See http://hl7.org/fhir/ValueSet/encounter-state.
+message EncounterStateCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/encounter-state";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PLANNED = 1 [(.google.fhir.proto.fhir_original_code) = "planned"];
+    ARRIVED = 2 [(.google.fhir.proto.fhir_original_code) = "arrived"];
+    IN_PROGRESS = 3 [(.google.fhir.proto.fhir_original_code) = "in-progress"];
+    ONLEAVE = 4 [(.google.fhir.proto.fhir_original_code) = "onleave"];
+    FINISHED = 5 [(.google.fhir.proto.fhir_original_code) = "finished"];
+    CANCELLED = 6 [(.google.fhir.proto.fhir_original_code) = "cancelled"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The episode of care status.
+// See http://hl7.org/fhir/ValueSet/episode-of-care-status.
+message EpisodeOfCareStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/episode-of-care-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PLANNED = 1 [(.google.fhir.proto.fhir_original_code) = "planned"];
+    WAITLIST = 2 [(.google.fhir.proto.fhir_original_code) = "waitlist"];
+    ACTIVE = 3 [(.google.fhir.proto.fhir_original_code) = "active"];
+    ONHOLD = 4 [(.google.fhir.proto.fhir_original_code) = "onhold"];
+    FINISHED = 5 [(.google.fhir.proto.fhir_original_code) = "finished"];
+    CANCELLED = 6 [(.google.fhir.proto.fhir_original_code) = "cancelled"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The extension context.
+// See http://hl7.org/fhir/ValueSet/extension-context.
+message ExtensionContextCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/extension-context";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    RESOURCE = 1 [(.google.fhir.proto.fhir_original_code) = "resource"];
+    DATATYPE = 2 [(.google.fhir.proto.fhir_original_code) = "datatype"];
+    MAPPING = 3 [(.google.fhir.proto.fhir_original_code) = "mapping"];
+    EXTENSION = 4 [(.google.fhir.proto.fhir_original_code) = "extension"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The filter operator.
+// See http://hl7.org/fhir/ValueSet/filter-operator.
+message FilterOperatorCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/filter-operator";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    EUQALS = 1 [(.google.fhir.proto.fhir_original_code) = "="];
+    IS_A = 2 [(.google.fhir.proto.fhir_original_code) = "is-a"];
+    IS_NOT_A = 3 [(.google.fhir.proto.fhir_original_code) = "is-not-a"];
+    REGEX = 4 [(.google.fhir.proto.fhir_original_code) = "regex"];
+    IN = 5 [(.google.fhir.proto.fhir_original_code) = "in"];
+    NOT_IN = 6 [(.google.fhir.proto.fhir_original_code) = "not-in"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The flag status.
+// See http://hl7.org/fhir/ValueSet/flag-status.
+message FlagStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/flag-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ACTIVE = 1 [(.google.fhir.proto.fhir_original_code) = "active"];
+    INACTIVE = 2 [(.google.fhir.proto.fhir_original_code) = "inactive"];
+    ENTERED_IN_ERROR = 3
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The forms.
+// See http://hl7.org/fhir/ValueSet/forms.
+message FormsCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/forms";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ONE = 1 [(.google.fhir.proto.fhir_original_code) = "1"];
+    TWO = 2 [(.google.fhir.proto.fhir_original_code) = "2"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The goal status.
+// See http://hl7.org/fhir/ValueSet/goal-status.
+message GoalStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/goal-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PROPOSED = 1 [(.google.fhir.proto.fhir_original_code) = "proposed"];
+    PLANNED = 2 [(.google.fhir.proto.fhir_original_code) = "planned"];
+    ACCEPTED = 3 [(.google.fhir.proto.fhir_original_code) = "accepted"];
+    REJECTED = 4 [(.google.fhir.proto.fhir_original_code) = "rejected"];
+    IN_PROGRESS = 5 [(.google.fhir.proto.fhir_original_code) = "in-progress"];
+    ACHIEVED = 6 [(.google.fhir.proto.fhir_original_code) = "achieved"];
+    SUSTAINING = 7 [(.google.fhir.proto.fhir_original_code) = "sustaining"];
+    ON_HOLD = 8 [(.google.fhir.proto.fhir_original_code) = "on-hold"];
+    CANCELLED = 9 [(.google.fhir.proto.fhir_original_code) = "cancelled"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The group type.
+// See http://hl7.org/fhir/ValueSet/group-type.
+message GroupTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/group-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PERSON = 1 [(.google.fhir.proto.fhir_original_code) = "person"];
+    ANIMAL = 2 [(.google.fhir.proto.fhir_original_code) = "animal"];
+    PRACTITIONER = 3 [(.google.fhir.proto.fhir_original_code) = "practitioner"];
+    DEVICE = 4 [(.google.fhir.proto.fhir_original_code) = "device"];
+    MEDICATION = 5 [(.google.fhir.proto.fhir_original_code) = "medication"];
+    SUBSTANCE = 6 [(.google.fhir.proto.fhir_original_code) = "substance"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The guide dependency type.
+// See http://hl7.org/fhir/ValueSet/guide-dependency-type.
+message GuideDependencyTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/guide-dependency-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    REFERENCE = 1 [(.google.fhir.proto.fhir_original_code) = "reference"];
+    INCLUSION = 2 [(.google.fhir.proto.fhir_original_code) = "inclusion"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The guide page kind.
+// See http://hl7.org/fhir/ValueSet/guide-page-kind.
+message GuidePageKindCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/guide-page-kind";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PAGE = 1 [(.google.fhir.proto.fhir_original_code) = "page"];
+    EXAMPLE = 2 [(.google.fhir.proto.fhir_original_code) = "example"];
+    LIST = 3 [(.google.fhir.proto.fhir_original_code) = "list"];
+    INCLUDE = 4 [(.google.fhir.proto.fhir_original_code) = "include"];
+    DIRECTORY = 5 [(.google.fhir.proto.fhir_original_code) = "directory"];
+    DICTIONARY = 6 [(.google.fhir.proto.fhir_original_code) = "dictionary"];
+    TOC = 7 [(.google.fhir.proto.fhir_original_code) = "toc"];
+    RESOURCE = 8 [(.google.fhir.proto.fhir_original_code) = "resource"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The guide resource purpose.
+// See http://hl7.org/fhir/ValueSet/guide-resource-purpose.
+message GuideResourcePurposeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/guide-resource-purpose";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    EXAMPLE = 1 [(.google.fhir.proto.fhir_original_code) = "example"];
+    TERMINOLOGY = 2 [(.google.fhir.proto.fhir_original_code) = "terminology"];
+    PROFILE = 3 [(.google.fhir.proto.fhir_original_code) = "profile"];
+    EXTENSION = 4 [(.google.fhir.proto.fhir_original_code) = "extension"];
+    DICTIONARY = 5 [(.google.fhir.proto.fhir_original_code) = "dictionary"];
+    LOGICAL = 6 [(.google.fhir.proto.fhir_original_code) = "logical"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The history status.
+// See http://hl7.org/fhir/ValueSet/history-status.
+message FamilyHistoryStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/history-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PARTIAL = 1 [(.google.fhir.proto.fhir_original_code) = "partial"];
+    COMPLETED = 2 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    ENTERED_IN_ERROR = 3
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+    HEALTH_UNKNOWN = 4
+        [(.google.fhir.proto.fhir_original_code) = "health-unknown"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The http verb.
+// See http://hl7.org/fhir/ValueSet/http-verb.
+message HTTPVerbCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/http-verb";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    GET = 1 [(.google.fhir.proto.fhir_original_code) = "GET"];
+    POST = 2 [(.google.fhir.proto.fhir_original_code) = "POST"];
+    PUT = 3 [(.google.fhir.proto.fhir_original_code) = "PUT"];
+    DELETE = 4 [(.google.fhir.proto.fhir_original_code) = "DELETE"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The identity assuranceLevel.
+// See http://hl7.org/fhir/ValueSet/identity-assuranceLevel.
+message IdentityAssuranceLevelCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/identity-assuranceLevel";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    LEVEL1 = 1 [(.google.fhir.proto.fhir_original_code) = "level1"];
+    LEVEL2 = 2 [(.google.fhir.proto.fhir_original_code) = "level2"];
+    LEVEL3 = 3 [(.google.fhir.proto.fhir_original_code) = "level3"];
+    LEVEL4 = 4 [(.google.fhir.proto.fhir_original_code) = "level4"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The issue severity.
+// See http://hl7.org/fhir/ValueSet/issue-severity.
+message IssueSeverityCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/issue-severity";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    FATAL = 1 [(.google.fhir.proto.fhir_original_code) = "fatal"];
+    ERROR = 2 [(.google.fhir.proto.fhir_original_code) = "error"];
+    WARNING = 3 [(.google.fhir.proto.fhir_original_code) = "warning"];
+    INFORMATION = 4 [(.google.fhir.proto.fhir_original_code) = "information"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The issue type.
+// See http://hl7.org/fhir/ValueSet/issue-type.
+message IssueTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/issue-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    INVALID = 1 [(.google.fhir.proto.fhir_original_code) = "invalid"];
+    STRUCTURE = 2 [(.google.fhir.proto.fhir_original_code) = "structure"];
+    REQUIRED = 3 [(.google.fhir.proto.fhir_original_code) = "required"];
+    VALUE = 4 [(.google.fhir.proto.fhir_original_code) = "value"];
+    INVARIANT = 5 [(.google.fhir.proto.fhir_original_code) = "invariant"];
+    SECURITY = 6 [(.google.fhir.proto.fhir_original_code) = "security"];
+    LOGIN = 7 [(.google.fhir.proto.fhir_original_code) = "login"];
+    UNKNOWN = 8 [(.google.fhir.proto.fhir_original_code) = "unknown"];
+    EXPIRED = 9 [(.google.fhir.proto.fhir_original_code) = "expired"];
+    FORBIDDEN = 10 [(.google.fhir.proto.fhir_original_code) = "forbidden"];
+    SUPPRESSED = 11 [(.google.fhir.proto.fhir_original_code) = "suppressed"];
+    PROCESSING = 12 [(.google.fhir.proto.fhir_original_code) = "processing"];
+    NOT_SUPPORTED = 13
+        [(.google.fhir.proto.fhir_original_code) = "not-supported"];
+    DUPLICATE = 14 [(.google.fhir.proto.fhir_original_code) = "duplicate"];
+    NOT_FOUND = 15 [(.google.fhir.proto.fhir_original_code) = "not-found"];
+    TOO_LONG = 16 [(.google.fhir.proto.fhir_original_code) = "too-long"];
+    CODE_INVALID = 17
+        [(.google.fhir.proto.fhir_original_code) = "code-invalid"];
+    EXTENSION = 18 [(.google.fhir.proto.fhir_original_code) = "extension"];
+    TOO_COSTLY = 19 [(.google.fhir.proto.fhir_original_code) = "too-costly"];
+    BUSINESS_RULE = 20
+        [(.google.fhir.proto.fhir_original_code) = "business-rule"];
+    CONFLICT = 21 [(.google.fhir.proto.fhir_original_code) = "conflict"];
+    INCOMPLETE = 22 [(.google.fhir.proto.fhir_original_code) = "incomplete"];
+    TRANSIENT = 23 [(.google.fhir.proto.fhir_original_code) = "transient"];
+    LOCK_ERROR = 24 [(.google.fhir.proto.fhir_original_code) = "lock-error"];
+    NO_STORE = 25 [(.google.fhir.proto.fhir_original_code) = "no-store"];
+    EXCEPTION = 26 [(.google.fhir.proto.fhir_original_code) = "exception"];
+    TIMEOUT = 27 [(.google.fhir.proto.fhir_original_code) = "timeout"];
+    THROTTLED = 28 [(.google.fhir.proto.fhir_original_code) = "throttled"];
+    INFORMATIONAL = 29
+        [(.google.fhir.proto.fhir_original_code) = "informational"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The link type.
+// See http://hl7.org/fhir/ValueSet/link-type.
+message LinkTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/link-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    REPLACE = 1 [(.google.fhir.proto.fhir_original_code) = "replace"];
+    REFER = 2 [(.google.fhir.proto.fhir_original_code) = "refer"];
+    SEEALSO = 3 [(.google.fhir.proto.fhir_original_code) = "seealso"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The list mode.
+// See http://hl7.org/fhir/ValueSet/list-mode.
+message ListModeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/list-mode";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    WORKING = 1 [(.google.fhir.proto.fhir_original_code) = "working"];
+    SNAPSHOT = 2 [(.google.fhir.proto.fhir_original_code) = "snapshot"];
+    CHANGES = 3 [(.google.fhir.proto.fhir_original_code) = "changes"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The list status.
+// See http://hl7.org/fhir/ValueSet/list-status.
+message ListStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/list-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    CURRENT = 1 [(.google.fhir.proto.fhir_original_code) = "current"];
+    RETIRED = 2 [(.google.fhir.proto.fhir_original_code) = "retired"];
+    ENTERED_IN_ERROR = 3
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The location mode.
+// See http://hl7.org/fhir/ValueSet/location-mode.
+message LocationModeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/location-mode";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    INSTANCE = 1 [(.google.fhir.proto.fhir_original_code) = "instance"];
+    KIND = 2 [(.google.fhir.proto.fhir_original_code) = "kind"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The location status.
+// See http://hl7.org/fhir/ValueSet/location-status.
+message LocationStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/location-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ACTIVE = 1 [(.google.fhir.proto.fhir_original_code) = "active"];
+    SUSPENDED = 2 [(.google.fhir.proto.fhir_original_code) = "suspended"];
+    INACTIVE = 3 [(.google.fhir.proto.fhir_original_code) = "inactive"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The marital status.
+// See http://hl7.org/fhir/ValueSet/marital-status.
+message MaritalStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/marital-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    U = 1 [(.google.fhir.proto.fhir_original_code) = "U"];
+    A = 2 [(.google.fhir.proto.fhir_original_code) = "A"];
+    D = 3 [(.google.fhir.proto.fhir_original_code) = "D"];
+    I = 4 [(.google.fhir.proto.fhir_original_code) = "I"];
+    L = 5 [(.google.fhir.proto.fhir_original_code) = "L"];
+    M = 6 [(.google.fhir.proto.fhir_original_code) = "M"];
+    P = 7 [(.google.fhir.proto.fhir_original_code) = "P"];
+    S = 8 [(.google.fhir.proto.fhir_original_code) = "S"];
+    T = 9 [(.google.fhir.proto.fhir_original_code) = "T"];
+    W = 10 [(.google.fhir.proto.fhir_original_code) = "W"];
+    UNK = 11 [(.google.fhir.proto.fhir_original_code) = "UNK"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The measurement principle.
+// See http://hl7.org/fhir/ValueSet/measurement-principle.
+message MeasmntPrincipleCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/measurement-principle";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    OTHER = 1 [(.google.fhir.proto.fhir_original_code) = "other"];
+    CHEMICAL = 2 [(.google.fhir.proto.fhir_original_code) = "chemical"];
+    ELECTRICAL = 3 [(.google.fhir.proto.fhir_original_code) = "electrical"];
+    IMPEDANCE = 4 [(.google.fhir.proto.fhir_original_code) = "impedance"];
+    NUCLEAR = 5 [(.google.fhir.proto.fhir_original_code) = "nuclear"];
+    OPTICAL = 6 [(.google.fhir.proto.fhir_original_code) = "optical"];
+    THERMAL = 7 [(.google.fhir.proto.fhir_original_code) = "thermal"];
+    BIOLOGICAL = 8 [(.google.fhir.proto.fhir_original_code) = "biological"];
+    MECHANICAL = 9 [(.google.fhir.proto.fhir_original_code) = "mechanical"];
+    ACOUSTICAL = 10 [(.google.fhir.proto.fhir_original_code) = "acoustical"];
+    MANUAL = 11 [(.google.fhir.proto.fhir_original_code) = "manual"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The medication admin status.
+// See http://hl7.org/fhir/ValueSet/medication-admin-status.
+message MedicationAdministrationStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/medication-admin-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    IN_PROGRESS = 1 [(.google.fhir.proto.fhir_original_code) = "in-progress"];
+    ON_HOLD = 2 [(.google.fhir.proto.fhir_original_code) = "on-hold"];
+    COMPLETED = 3 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    ENTERED_IN_ERROR = 4
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+    STOPPED = 5 [(.google.fhir.proto.fhir_original_code) = "stopped"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The medication dispense status.
+// See http://hl7.org/fhir/ValueSet/medication-dispense-status.
+message MedicationDispenseStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/medication-dispense-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    IN_PROGRESS = 1 [(.google.fhir.proto.fhir_original_code) = "in-progress"];
+    ON_HOLD = 2 [(.google.fhir.proto.fhir_original_code) = "on-hold"];
+    COMPLETED = 3 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    ENTERED_IN_ERROR = 4
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+    STOPPED = 5 [(.google.fhir.proto.fhir_original_code) = "stopped"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The medication order status.
+// See http://hl7.org/fhir/ValueSet/medication-order-status.
+message MedicationOrderStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/medication-order-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ACTIVE = 1 [(.google.fhir.proto.fhir_original_code) = "active"];
+    ON_HOLD = 2 [(.google.fhir.proto.fhir_original_code) = "on-hold"];
+    COMPLETED = 3 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    ENTERED_IN_ERROR = 4
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+    STOPPED = 5 [(.google.fhir.proto.fhir_original_code) = "stopped"];
+    DRAFT = 6 [(.google.fhir.proto.fhir_original_code) = "draft"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The medication statement status.
+// See http://hl7.org/fhir/ValueSet/medication-statement-status.
+message MedicationStatementStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/medication-statement-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ACTIVE = 1 [(.google.fhir.proto.fhir_original_code) = "active"];
+    COMPLETED = 2 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    ENTERED_IN_ERROR = 3
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+    INTENDED = 4 [(.google.fhir.proto.fhir_original_code) = "intended"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The message conformance event mode.
+// See http://hl7.org/fhir/ValueSet/message-conformance-event-mode.
+message ConformanceEventModeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/message-conformance-event-mode";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    SENDER = 1 [(.google.fhir.proto.fhir_original_code) = "sender"];
+    RECEIVER = 2 [(.google.fhir.proto.fhir_original_code) = "receiver"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The message significance category.
+// See http://hl7.org/fhir/ValueSet/message-significance-category.
+message MessageSignificanceCategoryCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/message-significance-category";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    CONSEQUENCE = 1 [(.google.fhir.proto.fhir_original_code) = "Consequence"];
+    CURRENCY = 2 [(.google.fhir.proto.fhir_original_code) = "Currency"];
+    NOTIFICATION = 3 [(.google.fhir.proto.fhir_original_code) = "Notification"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The metric calibration state.
+// See http://hl7.org/fhir/ValueSet/metric-calibration-state.
+message DeviceMetricCalibrationStateCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/metric-calibration-state";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    NOT_CALIBRATED = 1
+        [(.google.fhir.proto.fhir_original_code) = "not-calibrated"];
+    CALIBRATION_REQUIRED = 2
+        [(.google.fhir.proto.fhir_original_code) = "calibration-required"];
+    CALIBRATED = 3 [(.google.fhir.proto.fhir_original_code) = "calibrated"];
+    UNSPECIFIED = 4 [(.google.fhir.proto.fhir_original_code) = "unspecified"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The metric calibration type.
+// See http://hl7.org/fhir/ValueSet/metric-calibration-type.
+message DeviceMetricCalibrationTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/metric-calibration-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    UNSPECIFIED = 1 [(.google.fhir.proto.fhir_original_code) = "unspecified"];
+    OFFSET = 2 [(.google.fhir.proto.fhir_original_code) = "offset"];
+    GAIN = 3 [(.google.fhir.proto.fhir_original_code) = "gain"];
+    TWO_POINT = 4 [(.google.fhir.proto.fhir_original_code) = "two-point"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The metric category.
+// See http://hl7.org/fhir/ValueSet/metric-category.
+message DeviceMetricCategoryCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/metric-category";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    MEASUREMENT = 1 [(.google.fhir.proto.fhir_original_code) = "measurement"];
+    SETTING = 2 [(.google.fhir.proto.fhir_original_code) = "setting"];
+    CALCULATION = 3 [(.google.fhir.proto.fhir_original_code) = "calculation"];
+    UNSPECIFIED = 4 [(.google.fhir.proto.fhir_original_code) = "unspecified"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The metric color.
+// See http://hl7.org/fhir/ValueSet/metric-color.
+message DeviceMetricColorCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/metric-color";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    BLACK = 1 [(.google.fhir.proto.fhir_original_code) = "black"];
+    RED = 2 [(.google.fhir.proto.fhir_original_code) = "red"];
+    GREEN = 3 [(.google.fhir.proto.fhir_original_code) = "green"];
+    YELLOW = 4 [(.google.fhir.proto.fhir_original_code) = "yellow"];
+    BLUE = 5 [(.google.fhir.proto.fhir_original_code) = "blue"];
+    MAGENTA = 6 [(.google.fhir.proto.fhir_original_code) = "magenta"];
+    CYAN = 7 [(.google.fhir.proto.fhir_original_code) = "cyan"];
+    WHITE = 8 [(.google.fhir.proto.fhir_original_code) = "white"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The metric operational status.
+// See http://hl7.org/fhir/ValueSet/metric-operational-status.
+message DeviceMetricOperationalStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/metric-operational-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ON = 1 [(.google.fhir.proto.fhir_original_code) = "on"];
+    OFF = 2 [(.google.fhir.proto.fhir_original_code) = "off"];
+    STANDBY = 3 [(.google.fhir.proto.fhir_original_code) = "standby"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The namingsystem identifier type.
+// See http://hl7.org/fhir/ValueSet/namingsystem-identifier-type.
+message NamingSystemIdentifierTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/namingsystem-identifier-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    OID = 1 [(.google.fhir.proto.fhir_original_code) = "oid"];
+    UUID = 2 [(.google.fhir.proto.fhir_original_code) = "uuid"];
+    URI = 3 [(.google.fhir.proto.fhir_original_code) = "uri"];
+    OTHER = 4 [(.google.fhir.proto.fhir_original_code) = "other"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The namingsystem type.
+// See http://hl7.org/fhir/ValueSet/namingsystem-type.
+message NamingSystemTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/namingsystem-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    CODESYSTEM = 1 [(.google.fhir.proto.fhir_original_code) = "codesystem"];
+    IDENTIFIER = 2 [(.google.fhir.proto.fhir_original_code) = "identifier"];
+    ROOT = 3 [(.google.fhir.proto.fhir_original_code) = "root"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The narrative status.
+// See http://hl7.org/fhir/ValueSet/narrative-status.
+message NarrativeStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/narrative-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    GENERATED = 1 [(.google.fhir.proto.fhir_original_code) = "generated"];
+    EXTENSIONS = 2 [(.google.fhir.proto.fhir_original_code) = "extensions"];
+    ADDITIONAL = 3 [(.google.fhir.proto.fhir_original_code) = "additional"];
+    EMPTY = 4 [(.google.fhir.proto.fhir_original_code) = "empty"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The network type.
+// See http://hl7.org/fhir/ValueSet/network-type.
+message AuditEventAgentNetworkTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/network-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    MACHINE_NAME = 1 [(.google.fhir.proto.fhir_original_code) = "1"];
+    IP_ADDRESS = 2 [(.google.fhir.proto.fhir_original_code) = "2"];
+    TELEPHONE_NUMBER = 3 [(.google.fhir.proto.fhir_original_code) = "3"];
+    EMAIL_ADDRESS = 4 [(.google.fhir.proto.fhir_original_code) = "4"];
+    URI = 5 [(.google.fhir.proto.fhir_original_code) = "5"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The note type.
+// See http://hl7.org/fhir/ValueSet/note-type.
+message NoteTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/note-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    DISPLAY = 1 [(.google.fhir.proto.fhir_original_code) = "display"];
+    PRINT = 2 [(.google.fhir.proto.fhir_original_code) = "print"];
+    PRINTOPER = 3 [(.google.fhir.proto.fhir_original_code) = "printoper"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The nutrition order status.
+// See http://hl7.org/fhir/ValueSet/nutrition-order-status.
+message NutritionOrderStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/nutrition-order-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PROPOSED = 1 [(.google.fhir.proto.fhir_original_code) = "proposed"];
+    DRAFT = 2 [(.google.fhir.proto.fhir_original_code) = "draft"];
+    PLANNED = 3 [(.google.fhir.proto.fhir_original_code) = "planned"];
+    REQUESTED = 4 [(.google.fhir.proto.fhir_original_code) = "requested"];
+    ACTIVE = 5 [(.google.fhir.proto.fhir_original_code) = "active"];
+    ON_HOLD = 6 [(.google.fhir.proto.fhir_original_code) = "on-hold"];
+    COMPLETED = 7 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    CANCELLED = 8 [(.google.fhir.proto.fhir_original_code) = "cancelled"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The observation relationshiptypes.
+// See http://hl7.org/fhir/ValueSet/observation-relationshiptypes.
+message ObservationRelationshipTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/observation-relationshiptypes";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    HAS_MEMBER = 1 [(.google.fhir.proto.fhir_original_code) = "has-member"];
+    DERIVED_FROM = 2 [(.google.fhir.proto.fhir_original_code) = "derived-from"];
+    SEQUEL_TO = 3 [(.google.fhir.proto.fhir_original_code) = "sequel-to"];
+    REPLACES = 4 [(.google.fhir.proto.fhir_original_code) = "replaces"];
+    QUALIFIED_BY = 5 [(.google.fhir.proto.fhir_original_code) = "qualified-by"];
+    INTERFERED_BY = 6
+        [(.google.fhir.proto.fhir_original_code) = "interfered-by"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The observation status.
+// See http://hl7.org/fhir/ValueSet/observation-status.
+message ObservationStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/observation-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    REGISTERED = 1 [(.google.fhir.proto.fhir_original_code) = "registered"];
+    PRELIMINARY = 2 [(.google.fhir.proto.fhir_original_code) = "preliminary"];
+    FINAL = 3 [(.google.fhir.proto.fhir_original_code) = "final"];
+    AMENDED = 4 [(.google.fhir.proto.fhir_original_code) = "amended"];
+    CANCELLED = 5 [(.google.fhir.proto.fhir_original_code) = "cancelled"];
+    ENTERED_IN_ERROR = 6
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+    UNKNOWN = 7 [(.google.fhir.proto.fhir_original_code) = "unknown"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The operation kind.
+// See http://hl7.org/fhir/ValueSet/operation-kind.
+message OperationKindCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/operation-kind";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    OPERATION = 1 [(.google.fhir.proto.fhir_original_code) = "operation"];
+    QUERY = 2 [(.google.fhir.proto.fhir_original_code) = "query"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The operation parameter use.
+// See http://hl7.org/fhir/ValueSet/operation-parameter-use.
+message OperationParameterUseCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/operation-parameter-use";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    IN = 1 [(.google.fhir.proto.fhir_original_code) = "in"];
+    OUT = 2 [(.google.fhir.proto.fhir_original_code) = "out"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The order status.
+// See http://hl7.org/fhir/ValueSet/order-status.
+message OrderStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/order-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PENDING = 1 [(.google.fhir.proto.fhir_original_code) = "pending"];
+    REVIEW = 2 [(.google.fhir.proto.fhir_original_code) = "review"];
+    REJECTED = 3 [(.google.fhir.proto.fhir_original_code) = "rejected"];
+    ERROR = 4 [(.google.fhir.proto.fhir_original_code) = "error"];
+    ACCEPTED = 5 [(.google.fhir.proto.fhir_original_code) = "accepted"];
+    CANCELLED = 6 [(.google.fhir.proto.fhir_original_code) = "cancelled"];
+    REPLACED = 7 [(.google.fhir.proto.fhir_original_code) = "replaced"];
+    ABORTED = 8 [(.google.fhir.proto.fhir_original_code) = "aborted"];
+    COMPLETED = 9 [(.google.fhir.proto.fhir_original_code) = "completed"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The participantrequired.
+// See http://hl7.org/fhir/ValueSet/participantrequired.
+message ParticipantRequiredCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/participantrequired";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    REQUIRED = 1 [(.google.fhir.proto.fhir_original_code) = "required"];
+    OPTIONAL = 2 [(.google.fhir.proto.fhir_original_code) = "optional"];
+    INFORMATION_ONLY = 3
+        [(.google.fhir.proto.fhir_original_code) = "information-only"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The participantstatus.
+// See http://hl7.org/fhir/ValueSet/participantstatus.
+message ParticipantStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/participantstatus";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ACCEPTED = 1 [(.google.fhir.proto.fhir_original_code) = "accepted"];
+    DECLINED = 2 [(.google.fhir.proto.fhir_original_code) = "declined"];
+    TENTATIVE = 3 [(.google.fhir.proto.fhir_original_code) = "tentative"];
+    IN_PROCESS = 4 [(.google.fhir.proto.fhir_original_code) = "in-process"];
+    COMPLETED = 5 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    NEEDS_ACTION = 6 [(.google.fhir.proto.fhir_original_code) = "needs-action"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The participationstatus.
+// See http://hl7.org/fhir/ValueSet/participationstatus.
+message ParticipationStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/participationstatus";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ACCEPTED = 1 [(.google.fhir.proto.fhir_original_code) = "accepted"];
+    DECLINED = 2 [(.google.fhir.proto.fhir_original_code) = "declined"];
+    TENTATIVE = 3 [(.google.fhir.proto.fhir_original_code) = "tentative"];
+    NEEDS_ACTION = 4 [(.google.fhir.proto.fhir_original_code) = "needs-action"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The procedure request priority.
+// See http://hl7.org/fhir/ValueSet/procedure-request-priority.
+message ProcedureRequestPriorityCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/procedure-request-priority";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ROUTINE = 1 [(.google.fhir.proto.fhir_original_code) = "routine"];
+    URGENT = 2 [(.google.fhir.proto.fhir_original_code) = "urgent"];
+    STAT = 3 [(.google.fhir.proto.fhir_original_code) = "stat"];
+    ASAP = 4 [(.google.fhir.proto.fhir_original_code) = "asap"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The procedure request status.
+// See http://hl7.org/fhir/ValueSet/procedure-request-status.
+message ProcedureRequestStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/procedure-request-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    PROPOSED = 1 [(.google.fhir.proto.fhir_original_code) = "proposed"];
+    DRAFT = 2 [(.google.fhir.proto.fhir_original_code) = "draft"];
+    REQUESTED = 3 [(.google.fhir.proto.fhir_original_code) = "requested"];
+    RECEIVED = 4 [(.google.fhir.proto.fhir_original_code) = "received"];
+    ACCEPTED = 5 [(.google.fhir.proto.fhir_original_code) = "accepted"];
+    IN_PROGRESS = 6 [(.google.fhir.proto.fhir_original_code) = "in-progress"];
+    COMPLETED = 7 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    SUSPENDED = 8 [(.google.fhir.proto.fhir_original_code) = "suspended"];
+    REJECTED = 9 [(.google.fhir.proto.fhir_original_code) = "rejected"];
+    ABORTED = 10 [(.google.fhir.proto.fhir_original_code) = "aborted"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The procedure status.
+// See http://hl7.org/fhir/ValueSet/procedure-status.
+message ProcedureStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/procedure-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    IN_PROGRESS = 1 [(.google.fhir.proto.fhir_original_code) = "in-progress"];
+    ABORTED = 2 [(.google.fhir.proto.fhir_original_code) = "aborted"];
+    COMPLETED = 3 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    ENTERED_IN_ERROR = 4
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The property representation.
+// See http://hl7.org/fhir/ValueSet/property-representation.
+message PropertyRepresentationCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/property-representation";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    XMLATTR = 1 [(.google.fhir.proto.fhir_original_code) = "xmlAttr"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The provenance entity role.
+// See http://hl7.org/fhir/ValueSet/provenance-entity-role.
+message ProvenanceEntityRoleCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/provenance-entity-role";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    DERIVATION = 1 [(.google.fhir.proto.fhir_original_code) = "derivation"];
+    REVISION = 2 [(.google.fhir.proto.fhir_original_code) = "revision"];
+    QUOTATION = 3 [(.google.fhir.proto.fhir_original_code) = "quotation"];
+    SOURCE = 4 [(.google.fhir.proto.fhir_original_code) = "source"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The questionnaire answers status.
+// See http://hl7.org/fhir/ValueSet/questionnaire-answers-status.
+message QuestionnaireResponseStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/questionnaire-answers-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    IN_PROGRESS = 1 [(.google.fhir.proto.fhir_original_code) = "in-progress"];
+    COMPLETED = 2 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    AMENDED = 3 [(.google.fhir.proto.fhir_original_code) = "amended"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The questionnaire status.
+// See http://hl7.org/fhir/ValueSet/questionnaire-status.
+message QuestionnaireStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/questionnaire-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    DRAFT = 1 [(.google.fhir.proto.fhir_original_code) = "draft"];
+    PUBLISHED = 2 [(.google.fhir.proto.fhir_original_code) = "published"];
+    RETIRED = 3 [(.google.fhir.proto.fhir_original_code) = "retired"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The reaction event certainty.
+// See http://hl7.org/fhir/ValueSet/reaction-event-certainty.
+message AllergyIntoleranceCertaintyCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/reaction-event-certainty";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    UNLIKELY = 1 [(.google.fhir.proto.fhir_original_code) = "unlikely"];
+    LIKELY = 2 [(.google.fhir.proto.fhir_original_code) = "likely"];
+    CONFIRMED = 3 [(.google.fhir.proto.fhir_original_code) = "confirmed"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The reaction event severity.
+// See http://hl7.org/fhir/ValueSet/reaction-event-severity.
+message AllergyIntoleranceSeverityCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/reaction-event-severity";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    MILD = 1 [(.google.fhir.proto.fhir_original_code) = "mild"];
+    MODERATE = 2 [(.google.fhir.proto.fhir_original_code) = "moderate"];
+    SEVERE = 3 [(.google.fhir.proto.fhir_original_code) = "severe"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The referralstatus.
+// See http://hl7.org/fhir/ValueSet/referralstatus.
+message ReferralStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/referralstatus";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    DRAFT = 1 [(.google.fhir.proto.fhir_original_code) = "draft"];
+    REQUESTED = 2 [(.google.fhir.proto.fhir_original_code) = "requested"];
+    ACTIVE = 3 [(.google.fhir.proto.fhir_original_code) = "active"];
+    CANCELLED = 4 [(.google.fhir.proto.fhir_original_code) = "cancelled"];
+    ACCEPTED = 5 [(.google.fhir.proto.fhir_original_code) = "accepted"];
+    REJECTED = 6 [(.google.fhir.proto.fhir_original_code) = "rejected"];
+    COMPLETED = 7 [(.google.fhir.proto.fhir_original_code) = "completed"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The remittance outcome.
+// See http://hl7.org/fhir/ValueSet/remittance-outcome.
+message RemittanceOutcomeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/remittance-outcome";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    COMPLETE = 1 [(.google.fhir.proto.fhir_original_code) = "complete"];
+    ERROR = 2 [(.google.fhir.proto.fhir_original_code) = "error"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The resource aggregation mode.
+// See http://hl7.org/fhir/ValueSet/resource-aggregation-mode.
+message AggregationModeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/resource-aggregation-mode";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    CONTAINED = 1 [(.google.fhir.proto.fhir_original_code) = "contained"];
+    REFERENCED = 2 [(.google.fhir.proto.fhir_original_code) = "referenced"];
+    BUNDLED = 3 [(.google.fhir.proto.fhir_original_code) = "bundled"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The resource slicing rules.
+// See http://hl7.org/fhir/ValueSet/resource-slicing-rules.
+message SlicingRulesCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/resource-slicing-rules";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    CLOSED = 1 [(.google.fhir.proto.fhir_original_code) = "closed"];
+    OPEN = 2 [(.google.fhir.proto.fhir_original_code) = "open"];
+    OPENATEND = 3 [(.google.fhir.proto.fhir_original_code) = "openAtEnd"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The resource types.
+// See http://hl7.org/fhir/ValueSet/resource-types.
+message ResourceTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/resource-types";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ACCOUNT = 1 [(.google.fhir.proto.fhir_original_code) = "Account"];
+    ALLERGY_INTOLERANCE = 2
+        [(.google.fhir.proto.fhir_original_code) = "AllergyIntolerance"];
+    APPOINTMENT = 3 [(.google.fhir.proto.fhir_original_code) = "Appointment"];
+    APPOINTMENT_RESPONSE = 4
+        [(.google.fhir.proto.fhir_original_code) = "AppointmentResponse"];
+    AUDIT_EVENT = 5 [(.google.fhir.proto.fhir_original_code) = "AuditEvent"];
+    BASIC = 6 [(.google.fhir.proto.fhir_original_code) = "Basic"];
+    BINARY = 7 [(.google.fhir.proto.fhir_original_code) = "Binary"];
+    BODY_SITE = 8 [(.google.fhir.proto.fhir_original_code) = "BodySite"];
+    BUNDLE = 9 [(.google.fhir.proto.fhir_original_code) = "Bundle"];
+    CARE_PLAN = 10 [(.google.fhir.proto.fhir_original_code) = "CarePlan"];
+    CLAIM = 11 [(.google.fhir.proto.fhir_original_code) = "Claim"];
+    CLAIM_RESPONSE = 12
+        [(.google.fhir.proto.fhir_original_code) = "ClaimResponse"];
+    CLINICAL_IMPRESSION = 13
+        [(.google.fhir.proto.fhir_original_code) = "ClinicalImpression"];
+    COMMUNICATION = 14
+        [(.google.fhir.proto.fhir_original_code) = "Communication"];
+    COMMUNICATION_REQUEST = 15
+        [(.google.fhir.proto.fhir_original_code) = "CommunicationRequest"];
+    COMPOSITION = 16 [(.google.fhir.proto.fhir_original_code) = "Composition"];
+    CONCEPT_MAP = 17 [(.google.fhir.proto.fhir_original_code) = "ConceptMap"];
+    CONDITION = 18 [(.google.fhir.proto.fhir_original_code) = "Condition"];
+    CONFORMANCE = 19 [(.google.fhir.proto.fhir_original_code) = "Conformance"];
+    CONTRACT = 20 [(.google.fhir.proto.fhir_original_code) = "Contract"];
+    COVERAGE = 21 [(.google.fhir.proto.fhir_original_code) = "Coverage"];
+    DATA_ELEMENT = 22 [(.google.fhir.proto.fhir_original_code) = "DataElement"];
+    DETECTED_ISSUE = 23
+        [(.google.fhir.proto.fhir_original_code) = "DetectedIssue"];
+    DEVICE = 24 [(.google.fhir.proto.fhir_original_code) = "Device"];
+    DEVICE_COMPONENT = 25
+        [(.google.fhir.proto.fhir_original_code) = "DeviceComponent"];
+    DEVICE_METRIC = 26
+        [(.google.fhir.proto.fhir_original_code) = "DeviceMetric"];
+    DEVICE_USE_REQUEST = 27
+        [(.google.fhir.proto.fhir_original_code) = "DeviceUseRequest"];
+    DEVICE_USE_STATEMENT = 28
+        [(.google.fhir.proto.fhir_original_code) = "DeviceUseStatement"];
+    DIAGNOSTIC_ORDER = 29
+        [(.google.fhir.proto.fhir_original_code) = "DiagnosticOrder"];
+    DIAGNOSTIC_REPORT = 30
+        [(.google.fhir.proto.fhir_original_code) = "DiagnosticReport"];
+    DOCUMENT_MANIFEST = 31
+        [(.google.fhir.proto.fhir_original_code) = "DocumentManifest"];
+    DOCUMENT_REFERENCE = 32
+        [(.google.fhir.proto.fhir_original_code) = "DocumentReference"];
+    DOMAIN_RESOURCE = 33
+        [(.google.fhir.proto.fhir_original_code) = "DomainResource"];
+    ELIGIBILITY_REQUEST = 34
+        [(.google.fhir.proto.fhir_original_code) = "EligibilityRequest"];
+    ELIGIBILITY_RESPONSE = 35
+        [(.google.fhir.proto.fhir_original_code) = "EligibilityResponse"];
+    ENCOUNTER = 36 [(.google.fhir.proto.fhir_original_code) = "Encounter"];
+    ENROLLMENT_REQUEST = 37
+        [(.google.fhir.proto.fhir_original_code) = "EnrollmentRequest"];
+    ENROLLMENT_RESPONSE = 38
+        [(.google.fhir.proto.fhir_original_code) = "EnrollmentResponse"];
+    EPISODE_OF_CARE = 39
+        [(.google.fhir.proto.fhir_original_code) = "EpisodeOfCare"];
+    EXPLANATION_OF_BENEFIT = 40
+        [(.google.fhir.proto.fhir_original_code) = "ExplanationOfBenefit"];
+    FAMILY_MEMBER_HISTORY = 41
+        [(.google.fhir.proto.fhir_original_code) = "FamilyMemberHistory"];
+    FLAG = 42 [(.google.fhir.proto.fhir_original_code) = "Flag"];
+    GOAL = 43 [(.google.fhir.proto.fhir_original_code) = "Goal"];
+    GROUP = 44 [(.google.fhir.proto.fhir_original_code) = "Group"];
+    HEALTHCARE_SERVICE = 45
+        [(.google.fhir.proto.fhir_original_code) = "HealthcareService"];
+    IMAGING_OBJECT_SELECTION = 46
+        [(.google.fhir.proto.fhir_original_code) = "ImagingObjectSelection"];
+    IMAGINGSTUDY = 47
+        [(.google.fhir.proto.fhir_original_code) = "ImagingStudy"];
+    IMMUNIZATION = 48
+        [(.google.fhir.proto.fhir_original_code) = "Immunization"];
+    IMMUNIZATION_RECOMMENDATION = 49 [(.google.fhir.proto.fhir_original_code) =
+                                          "ImmunizationRecommendation"];
+    IMPLEMENTATION_GUIDE = 50
+        [(.google.fhir.proto.fhir_original_code) = "ImplementationGuide"];
+    LIST = 51 [(.google.fhir.proto.fhir_original_code) = "List"];
+    LOCATION = 52 [(.google.fhir.proto.fhir_original_code) = "Location"];
+    MEDIA = 53 [(.google.fhir.proto.fhir_original_code) = "Media"];
+    MEDICATION = 54 [(.google.fhir.proto.fhir_original_code) = "Medication"];
+    MEDICATION_ADMINISTRATION = 55
+        [(.google.fhir.proto.fhir_original_code) = "MedicationAdministration"];
+    MEDICATION_DISPENSE = 56
+        [(.google.fhir.proto.fhir_original_code) = "MedicationDispense"];
+    MEDICATION_ORDER = 57
+        [(.google.fhir.proto.fhir_original_code) = "MedicationOrder"];
+    MEDICATION_STATEMENT = 58
+        [(.google.fhir.proto.fhir_original_code) = "MedicationStatement"];
+    MESSAGE_HEADER = 59
+        [(.google.fhir.proto.fhir_original_code) = "MessageHeader"];
+    NAMING_SYSTEM = 60
+        [(.google.fhir.proto.fhir_original_code) = "NamingSystem"];
+    NUTRITION_ORDER = 61
+        [(.google.fhir.proto.fhir_original_code) = "NutritionOrder"];
+    OBSERVATION = 62 [(.google.fhir.proto.fhir_original_code) = "Observation"];
+    OPERATION_DEFINITION = 63
+        [(.google.fhir.proto.fhir_original_code) = "OperationDefinition"];
+    OPERATION_OUTCOME = 64
+        [(.google.fhir.proto.fhir_original_code) = "OperationOutcome"];
+    ORDER = 65 [(.google.fhir.proto.fhir_original_code) = "Order"];
+    ORDER_RESPONSE = 66
+        [(.google.fhir.proto.fhir_original_code) = "OrderResponse"];
+    ORGANIZATION = 67
+        [(.google.fhir.proto.fhir_original_code) = "Organization"];
+    PARAMETERS = 68 [(.google.fhir.proto.fhir_original_code) = "Parameters"];
+    PATIENT = 69 [(.google.fhir.proto.fhir_original_code) = "Patient"];
+    PAYMENT_NOTICE = 70
+        [(.google.fhir.proto.fhir_original_code) = "PaymentNotice"];
+    PAYMENT_RECONCILIATION = 71
+        [(.google.fhir.proto.fhir_original_code) = "PaymentReconciliation"];
+    PERSON = 72 [(.google.fhir.proto.fhir_original_code) = "Person"];
+    PRACTITIONER = 73
+        [(.google.fhir.proto.fhir_original_code) = "Practitioner"];
+    PROCEDURE = 74 [(.google.fhir.proto.fhir_original_code) = "Procedure"];
+    PROCEDURE_REQUEST = 75
+        [(.google.fhir.proto.fhir_original_code) = "ProcedureRequest"];
+    PROCESS_REQUEST = 76
+        [(.google.fhir.proto.fhir_original_code) = "ProcessRequest"];
+    PROCESS_RESPONSE = 77
+        [(.google.fhir.proto.fhir_original_code) = "ProcessResponse"];
+    PROVENANCE = 78 [(.google.fhir.proto.fhir_original_code) = "Provenance"];
+    QUESTIONNAIRE = 79
+        [(.google.fhir.proto.fhir_original_code) = "Questionnaire"];
+    QUESTIONNAIRE_RESPONSE = 80
+        [(.google.fhir.proto.fhir_original_code) = "QuestionnaireResponse"];
+    REFERRAL_REQUEST = 81
+        [(.google.fhir.proto.fhir_original_code) = "ReferralRequest"];
+    RELATED_PERSON = 82
+        [(.google.fhir.proto.fhir_original_code) = "RelatedPerson"];
+    RESOURCE = 83 [(.google.fhir.proto.fhir_original_code) = "Resource"];
+    RISK_ASSESSMENT = 84
+        [(.google.fhir.proto.fhir_original_code) = "RiskAssessment"];
+    SCHEDULE = 85 [(.google.fhir.proto.fhir_original_code) = "Schedule"];
+    SEARCH_PARAMETER = 86
+        [(.google.fhir.proto.fhir_original_code) = "SearchParameter"];
+    SLOT = 87 [(.google.fhir.proto.fhir_original_code) = "Slot"];
+    SPECIMEN = 88 [(.google.fhir.proto.fhir_original_code) = "Specimen"];
+    STRUCTURE_DEFINITION = 89
+        [(.google.fhir.proto.fhir_original_code) = "StructureDefinition"];
+    SUBSCRIPTION = 90
+        [(.google.fhir.proto.fhir_original_code) = "Subscription"];
+    SUBSTANCE = 91 [(.google.fhir.proto.fhir_original_code) = "Substance"];
+    SUPPLY_DELIVERY = 92
+        [(.google.fhir.proto.fhir_original_code) = "SupplyDelivery"];
+    SUPPLY_REQUEST = 93
+        [(.google.fhir.proto.fhir_original_code) = "SupplyRequest"];
+    TEST_SCRIPT = 94 [(.google.fhir.proto.fhir_original_code) = "TestScript"];
+    VALUE_SET = 95 [(.google.fhir.proto.fhir_original_code) = "ValueSet"];
+    VISION_PRESCRIPTION = 96
+        [(.google.fhir.proto.fhir_original_code) = "VisionPrescription"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The response code.
+// See http://hl7.org/fhir/ValueSet/response-code.
+message ResponseTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/response-code";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    OK = 1 [(.google.fhir.proto.fhir_original_code) = "ok"];
+    TRANSIENT_ERROR = 2
+        [(.google.fhir.proto.fhir_original_code) = "transient-error"];
+    FATAL_ERROR = 3 [(.google.fhir.proto.fhir_original_code) = "fatal-error"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The restful conformance mode.
+// See http://hl7.org/fhir/ValueSet/restful-conformance-mode.
+message RestfulConformanceModeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/restful-conformance-mode";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    CLIENT = 1 [(.google.fhir.proto.fhir_original_code) = "client"];
+    SERVER = 2 [(.google.fhir.proto.fhir_original_code) = "server"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The search entry mode.
+// See http://hl7.org/fhir/ValueSet/search-entry-mode.
+message SearchEntryModeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/search-entry-mode";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    MATCH = 1 [(.google.fhir.proto.fhir_original_code) = "match"];
+    INCLUDE = 2 [(.google.fhir.proto.fhir_original_code) = "include"];
+    OUTCOME = 3 [(.google.fhir.proto.fhir_original_code) = "outcome"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The search modifier code.
+// See http://hl7.org/fhir/ValueSet/search-modifier-code.
+message SearchModifierCodeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/search-modifier-code";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    MISSING = 1 [(.google.fhir.proto.fhir_original_code) = "missing"];
+    EXACT = 2 [(.google.fhir.proto.fhir_original_code) = "exact"];
+    CONTAINS = 3 [(.google.fhir.proto.fhir_original_code) = "contains"];
+    NOT = 4 [(.google.fhir.proto.fhir_original_code) = "not"];
+    TEXT = 5 [(.google.fhir.proto.fhir_original_code) = "text"];
+    IN = 6 [(.google.fhir.proto.fhir_original_code) = "in"];
+    NOT_IN = 7 [(.google.fhir.proto.fhir_original_code) = "not-in"];
+    BELOW = 8 [(.google.fhir.proto.fhir_original_code) = "below"];
+    ABOVE = 9 [(.google.fhir.proto.fhir_original_code) = "above"];
+    TYPE = 10 [(.google.fhir.proto.fhir_original_code) = "type"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The search param type.
+// See http://hl7.org/fhir/ValueSet/search-param-type.
+message SearchParamTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/search-param-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    NUMBER = 1 [(.google.fhir.proto.fhir_original_code) = "number"];
+    DATE = 2 [(.google.fhir.proto.fhir_original_code) = "date"];
+    STRING = 3 [(.google.fhir.proto.fhir_original_code) = "string"];
+    TOKEN = 4 [(.google.fhir.proto.fhir_original_code) = "token"];
+    REFERENCE = 5 [(.google.fhir.proto.fhir_original_code) = "reference"];
+    COMPOSITE = 6 [(.google.fhir.proto.fhir_original_code) = "composite"];
+    QUANTITY = 7 [(.google.fhir.proto.fhir_original_code) = "quantity"];
+    URI = 8 [(.google.fhir.proto.fhir_original_code) = "uri"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The search xpath usage.
+// See http://hl7.org/fhir/ValueSet/search-xpath-usage.
+message XPathUsageTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/search-xpath-usage";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    NORMAL = 1 [(.google.fhir.proto.fhir_original_code) = "normal"];
+    PHONETIC = 2 [(.google.fhir.proto.fhir_original_code) = "phonetic"];
+    NEARBY = 3 [(.google.fhir.proto.fhir_original_code) = "nearby"];
+    DISTANCE = 4 [(.google.fhir.proto.fhir_original_code) = "distance"];
+    OTHER = 5 [(.google.fhir.proto.fhir_original_code) = "other"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The slotstatus.
+// See http://hl7.org/fhir/ValueSet/slotstatus.
+message SlotStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/slotstatus";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    BUSY = 1 [(.google.fhir.proto.fhir_original_code) = "busy"];
+    FREE = 2 [(.google.fhir.proto.fhir_original_code) = "free"];
+    BUSY_UNAVAILABLE = 3
+        [(.google.fhir.proto.fhir_original_code) = "busy-unavailable"];
+    BUSY_TENTATIVE = 4
+        [(.google.fhir.proto.fhir_original_code) = "busy-tentative"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The specimen status.
+// See http://hl7.org/fhir/ValueSet/specimen-status.
+message SpecimenStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/specimen-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    AVAILABLE = 1 [(.google.fhir.proto.fhir_original_code) = "available"];
+    UNAVAILABLE = 2 [(.google.fhir.proto.fhir_original_code) = "unavailable"];
+    UNSATISFACTORY = 3
+        [(.google.fhir.proto.fhir_original_code) = "unsatisfactory"];
+    ENTERED_IN_ERROR = 4
+        [(.google.fhir.proto.fhir_original_code) = "entered-in-error"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The structure definition kind.
+// See http://hl7.org/fhir/ValueSet/structure-definition-kind.
+message StructureDefinitionKindCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/structure-definition-kind";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    DATATYPE = 1 [(.google.fhir.proto.fhir_original_code) = "datatype"];
+    RESOURCE = 2 [(.google.fhir.proto.fhir_original_code) = "resource"];
+    LOGICAL = 3 [(.google.fhir.proto.fhir_original_code) = "logical"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The subscription channel type.
+// See http://hl7.org/fhir/ValueSet/subscription-channel-type.
+message SubscriptionChannelTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/subscription-channel-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    REST_HOOK = 1 [(.google.fhir.proto.fhir_original_code) = "rest-hook"];
+    WEBSOCKET = 2 [(.google.fhir.proto.fhir_original_code) = "websocket"];
+    EMAIL = 3 [(.google.fhir.proto.fhir_original_code) = "email"];
+    SMS = 4 [(.google.fhir.proto.fhir_original_code) = "sms"];
+    MESSAGE = 5 [(.google.fhir.proto.fhir_original_code) = "message"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The subscription status.
+// See http://hl7.org/fhir/ValueSet/subscription-status.
+message SubscriptionStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/subscription-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    REQUESTED = 1 [(.google.fhir.proto.fhir_original_code) = "requested"];
+    ACTIVE = 2 [(.google.fhir.proto.fhir_original_code) = "active"];
+    ERROR = 3 [(.google.fhir.proto.fhir_original_code) = "error"];
+    OFF = 4 [(.google.fhir.proto.fhir_original_code) = "off"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The supplydelivery status.
+// See http://hl7.org/fhir/ValueSet/supplydelivery-status.
+message SupplyDeliveryStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/supplydelivery-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    IN_PROGRESS = 1 [(.google.fhir.proto.fhir_original_code) = "in-progress"];
+    COMPLETED = 2 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    ABANDONED = 3 [(.google.fhir.proto.fhir_original_code) = "abandoned"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The supplydelivery type.
+// See http://hl7.org/fhir/ValueSet/supplydelivery-type.
+message SupplyDeliveryCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/supplydelivery-type";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    MEDICATION = 1 [(.google.fhir.proto.fhir_original_code) = "medication"];
+    DEVICE = 2 [(.google.fhir.proto.fhir_original_code) = "device"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The supplyrequest kind.
+// See http://hl7.org/fhir/ValueSet/supplyrequest-kind.
+message SupplyTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/supplyrequest-kind";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    CENTRAL = 1 [(.google.fhir.proto.fhir_original_code) = "central"];
+    NONSTOCK = 2 [(.google.fhir.proto.fhir_original_code) = "nonstock"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The supplyrequest status.
+// See http://hl7.org/fhir/ValueSet/supplyrequest-status.
+message SupplyRequestStatusCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/supplyrequest-status";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    REQUESTED = 1 [(.google.fhir.proto.fhir_original_code) = "requested"];
+    COMPLETED = 2 [(.google.fhir.proto.fhir_original_code) = "completed"];
+    FAILED = 3 [(.google.fhir.proto.fhir_original_code) = "failed"];
+    CANCELLED = 4 [(.google.fhir.proto.fhir_original_code) = "cancelled"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The transaction mode.
+// See http://hl7.org/fhir/ValueSet/transaction-mode.
+message TransactionModeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/transaction-mode";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    NOT_SUPPORTED = 1
+        [(.google.fhir.proto.fhir_original_code) = "not-supported"];
+    BATCH = 2 [(.google.fhir.proto.fhir_original_code) = "batch"];
+    TRANSACTION = 3 [(.google.fhir.proto.fhir_original_code) = "transaction"];
+    BOTH = 4 [(.google.fhir.proto.fhir_original_code) = "both"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The unknown content code.
+// See http://hl7.org/fhir/ValueSet/unknown-content-code.
+message UnknownContentCodeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/unknown-content-code";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    NO = 1 [(.google.fhir.proto.fhir_original_code) = "no"];
+    EXTENSIONS = 2 [(.google.fhir.proto.fhir_original_code) = "extensions"];
+    ELEMENTS = 3 [(.google.fhir.proto.fhir_original_code) = "elements"];
+    BOTH = 4 [(.google.fhir.proto.fhir_original_code) = "both"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The v3 Confidentiality.
+// See http://hl7.org/fhir/ValueSet/v3-Confidentiality.
+message ConfidentialityClassificationCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/v3-Confidentiality";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    _CONFIDENTIALITY = 1
+        [(.google.fhir.proto.fhir_original_code) = "_Confidentiality"];
+    L = 2 [(.google.fhir.proto.fhir_original_code) = "L"];
+    M = 3 [(.google.fhir.proto.fhir_original_code) = "M"];
+    N = 4 [(.google.fhir.proto.fhir_original_code) = "N"];
+    R = 5 [(.google.fhir.proto.fhir_original_code) = "R"];
+    U = 6 [(.google.fhir.proto.fhir_original_code) = "U"];
+    V = 7 [(.google.fhir.proto.fhir_original_code) = "V"];
+    _CONFIDENTIALITYBYACCESSKIND = 8 [(.google.fhir.proto.fhir_original_code) =
+                                          "_ConfidentialityByAccessKind"];
+    B = 9 [(.google.fhir.proto.fhir_original_code) = "B"];
+    D = 10 [(.google.fhir.proto.fhir_original_code) = "D"];
+    I = 11 [(.google.fhir.proto.fhir_original_code) = "I"];
+    _CONFIDENTIALITYBYINFOTYPE = 12 [(.google.fhir.proto.fhir_original_code) =
+                                         "_ConfidentialityByInfoType"];
+    ETH = 13 [(.google.fhir.proto.fhir_original_code) = "ETH"];
+    HIV = 14 [(.google.fhir.proto.fhir_original_code) = "HIV"];
+    PSY = 15 [(.google.fhir.proto.fhir_original_code) = "PSY"];
+    SDV = 16 [(.google.fhir.proto.fhir_original_code) = "SDV"];
+    _CONFIDENTIALITYMODIFIERS = 17
+        [(.google.fhir.proto.fhir_original_code) = "_ConfidentialityModifiers"];
+    C = 18 [(.google.fhir.proto.fhir_original_code) = "C"];
+    S = 19 [(.google.fhir.proto.fhir_original_code) = "S"];
+    T = 20 [(.google.fhir.proto.fhir_original_code) = "T"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The versioning policy.
+// See http://hl7.org/fhir/ValueSet/versioning-policy.
+message ResourceVersionPolicyCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/versioning-policy";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    NO_VERSION = 1 [(.google.fhir.proto.fhir_original_code) = "no-version"];
+    VERSIONED = 2 [(.google.fhir.proto.fhir_original_code) = "versioned"];
+    VERSIONED_UPDATE = 3
+        [(.google.fhir.proto.fhir_original_code) = "versioned-update"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The vision base codes.
+// See http://hl7.org/fhir/ValueSet/vision-base-codes.
+message VisionBaseCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/vision-base-codes";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    UP = 1 [(.google.fhir.proto.fhir_original_code) = "up"];
+    DOWN = 2 [(.google.fhir.proto.fhir_original_code) = "down"];
+    IN = 3 [(.google.fhir.proto.fhir_original_code) = "in"];
+    OUT = 4 [(.google.fhir.proto.fhir_original_code) = "out"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// The vision eye codes.
+// See http://hl7.org/fhir/ValueSet/vision-eye-codes.
+message VisionEyesCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/vision-eye-codes";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    RIGHT = 1 [(.google.fhir.proto.fhir_original_code) = "right"];
+    LEFT = 2 [(.google.fhir.proto.fhir_original_code) = "left"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// Operations supported by REST at the type or instance level.
+// See http://hl7.org/fhir/ValueSet/type-restful-interaction.
+message TypeRestfulInteractionCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/type-restful-interaction";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    READ = 1 [(.google.fhir.proto.fhir_original_code) = "read"];
+    VREAD = 2 [(.google.fhir.proto.fhir_original_code) = "vread"];
+    UPDATE = 3 [(.google.fhir.proto.fhir_original_code) = "update"];
+    DELETE = 4 [(.google.fhir.proto.fhir_original_code) = "delete"];
+    HISTORY_INSTANCE = 5
+        [(.google.fhir.proto.fhir_original_code) = "history-instance"];
+    VALIDATE = 6 [(.google.fhir.proto.fhir_original_code) = "validate"];
+    HISTORY_TYPE = 7 [(.google.fhir.proto.fhir_original_code) = "history-type"];
+    CREATE = 8 [(.google.fhir.proto.fhir_original_code) = "create"];
+    SEARCH_TYPE = 9 [(.google.fhir.proto.fhir_original_code) = "search-type"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// Operations supported by REST at the system level.
+// http://hl7.org/fhir/ValueSet/system-restful-interaction.
+message SystemRestfulInteractionCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/system-restful-interaction";
+
+  // Primitive value for code.
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    TRANSACTION = 1 [(.google.fhir.proto.fhir_original_code) = "transaction"];
+    SEARCH_SYSTEM = 2
+        [(.google.fhir.proto.fhir_original_code) = "search-system"];
+    HISTORY_SYSTEM = 3
+        [(.google.fhir.proto.fhir_original_code) = "history-system"];
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON).
+  Id id = 2;
+
+  // Additional Content defined by implementations.
+  repeated Extension extension = 3;
+}
+
+// Availability of the resource.
+// See http://hl7.org/fhir/ValueSet/instance-availability.
+message InstanceAvailabilityCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/instance-availability";
+
+  // Primitive value for code
+  enum Value {
+    INVALID_UNINITIALIZED = 0;
+    ONLINE = 1;
+    OFFLINE = 2;
+    NEARLINE = 3;
+    UNAVAILABLE = 4;
+  }
+  Value value = 1;
+
+  // xml:id (or equivalent in JSON)
+  Id id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}
+
+// Either a resource or a data type.
+// See http://hl7.org/fhir/ValueSet/defined-types
+// TODO: List all the types.
+message FHIRDefinedTypeCode {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+  option (.google.fhir.proto.fhir_valueset_url) =
+      "http://hl7.org/fhir/ValueSet/defined-types";
+
+  // Primitive value for code
+  string value = 1;
+
+  // xml:id (or equivalent in JSON)
+  Id id = 2;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 3;
+}

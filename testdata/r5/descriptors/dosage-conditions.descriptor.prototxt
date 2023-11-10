@@ -1,0 +1,195 @@
+name: "DosageConditions"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "meet_goal"
+  number: 4
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.DosageConditions.MeetGoal"
+  options {
+    [google.fhir.proto.field_description]: "Extension"
+  }
+}
+field {
+  name: "when_trigger"
+  number: 5
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.DosageConditions.WhenTrigger"
+  options {
+    [google.fhir.proto.field_description]: "Extension"
+  }
+}
+field {
+  name: "precondition"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.DosageConditions.Precondition"
+  options {
+    [google.fhir.proto.field_description]: "Extension"
+  }
+}
+nested_type {
+  name: "MeetGoal"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    number: 2
+    options {
+      [google.fhir.proto.reserved_reason]: "Extension.extension.extension not present on profile."
+    }
+  }
+  field {
+    number: 3
+    options {
+      [google.fhir.proto.reserved_reason]: "Extension.extension.value[x] not present on profile."
+    }
+  }
+  field {
+    name: "offset"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Duration"
+    options {
+      [google.fhir.proto.field_description]: "Extension"
+    }
+  }
+  field {
+    name: "goal"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Reference"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Extension"
+    }
+  }
+}
+nested_type {
+  name: "WhenTrigger"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    number: 2
+    options {
+      [google.fhir.proto.reserved_reason]: "Extension.extension.extension not present on profile."
+    }
+  }
+  field {
+    number: 3
+    options {
+      [google.fhir.proto.reserved_reason]: "Extension.extension.value[x] not present on profile."
+    }
+  }
+  field {
+    name: "offset"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Duration"
+    options {
+      [google.fhir.proto.field_description]: "Extension"
+    }
+  }
+  field {
+    name: "trigger"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Reference"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Extension"
+    }
+  }
+}
+nested_type {
+  name: "Precondition"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    number: 2
+    options {
+      [google.fhir.proto.reserved_reason]: "Extension.extension.extension not present on profile."
+    }
+  }
+  field {
+    number: 3
+    options {
+      [google.fhir.proto.reserved_reason]: "Extension.extension.value[x] not present on profile."
+    }
+  }
+  field {
+    name: "does_not_occur"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Boolean"
+    options {
+      [google.fhir.proto.field_description]: "Extension"
+    }
+  }
+  field {
+    name: "condition"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Reference"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Extension"
+    }
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for conditions.\nDosage conditions.\nSee http://hl7.org/fhir/StructureDefinition/dosage-conditions"
+  [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Extension"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/dosage-conditions"
+}

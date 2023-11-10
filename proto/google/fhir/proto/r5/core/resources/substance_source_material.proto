@@ -1,0 +1,294 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/substance_source_material_go_proto";
+
+// Auto-generated from StructureDefinition for SubstanceSourceMaterial.
+// Source material shall capture information on the taxonomic and anatomical
+// origins as well as the fraction of a material that can result in or can be
+// modified to form a substance. This set of data elements shall be used to
+// define polymer substances isolated from biological matrices. Taxonomic and
+// anatomical origins shall be described using a controlled vocabulary as
+// required. This information is captured for naturally derived polymers ( .
+// starch) and structurally diverse substances. For Organisms belonging to the
+// Kingdom Plantae the Substance level defines the fresh material of a single
+// species or infraspecies, the Herbal Drug and the Herbal preparation. For
+// Herbal preparations, the fraction information will be captured at the
+// Substance information level and additional information for herbal extracts
+// will be captured at the Specified Substance Group 1 information level. See
+// for further explanation the Substance Class: Structurally Diverse and the
+// herbal annex. See
+// http://hl7.org/fhir/StructureDefinition/SubstanceSourceMaterial
+message SubstanceSourceMaterial {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/SubstanceSourceMaterial";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // SubstanceSourceMaterial.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // General high level classification of the source material specific to the
+  // origin of the material
+  CodeableConcept source_material_class = 10;
+
+  // The type of the source material shall be specified based on a controlled
+  // vocabulary. For vaccines, this subclause refers to the class of infectious
+  // agent
+  CodeableConcept source_material_type = 11;
+
+  // The state of the source material when extracted
+  CodeableConcept source_material_state = 12;
+
+  // The unique identifier associated with the source material parent organism
+  // shall be specified
+  Identifier organism_id = 13;
+
+  // The organism accepted Scientific name shall be provided based on the
+  // organism taxonomy
+  String organism_name = 14;
+
+  // The parent of the herbal drug Ginkgo biloba, Leaf is the substance ID of
+  // the substance (fresh) of Ginkgo biloba L. or Ginkgo biloba L. (Whole plant)
+  repeated Identifier parent_substance_id = 15;
+
+  // The parent substance of the Herbal Drug, or Herbal preparation
+  repeated String parent_substance_name = 16;
+
+  // The country where the plant material is harvested or the countries where
+  // the plasma is sourced from as laid down in accordance with the Plasma
+  // Master File. For “Plasma-derived substances” the attribute country of
+  // origin provides information about the countries used for the manufacturing
+  // of the Cryopoor plama or Crioprecipitate
+  repeated CodeableConcept country_of_origin = 17;
+
+  // The place/region where the plant is harvested or the places/regions where
+  // the animal source material has its habitat
+  repeated String geographical_location = 18;
+
+  // Stage of life for animals, plants, insects and microorganisms. This
+  // information shall be provided only when the substance is significantly
+  // different in these stages (e.g. foetal bovine serum)
+  CodeableConcept development_stage = 19;
+
+  // Many complex materials are fractions of parts of plants, animals, or
+  // minerals. Fraction elements are often necessary to define both Substances
+  // and Specified Group 1 Substances. For substances derived from Plants,
+  // fraction information will be captured at the Substance information level (
+  // . Oils, Juices and Exudates). Additional information for Extracts, such as
+  // extraction solvent composition, will be captured at the Specified Substance
+  // Group 1 information level. For plasma-derived products fraction information
+  // will be captured at the Substance and the Specified Substance Group 1
+  // levels
+  message FractionDescription {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // This element is capturing information about the fraction of a plant part,
+    // or human plasma for fractionation
+    String fraction = 4;
+
+    // The specific type of the material constituting the component. For Herbal
+    // preparations the particulars of the extracts (liquid/dry) is described in
+    // Specified Substance Group 1
+    CodeableConcept material_type = 5;
+  }
+  repeated FractionDescription fraction_description = 20;
+
+  // This subclause describes the organism which the substance is derived from.
+  // For vaccines, the parent organism shall be specified based on these
+  // subclause elements. As an example, full taxonomy will be described for the
+  // Substance Name: ., Leaf
+  message Organism {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The family of an organism shall be specified
+    CodeableConcept family = 4;
+
+    // The genus of an organism shall be specified; refers to the Latin epithet
+    // of the genus element of the plant/animal scientific name; it is present
+    // in names for genera, species and infraspecies
+    CodeableConcept genus = 5;
+
+    // The species of an organism shall be specified; refers to the Latin
+    // epithet of the species of the plant/animal; it is present in names for
+    // species and infraspecies
+    CodeableConcept species = 6;
+
+    // The Intraspecific type of an organism shall be specified
+    CodeableConcept intraspecific_type = 7;
+
+    // The intraspecific description of an organism shall be specified based on
+    // a controlled vocabulary. For Influenza Vaccine, the intraspecific
+    // description shall contain the syntax of the antigen in line with the WHO
+    // convention
+    String intraspecific_description = 8;
+
+    // 4.9.13.6.1 Author type (Conditional)
+    message Author {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The type of author of an organism species shall be specified. The
+      // parenthetical author of an organism species refers to the first author
+      // who published the plant/animal name (of any rank). The primary author
+      // of an organism species refers to the first author(s), who validly
+      // published the plant/animal name
+      CodeableConcept author_type = 4;
+
+      // The author of an organism species shall be specified. The author year
+      // of an organism shall also be specified when applicable; refers to the
+      // year in which the first author(s) published the infraspecific
+      // plant/animal name (of any rank)
+      String author_description = 5;
+    }
+    repeated Author author = 9;
+
+    // 4.9.13.8.1 Hybrid species maternal organism ID (Optional)
+    message Hybrid {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The identifier of the maternal species constituting the hybrid organism
+      // shall be specified based on a controlled vocabulary. For plants, the
+      // parents aren’t always known, and it is unlikely that it will be known
+      // which is maternal and which is paternal
+      String maternal_organism_id = 4;
+
+      // The name of the maternal species constituting the hybrid organism shall
+      // be specified. For plants, the parents aren’t always known, and it is
+      // unlikely that it will be known which is maternal and which is paternal
+      String maternal_organism_name = 5;
+
+      // The identifier of the paternal species constituting the hybrid organism
+      // shall be specified based on a controlled vocabulary
+      String paternal_organism_id = 6;
+
+      // The name of the paternal species constituting the hybrid organism shall
+      // be specified
+      String paternal_organism_name = 7;
+
+      // The hybrid type of an organism shall be specified
+      CodeableConcept hybrid_type = 8;
+    }
+    Hybrid hybrid = 10;
+
+    // 4.9.13.7.1 Kingdom (Conditional)
+    message OrganismGeneral {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The kingdom of an organism shall be specified
+      CodeableConcept kingdom = 4;
+
+      // The phylum of an organism shall be specified
+      CodeableConcept phylum = 5;
+
+      // The class of an organism shall be specified
+      CodeableConcept class_value = 6 [json_name = "class"];
+
+      // The order of an organism shall be specified,
+      CodeableConcept order = 7;
+    }
+    OrganismGeneral organism_general = 11;
+  }
+  Organism organism = 21;
+
+  // To do
+  message PartDescription {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Entity of anatomical origin of source material within an organism
+    CodeableConcept part = 4;
+
+    // The detailed anatomic location when the part can be extracted from
+    // different anatomical locations of the organism. Multiple alternative
+    // locations may apply
+    CodeableConcept part_location = 5;
+  }
+  repeated PartDescription part_description = 22;
+}

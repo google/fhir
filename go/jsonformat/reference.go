@@ -23,6 +23,7 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 
+	d2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/datatypes_go_proto" // _strip
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 )
@@ -89,6 +90,10 @@ func normalizeRelativeReferenceAndIgnoreHistory(pb proto.Message) error {
 // NormalizeReference normalizes a relative or internal reference into its specialized field.
 func NormalizeReference(pb proto.Message) error {
 	switch ref := pb.(type) {
+	// _strip_begin
+	case *d2pb.Reference:
+		return normalizeR2Reference(ref)
+	// _strip_end
 	case *d3pb.Reference:
 		return normalizeR3Reference(ref)
 	case *d4pb.Reference:
@@ -115,6 +120,32 @@ func setReferenceID(ref protoreflect.Message, resType string, refID protoreflect
 	return nil
 }
 
+// _strip_begin
+func normalizeR2Reference(ref *d2pb.Reference) error {
+	uri := ref.GetUri().GetValue()
+	if uri == "" {
+		return nil
+	}
+
+	if strings.HasPrefix(uri, jsonpbhelper.RefFragmentPrefix) {
+		fragVal := uri[len(jsonpbhelper.RefFragmentPrefix):]
+		ref.Reference = &d2pb.Reference_Fragment{Fragment: &d2pb.String{Value: fragVal}}
+		return nil
+	}
+	parts := strings.Split(uri, "/")
+	if !(len(parts) == 2 || len(parts) == 4 && parts[2] == jsonpbhelper.RefHistory) {
+		return nil
+	}
+
+	refID := &d2pb.ReferenceId{Value: parts[1]}
+	if len(parts) > 2 {
+		refID.History = &d2pb.Id{Value: parts[3]}
+	}
+
+	return setReferenceID(ref.ProtoReflect(), parts[0], refID.ProtoReflect())
+}
+
+// _strip_end
 func normalizeR3Reference(ref *d3pb.Reference) error {
 	uri := ref.GetUri().GetValue()
 	if uri == "" {
@@ -166,6 +197,10 @@ func normalizeR4Reference(ref *d4pb.Reference) error {
 // DenormalizeReference recovers the absolute reference URI from a normalized representation.
 func DenormalizeReference(pb proto.Message) error {
 	switch ref := pb.(type) {
+	// _strip_begin
+	case *d2pb.Reference:
+		denormalizeR2Reference(ref)
+	// _strip_end
 	case *d3pb.Reference:
 		denormalizeR3Reference(ref)
 	case *d4pb.Reference:
@@ -180,6 +215,10 @@ func DenormalizeReference(pb proto.Message) error {
 func NewDenormalizedReference(pb proto.Message) (proto.Message, error) {
 	var newRef proto.Message
 	switch ref := pb.(type) {
+	// _strip_begin
+	case *d2pb.Reference:
+		newRef = copyR2Reference(ref)
+	// _strip_end
 	case *d3pb.Reference:
 		newRef = copyR3Reference(ref)
 	case *d4pb.Reference:
@@ -193,6 +232,47 @@ func NewDenormalizedReference(pb proto.Message) (proto.Message, error) {
 	return newRef, nil
 }
 
+// _strip_begin
+func copyR2Reference(ref *d2pb.Reference) proto.Message {
+	return &d2pb.Reference{
+		Id:         ref.GetId(),
+		Extension:  ref.GetExtension(),
+		Identifier: ref.GetIdentifier(),
+		Display:    ref.GetDisplay(),
+		Reference:  ref.GetReference(),
+	}
+}
+
+func denormalizeR2Reference(ref *d2pb.Reference) {
+	if uri := ref.GetUri(); uri != nil {
+		return
+	}
+	if frag := ref.GetFragment(); frag != nil {
+		ref.Reference = &d2pb.Reference_Uri{Uri: &d2pb.String{Value: jsonpbhelper.RefFragmentPrefix + frag.GetValue()}}
+		return
+	}
+
+	rpb := ref.ProtoReflect()
+	f, err := jsonpbhelper.ResourceIDField(rpb)
+	if err != nil || f == nil {
+		return
+	}
+
+	refType, ok := jsonpbhelper.ResourceTypeForReference(f.Name())
+	if !ok {
+		return
+	}
+
+	refID, _ := rpb.Get(f).Message().Interface().(*d2pb.ReferenceId)
+	parts := []string{refType, refID.GetValue()}
+	if refID.GetHistory().GetValue() != "" {
+		parts = append(parts, jsonpbhelper.RefHistory, refID.GetHistory().GetValue())
+	}
+	ref.Reference = &d2pb.Reference_Uri{Uri: &d2pb.String{Value: strings.Join(parts, "/")}}
+	return
+}
+
+// _strip_end
 func copyR3Reference(ref *d3pb.Reference) proto.Message {
 	return &d3pb.Reference{
 		Id:         ref.GetId(),

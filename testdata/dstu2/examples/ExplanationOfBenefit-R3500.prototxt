@@ -1,0 +1,46 @@
+id {
+  value: "R3500"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>A human-readable rendering of the ExplanationOfBenefit</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/eob"
+  }
+  value {
+    value: "987654321"
+  }
+}
+request {
+  uri {
+    value: "http://www.BenefitsInc.com/fhir/oralhealthclaim/15476332402"
+  }
+}
+outcome {
+  value: COMPLETE
+}
+disposition {
+  value: "Claim settled as per contract."
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+organization {
+  organization_id {
+    value: "2"
+  }
+}
+request_organization {
+  organization_id {
+    value: "1"
+  }
+}
+

@@ -1,0 +1,159 @@
+id {
+  value: "v2-administrative-gender"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <h2>v2 map for AdministrativeGender (http://hl7.org/fhir/ConceptMap/v2-administrative-gender)</h2>\n            <p>Mapping from \n              <a href=\"valueset-administrative-gender.html\">http://hl7.org/fhir/ValueSet/administrative-gender</a> to \n              <a href=\"v2/0001/index.html\">http://hl7.org/fhir/ValueSet/v2-0001</a>\n            </p>\n            <p>DRAFT. Published on 24/10/2015 7:41:03 AM by HL7 (FHIR Project) (\n              <a href=\"http://hl7.org/fhir\">http://hl7.org/fhir</a>, \n              <a href=\"mailto:fhir@lists.hl7.org\">fhir@lists.hl7.org</a>; ). \n            </p>\n            <p>v2 Map (0001)</p>\n            <br/>\n            <table class=\"grid\">\n              <tr>\n                <td>\n                  <b>Source Code</b>\n                </td>\n                <td>\n                  <b>Equivalence</b>\n                </td>\n                <td>\n                  <b>Destination Code</b>\n                </td>\n              </tr>\n              <tr>\n                <td>male (Male)</td>\n                <td>equal</td>\n                <td>M (Male)</td>\n              </tr>\n              <tr>\n                <td>female (Female)</td>\n                <td>equal</td>\n                <td>F (Female)</td>\n              </tr>\n              <tr>\n                <td>other (Other)</td>\n                <td>wider</td>\n                <td>A (Ambiguous)</td>\n              </tr>\n              <tr>\n                <td>other (Other)</td>\n                <td>wider</td>\n                <td>O (Other)</td>\n              </tr>\n              <tr>\n                <td>unknown (Unknown)</td>\n                <td>equal</td>\n                <td>U (Unknown)</td>\n              </tr>\n            </table>\n          </div>"
+  }
+}
+url {
+  value: "http://hl7.org/fhir/ConceptMap/v2-administrative-gender"
+}
+name {
+  value: "v2 map for AdministrativeGender"
+}
+status {
+  value: DRAFT
+}
+publisher {
+  value: "HL7 (FHIR Project)"
+}
+contact {
+  telecom {
+    system {
+      value: OTHER
+    }
+    value {
+      value: "http://hl7.org/fhir"
+    }
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "fhir@lists.hl7.org"
+    }
+  }
+}
+date {
+  value_us: 1445632863000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+description {
+  value: "v2 Map (0001)"
+}
+source {
+  reference {
+    uri {
+      value: "http://hl7.org/fhir/ValueSet/administrative-gender"
+    }
+  }
+}
+target {
+  reference {
+    uri {
+      value: "http://hl7.org/fhir/ValueSet/v2-0001"
+    }
+  }
+}
+element {
+  code_system {
+    value: "http://hl7.org/fhir/administrative-gender"
+  }
+  code {
+    value: "male"
+  }
+  target {
+    code_system {
+      value: "http://hl7.org/fhir/v2/0001"
+    }
+    code {
+      value: "M"
+    }
+    equivalence {
+      value: EQUAL
+    }
+  }
+}
+element {
+  code_system {
+    value: "http://hl7.org/fhir/administrative-gender"
+  }
+  code {
+    value: "female"
+  }
+  target {
+    code_system {
+      value: "http://hl7.org/fhir/v2/0001"
+    }
+    code {
+      value: "F"
+    }
+    equivalence {
+      value: EQUAL
+    }
+  }
+}
+element {
+  code_system {
+    value: "http://hl7.org/fhir/administrative-gender"
+  }
+  code {
+    value: "other"
+  }
+  target {
+    code_system {
+      value: "http://hl7.org/fhir/v2/0001"
+    }
+    code {
+      value: "A"
+    }
+    equivalence {
+      value: WIDER
+    }
+  }
+}
+element {
+  code_system {
+    value: "http://hl7.org/fhir/administrative-gender"
+  }
+  code {
+    value: "other"
+  }
+  target {
+    code_system {
+      value: "http://hl7.org/fhir/v2/0001"
+    }
+    code {
+      value: "O"
+    }
+    equivalence {
+      value: WIDER
+    }
+  }
+}
+element {
+  code_system {
+    value: "http://hl7.org/fhir/administrative-gender"
+  }
+  code {
+    value: "unknown"
+  }
+  target {
+    code_system {
+      value: "http://hl7.org/fhir/v2/0001"
+    }
+    code {
+      value: "U"
+    }
+    equivalence {
+      value: EQUAL
+    }
+  }
+}
+

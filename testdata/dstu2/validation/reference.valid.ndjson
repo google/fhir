@@ -1,0 +1,7 @@
+{"reference": "Patient/034AB16"}
+{"reference": "http://fhir.hl7.org/svc/StructureDefinition/c8973a22-2b5b-4e76-9c66-00639c99e61b"}
+{"reference": "#p1"}
+{"reference": "Organization/1", "display": "Some Corporation"}
+{"reference": "FamilyMemberHistory/1"}
+{"reference": "urn:uuid:49a86246-4004-42eb-9bdc-f542f93f9228"}
+{"display": "Display Field Only"}

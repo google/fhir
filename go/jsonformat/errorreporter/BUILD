@@ -13,6 +13,9 @@ go_library(
     importpath = "github.com/google/fhir/go/jsonformat/errorreporter",
     deps = [
         "//go/fhirversion",
+        "//proto/google/fhir/proto/dstu2:codes_go_proto",  # _strip
+        "//proto/google/fhir/proto/dstu2:datatypes_go_proto",  # _strip
+        "//proto/google/fhir/proto/dstu2:resources_go_proto",  # _strip
         "//proto/google/fhir/proto/r4/core:codes_go_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:operation_outcome_go_proto",
@@ -30,6 +33,9 @@ go_test(
     deps = [
         "//go/fhirversion",
         "//go/jsonformat/internal/jsonpbhelper",
+        "//proto/google/fhir/proto/dstu2:codes_go_proto",  # _strip
+        "//proto/google/fhir/proto/dstu2:datatypes_go_proto",  # _strip
+        "//proto/google/fhir/proto/dstu2:resources_go_proto",  # _strip
         "//proto/google/fhir/proto/r4/core:codes_go_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:operation_outcome_go_proto",

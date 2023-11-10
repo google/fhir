@@ -1,0 +1,2977 @@
+name: "ElementDefinition"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 3
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
+  }
+}
+field {
+  name: "path"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Path of the element in the hierarchy of elements"
+  }
+}
+field {
+  name: "representation"
+  number: 5
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.ElementDefinition.RepresentationCode"
+  options {
+    [google.fhir.proto.field_description]: "xmlAttr | xmlText | typeAttr | cdaText | xhtml"
+  }
+}
+field {
+  name: "slice_name"
+  number: 6
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Name for this particular element (in a set of slices)"
+  }
+}
+field {
+  name: "slice_is_constraining"
+  number: 7
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Boolean"
+  options {
+    [google.fhir.proto.field_description]: "If this slice definition constrains an inherited slice definition (or not)"
+  }
+}
+field {
+  name: "label"
+  number: 8
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Name for element to display with or prompt for element"
+  }
+}
+field {
+  name: "code"
+  number: 9
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Coding"
+  options {
+    [google.fhir.proto.field_description]: "Corresponding codes in terminologies"
+  }
+}
+field {
+  name: "slicing"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.ElementDefinition.Slicing"
+  options {
+    [google.fhir.proto.field_description]: "This element is sliced - slices follow"
+  }
+}
+field {
+  name: "short"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Concise definition for space-constrained presentation"
+  }
+}
+field {
+  name: "definition"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Markdown"
+  options {
+    [google.fhir.proto.field_description]: "Full formal definition as narrative text"
+  }
+}
+field {
+  name: "comment"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Markdown"
+  options {
+    [google.fhir.proto.field_description]: "Comments about the use of this element"
+  }
+}
+field {
+  name: "requirements"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Markdown"
+  options {
+    [google.fhir.proto.field_description]: "Why this resource has been created"
+  }
+}
+field {
+  name: "alias"
+  number: 15
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Other names"
+  }
+}
+field {
+  name: "min"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.UnsignedInt"
+  options {
+    [google.fhir.proto.field_description]: "Minimum Cardinality"
+  }
+}
+field {
+  name: "max"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Maximum Cardinality (a number or *)"
+    [google.fhir.proto.fhir_path_constraint]: "empty() or ($this = \'*\') or (toInteger() >= 0)"
+  }
+}
+field {
+  name: "base"
+  number: 18
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.ElementDefinition.Base"
+  options {
+    [google.fhir.proto.field_description]: "Base definition information for tools"
+  }
+}
+field {
+  name: "content_reference"
+  number: 19
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Uri"
+  options {
+    [google.fhir.proto.field_description]: "Reference to definition of content for the element"
+  }
+}
+field {
+  name: "type"
+  number: 20
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.ElementDefinition.TypeRef"
+  options {
+    [google.fhir.proto.field_description]: "Data type and Profile for this element"
+  }
+}
+field {
+  name: "default_value"
+  number: 21
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.ElementDefinition.DefaultValueX"
+  options {
+    [google.fhir.proto.field_description]: "Specified value if missing from instance"
+  }
+}
+field {
+  name: "meaning_when_missing"
+  number: 22
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Markdown"
+  options {
+    [google.fhir.proto.field_description]: "Implicit meaning when this element is missing"
+  }
+}
+field {
+  name: "order_meaning"
+  number: 23
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "What the order of the elements means"
+  }
+}
+field {
+  name: "fixed"
+  number: 24
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.ElementDefinition.FixedX"
+  options {
+    [google.fhir.proto.field_description]: "Value must be exactly this"
+  }
+}
+field {
+  name: "pattern"
+  number: 25
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.ElementDefinition.PatternX"
+  options {
+    [google.fhir.proto.field_description]: "Value must have at least these property values"
+  }
+}
+field {
+  name: "example"
+  number: 26
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.ElementDefinition.Example"
+  options {
+    [google.fhir.proto.field_description]: "Example value (as defined for type)"
+  }
+}
+field {
+  name: "min_value"
+  number: 27
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.ElementDefinition.MinValueX"
+  options {
+    [google.fhir.proto.field_description]: "Minimum Allowed Value (for some types)"
+  }
+}
+field {
+  name: "max_value"
+  number: 28
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.ElementDefinition.MaxValueX"
+  options {
+    [google.fhir.proto.field_description]: "Maximum Allowed Value (for some types)"
+  }
+}
+field {
+  name: "max_length"
+  number: 29
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Integer"
+  options {
+    [google.fhir.proto.field_description]: "Max length for strings"
+  }
+}
+field {
+  name: "condition"
+  number: 30
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Id"
+  options {
+    [google.fhir.proto.field_description]: "Reference to invariant about presence"
+  }
+}
+field {
+  name: "constraint"
+  number: 31
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.ElementDefinition.Constraint"
+  options {
+    [google.fhir.proto.field_description]: "Condition that must evaluate to true"
+  }
+}
+field {
+  name: "must_support"
+  number: 32
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Boolean"
+  options {
+    [google.fhir.proto.field_description]: "If the element must be supported"
+  }
+}
+field {
+  name: "is_modifier"
+  number: 33
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Boolean"
+  options {
+    [google.fhir.proto.field_description]: "If this modifies the meaning of other elements"
+  }
+}
+field {
+  name: "is_modifier_reason"
+  number: 34
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Reason that this element is marked as a modifier"
+  }
+}
+field {
+  name: "is_summary"
+  number: 35
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Boolean"
+  options {
+    [google.fhir.proto.field_description]: "Include when _summary = true?"
+  }
+}
+field {
+  name: "binding"
+  number: 36
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.ElementDefinition.ElementDefinitionBinding"
+  options {
+    [google.fhir.proto.field_description]: "ValueSet details if this is coded"
+  }
+}
+field {
+  name: "mapping"
+  number: 37
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.ElementDefinition.Mapping"
+  options {
+    [google.fhir.proto.field_description]: "Map element to another set of definitions"
+  }
+}
+nested_type {
+  name: "RepresentationCode"
+  field {
+    name: "value"
+    number: 1
+    type: TYPE_ENUM
+    type_name: ".google.fhir.r5.core.PropertyRepresentationCode.Value"
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/property-representation"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+nested_type {
+  name: "Slicing"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "discriminator"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ElementDefinition.Slicing.Discriminator"
+    options {
+      [google.fhir.proto.field_description]: "Element values that are used to distinguish the slices"
+    }
+  }
+  field {
+    name: "description"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Text description of how slicing works (or not)"
+    }
+  }
+  field {
+    name: "ordered"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Boolean"
+    options {
+      [google.fhir.proto.field_description]: "If elements must be in same order as slices"
+    }
+  }
+  field {
+    name: "rules"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ElementDefinition.Slicing.RulesCode"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "closed | open | openAtEnd"
+    }
+  }
+  nested_type {
+    name: "Discriminator"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.String"
+      options {
+        [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Extension"
+      options {
+        [google.fhir.proto.field_description]: "Additional content defined by implementations"
+      }
+    }
+    field {
+      name: "type"
+      number: 3
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.ElementDefinition.Slicing.Discriminator.TypeCode"
+      options {
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "value | exists | pattern | type | profile"
+      }
+    }
+    field {
+      name: "path"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.String"
+      options {
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "Path to element value"
+      }
+    }
+    nested_type {
+      name: "TypeCode"
+      field {
+        name: "value"
+        number: 1
+        type: TYPE_ENUM
+        type_name: ".google.fhir.r5.core.DiscriminatorTypeCode.Value"
+      }
+      field {
+        name: "id"
+        number: 2
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r5.core.String"
+      }
+      field {
+        name: "extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.r5.core.Extension"
+      }
+      options {
+        [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/discriminator-type"
+        [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+        [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+      }
+    }
+  }
+  nested_type {
+    name: "RulesCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r5.core.SlicingRulesCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/resource-slicing-rules"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+    }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "discriminator.exists() or description.exists()"
+  }
+}
+nested_type {
+  name: "Base"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "path"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Path that identifies the base element"
+    }
+  }
+  field {
+    name: "min"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.UnsignedInt"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Min cardinality of the base element"
+    }
+  }
+  field {
+    name: "max"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Max cardinality of the base element"
+    }
+  }
+}
+nested_type {
+  name: "TypeRef"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "code"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Uri"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Data type or Resource (reference to definition)"
+    }
+  }
+  field {
+    name: "profile"
+    number: 4
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Canonical"
+    options {
+      [google.fhir.proto.field_description]: "Profiles (StructureDefinition or IG) - one must apply"
+    }
+  }
+  field {
+    name: "target_profile"
+    number: 5
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Canonical"
+    options {
+      [google.fhir.proto.field_description]: "Profile (StructureDefinition or IG) on the Reference/canonical target - one must apply"
+    }
+  }
+  field {
+    name: "aggregation"
+    number: 6
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ElementDefinition.TypeRef.AggregationCode"
+    options {
+      [google.fhir.proto.field_description]: "contained | referenced | bundled - how aggregated"
+    }
+  }
+  field {
+    name: "versioning"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ElementDefinition.TypeRef.VersioningCode"
+    options {
+      [google.fhir.proto.field_description]: "either | independent | specific"
+    }
+  }
+  nested_type {
+    name: "AggregationCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r5.core.AggregationModeCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/resource-aggregation-mode"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+    }
+  }
+  nested_type {
+    name: "VersioningCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r5.core.ReferenceVersionRulesCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/reference-version-rules"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+    }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "aggregation.empty() or (code = \'Reference\')"
+    [google.fhir.proto.fhir_path_message_constraint]: "(code=\'Reference\' or code = \'canonical\' or code = \'CodeableReference\') or targetProfile.empty()"
+  }
+}
+nested_type {
+  name: "DefaultValueX"
+  field {
+    name: "base64_binary"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Base64Binary"
+    oneof_index: 0
+  }
+  field {
+    name: "boolean"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Boolean"
+    oneof_index: 0
+  }
+  field {
+    name: "canonical"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Canonical"
+    oneof_index: 0
+  }
+  field {
+    name: "code"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Code"
+    oneof_index: 0
+  }
+  field {
+    name: "date"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Date"
+    oneof_index: 0
+  }
+  field {
+    name: "date_time"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.DateTime"
+    oneof_index: 0
+  }
+  field {
+    name: "decimal"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Decimal"
+    oneof_index: 0
+  }
+  field {
+    name: "id"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Id"
+    oneof_index: 0
+  }
+  field {
+    name: "instant"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Instant"
+    oneof_index: 0
+  }
+  field {
+    name: "integer"
+    number: 10
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Integer"
+    oneof_index: 0
+  }
+  field {
+    name: "integer64"
+    number: 11
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Integer64"
+    oneof_index: 0
+  }
+  field {
+    name: "markdown"
+    number: 12
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Markdown"
+    oneof_index: 0
+  }
+  field {
+    name: "oid"
+    number: 13
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Oid"
+    oneof_index: 0
+  }
+  field {
+    name: "positive_int"
+    number: 14
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.PositiveInt"
+    oneof_index: 0
+  }
+  field {
+    name: "string_value"
+    number: 15
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    oneof_index: 0
+    json_name: "string"
+  }
+  field {
+    name: "time"
+    number: 16
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Time"
+    oneof_index: 0
+  }
+  field {
+    name: "unsigned_int"
+    number: 17
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.UnsignedInt"
+    oneof_index: 0
+  }
+  field {
+    name: "uri"
+    number: 18
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Uri"
+    oneof_index: 0
+  }
+  field {
+    name: "url"
+    number: 19
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Url"
+    oneof_index: 0
+  }
+  field {
+    name: "uuid"
+    number: 20
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Uuid"
+    oneof_index: 0
+  }
+  field {
+    name: "address"
+    number: 21
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Address"
+    oneof_index: 0
+  }
+  field {
+    name: "age"
+    number: 22
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Age"
+    oneof_index: 0
+  }
+  field {
+    name: "annotation"
+    number: 23
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Annotation"
+    oneof_index: 0
+  }
+  field {
+    name: "attachment"
+    number: 24
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Attachment"
+    oneof_index: 0
+  }
+  field {
+    name: "codeable_concept"
+    number: 25
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.CodeableConcept"
+    oneof_index: 0
+  }
+  field {
+    name: "coding"
+    number: 26
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Coding"
+    oneof_index: 0
+  }
+  field {
+    name: "contact_point"
+    number: 27
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ContactPoint"
+    oneof_index: 0
+  }
+  field {
+    name: "count"
+    number: 28
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Count"
+    oneof_index: 0
+  }
+  field {
+    name: "distance"
+    number: 29
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Distance"
+    oneof_index: 0
+  }
+  field {
+    name: "duration"
+    number: 30
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Duration"
+    oneof_index: 0
+  }
+  field {
+    name: "human_name"
+    number: 31
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.HumanName"
+    oneof_index: 0
+  }
+  field {
+    name: "identifier"
+    number: 32
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Identifier"
+    oneof_index: 0
+  }
+  field {
+    name: "money"
+    number: 33
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Money"
+    oneof_index: 0
+  }
+  field {
+    name: "period"
+    number: 34
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Period"
+    oneof_index: 0
+  }
+  field {
+    name: "quantity"
+    number: 35
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Quantity"
+    oneof_index: 0
+  }
+  field {
+    name: "range"
+    number: 36
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Range"
+    oneof_index: 0
+  }
+  field {
+    name: "ratio"
+    number: 37
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Ratio"
+    oneof_index: 0
+  }
+  field {
+    name: "reference"
+    number: 38
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Reference"
+    oneof_index: 0
+  }
+  field {
+    name: "sampled_data"
+    number: 39
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.SampledData"
+    oneof_index: 0
+  }
+  field {
+    name: "signature"
+    number: 40
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Signature"
+    oneof_index: 0
+  }
+  field {
+    name: "timing"
+    number: 41
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Timing"
+    oneof_index: 0
+  }
+  field {
+    name: "contact_detail"
+    number: 42
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ContactDetail"
+    oneof_index: 0
+  }
+  field {
+    name: "contributor"
+    number: 43
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Contributor"
+    oneof_index: 0
+  }
+  field {
+    name: "data_requirement"
+    number: 44
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.DataRequirement"
+    oneof_index: 0
+  }
+  field {
+    name: "expression"
+    number: 45
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Expression"
+    oneof_index: 0
+  }
+  field {
+    name: "parameter_definition"
+    number: 46
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ParameterDefinition"
+    oneof_index: 0
+  }
+  field {
+    name: "related_artifact"
+    number: 47
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.RelatedArtifact"
+    oneof_index: 0
+  }
+  field {
+    name: "trigger_definition"
+    number: 48
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.TriggerDefinition"
+    oneof_index: 0
+  }
+  field {
+    name: "usage_context"
+    number: 49
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.UsageContext"
+    oneof_index: 0
+  }
+  field {
+    name: "dosage"
+    number: 50
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Dosage"
+    oneof_index: 0
+  }
+  field {
+    name: "meta"
+    number: 51
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Meta"
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+nested_type {
+  name: "FixedX"
+  field {
+    name: "base64_binary"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Base64Binary"
+    oneof_index: 0
+  }
+  field {
+    name: "boolean"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Boolean"
+    oneof_index: 0
+  }
+  field {
+    name: "canonical"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Canonical"
+    oneof_index: 0
+  }
+  field {
+    name: "code"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Code"
+    oneof_index: 0
+  }
+  field {
+    name: "date"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Date"
+    oneof_index: 0
+  }
+  field {
+    name: "date_time"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.DateTime"
+    oneof_index: 0
+  }
+  field {
+    name: "decimal"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Decimal"
+    oneof_index: 0
+  }
+  field {
+    name: "id"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Id"
+    oneof_index: 0
+  }
+  field {
+    name: "instant"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Instant"
+    oneof_index: 0
+  }
+  field {
+    name: "integer"
+    number: 10
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Integer"
+    oneof_index: 0
+  }
+  field {
+    name: "integer64"
+    number: 11
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Integer64"
+    oneof_index: 0
+  }
+  field {
+    name: "markdown"
+    number: 12
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Markdown"
+    oneof_index: 0
+  }
+  field {
+    name: "oid"
+    number: 13
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Oid"
+    oneof_index: 0
+  }
+  field {
+    name: "positive_int"
+    number: 14
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.PositiveInt"
+    oneof_index: 0
+  }
+  field {
+    name: "string_value"
+    number: 15
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    oneof_index: 0
+    json_name: "string"
+  }
+  field {
+    name: "time"
+    number: 16
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Time"
+    oneof_index: 0
+  }
+  field {
+    name: "unsigned_int"
+    number: 17
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.UnsignedInt"
+    oneof_index: 0
+  }
+  field {
+    name: "uri"
+    number: 18
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Uri"
+    oneof_index: 0
+  }
+  field {
+    name: "url"
+    number: 19
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Url"
+    oneof_index: 0
+  }
+  field {
+    name: "uuid"
+    number: 20
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Uuid"
+    oneof_index: 0
+  }
+  field {
+    name: "address"
+    number: 21
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Address"
+    oneof_index: 0
+  }
+  field {
+    name: "age"
+    number: 22
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Age"
+    oneof_index: 0
+  }
+  field {
+    name: "annotation"
+    number: 23
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Annotation"
+    oneof_index: 0
+  }
+  field {
+    name: "attachment"
+    number: 24
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Attachment"
+    oneof_index: 0
+  }
+  field {
+    name: "codeable_concept"
+    number: 25
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.CodeableConcept"
+    oneof_index: 0
+  }
+  field {
+    name: "coding"
+    number: 26
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Coding"
+    oneof_index: 0
+  }
+  field {
+    name: "contact_point"
+    number: 27
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ContactPoint"
+    oneof_index: 0
+  }
+  field {
+    name: "count"
+    number: 28
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Count"
+    oneof_index: 0
+  }
+  field {
+    name: "distance"
+    number: 29
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Distance"
+    oneof_index: 0
+  }
+  field {
+    name: "duration"
+    number: 30
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Duration"
+    oneof_index: 0
+  }
+  field {
+    name: "human_name"
+    number: 31
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.HumanName"
+    oneof_index: 0
+  }
+  field {
+    name: "identifier"
+    number: 32
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Identifier"
+    oneof_index: 0
+  }
+  field {
+    name: "money"
+    number: 33
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Money"
+    oneof_index: 0
+  }
+  field {
+    name: "period"
+    number: 34
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Period"
+    oneof_index: 0
+  }
+  field {
+    name: "quantity"
+    number: 35
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Quantity"
+    oneof_index: 0
+  }
+  field {
+    name: "range"
+    number: 36
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Range"
+    oneof_index: 0
+  }
+  field {
+    name: "ratio"
+    number: 37
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Ratio"
+    oneof_index: 0
+  }
+  field {
+    name: "reference"
+    number: 38
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Reference"
+    oneof_index: 0
+  }
+  field {
+    name: "sampled_data"
+    number: 39
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.SampledData"
+    oneof_index: 0
+  }
+  field {
+    name: "signature"
+    number: 40
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Signature"
+    oneof_index: 0
+  }
+  field {
+    name: "timing"
+    number: 41
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Timing"
+    oneof_index: 0
+  }
+  field {
+    name: "contact_detail"
+    number: 42
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ContactDetail"
+    oneof_index: 0
+  }
+  field {
+    name: "contributor"
+    number: 43
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Contributor"
+    oneof_index: 0
+  }
+  field {
+    name: "data_requirement"
+    number: 44
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.DataRequirement"
+    oneof_index: 0
+  }
+  field {
+    name: "expression"
+    number: 45
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Expression"
+    oneof_index: 0
+  }
+  field {
+    name: "parameter_definition"
+    number: 46
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ParameterDefinition"
+    oneof_index: 0
+  }
+  field {
+    name: "related_artifact"
+    number: 47
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.RelatedArtifact"
+    oneof_index: 0
+  }
+  field {
+    name: "trigger_definition"
+    number: 48
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.TriggerDefinition"
+    oneof_index: 0
+  }
+  field {
+    name: "usage_context"
+    number: 49
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.UsageContext"
+    oneof_index: 0
+  }
+  field {
+    name: "dosage"
+    number: 50
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Dosage"
+    oneof_index: 0
+  }
+  field {
+    name: "meta"
+    number: 51
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Meta"
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+nested_type {
+  name: "PatternX"
+  field {
+    name: "base64_binary"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Base64Binary"
+    oneof_index: 0
+  }
+  field {
+    name: "boolean"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Boolean"
+    oneof_index: 0
+  }
+  field {
+    name: "canonical"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Canonical"
+    oneof_index: 0
+  }
+  field {
+    name: "code"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Code"
+    oneof_index: 0
+  }
+  field {
+    name: "date"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Date"
+    oneof_index: 0
+  }
+  field {
+    name: "date_time"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.DateTime"
+    oneof_index: 0
+  }
+  field {
+    name: "decimal"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Decimal"
+    oneof_index: 0
+  }
+  field {
+    name: "id"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Id"
+    oneof_index: 0
+  }
+  field {
+    name: "instant"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Instant"
+    oneof_index: 0
+  }
+  field {
+    name: "integer"
+    number: 10
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Integer"
+    oneof_index: 0
+  }
+  field {
+    name: "integer64"
+    number: 11
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Integer64"
+    oneof_index: 0
+  }
+  field {
+    name: "markdown"
+    number: 12
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Markdown"
+    oneof_index: 0
+  }
+  field {
+    name: "oid"
+    number: 13
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Oid"
+    oneof_index: 0
+  }
+  field {
+    name: "positive_int"
+    number: 14
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.PositiveInt"
+    oneof_index: 0
+  }
+  field {
+    name: "string_value"
+    number: 15
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    oneof_index: 0
+    json_name: "string"
+  }
+  field {
+    name: "time"
+    number: 16
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Time"
+    oneof_index: 0
+  }
+  field {
+    name: "unsigned_int"
+    number: 17
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.UnsignedInt"
+    oneof_index: 0
+  }
+  field {
+    name: "uri"
+    number: 18
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Uri"
+    oneof_index: 0
+  }
+  field {
+    name: "url"
+    number: 19
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Url"
+    oneof_index: 0
+  }
+  field {
+    name: "uuid"
+    number: 20
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Uuid"
+    oneof_index: 0
+  }
+  field {
+    name: "address"
+    number: 21
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Address"
+    oneof_index: 0
+  }
+  field {
+    name: "age"
+    number: 22
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Age"
+    oneof_index: 0
+  }
+  field {
+    name: "annotation"
+    number: 23
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Annotation"
+    oneof_index: 0
+  }
+  field {
+    name: "attachment"
+    number: 24
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Attachment"
+    oneof_index: 0
+  }
+  field {
+    name: "codeable_concept"
+    number: 25
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.CodeableConcept"
+    oneof_index: 0
+  }
+  field {
+    name: "coding"
+    number: 26
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Coding"
+    oneof_index: 0
+  }
+  field {
+    name: "contact_point"
+    number: 27
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ContactPoint"
+    oneof_index: 0
+  }
+  field {
+    name: "count"
+    number: 28
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Count"
+    oneof_index: 0
+  }
+  field {
+    name: "distance"
+    number: 29
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Distance"
+    oneof_index: 0
+  }
+  field {
+    name: "duration"
+    number: 30
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Duration"
+    oneof_index: 0
+  }
+  field {
+    name: "human_name"
+    number: 31
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.HumanName"
+    oneof_index: 0
+  }
+  field {
+    name: "identifier"
+    number: 32
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Identifier"
+    oneof_index: 0
+  }
+  field {
+    name: "money"
+    number: 33
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Money"
+    oneof_index: 0
+  }
+  field {
+    name: "period"
+    number: 34
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Period"
+    oneof_index: 0
+  }
+  field {
+    name: "quantity"
+    number: 35
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Quantity"
+    oneof_index: 0
+  }
+  field {
+    name: "range"
+    number: 36
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Range"
+    oneof_index: 0
+  }
+  field {
+    name: "ratio"
+    number: 37
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Ratio"
+    oneof_index: 0
+  }
+  field {
+    name: "reference"
+    number: 38
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Reference"
+    oneof_index: 0
+  }
+  field {
+    name: "sampled_data"
+    number: 39
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.SampledData"
+    oneof_index: 0
+  }
+  field {
+    name: "signature"
+    number: 40
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Signature"
+    oneof_index: 0
+  }
+  field {
+    name: "timing"
+    number: 41
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Timing"
+    oneof_index: 0
+  }
+  field {
+    name: "contact_detail"
+    number: 42
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ContactDetail"
+    oneof_index: 0
+  }
+  field {
+    name: "contributor"
+    number: 43
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Contributor"
+    oneof_index: 0
+  }
+  field {
+    name: "data_requirement"
+    number: 44
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.DataRequirement"
+    oneof_index: 0
+  }
+  field {
+    name: "expression"
+    number: 45
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Expression"
+    oneof_index: 0
+  }
+  field {
+    name: "parameter_definition"
+    number: 46
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ParameterDefinition"
+    oneof_index: 0
+  }
+  field {
+    name: "related_artifact"
+    number: 47
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.RelatedArtifact"
+    oneof_index: 0
+  }
+  field {
+    name: "trigger_definition"
+    number: 48
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.TriggerDefinition"
+    oneof_index: 0
+  }
+  field {
+    name: "usage_context"
+    number: 49
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.UsageContext"
+    oneof_index: 0
+  }
+  field {
+    name: "dosage"
+    number: 50
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Dosage"
+    oneof_index: 0
+  }
+  field {
+    name: "meta"
+    number: 51
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Meta"
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+nested_type {
+  name: "Example"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "label"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Describes the purpose of this example"
+    }
+  }
+  field {
+    name: "value"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ElementDefinition.Example.ValueX"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Value of Example (one of allowed types)"
+    }
+  }
+  nested_type {
+    name: "ValueX"
+    field {
+      name: "base64_binary"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Base64Binary"
+      oneof_index: 0
+    }
+    field {
+      name: "boolean"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Boolean"
+      oneof_index: 0
+    }
+    field {
+      name: "canonical"
+      number: 3
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Canonical"
+      oneof_index: 0
+    }
+    field {
+      name: "code"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Code"
+      oneof_index: 0
+    }
+    field {
+      name: "date"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Date"
+      oneof_index: 0
+    }
+    field {
+      name: "date_time"
+      number: 6
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.DateTime"
+      oneof_index: 0
+    }
+    field {
+      name: "decimal"
+      number: 7
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Decimal"
+      oneof_index: 0
+    }
+    field {
+      name: "id"
+      number: 8
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Id"
+      oneof_index: 0
+    }
+    field {
+      name: "instant"
+      number: 9
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Instant"
+      oneof_index: 0
+    }
+    field {
+      name: "integer"
+      number: 10
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Integer"
+      oneof_index: 0
+    }
+    field {
+      name: "integer64"
+      number: 11
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Integer64"
+      oneof_index: 0
+    }
+    field {
+      name: "markdown"
+      number: 12
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Markdown"
+      oneof_index: 0
+    }
+    field {
+      name: "oid"
+      number: 13
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Oid"
+      oneof_index: 0
+    }
+    field {
+      name: "positive_int"
+      number: 14
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.PositiveInt"
+      oneof_index: 0
+    }
+    field {
+      name: "string_value"
+      number: 15
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.String"
+      oneof_index: 0
+      json_name: "string"
+    }
+    field {
+      name: "time"
+      number: 16
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Time"
+      oneof_index: 0
+    }
+    field {
+      name: "unsigned_int"
+      number: 17
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.UnsignedInt"
+      oneof_index: 0
+    }
+    field {
+      name: "uri"
+      number: 18
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Uri"
+      oneof_index: 0
+    }
+    field {
+      name: "url"
+      number: 19
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Url"
+      oneof_index: 0
+    }
+    field {
+      name: "uuid"
+      number: 20
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Uuid"
+      oneof_index: 0
+    }
+    field {
+      name: "address"
+      number: 21
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Address"
+      oneof_index: 0
+    }
+    field {
+      name: "age"
+      number: 22
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Age"
+      oneof_index: 0
+    }
+    field {
+      name: "annotation"
+      number: 23
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Annotation"
+      oneof_index: 0
+    }
+    field {
+      name: "attachment"
+      number: 24
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Attachment"
+      oneof_index: 0
+    }
+    field {
+      name: "codeable_concept"
+      number: 25
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.CodeableConcept"
+      oneof_index: 0
+    }
+    field {
+      name: "coding"
+      number: 26
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Coding"
+      oneof_index: 0
+    }
+    field {
+      name: "contact_point"
+      number: 27
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.ContactPoint"
+      oneof_index: 0
+    }
+    field {
+      name: "count"
+      number: 28
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Count"
+      oneof_index: 0
+    }
+    field {
+      name: "distance"
+      number: 29
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Distance"
+      oneof_index: 0
+    }
+    field {
+      name: "duration"
+      number: 30
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Duration"
+      oneof_index: 0
+    }
+    field {
+      name: "human_name"
+      number: 31
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.HumanName"
+      oneof_index: 0
+    }
+    field {
+      name: "identifier"
+      number: 32
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Identifier"
+      oneof_index: 0
+    }
+    field {
+      name: "money"
+      number: 33
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Money"
+      oneof_index: 0
+    }
+    field {
+      name: "period"
+      number: 34
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Period"
+      oneof_index: 0
+    }
+    field {
+      name: "quantity"
+      number: 35
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Quantity"
+      oneof_index: 0
+    }
+    field {
+      name: "range"
+      number: 36
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Range"
+      oneof_index: 0
+    }
+    field {
+      name: "ratio"
+      number: 37
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Ratio"
+      oneof_index: 0
+    }
+    field {
+      name: "reference"
+      number: 38
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Reference"
+      oneof_index: 0
+    }
+    field {
+      name: "sampled_data"
+      number: 39
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.SampledData"
+      oneof_index: 0
+    }
+    field {
+      name: "signature"
+      number: 40
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Signature"
+      oneof_index: 0
+    }
+    field {
+      name: "timing"
+      number: 41
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Timing"
+      oneof_index: 0
+    }
+    field {
+      name: "contact_detail"
+      number: 42
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.ContactDetail"
+      oneof_index: 0
+    }
+    field {
+      name: "contributor"
+      number: 43
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Contributor"
+      oneof_index: 0
+    }
+    field {
+      name: "data_requirement"
+      number: 44
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.DataRequirement"
+      oneof_index: 0
+    }
+    field {
+      name: "expression"
+      number: 45
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Expression"
+      oneof_index: 0
+    }
+    field {
+      name: "parameter_definition"
+      number: 46
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.ParameterDefinition"
+      oneof_index: 0
+    }
+    field {
+      name: "related_artifact"
+      number: 47
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.RelatedArtifact"
+      oneof_index: 0
+    }
+    field {
+      name: "trigger_definition"
+      number: 48
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.TriggerDefinition"
+      oneof_index: 0
+    }
+    field {
+      name: "usage_context"
+      number: 49
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.UsageContext"
+      oneof_index: 0
+    }
+    field {
+      name: "dosage"
+      number: 50
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Dosage"
+      oneof_index: 0
+    }
+    field {
+      name: "meta"
+      number: 51
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Meta"
+      oneof_index: 0
+    }
+    options {
+      [google.fhir.proto.is_choice_type]: true
+    }
+    oneof_decl {
+      name: "choice"
+    }
+  }
+}
+nested_type {
+  name: "MinValueX"
+  field {
+    name: "date"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Date"
+    oneof_index: 0
+  }
+  field {
+    name: "date_time"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.DateTime"
+    oneof_index: 0
+  }
+  field {
+    name: "instant"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Instant"
+    oneof_index: 0
+  }
+  field {
+    name: "time"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Time"
+    oneof_index: 0
+  }
+  field {
+    name: "decimal"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Decimal"
+    oneof_index: 0
+  }
+  field {
+    name: "integer"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Integer"
+    oneof_index: 0
+  }
+  field {
+    name: "integer64"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Integer64"
+    oneof_index: 0
+  }
+  field {
+    name: "positive_int"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.PositiveInt"
+    oneof_index: 0
+  }
+  field {
+    name: "unsigned_int"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.UnsignedInt"
+    oneof_index: 0
+  }
+  field {
+    name: "quantity"
+    number: 10
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Quantity"
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+nested_type {
+  name: "MaxValueX"
+  field {
+    name: "date"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Date"
+    oneof_index: 0
+  }
+  field {
+    name: "date_time"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.DateTime"
+    oneof_index: 0
+  }
+  field {
+    name: "instant"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Instant"
+    oneof_index: 0
+  }
+  field {
+    name: "time"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Time"
+    oneof_index: 0
+  }
+  field {
+    name: "decimal"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Decimal"
+    oneof_index: 0
+  }
+  field {
+    name: "integer"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Integer"
+    oneof_index: 0
+  }
+  field {
+    name: "integer64"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Integer64"
+    oneof_index: 0
+  }
+  field {
+    name: "positive_int"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.PositiveInt"
+    oneof_index: 0
+  }
+  field {
+    name: "unsigned_int"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.UnsignedInt"
+    oneof_index: 0
+  }
+  field {
+    name: "quantity"
+    number: 10
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Quantity"
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "choice"
+  }
+}
+nested_type {
+  name: "Constraint"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "key"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Id"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Target of \'condition\' reference above"
+    }
+  }
+  field {
+    name: "requirements"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Why this constraint is necessary or appropriate"
+    }
+  }
+  field {
+    name: "severity"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ElementDefinition.Constraint.SeverityCode"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "error | warning"
+    }
+  }
+  field {
+    name: "human"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Human description of constraint"
+    }
+  }
+  field {
+    name: "expression"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "FHIRPath expression of constraint"
+    }
+  }
+  field {
+    name: "xpath"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "XPath expression of constraint"
+    }
+  }
+  field {
+    name: "source"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Canonical"
+    options {
+      [google.fhir.proto.field_description]: "Reference to original source of constraint"
+    }
+  }
+  nested_type {
+    name: "SeverityCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r5.core.ConstraintSeverityCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/constraint-severity"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+    }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "expression.exists()"
+  }
+}
+nested_type {
+  name: "ElementDefinitionBinding"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "strength"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ElementDefinition.ElementDefinitionBinding.StrengthCode"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "required | extensible | preferred | example"
+    }
+  }
+  field {
+    name: "description"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Human explanation of the value set"
+    }
+  }
+  field {
+    name: "value_set"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Canonical"
+    options {
+      [google.fhir.proto.field_description]: "Source of value set"
+    }
+  }
+  nested_type {
+    name: "StrengthCode"
+    field {
+      name: "value"
+      number: 1
+      type: TYPE_ENUM
+      type_name: ".google.fhir.r5.core.BindingStrengthCode.Value"
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Extension"
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/binding-strength"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+    }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "valueSet.exists() implies (valueSet.startsWith(\'http:\') or valueSet.startsWith(\'https\') or valueSet.startsWith(\'urn:\'))"
+  }
+}
+nested_type {
+  name: "Mapping"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "identity"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Id"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Reference to mapping declaration"
+    }
+  }
+  field {
+    name: "language"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.ElementDefinition.Mapping.LanguageCode"
+    options {
+      [google.fhir.proto.field_description]: "Computable language of mapping"
+    }
+  }
+  field {
+    name: "map"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Details of the mapping"
+    }
+  }
+  field {
+    name: "comment"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Comments about the mapping or its use"
+    }
+  }
+  nested_type {
+    name: "LanguageCode"
+    field {
+      number: 1
+      options {
+        [google.fhir.proto.reserved_reason]: "Field 1 reserved to allow enumeration in the future."
+      }
+    }
+    field {
+      name: "id"
+      number: 2
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.String"
+    }
+    field {
+      name: "extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.r5.core.Extension"
+    }
+    field {
+      name: "value"
+      number: 4
+      type: TYPE_STRING
+      options {
+        [google.fhir.proto.field_description]: "This valueset is not enumerable, and so is represented as a string."
+      }
+    }
+    options {
+      [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/mimetypes"
+      [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+      [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+    }
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ElementDefinition, last updated 2019-12-31T21:03:40.621+11:00.\nDefinition of an element in a resource or extension.\nSee http://hl7.org/fhir/StructureDefinition/ElementDefinition"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ElementDefinition"
+  [google.fhir.proto.fhir_path_message_constraint]: "min.empty() or max.empty() or (max = \'*\') or iif(max != \'*\', min <= max.toInteger())"
+  [google.fhir.proto.fhir_path_message_constraint]: "contentReference.empty() or (type.empty() and defaultValue.empty() and fixed.empty() and pattern.empty() and example.empty() and minValue.empty() and maxValue.empty() and maxLength.empty() and binding.empty())"
+  [google.fhir.proto.fhir_path_message_constraint]: "fixed.empty() or (type.count()  <= 1)"
+  [google.fhir.proto.fhir_path_message_constraint]: "pattern.empty() or (type.count() <= 1)"
+  [google.fhir.proto.fhir_path_message_constraint]: "pattern.empty() or fixed.empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "binding.empty() or type.code.empty() or type.select((code = \'code\') or (code = \'Coding\') or (code=\'CodeableConcept\') or (code = \'Quantity\') or (code = \'string\') or (code = \'uri\')).exists()"
+  [google.fhir.proto.fhir_path_message_constraint]: "type.select(code).isDistinct()"
+  [google.fhir.proto.fhir_path_message_constraint]: "constraint.select(key).isDistinct()"
+  [google.fhir.proto.fhir_path_message_constraint]: "defaultValue.empty() or meaningWhenMissing.empty()"
+  [google.fhir.proto.fhir_path_message_constraint]: "sliceName.empty() or sliceName.matches(\'^[a-zA-Z0-9\\\\/\\\\-_\\\\[\\\\]\\\\@]+$\')"
+  [google.fhir.proto.fhir_path_message_constraint]: "(isModifier.exists() and isModifier) implies isModifierReason.exists()"
+  [google.fhir.proto.fhir_path_message_constraint]: "path.matches(\'[A-Za-z][A-Za-z0-9]*(\\\\.[a-z][A-Za-z0-9]*(\\\\[x])?)*\')"
+  [google.fhir.proto.fhir_path_message_constraint]: "sliceIsConstraining.exists() implies sliceName.exists()"
+}

@@ -23,12 +23,17 @@ import (
 	"google.golang.org/protobuf/testing/protocmp"
 
 	apb "github.com/google/fhir/go/proto/google/fhir/proto/annotations_go_proto"
+	d2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/datatypes_go_proto" // _strip
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 )
 
 func referenceProto(ver apb.FhirVersion) proto.Message {
 	switch ver {
+	// _strip_begin
+	case apb.FhirVersion_DSTU2:
+		return &d2pb.Reference{}
+	// _strip_end
 	case apb.FhirVersion_STU3:
 		return &d3pb.Reference{}
 	case apb.FhirVersion_R4:
@@ -42,7 +47,9 @@ func TestAllReferenceTypes(t *testing.T) {
 	for _, v := range apb.FhirVersion_value {
 		ver := apb.FhirVersion(v)
 		// TODO(b/265289586): Testing support for r4b
-		if ver != apb.FhirVersion_FHIR_VERSION_UNKNOWN && ver != apb.FhirVersion_R5 && ver != apb.FhirVersion_DSTU2 && ver != apb.FhirVersion_R4B {
+		// _strip_begin
+		if ver != apb.FhirVersion_FHIR_VERSION_UNKNOWN && ver != apb.FhirVersion_R5 && ver != apb.FhirVersion_R4B {
+			// _strip_end_and_replace if ver != apb.FhirVersion_FHIR_VERSION_UNKNOWN && ver != apb.FhirVersion_R5 && ver != apb.FhirVersion_DSTU2 && ver != apb.FhirVersion_R4B {
 			versions = append(versions, ver)
 		}
 	}
@@ -65,6 +72,79 @@ func TestNormalizeDenormalizeReference(t *testing.T) {
 		name                     string
 		denormalized, normalized proto.Message
 	}{
+		// _strip_begin
+		{
+			"dstu2 absolute url",
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_Uri{
+					Uri: &d2pb.String{
+						Value: "http://a.com/patient123",
+					},
+				},
+			},
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_Uri{
+					Uri: &d2pb.String{
+						Value: "http://a.com/patient123",
+					},
+				},
+			},
+		},
+		{
+			"dstu2 relative reference",
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_Uri{
+					Uri: &d2pb.String{
+						Value: "Conformance/abc123",
+					},
+				},
+			},
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_ConformanceId{
+					ConformanceId: &d2pb.ReferenceId{
+						Value: "abc123",
+					},
+				},
+			},
+		},
+		{
+			"dstu2 relative reference with history",
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_Uri{
+					Uri: &d2pb.String{
+						Value: "Patient/abc123/_history/3",
+					},
+				},
+			},
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_PatientId{
+					PatientId: &d2pb.ReferenceId{
+						Value: "abc123",
+						History: &d2pb.Id{
+							Value: "3",
+						},
+					},
+				},
+			},
+		},
+		{
+			"dstu2 internal reference",
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_Uri{
+					Uri: &d2pb.String{
+						Value: "#frag_xyz",
+					},
+				},
+			},
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_Fragment{
+					Fragment: &d2pb.String{
+						Value: "frag_xyz",
+					},
+				},
+			},
+		},
+		// _strip_end
 		{
 			"stu3 absolute url",
 			&d3pb.Reference{
@@ -233,6 +313,18 @@ func TestNormalizeReference_Errors(t *testing.T) {
 		name string
 		in   proto.Message
 	}{
+		// _strip_begin
+		{
+			name: "r2 non-existing resource type in reference",
+			in: &d2pb.Reference{
+				Reference: &d2pb.Reference_Uri{
+					Uri: &d2pb.String{
+						Value: "VerificationResult/123",
+					},
+				},
+			},
+		},
+		// _strip_end
 		{
 			name: "r3 non-existing resource type in reference",
 			in: &d3pb.Reference{
@@ -269,6 +361,57 @@ func TestNormalizeRelativeReferenceAndIgnoreHistory(t *testing.T) {
 		name                     string
 		denormalized, normalized proto.Message
 	}{
+		// _strip_begin
+		{
+			"dstu2 no history",
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_Uri{
+					Uri: &d2pb.String{
+						Value: "Patient/abc123",
+					},
+				},
+			},
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_PatientId{
+					PatientId: &d2pb.ReferenceId{
+						Value: "abc123",
+					},
+				},
+			},
+		},
+		{
+			"dstu2 relative reference with history",
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_Uri{
+					Uri: &d2pb.String{
+						Value: "Patient/abc123/_history/3",
+					},
+				},
+			},
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_PatientId{
+					PatientId: &d2pb.ReferenceId{
+						Value: "abc123",
+					},
+				},
+			},
+		},
+		{
+			"dstu2 identifier reference",
+			&d2pb.Reference{
+				Identifier: &d2pb.Identifier{
+					System: &d2pb.Uri{Value: "http://example.com/fhir/identifier"},
+					Value:  &d2pb.String{Value: "Patient/abc123"},
+				},
+			},
+			&d2pb.Reference{
+				Identifier: &d2pb.Identifier{
+					System: &d2pb.Uri{Value: "http://example.com/fhir/identifier"},
+					Value:  &d2pb.String{Value: "Patient/abc123"},
+				},
+			},
+		},
+		// _strip_end
 		{
 			"stu3 no history",
 			&d3pb.Reference{
@@ -384,6 +527,59 @@ func TestNormalizeInternalReference(t *testing.T) {
 		name                     string
 		denormalized, normalized proto.Message
 	}{
+		// _strip_begin
+		{
+			"dstu2 relative reference",
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_Uri{
+					Uri: &d2pb.String{
+						Value: "Patient/abc123",
+					},
+				},
+			},
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_Uri{
+					Uri: &d2pb.String{
+						Value: "Patient/abc123",
+					},
+				},
+			},
+		},
+		{
+			"dstu2 internal reference",
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_Uri{
+					Uri: &d2pb.String{
+						Value: "#frag_xyz",
+					},
+				},
+			},
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_Fragment{
+					Fragment: &d2pb.String{
+						Value: "frag_xyz",
+					},
+				},
+			},
+		},
+		{
+			"dstu2 existing internal reference",
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_Fragment{
+					Fragment: &d2pb.String{
+						Value: "frag_xyz",
+					},
+				},
+			},
+			&d2pb.Reference{
+				Reference: &d2pb.Reference_Fragment{
+					Fragment: &d2pb.String{
+						Value: "frag_xyz",
+					},
+				},
+			},
+		},
+		// _strip_end
 		{
 			"stu3 relative reference",
 			&d3pb.Reference{

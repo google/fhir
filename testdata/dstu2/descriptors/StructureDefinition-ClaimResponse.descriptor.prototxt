@@ -1,0 +1,1276 @@
+name: "ClaimResponse"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Id"
+  options {
+    [google.fhir.proto.field_description]: "Logical id of this artifact"
+  }
+}
+field {
+  name: "meta"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Meta"
+  options {
+    [google.fhir.proto.field_description]: "Metadata about the resource"
+  }
+}
+field {
+  name: "implicit_rules"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Uri"
+  options {
+    [google.fhir.proto.field_description]: "A set of rules under which this content was created"
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.AllLanguageCode"
+  options {
+    [google.fhir.proto.field_description]: "Language of the resource content"
+  }
+}
+field {
+  name: "text"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Narrative"
+  options {
+    [google.fhir.proto.field_description]: "Text summary of the resource, for human interpretation"
+  }
+}
+field {
+  name: "contained"
+  number: 6
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ContainedResource"
+  options {
+    [google.fhir.proto.field_description]: "Contained, inline Resources"
+  }
+}
+field {
+  name: "extension"
+  number: 7
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+  }
+}
+field {
+  name: "identifier"
+  number: 9
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Identifier"
+  options {
+    [google.fhir.proto.field_description]: "Response  number"
+  }
+}
+field {
+  name: "request"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Id of resource triggering adjudication"
+    [google.fhir.proto.valid_reference_type]: "Claim"
+  }
+}
+field {
+  name: "ruleset"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Coding"
+  options {
+    [google.fhir.proto.field_description]: "Resource version"
+  }
+}
+field {
+  name: "original_ruleset"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Coding"
+  options {
+    [google.fhir.proto.field_description]: "Original version"
+  }
+}
+field {
+  name: "created"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.DateTime"
+  options {
+    [google.fhir.proto.field_description]: "Creation date"
+  }
+}
+field {
+  name: "organization"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Insurer"
+    [google.fhir.proto.valid_reference_type]: "Organization"
+  }
+}
+field {
+  name: "request_provider"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Responsible practitioner"
+    [google.fhir.proto.valid_reference_type]: "Practitioner"
+  }
+}
+field {
+  name: "request_organization"
+  number: 16
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Reference"
+  options {
+    [google.fhir.proto.field_description]: "Responsible organization"
+    [google.fhir.proto.valid_reference_type]: "Organization"
+  }
+}
+field {
+  name: "outcome"
+  number: 17
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.RemittanceOutcomeCode"
+  options {
+    [google.fhir.proto.field_description]: "complete | error"
+  }
+}
+field {
+  name: "disposition"
+  number: 18
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.String"
+  options {
+    [google.fhir.proto.field_description]: "Disposition Message"
+  }
+}
+field {
+  name: "payee_type"
+  number: 19
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Coding"
+  options {
+    [google.fhir.proto.field_description]: "Party to be paid any benefits payable"
+  }
+}
+field {
+  name: "item"
+  number: 20
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ClaimResponse.Item"
+  options {
+    [google.fhir.proto.field_description]: "Line items"
+  }
+}
+field {
+  name: "add_item"
+  number: 21
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ClaimResponse.AddItem"
+  options {
+    [google.fhir.proto.field_description]: "Insurer added line items"
+  }
+}
+field {
+  name: "error"
+  number: 22
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ClaimResponse.Error"
+  options {
+    [google.fhir.proto.field_description]: "Processing errors"
+  }
+}
+field {
+  name: "total_cost"
+  number: 23
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Quantity"
+  options {
+    [google.fhir.proto.field_description]: "Total Cost of service from the Claim"
+  }
+}
+field {
+  name: "unalloc_deductable"
+  number: 24
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Quantity"
+  options {
+    [google.fhir.proto.field_description]: "Unallocated deductible"
+  }
+}
+field {
+  name: "total_benefit"
+  number: 25
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Quantity"
+  options {
+    [google.fhir.proto.field_description]: "Total benefit payable for the Claim"
+  }
+}
+field {
+  name: "payment_adjustment"
+  number: 26
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Quantity"
+  options {
+    [google.fhir.proto.field_description]: "Payment adjustment for non-Claim issues"
+  }
+}
+field {
+  name: "payment_adjustment_reason"
+  number: 27
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Coding"
+  options {
+    [google.fhir.proto.field_description]: "Reason for Payment adjustment"
+  }
+}
+field {
+  name: "payment_date"
+  number: 28
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Date"
+  options {
+    [google.fhir.proto.field_description]: "Expected data of Payment"
+  }
+}
+field {
+  name: "payment_amount"
+  number: 29
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Quantity"
+  options {
+    [google.fhir.proto.field_description]: "Payment amount"
+  }
+}
+field {
+  name: "payment_ref"
+  number: 30
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Identifier"
+  options {
+    [google.fhir.proto.field_description]: "Payment identifier"
+  }
+}
+field {
+  name: "reserved"
+  number: 31
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Coding"
+  options {
+    [google.fhir.proto.field_description]: "Funds reserved status"
+  }
+}
+field {
+  name: "form"
+  number: 32
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Coding"
+  options {
+    [google.fhir.proto.field_description]: "Printed Form Identifier"
+  }
+}
+field {
+  name: "note"
+  number: 33
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ClaimResponse.Note"
+  options {
+    [google.fhir.proto.field_description]: "Processing notes"
+  }
+}
+field {
+  name: "coverage"
+  number: 34
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.ClaimResponse.Coverage"
+  options {
+    [google.fhir.proto.field_description]: "Insurance or medical plan"
+  }
+}
+nested_type {
+  name: "Item"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "sequence_link_id"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.PositiveInt"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Service instance"
+    }
+  }
+  field {
+    name: "note_number"
+    number: 5
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.PositiveInt"
+    options {
+      [google.fhir.proto.field_description]: "List of note numbers which apply"
+    }
+  }
+  field {
+    name: "adjudication"
+    number: 6
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.ClaimResponse.Item.Adjudication"
+    options {
+      [google.fhir.proto.field_description]: "Adjudication details"
+    }
+  }
+  field {
+    name: "detail"
+    number: 7
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.ClaimResponse.Item.Detail"
+    options {
+      [google.fhir.proto.field_description]: "Detail line items"
+    }
+  }
+  nested_type {
+    name: "Adjudication"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Id"
+      options {
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Extension"
+      options {
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Extension"
+      options {
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "code"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Coding"
+      options {
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "Adjudication category such as co-pay, eligible, benefit, etc."
+      }
+    }
+    field {
+      name: "amount"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Quantity"
+      options {
+        [google.fhir.proto.field_description]: "Monetary amount"
+      }
+    }
+    field {
+      name: "value"
+      number: 6
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Decimal"
+      options {
+        [google.fhir.proto.field_description]: "Non-monetary value"
+      }
+    }
+  }
+  nested_type {
+    name: "Detail"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Id"
+      options {
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Extension"
+      options {
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Extension"
+      options {
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "sequence_link_id"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.PositiveInt"
+      options {
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "Service instance"
+      }
+    }
+    field {
+      name: "adjudication"
+      number: 5
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.ClaimResponse.Item.Detail.Adjudication"
+      options {
+        [google.fhir.proto.field_description]: "Detail adjudication"
+      }
+    }
+    field {
+      name: "sub_detail"
+      number: 6
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.ClaimResponse.Item.Detail.SubDetail"
+      options {
+        [google.fhir.proto.field_description]: "Subdetail line items"
+      }
+    }
+    nested_type {
+      name: "Adjudication"
+      field {
+        name: "id"
+        number: 1
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Id"
+        options {
+          [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+        }
+      }
+      field {
+        name: "extension"
+        number: 2
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Extension"
+        options {
+          [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+        }
+      }
+      field {
+        name: "modifier_extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Extension"
+        options {
+          [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+        }
+      }
+      field {
+        name: "code"
+        number: 4
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Coding"
+        options {
+          [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+          [google.fhir.proto.field_description]: "Adjudication category such as co-pay, eligible, benefit, etc."
+        }
+      }
+      field {
+        name: "amount"
+        number: 5
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Quantity"
+        options {
+          [google.fhir.proto.field_description]: "Monetary amount"
+        }
+      }
+      field {
+        name: "value"
+        number: 6
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Decimal"
+        options {
+          [google.fhir.proto.field_description]: "Non-monetary value"
+        }
+      }
+    }
+    nested_type {
+      name: "SubDetail"
+      field {
+        name: "id"
+        number: 1
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Id"
+        options {
+          [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+        }
+      }
+      field {
+        name: "extension"
+        number: 2
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Extension"
+        options {
+          [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+        }
+      }
+      field {
+        name: "modifier_extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Extension"
+        options {
+          [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+        }
+      }
+      field {
+        name: "sequence_link_id"
+        number: 4
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.PositiveInt"
+        options {
+          [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+          [google.fhir.proto.field_description]: "Service instance"
+        }
+      }
+      field {
+        name: "adjudication"
+        number: 5
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.ClaimResponse.Item.Detail.SubDetail.Adjudication"
+        options {
+          [google.fhir.proto.field_description]: "Subdetail adjudication"
+        }
+      }
+      nested_type {
+        name: "Adjudication"
+        field {
+          name: "id"
+          number: 1
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.dstu2.proto.Id"
+          options {
+            [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+          }
+        }
+        field {
+          name: "extension"
+          number: 2
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.dstu2.proto.Extension"
+          options {
+            [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+          }
+        }
+        field {
+          name: "modifier_extension"
+          number: 3
+          label: LABEL_REPEATED
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.dstu2.proto.Extension"
+          options {
+            [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+          }
+        }
+        field {
+          name: "code"
+          number: 4
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.dstu2.proto.Coding"
+          options {
+            [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+            [google.fhir.proto.field_description]: "Adjudication category such as co-pay, eligible, benefit, etc."
+          }
+        }
+        field {
+          name: "amount"
+          number: 5
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.dstu2.proto.Quantity"
+          options {
+            [google.fhir.proto.field_description]: "Monetary amount"
+          }
+        }
+        field {
+          name: "value"
+          number: 6
+          label: LABEL_OPTIONAL
+          type: TYPE_MESSAGE
+          type_name: ".google.fhir.dstu2.proto.Decimal"
+          options {
+            [google.fhir.proto.field_description]: "Non-monetary value"
+          }
+        }
+      }
+    }
+  }
+}
+nested_type {
+  name: "AddItem"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "sequence_link_id"
+    number: 4
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.PositiveInt"
+    options {
+      [google.fhir.proto.field_description]: "Service instances"
+    }
+  }
+  field {
+    name: "service"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Coding"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Group, Service or Product"
+    }
+  }
+  field {
+    name: "fee"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Quantity"
+    options {
+      [google.fhir.proto.field_description]: "Professional fee or Product charge"
+    }
+  }
+  field {
+    name: "note_number_link_id"
+    number: 7
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.PositiveInt"
+    options {
+      [google.fhir.proto.field_description]: "List of note numbers which apply"
+    }
+  }
+  field {
+    name: "adjudication"
+    number: 8
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.ClaimResponse.AddItem.Adjudication"
+    options {
+      [google.fhir.proto.field_description]: "Added items adjudication"
+    }
+  }
+  field {
+    name: "detail"
+    number: 9
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.ClaimResponse.AddItem.Detail"
+    options {
+      [google.fhir.proto.field_description]: "Added items details"
+    }
+  }
+  nested_type {
+    name: "Adjudication"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Id"
+      options {
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Extension"
+      options {
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Extension"
+      options {
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "code"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Coding"
+      options {
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "Adjudication category such as co-pay, eligible, benefit, etc."
+      }
+    }
+    field {
+      name: "amount"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Quantity"
+      options {
+        [google.fhir.proto.field_description]: "Monetary amount"
+      }
+    }
+    field {
+      name: "value"
+      number: 6
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Decimal"
+      options {
+        [google.fhir.proto.field_description]: "Non-monetary value"
+      }
+    }
+  }
+  nested_type {
+    name: "Detail"
+    field {
+      name: "id"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Id"
+      options {
+        [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+      }
+    }
+    field {
+      name: "extension"
+      number: 2
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Extension"
+      options {
+        [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+      }
+    }
+    field {
+      name: "modifier_extension"
+      number: 3
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Extension"
+      options {
+        [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+      }
+    }
+    field {
+      name: "service"
+      number: 4
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Coding"
+      options {
+        [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+        [google.fhir.proto.field_description]: "Service or Product"
+      }
+    }
+    field {
+      name: "fee"
+      number: 5
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Quantity"
+      options {
+        [google.fhir.proto.field_description]: "Professional fee or Product charge"
+      }
+    }
+    field {
+      name: "adjudication"
+      number: 6
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.ClaimResponse.AddItem.Detail.Adjudication"
+      options {
+        [google.fhir.proto.field_description]: "Added items detail adjudication"
+      }
+    }
+    nested_type {
+      name: "Adjudication"
+      field {
+        name: "id"
+        number: 1
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Id"
+        options {
+          [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+        }
+      }
+      field {
+        name: "extension"
+        number: 2
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Extension"
+        options {
+          [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+        }
+      }
+      field {
+        name: "modifier_extension"
+        number: 3
+        label: LABEL_REPEATED
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Extension"
+        options {
+          [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+        }
+      }
+      field {
+        name: "code"
+        number: 4
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Coding"
+        options {
+          [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+          [google.fhir.proto.field_description]: "Adjudication category such as co-pay, eligible, benefit, etc."
+        }
+      }
+      field {
+        name: "amount"
+        number: 5
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Quantity"
+        options {
+          [google.fhir.proto.field_description]: "Monetary amount"
+        }
+      }
+      field {
+        name: "value"
+        number: 6
+        label: LABEL_OPTIONAL
+        type: TYPE_MESSAGE
+        type_name: ".google.fhir.dstu2.proto.Decimal"
+        options {
+          [google.fhir.proto.field_description]: "Non-monetary value"
+        }
+      }
+    }
+  }
+}
+nested_type {
+  name: "Error"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "sequence_link_id"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.PositiveInt"
+    options {
+      [google.fhir.proto.field_description]: "Item sequence number"
+    }
+  }
+  field {
+    name: "detail_sequence_link_id"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.PositiveInt"
+    options {
+      [google.fhir.proto.field_description]: "Detail sequence number"
+    }
+  }
+  field {
+    name: "subdetail_sequence_link_id"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.PositiveInt"
+    options {
+      [google.fhir.proto.field_description]: "Subdetail sequence number"
+    }
+  }
+  field {
+    name: "code"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Coding"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Error code detailing processing issues"
+    }
+  }
+}
+nested_type {
+  name: "Note"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "number"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.PositiveInt"
+    options {
+      [google.fhir.proto.field_description]: "Note Number for this note"
+    }
+  }
+  field {
+    name: "type"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Coding"
+    options {
+      [google.fhir.proto.field_description]: "display | print | printoper"
+    }
+  }
+  field {
+    name: "text"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Note explanatory text"
+    }
+  }
+}
+nested_type {
+  name: "Coverage"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "modifier_extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Extensions that cannot be ignored"
+    }
+  }
+  field {
+    name: "sequence"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.PositiveInt"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Service instance identifier"
+    }
+  }
+  field {
+    name: "focal"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Boolean"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Is the focal Coverage"
+    }
+  }
+  field {
+    name: "coverage"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Reference"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Insurance information"
+      [google.fhir.proto.valid_reference_type]: "Coverage"
+    }
+  }
+  field {
+    name: "business_arrangement"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Business agreement"
+    }
+  }
+  field {
+    name: "relationship"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Coding"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Patient relationship to subscriber"
+    }
+  }
+  field {
+    name: "pre_auth_ref"
+    number: 9
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.String"
+    options {
+      [google.fhir.proto.field_description]: "Pre-Authorization/Determination Reference"
+    }
+  }
+  field {
+    name: "claim_response"
+    number: 10
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Reference"
+    options {
+      [google.fhir.proto.field_description]: "Adjudication results"
+      [google.fhir.proto.valid_reference_type]: "ClaimResponse"
+    }
+  }
+  field {
+    name: "original_ruleset"
+    number: 11
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Coding"
+    options {
+      [google.fhir.proto.field_description]: "Original version"
+    }
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_RESOURCE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for ClaimResponse.\nRemittance resource.\nSee http://hl7.org/fhir/StructureDefinition/ClaimResponse"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/ClaimResponse"
+}

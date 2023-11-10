@@ -13,6 +13,7 @@ go_library(
         "date_time.go",
         "marshaller.go",
         "primitive.go",
+        "r2_utils.go",  # _strip
         "r3_utils.go",
         "r4_utils.go",
         "reference.go",
@@ -28,6 +29,9 @@ go_library(
         "//go/jsonformat/internal/jsonpbhelper",
         "//go/jsonformat/internal/protopath",
         "//proto/google/fhir/proto:annotations_go_proto",
+        "//proto/google/fhir/proto/dstu2:datatypes_go_proto",  # _strip
+        "//proto/google/fhir/proto/dstu2:fhirproto_extensions_go_proto",  # _strip
+        "//proto/google/fhir/proto/dstu2:resources_go_proto",  # _strip
         "//proto/google/fhir/proto/r4:fhirproto_extensions_go_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_go_proto",
@@ -57,6 +61,8 @@ go_test(
         "//go/jsonformat/internal/accessor",
         "//go/jsonformat/internal/jsonpbhelper",
         "//proto/google/fhir/proto:annotations_go_proto",
+        "//proto/google/fhir/proto/dstu2:datatypes_go_proto",  # _strip
+        "//proto/google/fhir/proto/dstu2:fhirproto_extensions_go_proto",  # _strip
         "//proto/google/fhir/proto/r4:fhirproto_extensions_go_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",
         "//proto/google/fhir/proto/stu3:datatypes_go_proto",
@@ -73,6 +79,7 @@ go_test(
     size = "small",
     srcs = [
         "marshaller_test.go",
+        "unmarshaller_r2_test.go",  # _strip
         "unmarshaller_test.go",
     ],
     data = [
@@ -84,6 +91,10 @@ go_test(
         "//go/jsonformat/errorreporter",
         "//go/jsonformat/fhirvalidate",
         "//go/jsonformat/internal/jsonpbhelper",
+        "//proto/google/fhir/proto/dstu2:codes_go_proto",  # _strip
+        "//proto/google/fhir/proto/dstu2:datatypes_go_proto",  # _strip
+        "//proto/google/fhir/proto/dstu2:metadatatypes_go_proto",  # _strip
+        "//proto/google/fhir/proto/dstu2:resources_go_proto",  # _strip
         "//proto/google/fhir/proto/r4/core:codes_go_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:binary_go_proto",

@@ -1,0 +1,256 @@
+id {
+  value: "3141"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>\n      \n      \n      <pre>\n            Comorbidity? YES\n              Cardial Comorbidity? YES\n                Angina? YES\n                MI? NO\n              Vascular Comorbidity?\n                (no answers)\n              ...\n            Histopathology\n              Abdominal\n                pT category: 1a\n              ...\n          </pre>\n    \n    \n    </div>"
+  }
+}
+contained {
+  value_set {
+    id {
+      value: "yesno"
+    }
+    name {
+      value: "Example YesNo"
+    }
+    status {
+      value: ACTIVE
+    }
+    description {
+      value: "Captures simple yes-no"
+    }
+    code_system {
+      system {
+        value: "http://example.org/system/code/yesno"
+      }
+      case_sensitive {
+        value: true
+      }
+      concept {
+        code {
+          value: "1"
+        }
+        display {
+          value: "Yes"
+        }
+      }
+      concept {
+        code {
+          value: "2"
+        }
+        display {
+          value: "No"
+        }
+      }
+    }
+  }
+}
+status {
+  value: DRAFT
+}
+date {
+  value_us: 1325336400000000
+  timezone: "Australia/Sydney"
+  precision: MONTH
+}
+subject_type {
+  value: PATIENT
+}
+group {
+  link_id {
+    value: "1"
+  }
+  title {
+    value: "Cancer Quality Forum Questionnaire 2012"
+  }
+  required {
+    value: true
+  }
+  group {
+    link_id {
+      value: "1.1"
+    }
+    concept {
+      system {
+        value: "http://example.org/system/code/sections"
+      }
+      code {
+        value: "COMORBIDITY"
+      }
+    }
+    question {
+      link_id {
+        value: "1.1.1"
+      }
+      concept {
+        system {
+          value: "http://example.org/system/code/questions"
+        }
+        code {
+          value: "COMORB"
+        }
+      }
+      type {
+        value: CHOICE
+      }
+      options {
+        fragment {
+          value: "yesno"
+        }
+      }
+      group {
+        link_id {
+          value: "1.1.1.1"
+        }
+        concept {
+          system {
+            value: "http://example.org/system/code/sections"
+          }
+          code {
+            value: "CARDIAL"
+          }
+        }
+        question {
+          link_id {
+            value: "1.1.1.1.1"
+          }
+          concept {
+            system {
+              value: "http://example.org/system/code/questions"
+            }
+            code {
+              value: "COMORBCAR"
+            }
+          }
+          type {
+            value: CHOICE
+          }
+          options {
+            fragment {
+              value: "yesno"
+            }
+          }
+        }
+        question {
+          link_id {
+            value: "1.1.1.1.2"
+          }
+          concept {
+            system {
+              value: "http://example.org/system/code/questions"
+            }
+            code {
+              value: "COMCAR00"
+            }
+            display {
+              value: "Angina Pectoris"
+            }
+          }
+          concept {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "194828000"
+            }
+            display {
+              value: "Angina (disorder)"
+            }
+          }
+          type {
+            value: CHOICE
+          }
+          options {
+            fragment {
+              value: "yesno"
+            }
+          }
+        }
+        question {
+          link_id {
+            value: "1.1.1.1.3"
+          }
+          concept {
+            system {
+              value: "http://snomed.info/sct"
+            }
+            code {
+              value: "22298006"
+            }
+            display {
+              value: "Myocardial infarction (disorder)"
+            }
+          }
+          type {
+            value: CHOICE
+          }
+          options {
+            fragment {
+              value: "yesno"
+            }
+          }
+        }
+      }
+      group {
+        link_id {
+          value: "1.1.1.2"
+        }
+        concept {
+          system {
+            value: "http://example.org/system/code/sections"
+          }
+          code {
+            value: "VASCULAR"
+          }
+        }
+      }
+    }
+  }
+  group {
+    link_id {
+      value: "1.2"
+    }
+    concept {
+      system {
+        value: "http://example.org/system/code/sections"
+      }
+      code {
+        value: "HISTOPATHOLOGY"
+      }
+    }
+    group {
+      link_id {
+        value: "1.2.1"
+      }
+      concept {
+        system {
+          value: "http://example.org/system/code/sections"
+        }
+        code {
+          value: "ABDOMINAL"
+        }
+      }
+      question {
+        link_id {
+          value: "1.2.1.2"
+        }
+        concept {
+          system {
+            value: "http://example.org/system/code/questions"
+          }
+          code {
+            value: "STADPT"
+          }
+          display {
+            value: "pT category"
+          }
+        }
+      }
+    }
+  }
+}
+

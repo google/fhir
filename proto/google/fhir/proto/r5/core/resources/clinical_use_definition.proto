@@ -1,0 +1,324 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/clinical_use_definition_go_proto";
+
+// Auto-generated from StructureDefinition for ClinicalUseDefinition.
+// A single issue - either an indication, contraindication, interaction or an
+// undesirable effect for a medicinal product, medication, device or procedure.
+// See http://hl7.org/fhir/StructureDefinition/ClinicalUseDefinition
+message ClinicalUseDefinition {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ClinicalUseDefinition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(ClinicalUseDefinition.indication.count() + ClinicalUseDefinition.contraindication.count() + ClinicalUseDefinition.interaction.count() + ClinicalUseDefinition.undesirableEffect.count() + ClinicalUseDefinition.warning.count())  < 2";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // ClinicalUseDefinition.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business identifier for this issue
+  repeated Identifier identifier = 10;
+
+  // indication | contraindication | interaction | undesirable-effect | warning
+  message TypeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/clinical-use-definition-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ClinicalUseDefinitionTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  TypeCode type = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // A categorisation of the issue, primarily for dividing warnings into subject
+  // heading areas such as "Pregnancy", "Overdose"
+  repeated CodeableConcept category = 12;
+
+  // The medication, product, substance, device, procedure etc. for which this
+  // is an indication
+  repeated Reference subject = 13 [
+    (.google.fhir.proto.valid_reference_type) = "MedicinalProductDefinition",
+    (.google.fhir.proto.valid_reference_type) = "Medication",
+    (.google.fhir.proto.valid_reference_type) = "ActivityDefinition",
+    (.google.fhir.proto.valid_reference_type) = "PlanDefinition",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "DeviceDefinition",
+    (.google.fhir.proto.valid_reference_type) = "Substance",
+    (.google.fhir.proto.valid_reference_type) = "NutritionProduct",
+    (.google.fhir.proto.valid_reference_type) = "BiologicallyDerivedProduct"
+  ];
+
+  // Whether this is a current issue or one that has been retired etc
+  CodeableConcept status = 14;
+
+  // Specifics for when this is a contraindication
+  message Contraindication {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The situation that is being documented as contraindicating against this
+    // item
+    CodeableReference disease_symptom_procedure = 4;
+
+    // The status of the disease or symptom for the contraindication
+    CodeableReference disease_status = 5;
+
+    // A comorbidity (concurrent condition) or coinfection
+    repeated CodeableReference comorbidity = 6;
+
+    // The indication which this is a contraidication for
+    repeated Reference indication = 7
+        [(.google.fhir.proto.valid_reference_type) = "ClinicalUseDefinition"];
+
+    // An expression that returns true or false, indicating whether the
+    // indication is applicable or not, after having applied its other elements
+    Expression applicability = 8;
+
+    // Information about use of the product in relation to other therapies
+    // described as part of the contraindication
+    message OtherTherapy {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The type of relationship between the product
+      // indication/contraindication and another therapy
+      CodeableConcept relationship_type = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Reference to a specific medication, substance etc. as part of an
+      // indication or contraindication
+      CodeableReference treatment = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated OtherTherapy other_therapy = 9;
+  }
+  Contraindication contraindication = 15;
+
+  // Specifics for when this is an indication
+  message Indication {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The situation that is being documented as an indicaton for this item
+    CodeableReference disease_symptom_procedure = 4;
+
+    // The status of the disease or symptom for the indication
+    CodeableReference disease_status = 5;
+
+    // A comorbidity or coinfection as part of the indication
+    repeated CodeableReference comorbidity = 6;
+
+    // The intended effect, aim or strategy to be achieved
+    CodeableReference intended_effect = 7;
+
+    // Timing or duration information
+    message DurationX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Range range = 1;
+        String string_value = 2 [json_name = "string"];
+      }
+    }
+    DurationX duration = 8;
+
+    // An unwanted side effect or negative outcome of the subject of this
+    // resource when being used for this indication
+    repeated Reference undesirable_effect = 9
+        [(.google.fhir.proto.valid_reference_type) = "ClinicalUseDefinition"];
+
+    // An expression that returns true or false, indicating whether the
+    // indication is applicable or not, after having applied its other elements
+    Expression applicability = 10;
+
+    // The use of the medicinal product in relation to other therapies described
+    // as part of the indication
+    repeated Contraindication.OtherTherapy other_therapy = 11;
+  }
+  Indication indication = 16;
+
+  // Specifics for when this is an interaction
+  message Interaction {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The specific medication, product, food etc. or laboratory test that
+    // interacts
+    message Interactant {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The specific medication, product, food etc. or laboratory test that
+      // interacts
+      message ItemX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          Reference reference = 1 [
+            (.google.fhir.proto.valid_reference_type) =
+                "MedicinalProductDefinition",
+            (.google.fhir.proto.valid_reference_type) = "Medication",
+            (.google.fhir.proto.valid_reference_type) = "Substance",
+            (.google.fhir.proto.valid_reference_type) = "NutritionProduct",
+            (.google.fhir.proto.valid_reference_type) =
+                "BiologicallyDerivedProduct",
+            (.google.fhir.proto.valid_reference_type) = "ObservationDefinition"
+          ];
+          CodeableConcept codeable_concept = 2;
+        }
+      }
+      ItemX item = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated Interactant interactant = 4;
+
+    // The type of the interaction e.g. drug-drug interaction, drug-lab test
+    // interaction
+    CodeableConcept type = 5;
+
+    // The effect of the interaction, for example "reduced gastric absorption of
+    // primary medication"
+    CodeableReference effect = 6;
+
+    // The incidence of the interaction, e.g. theoretical, observed
+    CodeableConcept incidence = 7;
+
+    // Actions for managing the interaction
+    repeated CodeableConcept management = 8;
+  }
+  Interaction interaction = 17;
+
+  // The population group to which this applies
+  repeated Reference population = 18
+      [(.google.fhir.proto.valid_reference_type) = "Group"];
+
+  // Logic used by the clinical use definition
+  repeated Canonical library = 19;
+
+  // A possible negative outcome from the use of this treatment
+  message UndesirableEffect {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The situation in which the undesirable effect may manifest
+    CodeableReference symptom_condition_effect = 4;
+
+    // High level classification of the effect
+    CodeableConcept classification = 5;
+
+    // How often the effect is seen
+    CodeableConcept frequency_of_occurrence = 6;
+  }
+  UndesirableEffect undesirable_effect = 20;
+
+  // Critical environmental, health or physical risks or hazards. For example
+  // 'Do not operate heavy machinery', 'May cause drowsiness'
+  message Warning {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // A textual definition of this warning, with formatting
+    Markdown description = 4;
+
+    // A coded or unformatted textual definition of this warning
+    CodeableConcept code = 5;
+  }
+  Warning warning = 21;
+}

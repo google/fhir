@@ -1,0 +1,12 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>[Put rendering here]</div>"
+  }
+}
+

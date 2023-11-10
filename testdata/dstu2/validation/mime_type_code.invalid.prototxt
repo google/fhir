@@ -1,0 +1,2 @@
+# Code-like messages cannot have an empty value when there is no extension.
+value: ""

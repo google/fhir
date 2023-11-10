@@ -1,0 +1,46 @@
+id {
+  value: "E2500"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>A human-readable rendering of the EligibilityResponse.</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/eligibilityresponse"
+  }
+  value {
+    value: "881234"
+  }
+}
+request {
+  uri {
+    value: "http://www.BenefitsInc.com/fhir/eligibility/225476332402"
+  }
+}
+outcome {
+  value: COMPLETE
+}
+disposition {
+  value: "Policy is currently in-force."
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+organization {
+  organization_id {
+    value: "2"
+  }
+}
+request_organization {
+  organization_id {
+    value: "1"
+  }
+}
+

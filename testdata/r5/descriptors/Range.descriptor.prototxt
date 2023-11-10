@@ -1,0 +1,47 @@
+name: "Range"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "low"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.SimpleQuantity"
+  options {
+    [google.fhir.proto.field_description]: "Low limit"
+  }
+}
+field {
+  name: "high"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.SimpleQuantity"
+  options {
+    [google.fhir.proto.field_description]: "High limit"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Range, last updated 2019-12-31T21:03:40.621+11:00.\nSet of values bounded by low and high.\nSee http://hl7.org/fhir/StructureDefinition/Range"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Range"
+  [google.fhir.proto.fhir_path_message_constraint]: "low.empty() or high.empty() or (low <= high)"
+}

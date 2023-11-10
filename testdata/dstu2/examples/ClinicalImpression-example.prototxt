@@ -1,0 +1,85 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div><p><b>Generated Narrative with Details</b></p><p><b>id</b>: example</p><p><b>patient</b>: <a>Patient/example</a></p><p><b>assessor</b>: <a>Practitioner/example</a></p><p><b>status</b>: completed</p><p><b>date</b>: 06/12/2014 10:33:00 PM</p><p><b>description</b>: This 26 yo male patient is brought into ER by ambulance after being involved in a motor vehicle accident</p><p><b>problem</b>: MVA</p><h3>Investigations</h3><table><tr><td>-</td><td><b>Code</b></td><td><b>Item</b></td></tr><tr><td>*</td><td>Initial Examination <span>(Details )</span></td><td>deep laceration of the scalp (left temporo-occipital)</td></tr></table><p><b>summary</b>: provisional diagnoses of laceration of head and traumatic brain injury (TBI)</p><h3>Findings</h3><table><tr><td>-</td><td><b>Item</b></td></tr><tr><td>*</td><td>?? <span>(Details : {ICD-9 code \'850.0\' = \'??)</span></td></tr></table><p><b>plan</b>: hospital standard closed head injury management protocol </p></div>"
+  }
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+}
+assessor {
+  practitioner_id {
+    value: "example"
+  }
+}
+status {
+  value: COMPLETED
+}
+date {
+  value_us: 1417865580000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+description {
+  value: "This 26 yo male patient is brought into ER by ambulance after being involved in a motor vehicle accident"
+}
+problem {
+  display {
+    value: "MVA"
+  }
+}
+investigations {
+  code {
+    text {
+      value: "Initial Examination"
+    }
+  }
+  item {
+    display {
+      value: "deep laceration of the scalp (left temporo-occipital)"
+    }
+  }
+  item {
+    display {
+      value: "decreased level of consciousness"
+    }
+  }
+  item {
+    display {
+      value: "disoriented to time and place"
+    }
+  }
+  item {
+    display {
+      value: "restless"
+    }
+  }
+}
+summary {
+  value: "provisional diagnoses of laceration of head and traumatic brain injury (TBI)"
+}
+finding {
+  item {
+    coding {
+      system {
+        value: "http://hl7.org/fhir/sid/icd-9"
+      }
+      code {
+        value: "850.0"
+      }
+    }
+  }
+}
+plan {
+  display {
+    value: "hospital standard closed head injury management protocol "
+  }
+}
+

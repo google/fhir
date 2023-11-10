@@ -35,6 +35,11 @@ import (
 
 	apb "github.com/google/fhir/go/proto/google/fhir/proto/annotations_go_proto"
 
+	// _strip_begin
+	d2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/datatypes_go_proto"
+	r2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/resources_go_proto"
+
+	// _strip_end
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	r4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
@@ -378,6 +383,14 @@ func init() {
 	requiredFields = make(map[protoreflect.FullName][]protoreflect.FieldNumber)
 
 	var emptyCR proto.Message
+	// _strip_begin
+	// populate DSTU2 required fields
+	emptyCR = &r2pb.ContainedResource{}
+	findAllReferencedMessageTypes(
+		emptyCR.ProtoReflect().Descriptor(),
+		func(node protoreflect.MessageDescriptor) { collectDirectRequiredFields(node, requiredFields) },
+	)
+	// _strip_end
 	// populate STU3 required fields
 	emptyCR = &r3pb.ContainedResource{}
 	findAllReferencedMessageTypes(
@@ -393,6 +406,14 @@ func init() {
 
 	RegexValues = make(map[protoreflect.FullName]*regexp.Regexp)
 	primitivesWithRegex := []protoreflect.Message{
+		// _strip_begin
+		// TODO(b/150597841): Add other primitives.
+		(&d2pb.Decimal{}).ProtoReflect(),
+		(&d2pb.Oid{}).ProtoReflect(),
+		(&d2pb.Id{}).ProtoReflect(),
+		(&d2pb.Uuid{}).ProtoReflect(),
+		(&d2pb.Code{}).ProtoReflect(),
+		// _strip_end
 		(&d3pb.Decimal{}).ProtoReflect(),
 		(&d3pb.Oid{}).ProtoReflect(),
 		(&d3pb.Id{}).ProtoReflect(),
@@ -420,6 +441,7 @@ func init() {
 
 func initReferenceTypes() {
 	for _, refPB := range []proto.Message{
+		&d2pb.Reference{}, // _strip
 		&d3pb.Reference{},
 		&d4pb.Reference{},
 	} {

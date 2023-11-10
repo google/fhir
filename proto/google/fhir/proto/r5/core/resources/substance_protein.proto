@@ -1,0 +1,152 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/substance_protein_go_proto";
+
+// Auto-generated from StructureDefinition for SubstanceProtein.
+// A SubstanceProtein is defined as a single unit of a linear amino acid
+// sequence, or a combination of subunits that are either covalently linked or
+// have a defined invariant stoichiometric relationship. This includes all
+// synthetic, recombinant and purified SubstanceProteins of defined sequence,
+// whether the use is therapeutic or prophylactic. This set of elements will be
+// used to describe albumins, coagulation factors, cytokines, growth factors,
+// peptide/SubstanceProtein hormones, enzymes, toxins, toxoids, recombinant
+// vaccines, and immunomodulators. See
+// http://hl7.org/fhir/StructureDefinition/SubstanceProtein
+message SubstanceProtein {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/SubstanceProtein";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // SubstanceProtein.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // The SubstanceProtein descriptive elements will only be used when a complete
+  // or partial amino acid sequence is available or derivable from a nucleic
+  // acid sequence
+  CodeableConcept sequence_type = 10;
+
+  // Number of linear sequences of amino acids linked through peptide bonds. The
+  // number of subunits constituting the SubstanceProtein shall be described. It
+  // is possible that the number of subunits can be variable
+  Integer number_of_subunits = 11;
+
+  // The disulphide bond between two cysteine residues either on the same
+  // subunit or on two different subunits shall be described. The position of
+  // the disulfide bonds in the SubstanceProtein shall be listed in increasing
+  // order of subunit number and position within subunit followed by the
+  // abbreviation of the amino acids involved. The disulfide linkage positions
+  // shall actually contain the amino acid Cysteine at the respective positions
+  repeated String disulfide_linkage = 12;
+
+  // This subclause refers to the description of each subunit constituting the
+  // SubstanceProtein. A subunit is a linear sequence of amino acids linked
+  // through peptide bonds. The Subunit information shall be provided when the
+  // finished SubstanceProtein is a complex of multiple sequences; subunits are
+  // not used to delineate domains within a single sequence. Subunits are listed
+  // in order of decreasing length; sequences of the same length will be ordered
+  // by decreasing molecular weight; subunits that have identical sequences will
+  // be repeated multiple times
+  message Subunit {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Index of primary sequences of amino acids linked through peptide bonds in
+    // order of decreasing length. Sequences of the same length will be ordered
+    // by molecular weight. Subunits that have identical sequences will be
+    // repeated and have sequential subscripts
+    Integer subunit = 4;
+
+    // The sequence information shall be provided enumerating the amino acids
+    // from N- to C-terminal end using standard single-letter amino acid codes.
+    // Uppercase shall be used for L-amino acids and lowercase for D-amino
+    // acids. Transcribed SubstanceProteins will always be described using the
+    // translated sequence; for synthetic peptide containing amino acids that
+    // are not represented with a single letter code an X should be used within
+    // the sequence. The modified amino acids will be distinguished by their
+    // position in the sequence
+    String sequence = 5;
+
+    // Length of linear sequences of amino acids contained in the subunit
+    Integer length = 6;
+
+    // The sequence information shall be provided enumerating the amino acids
+    // from N- to C-terminal end using standard single-letter amino acid codes.
+    // Uppercase shall be used for L-amino acids and lowercase for D-amino
+    // acids. Transcribed SubstanceProteins will always be described using the
+    // translated sequence; for synthetic peptide containing amino acids that
+    // are not represented with a single letter code an X should be used within
+    // the sequence. The modified amino acids will be distinguished by their
+    // position in the sequence
+    Attachment sequence_attachment = 7;
+
+    // Unique identifier for molecular fragment modification based on the ISO
+    // 11238 Substance ID
+    Identifier n_terminal_modification_id = 8;
+
+    // The name of the fragment modified at the N-terminal of the
+    // SubstanceProtein shall be specified
+    String n_terminal_modification = 9;
+
+    // Unique identifier for molecular fragment modification based on the ISO
+    // 11238 Substance ID
+    Identifier c_terminal_modification_id = 10;
+
+    // The modification at the C-terminal shall be specified
+    String c_terminal_modification = 11;
+  }
+  repeated Subunit subunit = 13;
+}

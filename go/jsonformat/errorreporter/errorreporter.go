@@ -22,6 +22,9 @@ import (
 
 	"github.com/google/fhir/go/fhirversion"
 
+	c2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/codes_go_proto"     // _strip
+	d2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/datatypes_go_proto" // _strip
+	r2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/resources_go_proto" // _strip
 	c4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/codes_go_proto"
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	r4outcomepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/operation_outcome_go_proto"
@@ -44,6 +47,17 @@ const (
 )
 
 var (
+	// _strip_begin
+	// R2IssueSeverityCodeMap maps IssueSeverityCode to R2IssueSeverityCode
+	R2IssueSeverityCodeMap = map[IssueSeverityCode]c2pb.IssueSeverityCode_Value{
+		IssueSeverityError:   c2pb.IssueSeverityCode_ERROR,
+		IssueSeverityWarning: c2pb.IssueSeverityCode_WARNING,
+	}
+	// R2OutcomeCodeMap maps IssueTypeCode to R2IssueTypeCode_Value
+	R2OutcomeCodeMap = map[IssueTypeCode]c2pb.IssueTypeCode_Value{
+		ValueIssueTypeCode: c2pb.IssueTypeCode_VALUE,
+	}
+	// _strip_end
 	// R3IssueSeverityCodeMap maps IssueSeverityCode to R3IssueSeverityCode
 	R3IssueSeverityCodeMap = map[IssueSeverityCode]c3pb.IssueSeverityCode_Value{
 		IssueSeverityError:   c3pb.IssueSeverityCode_ERROR,
@@ -90,6 +104,7 @@ type ErrorReporter interface {
 // MultiVersionOperationOutcome encompasses Operations of multiple FHIR versions.
 type MultiVersionOperationOutcome struct {
 	Version   fhirversion.Version
+	R2Outcome *r2pb.OperationOutcome // _strip
 	R3Outcome *r3pb.OperationOutcome
 	R4Outcome *r4outcomepb.OperationOutcome
 }
@@ -107,6 +122,10 @@ type OperationErrorReporter struct {
 func NewOperationErrorReporter(ver fhirversion.Version) *OperationErrorReporter {
 	outcome := &MultiVersionOperationOutcome{Version: ver}
 	switch ver {
+	// _strip_begin
+	case fhirversion.DSTU2:
+		outcome.R2Outcome = &r2pb.OperationOutcome{}
+	// _strip_end
 	case fhirversion.STU3:
 		outcome.R3Outcome = &r3pb.OperationOutcome{}
 	case fhirversion.R4:
@@ -131,6 +150,23 @@ func (oe *OperationErrorReporter) ReportValidationWarning(elementPath string, er
 
 func (oe *OperationErrorReporter) report(elementPath string, err error, typeCode IssueTypeCode, severity IssueSeverityCode) error {
 	switch oe.Outcome.Version {
+	// _strip_begin
+	case fhirversion.DSTU2:
+		issues := oe.Outcome.R2Outcome.GetIssue()
+		issue := &r2pb.OperationOutcome_Issue{
+			Code: &c2pb.IssueTypeCode{
+				Value: R2OutcomeCodeMap[typeCode],
+			},
+			Severity: &c2pb.IssueSeverityCode{
+				Value: R2IssueSeverityCodeMap[severity],
+			},
+			Diagnostics: &d2pb.String{Value: err.Error()},
+		}
+		if elementPath != "" {
+			issue.Location = append(issue.Location, &d2pb.String{Value: elementPath})
+		}
+		oe.Outcome.R2Outcome.Issue = append(issues, issue)
+	// _strip_end
 	case fhirversion.STU3:
 		issues := oe.Outcome.R3Outcome.GetIssue()
 		issue := &r3pb.OperationOutcome_Issue{

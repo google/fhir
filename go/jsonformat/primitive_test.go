@@ -27,6 +27,11 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/testing/protocmp"
 
+	// _strip_begin
+	d2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/datatypes_go_proto"
+	e2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/fhirproto_extensions_go_proto"
+
+	// _strip_end
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	e4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/fhirproto_extensions_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
@@ -105,6 +110,12 @@ type protoToExtensionTestData struct {
 func newBinarySeparatorStrideAndExtensionTestData(sep string, stride uint32) []protoToExtensionTestData {
 	var ret []protoToExtensionTestData
 	ret = append(ret,
+		// _strip_begin
+		protoToExtensionTestData{
+			srcProto:     &e2pb.Base64BinarySeparatorStride{},
+			dstExtension: &d2pb.Extension{},
+		},
+		// _strip_end
 		protoToExtensionTestData{
 			srcProto:     &e3pb.Base64BinarySeparatorStride{},
 			dstExtension: &d3pb.Extension{},
@@ -153,6 +164,12 @@ func newBinarySeparatorStrideAndExtensionTestData(sep string, stride uint32) []p
 func newPrimitiveHasNoValueTestData(b bool) []protoToExtensionTestData {
 	var ret []protoToExtensionTestData
 	ret = append(ret,
+		// _strip_begin
+		protoToExtensionTestData{
+			srcProto:     &e2pb.PrimitiveHasNoValue{},
+			dstExtension: &d2pb.Extension{},
+		},
+		// _strip_end
 		protoToExtensionTestData{
 			srcProto:     &e3pb.PrimitiveHasNoValue{},
 			dstExtension: &d3pb.Extension{},
@@ -249,6 +266,12 @@ type addInternalExtensionTestData struct {
 func newAddInternalExtensionTestData(bin []byte, sep string, stride uint32, alreadyExist bool) []addInternalExtensionTestData {
 	var ret []addInternalExtensionTestData
 	ret = append(ret,
+		// _strip_begin
+		addInternalExtensionTestData{
+			srcBinary: &d2pb.Base64Binary{Value: bin},
+			dstBinary: &d2pb.Base64Binary{Value: bin},
+		},
+		// _strip_end
 		addInternalExtensionTestData{
 			srcBinary: &d3pb.Base64Binary{Value: bin},
 			dstBinary: &d3pb.Base64Binary{Value: bin},
@@ -313,7 +336,7 @@ func TestAddInternalExtension(t *testing.T) {
 }
 
 func TestDecimal(t *testing.T) {
-	allVers := []Version{fhirversion.STU3, fhirversion.R4}
+	allVers := []fhirversion.Version{fhirversion.DSTU2, fhirversion.STU3, fhirversion.R4} // _replace allVers := []Version{fhirversion.STU3, fhirversion.R4}
 	tests := []struct {
 		value string
 		vers  []fhirversion.Version
@@ -333,6 +356,7 @@ func TestDecimal(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.value, func(t *testing.T) {
 			expects := map[fhirversion.Version]proto.Message{
+				fhirversion.DSTU2: &d2pb.Decimal{Value: test.value}, // _strip
 				fhirversion.STU3:  &d3pb.Decimal{Value: test.value},
 				fhirversion.R4:    &d4pb.Decimal{Value: test.value},
 			}
@@ -351,7 +375,7 @@ func TestDecimal(t *testing.T) {
 }
 
 func TestDecimal_Invalid(t *testing.T) {
-	allVers := []Version{fhirversion.STU3, fhirversion.R4}
+	allVers := []fhirversion.Version{fhirversion.DSTU2, fhirversion.STU3, fhirversion.R4} // _replace allVers := []Version{fhirversion.STU3, fhirversion.R4}
 	tests := []struct {
 		name string
 		json string
@@ -365,7 +389,7 @@ func TestDecimal_Invalid(t *testing.T) {
 		{
 			"exponent",
 			"1e3",
-			[]fhirversion.Version{fhirversion.STU3},
+			[]fhirversion.Version{fhirversion.DSTU2, fhirversion.STU3}, // _replace []fhirversion.Version{fhirversion.STU3},
 		},
 		{
 			"leading 0",
@@ -375,6 +399,7 @@ func TestDecimal_Invalid(t *testing.T) {
 	}
 	for _, test := range tests {
 		msgs := map[fhirversion.Version]proto.Message{
+			fhirversion.DSTU2: &d2pb.Decimal{}, // _strip
 			fhirversion.STU3:  &d3pb.Decimal{},
 			fhirversion.R4:    &d4pb.Decimal{},
 		}
@@ -416,6 +441,17 @@ func TestBinary(t *testing.T) {
 				message proto.Message
 				creator base64BinarySeparatorStrideCreator
 			}{
+				// _strip_begin
+				{
+					&d2pb.Base64Binary{},
+					func(sep string, stride uint32) proto.Message {
+						return &e2pb.Base64BinarySeparatorStride{
+							Separator: &d2pb.String{Value: sep},
+							Stride:    &d2pb.PositiveInt{Value: stride},
+						}
+					},
+				},
+				// _strip_end
 				{
 					&d3pb.Base64Binary{},
 					func(sep string, stride uint32) proto.Message {
@@ -491,6 +527,17 @@ func TestParseBinary_Invalid(t *testing.T) {
 				message proto.Message
 				creator base64BinarySeparatorStrideCreator
 			}{
+				// _strip_begin
+				{
+					&d2pb.Base64Binary{},
+					func(sep string, stride uint32) proto.Message {
+						return &e2pb.Base64BinarySeparatorStride{
+							Separator: &d2pb.String{Value: sep},
+							Stride:    &d2pb.PositiveInt{Value: stride},
+						}
+					},
+				},
+				// _strip_end
 				{
 					&d3pb.Base64Binary{},
 					func(sep string, stride uint32) proto.Message {

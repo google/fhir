@@ -1,0 +1,35 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>Lab Report completed at 13:10 28-Dec 2012</div>"
+  }
+}
+request {
+  order_id {
+    value: "example"
+  }
+}
+date {
+  value_us: 1356660656000000
+  timezone: "+11:00"
+  precision: SECOND
+}
+who {
+  organization_id {
+    value: "1832473e-2fe0-452d-abe9-3cdb9879522f"
+  }
+}
+order_status {
+  value: COMPLETED
+}
+fulfillment {
+  diagnostic_report_id {
+    value: "101"
+  }
+}
+

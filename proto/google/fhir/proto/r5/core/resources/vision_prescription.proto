@@ -1,0 +1,213 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/vision_prescription_go_proto";
+
+// Auto-generated from StructureDefinition for VisionPrescription.
+// Prescription for vision correction products for a patient.
+// See http://hl7.org/fhir/StructureDefinition/VisionPrescription
+message VisionPrescription {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/VisionPrescription";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // VisionPrescription.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business Identifier for vision prescription
+  repeated Identifier identifier = 10;
+
+  // active | cancelled | draft | entered-in-error
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/fm-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    FinancialResourceStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Response creation date
+  DateTime created = 12
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who prescription is for
+  Reference patient = 13 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient"
+  ];
+
+  // Created during encounter / admission / stay
+  Reference encounter = 14
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // When prescription was authorized
+  DateTime date_written = 15
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who authorized the vision prescription
+  Reference prescriber = 16 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  ];
+
+  // Vision lens authorization
+  message LensSpecification {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Product to be supplied
+    CodeableConcept product = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // right | left
+    message EyeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/vision-eye-codes";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      VisionEyesCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    EyeCode eye = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Power of the lens
+    Decimal sphere = 6;
+
+    // Lens power for astigmatism
+    Decimal cylinder = 7;
+
+    // Lens meridian which contain no power for astigmatism
+    Integer axis = 8;
+
+    // Eye alignment compensation
+    message Prism {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Amount of adjustment
+      Decimal amount = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // up | down | in | out
+      message BaseCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/vision-base-codes";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        VisionBaseCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      BaseCode base = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated Prism prism = 9;
+
+    // Added power for multifocal levels
+    Decimal add = 10;
+
+    // Contact lens power
+    Decimal power = 11;
+
+    // Contact lens back curvature
+    Decimal back_curve = 12;
+
+    // Contact lens diameter
+    Decimal diameter = 13;
+
+    // Lens wear duration
+    SimpleQuantity duration = 14;
+
+    // Color required
+    String color = 15;
+
+    // Brand required
+    String brand = 16;
+
+    // Notes for coatings
+    repeated Annotation note = 17;
+  }
+  repeated LensSpecification lens_specification = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+}

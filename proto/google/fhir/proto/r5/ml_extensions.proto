@@ -1,0 +1,110 @@
+//    Copyright 2019 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.ml;
+
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.ml";
+option (.google.fhir.proto.fhir_version) = R5;
+
+// EventLabels define labels used for TensorFlow model training and evaluation.
+// See https://g.co/fhir/StructureDefinition/eventLabel
+message EventLabel {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "https://g.co/fhir/StructureDefinition/eventLabel";
+
+  // Unique id for inter-element referencing
+  core.String id = 1;
+
+  // Additional content defined by implementations
+  repeated core.Extension extension = 2;
+
+  // The patient associated with this label
+  core.Reference patient = 4
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The type of label, part of the prediction task definition
+  core.Coding type = 5
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Time associated with the label event, if available
+  core.DateTime event_time = 6;
+
+  // Resource that owns this label
+  core.Reference source = 7;
+
+  // List of labels associated with this event
+  message Label {
+    // Unique id for inter-element referencing
+    core.String id = 1;
+
+    // Extension.extension.extension not present on profile.
+    reserved 2;
+
+    // Extension.extension.value[x] not present on profile.
+    reserved 3;
+
+    // Class name in multi-class prediction tasks, e.g. code "780.60" for icd9
+    core.Coding class_name = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // The value of the label
+    message ClassValueX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        core.Boolean boolean = 1;
+        core.Decimal decimal = 2;
+        core.Integer integer = 3;
+        core.String string_value = 4 [json_name = "string"];
+        core.DateTime date_time = 5;
+      }
+    }
+    ClassValueX class_value = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Label label = 8;
+}
+
+// EventTriggers specify cutoff times for generated TensorFlow examples.
+// See https://g.co/fhir/StructureDefinition/eventTrigger
+message EventTrigger {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_profile_base) =
+      "http://hl7.org/fhir/StructureDefinition/Extension";
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "https://g.co/fhir/StructureDefinition/eventTrigger";
+
+  // Unique id for inter-element referencing
+  core.String id = 1;
+
+  // The type of trigger, part of the prediction task definition.
+  core.Coding type = 4
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Prediction event time, more recent data will be elided.
+  core.DateTime event_time = 5
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Resource that owns this trigger.
+  core.Reference source = 6;
+}

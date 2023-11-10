@@ -1,0 +1,202 @@
+id {
+  value: "3141"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>\n      \n      \n      <pre>\n            Comorbidity? YES\n              Cardial Comorbidity? YES\n                Angina? YES\n                MI? NO\n              Vascular Comorbidity?\n                (no answers)\n              ...\n            Histopathology\n              Abdominal\n                pT category: 1a\n              ...\n          </pre>\n    \n    \n    </div>"
+  }
+}
+contained {
+  patient {
+    id {
+      value: "patsub"
+    }
+    identifier {
+      system {
+        value: "http://cancer.questionnaire.org/systems/id/patientnr"
+      }
+      value {
+        value: "A34442332"
+      }
+    }
+    identifier {
+      type {
+        text {
+          value: "Dutch BSN"
+        }
+      }
+      system {
+        value: "urn:oid:2.16.840.1.113883.2.4.6.3"
+      }
+      value {
+        value: "188912345"
+      }
+    }
+    gender {
+      value: MALE
+    }
+    birth_date {
+      value_us: 91890000000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+}
+contained {
+  practitioner {
+    id {
+      value: "questauth"
+    }
+    identifier {
+      type {
+        text {
+          value: "AUMC, Den Helder"
+        }
+      }
+      system {
+        value: "http://cancer.questionnaire.org/systems/id/org"
+      }
+      value {
+        value: "AUMC"
+      }
+    }
+  }
+}
+contained {
+  observation {
+    id {
+      value: "obs.pt-category"
+    }
+    status {
+      value: FINAL
+    }
+    code {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "53786006"
+        }
+        display {
+          value: "pT1 category"
+        }
+      }
+    }
+    subject {
+      fragment {
+        value: "patsub"
+      }
+    }
+    performer {
+      fragment {
+        value: "questauth"
+      }
+    }
+    value {
+      codeable_concept {
+        coding {
+          system {
+            value: "http://snomed.info/sct"
+          }
+          code {
+            value: "443357004"
+          }
+          display {
+            value: "pT1a category"
+          }
+        }
+      }
+    }
+  }
+}
+status {
+  value: COMPLETED
+}
+subject {
+  fragment {
+    value: "patsub"
+  }
+}
+author {
+  fragment {
+    value: "questauth"
+  }
+}
+authored {
+  value_us: 1361301300000000
+  timezone: "-05:00"
+  precision: SECOND
+}
+group {
+  title {
+    value: "Cancer Quality Forum Questionnaire 2012"
+  }
+  group {
+    question {
+      answer {
+        value {
+          coding {
+            system {
+              value: "http://cancer.questionnaire.org/system/code/yesno"
+            }
+            code {
+              value: "1"
+            }
+            display {
+              value: "Yes"
+            }
+          }
+        }
+        group {
+          question {
+            answer {
+              value {
+                coding {
+                  system {
+                    value: "http://cancer.questionnaire.org/system/code/yesno"
+                  }
+                  code {
+                    value: "1"
+                  }
+                }
+              }
+            }
+          }
+          question {
+            answer {
+              value {
+                coding {
+                  system {
+                    value: "http://cancer.questionnaire.org/system/code/yesno"
+                  }
+                  code {
+                    value: "1"
+                  }
+                }
+              }
+            }
+          }
+          question {
+            answer {
+              value {
+                coding {
+                  system {
+                    value: "http://cancer.questionnaire.org/system/code/yesno"
+                  }
+                  code {
+                    value: "0"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

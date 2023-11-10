@@ -1,0 +1,122 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>\n\t\t\t<p>Example of a simple MDS from a pulse oximeter containment tree</p>\n\t\t</div>"
+  }
+}
+contained {
+  device {
+    id {
+      value: "d1"
+    }
+    identifier {
+      type {
+        coding {
+          system {
+            value: "http://hl7.org/fhir/identifier-type"
+          }
+          code {
+            value: "SNO"
+          }
+        }
+      }
+      value {
+        value: "ID 13.1"
+      }
+    }
+    identifier {
+      type {
+        text {
+          value: "Global Medical Device Nomenclature"
+        }
+      }
+      system {
+        value: "urn:iso:std:iso:11073:10101"
+      }
+      value {
+        value: "2000"
+      }
+    }
+    type {
+      coding {
+        system {
+          value: "urn:iso:std:iso:11073:10101"
+        }
+        code {
+          value: "2000"
+        }
+        display {
+          value: "MDC_DEV_ANALY_SAT_O2_MDS"
+        }
+      }
+    }
+    manufacturer {
+      value: "Center4MI"
+    }
+    model {
+      value: "2-0-14"
+    }
+  }
+}
+type {
+  coding {
+    system {
+      value: "urn:iso:std:iso:11073:10101"
+    }
+    code {
+      value: "2000"
+    }
+    display {
+      value: "MDC_DEV_ANALY_SAT_O2_MDS"
+    }
+  }
+}
+identifier {
+  type {
+    text {
+      value: "Handle ID"
+    }
+  }
+  value {
+    value: "0"
+  }
+}
+last_system_change {
+  value_us: 1412693100000000
+  timezone: "Z"
+  precision: SECOND
+}
+source {
+  fragment {
+    value: "d1"
+  }
+}
+operational_status {
+  coding {
+    system {
+      value: "urn:iso:std:iso:11073:10101"
+    }
+    code {
+      value: "0"
+    }
+    display {
+      value: "disconnected"
+    }
+  }
+}
+language_code {
+  coding {
+    system {
+      value: "http://tools.ietf.org/html/bcp47"
+    }
+    code {
+      value: "en-US"
+    }
+  }
+}
+

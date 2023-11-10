@@ -1,0 +1,36 @@
+name: "PositiveInt"
+field {
+  name: "value"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_UINT32
+  options {
+    [google.fhir.proto.field_description]: "Primitive value for positiveInt"
+  }
+}
+field {
+  name: "id"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  name: "extension"
+  number: 3
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for positiveInt, last updated 2019-12-31T21:03:40.621+11:00.\nPrimitive Type positiveInt.\nSee http://hl7.org/fhir/StructureDefinition/positiveInt"
+  [google.fhir.proto.value_regex]: "[1-9][0-9]*"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/positiveInt"
+}

@@ -20,8 +20,11 @@ type Version string
 
 // FHIR converter versions.
 const (
+	DSTU2 = Version("DSTU2") // _strip
 	STU3  = Version("STU3")
 	R4    = Version("R4")
+	// TODO(b/291121676): make this public when releasing R5. // _strip
+	R5 = Version("R5") // _strip
 )
 
 // String returns the Version as a string.

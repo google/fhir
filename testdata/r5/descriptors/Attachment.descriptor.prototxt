@@ -1,0 +1,192 @@
+name: "Attachment"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "content_type"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Attachment.ContentTypeCode"
+  options {
+    [google.fhir.proto.field_description]: "Mime type of the content, with charset etc."
+  }
+}
+field {
+  name: "language"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Code"
+  options {
+    [google.fhir.proto.field_description]: "Human language of the content (BCP-47)"
+  }
+}
+field {
+  name: "data"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Base64Binary"
+  options {
+    [google.fhir.proto.field_description]: "Data inline, base64ed"
+  }
+}
+field {
+  name: "url"
+  number: 6
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Url"
+  options {
+    [google.fhir.proto.field_description]: "Uri where the data can be found"
+  }
+}
+field {
+  name: "size"
+  number: 7
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Integer64"
+  options {
+    [google.fhir.proto.field_description]: "Number of bytes of content (if url provided)"
+  }
+}
+field {
+  name: "hash"
+  number: 8
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Base64Binary"
+  options {
+    [google.fhir.proto.field_description]: "Hash of the data (sha-1, base64ed)"
+  }
+}
+field {
+  name: "title"
+  number: 9
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Label to display in place of the data"
+  }
+}
+field {
+  name: "creation"
+  number: 10
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.DateTime"
+  options {
+    [google.fhir.proto.field_description]: "Date attachment was first created"
+  }
+}
+field {
+  name: "height"
+  number: 11
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.PositiveInt"
+  options {
+    [google.fhir.proto.field_description]: "Height of the image in pixels (photo/video)"
+  }
+}
+field {
+  name: "width"
+  number: 12
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.PositiveInt"
+  options {
+    [google.fhir.proto.field_description]: "Width of the image in pixels (photo/video)"
+  }
+}
+field {
+  name: "frames"
+  number: 13
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.PositiveInt"
+  options {
+    [google.fhir.proto.field_description]: "Number of frames if > 1 (photo)"
+  }
+}
+field {
+  name: "duration"
+  number: 14
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Decimal"
+  options {
+    [google.fhir.proto.field_description]: "Length in seconds (audio / video)"
+  }
+}
+field {
+  name: "pages"
+  number: 15
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.PositiveInt"
+  options {
+    [google.fhir.proto.field_description]: "Number of printed pages"
+  }
+}
+nested_type {
+  name: "ContentTypeCode"
+  field {
+    number: 1
+    options {
+      [google.fhir.proto.reserved_reason]: "Field 1 reserved to allow enumeration in the future."
+    }
+  }
+  field {
+    name: "id"
+    number: 2
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+  }
+  field {
+    name: "extension"
+    number: 3
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+  }
+  field {
+    name: "value"
+    number: 4
+    type: TYPE_STRING
+    options {
+      [google.fhir.proto.field_description]: "This valueset is not enumerable, and so is represented as a string."
+    }
+  }
+  options {
+    [google.fhir.proto.fhir_valueset_url]: "http://hl7.org/fhir/ValueSet/mimetypes"
+    [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+    [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/code"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Attachment, last updated 2019-12-31T21:03:40.621+11:00.\nContent in a format defined elsewhere.\nSee http://hl7.org/fhir/StructureDefinition/Attachment"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Attachment"
+  [google.fhir.proto.fhir_path_message_constraint]: "data.empty() or contentType.exists()"
+}

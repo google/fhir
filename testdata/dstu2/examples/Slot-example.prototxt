@@ -1,0 +1,43 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>\n\t\t\t25 Dec 2013 9:15am - 9:30am: <b>Busy</b> Physiotherapy\n\t\t</div>"
+  }
+}
+type {
+  coding {
+    code {
+      value: "45"
+    }
+    display {
+      value: "Physiotherapy"
+    }
+  }
+}
+schedule {
+  schedule_id {
+    value: "example"
+  }
+}
+free_busy_type {
+  value: FREE
+}
+start {
+  value_us: 1387962900000000
+  timezone: "Z"
+  precision: SECOND
+}
+end {
+  value_us: 1387963800000000
+  timezone: "Z"
+  precision: SECOND
+}
+comment {
+  value: "Assessments should be performed before requesting appointments in this slot."
+}
+

@@ -1,0 +1,321 @@
+name: "Extension"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Id"
+  options {
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "url"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Uri"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "identifies the meaning of the extension"
+  }
+}
+field {
+  name: "value"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension.Value"
+  options {
+    [google.fhir.proto.field_description]: "Value of extension"
+  }
+}
+nested_type {
+  name: "Value"
+  field {
+    name: "boolean"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Boolean"
+    oneof_index: 0
+  }
+  field {
+    name: "integer"
+    number: 2
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Integer"
+    oneof_index: 0
+  }
+  field {
+    name: "decimal"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Decimal"
+    oneof_index: 0
+  }
+  field {
+    name: "base64_binary"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Base64Binary"
+    oneof_index: 0
+  }
+  field {
+    name: "instant"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Instant"
+    oneof_index: 0
+  }
+  field {
+    name: "string_value"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.String"
+    oneof_index: 0
+    json_name: "string"
+  }
+  field {
+    name: "uri"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Uri"
+    oneof_index: 0
+  }
+  field {
+    name: "date"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Date"
+    oneof_index: 0
+  }
+  field {
+    name: "date_time"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.DateTime"
+    oneof_index: 0
+  }
+  field {
+    name: "time"
+    number: 10
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Time"
+    oneof_index: 0
+  }
+  field {
+    name: "code"
+    number: 11
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Code"
+    oneof_index: 0
+  }
+  field {
+    name: "oid"
+    number: 12
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Oid"
+    oneof_index: 0
+  }
+  field {
+    name: "id"
+    number: 13
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    oneof_index: 0
+  }
+  field {
+    name: "unsigned_int"
+    number: 14
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.UnsignedInt"
+    oneof_index: 0
+  }
+  field {
+    name: "positive_int"
+    number: 15
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.PositiveInt"
+    oneof_index: 0
+  }
+  field {
+    name: "markdown"
+    number: 16
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Markdown"
+    oneof_index: 0
+  }
+  field {
+    name: "annotation"
+    number: 17
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Annotation"
+    oneof_index: 0
+  }
+  field {
+    name: "attachment"
+    number: 18
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Attachment"
+    oneof_index: 0
+  }
+  field {
+    name: "identifier"
+    number: 19
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Identifier"
+    oneof_index: 0
+  }
+  field {
+    name: "codeable_concept"
+    number: 20
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+    oneof_index: 0
+  }
+  field {
+    name: "coding"
+    number: 21
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Coding"
+    oneof_index: 0
+  }
+  field {
+    name: "quantity"
+    number: 22
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Quantity"
+    oneof_index: 0
+  }
+  field {
+    name: "range"
+    number: 23
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Range"
+    oneof_index: 0
+  }
+  field {
+    name: "period"
+    number: 24
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Period"
+    oneof_index: 0
+  }
+  field {
+    name: "ratio"
+    number: 25
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Ratio"
+    oneof_index: 0
+  }
+  field {
+    name: "sampled_data"
+    number: 26
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.SampledData"
+    oneof_index: 0
+  }
+  field {
+    name: "signature"
+    number: 27
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Signature"
+    oneof_index: 0
+  }
+  field {
+    name: "human_name"
+    number: 28
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.HumanName"
+    oneof_index: 0
+  }
+  field {
+    name: "address"
+    number: 29
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Address"
+    oneof_index: 0
+  }
+  field {
+    name: "contact_point"
+    number: 30
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.ContactPoint"
+    oneof_index: 0
+  }
+  field {
+    name: "timing"
+    number: 31
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Timing"
+    oneof_index: 0
+  }
+  field {
+    name: "reference"
+    number: 32
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Reference"
+    oneof_index: 0
+  }
+  field {
+    name: "meta"
+    number: 33
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Meta"
+    oneof_index: 0
+  }
+  options {
+    [google.fhir.proto.is_choice_type]: true
+  }
+  oneof_decl {
+    name: "value"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Extension.\nSee http://hl7.org/fhir/StructureDefinition/Extension"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Extension"
+}

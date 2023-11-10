@@ -1,0 +1,222 @@
+name: "Timing"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Id"
+  options {
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+  }
+}
+field {
+  name: "event"
+  number: 3
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.DateTime"
+  options {
+    [google.fhir.proto.field_description]: "When the event occurs"
+  }
+}
+field {
+  name: "repeat"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.Timing.Repeat"
+  options {
+    [google.fhir.proto.field_description]: "When the event is to occur"
+  }
+}
+field {
+  name: "code"
+  number: 5
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.dstu2.proto.CodeableConcept"
+  options {
+    [google.fhir.proto.field_description]: "QD | QOD | Q4H | Q6H | BID | TID | QID | AM | PM +"
+  }
+}
+nested_type {
+  name: "Repeat"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Id"
+    options {
+      [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional Content defined by implementations"
+    }
+  }
+  field {
+    name: "bounds"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Timing.Repeat.Bounds"
+    options {
+      [google.fhir.proto.field_description]: "Length/Range of lengths, or (Start and/or end) limits"
+    }
+  }
+  field {
+    name: "count"
+    number: 4
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Integer"
+    options {
+      [google.fhir.proto.field_description]: "Number of times to repeat"
+    }
+  }
+  field {
+    name: "duration"
+    number: 5
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Decimal"
+    options {
+      [google.fhir.proto.field_description]: "How long when it happens"
+    }
+  }
+  field {
+    name: "duration_max"
+    number: 6
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Decimal"
+    options {
+      [google.fhir.proto.field_description]: "How long when it happens (Max)"
+    }
+  }
+  field {
+    name: "duration_units"
+    number: 7
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.UnitsOfTimeCode"
+    options {
+      [google.fhir.proto.field_description]: "s | min | h | d | wk | mo | a - unit of time (UCUM)"
+    }
+  }
+  field {
+    name: "frequency"
+    number: 8
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Integer"
+    options {
+      [google.fhir.proto.field_description]: "Event occurs frequency times per period"
+    }
+  }
+  field {
+    name: "frequency_max"
+    number: 9
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Integer"
+    options {
+      [google.fhir.proto.field_description]: "Event occurs up to frequencyMax times per period"
+    }
+  }
+  field {
+    name: "period"
+    number: 10
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Decimal"
+    options {
+      [google.fhir.proto.field_description]: "Event occurs frequency times per period"
+    }
+  }
+  field {
+    name: "period_max"
+    number: 11
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.Decimal"
+    options {
+      [google.fhir.proto.field_description]: "Upper limit of period (3-4 hours)"
+    }
+  }
+  field {
+    name: "period_units"
+    number: 12
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.UnitsOfTimeCode"
+    options {
+      [google.fhir.proto.field_description]: "s | min | h | d | wk | mo | a - unit of time (UCUM)"
+    }
+  }
+  field {
+    name: "when"
+    number: 13
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.dstu2.proto.EventTimingCode"
+    options {
+      [google.fhir.proto.field_description]: "Regular life events the event is tied to"
+    }
+  }
+  nested_type {
+    name: "Bounds"
+    field {
+      name: "quantity"
+      number: 1
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Quantity"
+      oneof_index: 0
+    }
+    field {
+      name: "range"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Range"
+      oneof_index: 0
+    }
+    field {
+      name: "period"
+      number: 3
+      label: LABEL_OPTIONAL
+      type: TYPE_MESSAGE
+      type_name: ".google.fhir.dstu2.proto.Period"
+      oneof_index: 0
+    }
+    options {
+      [google.fhir.proto.is_choice_type]: true
+    }
+    oneof_decl {
+      name: "bounds"
+    }
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Timing.\nA timing schedule that specifies an event that may occur multiple times.\nSee http://hl7.org/fhir/StructureDefinition/Timing"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Timing"
+}

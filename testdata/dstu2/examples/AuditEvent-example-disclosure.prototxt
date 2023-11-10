@@ -1,0 +1,286 @@
+id {
+  value: "example-disclosure"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>Disclosure by some idiot, for marketing reasons, to places unknown, of a Poor Sap, data about Everthing important.</div>"
+  }
+}
+event {
+  type {
+    system {
+      value: "http://nema.org/dicom/dicm"
+    }
+    code {
+      value: "110106"
+    }
+    display {
+      value: "Export"
+    }
+  }
+  subtype {
+    code {
+      value: "Disclosure"
+    }
+    display {
+      value: "HIPAA disclosure"
+    }
+  }
+  action {
+    value: R
+  }
+  date_time {
+    value_us: 1379808480000000
+    timezone: "Z"
+    precision: SECOND
+  }
+  outcome {
+    value: SUCCESS
+  }
+  outcome_desc {
+    value: "Successful  Disclosure"
+  }
+  purpose_of_event {
+    system {
+      value: "http://hl7.org/fhir/v3/ActReason"
+    }
+    code {
+      value: "HMARKT"
+    }
+    display {
+      value: "healthcare marketing"
+    }
+  }
+}
+participant {
+  role {
+    coding {
+      system {
+        value: "http://nema.org/dicom/dicm"
+      }
+      code {
+        value: "110153"
+      }
+      display {
+        value: "Source Role ID"
+      }
+    }
+  }
+  user_id {
+    value {
+      value: "SomeIdiot@nowhere.com"
+    }
+  }
+  alt_id {
+    value: "notMe"
+  }
+  name {
+    value: "That guy everyone wishes would be caught"
+  }
+  requestor {
+    value: true
+  }
+  location {
+    location_id {
+      value: "1"
+    }
+  }
+  policy {
+    value: "http://consent.com/yes"
+  }
+  network {
+    address {
+      value: "custodian.net"
+    }
+    type {
+      value: MACHINE_NAME
+    }
+  }
+}
+participant {
+  role {
+    coding {
+      system {
+        value: "http://nema.org/dicom/dicm"
+      }
+      code {
+        value: "110152"
+      }
+      display {
+        value: "Destination Role ID"
+      }
+    }
+  }
+  reference {
+    practitioner_id {
+      value: "example"
+    }
+  }
+  user_id {
+    value {
+      value: "Where"
+    }
+  }
+  requestor {
+  }
+  network {
+    address {
+      value: "marketing.land"
+    }
+    type {
+      value: MACHINE_NAME
+    }
+  }
+  purpose_of_use {
+    system {
+      value: "http://hl7.org/fhir/v3/ActReason"
+    }
+    code {
+      value: "HMARKT"
+    }
+    display {
+      value: "healthcare marketing"
+    }
+  }
+}
+source {
+  site {
+    value: "Watcher"
+  }
+  identifier {
+    value {
+      value: "Watchers Accounting of Disclosures Application"
+    }
+  }
+  type {
+    system {
+      value: "http://hl7.org/fhir/security-source-type"
+    }
+    code {
+      value: "4"
+    }
+    display {
+      value: "Application Server"
+    }
+  }
+}
+object {
+  reference {
+    patient_id {
+      value: "example"
+    }
+  }
+  type {
+    system {
+      value: "http://hl7.org/fhir/object-type"
+    }
+    code {
+      value: "1"
+    }
+    display {
+      value: "Person"
+    }
+  }
+  role {
+    system {
+      value: "http://hl7.org/fhir/valueset-object-role"
+    }
+    code {
+      value: "1"
+    }
+    display {
+      value: "Patient"
+    }
+  }
+}
+object {
+  identifier {
+    value {
+      value: "What.id"
+    }
+  }
+  reference {
+    patient_id {
+      value: "example"
+      history {
+        value: "1"
+      }
+    }
+  }
+  type {
+    system {
+      value: "http://hl7.org/fhir/object-type"
+    }
+    code {
+      value: "2"
+    }
+    display {
+      value: "System Object"
+    }
+  }
+  role {
+    system {
+      value: "http://hl7.org/fhir/valueset-object-role"
+    }
+    code {
+      value: "4"
+    }
+    display {
+      value: "DomainResource"
+    }
+  }
+  lifecycle {
+    system {
+      value: "http://hl7.org/fhir/object-lifecycle"
+    }
+    code {
+      value: "11"
+    }
+    display {
+      value: "Disclosure"
+    }
+  }
+  security_label {
+    system {
+      value: "http://hl7.org/fhir/v3/Confidentiality"
+    }
+    code {
+      value: "V"
+    }
+    display {
+      value: "very restricted"
+    }
+  }
+  security_label {
+    system {
+      value: "http://hl7.org/fhir/v3/ActCode"
+    }
+    code {
+      value: "STD"
+    }
+    display {
+      value: "sexually transmitted disease information sensitivity"
+    }
+  }
+  security_label {
+    system {
+      value: "http://hl7.org/fhir/v3/ActCode"
+    }
+    code {
+      value: "DELAU"
+    }
+    display {
+      value: "delete after use"
+    }
+  }
+  name {
+    value: "Namne of What"
+  }
+  description {
+    value: "data about Everthing important"
+  }
+}
+

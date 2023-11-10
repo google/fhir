@@ -1,0 +1,50 @@
+id {
+  value: "ImplementationGuide.package.resource.exampleFor"
+}
+meta {
+  last_updated {
+    value_us: 1445632863495000
+    timezone: "+11:00"
+    precision: MILLISECOND
+  }
+}
+url {
+  value: "http://hl7.org/fhir/DataElement/ImplementationGuide.package.resource.exampleFor"
+}
+status {
+  value: DRAFT
+}
+experimental {
+  value: true
+}
+stringency {
+  value: FULLY_SPECIFIED
+}
+element {
+  path {
+    value: "ImplementationGuide.package.resource.exampleFor"
+  }
+  short {
+    value: "Resource this is an example of (if applicable)"
+  }
+  definition {
+    value: "Another resource that this resource is an example for. This is mostly used for resources that are included as examples of StructureDefinitions."
+  }
+  comments {
+    value: "Examples: * StructureDefinition -> Any * ValueSet -> expansion * OperationDefinition -> Parameters * Questionnaire -> QuestionnaireResponse."
+  }
+  min {
+  }
+  max {
+    value: "1"
+  }
+  type {
+    code {
+      value: "Reference"
+    }
+    profile {
+      value: "http://hl7.org/fhir/StructureDefinition/StructureDefinition"
+    }
+  }
+}
+

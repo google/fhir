@@ -1,0 +1,306 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/genomic_study_go_proto";
+
+// Auto-generated from StructureDefinition for GenomicStudy.
+// Genomic Study.
+// See http://hl7.org/fhir/StructureDefinition/GenomicStudy
+message GenomicStudy {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/GenomicStudy";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // GenomicStudy.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Identifiers for this genomic study
+  repeated Identifier identifier = 10;
+
+  // registered | available | cancelled | entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/genomicstudy-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    GenomicStudyStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The type of the study (e.g., Familial variant segregation, Functional
+  // variation detection, or Gene expression profiling)
+  repeated CodeableConcept type = 12;
+
+  // The primary subject of the genomic study
+  Reference subject = 13 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.valid_reference_type) = "Substance",
+    (.google.fhir.proto.valid_reference_type) = "BiologicallyDerivedProduct",
+    (.google.fhir.proto.valid_reference_type) = "NutritionProduct"
+  ];
+
+  // The healthcare event with which this genomics study is associated
+  Reference encounter = 14
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // When the genomic study was started
+  DateTime start_date = 15;
+
+  // Event resources that the genomic study is based on
+  repeated Reference based_on = 16 [
+    (.google.fhir.proto.valid_reference_type) = "ServiceRequest",
+    (.google.fhir.proto.valid_reference_type) = "Task"
+  ];
+
+  // Healthcare professional who requested or referred the genomic study
+  Reference referrer = 17 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  ];
+
+  // Healthcare professionals who interpreted the genomic study
+  repeated Reference interpreter = 18 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  ];
+
+  // Why the genomic study was performed
+  repeated CodeableReference reason = 19;
+
+  // The defined protocol that describes the study
+  Canonical instantiates_canonical = 20;
+
+  // The URL pointing to an externally maintained protocol that describes the
+  // study
+  Uri instantiates_uri = 21;
+
+  // Comments related to the genomic study
+  repeated Annotation note = 22;
+
+  // Description of the genomic study
+  Markdown description = 23;
+
+  // Genomic Analysis Event
+  message Analysis {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Identifiers for the analysis event
+    repeated Identifier identifier = 4;
+
+    // Type of the methods used in the analysis (e.g., FISH, Karyotyping, MSI)
+    repeated CodeableConcept method_type = 5;
+
+    // Type of the genomic changes studied in the analysis (e.g., DNA, RNA, or
+    // AA change)
+    repeated CodeableConcept change_type = 6;
+
+    // Genome build that is used in this analysis
+    CodeableConcept genome_build = 7;
+
+    // The defined protocol that describes the analysis
+    Canonical instantiates_canonical = 8;
+
+    // The URL pointing to an externally maintained protocol that describes the
+    // analysis
+    Uri instantiates_uri = 9;
+
+    // Name of the analysis event (human friendly)
+    String title = 10;
+
+    // What the genomic analysis is about, when it is not about the subject of
+    // record
+    repeated Reference focus = 11
+        [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+    // The specimen used in the analysis event
+    repeated Reference specimen = 12
+        [(.google.fhir.proto.valid_reference_type) = "Specimen"];
+
+    // The date of the analysis event
+    DateTime date = 13;
+
+    // Any notes capture with the analysis event
+    repeated Annotation note = 14;
+
+    // The protocol that was performed for the analysis event
+    Reference protocol_performed = 15 [
+      (.google.fhir.proto.valid_reference_type) = "Procedure",
+      (.google.fhir.proto.valid_reference_type) = "Task"
+    ];
+
+    // The genomic regions to be studied in the analysis (BED file)
+    repeated Reference regions_studied = 16 [
+      (.google.fhir.proto.valid_reference_type) = "DocumentReference",
+      (.google.fhir.proto.valid_reference_type) = "Observation"
+    ];
+
+    // Genomic regions actually called in the analysis event (BED file)
+    repeated Reference regions_called = 17 [
+      (.google.fhir.proto.valid_reference_type) = "DocumentReference",
+      (.google.fhir.proto.valid_reference_type) = "Observation"
+    ];
+
+    // Inputs for the analysis event
+    message Input {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // File containing input data
+      Reference file = 4
+          [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
+
+      // Type of input data (e.g., BAM, CRAM, or FASTA)
+      CodeableConcept type = 5;
+
+      // The analysis event or other GenomicStudy that generated this input file
+      message GeneratedByX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          Identifier identifier = 1;
+          Reference reference = 2
+              [(.google.fhir.proto.valid_reference_type) = "GenomicStudy"];
+        }
+      }
+      GeneratedByX generated_by = 6;
+    }
+    repeated Input input = 18;
+
+    // Outputs for the analysis event
+    message Output {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // File containing output data
+      Reference file = 4
+          [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
+
+      // Type of output data (e.g., VCF, MAF, or BAM)
+      CodeableConcept type = 5;
+    }
+    repeated Output output = 19;
+
+    // Performer for the analysis event
+    message Performer {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The organization, healthcare professional, or others who participated
+      // in performing this analysis
+      Reference actor = 4 [
+        (.google.fhir.proto.valid_reference_type) = "Practitioner",
+        (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+        (.google.fhir.proto.valid_reference_type) = "Organization",
+        (.google.fhir.proto.valid_reference_type) = "Device"
+      ];
+
+      // Role of the actor for this analysis
+      CodeableConcept role = 5;
+    }
+    repeated Performer performer = 20;
+
+    // Devices used for the analysis (e.g., instruments, software), with
+    // settings and parameters
+    message Device {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Device used for the analysis
+      Reference device = 4
+          [(.google.fhir.proto.valid_reference_type) = "Device"];
+
+      // Specific function for the device used for the analysis
+      CodeableConcept function = 5;
+    }
+    repeated Device device = 21;
+  }
+  repeated Analysis analysis = 24;
+}

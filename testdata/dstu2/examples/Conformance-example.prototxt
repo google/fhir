@@ -1,0 +1,311 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>\n      \n      <p>The EHR Server supports the following transactions for the resource Person: read, vread, \n        update, history, search(name,gender), create and updates.</p>\n      \n      <p>The EHR System supports the following message: admin-notify::Person.</p>\n      \n      <p>The EHR Application has a \n        <a href=\"http://fhir.hl7.org/base/Profilebc054d23-75e1-4dc6-aca5-838b6b1ac81d/_history/b5fdd9fc-b021-4ea1-911a-721a60663796\">general document profile</a>.\n      </p>\n    \n    </div>"
+  }
+}
+url {
+  value: "68D043B5-9ECF-4559-A57A-396E0D452311"
+}
+version {
+  value: "20130510"
+}
+name {
+  value: "ACME EHR Conformance statement"
+}
+status {
+  value: DRAFT
+}
+experimental {
+  value: true
+}
+publisher {
+  value: "ACME Corporation"
+}
+contact {
+  name {
+    value: "System Administrator"
+  }
+  telecom {
+    system {
+      value: EMAIL
+    }
+    value {
+      value: "wile@acme.org"
+    }
+  }
+}
+date {
+  value_us: 1325595600000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+description {
+  value: "This is the FHIR conformance statement for the main EHR at ACME for the private interface - it does not describe the public interface"
+}
+requirements {
+  value: "Main EHR conformance statement, published for contracting and operational support"
+}
+copyright {
+  value: "Copyright \302\251 Acme Healthcare and GoodCorp EHR Systems"
+}
+kind {
+  value: INSTANCE
+}
+software {
+  name {
+    value: "EHR"
+  }
+  version {
+    value: "0.00.020.2134"
+  }
+  release_date {
+    value_us: 1325595600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+implementation {
+  description {
+    value: "main EHR at ACME"
+  }
+  url {
+    value: "http://10.2.3.4/fhir"
+  }
+}
+fhir_version {
+  value: "1.0.0"
+}
+accept_unknown {
+  value: BOTH
+}
+format {
+  value: "xml"
+}
+format {
+  value: "json"
+}
+rest {
+  mode {
+    value: SERVER
+  }
+  documentation {
+    value: "Main FHIR endpoint for acem health"
+  }
+  security {
+    cors {
+      value: true
+    }
+    service {
+      coding {
+        system {
+          value: "http://hl7.org/fhir/restful-security-service"
+        }
+        code {
+          value: "SMART-on-FHIR"
+        }
+      }
+    }
+    description {
+      value: "See Smart on FHIR documentation"
+    }
+    certificate {
+      type {
+        value: "application/jwt"
+      }
+      blob {
+        value: " this blob is not valid"
+      }
+    }
+  }
+  resource {
+    type {
+      value: PATIENT
+    }
+    profile {
+      uri {
+        value: "http://fhir.hl7.org/base/Profile7896271d-57f6-4231-89dc-dcc91eab2416"
+      }
+    }
+    interaction {
+      code {
+        value: READ
+      }
+    }
+    interaction {
+      code {
+        value: VREAD
+      }
+      documentation {
+        value: "Only supported for patient records since 12-Dec 2012"
+      }
+    }
+    interaction {
+      code {
+        value: UPDATE
+      }
+    }
+    interaction {
+      code {
+        value: HISTORY_INSTANCE
+      }
+    }
+    interaction {
+      code {
+        value: CREATE
+      }
+    }
+    interaction {
+      code {
+        value: HISTORY_TYPE
+      }
+    }
+    versioning {
+      value: VERSIONED_UPDATE
+    }
+    read_history {
+      value: true
+    }
+    update_create {
+    }
+    conditional_create {
+      value: true
+    }
+    conditional_update {
+    }
+    conditional_delete {
+      value: NOT_SUPPORTED
+    }
+    search_include {
+      value: "Organization"
+    }
+    search_rev_include {
+      value: "Person"
+    }
+    search_param {
+      name {
+        value: "identifier"
+      }
+      definition {
+        value: "http://hl7.org/fhir/SearchParameter/Patient-identifier"
+      }
+      type {
+        value: TOKEN
+      }
+      documentation {
+        value: "Only supports search by institution MRN"
+      }
+      modifier {
+        value: MISSING
+      }
+    }
+    search_param {
+      name {
+        value: "careprovider"
+      }
+      definition {
+        value: "http://hl7.org/fhir/SearchParameter/Patient-careprovider"
+      }
+      type {
+        value: REFERENCE
+      }
+      target {
+        value: ORGANIZATION
+      }
+      modifier {
+        value: MISSING
+      }
+      chain {
+        value: "name"
+      }
+      chain {
+        value: "identifier"
+      }
+    }
+  }
+  interaction {
+    code {
+      value: TRANSACTION
+    }
+  }
+  interaction {
+    code {
+      value: HISTORY_SYSTEM
+    }
+  }
+  compartment {
+    value: "http://hl7.org/fhir/compartment/Patient"
+  }
+}
+messaging {
+  endpoint {
+    protocol {
+      system {
+        value: "http://hl7.org/fhir/message-transport"
+      }
+      code {
+        value: "mllp"
+      }
+    }
+    address {
+      value: "mllp:10.1.1.10:9234"
+    }
+  }
+  reliable_cache {
+    value: 30
+  }
+  documentation {
+    value: "ADT A08 equivalent for external system notifications"
+  }
+  event {
+    code {
+      system {
+        value: "http://hl7.org/fhir/message-type"
+      }
+      code {
+        value: "admin-notify"
+      }
+    }
+    category {
+      value: CONSEQUENCE
+    }
+    mode {
+      value: RECEIVER
+    }
+    focus {
+      value: PATIENT
+    }
+    request {
+      structure_definition_id {
+        value: "daf-patient"
+      }
+    }
+    response {
+      structure_definition_id {
+        value: "MessageHeader"
+      }
+    }
+    documentation {
+      value: "Notification of an update to a patient resource. changing the links is not supported"
+    }
+  }
+}
+document {
+  mode {
+    value: CONSUMER
+  }
+  documentation {
+    value: "Basic rules for all documents in the EHR system"
+  }
+  profile {
+    uri {
+      value: "http://fhir.hl7.org/base/Profilebc054d23-75e1-4dc6-aca5-838b6b1ac81d/_history/b5fdd9fc-b021-4ea1-911a-721a60663796"
+    }
+  }
+}
+

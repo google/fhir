@@ -1,0 +1,265 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>\n\t\t\t25 Dec 2013 9:15am - 9:30am: <b>Busy</b> Physiotherapy\n\t\t</div>"
+  }
+}
+contained {
+  location {
+    id {
+      value: "DenBurg"
+    }
+    description {
+      value: "Greater Denburg area"
+    }
+    mode {
+      value: INSTANCE
+    }
+    physical_type {
+      coding {
+        code {
+          value: "area"
+        }
+        display {
+          value: "Area"
+        }
+      }
+    }
+  }
+}
+service_type {
+  type {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "394913002"
+      }
+      display {
+        value: "Psychotherapy"
+      }
+    }
+  }
+}
+service_type {
+  type {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "394587001"
+      }
+      display {
+        value: "Psychiatry"
+      }
+    }
+  }
+  specialty {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "47505003"
+      }
+      display {
+        value: "Posttraumatic stress disorder"
+      }
+    }
+  }
+}
+location {
+  location_id {
+    value: "1"
+  }
+}
+service_name {
+  value: "Consulting psychologists and/or psychology services"
+}
+comment {
+  value: "Providing Specialist psychology services to the greater Den Burg area, many years of experience dealing with PTSD issues"
+}
+extra_details {
+  value: "Several assessments are required for these specialist services, and the waiting times can be greater than 3 months at times. Existing patients are prioritized when requesting appointments on the schedule."
+}
+telecom {
+  system {
+    value: PHONE
+  }
+  value {
+    value: "(555) silent"
+  }
+  use {
+    value: WORK
+  }
+}
+telecom {
+  system {
+    value: EMAIL
+  }
+  value {
+    value: "directaddress@example.com"
+  }
+  use {
+    value: WORK
+  }
+}
+coverage_area {
+  fragment {
+    value: "DenBurg"
+  }
+  display {
+    value: "Greater Denburg area"
+  }
+}
+eligibility {
+  coding {
+    display {
+      value: "DVA Required"
+    }
+  }
+}
+eligibility_note {
+  value: "Evidence of application for DVA status may be sufficient for commencing assessment"
+}
+program_name {
+  value: "PTSD outreach"
+}
+characteristic {
+  coding {
+    display {
+      value: "Wheelchair access"
+    }
+  }
+}
+referral_method {
+  coding {
+    code {
+      value: "phone"
+    }
+    display {
+      value: "Phone"
+    }
+  }
+}
+referral_method {
+  coding {
+    code {
+      value: "fax"
+    }
+    display {
+      value: "Fax"
+    }
+  }
+}
+referral_method {
+  coding {
+    code {
+      value: "elec"
+    }
+    display {
+      value: "Secure Messaging"
+    }
+  }
+}
+referral_method {
+  coding {
+    code {
+      value: "semail"
+    }
+    display {
+      value: "Secure Email"
+    }
+  }
+}
+public_key {
+  value: "*** Base64 public key goes here to be used for secure messaging ***"
+}
+appointment_required {
+}
+available_time {
+  days_of_week {
+    value: MON
+  }
+  days_of_week {
+    value: TUE
+  }
+  days_of_week {
+    value: WED
+  }
+  days_of_week {
+    value: THU
+  }
+  days_of_week {
+    value: FRI
+  }
+  available_start_time {
+    value_us: 30600000000
+    precision: SECOND
+  }
+  available_end_time {
+    value_us: 19800000000
+    precision: SECOND
+  }
+}
+available_time {
+  days_of_week {
+    value: SAT
+  }
+  days_of_week {
+    value: FRI
+  }
+  available_start_time {
+    value_us: 34200000000
+    precision: SECOND
+  }
+  available_end_time {
+    value_us: 16200000000
+    precision: SECOND
+  }
+}
+not_available {
+  description {
+    value: "Christmas/Boxing Day"
+  }
+  during {
+    start {
+      value_us: 1450962000000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+    end {
+      value_us: 1451048400000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+}
+not_available {
+  description {
+    value: "New Years Day"
+  }
+  during {
+    start {
+      value_us: 1451566800000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+    end {
+      value_us: 1451566800000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+}
+availability_exceptions {
+  value: "Reduced capacity is available during the Christmas period"
+}
+

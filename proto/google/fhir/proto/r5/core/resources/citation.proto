@@ -1,0 +1,682 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+import "proto/google/fhir/proto/r5/core/valuesets.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/citation_go_proto";
+
+// Auto-generated from StructureDefinition for Citation.
+// A description of identification, location, or contributorship of a
+// publication (article or artifact). See
+// http://hl7.org/fhir/StructureDefinition/Citation
+message Citation {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Citation";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.exists() implies name.matches('^[A-Z]([A-Za-z0-9_]){1,254}$')";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Citation.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this citation record, represented as a globally
+  // unique URI
+  Uri url = 10 [(.google.fhir.proto.fhir_path_warning_constraint) =
+                    "exists() implies matches('^[^|# ]+$')"];
+
+  // Identifier for the citation record itself
+  repeated Identifier identifier = 11;
+
+  // Business version of the citation record
+  String version = 12;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 13;
+
+  // Name for this citation record (computer friendly)
+  String name = 14;
+
+  // Name for this citation record (human friendly)
+  String title = 15;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 17;
+
+  // Date last changed
+  DateTime date = 18;
+
+  // The publisher of the citation record, not the publisher of the article or
+  // artifact being cited
+  String publisher = 19;
+
+  // Contact details for the publisher of the citation record
+  repeated ContactDetail contact = 20;
+
+  // Natural language description of the citation
+  Markdown description = 21;
+
+  // The context that the citation record content is intended to support
+  repeated UsageContext use_context = 22;
+
+  // Intended jurisdiction for citation record (if applicable)
+  repeated CodeableConcept jurisdiction = 23;
+
+  // Why this citation is defined
+  Markdown purpose = 24;
+
+  // Use and/or publishing restrictions for the citation record, not for the
+  // cited artifact
+  Markdown copyright = 25;
+
+  // Copyright holder and year(s) for the ciation record, not for the cited
+  // artifact
+  String copyright_label = 26;
+
+  // When the citation record was approved by publisher
+  Date approval_date = 27;
+
+  // When the citation record was last reviewed by the publisher
+  Date last_review_date = 28;
+
+  // When the citation record is expected to be used
+  Period effective_period = 29;
+
+  // Who authored the citation record
+  repeated ContactDetail author = 30;
+
+  // Who edited the citation record
+  repeated ContactDetail editor = 31;
+
+  // Who reviewed the citation record
+  repeated ContactDetail reviewer = 32;
+
+  // Who endorsed the citation record
+  repeated ContactDetail endorser = 33;
+
+  // A human-readable display of key concepts to represent the citation
+  message Summary {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Format for display of the citation summary
+    CodeableConcept style = 4;
+
+    // The human-readable display of the citation summary
+    Markdown text = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Summary summary = 34;
+
+  // The assignment to an organizing scheme
+  message Classification {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The kind of classifier (e.g. publication type, keyword)
+    CodeableConcept type = 4;
+
+    // The specific classification value
+    repeated CodeableConcept classifier = 5;
+  }
+  repeated Classification classification = 35;
+
+  // Used for general notes and annotations not coded elsewhere
+  repeated Annotation note = 36;
+
+  // The status of the citation record
+  repeated CodeableConcept current_state = 37;
+
+  // An effective date or period for a status of the citation record
+  message StatusDate {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Classification of the status
+    CodeableConcept activity = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Either occurred or expected
+    Boolean actual = 5;
+
+    // When the status started and/or ended
+    Period period = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated StatusDate status_date = 38;
+
+  // Artifact related to the citation record
+  repeated RelatedArtifact related_artifact = 39;
+
+  // The article or artifact being described
+  message CitedArtifact {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Unique identifier. May include DOI, PMID, PMCID, etc
+    repeated Identifier identifier = 4;
+
+    // Identifier not unique to the cited artifact. May include trial registry
+    // identifiers
+    repeated Identifier related_identifier = 5;
+
+    // When the cited artifact was accessed
+    DateTime date_accessed = 6;
+
+    // The defined version of the cited artifact
+    message Version {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The version number or other version identifier
+      String value = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Citation for the main version of the cited artifact
+      Reference base_citation = 5
+          [(.google.fhir.proto.valid_reference_type) = "Citation"];
+    }
+    Version version = 7;
+
+    // The status of the cited artifact
+    repeated CodeableConcept current_state = 8;
+
+    // An effective date or period for a status of the cited artifact
+    message StatusDate {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Classification of the status
+      CodeableConcept activity = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Either occurred or expected
+      Boolean actual = 5;
+
+      // When the status started and/or ended
+      Period period = 6
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated StatusDate status_date = 9;
+
+    // The title details of the article or artifact
+    message Title {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The kind of title
+      repeated CodeableConcept type = 4;
+
+      // Used to express the specific language
+      CodeableConcept language = 5;
+
+      // The title of the article or artifact
+      Markdown text = 6
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated Title title = 10;
+
+    // Summary of the article or artifact
+    message Abstract {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The kind of abstract
+      CodeableConcept type = 4;
+
+      // Used to express the specific language
+      CodeableConcept language = 5;
+
+      // Abstract content
+      Markdown text = 6
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Copyright notice for the abstract
+      Markdown copyright = 7;
+    }
+    repeated Abstract abstract = 11;
+
+    // The component of the article or artifact
+    message Part {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The kind of component
+      CodeableConcept type = 4;
+
+      // The specification of the component
+      String value = 5;
+
+      // The citation for the full article or artifact
+      Reference base_citation = 6
+          [(.google.fhir.proto.valid_reference_type) = "Citation"];
+    }
+    Part part = 12;
+
+    // The artifact related to the cited artifact
+    message RelatesTo {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // documentation | justification | citation | predecessor | successor |
+      // derived-from | depends-on | composed-of | part-of | amends |
+      // amended-with | appends | appended-with | cites | cited-by | comments-on
+      // | comment-in | contains | contained-in | corrects | correction-in |
+      // replaces | replaced-with | retracts | retracted-by | signs | similar-to
+      // | supports | supported-with | transforms | transformed-into |
+      // transformed-with | documents | specification-of | created-with |
+      // cite-as | reprint | reprint-of
+      message TypeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/related-artifact-type-all";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        RelatedArtifactTypeExpandedValueSet.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      TypeCode type = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Additional classifiers
+      repeated CodeableConcept classifier = 5;
+
+      // Short label
+      String label = 6;
+
+      // Brief description of the related artifact
+      String display = 7;
+
+      // Bibliographic citation for the artifact
+      Markdown citation = 8;
+
+      // What document is being referenced
+      Attachment document = 9;
+
+      // What artifact is being referenced
+      Canonical resource = 10;
+
+      // What artifact, if not a conformance resource
+      Reference resource_reference = 11;
+    }
+    repeated RelatesTo relates_to = 13;
+
+    // If multiple, used to represent alternative forms of the article that are
+    // not separate citations
+    message PublicationForm {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The collection the cited article or artifact is published in
+      message PublishedIn {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Kind of container (e.g. Periodical, database, or book)
+        CodeableConcept type = 4;
+
+        // Journal identifiers include ISSN, ISO Abbreviation and NLMuniqueID;
+        // Book identifiers include ISBN
+        repeated Identifier identifier = 5;
+
+        // Name of the database or title of the book or journal
+        String title = 6;
+
+        // Name of or resource describing the publisher
+        Reference publisher = 7
+            [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+        // Geographic location of the publisher
+        String publisher_location = 8;
+      }
+      PublishedIn published_in = 4;
+
+      // Internet or Print
+      CodeableConcept cited_medium = 5;
+
+      // Volume number of journal or other collection in which the article is
+      // published
+      String volume = 6;
+
+      // Issue, part or supplement of journal or other collection in which the
+      // article is published
+      String issue = 7;
+
+      // The date the article was added to the database, or the date the article
+      // was released
+      DateTime article_date = 8;
+
+      // Text representation of the date on which the issue of the cited
+      // artifact was published
+      String publication_date_text = 9;
+
+      // Season in which the cited artifact was published
+      String publication_date_season = 10;
+
+      // The date the article was last revised or updated in the database
+      DateTime last_revision_date = 11;
+
+      // Language(s) in which this form of the article is published
+      repeated CodeableConcept language = 12;
+
+      // Entry number or identifier for inclusion in a database
+      String accession_number = 13;
+
+      // Used for full display of pagination
+      String page_string = 14;
+
+      // Used for isolated representation of first page
+      String first_page = 15;
+
+      // Used for isolated representation of last page
+      String last_page = 16;
+
+      // Number of pages or screens
+      String page_count = 17;
+
+      // Copyright notice for the full article or artifact
+      Markdown copyright = 18;
+    }
+    repeated PublicationForm publication_form = 14;
+
+    // Used for any URL for the article or artifact cited
+    message WebLocation {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Code the reason for different URLs, e.g. abstract and full-text
+      repeated CodeableConcept classifier = 4;
+
+      // The specific URL
+      Uri url = 5;
+    }
+    repeated WebLocation web_location = 15;
+
+    // The assignment to an organizing scheme
+    message Classification {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The kind of classifier (e.g. publication type, keyword)
+      CodeableConcept type = 4;
+
+      // The specific classification value
+      repeated CodeableConcept classifier = 5;
+
+      // Complex or externally created classification
+      repeated Reference artifact_assessment = 6
+          [(.google.fhir.proto.valid_reference_type) = "ArtifactAssessment"];
+    }
+    repeated Classification classification = 16;
+
+    // Attribution of authors and other contributors
+    message Contributorship {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Indicates if the list includes all authors and/or contributors
+      Boolean complete = 4;
+
+      // An individual entity named as a contributor
+      message Entry {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // The identity of the individual contributor
+        Reference contributor = 4 [
+          (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+          (.google.fhir.proto.valid_reference_type) = "Practitioner",
+          (.google.fhir.proto.valid_reference_type) = "Organization"
+        ];
+
+        // For citation styles that use initials
+        String forename_initials = 5;
+
+        // Organizational affiliation
+        repeated Reference affiliation = 6 [
+          (.google.fhir.proto.valid_reference_type) = "Organization",
+          (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+        ];
+
+        // The specific contribution
+        repeated CodeableConcept contribution_type = 7;
+
+        // The role of the contributor (e.g. author, editor, reviewer, funder)
+        CodeableConcept role = 8;
+
+        // Contributions with accounting for time or number
+        message ContributionInstance {
+          // Unique id for inter-element referencing
+          String id = 1;
+
+          // Additional content defined by implementations
+          repeated Extension extension = 2;
+
+          // Extensions that cannot be ignored even if unrecognized
+          repeated Extension modifier_extension = 3;
+
+          // The specific contribution
+          CodeableConcept type = 4
+              [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+          // The time that the contribution was made
+          DateTime time = 5;
+        }
+        repeated ContributionInstance contribution_instance = 9;
+
+        // Whether the contributor is the corresponding contributor for the role
+        Boolean corresponding_contact = 10;
+
+        // Ranked order of contribution
+        PositiveInt ranking_order = 11;
+      }
+      repeated Entry entry = 5;
+
+      // Used to record a display of the author/contributor list without
+      // separate data element for each list member
+      message ContributorshipSummary {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Such as author list, contributorship statement, funding statement,
+        // acknowledgements statement, or conflicts of interest statement
+        CodeableConcept type = 4;
+
+        // The format for the display string
+        CodeableConcept style = 5;
+
+        // Used to code the producer or rule for creating the display string
+        CodeableConcept source = 6;
+
+        // The display string for the author list, contributor list, or
+        // contributorship statement
+        Markdown value = 7
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+      }
+      repeated ContributorshipSummary summary = 6;
+    }
+    Contributorship contributorship = 17;
+
+    // Any additional information or content for the article or artifact
+    repeated Annotation note = 18;
+  }
+  CitedArtifact cited_artifact = 40;
+}

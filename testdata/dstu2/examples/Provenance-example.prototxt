@@ -1,0 +1,129 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>procedure record authored on 27-June 2015 by Harold Hippocrates, MD Content extracted from Referral received 26-June</div>"
+  }
+}
+target {
+  procedure_id {
+    value: "example"
+    history {
+      value: "1"
+    }
+  }
+}
+period {
+  start {
+    value_us: 1435327200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+recorded {
+  value_us: 1435358364000000
+  timezone: "+10:00"
+  precision: SECOND
+}
+reason {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "3457005"
+    }
+    display {
+      value: "Referral"
+    }
+  }
+  text {
+    value: "Accepting a referral"
+  }
+}
+location {
+  location_id {
+    value: "1"
+  }
+}
+policy {
+  value: "http://acme.com/fhir/Consent/25"
+}
+agent {
+  role {
+    system {
+      value: "http://hl7.org/fhir/provenance-participant-role"
+    }
+    code {
+      value: "author"
+    }
+  }
+  actor {
+    practitioner_id {
+      value: "xcda-author"
+    }
+  }
+  user_id {
+    system {
+      value: "http://acme.com/fhir/users/sso"
+    }
+    value {
+      value: "hhd"
+    }
+  }
+  related_agent {
+    type {
+      text {
+        value: "used"
+      }
+    }
+    target {
+      value: "#a1"
+    }
+  }
+}
+agent {
+  id {
+    value: "a1"
+  }
+  role {
+    system {
+      value: "http://hl7.org/fhir/v3/ParticipationType"
+    }
+    code {
+      value: "DEV"
+    }
+  }
+  actor {
+    device_id {
+      value: "software"
+    }
+  }
+}
+entity {
+  role {
+    value: SOURCE
+  }
+  type {
+    system {
+      value: "http://loinc.org"
+    }
+    code {
+      value: "57133-1"
+    }
+    display {
+      value: "Referral note"
+    }
+  }
+  reference {
+    value: "DocumentReference/90f55916-9d15-4b8f-87a9-2d7ade8670c8"
+  }
+  display {
+    value: "CDA Document in XDS repository"
+  }
+}
+

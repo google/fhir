@@ -1,0 +1,68 @@
+name: "Instant"
+field {
+  name: "value_us"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_INT64
+  options {
+    [google.fhir.proto.field_description]: "Primitive value for instant"
+  }
+}
+field {
+  name: "timezone"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_STRING
+}
+field {
+  name: "precision"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_ENUM
+  type_name: ".google.fhir.r5.core.Instant.Precision"
+}
+field {
+  name: "id"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  name: "extension"
+  number: 5
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+enum_type {
+  name: "Precision"
+  value {
+    name: "PRECISION_UNSPECIFIED"
+    number: 0
+  }
+  value {
+    name: "SECOND"
+    number: 1
+  }
+  value {
+    name: "MILLISECOND"
+    number: 2
+  }
+  value {
+    name: "MICROSECOND"
+    number: 3
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for instant, last updated 2019-12-31T21:03:40.621+11:00.\nPrimitive Type instant.\nSee http://hl7.org/fhir/StructureDefinition/instant"
+  [google.fhir.proto.value_regex]: "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]+)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/instant"
+}

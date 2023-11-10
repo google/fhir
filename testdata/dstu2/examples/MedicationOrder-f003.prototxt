@@ -1,0 +1,168 @@
+id {
+  value: "f003"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f003</p><p><b>identifier</b>: order9845343 (OFFICIAL)</p><p><b>dateWritten</b>: 01/05/2011</p><p><b>status</b>: active</p><p><b>patient</b>: <a>P. van den Heuvel</a></p><p><b>prescriber</b>: <a>S.M. Heps</a></p><p><b>encounter</b>: <a>encounter who leads to this priscription</a></p><p><b>reason</b>: High glucose level in blood <span>(Details : {SNOMED CT code \'444780001\' = \'444780001\', given as \'High glucose level in blood\'})</span></p><p><b>medication</b>: <a>prescribed medication</a></p><h3>DosageInstructions</h3><table><tr><td>-</td><td><b>Timing</b></td><td><b>Site[x]</b></td><td><b>Route</b></td><td><b>Dose[x]</b></td></tr><tr><td>*</td><td>Starting 01/05/2011, Do 3 per 1 days</td><td>Entire oral cavity <span>(Details : {SNOMED CT code \'181220002\' = \'181220002\', given as \'Entire oral cavity\'})</span></td><td>Administration of drug or medicament via oral route <span>(Details : {SNOMED CT code \'386359008\' = \'386359008\', given as \'Administration of drug or medicament via oral route\'})</span></td><td>500 mg<span> (Details: http://unitsofmeasure.org code mg = \'??\')</span></td></tr></table><h3>DispenseRequests</h3><table><tr><td>-</td><td><b>ValidityPeriod</b></td><td><b>Quantity</b></td></tr><tr><td>*</td><td>01/05/2011 --&gt; (ongoing)</td><td>90 46992007<span> (Details: SNOMED CT code 46992007 = \'46992007\')</span></td></tr></table></div>"
+  }
+}
+identifier {
+  use {
+    value: OFFICIAL
+  }
+  system {
+    value: "http://www.bmc.nl/portal/prescriptions"
+  }
+  value {
+    value: "order9845343"
+  }
+}
+date_written {
+  value_us: 1304172000000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+status {
+  value: ACTIVE
+}
+patient {
+  patient_id {
+    value: "f001"
+  }
+  display {
+    value: "P. van den Heuvel"
+  }
+}
+prescriber {
+  practitioner_id {
+    value: "f007"
+  }
+  display {
+    value: "S.M. Heps"
+  }
+}
+encounter {
+  encounter_id {
+    value: "f002"
+  }
+  display {
+    value: "encounter who leads to this priscription"
+  }
+}
+reason {
+  codeable_concept {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "444780001"
+      }
+      display {
+        value: "High glucose level in blood"
+      }
+    }
+  }
+}
+medication {
+  reference {
+    medication_id {
+      value: "f003"
+    }
+    display {
+      value: "prescribed medication"
+    }
+  }
+}
+dosage_instruction {
+  timing {
+    repeat {
+      bounds {
+        period {
+          start {
+            value_us: 1304172000000000
+            timezone: "Australia/Sydney"
+            precision: DAY
+          }
+        }
+      }
+      frequency {
+        value: 3
+      }
+      period {
+        value: "1"
+      }
+      period_units {
+        value: D
+      }
+    }
+  }
+  site {
+    codeable_concept {
+      coding {
+        system {
+          value: "http://snomed.info/sct"
+        }
+        code {
+          value: "181220002"
+        }
+        display {
+          value: "Entire oral cavity"
+        }
+      }
+    }
+  }
+  route {
+    coding {
+      system {
+        value: "http://snomed.info/sct"
+      }
+      code {
+        value: "386359008"
+      }
+      display {
+        value: "Administration of drug or medicament via oral route"
+      }
+    }
+  }
+  dose {
+    quantity {
+      value {
+        value: "500"
+      }
+      unit {
+        value: "mg"
+      }
+      system {
+        value: "http://unitsofmeasure.org"
+      }
+      code {
+        value: "mg"
+      }
+    }
+  }
+}
+dispense_request {
+  validity_period {
+    start {
+      value_us: 1304172000000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+  quantity {
+    value {
+      value: "90"
+    }
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "46992007"
+    }
+  }
+}
+

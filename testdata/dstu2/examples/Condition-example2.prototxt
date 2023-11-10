@@ -1,0 +1,61 @@
+id {
+  value: "example2"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>Mild Asthma (Date: 21-Nov 2012)</div>"
+  }
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+}
+code {
+  text {
+    value: "Asthma"
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/condition-category"
+    }
+    code {
+      value: "finding"
+    }
+    display {
+      value: "Finding"
+    }
+  }
+}
+clinical_status {
+  value: "active"
+}
+verification_status {
+  value: CONFIRMED
+}
+severity {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "255604002"
+    }
+    display {
+      value: "Mild"
+    }
+  }
+}
+onset {
+  date_time {
+    value_us: 1352638800000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+

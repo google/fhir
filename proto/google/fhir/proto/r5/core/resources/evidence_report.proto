@@ -1,0 +1,322 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/evidence_report_go_proto";
+
+// Auto-generated from StructureDefinition for EvidenceReport.
+// A EvidenceReport.
+// See http://hl7.org/fhir/StructureDefinition/EvidenceReport
+message EvidenceReport {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/EvidenceReport";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // EvidenceReport.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this EvidenceReport, represented as a globally
+  // unique URI
+  Uri url = 10 [(.google.fhir.proto.fhir_path_warning_constraint) =
+                    "exists() implies matches('^[^|# ]+$')"];
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 12;
+
+  // Unique identifier for the evidence report
+  repeated Identifier identifier = 13;
+
+  // Identifiers for articles that may relate to more than one evidence report
+  repeated Identifier related_identifier = 14;
+
+  // Citation for this report
+  message CiteAsX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Reference reference = 1
+          [(.google.fhir.proto.valid_reference_type) = "Citation"];
+      Markdown markdown = 2;
+    }
+  }
+  CiteAsX cite_as = 15;
+
+  // Kind of report
+  CodeableConcept type = 16;
+
+  // Used for footnotes and annotations
+  repeated Annotation note = 17;
+
+  // Link, description or reference to artifact associated with the report
+  repeated RelatedArtifact related_artifact = 18;
+
+  // Focus of the report
+  message Subject {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Characteristic
+    message Characteristic {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Characteristic code
+      CodeableConcept code = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Characteristic value
+      message ValueX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          Reference reference = 1
+              [(.google.fhir.proto.valid_reference_type) = "Resource"];
+          CodeableConcept codeable_concept = 2;
+          Boolean boolean = 3;
+          Quantity quantity = 4;
+          Range range = 5;
+        }
+      }
+      ValueX value = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Is used to express not the characteristic
+      Boolean exclude = 6;
+
+      // Timeframe for the characteristic
+      Period period = 7;
+    }
+    repeated Characteristic characteristic = 4;
+
+    // Footnotes and/or explanatory notes
+    repeated Annotation note = 5;
+  }
+  Subject subject = 19
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Name of the publisher/steward (organization or individual)
+  String publisher = 20;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 21;
+
+  // Who authored the content
+  repeated ContactDetail author = 22;
+
+  // Who edited the content
+  repeated ContactDetail editor = 23;
+
+  // Who reviewed the content
+  repeated ContactDetail reviewer = 24;
+
+  // Who endorsed the content
+  repeated ContactDetail endorser = 25;
+
+  // Relationships to other compositions/documents
+  message RelatesTo {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // replaces | amends | appends | transforms | replacedWith | amendedWith |
+    // appendedWith | transformedWith
+    message CodeType {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/report-relation-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ReportRelationshipTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    CodeType code = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Target of the relationship
+    message Target {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Target of the relationship URL
+      Uri url = 4;
+
+      // Target of the relationship Identifier
+      Identifier identifier = 5;
+
+      // Target of the relationship Display
+      Markdown display = 6;
+
+      // Target of the relationship Resource reference
+      Reference resource = 7
+          [(.google.fhir.proto.valid_reference_type) = "Resource"];
+    }
+    Target target = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated RelatesTo relates_to = 26;
+
+  // Composition is broken into sections
+  message Section {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Label for section (e.g. for ToC)
+    String title = 4;
+
+    // Classification of section (recommended)
+    CodeableConcept focus = 5;
+
+    // Classification of section by Resource
+    Reference focus_reference = 6
+        [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+    // Who and/or what authored the section
+    repeated Reference author = 7 [
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+      (.google.fhir.proto.valid_reference_type) = "Device",
+      (.google.fhir.proto.valid_reference_type) = "Group",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // Text summary of the section, for human interpretation
+    Narrative text = 8;
+
+    // working | snapshot | changes
+    message ModeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/list-mode";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ListModeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    ModeCode mode = 9;
+
+    // Order of section entries
+    CodeableConcept ordered_by = 10;
+
+    // Extensible classifiers as content
+    repeated CodeableConcept entry_classifier = 11;
+
+    // Reference to resources as content
+    repeated Reference entry_reference = 12
+        [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+    // Quantity as content
+    repeated Quantity entry_quantity = 13;
+
+    // Why the section is empty
+    CodeableConcept empty_reason = 14;
+
+    // Nested Section
+    repeated Section section = 15;
+  }
+  repeated Section section = 27;
+}

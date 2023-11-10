@@ -1,0 +1,550 @@
+//    Copyright 2018 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.dstu2.proto;
+
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/dstu2/codes.proto";
+import "proto/google/fhir/proto/dstu2/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.dstu2.proto";
+option (.google.fhir.proto.fhir_version) = DSTU2;
+
+// Auto-generated from StructureDefinition for BackboneElement.
+// Base for elements defined inside a resource.
+// See http://hl7.org/fhir/StructureDefinition/BackboneElement
+message BackboneElement {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/BackboneElement";
+
+  // xml:id (or equivalent in JSON)
+  Id id = 1;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 2;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 3;
+}
+
+// Auto-generated from StructureDefinition for Element.
+// Base for all elements.
+// See http://hl7.org/fhir/StructureDefinition/Element
+message Element {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.is_abstract_type) = true;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Element";
+
+  // xml:id (or equivalent in JSON)
+  Id id = 1;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 2;
+}
+
+// Auto-generated from StructureDefinition for ElementDefinition.
+// Definition of an element in a resource or extension.
+// See http://hl7.org/fhir/StructureDefinition/ElementDefinition
+message ElementDefinition {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ElementDefinition";
+
+  // xml:id (or equivalent in JSON)
+  Id id = 1;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 2;
+
+  // The path of the element (see the Detailed Descriptions)
+  String path = 3
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // How this element is represented in instances
+  repeated PropertyRepresentationCode representation = 4;
+
+  // Name for this particular element definition (reference target)
+  String name = 5;
+
+  // Name for element to display with or prompt for element
+  String label = 6;
+
+  // Defining code
+  repeated Coding code = 7;
+
+  // This element is sliced - slices follow
+  message Slicing {
+    // xml:id (or equivalent in JSON)
+    Id id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Element values that used to distinguish the slices
+    repeated String discriminator = 3;
+
+    // Text description of how slicing works (or not)
+    String description = 4;
+
+    // If elements must be in same order as slices
+    Boolean ordered = 5;
+
+    // closed | open | openAtEnd
+    SlicingRulesCode rules = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  Slicing slicing = 8;
+
+  // Concise definition for xml presentation
+  String short = 9;
+
+  // Full formal definition as narrative text
+  Markdown definition = 10;
+
+  // Comments about the use of this element
+  Markdown comments = 11;
+
+  // Why is this needed?
+  Markdown requirements = 12;
+
+  // Other names
+  repeated String alias = 13;
+
+  // Minimum Cardinality
+  Integer min = 14;
+
+  // Maximum Cardinality (a number or *)
+  String max = 15;
+
+  // Base definition information for tools
+  message Base {
+    // xml:id (or equivalent in JSON)
+    Id id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Path that identifies the base element
+    String path = 3
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Min cardinality of the base element
+    Integer min = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Max cardinality of the base element
+    String max = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  Base base = 16;
+
+  // Data type and Profile for this element
+  message Type {
+    // xml:id (or equivalent in JSON)
+    Id id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Name of Data type or Resource
+    FHIRDefinedTypeCode code = 3
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Profile (StructureDefinition) to apply (or IG)
+    repeated Uri profile = 4;
+
+    // contained | referenced | bundled - how aggregated
+    repeated AggregationModeCode aggregation = 5;
+  }
+  repeated Type type = 17;
+
+  // To another element constraint (by element.name)
+  String name_reference = 18;
+
+  // Specified value it missing from instance
+  message DefaultValue {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof default_value {
+      Boolean boolean = 1;
+      Integer integer = 2;
+      Decimal decimal = 3;
+      Base64Binary base64_binary = 4;
+      Instant instant = 5;
+      String string_value = 6 [json_name = "string"];
+      Uri uri = 7;
+      Date date = 8;
+      DateTime date_time = 9;
+      Time time = 10;
+      Code code = 11;
+      Oid oid = 12;
+      Id id = 13;
+      UnsignedInt unsigned_int = 14;
+      PositiveInt positive_int = 15;
+      Markdown markdown = 16;
+      Annotation annotation = 17;
+      Attachment attachment = 18;
+      Identifier identifier = 19;
+      CodeableConcept codeable_concept = 20;
+      Coding coding = 21;
+      Quantity quantity = 22;
+      Range range = 23;
+      Period period = 24;
+      Ratio ratio = 25;
+      SampledData sampled_data = 26;
+      Signature signature = 27;
+      HumanName human_name = 28;
+      Address address = 29;
+      ContactPoint contact_point = 30;
+      Timing timing = 31;
+      Reference reference = 32;
+      Meta meta = 33;
+    }
+  }
+  DefaultValue default_value = 19;
+
+  // Implicit meaning when this element is missing
+  Markdown meaning_when_missing = 20;
+
+  // Value must be exactly this
+  message Fixed {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof fixed {
+      Boolean boolean = 1;
+      Integer integer = 2;
+      Decimal decimal = 3;
+      Base64Binary base64_binary = 4;
+      Instant instant = 5;
+      String string_value = 6 [json_name = "string"];
+      Uri uri = 7;
+      Date date = 8;
+      DateTime date_time = 9;
+      Time time = 10;
+      Code code = 11;
+      Oid oid = 12;
+      Id id = 13;
+      UnsignedInt unsigned_int = 14;
+      PositiveInt positive_int = 15;
+      Markdown markdown = 16;
+      Annotation annotation = 17;
+      Attachment attachment = 18;
+      Identifier identifier = 19;
+      CodeableConcept codeable_concept = 20;
+      Coding coding = 21;
+      Quantity quantity = 22;
+      Range range = 23;
+      Period period = 24;
+      Ratio ratio = 25;
+      SampledData sampled_data = 26;
+      Signature signature = 27;
+      HumanName human_name = 28;
+      Address address = 29;
+      ContactPoint contact_point = 30;
+      Timing timing = 31;
+      Reference reference = 32;
+      Meta meta = 33;
+    }
+  }
+  Fixed fixed = 21;
+
+  // Value must have at least these property values
+  message Pattern {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof pattern {
+      Boolean boolean = 1;
+      Integer integer = 2;
+      Decimal decimal = 3;
+      Base64Binary base64_binary = 4;
+      Instant instant = 5;
+      String string_value = 6 [json_name = "string"];
+      Uri uri = 7;
+      Date date = 8;
+      DateTime date_time = 9;
+      Time time = 10;
+      Code code = 11;
+      Oid oid = 12;
+      Id id = 13;
+      UnsignedInt unsigned_int = 14;
+      PositiveInt positive_int = 15;
+      Markdown markdown = 16;
+      Annotation annotation = 17;
+      Attachment attachment = 18;
+      Identifier identifier = 19;
+      CodeableConcept codeable_concept = 20;
+      Coding coding = 21;
+      Quantity quantity = 22;
+      Range range = 23;
+      Period period = 24;
+      Ratio ratio = 25;
+      SampledData sampled_data = 26;
+      Signature signature = 27;
+      HumanName human_name = 28;
+      Address address = 29;
+      ContactPoint contact_point = 30;
+      Timing timing = 31;
+      Reference reference = 32;
+      Meta meta = 33;
+    }
+  }
+  Pattern pattern = 22;
+
+  // Example value: [as defined for type]
+  message Example {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof example {
+      Boolean boolean = 1;
+      Integer integer = 2;
+      Decimal decimal = 3;
+      Base64Binary base64_binary = 4;
+      Instant instant = 5;
+      String string_value = 6 [json_name = "string"];
+      Uri uri = 7;
+      Date date = 8;
+      DateTime date_time = 9;
+      Time time = 10;
+      Code code = 11;
+      Oid oid = 12;
+      Id id = 13;
+      UnsignedInt unsigned_int = 14;
+      PositiveInt positive_int = 15;
+      Markdown markdown = 16;
+      Annotation annotation = 17;
+      Attachment attachment = 18;
+      Identifier identifier = 19;
+      CodeableConcept codeable_concept = 20;
+      Coding coding = 21;
+      Quantity quantity = 22;
+      Range range = 23;
+      Period period = 24;
+      Ratio ratio = 25;
+      SampledData sampled_data = 26;
+      Signature signature = 27;
+      HumanName human_name = 28;
+      Address address = 29;
+      ContactPoint contact_point = 30;
+      Timing timing = 31;
+      Reference reference = 32;
+      Meta meta = 33;
+    }
+  }
+  Example example = 23;
+
+  // Minimum Allowed Value (for some types)
+  message MinValue {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof min_value {
+      Boolean boolean = 1;
+      Integer integer = 2;
+      Decimal decimal = 3;
+      Base64Binary base64_binary = 4;
+      Instant instant = 5;
+      String string_value = 6 [json_name = "string"];
+      Uri uri = 7;
+      Date date = 8;
+      DateTime date_time = 9;
+      Time time = 10;
+      Code code = 11;
+      Oid oid = 12;
+      Id id = 13;
+      UnsignedInt unsigned_int = 14;
+      PositiveInt positive_int = 15;
+      Markdown markdown = 16;
+      Annotation annotation = 17;
+      Attachment attachment = 18;
+      Identifier identifier = 19;
+      CodeableConcept codeable_concept = 20;
+      Coding coding = 21;
+      Quantity quantity = 22;
+      Range range = 23;
+      Period period = 24;
+      Ratio ratio = 25;
+      SampledData sampled_data = 26;
+      Signature signature = 27;
+      HumanName human_name = 28;
+      Address address = 29;
+      ContactPoint contact_point = 30;
+      Timing timing = 31;
+      Reference reference = 32;
+      Meta meta = 33;
+    }
+  }
+  MinValue min_value = 24;
+
+  // Maximum Allowed Value (for some types)
+  message MaxValue {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof max_value {
+      Boolean boolean = 1;
+      Integer integer = 2;
+      Decimal decimal = 3;
+      Base64Binary base64_binary = 4;
+      Instant instant = 5;
+      String string_value = 6 [json_name = "string"];
+      Uri uri = 7;
+      Date date = 8;
+      DateTime date_time = 9;
+      Time time = 10;
+      Code code = 11;
+      Oid oid = 12;
+      Id id = 13;
+      UnsignedInt unsigned_int = 14;
+      PositiveInt positive_int = 15;
+      Markdown markdown = 16;
+      Annotation annotation = 17;
+      Attachment attachment = 18;
+      Identifier identifier = 19;
+      CodeableConcept codeable_concept = 20;
+      Coding coding = 21;
+      Quantity quantity = 22;
+      Range range = 23;
+      Period period = 24;
+      Ratio ratio = 25;
+      SampledData sampled_data = 26;
+      Signature signature = 27;
+      HumanName human_name = 28;
+      Address address = 29;
+      ContactPoint contact_point = 30;
+      Timing timing = 31;
+      Reference reference = 32;
+      Meta meta = 33;
+    }
+  }
+  MaxValue max_value = 25;
+
+  // Max length for strings
+  Integer max_length = 26;
+
+  // Reference to invariant about presence
+  repeated Id condition = 27;
+
+  // Condition that must evaluate to true
+  message Constraint {
+    // xml:id (or equivalent in JSON)
+    Id id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Target of 'condition' reference above
+    Id key = 3 [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Why this constraint necessary or appropriate
+    String requirements = 4;
+
+    // error | warning
+    ConstraintSeverityCode severity = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Human description of constraint
+    String human = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // XPath expression of constraint
+    String xpath = 7
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Constraint constraint = 28;
+
+  // If the element must supported
+  Boolean must_support = 29;
+
+  // If this modifies the meaning of other elements
+  Boolean is_modifier = 30;
+
+  // Include when _summary = true?
+  Boolean is_summary = 31;
+
+  // ValueSet details if this is coded
+  message Binding {
+    // xml:id (or equivalent in JSON)
+    Id id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // required | extensible | preferred | example
+    BindingStrengthCode strength = 3
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Human explanation of the value set
+    String description = 4;
+
+    // Source of value set
+    message ValueSet {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof value_set {
+        Uri uri = 1;
+        Reference reference = 2
+            [(.google.fhir.proto.valid_reference_type) = "ValueSet"];
+      }
+    }
+    ValueSet value_set = 5;
+  }
+  Binding binding = 32;
+
+  // Map element to another set of definitions
+  message Mapping {
+    // xml:id (or equivalent in JSON)
+    Id id = 1;
+
+    // Additional Content defined by implementations
+    repeated Extension extension = 2;
+
+    // Reference to mapping declaration
+    Id identity = 3
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Computable language of mapping
+    MimeTypeCode language = 4;
+
+    // Details of the mapping
+    String map = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Mapping mapping = 33;
+}
+
+// Auto-generated from StructureDefinition for Narrative.
+// A human-readable formatted text, including images.
+// See http://hl7.org/fhir/StructureDefinition/Narrative
+message Narrative {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_COMPLEX_TYPE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Narrative";
+
+  // xml:id (or equivalent in JSON)
+  Id id = 1;
+
+  // Additional Content defined by implementations
+  repeated Extension extension = 2;
+
+  // generated | extensions | additional | empty
+  NarrativeStatusCode status = 3
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Limited xhtml content
+  Xhtml div = 4
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+}

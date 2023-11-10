@@ -1,0 +1,96 @@
+id {
+  value: "example"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>Severe burn of left ear (Date: 24-May 2012)</div>"
+  }
+}
+patient {
+  patient_id {
+    value: "example"
+  }
+}
+code {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "39065001"
+    }
+    display {
+      value: "Burn of ear"
+    }
+  }
+  text {
+    value: "Burnt Ear"
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://hl7.org/fhir/condition-category"
+    }
+    code {
+      value: "diagnosis"
+    }
+    display {
+      value: "Diagnosis"
+    }
+  }
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "439401001"
+    }
+    display {
+      value: "Diagnosis"
+    }
+  }
+}
+verification_status {
+  value: CONFIRMED
+}
+severity {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "24484000"
+    }
+    display {
+      value: "Severe"
+    }
+  }
+}
+onset {
+  date_time {
+    value_us: 1337781600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+}
+body_site {
+  coding {
+    system {
+      value: "http://snomed.info/sct"
+    }
+    code {
+      value: "49521004"
+    }
+    display {
+      value: "Left external ear structure"
+    }
+  }
+  text {
+    value: "Left Ear"
+  }
+}
+

@@ -1,0 +1,145 @@
+id {
+  value: "ER2500"
+}
+text {
+  status {
+    value: GENERATED
+  }
+  div {
+    value: "<div>A human-readable rendering of the PaymentReconciliation</div>"
+  }
+}
+identifier {
+  system {
+    value: "http://www.BenefitsInc.com/fhir/enrollmentresponse"
+  }
+  value {
+    value: "781234"
+  }
+}
+request {
+  uri {
+    value: "http://www.BenefitsInc.com/fhir/eligibility/225476332402"
+  }
+}
+outcome {
+  value: COMPLETE
+}
+disposition {
+  value: "2014 August mid-month settlement."
+}
+created {
+  value_us: 1408111200000000
+  timezone: "Australia/Sydney"
+  precision: DAY
+}
+organization {
+  organization_id {
+    value: "2"
+  }
+}
+request_organization {
+  organization_id {
+    value: "1"
+  }
+}
+detail {
+  type {
+    system {
+      value: "http://hl7.org/fhir/paymenttype"
+    }
+    code {
+      value: "payment"
+    }
+  }
+  request {
+    uri {
+      value: "http://www.BenefitsInc.com/fhir/oralhealthclaim/225476332402"
+    }
+  }
+  date {
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  amount {
+    value {
+      value: "1000.00"
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+}
+detail {
+  type {
+    system {
+      value: "http://hl7.org/fhir/paymenttype"
+    }
+    code {
+      value: "payment"
+    }
+  }
+  request {
+    uri {
+      value: "http://www.BenefitsInc.com/fhir/oralhealthclaim/225476332699"
+    }
+  }
+  date {
+    value_us: 1407765600000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  amount {
+    value {
+      value: "4000.00"
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+}
+detail {
+  type {
+    system {
+      value: "http://hl7.org/fhir/paymenttype"
+    }
+    code {
+      value: "advance"
+    }
+  }
+  date {
+    value_us: 1408111200000000
+    timezone: "Australia/Sydney"
+    precision: DAY
+  }
+  amount {
+    value {
+      value: "-1500.00"
+    }
+    system {
+      value: "urn:iso:std:iso:4217"
+    }
+    code {
+      value: "USD"
+    }
+  }
+}
+total {
+  value {
+    value: "3500.00"
+  }
+  system {
+    value: "urn:iso:std:iso:4217"
+  }
+  code {
+    value: "USD"
+  }
+}
+
