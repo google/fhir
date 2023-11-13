@@ -15,7 +15,6 @@ go_library(
         "//go/jsonformat/errorreporter",
         "//go/jsonformat/internal/jsonpbhelper",
         "//proto/google/fhir/proto:annotations_go_proto",
-        "//proto/google/fhir/proto/dstu2:datatypes_go_proto",  # _strip
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",
         "//proto/google/fhir/proto/stu3:datatypes_go_proto",
         "@org_bitbucket_creachadair_stringset//:go_default_library",
@@ -28,7 +27,6 @@ go_test(
     name = "fhirvalidate_test",
     size = "small",
     srcs = [
-        "fhirvalidate_r2_test.go",  # _strip
         "fhirvalidate_test.go",
     ],
     embed = [":fhirvalidate"],
@@ -36,9 +34,6 @@ go_test(
         "//go/fhirversion",
         "//go/jsonformat/errorreporter",
         "//go/jsonformat/internal/jsonpbhelper",
-        "//proto/google/fhir/proto/dstu2:codes_go_proto",  # _strip
-        "//proto/google/fhir/proto/dstu2:datatypes_go_proto",  # _strip
-        "//proto/google/fhir/proto/dstu2:resources_go_proto",  # _strip
         "//proto/google/fhir/proto/r4/core:codes_go_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_go_proto",

@@ -50,45 +50,11 @@ import (
 const (
 	timeZone               = "Australia/Sydney"
 	oneofResourceProtopath = "oneof_resource"
-	// _strip_begin
-	// fhir_comments is a special meta field in the DSTU2 spec that should typically be ignored.
-	fhirCommentsKey = "fhir_comments"
-	// _strip_end
 	jsonExt     = "json"
 	txtprotoExt = "prototxt"
 )
 
 var (
-	// _strip_begin
-	dstu2Ignores = stringset.New(
-		// Invalid "value_integer" JSON field.
-		"Bundle-dataelements",
-		"DataElement-integer.value",
-		// Contains reference to invalid resource.
-		"ImplementationGuide-fhir",
-		// Invalid id.
-		"SearchParameter-observation-genetics-cg-prf-1a-Observation-chromosome-genomicstart",
-		"SearchParameter-observation-genetics-cg-prf-1a-Observation-condition-gene-dnavariant",
-		"SearchParameter-observation-genetics-cg-prf-1a-Observation-gene-amino-acid-change",
-		// Missing required field "base".
-		"SearchParameter-valueset-extensions-ValueSet-workflow",
-		"SearchParameter-valueset-extensions-ValueSet-keyword",
-		"SearchParameter-valueset-extensions-ValueSet-end",
-		"SearchParameter-valueset-extensions-ValueSet-effective",
-		"SearchParameter-valueset-extensions-ValueSet-author",
-		"SearchParameter-questionnaire-extensions-Questionnaire-deReference",
-		"SearchParameter-questionnaire-extensions-Questionnaire-category",
-		"SearchParameter-organization-extensions-Organization-alias",
-		"SearchParameter-location-extensions-Location-alias",
-		// Missing required field "resourceType".
-		"package",
-		// Invalid "license" JSON field.
-		"ig-r4",
-		// Other ignores.
-		"Bundle-valuesets",
-		"ValueSet-example-expansion",
-	)
-	// _strip_end
 	stu3Ignores = stringset.New(
 		// Invalid "value_integer" JSON field.
 		"Bundle-dataelements",
@@ -171,7 +137,6 @@ var (
 	)
 
 	versionToJSONPath = map[fhirversion.Version]string{
-		fhirversion.DSTU2: "spec/hl7.fhir.core/1.0.2/package/", // _strip
 		fhirversion.STU3:  "spec/hl7.fhir.core/3.0.1/package/",
 		fhirversion.R4:    "spec/hl7.fhir.r4.examples/4.0.1/package/",
 	}
@@ -421,23 +386,6 @@ func testUnmarshal(t *testing.T, name string, ver fhirversion.Version) {
 	}
 }
 
-// _strip_begin
-func TestMarshalUnmarshalIdentity_DSTU2(t *testing.T) {
-	t.Parallel()
-	tests := readTestCaseFileNames(t, versionToJSONPath[fhirversion.DSTU2])
-	for _, tc := range tests {
-		tc := tc
-		t.Run(tc, func(t *testing.T) {
-			t.Parallel()
-			if dstu2Ignores.Contains(tc) {
-				t.Skipf("Skipping %s", tc)
-			}
-			testMarshalUnmarshalIdentity(t, tc, fhirversion.DSTU2)
-		})
-	}
-}
-
-// _strip_end
 func TestMarshalUnmarshalIdentity_STU3(t *testing.T) {
 	t.Parallel()
 	tests := readTestCaseFileNames(t, versionToJSONPath[fhirversion.STU3])
@@ -687,20 +635,8 @@ func diffJSONObject(a, b json.RawMessage, indent string) (string, error) {
 	}
 	diff := ""
 	for k, va := range objA {
-		// _strip_begin
-		if k == fhirCommentsKey {
-			continue
-		}
-		// _strip_end
 		vb, ok := objB[k]
 		if !ok {
-			// _strip_begin
-			// Cannot find this field in object B. But if this value only contains fhir_comments,
-			// it's safe to ignore.
-			if onlyContainField(va, fhirCommentsKey) {
-				continue
-			}
-			// _strip_end
 			diff += fmt.Sprintf("%v%v: -%v +nil\n", indent, k, string(va))
 			continue
 		}
@@ -712,11 +648,6 @@ func diffJSONObject(a, b json.RawMessage, indent string) (string, error) {
 		}
 	}
 	for k, vb := range objB {
-		// _strip_begin
-		if k == fhirCommentsKey || onlyContainField(vb, fhirCommentsKey) {
-			continue
-		}
-		// _strip_end
 		diff += fmt.Sprintf("%v%v: -nil +%v\n", indent, k, string(vb))
 	}
 	return diff, nil

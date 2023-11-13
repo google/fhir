@@ -35,9 +35,6 @@ import (
 	r3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto"
 )
 
-// _strip_begin
-// LINT.IfChange
-// _strip_end
 func TestRequiredFields(t *testing.T) {
 	tests := []proto.Message{
 		&r3pb.ContainedResource{
@@ -406,7 +403,3 @@ func TestValidateWithErrorReporter(t *testing.T) {
 		})
 	}
 }
-
-// _strip_begin
-// LINT.ThenChange(fhirvalidate_r2_test.go)
-// _strip_end

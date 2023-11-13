@@ -55,9 +55,6 @@ import (
 	r3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto"
 )
 
-// _strip_begin
-// LINT.IfChange
-// _strip_end
 var (
 	unnestErrorListOpt = cmpopts.AcyclicTransformer("UnnestedErrorList", func(v interface{}) interface{} {
 		if el, ok := v.(jsonpbhelper.UnmarshalErrorList); ok && len(el) == 1 {
@@ -66,7 +63,7 @@ var (
 		return v
 	})
 	basePath = "testdata/jsonformat"
-	allVers  = []fhirversion.Version{fhirversion.DSTU2, fhirversion.STU3, fhirversion.R4} // _replace allVers  = []fhirversion.Version{fhirversion.STU3, fhirversion.R4}
+	allVers  = []fhirversion.Version{fhirversion.STU3, fhirversion.R4}
 )
 
 // TODO(b/135148603): Find a better way to maintain the versioned unit tests.
@@ -2932,7 +2929,3 @@ func ExampleUnmarshaller_UnmarshalR4Streaming() {
 	// exampleID1
 	// exampleID2
 }
-
-// _strip_begin
-// LINT.ThenChange(unmarshaller_r2_test.go)
-// _strip_end

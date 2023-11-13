@@ -1,5 +1,0 @@
-proto_package: "google.fhir.dstu2.proto"
-java_proto_package: "com.google.fhir.dstu2.proto"
-fhir_version: DSTU2
-license: APACHE
-license_date: "2018"

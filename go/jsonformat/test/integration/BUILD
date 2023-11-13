@@ -9,7 +9,6 @@ go_test(
     size = "large",
     srcs = ["integration_test.go"],
     data = [
-        "//spec:dstu2",  # _strip
         "//spec:r4_examples",
         "//spec:stu3",
         "//testdata/r4:bigquery",

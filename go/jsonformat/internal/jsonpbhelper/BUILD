@@ -16,8 +16,6 @@ go_library(
     importpath = "github.com/google/fhir/go/jsonformat/internal/jsonpbhelper",
     deps = [
         "//proto/google/fhir/proto:annotations_go_proto",
-        "//proto/google/fhir/proto/dstu2:datatypes_go_proto",  # _strip
-        "//proto/google/fhir/proto/dstu2:resources_go_proto",  # _strip
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_go_proto",
         "//proto/google/fhir/proto/stu3:datatypes_go_proto",
@@ -39,10 +37,6 @@ go_test(
     ],
     embed = [":jsonpbhelper"],
     deps = [
-        "//proto/google/fhir/proto/dstu2:codes_go_proto",  # _strip
-        "//proto/google/fhir/proto/dstu2:datatypes_go_proto",  # _strip
-        "//proto/google/fhir/proto/dstu2:fhirproto_extensions_go_proto",  # _strip
-        "//proto/google/fhir/proto/dstu2:resources_go_proto",  # _strip
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:basic_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:patient_go_proto",

@@ -32,37 +32,28 @@ import (
 	"bitbucket.org/creachadair/stringset"
 
 	apb "github.com/google/fhir/go/proto/google/fhir/proto/annotations_go_proto"
-	d2pb "github.com/google/fhir/go/proto/google/fhir/proto/dstu2/datatypes_go_proto" // _strip
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 )
 
 var (
 	stringMessageNames = collectDescriptorNames(
-		&d2pb.String{}, // _strip
 		&d3pb.String{}, &d4pb.String{})
 	unsignedIntMessageNames = collectDescriptorNames(
-		&d2pb.UnsignedInt{}, // _strip
 		&d3pb.UnsignedInt{}, &d4pb.UnsignedInt{})
 	positiveIntMessageNames = collectDescriptorNames(
-		&d2pb.PositiveInt{}, // _strip
 		&d3pb.PositiveInt{}, &d4pb.PositiveInt{})
 	intMessageNames = unsignedIntMessageNames.Union(positiveIntMessageNames)
 	oidMessageNames = collectDescriptorNames(
-		&d2pb.Oid{}, // _strip
 		&d3pb.Oid{}, &d4pb.Oid{})
 	idMessageNames = collectDescriptorNames(
-		&d2pb.Id{}, // _strip
 		&d3pb.Id{}, &d4pb.Id{})
 	uuidMessageNames = collectDescriptorNames(
-		&d2pb.Uuid{}, // _strip
 		&d3pb.Uuid{}, &d4pb.Uuid{})
 	codeMessageNames = collectDescriptorNames(
-		&d2pb.Code{}, // _strip
 		&d3pb.Code{}, &d4pb.Code{})
 	stringRegexMessageNames = oidMessageNames.Union(idMessageNames).Union(uuidMessageNames).Union(codeMessageNames)
 	urlMessageNames         = collectDescriptorNames(
-		&d2pb.Uri{}, // _strip
 		&d3pb.Uri{}, &d4pb.Uri{}, &d4pb.Url{}, &d4pb.Canonical{})
 	validatedTypes stringset.Set
 )

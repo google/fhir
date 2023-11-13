@@ -154,13 +154,6 @@ T ReadProto(absl::string_view filename) {
   return result;
 }
 
-// _strip_begin
-template <class T>
-T ReadDSTU2Proto(absl::string_view filename) {
-  return ReadProto<T>(absl::StrCat("testdata/dstu2/", filename));
-}
-// _strip_end
-
 template <class T>
 T ReadStu3Proto(absl::string_view filename) {
   return ReadProto<T>(absl::StrCat("testdata/stu3/", filename));
