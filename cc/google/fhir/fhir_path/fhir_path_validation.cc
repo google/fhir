@@ -29,6 +29,7 @@
 #include "google/fhir/annotations.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/fhir_path/fhir_path.h"
+#include "google/fhir/json_util.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
@@ -320,10 +321,11 @@ absl::Status ValidateConstraint(const internal::WorkspaceMessage& message,
 }
 
 std::string PathTerm(const Message& message, const FieldDescriptor* field) {
-  return IsContainedResource(message) ||
-                 IsChoiceTypeContainer(message.GetDescriptor())
-             ? absl::StrCat("ofType(", field->message_type()->name(), ")")
-             : field->json_name();
+  if (IsContainedResource(message) ||
+      IsChoiceTypeContainer(message.GetDescriptor())) {
+    return absl::StrCat("ofType(", field->message_type()->name(), ")");
+  }
+  return FhirJsonName(field);
 }
 
 namespace {

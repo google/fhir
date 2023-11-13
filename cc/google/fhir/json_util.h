@@ -19,6 +19,7 @@
 
 #include <string>
 
+#include "google/protobuf/descriptor.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/string_view.h"
 
@@ -43,6 +44,9 @@ namespace google::fhir {
 // touch it is left as is. See section 9:
 // http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf
 absl::StatusOr<std::string> ToJsonStringValue(absl::string_view raw_value);
+
+// Given a proto field, returns the name of the field in FHIR JSON.
+const std::string& FhirJsonName(const google::protobuf::FieldDescriptor* field);
 
 }  // namespace google::fhir
 

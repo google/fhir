@@ -16,12 +16,18 @@
 
 #include "google/fhir/json_util.h"
 
-#include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "google/fhir/status/status.h"
+#include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
 
 namespace google::fhir {
 namespace {
+
+using ::google::fhir::r4::core::Observation;
+using ::google::fhir::r4::core::Patient;
+using ::google::fhir::r4::core::Reference;
 
 void TestToJsonStringValue(std::string input, std::string expected) {
   absl::StatusOr<std::string> result = ToJsonStringValue(input);
@@ -52,6 +58,32 @@ TEST(JsonUtilTest, ToJsonStringValueInvalidControlCharactersReturnsError) {
   std::string with_null_char{"foo\0bar", 7};
   absl::StatusOr<std::string> result = ToJsonStringValue(with_null_char);
   EXPECT_FALSE(result.ok());
+}
+
+TEST(JsonUtilTest, FhirJsonNameNonReferenceSucceeds) {
+  EXPECT_EQ(
+      FhirJsonName(Patient::GetDescriptor()->FindFieldByName("implicit_rules")),
+      "implicitRules");
+}
+
+TEST(JsonUtilTest, FhirJsonNameNonReferenceWithExplicitJsonNameSucceeds) {
+  EXPECT_EQ(FhirJsonName(Observation::Component::ValueX::GetDescriptor()
+                             ->FindFieldByName("string_value")),
+            "string");
+}
+
+TEST(JsonUtilTest, FhirJsonNameReferenceUriSucceeds) {
+  EXPECT_EQ(FhirJsonName(Reference::GetDescriptor()->FindFieldByName("uri")),
+            "reference");
+}
+
+TEST(JsonUtilTest, FhirJsonNameReferenceOtherFieldSucceeds) {
+  EXPECT_EQ(
+      FhirJsonName(Reference::GetDescriptor()->FindFieldByName("fragment")),
+      "fragment");
+  EXPECT_EQ(
+      FhirJsonName(Reference::GetDescriptor()->FindFieldByName("patient_id")),
+      "patientId");
 }
 
 }  // namespace

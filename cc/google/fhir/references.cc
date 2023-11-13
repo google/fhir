@@ -16,8 +16,21 @@
 
 #include "google/fhir/references.h"
 
+#include <memory>
+#include <string>
+
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/message.h"
+#include "absl/memory/memory.h"
+#include "absl/status/status.h"
 #include "absl/status/statusor.h"
+#include "absl/strings/str_cat.h"
+#include "absl/types/optional.h"
+#include "google/fhir/proto_util.h"
+#include "google/fhir/status/status.h"
+#include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
+#include "re2/re2.h"
 
 namespace google {
 namespace fhir {

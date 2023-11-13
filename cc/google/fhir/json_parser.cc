@@ -17,6 +17,7 @@
 #include <ctype.h>
 
 #include <cctype>
+#include <cstdint>
 #include <iosfwd>
 #include <memory>
 #include <string>
@@ -24,12 +25,15 @@
 #include <utility>
 
 #include "google/protobuf/any.pb.h"
+#include "absl/base/attributes.h"
+#include "absl/base/const_init.h"
 #include "absl/container/flat_hash_map.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
+#include "absl/strings/string_view.h"
 #include "absl/synchronization/mutex.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/core_resource_registry.h"
@@ -39,6 +43,7 @@
 #include "google/fhir/json/json_sax_handler.h"
 #include "google/fhir/json_format.h"
 #include "google/fhir/json_format_results.h"
+#include "google/fhir/json_util.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/r4/profiles.h"
 #include "google/fhir/references.h"
@@ -75,6 +80,7 @@ MakeFieldMap(const Descriptor* descriptor) {
       std::unordered_map<std::string, const FieldDescriptor*>>();
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
+    const std::string& json_name = FhirJsonName(field);
     if (IsChoiceType(field)) {
       std::unique_ptr<
           const std::unordered_map<std::string, const FieldDescriptor*>>
@@ -85,23 +91,23 @@ MakeFieldMap(const Descriptor* descriptor) {
           // Convert primitive extension field name to field on choice type,
           // e.g., value + _boolean -> _valueBoolean for Extension.value.
           child_field_name[1] = std::toupper(child_field_name[1]);
-          (*field_map)[absl::StrCat("_", field->json_name(),
+          (*field_map)[absl::StrCat("_", json_name,
                                     child_field_name.substr(1))] = field;
         } else {
           // For non-primitive, just append them together as camelcase, e.g.,
           // value + boolean = valueBoolean
           child_field_name[0] = std::toupper(child_field_name[0]);
-          (*field_map)[absl::StrCat(field->json_name(), child_field_name)] =
-              field;
+          (*field_map)[absl::StrCat(json_name, child_field_name)] = field;
         }
       }
     } else {
-      (*field_map)[field->json_name()] = field;
+      (*field_map)[json_name] = field;
+
       if (field->type() == FieldDescriptor::TYPE_MESSAGE &&
           IsPrimitive(field->message_type())) {
         // Fhir JSON represents extensions to primitive fields as separate
         // standalone JSON objects, keyed by the "_" + field name.
-        (*field_map)["_" + field->json_name()] = field;
+        (*field_map)["_" + json_name] = field;
       }
     }
   }

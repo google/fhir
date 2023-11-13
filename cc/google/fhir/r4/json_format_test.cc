@@ -16,7 +16,9 @@
 
 #include "google/fhir/r4/json_format.h"
 
+#include <fstream>
 #include <memory>
+#include <sstream>
 #include <string>
 #include <unordered_set>
 #include <utility>
@@ -26,8 +28,10 @@
 #include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/log/check.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/string_view.h"
 #include "absl/strings/substitute.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/json/fhir_json.h"
@@ -37,8 +41,9 @@
 #include "google/fhir/r4/operation_error_reporter.h"
 #include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/r4/profiles.h"
+#include "google/fhir/r4/resource_validation.h"
 #include "google/fhir/status/status.h"
-#include "google/fhir/test_helper.h"
+#include "google/fhir/status/statusor.h"
 #include "google/fhir/testutil/generator.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
@@ -212,6 +217,24 @@ using ::testing::Eq;
 using ::testing::UnorderedPointwise;
 
 static const char* const kTimeZoneString = "Australia/Sydney";
+
+inline std::string ReadFile(absl::string_view filename) {
+  std::ifstream infile;
+  infile.open(
+      absl::StrCat(getenv("TEST_SRCDIR"), "/com_google_fhir/", filename));
+
+  std::ostringstream out;
+  out << infile.rdbuf();
+  return out.str();
+}
+
+template <class T>
+T ReadProto(absl::string_view filename) {
+  T result;
+  CHECK(google::protobuf::TextFormat::ParseFromString(ReadFile(filename), &result))
+      << "Failed to parse proto in file " << filename;
+  return result;
+}
 
 // json_path should be relative to fhir root
 template <typename R>
@@ -1710,7 +1733,7 @@ TEST(JsonFormatR4Test, PrintAndParseAllResources) {
   generator_params.optional_set_ratio_per_level = 0.05;
   generator_params.max_string_length = 200;
   auto value_provider =
-      absl::make_unique<google::fhir::testutil::RandomValueProvider>(
+      std::make_unique<google::fhir::testutil::RandomValueProvider>(
           generator_params);
 
   google::fhir::testutil::FhirGenerator generator(
@@ -1927,6 +1950,116 @@ TEST(JsonFormatR4Test,
 
   EXPECT_THAT(outcome,
               IgnoringRepeatedFieldOrdering(EqualsProto(expected_outcome)));
+}
+
+TEST(JsonFormatR4Test, ParseRelativeReferenceSucceeds) {
+  std::string raw_json = R"json(
+  {
+  "resourceType": "Observation",
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Amy Shaw"
+  }})json";
+
+  OperationOutcome outcome;
+  OperationOutcomeErrorHandler handler(&outcome);
+  Observation resource;
+  absl::Status merge_status = ::google::fhir::r4::MergeJsonFhirStringIntoProto(
+      raw_json, &resource, absl::LocalTimeZone(), true, handler);
+
+  Observation expected;
+  ASSERT_TRUE(
+      google::protobuf::TextFormat::ParseFromString(R"pb(
+                                            subject {
+                                              patient_id { value: "example" }
+                                              display { value: "Amy Shaw" }
+                                            }
+                                          )pb",
+                                          &expected));
+
+  EXPECT_THAT(resource, EqualsProto(expected));
+}
+
+TEST(JsonFormatR4Test, ParseAbsoluteReferenceSucceeds) {
+  std::string raw_json = R"json(
+  {
+  "resourceType": "Observation",
+  "subject": {
+    "reference": "www.patient.org/123",
+    "display": "Amy Shaw"
+  }})json";
+
+  OperationOutcome outcome;
+  OperationOutcomeErrorHandler handler(&outcome);
+  Observation resource;
+  absl::Status merge_status = ::google::fhir::r4::MergeJsonFhirStringIntoProto(
+      raw_json, &resource, absl::LocalTimeZone(), true, handler);
+
+  Observation expected;
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"pb(
+        subject {
+          uri { value: "www.patient.org/123" }
+          display { value: "Amy Shaw" }
+        }
+      )pb",
+      &expected));
+
+  EXPECT_THAT(resource, EqualsProto(expected));
+}
+
+TEST(JsonFormatR4Test, PrintRelativeReferenceSucceeds) {
+  Observation proto_form;
+  ASSERT_TRUE(
+      google::protobuf::TextFormat::ParseFromString(R"pb(
+                                            subject {
+                                              patient_id { value: "example" }
+                                              display { value: "Amy Shaw" }
+                                            }
+                                          )pb",
+                                          &proto_form));
+
+  OperationOutcome outcome;
+  OperationOutcomeErrorHandler handler(&outcome);
+  Observation resource;
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string json,
+      ::google::fhir::r4::PrettyPrintFhirToJsonString(proto_form));
+
+  EXPECT_EQ(json, R"json({
+  "resourceType": "Observation",
+  "subject": {
+    "reference": "Patient/example",
+    "display": "Amy Shaw"
+  }
+})json");
+}
+
+TEST(JsonFormatR4Test, PrintAbsoluteReferenceSucceeds) {
+  Observation proto_form;
+  ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+      R"pb(
+        subject {
+          uri { value: "www.patient.org/123" }
+          display { value: "Amy Shaw" }
+        }
+      )pb",
+      &proto_form));
+
+  OperationOutcome outcome;
+  OperationOutcomeErrorHandler handler(&outcome);
+  Observation resource;
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string json,
+      ::google::fhir::r4::PrettyPrintFhirToJsonString(proto_form));
+
+  EXPECT_EQ(json, R"json({
+  "resourceType": "Observation",
+  "subject": {
+    "reference": "www.patient.org/123",
+    "display": "Amy Shaw"
+  }
+})json");
 }
 
 }  // namespace

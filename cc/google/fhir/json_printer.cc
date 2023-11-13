@@ -36,6 +36,7 @@
 #include "google/fhir/extensions.h"
 #include "google/fhir/fhir_types.h"
 #include "google/fhir/json_format.h"
+#include "google/fhir/json_util.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/r4/codeable_concepts.h"
@@ -269,7 +270,7 @@ class Printer {
       // to query all possible choice types in a single query.
       if (IsChoiceType(field) && json_format_ == kFormatPure) {
         FHIR_RETURN_IF_ERROR(PrintChoiceTypeField(
-            reflection->GetMessage(proto, field), field->json_name()));
+            reflection->GetMessage(proto, field), FhirJsonName(field)));
       } else {
         FHIR_RETURN_IF_ERROR(PrintField(proto, field, print_as_string));
       }
@@ -347,7 +348,7 @@ class Printer {
       } else {
         int field_size = reflection->FieldSize(containing_proto, field);
 
-        PrintFieldPreamble(field->json_name());
+        PrintFieldPreamble(FhirJsonName(field));
         output_ += "[";
         Indent();
         AddNewline();
@@ -370,9 +371,9 @@ class Printer {
       if (IsPrimitive(field->message_type())) {
         FHIR_RETURN_IF_ERROR(
             PrintPrimitiveField(reflection->GetMessage(containing_proto, field),
-                                field->json_name()));
+                                FhirJsonName(field)));
       } else {
-        PrintFieldPreamble(field->json_name());
+        PrintFieldPreamble(FhirJsonName(field));
         FHIR_RETURN_IF_ERROR(
             PrintNonPrimitive(reflection->GetMessage(containing_proto, field)));
       }
@@ -432,7 +433,7 @@ class Printer {
     }
     const google::protobuf::FieldDescriptor* value_field =
         choice_reflection->GetOneofFieldDescriptor(choice_container, oneof);
-    std::string oneof_field_name = value_field->json_name();
+    std::string oneof_field_name = FhirJsonName(value_field);
     oneof_field_name[0] = toupper(oneof_field_name[0]);
 
     if (IsPrimitive(value_field->message_type())) {
@@ -474,7 +475,7 @@ class Printer {
     }
 
     if (non_null_values_found) {
-      PrintFieldPreamble(field->json_name());
+      PrintFieldPreamble(FhirJsonName(field));
       output_ += "[";
       Indent();
       for (const JsonPrimitive& json_primitive : json_primitives) {
@@ -493,7 +494,7 @@ class Printer {
         output_ += ",";
         AddNewline();
       }
-      PrintFieldPreamble(absl::StrCat("_", field->json_name()));
+      PrintFieldPreamble(absl::StrCat("_", FhirJsonName(field)));
       output_ += "[";
       Indent();
       for (const JsonPrimitive& json_primitive : json_primitives) {

@@ -15,9 +15,12 @@
 #include "google/fhir/fhir_path/utils.h"
 
 #include "google/protobuf/any.pb.h"
+#include "google/protobuf/descriptor.h"
 #include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
+#include "google/fhir/annotations.h"
+#include "google/fhir/json_util.h"
 #include "google/fhir/references.h"
 #include "google/fhir/util.h"
 
@@ -27,8 +30,8 @@ namespace fhir_path {
 namespace internal {
 
 using ::absl::NotFoundError;
-using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Descriptor;
+using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
 
@@ -68,15 +71,14 @@ absl::Status OneofMessageFromContainer(const Message& container_message,
 
 namespace {
 
-// Returns true if `message` is a Reference and field_descriptor is a field
-// within `message` that resolves to 'reference' in FHIR.
-// Note: the json_name corresponds to fields in FHIR.
-bool IsReference(const Message& message,
-                 const google::protobuf::FieldDescriptor& field_descriptor) {
+// Returns true if `message` is a Reference and field_descriptor is the `uri`
+// field.
+bool IsReferenceUri(const Message& message,
+                    const google::protobuf::FieldDescriptor& field_descriptor) {
   return message.GetDescriptor()->options().GetExtension(
              ::google::fhir::proto::fhir_structure_definition_url) ==
              "http://hl7.org/fhir/StructureDefinition/Reference" &&
-         field_descriptor.json_name() == "reference";
+         field_descriptor.name() == "uri";
 }
 
 }  // namespace
@@ -95,7 +97,7 @@ absl::Status RetrieveField(
   // If asked to retrieve a reference, retrieve a String value with a standard
   // representation (i.e. ResourceType/id) regardless of how the reference is
   // stored in the source message.
-  if (IsReference(root, field)) {
+  if (IsReferenceUri(root, field)) {
     Message* string_message = message_factory(field.message_type());
     if (string_message == nullptr) {
       return absl::InternalError(
@@ -162,7 +164,7 @@ bool HasFieldWithJsonName(const Descriptor* descriptor,
 const FieldDescriptor* FindFieldByJsonName(const Descriptor* descriptor,
                                            absl::string_view json_name) {
   for (int i = 0; i < descriptor->field_count(); ++i) {
-    if (json_name == descriptor->field(i)->json_name()) {
+    if (json_name == FhirJsonName(descriptor->field(i))) {
       return descriptor->field(i);
     }
   }
