@@ -95,7 +95,7 @@ inline constexpr bool IsAntlrAnyOrStdAny =
 template <typename F>
 std::enable_if_t<IsAntlrAnyOrStdAny<F>, bool> AnyHasValue(const F& any) {
   if constexpr (std::is_same_v<antlrcpp::Any, std::any>) {
-    return any.has_value();
+    return any.has_value() && any.type() != typeid(nullptr);
   } else {
     return !any.isNull();
   }

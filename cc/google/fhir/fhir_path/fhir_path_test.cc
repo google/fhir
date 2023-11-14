@@ -1766,6 +1766,9 @@ TYPED_TEST(FhirPathTest, TestSelectValidatesArguments) {
 }
 
 TYPED_TEST(FhirPathTest, TestIif) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.iif(true, foo)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+
   // 2 parameter invocations
   EXPECT_THAT(TestFixture::Evaluate("iif(true, 1)"), EvalsToInteger(1));
   EXPECT_THAT(TestFixture::Evaluate("iif(false, 1)"), EvalsToEmpty());
