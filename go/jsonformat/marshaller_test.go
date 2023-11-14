@@ -17,6 +17,7 @@ package jsonformat
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"testing"
 
@@ -24,7 +25,6 @@ import (
 	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/testing/protocmp"
 

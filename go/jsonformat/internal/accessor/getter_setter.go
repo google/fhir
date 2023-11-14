@@ -16,17 +16,17 @@
 package accessor
 
 import (
+	"fmt"
 	"reflect"
 	"strings"
 
-	"github.com/pkg/errors"
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 func firstFieldDesc(ty protoreflect.MessageDescriptor, fields ...string) (protoreflect.FieldDescriptor, []string, error) {
 	if len(fields) == 0 {
-		return nil, nil, errors.Errorf("none given field, at least one field is required")
+		return nil, nil, fmt.Errorf("none given field, at least one field is required")
 	}
 	f := fields[0]
 	fd := ty.Fields().ByName(protoreflect.Name(f))
@@ -35,16 +35,16 @@ func firstFieldDesc(ty protoreflect.MessageDescriptor, fields ...string) (protor
 		// try with oneof fields
 		oneof := ty.Oneofs().ByName(protoreflect.Name(f))
 		if oneof == nil {
-			return nil, nil, errors.Errorf("field: %v not found in %v", f, ty.FullName())
+			return nil, nil, fmt.Errorf("field: %v not found in %v", f, ty.FullName())
 		}
 		if len(fields) < 1 {
-			return nil, nil, errors.Errorf("not enough fields given to get field through 'oneof': %v in %v", f, ty.FullName())
+			return nil, nil, fmt.Errorf("not enough fields given to get field through 'oneof': %v in %v", f, ty.FullName())
 		}
 		f2 := fields[0]
 		fields = fields[1:]
 		fd = oneof.Fields().ByName(protoreflect.Name(f2))
 		if fd == nil {
-			return nil, nil, errors.Errorf("field: %v not found in 'oneof' field %v of %v", f2, f, ty.FullName())
+			return nil, nil, fmt.Errorf("field: %v not found in 'oneof' field %v of %v", f2, f, ty.FullName())
 		}
 	}
 	return fd, fields, nil
@@ -53,18 +53,18 @@ func firstFieldDesc(ty protoreflect.MessageDescriptor, fields ...string) (protor
 func getNonRepeatedFieldValue(rpb protoreflect.Message, fields []string, validKinds ...protoreflect.Kind) (protoreflect.Value, error) {
 	var err error
 	if len(fields) == 0 {
-		return protoreflect.Value{}, errors.Errorf("none given field, at least one field is required")
+		return protoreflect.Value{}, fmt.Errorf("none given field, at least one field is required")
 	}
 	if len(fields) > 1 {
 		rpb, err = getMessage(rpb, false, fields[0:len(fields)-1]...)
 		if err != nil {
-			return protoreflect.Value{}, errors.Wrapf(err, "getting parent message")
+			return protoreflect.Value{}, fmt.Errorf("getting parent message: %w", err)
 		}
 	}
 	f := fields[len(fields)-1]
 	fd := rpb.Descriptor().Fields().ByName(protoreflect.Name(f))
 	if fd == nil {
-		return protoreflect.Value{}, errors.Errorf("field: %v not found in %v", f, rpb.Descriptor().FullName())
+		return protoreflect.Value{}, fmt.Errorf("field: %v not found in %v", f, rpb.Descriptor().FullName())
 	}
 	isValidKind := false
 	for _, k := range validKinds {
@@ -74,13 +74,13 @@ func getNonRepeatedFieldValue(rpb protoreflect.Message, fields []string, validKi
 		}
 	}
 	if !isValidKind {
-		return protoreflect.Value{}, errors.Errorf("field: %v in %v is of kind: %v, valid kinds are: %v", fd.Name(), rpb.Descriptor().FullName(), fd.Kind(), validKinds)
+		return protoreflect.Value{}, fmt.Errorf("field: %v in %v is of kind: %v, valid kinds are: %v", fd.Name(), rpb.Descriptor().FullName(), fd.Kind(), validKinds)
 	}
 	if fd.IsList() {
-		return protoreflect.Value{}, errors.Errorf("field: %v in %v is repeated", fd.Name(), rpb.Descriptor().FullName())
+		return protoreflect.Value{}, fmt.Errorf("field: %v in %v is repeated", fd.Name(), rpb.Descriptor().FullName())
 	}
 	if fd.IsMap() {
-		return protoreflect.Value{}, errors.Errorf("field: %v in %v is a map", fd.Name(), rpb.Descriptor().FullName())
+		return protoreflect.Value{}, fmt.Errorf("field: %v in %v is a map", fd.Name(), rpb.Descriptor().FullName())
 	}
 	return rpb.Get(fd), nil
 }
@@ -94,20 +94,20 @@ func getNonRepeatedFieldValue(rpb protoreflect.Message, fields []string, validKi
 func getMessage(rpb protoreflect.Message, populateIfMissing bool, fields ...string) (protoreflect.Message, error) {
 	fd, fields, err := firstFieldDesc(rpb.Descriptor(), fields...)
 	if err != nil {
-		return nil, errors.Wrap(err, "getting field descriptor")
+		return nil, fmt.Errorf("getting field descriptor: %w", err)
 	}
 	if fd.Kind() != protoreflect.MessageKind {
-		return nil, errors.Errorf("field: %v in %v is not message type", fd.Name(), rpb.Descriptor().FullName())
+		return nil, fmt.Errorf("field: %v in %v is not message type", fd.Name(), rpb.Descriptor().FullName())
 	}
 	if fd.IsList() {
-		return nil, errors.Errorf("field: %v in %v is repeated", fd.Name(), rpb.Descriptor().FullName())
+		return nil, fmt.Errorf("field: %v in %v is repeated", fd.Name(), rpb.Descriptor().FullName())
 	}
 	if fd.IsMap() {
-		return nil, errors.Errorf("field: %v in %v is a map", fd.Name(), rpb.Descriptor().FullName())
+		return nil, fmt.Errorf("field: %v in %v is a map", fd.Name(), rpb.Descriptor().FullName())
 	}
 	if !rpb.Has(fd) {
 		if !populateIfMissing {
-			return nil, errors.Errorf("field: %v in %v is not populated", fd.Name(), rpb.Descriptor().FullName())
+			return nil, fmt.Errorf("field: %v in %v is not populated", fd.Name(), rpb.Descriptor().FullName())
 		}
 		emptyMsg := reflect.New(proto.MessageType(string(fd.Message().FullName())).Elem()).Interface().(proto.Message)
 		rpb.Set(fd, protoreflect.ValueOf(proto.MessageReflect(emptyMsg)))
@@ -116,7 +116,7 @@ func getMessage(rpb protoreflect.Message, populateIfMissing bool, fields ...stri
 	if len(fields) > 0 {
 		ret, err = getMessage(ret, populateIfMissing, fields...)
 		if err != nil {
-			return nil, errors.Wrapf(err, "field %v", fd.Name())
+			return nil, fmt.Errorf("field %v: %w", fd.Name(), err)
 		}
 	}
 	return ret, nil
@@ -128,49 +128,64 @@ func getMessage(rpb protoreflect.Message, populateIfMissing bool, fields ...stri
 // GetMessage can handle OneOf fields, given either the inner concrete field name or the oneof
 // field name AND the inner concrete field name.
 // GetMessage returns error in following cases:
-// 1. No field is given.
-// 2. The nested field pointed by the path is not of message type (i.e. the field is of primitive
-//    types like string, []byte, int, etc)
-// 3. The nested field pointed by the path is a repeated field or is a map.
-// 4. The path points to/through a field that does not exist.
-// 5. The path points to/through a field that is not populated.
+//  1. No field is given.
+//  2. The nested field pointed by the path is not of message type (i.e. the field is of primitive
+//     types like string, []byte, int, etc)
+//  3. The nested field pointed by the path is a repeated field or is a map.
+//  4. The path points to/through a field that does not exist.
+//  5. The path points to/through a field that is not populated.
 //
 // Example, assume we have a fully populated Foo message: foo, and its reflection: rfoo:
-// message Foo {
-//   message Bar {
-//     message Xyz {
-//       string field_a;
-//     }
-//     Xyz field_b;
-//   }
-//   Bar field_c;
-//   repeated Bar field_d;
-//   message Bar2 {
-//     string bar2_content
-//   }
-//   oneof field_one_of {
-//     Bar field_one_of_bar;
-//     Bar2 field_one_of_bar2;
-//   }
-// }
+//
+//	message Foo {
+//	  message Bar {
+//	    message Xyz {
+//	      string field_a;
+//	    }
+//	    Xyz field_b;
+//	  }
+//	  Bar field_c;
+//	  repeated Bar field_d;
+//	  message Bar2 {
+//	    string bar2_content
+//	  }
+//	  oneof field_one_of {
+//	    Bar field_one_of_bar;
+//	    Bar2 field_one_of_bar2;
+//	  }
+//	}
+//
 // GetMessage(rfoo, "field_c") returns:
-//   reflected: foo.FieldC
+//
+//	reflected: foo.FieldC
+//
 // GetMessage(rfoo, "field_c", "field_b") returns:
-//   reflected: foo.FieldC.FieldB
+//
+//	reflected: foo.FieldC.FieldB
+//
 // GetMessage(rfoo, "field_c", "field_b", "field_a") returns:
-//   error as the path points to a non-message type field
+//
+//	error as the path points to a non-message type field
+//
 // GetMessage(rfoo, "not_exist") returns:
-//   error as not_exist is not a valid field
+//
+//	error as not_exist is not a valid field
+//
 // GetMessage(rfoo, "field_d") returns:
-//   error as the path points to a repeated field
+//
+//	error as the path points to a repeated field
+//
 // GetMessage(rfoo, "field_one_of", "field_one_of_bar") returns:
-//   foo.GetFieldOneOfBar() if field_one_of_bar is populated, otherwise error
+//
+//	foo.GetFieldOneOfBar() if field_one_of_bar is populated, otherwise error
+//
 // GetMessage(rfoo, "field_one_of_bar") also returns:
-//   foo.GetFieldOneOfBar() if field_one_of_bar is populated, otherwise error
+//
+//	foo.GetFieldOneOfBar() if field_one_of_bar is populated, otherwise error
 func GetMessage(rpb protoreflect.Message, fields ...string) (protoreflect.Message, error) {
 	ret, err := getMessage(rpb, false, fields...)
 	if err != nil {
-		return nil, errors.Wrap(err, "getting message")
+		return nil, fmt.Errorf("getting message: %w", err)
 	}
 	return ret, nil
 }
@@ -188,37 +203,44 @@ func GetMessage(rpb protoreflect.Message, fields ...string) (protoreflect.Messag
 // 4. Field pointed by the path is not of repeated
 //
 // Example: assume we have a fully populated Foo message: foo, and its reflection: rfoo
-// message Foo {
-// 	message Bar {
-// 		repeated string field_a;
-// 	}
-// 	repeated Bar field_b;
-//  Bar field_c;
-// }
+//
+//	message Foo {
+//		message Bar {
+//			repeated string field_a;
+//		}
+//		repeated Bar field_b;
+//	 Bar field_c;
+//	}
+//
 // GetList(rfoo, "field_b") returns:
-//  foo.FieldB
+//
+//	foo.FieldB
+//
 // GetList(rfoo, "field_b", "field_a") returns:
-//  error, as field_b is a repeated field and intermediate fields must not be repeated
+//
+//	error, as field_b is a repeated field and intermediate fields must not be repeated
+//
 // GetList(rfoo, "field_c", "field_a") returns:
-//  foo.FieldC.FieldA
+//
+//	foo.FieldC.FieldA
 func GetList(rpb protoreflect.Message, fields ...string) (protoreflect.List, error) {
 	var err error
 	if len(fields) == 0 {
-		return nil, errors.Errorf("none given field, at least one field is required")
+		return nil, fmt.Errorf("none given field, at least one field is required")
 	}
 	if len(fields) > 1 {
 		rpb, err = getMessage(rpb, false, fields[0:len(fields)-1]...)
 		if err != nil {
-			return nil, errors.Wrapf(err, "getting parent message")
+			return nil, fmt.Errorf("getting parent message: %w", err)
 		}
 	}
 	f := fields[len(fields)-1]
 	fd := rpb.Descriptor().Fields().ByName(protoreflect.Name(f))
 	if fd == nil {
-		return nil, errors.Errorf("field: %v not found in %v", f, rpb.Descriptor().FullName())
+		return nil, fmt.Errorf("field: %v not found in %v", f, rpb.Descriptor().FullName())
 	}
 	if fd.Cardinality() != protoreflect.Repeated {
-		return nil, errors.Errorf("field: %v in %v is not repeated", f, rpb.Descriptor().FullName())
+		return nil, fmt.Errorf("field: %v in %v is not repeated", f, rpb.Descriptor().FullName())
 	}
 	if !rpb.Has(fd) {
 		return rpb.Mutable(fd).List(), nil
@@ -239,26 +261,35 @@ func GetList(rpb protoreflect.Message, fields ...string) (protoreflect.List, err
 // 5. Target field is repeated.
 //
 // Example: assume we have a fully populated Foo message: foo, and its reflection: rfoo
-// message Foo {
-//  string field_a;
-// 	message Bar {
-// 		string field_b;
-// 	}
-//  Bar field_c;
-//  repeated string field_d;
-// }
+//
+//	message Foo {
+//	 string field_a;
+//		message Bar {
+//			string field_b;
+//		}
+//	 Bar field_c;
+//	 repeated string field_d;
+//	}
+//
 // GetString(rfoo, "field_a") returns:
-//  foo.FieldA's content
+//
+//	foo.FieldA's content
+//
 // GetString(rfoo, "field_c", "field_b") returns:
-//  foo.FieldC.FieldB's content
+//
+//	foo.FieldC.FieldB's content
+//
 // GetString(rfoo, "field_c") returns:
-//  error, as field_c is not a field of string type
+//
+//	error, as field_c is not a field of string type
+//
 // GetString(rfoo, "field_d") returns:
-//  error, as field_d is a repeated field.
+//
+//	error, as field_d is a repeated field.
 func GetString(rpb protoreflect.Message, fields ...string) (string, error) {
 	fval, err := getNonRepeatedFieldValue(rpb, fields, protoreflect.StringKind)
 	if err != nil {
-		return "", errors.Wrapf(err, "getting field value")
+		return "", fmt.Errorf("getting field value: %w", err)
 	}
 	return fval.String(), nil
 }
@@ -276,26 +307,35 @@ func GetString(rpb protoreflect.Message, fields ...string) (string, error) {
 // 5. Target field is repeated.
 //
 // Example: assume we have a fully populated Foo message: foo, and its reflection: rfoo
-// message Foo {
-//  int64 field_a;
-// 	message Bar {
-// 		int64 field_b;
-// 	}
-//  Bar field_c;
-//  repeated int64 field_d;
-// }
+//
+//	message Foo {
+//	 int64 field_a;
+//		message Bar {
+//			int64 field_b;
+//		}
+//	 Bar field_c;
+//	 repeated int64 field_d;
+//	}
+//
 // GetInt64(rfoo, "field_a") returns:
-//  foo.FieldA
+//
+//	foo.FieldA
+//
 // GetInt64(rfoo, "field_c", "field_b") returns:
-//  foo.FieldC.FieldB
+//
+//	foo.FieldC.FieldB
+//
 // GetInt64(rfoo, "field_c") returns:
-//  error, as field_c is not a field of 64-bit int kind
+//
+//	error, as field_c is not a field of 64-bit int kind
+//
 // GetInt64(rfoo, "field_d") returns:
-//  error, as field_d is a repeated field.
+//
+//	error, as field_d is a repeated field.
 func GetInt64(rpb protoreflect.Message, fields ...string) (int64, error) {
 	fval, err := getNonRepeatedFieldValue(rpb, fields, protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind)
 	if err != nil {
-		return 0, errors.Wrap(err, "getting field value")
+		return 0, fmt.Errorf("getting field value: %w", err)
 	}
 	return fval.Int(), nil
 }
@@ -313,26 +353,35 @@ func GetInt64(rpb protoreflect.Message, fields ...string) (int64, error) {
 // 5. Target field is repeated.
 //
 // Example: assume we have a fully populated Foo message: foo, and its reflection: rfoo
-// message Foo {
-//  uint32 field_a;
-// 	message Bar {
-// 		uint32 field_b;
-// 	}
-//  Bar field_c;
-//  repeated uint32 field_d;
-// }
+//
+//	message Foo {
+//	 uint32 field_a;
+//		message Bar {
+//			uint32 field_b;
+//		}
+//	 Bar field_c;
+//	 repeated uint32 field_d;
+//	}
+//
 // GetUint32(rfoo, "field_a") returns:
-//  foo.FieldA
+//
+//	foo.FieldA
+//
 // GetUint32(rfoo, "field_c", "field_b") returns:
-//  foo.FieldC.FieldB
+//
+//	foo.FieldC.FieldB
+//
 // GetUint32(rfoo, "field_c") returns:
-//  error, as field_c is not a field of 32-bit uint kind
+//
+//	error, as field_c is not a field of 32-bit uint kind
+//
 // GetUint32(rfoo, "field_d") returns:
-//  error, as field_d is a repeated field.
+//
+//	error, as field_d is a repeated field.
 func GetUint32(rpb protoreflect.Message, fields ...string) (uint32, error) {
 	fval, err := getNonRepeatedFieldValue(rpb, fields, protoreflect.Uint32Kind, protoreflect.Fixed32Kind)
 	if err != nil {
-		return 0, errors.Wrap(err, "getting field value")
+		return 0, fmt.Errorf("getting field value: %w", err)
 	}
 	return uint32(fval.Uint()), nil
 }
@@ -349,26 +398,35 @@ func GetUint32(rpb protoreflect.Message, fields ...string) (uint32, error) {
 // 5. Target field is repeated.
 //
 // Example: assume we have a fully populated Foo message: foo, and its reflection: rfoo
-// message Foo {
-//  bytes field_a;
-// 	message Bar {
-// 		bytes field_b;
-// 	}
-//  Bar field_c;
-//  repeated bytes field_d;
-// }
+//
+//	message Foo {
+//	 bytes field_a;
+//		message Bar {
+//			bytes field_b;
+//		}
+//	 Bar field_c;
+//	 repeated bytes field_d;
+//	}
+//
 // GetBytes(rfoo, "field_a") returns:
-//  foo.FieldA
+//
+//	foo.FieldA
+//
 // GetBytes(rfoo, "field_c", "field_b") returns:
-//  foo.FieldC.FieldB
+//
+//	foo.FieldC.FieldB
+//
 // GetBytes(rfoo, "field_c") returns:
-//  error, as field_c is not a field of bytes kind, but message kind
+//
+//	error, as field_c is not a field of bytes kind, but message kind
+//
 // GetBytes(rfoo, "field_d") returns:
-//  error, as field_d is a repeated field.
+//
+//	error, as field_d is a repeated field.
 func GetBytes(rpb protoreflect.Message, fields ...string) ([]byte, error) {
 	fval, err := getNonRepeatedFieldValue(rpb, fields, protoreflect.BytesKind)
 	if err != nil {
-		return nil, errors.Wrap(err, "getting field value")
+		return nil, fmt.Errorf("getting field value: %w", err)
 	}
 	return fval.Bytes(), nil
 }
@@ -385,31 +443,40 @@ func GetBytes(rpb protoreflect.Message, fields ...string) ([]byte, error) {
 // 5. Target field is repeated.
 //
 // Example: assume we have a fully populated Foo message: foo, and its reflection: rfoo
-// message Foo {
-//  string field_a;
-// 	Enum Fruit {
-// 		APPLE = 0;
-//    ORANGE = 1;
-// 	}
-//  Fruit field_b;
-//  Message Bar {
-//    Fruit field_c
-//  }
-//  Bar field_d;
-//  repeated Fruit field_e;
-// }
+//
+//	message Foo {
+//	 string field_a;
+//		Enum Fruit {
+//			APPLE = 0;
+//	   ORANGE = 1;
+//		}
+//	 Fruit field_b;
+//	 Message Bar {
+//	   Fruit field_c
+//	 }
+//	 Bar field_d;
+//	 repeated Fruit field_e;
+//	}
+//
 // GetEnumNumber(rfoo, "field_a") returns:
-//  error, as field_a is not a field of enum type.
+//
+//	error, as field_a is not a field of enum type.
+//
 // GetEnumNumber(rfoo, "field_b") returns:
-//  the number value of foo.FieldB
+//
+//	the number value of foo.FieldB
+//
 // GetEnumNumber(rfoo, "field_d", "field_c") returns:
-//  the number value of foo.FieldD.FieldC
+//
+//	the number value of foo.FieldD.FieldC
+//
 // GetEnumNumber(rfoo, "field_e") returns:
-//  error, as field_e is a repeated field.
+//
+//	error, as field_e is a repeated field.
 func GetEnumNumber(rpb protoreflect.Message, fields ...string) (protoreflect.EnumNumber, error) {
 	fval, err := getNonRepeatedFieldValue(rpb, fields, protoreflect.EnumKind)
 	if err != nil {
-		return 0, errors.Wrap(err, "getting field value")
+		return 0, fmt.Errorf("getting field value: %w", err)
 	}
 	return fval.Enum(), nil
 }
@@ -426,58 +493,67 @@ func GetEnumNumber(rpb protoreflect.Message, fields ...string) (protoreflect.Enu
 // 5. Target field is repeated.
 //
 // Example: assume we have a Foo message
-// message Foo {
-//  string field_a;
-// 	Enum Fruit {
-// 		APPLE = 0;
-//    ORANGE = 1;
-// 	}
-//  Fruit field_b;
-//  Message Bar {
-//    Fruit field_c
-//  }
-//  Bar field_d;
-//  repeated Fruit field_e;
-// }
+//
+//	message Foo {
+//	 string field_a;
+//		Enum Fruit {
+//			APPLE = 0;
+//	   ORANGE = 1;
+//		}
+//	 Fruit field_b;
+//	 Message Bar {
+//	   Fruit field_c
+//	 }
+//	 Bar field_d;
+//	 repeated Fruit field_e;
+//	}
+//
 // GetEnumDescriptor(Foo, "field_a") returns:
-//  error, as field_a is not a field of enum type.
+//
+//	error, as field_a is not a field of enum type.
+//
 // GetEnumDescriptor(Foo, "field_b") returns:
-//  the enum descriptor of Foo_Fruit
+//
+//	the enum descriptor of Foo_Fruit
+//
 // GetEnumDescriptor(Foo, "field_d", "field_c") returns:
-//  the enum descriptor of Foo_Fruit
+//
+//	the enum descriptor of Foo_Fruit
+//
 // GetEnumDescriptor(Foo, "field_e") returns:
-//  error, as field_e is a repeated field.
+//
+//	error, as field_e is a repeated field.
 func GetEnumDescriptor(ty protoreflect.MessageDescriptor, fields ...string) (protoreflect.EnumDescriptor, error) {
 	var err error
 	fd, fields, err := firstFieldDesc(ty, fields...)
 	if err != nil {
-		return nil, errors.Wrap(err, "getting field descriptor for getting enum descriptor")
+		return nil, fmt.Errorf("getting field descriptor for getting enum descriptor: %w", err)
 	}
 	if fd.IsList() {
-		return nil, errors.Errorf("field: %v in %v is repeated", fd.Name(), ty.FullName())
+		return nil, fmt.Errorf("field: %v in %v is repeated", fd.Name(), ty.FullName())
 	}
 	if fd.IsMap() {
-		return nil, errors.Errorf("field: %v in %v is a map", fd.Name(), ty.FullName())
+		return nil, fmt.Errorf("field: %v in %v is a map", fd.Name(), ty.FullName())
 	}
 	if len(fields) > 0 {
 		if fd.Kind() != protoreflect.MessageKind {
-			return nil, errors.Errorf("field: %v in %v is not message type", fd.Name(), ty.FullName())
+			return nil, fmt.Errorf("field: %v in %v is not message type", fd.Name(), ty.FullName())
 		}
 		ed, err := GetEnumDescriptor(fd.Message(), fields...)
 		if err != nil {
-			return nil, errors.Wrapf(err, "field: %v", fd.Name())
+			return nil, fmt.Errorf("field %q: %w", fd.Name(), err)
 		}
 		return ed, nil
 	}
 	if fd.Kind() != protoreflect.EnumKind {
-		return nil, errors.Errorf("field: %v in %v is not of enum kind", fd.Name(), ty.FullName())
+		return nil, fmt.Errorf("field: %v in %v is not of enum kind", fd.Name(), ty.FullName())
 	}
 	return fd.Enum(), nil
 }
 
 func getParentMessage(rpb protoreflect.Message, populateIfMissing bool, fields ...string) (protoreflect.Message, error) {
 	if len(fields) == 0 {
-		return nil, errors.Errorf("none given field, at least one field is required")
+		return nil, fmt.Errorf("none given field, at least one field is required")
 	}
 	if len(fields) == 1 {
 		return rpb, nil
@@ -503,18 +579,22 @@ func getParentMessage(rpb protoreflect.Message, populateIfMissing bool, fields .
 // field. The target field must NOT be a repeated or map field.
 //
 // Example: assume we have a Foo message: foo, and its reflection: rfoo
-// message Foo {
-//  int64 field_a;
-// 	message Bar {
-// 		int64 field_b;
-// 	}
-//  Bar field_c;
-//  repeated int64 field_d;
-// }
+//
+//	message Foo {
+//	 int64 field_a;
+//		message Bar {
+//			int64 field_b;
+//		}
+//	 Bar field_c;
+//	 repeated int64 field_d;
+//	}
+//
 // SetValue(rfoo, 123, "field_a") sets the foo.FieldA to 123
 // SetValue(rfoo, &Foo_Bar{FieldB: 123}, "field_c"} sets the foo.FieldC to &Foo_Bar{FieldB: 123}
 // SetValue(rfoo, 123, "field_c", "field_b") sets the foo.FieldC.FieldB to 123. And if FieldC is
-// 	not populated ahead, a Foo_Bar message will be created and set to foo.FieldC.
+//
+//	not populated ahead, a Foo_Bar message will be created and set to foo.FieldC.
+//
 // SetValue(rfoo, "str", "field_a") returns error as value/field type mismatch
 // SetValue(rfoo, "str", "not_exist") returns error as field not_exist is not valid
 // SetValue(rfoo, 123, "field_d") returns error as field_d is repeated
@@ -522,18 +602,18 @@ func SetValue(rpb protoreflect.Message, value interface{}, fields ...string) err
 	var err error
 	rpb, err = getParentMessage(rpb, true, fields...)
 	if err != nil {
-		return errors.Wrap(err, "setting value")
+		return fmt.Errorf("setting value: %w", err)
 	}
 	f := fields[len(fields)-1]
 	fd, _, err := firstFieldDesc(rpb.Descriptor(), f)
 	if err != nil {
-		return errors.Wrap(err, "setting value")
+		return fmt.Errorf("setting value: %w", err)
 	}
 	if fd.IsList() {
-		return errors.Errorf("field: %v in %v is repeated", fd.Name(), rpb.Descriptor().FullName())
+		return fmt.Errorf("field: %v in %v is repeated", fd.Name(), rpb.Descriptor().FullName())
 	}
 	if fd.IsMap() {
-		return errors.Errorf("field: %v in %v is a map", fd.Name(), rpb.Descriptor().FullName())
+		return fmt.Errorf("field: %v in %v is a map", fd.Name(), rpb.Descriptor().FullName())
 	}
 	valueGoType := reflect.TypeOf(value)
 	valueGoKind := valueGoType.Kind()
@@ -549,7 +629,7 @@ func SetValue(rpb protoreflect.Message, value interface{}, fields ...string) err
 		defaultValue := fd.Default().Interface()
 		defaultGoKind := reflect.TypeOf(defaultValue).Kind()
 		if defaultGoKind != valueGoKind {
-			return errors.Errorf("go kind mismatch, field: %v in %v is of kind: %v, given value is of kind: %v",
+			return fmt.Errorf("go kind mismatch, field: %v in %v is of kind: %v, given value is of kind: %v",
 				fd.Name(), rpb.Descriptor().FullName(), defaultGoKind, valueGoKind)
 		}
 		converted := reflect.ValueOf(value).Convert(reflect.TypeOf(defaultValue)).Interface()
@@ -559,7 +639,7 @@ func SetValue(rpb protoreflect.Message, value interface{}, fields ...string) err
 	// bytes
 	case protoreflect.BytesKind:
 		if valueGoType != reflect.TypeOf([]byte{}) {
-			return errors.Errorf("type mismatch, given value is not a byte slice ([]byte type)")
+			return fmt.Errorf("type mismatch, given value is not a byte slice ([]byte type)")
 		}
 		rpb.Set(fd, protoreflect.ValueOf(value))
 		return nil
@@ -568,12 +648,12 @@ func SetValue(rpb protoreflect.Message, value interface{}, fields ...string) err
 	case protoreflect.MessageKind:
 		pv, ok := value.(proto.Message)
 		if !ok {
-			return errors.Errorf("type mismatch, given value is not a proto message: %T", value)
+			return fmt.Errorf("type mismatch, given value is not a proto message: %T", value)
 		}
 		fieldProtoName := fd.Message().FullName()
 		valueProtoName := proto.MessageReflect(pv).Descriptor().FullName()
 		if fieldProtoName != valueProtoName {
-			return errors.Errorf("type mismatch, field %v in %v is a message of type: %v, given value is a message of type: %v",
+			return fmt.Errorf("type mismatch, field %v in %v is a message of type: %v, given value is a message of type: %v",
 				fd.Name(), rpb.Descriptor().FullName(), fieldProtoName, valueProtoName)
 		}
 		rpb.Set(fd, protoreflect.ValueOf(proto.MessageReflect(pv)))
@@ -581,7 +661,7 @@ func SetValue(rpb protoreflect.Message, value interface{}, fields ...string) err
 
 	// not supported
 	default:
-		return errors.Errorf("proto kind: %v is not supported", fd.Kind())
+		return fmt.Errorf("proto kind: %v is not supported", fd.Kind())
 	}
 }
 
@@ -593,14 +673,16 @@ func SetValue(rpb protoreflect.Message, value interface{}, fields ...string) err
 // value must be exactly the same type as the field. The target field must not be a map.
 //
 // Example: assume we have a Foo message: foo, and its reflection: rfoo
-// message Foo {
-//  repeated int64 field_a;
-// 	message Bar {
-// 		repeated int64 field_b;
-// 	}
-//  repeated Bar field_c;
-//  Bar field_d;
-// }
+//
+//	message Foo {
+//	 repeated int64 field_a;
+//		message Bar {
+//			repeated int64 field_b;
+//		}
+//	 repeated Bar field_c;
+//	 Bar field_d;
+//	}
+//
 // AppendValue(rfoo, 123, "field_a") append int64(123) to the foo.FieldA slice
 // AppendValue(rfoo, &Foo_Bar{FieldB: []int64{123}}, "field_c"} append the new Foo_Bar to the foo.FieldC slice
 // AppendValue(rfoo, "str", "field_a") returns error as value/field type mismatch
@@ -611,12 +693,12 @@ func AppendValue(rpb protoreflect.Message, value interface{}, fields ...string) 
 	var err error
 	rpb, err = getParentMessage(rpb, true, fields...)
 	if err != nil {
-		return errors.Wrap(err, "appending value")
+		return fmt.Errorf("appending value: %w", err)
 	}
 	f := fields[len(fields)-1]
 	list, err := GetList(rpb, f)
 	if err != nil {
-		return errors.Wrap(err, "appending value")
+		return fmt.Errorf("appending value: %w", err)
 	}
 	fd := rpb.Descriptor().Fields().ByName(protoreflect.Name(f))
 	// GetList has already checked fd is not nil
@@ -631,11 +713,11 @@ func AppendValue(rpb protoreflect.Message, value interface{}, fields ...string) 
 		protoreflect.Int64Kind:
 		goType, err := getGoType(fd.Kind())
 		if err != nil {
-			return errors.Wrap(err, "appending value")
+			return fmt.Errorf("appending value: %w", err)
 		}
 		goKind := goType.Kind()
 		if goKind != valueGoKind {
-			return errors.Errorf("go kind mismatch, field: %v in %v is repeated of kind: %v, given value is of kind: %v",
+			return fmt.Errorf("go kind mismatch, field: %v in %v is repeated of kind: %v, given value is of kind: %v",
 				fd.Name(), rpb.Descriptor().FullName(), goKind, valueGoKind)
 		}
 		converted := reflect.ValueOf(value).Convert(goType).Interface()
@@ -646,18 +728,18 @@ func AppendValue(rpb protoreflect.Message, value interface{}, fields ...string) 
 	case protoreflect.MessageKind:
 		pv, ok := value.(proto.Message)
 		if !ok {
-			return errors.Errorf("type mismatch, given value is not a proto message: %T", value)
+			return fmt.Errorf("type mismatch, given value is not a proto message: %T", value)
 		}
 		fieldProtoName := fd.Message().FullName()
 		valueProtoName := proto.MessageReflect(pv).Descriptor().FullName()
 		if fieldProtoName != valueProtoName {
-			return errors.Errorf("type mismatch, field: %v in %v is a list of messages of type: %v, given value is a message of type: %v",
+			return fmt.Errorf("type mismatch, field: %v in %v is a list of messages of type: %v, given value is a message of type: %v",
 				fd.Name(), rpb.Descriptor().FullName(), fieldProtoName, valueProtoName)
 		}
 		list.Append(protoreflect.ValueOf(proto.MessageReflect(pv)))
 		return nil
 	default:
-		return errors.Errorf("proto kind: %v is not supported", fd.Kind())
+		return fmt.Errorf("proto kind: %v is not supported", fd.Kind())
 	}
 }
 
@@ -674,6 +756,6 @@ func getGoType(kind protoreflect.Kind) (reflect.Type, error) {
 	case protoreflect.Int64Kind:
 		return reflect.TypeOf(int64(0)), nil
 	default:
-		return nil, errors.Errorf("proto kind: %v is not supported", kind)
+		return nil, fmt.Errorf("proto kind: %v is not supported", kind)
 	}
 }

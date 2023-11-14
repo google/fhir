@@ -14,7 +14,6 @@ go_library(
     importpath = "github.com/google/fhir/go/jsonformat/internal/accessor",
     deps = [
         "@com_github_golang_protobuf//proto:go_default_library",
-        "@com_github_pkg_errors//:go_default_library",
         "@org_golang_google_protobuf//reflect/protoreflect:go_default_library",
     ],
 )

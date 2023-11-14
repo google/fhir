@@ -8,7 +8,6 @@ require (
 	github.com/golang/protobuf v1.4.3
 	github.com/google/go-cmp v0.5.8
 	github.com/json-iterator/go v1.1.10
-	github.com/pkg/errors v0.9.1
 	github.com/serenize/snaker v0.0.0-20201027110005-a7ad2135616e
 	golang.org/x/exp v0.0.0-20230315142452-642cacee5cc0
 	google.golang.org/protobuf v1.25.0
@@ -21,6 +20,6 @@ require (
 	github.com/onsi/gomega v1.7.1 // indirect
 	github.com/stretchr/testify v1.4.0 // indirect
 	golang.org/x/net v0.18.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/sys v0.14.0 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )

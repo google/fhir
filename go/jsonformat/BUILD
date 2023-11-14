@@ -102,7 +102,6 @@ go_test(
         "//proto/google/fhir/proto/stu3:resources_go_proto",
         "@com_github_google_go_cmp//cmp:go_default_library",
         "@com_github_google_go_cmp//cmp/cmpopts:go_default_library",
-        "@com_github_pkg_errors//:go_default_library",
         "@io_bazel_rules_go//go/tools/bazel:go_default_library",
         "@org_golang_google_protobuf//proto:go_default_library",
         "@org_golang_google_protobuf//reflect/protoreflect:go_default_library",
