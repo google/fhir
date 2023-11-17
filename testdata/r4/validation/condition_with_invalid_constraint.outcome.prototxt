@@ -1,0 +1,14 @@
+issue{
+  severity {
+    value: WARNING
+  }
+  code {
+    value: VALUE
+  }
+  diagnostics {
+    value: "Unable to execute message constraint on Condition (where(category in 'http://hl7.org/fhir/us/core/ValueSet/us-core-condition-category\').exists()): in/contains must have one or fewer items in the left/right operand."
+  }
+  expression {
+    value: "Condition"
+  }
+}

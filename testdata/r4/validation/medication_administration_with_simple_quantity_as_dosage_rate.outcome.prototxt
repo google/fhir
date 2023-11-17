@@ -1,12 +1,12 @@
 issue {
   severity {
-    value: FATAL
+    value: WARNING
   }
   code {
-    value: STRUCTURE
+    value: VALUE
   }
   diagnostics {
-    value: "Unable to find field `comparator` in `google.fhir.r4.core.SimpleQuantity`"
+    value: "Unable to execute message constraint on SimpleQuantity (comparator.empty()): Unable to find field `comparator` in `google.fhir.r4.core.SimpleQuantity`"
   }
   expression {
     value: "MedicationAdministration.dosage.rate.ofType(SimpleQuantity)"

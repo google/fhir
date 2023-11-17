@@ -1,0 +1,120 @@
+id {
+  value: "V-1"
+}
+clinical_status {
+  coding {
+    code {
+      value: "active"
+    }
+  }
+}
+extension {
+  url {
+    value: "http://hl7.org/fhir/StructureDefinition/condition-priority"
+  }
+  value {
+    codeable_concept { }
+  }
+}
+verification_status {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+    }
+    code {
+      value: "differential"
+    }
+    display {
+      value: "Differential"
+    }
+  }
+  coding {
+    system {
+      value: "https://g.co/fhir/asc/tnnas/crnr/diagnosis-problem-confirmation_status_cd"
+    }
+    code {
+      value: "3306"
+    }
+    display {
+      value: "Differential"
+    }
+  }
+  text {
+    value: "Differential"
+  }
+}
+category {
+  coding {
+    system {
+      value: "https://g.co/fhir/asc/tnnas/crnr/diagnosis-diag_type_cd"
+    }
+    code {
+      value: "2343"
+    }
+    display {
+      value: "ABC"
+    }
+  }
+  text {
+    value: "ABC"
+  }
+}
+category {
+  coding {
+    system {
+      value: "http://terminology.hl7.org/CodeSystem/condition-category"
+    }
+    code {
+      value: "encounter-diagnosis"
+    }
+    display {
+      value: "Encounter Diagnosis"
+    }
+  }
+  text {
+    value: "Encounter Diagnosis"
+  }
+}
+code {
+  coding {
+    system {
+      value: "https://g.co/fhir/asc/tnnas/crnr/nomenclature-concept_cki"
+    }
+    code {
+      value: "ICD9CM!V30.00"
+    }
+  }
+  coding {
+    system {
+      value: "https://g.co/fhir/asc/tnnas/crnr/nomenclature-nomenclature_id"
+    }
+    code {
+      value: "13579"
+    }
+  }
+  text {
+    value: "Cholecystectomy Display"
+  }
+}
+subject {
+  patient_id {
+    value: "W1-678"
+  }
+}
+encounter {
+  encounter_id {
+    value: "W1-12345"
+  }
+}
+onset {
+  date_time {
+    value_us: 1502111482000000
+    timezone: "+00:00"
+    precision: MICROSECOND
+  }
+}
+recorded_date {
+  value_us: 1628208000000000
+  timezone: "UTC"
+  precision: DAY
+}
