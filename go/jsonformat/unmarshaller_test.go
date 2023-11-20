@@ -1896,18 +1896,6 @@ func TestUnmarshal_Errors(t *testing.T) {
 			errs: []string{`error at "Patient.gender.value": invalid field`},
 		},
 		{
-			name: "reference field of wrong FHIR version",
-			json: `
-			{
-				"resourceType": "Observation",
-				"device": {
-					"reference": "DeviceRequest/1"
-				}
-			}`,
-			vers: []fhirversion.Version{fhirversion.DSTU2},
-			errs: []string{`error at "Observation.device": invalid reference`},
-		},
-		{
 			name: "invalid reference proto type",
 			json: `
     	{

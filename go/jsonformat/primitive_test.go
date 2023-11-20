@@ -313,7 +313,7 @@ func TestAddInternalExtension(t *testing.T) {
 }
 
 func TestDecimal(t *testing.T) {
-	allVers := []Version{fhirversion.STU3, fhirversion.R4}
+	allVers := []fhirversion.Version{fhirversion.STU3, fhirversion.R4}
 	tests := []struct {
 		value string
 		vers  []fhirversion.Version
@@ -351,7 +351,7 @@ func TestDecimal(t *testing.T) {
 }
 
 func TestDecimal_Invalid(t *testing.T) {
-	allVers := []Version{fhirversion.STU3, fhirversion.R4}
+	allVers := []fhirversion.Version{fhirversion.STU3, fhirversion.R4}
 	tests := []struct {
 		name string
 		json string
