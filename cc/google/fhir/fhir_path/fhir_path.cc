@@ -4166,6 +4166,31 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
                 : "")));
         return std::shared_ptr<ExpressionNode>(nullptr);
       }
+      if (!child_context_visitor.GetError().ok()) {
+        this->SetError(absl::InvalidArgumentError(absl::StrCat(
+            "Failed to compile call to ", function_name,
+            "(): ", child_context_visitor.GetError().message(),
+            !child_context_visitor.GetError().ok()
+                ? absl::StrCat("; ", child_context_visitor.GetError().message())
+                : "")));
+
+        // Unlike the previous case where we get an error, we free the result
+        // object here since the error isn't returned directly from the function
+        // call but is a side effect. Thus we delete the unused object before
+        // returning.
+        delete result.value();
+        return std::shared_ptr<ExpressionNode>(nullptr);
+      }
+      if (!GetError().ok()) {
+        this->SetError(absl::InvalidArgumentError(absl::StrCat(
+            "Failed to compile call to ", function_name,
+            "(): ", GetError().message(),
+            !GetError().ok()
+                ? absl::StrCat("; ", GetError().message())
+                : "")));
+        delete result.value();
+        return std::shared_ptr<ExpressionNode>(nullptr);
+      }
 
       return std::shared_ptr<ExpressionNode>(result.value());
     } else {

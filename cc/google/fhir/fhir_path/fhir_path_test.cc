@@ -1652,6 +1652,13 @@ TYPED_TEST(FhirPathTest, TestWhereWithNonExistentFieldReference) {
       HasStatusCode(StatusCode::kInvalidArgument));
 }
 
+TYPED_TEST(FhirPathTest, TestWhereWithNonExistentFunction) {
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidObservation<typename TypeParam::Observation>(),
+                            "code.coding.where(foo())"),
+      HasStatusCode(StatusCode::kInvalidArgument));
+}
+
 TYPED_TEST(FhirPathTest, TestAnyTrue) {
   EXPECT_THAT(TestFixture::Evaluate("{}.anyTrue()"), EvalsToFalse());
   EXPECT_THAT(TestFixture::Evaluate("(false).anyTrue()"), EvalsToFalse());
