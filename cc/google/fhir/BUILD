@@ -680,3 +680,31 @@ cc_test(
         "@com_google_googletest//:gtest_main",
     ],
 )
+
+cc_test(
+    name = "json_format_test",
+    srcs = ["json_format_test.cc"],
+    data = [
+        "@hl7.fhir.r4.core_4.0.1//file",
+    ],
+    shard_count = 16,
+    deps = [
+        ":error_reporter",
+        ":json_format",
+        ":json_format_results",
+        ":primitive_handler",
+        "//cc/google/fhir/json:fhir_json",
+        "//cc/google/fhir/json:json_sax_handler",
+        "//cc/google/fhir/r4:primitive_handler",
+        "//cc/google/fhir/status",
+        "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
+        "@com_google_absl//absl/container:flat_hash_set",
+        "@com_google_absl//absl/log:check",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/time",
+        "@com_google_googletest//:gtest_main",
+        "@libarchive",
+    ],
+)
