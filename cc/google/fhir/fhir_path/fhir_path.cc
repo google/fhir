@@ -16,8 +16,11 @@
 
 #include <algorithm>
 #include <any>
+#include <cstddef>
 #include <iterator>
+#include <map>
 #include <memory>
+#include <optional>
 #include <type_traits>
 #include <utility>
 
@@ -307,6 +310,13 @@ std::vector<const google::protobuf::Message*> WorkspaceMessage::Ancestry() const
   std::vector<const google::protobuf::Message*> stack = ancestry_stack_;
   stack.push_back(result_);
   return stack;
+}
+
+// Produces a shared pointer explicitly of ExpressionNode rather
+// than a subclass to work well with ANTLR's "Any" semantics.
+inline std::shared_ptr<ExpressionNode> ToAny(
+    std::shared_ptr<ExpressionNode> node) {
+  return node;
 }
 
 // Expression node that returns literals wrapped in the corresponding
@@ -2757,6 +2767,85 @@ class MemberOfFunction : public SingleValueFunctionNode {
   }
 };
 
+// Implements a custom user-defined function.
+class CustomFunction : public FunctionNode {
+ public:
+  static absl::StatusOr<CustomFunction*> Create(
+      const std::shared_ptr<ExpressionNode>& child_expression,
+      const std::vector<FhirPathParser::ExpressionContext*>& params,
+      const UserDefinedFunction* user_defined_function,
+      FhirPathBaseVisitor* base_context_visitor,
+      FhirPathBaseVisitor* child_context_visitor,
+      const PrimitiveHandler* primitive_handler) {
+    FHIR_ASSIGN_OR_RETURN(
+        std::vector<std::shared_ptr<ExpressionNode>> compiled_params,
+        CompileParams(user_defined_function, params, base_context_visitor,
+                      child_context_visitor, primitive_handler));
+
+    FHIR_RETURN_IF_ERROR(
+        user_defined_function->ValidateParams(compiled_params));
+    return new CustomFunction(child_expression, compiled_params,
+                              user_defined_function);
+  }
+
+  static absl::StatusOr<std::vector<std::shared_ptr<ExpressionNode>>>
+  CompileParams(const UserDefinedFunction* function,
+                const std::vector<FhirPathParser::ExpressionContext*>& params,
+                FhirPathBaseVisitor* base_context_visitor,
+                FhirPathBaseVisitor* child_context_visitor,
+                const PrimitiveHandler* primitive_handler) {
+    if (function->GetParamTypes().size() != params.size()) {
+      return InvalidArgumentError(
+          absl::StrFormat("%s() requires %d arguments.", function->GetName(),
+                          function->GetParamTypes().size()));
+    }
+    std::vector<std::shared_ptr<ExpressionNode>> compiled_params;
+
+    for (int i = 0; i < params.size(); ++i) {
+      antlrcpp::Any param_any;
+      switch (function->GetParamTypes()[i]) {
+        case UserDefinedFunction::ParameterVisitorType::kBase:
+          param_any = params[i]->accept(base_context_visitor);
+          break;
+        case UserDefinedFunction::ParameterVisitorType::kChild:
+          param_any = params[i]->accept(child_context_visitor);
+          break;
+        case UserDefinedFunction::ParameterVisitorType::kIdentifier:
+          std::string identifier = params[i]->getText();
+          param_any = ToAny(std::make_shared<Literal>(
+              primitive_handler->StringDescriptor(),
+              [primitive_handler, identifier]() {
+                return primitive_handler->NewString(identifier);
+              }));
+      }
+      if (!AnyHasValue(param_any)) {
+        return InvalidArgumentError("Failed to compile parameter.");
+      }
+      compiled_params.push_back(
+          AnyCast<std::shared_ptr<ExpressionNode>>(param_any));
+    }
+
+    return compiled_params;
+  }
+
+  CustomFunction(const std::shared_ptr<ExpressionNode>& child,
+                 const std::vector<std::shared_ptr<ExpressionNode>>& params,
+                 const UserDefinedFunction* function)
+      : FunctionNode(child, params), function_(function) {}
+
+  absl::Status Evaluate(WorkSpace* work_space,
+                        std::vector<WorkspaceMessage>* results) const override {
+    std::vector<WorkspaceMessage> child_results;
+    FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
+    return function_->Evaluate(work_space, child_results, results, params_);
+  }
+
+  const Descriptor* ReturnType() const override { return nullptr; }
+
+ private:
+  const UserDefinedFunction* function_;
+};
+
 class ComparisonOperator : public BinaryOperator {
  public:
   // Types of comparisons supported by this operator.
@@ -3401,13 +3490,6 @@ class ContainsOperator : public BinaryOperator {
   }
 };
 
-// Produces a shared pointer explicitly of ExpressionNode rather
-// than a subclass to work well with ANTLR's "Any" semantics.
-inline std::shared_ptr<ExpressionNode> ToAny(
-    std::shared_ptr<ExpressionNode> node) {
-  return node;
-}
-
 // Internal structure that defines an invocation. This is used
 // at points when visiting the AST that do not have enough context
 // to produce an ExpressionNode (e.g., they do not see the type of
@@ -3447,18 +3529,22 @@ absl::StatusOr<ExpressionNode*> UnimplementedFunction(
 // more frequently here, but the costs in this case are negligible.
 class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
  public:
-  FhirPathCompilerVisitor(const Descriptor* descriptor,
-                          const PrimitiveHandler* primitive_handler)
+  FhirPathCompilerVisitor(
+      const Descriptor* descriptor, const PrimitiveHandler* primitive_handler,
+      const std::map<std::string, UserDefinedFunction*>& user_defined_functions)
       : error_listener_(this),
         descriptor_stack_({descriptor}),
-        primitive_handler_(primitive_handler) {}
+        primitive_handler_(primitive_handler),
+        user_defined_functions_(user_defined_functions) {}
 
   FhirPathCompilerVisitor(
       const std::vector<const Descriptor*>& descriptor_stack_history,
-      const Descriptor* descriptor, const PrimitiveHandler* primitive_handler)
+      const Descriptor* descriptor, const PrimitiveHandler* primitive_handler,
+      const std::map<std::string, UserDefinedFunction*>& user_defined_functions)
       : error_listener_(this),
         descriptor_stack_(descriptor_stack_history),
-        primitive_handler_(primitive_handler) {
+        primitive_handler_(primitive_handler),
+        user_defined_functions_(user_defined_functions) {
     descriptor_stack_.push_back(descriptor);
   }
 
@@ -3480,8 +3566,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
         AnyCast<std::shared_ptr<ExpressionNode>>(expression);
 
     if (definition->is_function) {
-      auto function_node =
-          createFunction(definition->name, expr, definition->params);
+      auto function_node = createFunction(
+          definition->name, expr, definition->params, primitive_handler_);
 
       if (function_node == nullptr || !GetError().ok()) {
         return nullptr;
@@ -3531,7 +3617,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       auto function_node = createFunction(
           definition->name,
           std::make_shared<ThisReference>(descriptor_stack_.back()),
-          definition->params);
+          definition->params, primitive_handler_);
 
       return function_node == nullptr || !GetError().ok()
                  ? nullptr
@@ -4140,65 +4226,80 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   std::shared_ptr<ExpressionNode> createFunction(
       const std::string& function_name,
       std::shared_ptr<ExpressionNode> child_expression,
-      const std::vector<FhirPathParser::ExpressionContext*>& params) {
+      const std::vector<FhirPathParser::ExpressionContext*>& params,
+      const PrimitiveHandler* primitive_handler) {
+    // Some functions accept parameters that are expressions evaluated using
+    // the child expression's result as context, not the base context of the
+    // FHIRPath expression. In order to compile such parameters, we need to
+    // visit it with the child expression's type and not the base type of the
+    // current visitor. Therefore, both the current visitor and a visitor with
+    // the child expression as the context are provided. The function factory
+    // will use whichever visitor (or both) is needed to compile the function
+    // invocation.
+    FhirPathCompilerVisitor child_context_visitor(
+        descriptor_stack_, child_expression->ReturnType(), primitive_handler_,
+        user_defined_functions_);
+
     std::map<std::string, FunctionFactory>::iterator function_factory =
         function_map_.find(function_name);
+    absl::StatusOr<ExpressionNode*> result;
+
     if (function_factory != function_map_.end()) {
-      // Some functions accept parameters that are expressions evaluated using
-      // the child expression's result as context, not the base context of the
-      // FHIRPath expression. In order to compile such parameters, we need to
-      // visit it with the child expression's type and not the base type of the
-      // current visitor. Therefore, both the current visitor and a visitor with
-      // the child expression as the context are provided. The function factory
-      // will use whichever visitor (or both) is needed to compile the function
-      // invocation.
-      FhirPathCompilerVisitor child_context_visitor(
-          descriptor_stack_, child_expression->ReturnType(),
-          primitive_handler_);
-      absl::StatusOr<ExpressionNode*> result = function_factory->second(
-          child_expression, params, this, &child_context_visitor);
-      if (!result.ok()) {
-        this->SetError(absl::InvalidArgumentError(absl::StrCat(
-            "Failed to compile call to ", function_name,
-            "(): ", result.status().message(),
-            !child_context_visitor.GetError().ok()
-                ? absl::StrCat("; ", child_context_visitor.GetError().message())
-                : "")));
+      if (user_defined_functions_.find(function_name) !=
+          user_defined_functions_.end()) {
+        SetError(NotFoundError(
+            absl::StrCat("The user-defined function ", function_name,
+                         "() conflicts with an existing function name.")));
         return std::shared_ptr<ExpressionNode>(nullptr);
       }
-      if (!child_context_visitor.GetError().ok()) {
-        this->SetError(absl::InvalidArgumentError(absl::StrCat(
-            "Failed to compile call to ", function_name,
-            "(): ", child_context_visitor.GetError().message(),
-            !child_context_visitor.GetError().ok()
-                ? absl::StrCat("; ", child_context_visitor.GetError().message())
-                : "")));
-
-        // Unlike the previous case where we get an error, we free the result
-        // object here since the error isn't returned directly from the function
-        // call but is a side effect. Thus we delete the unused object before
-        // returning.
-        delete result.value();
-        return std::shared_ptr<ExpressionNode>(nullptr);
-      }
-      if (!GetError().ok()) {
-        this->SetError(absl::InvalidArgumentError(absl::StrCat(
-            "Failed to compile call to ", function_name,
-            "(): ", GetError().message(),
-            !GetError().ok()
-                ? absl::StrCat("; ", GetError().message())
-                : "")));
-        delete result.value();
-        return std::shared_ptr<ExpressionNode>(nullptr);
-      }
-
-      return std::shared_ptr<ExpressionNode>(result.value());
+      result = function_factory->second(child_expression, params, this,
+                                        &child_context_visitor);
+    } else if (user_defined_functions_.find(function_name) !=
+               user_defined_functions_.end()) {
+      result = CustomFunction::Create(
+          child_expression, params, user_defined_functions_.at(function_name),
+          this, &child_context_visitor, primitive_handler);
     } else {
       SetError(NotFoundError(
           absl::StrCat("The function ", function_name, " does not exist.")));
 
       return std::shared_ptr<ExpressionNode>(nullptr);
     }
+
+    if (!result.ok()) {
+      this->SetError(absl::InvalidArgumentError(absl::StrCat(
+          "Failed to compile call to ", function_name,
+          "(): ", result.status().message(),
+          !child_context_visitor.GetError().ok()
+              ? absl::StrCat("; ", child_context_visitor.GetError().message())
+              : "")));
+      return std::shared_ptr<ExpressionNode>(nullptr);
+    }
+    if (!child_context_visitor.GetError().ok()) {
+      this->SetError(absl::InvalidArgumentError(absl::StrCat(
+          "Failed to compile call to ", function_name,
+          "(): ", child_context_visitor.GetError().message(),
+          !child_context_visitor.GetError().ok()
+              ? absl::StrCat("; ", child_context_visitor.GetError().message())
+              : "")));
+
+      // Unlike the previous case where we get an error, we free the result
+      // object here since the error isn't returned directly from the function
+      // call but is a side effect. Thus we delete the unused object before
+      // returning.
+      delete result.value();
+      return std::shared_ptr<ExpressionNode>(nullptr);
+    }
+    if (!GetError().ok()) {
+      this->SetError(absl::InvalidArgumentError(absl::StrCat(
+          "Failed to compile call to ", function_name,
+          "(): ", GetError().message(),
+          !GetError().ok() ? absl::StrCat("; ", GetError().message()) : "")));
+      delete result.value();
+      return std::shared_ptr<ExpressionNode>(nullptr);
+    }
+
+    return std::shared_ptr<ExpressionNode>(result.value());
   }
 
   // ANTLR listener to report syntax errors.
@@ -4224,6 +4325,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   std::vector<const Descriptor*> descriptor_stack_;
   absl::Status error_;
   const PrimitiveHandler* primitive_handler_;
+  const std::map<std::string, UserDefinedFunction*> user_defined_functions_;
 };
 
 }  // namespace internal
@@ -4329,13 +4431,24 @@ CompiledExpression::CompiledExpression(
 absl::StatusOr<CompiledExpression> CompiledExpression::Compile(
     const Descriptor* descriptor, const PrimitiveHandler* primitive_handler,
     const std::string& fhir_path,
-    const terminology::TerminologyResolver* terminology_resolver) {
+    const terminology::TerminologyResolver* terminology_resolver,
+    const std::vector<UserDefinedFunction*>& user_defined_functions) {
+  std::map<std::string, UserDefinedFunction*> fns;
+  for (UserDefinedFunction* fn : user_defined_functions) {
+    if (fns.find(fn->GetName()) != fns.end()) {
+      return absl::InvalidArgumentError(
+          absl::StrCat("Found multiple user-defined functions with same name: ",
+                       fn->GetName()));
+    }
+    fns[fn->GetName()] = fn;
+  }
+
   ANTLRInputStream input(fhir_path);
   FhirPathLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
   FhirPathParser parser(&tokens);
 
-  internal::FhirPathCompilerVisitor visitor(descriptor, primitive_handler);
+  internal::FhirPathCompilerVisitor visitor(descriptor, primitive_handler, fns);
   parser.addErrorListener(visitor.GetErrorListener());
   lexer.addErrorListener(visitor.GetErrorListener());
   antlrcpp::Any result = visitor.visit(parser.expression());

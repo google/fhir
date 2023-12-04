@@ -15,6 +15,8 @@
 #ifndef GOOGLE_FHIR_FHIR_PATH_FHIR_PATH_H_
 #define GOOGLE_FHIR_FHIR_PATH_FHIR_PATH_H_
 
+#include <vector>
+
 #include "google/protobuf/message.h"
 #include "absl/status/statusor.h"
 #include "google/fhir/annotations.h"
@@ -75,7 +77,7 @@ class WorkspaceMessage {
   const ::google::protobuf::Message* result_;
 };
 
-// Represents working memory needed to evaluate the expression aginst
+// Represents working memory needed to evaluate the expression against
 // a given message. All temporary structures are destroyed when
 // the workspace goes out of scope.
 class WorkSpace {
@@ -237,12 +239,12 @@ class ExpressionNode {
 // all expressions as a collection of Protocol Buffer Messages, where primitives
 // are represented with message wrappers of primitive types. This class
 // also offers the GetBoolean() method as a convenient way to handle the
-// frequent case where expression evaluates to a single booolean.
+// frequent case where expression evaluates to a single boolean.
 //
 // Depending on the FHIRPath expression, the result could either be children
 // of the original Message, or temporary objects. The EvaluationResult
 // itself maintains ownership of those objects and will clean them up
-// when it goes out of scope. See the AsMessages() method for deails.
+// when it goes out of scope. See the AsMessages() method for details.
 //
 // This class is immutable and thread safe as long as the Message used
 // in the evaluation is in scope and unmodified.
@@ -294,6 +296,63 @@ class EvaluationResult {
   std::unique_ptr<internal::WorkSpace> work_space_;
 };
 
+// Represents a custom user-defined function.
+class UserDefinedFunction {
+ public:
+  // Defines how the parameters are compiled.
+  // TODO(b/310238380): Extend this to support functions with optional or
+  // variable arguments.
+  enum class ParameterVisitorType {
+    // Parameter will be compiled against the base context of the expression.
+    // To be used for parameters of primitive types or expressions that don't
+    // depend on the input.
+    kBase,
+    // Parameter will be compiled against the child context.
+    // To be used for parameters that depend on the child expression or input,
+    // for example expressions that access fields within the input.
+    kChild,
+    // Parameter that should not be parsed and are treated as labels.
+    // See https://hl7.org/fhirpath/N1/#identifiers
+    kIdentifier
+  };
+
+  explicit UserDefinedFunction(const std::string& name,
+                               const std::vector<ParameterVisitorType>& params)
+      : name_(name), param_types_(params) {}
+  virtual ~UserDefinedFunction() {}
+
+  // Validate the function's parameters.
+  virtual absl::Status ValidateParams(
+      std::vector<std::shared_ptr<internal::ExpressionNode>>& params) const = 0;
+
+  // Evaluate the function given the work_space containing the context stack,
+  // the child results representing the input, and the function's parameter
+  // nodes. If successful, the implementation should return Status::OK and place
+  // the resulting values in the results vector.
+  virtual absl::Status Evaluate(
+      internal::WorkSpace* work_space,
+      const std::vector<internal::WorkspaceMessage>& child_results,
+      std::vector<internal::WorkspaceMessage>* results,
+      const std::vector<std::shared_ptr<internal::ExpressionNode>>& params...)
+      const = 0;
+
+  // The descriptor of the message type returned by the expression.
+  virtual const ::google::protobuf::Descriptor* ReturnType() const = 0;
+
+  // The name of the function that the parser will use.
+  std::string GetName() const { return name_; }
+
+  // A list of parameter types indicating how to compile each parameter and the
+  // number of them.
+  std::vector<ParameterVisitorType> GetParamTypes() const {
+    return param_types_;
+  }
+
+ private:
+  const std::string name_;
+  const std::vector<ParameterVisitorType> param_types_;
+};
+
 // Represents a FHIRPath expression that has been "compiled" to run efficiently
 // against a given protobuf message type.
 //
@@ -318,7 +377,8 @@ class CompiledExpression {
       const PrimitiveHandler* primitive_handler, const std::string& fhir_path,
       // If `terminology_resolver` is specified, it should be alive for as long
       // as the returned CompiledExpression object is alive.
-      const terminology::TerminologyResolver* terminology_resolver = nullptr);
+      const terminology::TerminologyResolver* terminology_resolver = nullptr,
+      const std::vector<UserDefinedFunction*>& user_defined_functions = {});
 
   // Evaluates the compiled expression against the given message.
   absl::StatusOr<EvaluationResult> Evaluate(
@@ -337,7 +397,7 @@ class CompiledExpression {
       const std::string& fhir_path,
       std::shared_ptr<internal::ExpressionNode> root_expression,
       const PrimitiveHandler* primitive_handler,
-      const terminology::TerminologyResolver* value_set_repo);
+      const terminology::TerminologyResolver* terminology_resolver);
 
   std::string fhir_path_;
   std::shared_ptr<const internal::ExpressionNode> root_expression_;

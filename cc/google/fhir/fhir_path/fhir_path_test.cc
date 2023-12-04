@@ -16,6 +16,7 @@
 
 #include <stdint.h>
 
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -33,6 +34,7 @@
 #include "absl/strings/substitute.h"
 #include "absl/time/civil_time.h"
 #include "absl/time/time.h"
+#include "google/fhir/fhir_path/utils.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/status/status.h"
@@ -41,6 +43,7 @@
 #include "google/fhir/terminology/terminology_resolver.h"
 #include "google/fhir/testutil/fhir_test_env.h"
 #include "google/fhir/testutil/proto_matchers.h"
+#include "google/fhir/util.h"
 #include "proto/google/fhir/proto/r4/core/codes.pb.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
@@ -2819,6 +2822,156 @@ TYPED_TEST(FhirPathTestForValueSets, MemberOf) {
       TestFixture::Evaluate(
           obs, absl::Substitute("category.memberOf('$0')", kRangeValueSetUrl)),
       IsOkWithMessages(std::vector<typename TypeParam::Boolean>{false_obj}));
+}
+
+// For testing user-defined functions.
+template <typename T>
+class FhirPathUserDefinedFnsTest : public ::testing::Test {
+ public:
+  static absl::StatusOr<CompiledExpression> Compile(
+      const ::google::protobuf::Descriptor* descriptor, const std::string& fhir_path,
+      const std::vector<UserDefinedFunction*>& functions) {
+    return CompiledExpression::Compile(descriptor,
+                                       T::PrimitiveHandler::GetInstance(),
+                                       fhir_path, nullptr, functions);
+  }
+
+  template <typename R>
+  static absl::StatusOr<EvaluationResult> Evaluate(
+      const R& message, const std::string& expression,
+      const std::vector<UserDefinedFunction*>& functions) {
+    FHIR_ASSIGN_OR_RETURN(
+        auto compiled_expression,
+        Compile(message.GetDescriptor(), expression, functions));
+
+    return compiled_expression.Evaluate(message);
+  }
+
+  static absl::StatusOr<EvaluationResult> Evaluate(
+      const std::string& expression,
+      const std::vector<UserDefinedFunction*>& functions) {
+    // FHIRPath assumes a resource object during evaluation, so we use an
+    // encounter as a placeholder.
+    auto test_encounter = ValidEncounter<typename T::Encounter>();
+    return Evaluate<typename T::Encounter>(test_encounter, expression,
+                                           functions);
+  }
+
+  // foo() : String
+  //   Simply returns the string "foo".
+  class FooFunction : public UserDefinedFunction {
+   public:
+    explicit FooFunction(const std::string& name)
+        : UserDefinedFunction(name, {}) {}
+    absl::Status ValidateParams(
+        std::vector<std::shared_ptr<internal::ExpressionNode>>& params)
+        const override {
+      if (!params.empty()) {
+        return absl::InvalidArgumentError("foo() accepts zero arguments");
+      }
+      return absl::OkStatus();
+    }
+
+    absl::Status Evaluate(
+        internal::WorkSpace* work_space,
+        const std::vector<internal::WorkspaceMessage>& child_results,
+        std::vector<internal::WorkspaceMessage>* results,
+        const std::vector<std::shared_ptr<internal::ExpressionNode>>& params...)
+        const override {
+      Message* result = work_space->GetPrimitiveHandler()->NewString("foo");
+      work_space->DeleteWhenFinished(result);
+      results->push_back(internal::WorkspaceMessage(result));
+      return absl::OkStatus();
+    }
+
+    const ::google::protobuf::Descriptor* ReturnType() const override {
+      return google::fhir::r4::core::String::descriptor();
+    }
+  };
+
+  // has(field : identifier): Boolean
+  //   Checks if an object has a given field.
+  class HasFunction : public UserDefinedFunction {
+   public:
+    HasFunction()
+        : UserDefinedFunction(
+              "has", {UserDefinedFunction::ParameterVisitorType::kIdentifier}) {
+    }
+    absl::Status ValidateParams(
+        std::vector<std::shared_ptr<internal::ExpressionNode>>& params)
+        const override {
+      if (params.size() != 1) {
+        return absl::InvalidArgumentError("has() requires 1 argument");
+      }
+      return absl::OkStatus();
+    }
+
+    absl::Status Evaluate(
+        internal::WorkSpace* work_space,
+        const std::vector<internal::WorkspaceMessage>& child_results,
+        std::vector<internal::WorkspaceMessage>* results,
+        const std::vector<std::shared_ptr<internal::ExpressionNode>>& params...)
+        const override {
+      if (child_results.size() > 1) {
+        return absl::InvalidArgumentError(
+            "Function must be invoked on a single object.");
+      }
+      if (child_results.empty()) {
+        return absl::OkStatus();
+      }
+
+      std::vector<internal::WorkspaceMessage> tmp_results;
+      absl::Status status = params[0]->Evaluate(work_space, &tmp_results);
+      FHIR_RETURN_IF_ERROR(status);
+      std::string field;
+      FHIR_ASSIGN_OR_RETURN(
+          field, GetPrimitiveStringValue(*tmp_results[0].Message(), &field));
+
+      const Descriptor* descriptor =
+          child_results[0].Message()->GetDescriptor();
+      Message* result = work_space->GetPrimitiveHandler()->NewBoolean(
+          internal::HasFieldWithJsonName(descriptor, field));
+      work_space->DeleteWhenFinished(result);
+      results->push_back(internal::WorkspaceMessage(result));
+      return absl::OkStatus();
+    }
+
+    const ::google::protobuf::Descriptor* ReturnType() const override {
+      return google::fhir::r4::core::String::descriptor();
+    }
+  };
+};
+
+TYPED_TEST_SUITE(FhirPathUserDefinedFnsTest, TestEnvs);
+
+TYPED_TEST(FhirPathUserDefinedFnsTest, TestFooFunction) {
+  EXPECT_THAT(TestFixture::Evaluate("foo()", {}),
+              HasStatusCode(absl::StatusCode::kNotFound));
+
+  typename TestFixture::FooFunction foo_function("foo");
+  EXPECT_THAT(TestFixture::Evaluate("foo(1)", {&foo_function}),
+              HasStatusCode(absl::StatusCode::kInvalidArgument));
+  EXPECT_THAT(TestFixture::Evaluate("foo()", {&foo_function}),
+              EvalsToStringThatMatches(StrEq("foo")));
+  EXPECT_THAT(TestFixture::Evaluate("{}.foo()", {&foo_function}),
+              EvalsToStringThatMatches(StrEq("foo")));
+  EXPECT_THAT(TestFixture::Evaluate("'foo' = 1.foo()", {&foo_function}),
+              EvalsToTrue());
+
+  typename TestFixture::FooFunction invalid_foo_function("where");
+  EXPECT_THAT(TestFixture::Evaluate("where()", {}),
+              HasStatusCode(absl::StatusCode::kInvalidArgument));
+}
+
+TYPED_TEST(FhirPathUserDefinedFnsTest, TestHasFunction) {
+  typename TestFixture::HasFunction has_function;
+  auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
+  EXPECT_THAT(TestFixture::Evaluate(test_encounter, "Encounter.has(period)",
+                                    {&has_function}),
+              EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate(test_encounter, "Encounter.has(bar)",
+                                    {&has_function}),
+              EvalsToFalse());
 }
 
 }  // namespace
