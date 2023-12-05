@@ -320,7 +320,7 @@ inline std::shared_ptr<ExpressionNode> ToAny(
 }
 
 // Expression node that returns literals wrapped in the corresponding
-// protbuf wrapper
+// protobuf wrapper
 class Literal : public ExpressionNode {
  public:
   Literal(const Descriptor* descriptor,
@@ -337,6 +337,11 @@ class Literal : public ExpressionNode {
   }
 
   const Descriptor* ReturnType() const override { return descriptor_; }
+
+  std::vector<std::shared_ptr<ExpressionNode>> GetChildren()
+      const override {
+    return {};
+  }
 
  private:
   const Descriptor* descriptor_;
@@ -357,6 +362,11 @@ class EmptyLiteral : public ExpressionNode {
   // it is likely we could arbitrarily pick one of the primitive types without
   // ill-effect.
   const Descriptor* ReturnType() const override { return nullptr; }
+
+  std::vector<std::shared_ptr<ExpressionNode>> GetChildren()
+      const override {
+    return {};
+  }
 };
 
 // Expression node for a reference to $this.
@@ -372,6 +382,11 @@ class ThisReference : public ExpressionNode {
   }
 
   const Descriptor* ReturnType() const override { return descriptor_; }
+
+  std::vector<std::shared_ptr<ExpressionNode>> GetChildren()
+      const override {
+    return {};
+  }
 
  private:
   const Descriptor* descriptor_;
@@ -391,6 +406,11 @@ class ContextReference : public ExpressionNode {
 
   const Descriptor* ReturnType() const override { return descriptor_; }
 
+  std::vector<std::shared_ptr<ExpressionNode>> GetChildren()
+      const override {
+    return {};
+  }
+
  private:
   const Descriptor* descriptor_;
 };
@@ -408,6 +428,11 @@ class ResourceReference : public ExpressionNode {
 
   // TODO(b/244184211): Track %resource type during compilation.
   const Descriptor* ReturnType() const override { return nullptr; }
+
+  std::vector<std::shared_ptr<ExpressionNode>> GetChildren()
+      const override {
+    return {};
+  }
 };
 
 // Implements the InvocationTerm from the FHIRPath grammar,
@@ -449,6 +474,11 @@ class InvokeTermNode : public ExpressionNode {
 
   const Descriptor* ReturnType() const override {
     return field_ != nullptr ? field_->message_type() : nullptr;
+  }
+
+  std::vector<std::shared_ptr<ExpressionNode>> GetChildren()
+      const override {
+    return {};
   }
 
  private:
@@ -512,6 +542,11 @@ class InvokeExpressionNode : public ExpressionNode {
     return field_ != nullptr ? field_->message_type() : nullptr;
   }
 
+  std::vector<std::shared_ptr<ExpressionNode>> GetChildren()
+      const override {
+    return {child_expression_};
+  }
+
  private:
   const std::shared_ptr<ExpressionNode> child_expression_;
   // Null if the child_expression_ may evaluate to a collection that contains
@@ -568,6 +603,13 @@ class FunctionNode : public ExpressionNode {
   static absl::Status ValidateParams(
       const std::vector<std::shared_ptr<ExpressionNode>>& params) {
     return absl::OkStatus();
+  }
+
+  std::vector<std::shared_ptr<ExpressionNode>> GetChildren()
+      const override {
+    std::vector<std::shared_ptr<ExpressionNode>> children = params_;
+    children.insert(children.begin(), child_);
+    return children;
   }
 
  protected:
@@ -1710,6 +1752,11 @@ class BinaryOperator : public ExpressionNode {
       const std::vector<WorkspaceMessage>& right_results, WorkSpace* work_space,
       std::vector<WorkspaceMessage>* out_results) const = 0;
 
+  std::vector<std::shared_ptr<ExpressionNode>> GetChildren()
+      const override {
+    return {left_, right_};
+  }
+
  protected:
   const std::shared_ptr<ExpressionNode> left_;
 
@@ -2381,6 +2428,11 @@ class OfTypeFunction : public ExpressionNode {
     return nullptr;
   }
 
+  std::vector<std::shared_ptr<ExpressionNode>> GetChildren()
+      const override {
+    return {child_};
+  }
+
  private:
   const std::shared_ptr<ExpressionNode> child_;
   const std::string type_name_;
@@ -2440,6 +2492,11 @@ class IsFunction : public ExpressionNode {
     return Boolean::GetDescriptor();
   }
 
+  std::vector<std::shared_ptr<ExpressionNode>> GetChildren()
+      const override {
+    return {child_};
+  }
+
  private:
   const std::shared_ptr<ExpressionNode> child_;
   const std::string type_name_;
@@ -2496,6 +2553,11 @@ class AsFunction : public ExpressionNode {
   const Descriptor* ReturnType() const override {
     // TODO(b/244184211): Fetch the descriptor based on this->type_name_.
     return nullptr;
+  }
+
+  std::vector<std::shared_ptr<ExpressionNode>> GetChildren()
+      const override {
+    return {child_};
   }
 
  private:
@@ -2770,7 +2832,7 @@ class MemberOfFunction : public SingleValueFunctionNode {
 // Implements a custom user-defined function.
 class CustomFunction : public FunctionNode {
  public:
-  static absl::StatusOr<CustomFunction*> Create(
+  absl::StatusOr<CustomFunction*> static Create(
       const std::shared_ptr<ExpressionNode>& child_expression,
       const std::vector<FhirPathParser::ExpressionContext*>& params,
       const UserDefinedFunction* user_defined_function,
@@ -2785,7 +2847,7 @@ class CustomFunction : public FunctionNode {
     FHIR_RETURN_IF_ERROR(
         user_defined_function->ValidateParams(compiled_params));
     return new CustomFunction(child_expression, compiled_params,
-                              user_defined_function);
+                              user_defined_function, next_id_++);
   }
 
   static absl::StatusOr<std::vector<std::shared_ptr<ExpressionNode>>>
@@ -2830,11 +2892,21 @@ class CustomFunction : public FunctionNode {
 
   CustomFunction(const std::shared_ptr<ExpressionNode>& child,
                  const std::vector<std::shared_ptr<ExpressionNode>>& params,
-                 const UserDefinedFunction* function)
-      : FunctionNode(child, params), function_(function) {}
+                 const UserDefinedFunction* function, int32_t id)
+      : FunctionNode(child, params), function_(function), id_(id) {}
 
   absl::Status Evaluate(WorkSpace* work_space,
                         std::vector<WorkspaceMessage>* results) const override {
+    if (GetCallbackFunctionName().has_value()) {
+      auto cached_results = work_space->GetResultsCache().find(id_);
+      if (cached_results != work_space->GetResultsCache().end()) {
+        results->insert(results->end(), cached_results->second.begin(),
+                        cached_results->second.end());
+        return absl::OkStatus();
+      } else {
+        work_space->SetNextCacheNodeId(id_);
+      }
+    }
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
     return function_->Evaluate(work_space, child_results, results, params_);
@@ -2842,8 +2914,23 @@ class CustomFunction : public FunctionNode {
 
   const Descriptor* ReturnType() const override { return nullptr; }
 
+
+  // If the node represents a callback function, it's name is returned.
+  // Otherwise, an empty response is returned.
+  std::optional<std::string> GetCallbackFunctionName() const {
+    if (function_->IsCallbackFunction()) {
+      return function_->GetName();
+    }
+    return std::nullopt;
+  }
+
+  int32_t GetId() const { return id_; }
+
  private:
   const UserDefinedFunction* function_;
+  int32_t id_;
+
+  inline static int32_t next_id_ = 1;
 };
 
 class ComparisonOperator : public BinaryOperator {
@@ -3274,6 +3361,10 @@ class PolarityOperator : public ExpressionNode {
     return operand_->ReturnType();
   }
 
+  std::vector<std::shared_ptr<ExpressionNode>> GetChildren() const override {
+    return {operand_};
+  }
+
  private:
   const PolarityOperation operation_;
   const std::shared_ptr<ExpressionNode> operand_;
@@ -3289,6 +3380,10 @@ class BooleanOperator : public ExpressionNode {
   BooleanOperator(std::shared_ptr<ExpressionNode> left,
                   std::shared_ptr<ExpressionNode> right)
       : left_(left), right_(right) {}
+
+  std::vector<std::shared_ptr<ExpressionNode>> GetChildren() const override {
+    return {left_, right_};
+  }
 
  protected:
   void SetResult(bool eval_result, WorkSpace* work_space,
@@ -4328,20 +4423,76 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   const std::map<std::string, UserDefinedFunction*> user_defined_functions_;
 };
 
+absl::StatusOr<std::unique_ptr<internal::WorkSpace>> EvaluateCompiledExpression(
+    std::shared_ptr<const ExpressionNode> start_node,
+    const PrimitiveHandler* primitive_handler,
+    const terminology::TerminologyResolver* terminology_resolver,
+    const WorkspaceMessage& message,
+    std::vector<internal::WorkspaceMessage> message_context_stack = {},
+    std::map<int32_t, std::vector<internal::WorkspaceMessage>> results_cache =
+        {}) {
+  auto work_space = std::make_unique<internal::WorkSpace>(
+      primitive_handler, message_context_stack, message, terminology_resolver,
+      results_cache);
+  std::vector<internal::WorkspaceMessage> workspace_results;
+  FHIR_RETURN_IF_ERROR(
+      start_node->Evaluate(work_space.get(), &workspace_results));
+
+  std::vector<const Message*> results;
+  results.reserve(workspace_results.size());
+  for (internal::WorkspaceMessage& result : workspace_results) {
+    results.push_back(result.Message());
+  }
+  work_space->SetResultMessages(results);
+  return std::move(work_space);
+}
+
 }  // namespace internal
 
+// Postorder traversal of the AST looking for the first callback function node
+// with no precomputed result (entry in results_cache), starting the traversal
+// from the `root_expression_` node of the compiled expression.
+// Returns nullptr if the AST doesn't contain any callback function nodes that
+// have not already been evaluated.
+std::shared_ptr<const internal::CustomFunction>
+GetFirstCallbackNodeWithNoCachedResult(
+    std::shared_ptr<const ExpressionNode> node,
+    const std::map<int32_t, std::vector<internal::WorkspaceMessage>>&
+        results_cache) {
+  for (const std::shared_ptr<ExpressionNode>& child : node->GetChildren()) {
+    auto callback_node =
+        GetFirstCallbackNodeWithNoCachedResult(child, results_cache);
+    if (callback_node != nullptr) return callback_node;
+  }
+  std::shared_ptr<const internal::CustomFunction> custom_function =
+      std::dynamic_pointer_cast<const internal::CustomFunction>(node);
+  if (custom_function != nullptr &&
+      custom_function->GetCallbackFunctionName().has_value() &&
+      results_cache.find(custom_function->GetId()) == results_cache.end()) {
+    return custom_function;
+  }
+  return nullptr;
+}
+
 EvaluationResult::EvaluationResult(EvaluationResult&& result)
-    : work_space_(std::move(result.work_space_)) {}
+    : work_space_(std::move(result.work_space_)),
+      callback_function_name_(std::move(result.callback_function_name_)) {}
 
 EvaluationResult& EvaluationResult::operator=(EvaluationResult&& result) {
   work_space_ = std::move(result.work_space_);
+  callback_function_name_ = result.callback_function_name_;
 
   return *this;
 }
 
 EvaluationResult::EvaluationResult(
-    std::unique_ptr<internal::WorkSpace> work_space)
-    : work_space_(std::move(work_space)) {}
+    std::unique_ptr<internal::WorkSpace> work_space,
+    const std::string& callback_function_name)
+    : work_space_(std::move(work_space)) {
+  if (!callback_function_name.empty()) {
+    callback_function_name_ = callback_function_name;
+  }
+}
 
 EvaluationResult::~EvaluationResult() {}
 
@@ -4469,24 +4620,57 @@ absl::StatusOr<EvaluationResult> CompiledExpression::Evaluate(
 
 absl::StatusOr<EvaluationResult> CompiledExpression::Evaluate(
     const internal::WorkspaceMessage& message) const {
-  std::vector<internal::WorkspaceMessage> message_context_stack;
-  auto work_space = absl::make_unique<internal::WorkSpace>(
-      primitive_handler_, message_context_stack, message,
-      terminology_resolver_);
-
-  std::vector<internal::WorkspaceMessage> workspace_results;
-  FHIR_RETURN_IF_ERROR(
-      root_expression_->Evaluate(work_space.get(), &workspace_results));
-
-  std::vector<const Message*> results;
-  results.reserve(workspace_results.size());
-  for (internal::WorkspaceMessage& result : workspace_results) {
-    results.push_back(result.Message());
+  auto next_callback_node =
+      GetFirstCallbackNodeWithNoCachedResult(root_expression_, {});
+  auto work_space = internal::EvaluateCompiledExpression(
+      next_callback_node == nullptr ? root_expression_ : next_callback_node,
+      primitive_handler_, terminology_resolver_, message);
+  if (!work_space.ok()) {
+    return work_space.status();
   }
+  if (next_callback_node != nullptr) {
+    return EvaluationResult(
+        std::move(work_space.value()),
+        next_callback_node->GetCallbackFunctionName().value());
+  }
+  return EvaluationResult(std::move(work_space.value()));
+}
 
-  work_space->SetResultMessages(results);
+absl::StatusOr<EvaluationResult> CompiledExpression::ResumeEvaluation(
+    const EvaluationResult& prev_result,
+    const std::vector<const Message*>& callback_results) const {
+  std::vector<internal::WorkspaceMessage> workspace_results;
+  workspace_results.reserve(callback_results.size());
+  for (const Message* msg : callback_results) {
+    workspace_results.push_back(internal::WorkspaceMessage(msg));
+  }
+  std::map<int32_t, std::vector<internal::WorkspaceMessage>> results_cache =
+      prev_result.work_space_->GetResultsCache();
+  std::optional<int32_t> next_cache_node_id =
+      prev_result.work_space_->GetNextCacheNodeId();
+  if (!next_cache_node_id.has_value()) {
+    return absl::InvalidArgumentError(
+        "Cannot resume evaluation, no remaining callback functions found");
+  }
+  results_cache[next_cache_node_id.value()] = workspace_results;
 
-  return EvaluationResult(std::move(work_space));
+  auto next_callback_node =
+      GetFirstCallbackNodeWithNoCachedResult(root_expression_, results_cache);
+
+  auto work_space = internal::EvaluateCompiledExpression(
+      next_callback_node == nullptr ? root_expression_ : next_callback_node,
+      primitive_handler_, terminology_resolver_,
+      prev_result.work_space_->MessageContext(),
+      prev_result.work_space_->MessageContextStack(), results_cache);
+  if (!work_space.ok()) {
+    return work_space.status();
+  }
+  if (next_callback_node != nullptr) {
+    return EvaluationResult(
+        std::move(work_space.value()),
+        next_callback_node->GetCallbackFunctionName().value());
+  }
+  return EvaluationResult(std::move(work_space.value()));
 }
 
 }  // namespace fhir_path

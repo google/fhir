@@ -17,6 +17,7 @@
 #include <stdint.h>
 
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -30,13 +31,16 @@
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
+#include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
 #include "absl/strings/substitute.h"
 #include "absl/time/civil_time.h"
 #include "absl/time/time.h"
+#include "google/fhir/annotations.h"
 #include "google/fhir/fhir_path/utils.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/r4/primitive_handler.h"
+#include "google/fhir/references.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/stu3/primitive_handler.h"
@@ -303,7 +307,10 @@ class FhirPathTest : public ::testing::Test {
     FHIR_ASSIGN_OR_RETURN(auto compiled_expression,
                           Compile(message.GetDescriptor(), expression));
 
-    return compiled_expression.Evaluate(message);
+    auto result = compiled_expression.Evaluate(message);
+    CHECK(!result.ok() ||
+          (result.ok() && !result.value().CallbackFunctionName().has_value()));
+    return result;
   }
 
   static absl::StatusOr<EvaluationResult> Evaluate(
@@ -311,7 +318,10 @@ class FhirPathTest : public ::testing::Test {
     // FHIRPath assumes a resource object during evaluation, so we use an
     // encounter as a placeholder.
     auto test_encounter = ValidEncounter<typename T::Encounter>();
-    return Evaluate<typename T::Encounter>(test_encounter, expression);
+    auto result = Evaluate<typename T::Encounter>(test_encounter, expression);
+    CHECK(!result.ok() ||
+          (result.ok() && !result.value().CallbackFunctionName().has_value()));
+    return result;
   }
 };
 
@@ -2725,7 +2735,10 @@ class FhirPathTestForValueSets : public FhirPathTest<T> {
     FHIR_ASSIGN_OR_RETURN(auto compiled_expression,
                           Compile(message.GetDescriptor(), expression));
 
-    return compiled_expression.Evaluate(message);
+    auto result = compiled_expression.Evaluate(message);
+    CHECK(!result.ok() ||
+          (result.ok() && !result.value().CallbackFunctionName().has_value()));
+    return result;
   }
 
  private:
@@ -2940,6 +2953,111 @@ class FhirPathUserDefinedFnsTest : public ::testing::Test {
       return google::fhir::r4::core::String::descriptor();
     }
   };
+
+  // resolve(): Resource
+  //   Takes as input a reference and returns the resource pointed to by that
+  //   reference if found.
+  class ResolveFunction : public UserDefinedFunction {
+   public:
+    ResolveFunction() : UserDefinedFunction("resolve", {}, true) {}
+    absl::Status ValidateParams(
+        std::vector<std::shared_ptr<internal::ExpressionNode>>& params)
+        const override {
+      if (!params.empty()) {
+        return absl::InvalidArgumentError("resolve() accepts zero arguments");
+      }
+      return absl::OkStatus();
+    }
+
+    absl::Status Evaluate(
+        internal::WorkSpace* work_space,
+        const std::vector<internal::WorkspaceMessage>& child_results,
+        std::vector<internal::WorkspaceMessage>* results,
+        const std::vector<std::shared_ptr<internal::ExpressionNode>>& params...)
+        const override {
+      // accept a single input for simplicity
+      if (child_results.size() > 1) {
+        return absl::InvalidArgumentError(
+            "Function must be invoked on at most one object.");
+      }
+      if (child_results.empty()) {
+        return absl::OkStatus();
+      }
+      const Descriptor* descriptor =
+          child_results[0].Message()->GetDescriptor();
+      if (!IsReference(descriptor)) {
+        return absl::OkStatus();
+      }
+      FHIR_ASSIGN_OR_RETURN(
+          std::optional<std::string> reference,
+          ReferenceProtoToString(*child_results[0].Message()));
+      if (!reference.has_value()) {
+        return absl::OkStatus();
+      }
+      Message* reference_res =
+          work_space->GetPrimitiveHandler()->NewString(reference.value());
+      work_space->DeleteWhenFinished(reference_res);
+      results->push_back(internal::WorkspaceMessage(reference_res));
+      return absl::OkStatus();
+    }
+
+    const ::google::protobuf::Descriptor* ReturnType() const override { return nullptr; }
+  };
+
+  // reverseResolve(sourceReference : identifier): Resource
+  //   Takes as input a resource and returns the resource(s) that resolve to the
+  //   input resource.
+  class ReverseResolveFunction : public UserDefinedFunction {
+   public:
+    ReverseResolveFunction()
+        : UserDefinedFunction(
+              "reverseResolve",
+              {UserDefinedFunction::ParameterVisitorType::kIdentifier}, true) {}
+    absl::Status ValidateParams(
+        std::vector<std::shared_ptr<internal::ExpressionNode>>& params)
+        const override {
+      if (params.size() > 1) {
+        return absl::InvalidArgumentError(
+            "reverseResolve() requires 1 argument");
+      }
+      return absl::OkStatus();
+    }
+
+    absl::Status Evaluate(
+        internal::WorkSpace* work_space,
+        const std::vector<internal::WorkspaceMessage>& child_results,
+        std::vector<internal::WorkspaceMessage>* results,
+        const std::vector<std::shared_ptr<internal::ExpressionNode>>& params...)
+        const override {
+      if (child_results.size() > 1) {
+        return absl::InvalidArgumentError(
+            "Function must be invoked on at most one object.");
+      }
+      if (child_results.empty()) {
+        return absl::OkStatus();
+      }
+      const Descriptor* descriptor =
+          child_results[0].Message()->GetDescriptor();
+      if (!IsResource(descriptor)) {
+        return absl::OkStatus();
+      }
+
+      std::vector<internal::WorkspaceMessage> param_res;
+      absl::Status status = params[0]->Evaluate(work_space, &param_res);
+      FHIR_RETURN_IF_ERROR(status);
+      std::string path;
+      FHIR_ASSIGN_OR_RETURN(
+          path, GetPrimitiveStringValue(*param_res[0].Message(), &path));
+
+      Message* path_res = work_space->GetPrimitiveHandler()->NewString(path);
+      work_space->DeleteWhenFinished(path_res);
+      results->push_back(internal::WorkspaceMessage(path_res));
+      results->push_back(internal::WorkspaceMessage(child_results[0]));
+      return absl::OkStatus();
+    }
+
+    const ::google::protobuf::Descriptor* ReturnType() const override { return nullptr; }
+  };
 };
 
 TYPED_TEST_SUITE(FhirPathUserDefinedFnsTest, TestEnvs);
@@ -2972,6 +3090,94 @@ TYPED_TEST(FhirPathUserDefinedFnsTest, TestHasFunction) {
   EXPECT_THAT(TestFixture::Evaluate(test_encounter, "Encounter.has(bar)",
                                     {&has_function}),
               EvalsToFalse());
+}
+
+TYPED_TEST(FhirPathUserDefinedFnsTest, TestCallbackFunction) {
+  typename TestFixture::ResolveFunction resolve_function;
+  auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
+  test_encounter.mutable_service_provider()
+      ->mutable_observation_id()
+      ->set_value("123");
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      auto compiled, TestFixture::Compile(test_encounter.GetDescriptor(),
+                                          "Encounter.serviceProvider.resolve()."
+                                          "ofType(Observation).where(id='123')",
+                                          {&resolve_function}));
+  auto result = compiled.Evaluate(test_encounter);
+  FHIR_ASSERT_OK(result.status());
+  ASSERT_EQ(result.value().CallbackFunctionName().value_or(""), "resolve");
+  EXPECT_THAT(result, EvalsToStringThatMatches(StrEq("Observation/123")));
+
+  auto test_observation = ValidObservation<typename TypeParam::Observation>();
+  auto final_result =
+      compiled.ResumeEvaluation(result.value(), {&test_observation});
+  FHIR_ASSERT_OK(final_result.status());
+  EXPECT_THAT(final_result.value().GetMessages(),
+              UnorderedElementsAreArray({&test_observation}));
+  ASSERT_FALSE(final_result.value().CallbackFunctionName().has_value());
+}
+
+TYPED_TEST(FhirPathUserDefinedFnsTest, TestCallbackAndUserDefinedFunctions) {
+  auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
+  test_encounter.mutable_service_provider()
+      ->mutable_observation_id()
+      ->set_value("1");
+  test_encounter.mutable_subject()->mutable_observation_id()->set_value("2");
+
+  typename TestFixture::ResolveFunction resolve_function;
+  typename TestFixture::ReverseResolveFunction reverse_resolve_function;
+  typename TestFixture::HasFunction has_function;
+
+  // Order of callback executions for the below expression should be:
+  //   subject.resolve() -> serviceProvider.resolve() -> reverseResolve()
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      auto compiled,
+      TestFixture::Compile(
+          test_encounter.GetDescriptor(),
+          "Encounter in (subject.resolve().where(has(id)) | "
+          "serviceProvider.resolve().reverseResolve(Encounter.subject))",
+          {&resolve_function, &reverse_resolve_function, &has_function}));
+
+  auto result = compiled.Evaluate(test_encounter);
+  FHIR_ASSERT_OK(result.status());
+  ASSERT_EQ(result.value().CallbackFunctionName().value_or(""), "resolve");
+  EXPECT_THAT(result, EvalsToStringThatMatches(StrEq("Observation/2")));
+
+  auto test_observation2 = ValidObservation<typename TypeParam::Observation>();
+  test_observation2.mutable_id()->set_value("2");
+
+  // resume evaluation from subject.resolve()
+  result = compiled.ResumeEvaluation(result.value(), {&test_observation2});
+  FHIR_ASSERT_OK(result.status());
+  ASSERT_EQ(result.value().CallbackFunctionName().value_or(""), "resolve");
+  EXPECT_THAT(result, EvalsToStringThatMatches(StrEq("Observation/1")));
+
+  auto test_observation1 = ValidObservation<typename TypeParam::Observation>();
+  test_observation1.mutable_id()->set_value("1");
+
+  // resume evaluation from serviceProvider.resolve()
+  result = compiled.ResumeEvaluation(result.value(), {&test_observation1});
+  FHIR_ASSERT_OK(result.status());
+  ASSERT_EQ(result.value().CallbackFunctionName().value_or(""),
+            "reverseResolve");
+  EXPECT_THAT(
+      result.value().GetMessages(),
+      ElementsAreArray({EqualsProto(ParseFromString<typename TypeParam::String>(
+                            "value: 'Encounter.subject'")),
+                        EqualsProto(test_observation1)}));
+
+  // resume evaluation from reverseResolve() - get final result
+  result = compiled.ResumeEvaluation(result.value(), {&test_encounter});
+  FHIR_ASSERT_OK(result.status());
+  ASSERT_FALSE(result.value().CallbackFunctionName().has_value());
+  EXPECT_THAT(result.value().GetMessages(),
+              ElementsAreArray({
+                  EqualsProto(ParseFromString<typename TypeParam::Boolean>(
+                      "value: true")),
+              }));
+
+  EXPECT_THAT(compiled.ResumeEvaluation(result.value(), {}),
+              HasStatusCode(absl::StatusCode::kInvalidArgument));
 }
 
 }  // namespace

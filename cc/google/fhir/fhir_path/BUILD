@@ -199,7 +199,9 @@ cc_test(
     deps = [
         ":fhir_path",
         ":utils",
+        "//cc/google/fhir:annotations",
         "//cc/google/fhir:proto_util",
+        "//cc/google/fhir:references",
         "//cc/google/fhir:util",
         "//cc/google/fhir/r4:primitive_handler",
         "//cc/google/fhir/status",

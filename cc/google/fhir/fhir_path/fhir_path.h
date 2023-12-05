@@ -15,6 +15,8 @@
 #ifndef GOOGLE_FHIR_FHIR_PATH_FHIR_PATH_H_
 #define GOOGLE_FHIR_FHIR_PATH_FHIR_PATH_H_
 
+#include <cstdint>
+#include <map>
 #include <vector>
 
 #include "google/protobuf/message.h"
@@ -27,7 +29,6 @@
 namespace google {
 namespace fhir {
 namespace fhir_path {
-
 
 namespace internal {
 
@@ -108,15 +109,20 @@ class WorkSpace {
   }
 
   // Same as above, with added parameter for const
-  // terminology::TerminologyResolver*.
+  // terminology::TerminologyResolver* and results_cache.
+  //
+  // results_cache stores the previously evaluated results for expression nodes
+  // of type user-defined callback functions.
   explicit WorkSpace(
       const PrimitiveHandler* primitive_handler,
       const std::vector<WorkspaceMessage>& message_context_stack,
       const WorkspaceMessage& message_context,
-      const terminology::TerminologyResolver* terminology_resolver)
+      const terminology::TerminologyResolver* terminology_resolver,
+      const std::map<int32_t, std::vector<WorkspaceMessage>>& results_cache)
       : message_context_stack_(message_context_stack),
         primitive_handler_(primitive_handler),
-        terminology_resolver_(terminology_resolver) {
+        terminology_resolver_(terminology_resolver),
+        results_cache_(results_cache) {
     message_context_stack_.push_back(message_context);
   }
 
@@ -179,6 +185,18 @@ class WorkSpace {
     return terminology_resolver_;
   }
 
+  std::map<int32_t, std::vector<WorkspaceMessage>>& GetResultsCache() {
+    return results_cache_;
+  }
+
+  void SetNextCacheNodeId(int32_t next_cache_node_id) {
+    next_cache_node_id_ = next_cache_node_id;
+  }
+
+  std::optional<int32_t> GetNextCacheNodeId() const {
+    return next_cache_node_id_;
+  }
+
  private:
   std::vector<const ::google::protobuf::Message*> messages_;
 
@@ -189,6 +207,10 @@ class WorkSpace {
   const PrimitiveHandler* primitive_handler_;
 
   const terminology::TerminologyResolver* terminology_resolver_;
+
+  std::map<int32_t, std::vector<WorkspaceMessage>> results_cache_;
+
+  std::optional<int32_t> next_cache_node_id_;
 };
 
 // Abstract base class of "compiled" FHIRPath expressions. In this
@@ -218,6 +240,10 @@ class ExpressionNode {
 
   // The descriptor of the message type returned by the expression.
   virtual const ::google::protobuf::Descriptor* ReturnType() const = 0;
+
+  // The children nodes of the current node, that need to be evaluated first.
+  virtual std::vector<std::shared_ptr<ExpressionNode>> GetChildren()
+      const = 0;
 };
 
 }  // namespace internal
@@ -288,15 +314,83 @@ class EvaluationResult {
   // did not resolve to a string value.
   absl::StatusOr<std::string> GetString() const;
 
+  // If empty, this indicates that the result is final. Otherwise, it means that
+  // it's an intermediate result. Intermediate results are inputs to a callback
+  // function that the caller need to evaluate on their end, then call
+  // CompiledExpression::ResumeEvaluation() with the computed output to resume
+  // evaluation.
+  // For more information, see documentation on the UserDefinedFunction class.
+  std::optional<std::string> CallbackFunctionName() const {
+    return callback_function_name_;
+  }
+
  private:
   friend class CompiledExpression;
 
-  explicit EvaluationResult(std::unique_ptr<internal::WorkSpace> work_space);
+  explicit EvaluationResult(std::unique_ptr<internal::WorkSpace> work_space,
+                            const std::string& callback_function_name = "");
 
   std::unique_ptr<internal::WorkSpace> work_space_;
+  std::optional<std::string> callback_function_name_;
 };
 
 // Represents a custom user-defined function.
+// These are custom functions defined by the caller and passed to the FHIRPath
+// compiler. The caller is responsible for defining how these functions are
+// evaluated given the results of the child expression and the compiled
+// parameters.
+//
+// User-defined functions can also be defined as "Callback" function.
+// This means that some of the execution of the function has to occur outside
+// of the FhirPath engine, for instance for expensive calls to external
+// services.  When the engine encounters a Callback function, it will pause
+// evaluation with the result of the CallbackFunction, and return an
+// EvaluationResult.  In this case, the optional
+// `EvaluationResult::CallbackFuctionName()` will be present and populated with
+// the name of the Callback function that evaluation was paused on, and the
+// EvaluationResult should be considered an "intermediate" result that is the
+// input to the external part of the function. The user can then determine the
+// output of the Callback function and resume evaluation using
+// CompiledExpression::ResumeEvaluation.
+//
+// For example, consider the expression
+// `Encounter.serviceProvider.resolve().meta`
+// This should return the `meta` field of the Resource referenced by the
+// `Encounter.serviceProvider` field, which is a Reference.  This cannot be
+// fully evaluated by the FhirPath engine, since it is unable to look up
+// arbitrary resources by id.
+// Instead, this could be implemented by a UserDefinedFunction with
+// `is_callback_function` set to true, that just returns the Reference proto it
+// is evaluated on, so the user can externally resolve the reference and supply
+// the result.
+//
+// E.g.,
+//
+// absl::StatusOr<CompiledExpression>  expr =
+//     CompiledExpression::Compile(Encounter::descriptor(),
+//                                 r4_primitive_handler,
+//                                 `Encounter.serviceProvider.resolve().meta`,
+//                                 terminology_resolver,
+//                                 udf_definitions);
+// absl::StatusOr<EvaluationResult> result = expr->Evaluate(my_encounter);
+// // Check for CallbackFunctionName, which indicates we've paused on an
+// // intermediate result.
+// while (result->CallbackFunctionName().has_value()) {
+//   // There is a CallbackFunctionName, so this is an intermediate result
+//   if (*result->CallbackFunctionName() == "resolve") {
+//     // Evaluation was paused on a "resolve" callback function.
+//     // The implementation of "resolve" according to `udf_definitions` just
+//     // returns the reference it was invoked on, so that is the value of the
+//     // intermediate result, and we must do the resolving ourself.
+//     Observation referenced_obs = DoActualResolving(result->value());
+//     // Resume evaluation of the FhirPath expression and update the value of
+//     // result.
+//     result = expr->ResumeEvaluation(*result, {referenced_obs});
+//     continue;
+//   }
+//   {... Handle other potential callback names ...}
+// }
+// // There are no more Callback functions - the result is final.
 class UserDefinedFunction {
  public:
   // Defines how the parameters are compiled.
@@ -317,8 +411,11 @@ class UserDefinedFunction {
   };
 
   explicit UserDefinedFunction(const std::string& name,
-                               const std::vector<ParameterVisitorType>& params)
-      : name_(name), param_types_(params) {}
+                               const std::vector<ParameterVisitorType>& params,
+                               bool is_callback_function = false)
+      : name_(name),
+        param_types_(params),
+        is_callback_function_(is_callback_function) {}
   virtual ~UserDefinedFunction() {}
 
   // Validate the function's parameters.
@@ -348,9 +445,14 @@ class UserDefinedFunction {
     return param_types_;
   }
 
- private:
+  // Whether the function is a callback function that will return an
+  // intermediate result to the caller.
+  bool IsCallbackFunction() const { return is_callback_function_; }
+
+ protected:
   const std::string name_;
   const std::vector<ParameterVisitorType> param_types_;
+  const bool is_callback_function_;
 };
 
 // Represents a FHIRPath expression that has been "compiled" to run efficiently
@@ -391,6 +493,17 @@ class CompiledExpression {
   // evaluated against (e.g. the message's ancestry.)
   absl::StatusOr<EvaluationResult> Evaluate(
       const internal::WorkspaceMessage& message) const;
+
+  // Resumes evaluation of the compiled expression.
+  //
+  // To be used whenever an expression contains a callback function and returns
+  // an intermediate result. The caller needs to evaluate the callback function
+  // and then call this method providing the output of the callback in
+  // callback_results. Note that this function may need to be called multiple
+  // times for each callback-type function in the expression.
+  absl::StatusOr<EvaluationResult> ResumeEvaluation(
+      const EvaluationResult& prev_result,
+      const std::vector<const Message*>& callback_results) const;
 
  private:
   explicit CompiledExpression(
