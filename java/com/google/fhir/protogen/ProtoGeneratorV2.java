@@ -128,6 +128,7 @@ public class ProtoGeneratorV2 {
           "base64Binary", FieldDescriptorProto.Type.TYPE_BYTES,
           "boolean", FieldDescriptorProto.Type.TYPE_BOOL,
           "integer", FieldDescriptorProto.Type.TYPE_SINT32,
+          "integer64", FieldDescriptorProto.Type.TYPE_SINT64,
           "positiveInt", FieldDescriptorProto.Type.TYPE_UINT32,
           "unsignedInt", FieldDescriptorProto.Type.TYPE_UINT32);
 
