@@ -21,9 +21,6 @@
 #include <ostream>
 #include <string>
 
-#include "google/protobuf/descriptor.h"
-#include "google/protobuf/message.h"
-#include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
@@ -38,6 +35,9 @@
 #include "google/fhir/stu3/profiles.h"
 #include "google/fhir/stu3/resource_validation.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/message.h"
+#include "google/protobuf/text_format.h"
 
 // When comparing converted FHIR resources to their expected value, you should
 // also check whether that resource is considered valid. Invalid resources are

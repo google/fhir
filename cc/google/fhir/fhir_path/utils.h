@@ -18,10 +18,10 @@
 #include <functional>
 #include <vector>
 
-#include "google/protobuf/descriptor.h"
-#include "google/protobuf/message.h"
 #include "absl/status/status.h"
 #include "absl/strings/string_view.h"
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/message.h"
 
 namespace google {
 namespace fhir {

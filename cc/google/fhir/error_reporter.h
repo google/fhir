@@ -23,10 +23,10 @@
 #include <utility>
 #include <vector>
 
-#include "google/protobuf/descriptor.h"
 #include "absl/status/status.h"
 #include "absl/strings/string_view.h"
 #include "absl/strings/substitute.h"
+#include "google/protobuf/descriptor.h"
 
 namespace google::fhir {
 

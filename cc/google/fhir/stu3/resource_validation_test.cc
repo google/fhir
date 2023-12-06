@@ -16,7 +16,6 @@
 
 #include "google/fhir/stu3/resource_validation.h"
 
-#include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
@@ -24,6 +23,7 @@
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 #include "proto/google/fhir/proto/stu3/resources.pb.h"
+#include "google/protobuf/text_format.h"
 
 namespace google {
 namespace fhir {

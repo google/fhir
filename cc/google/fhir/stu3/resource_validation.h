@@ -17,11 +17,11 @@
 #ifndef GOOGLE_FHIR_STU3_RESOURCE_VALIDATION_H_
 #define GOOGLE_FHIR_STU3_RESOURCE_VALIDATION_H_
 
-#include "google/protobuf/message.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "google/fhir/error_reporter.h"
 #include "proto/google/fhir/proto/stu3/resources.pb.h"
+#include "google/protobuf/message.h"
 
 namespace google {
 namespace fhir {

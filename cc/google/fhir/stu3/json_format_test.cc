@@ -16,7 +16,6 @@
 
 #include "google/fhir/stu3/json_format.h"
 
-#include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/statusor.h"
@@ -32,6 +31,7 @@
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 #include "proto/google/fhir/proto/stu3/resources.pb.h"
 #include "testdata/stu3/profiles/test.pb.h"
+#include "google/protobuf/text_format.h"
 
 namespace google {
 namespace fhir {

@@ -14,15 +14,15 @@
 
 #include "google/fhir/proto_util.h"
 
-#include "google/protobuf/descriptor.h"
-#include "google/protobuf/message.h"
-#include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 #include "proto/google/fhir/proto/stu3/resources.pb.h"
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/message.h"
+#include "google/protobuf/text_format.h"
 
 namespace google {
 namespace fhir {

@@ -21,7 +21,6 @@
 #include <vector>
 
 #include "google/protobuf/any.pb.h"
-#include "google/protobuf/message.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/statusor.h"
@@ -37,6 +36,7 @@
 #include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
 #include "proto/google/fhir/proto/r4/fhirproto_extensions.pb.h"
+#include "google/protobuf/message.h"
 
 namespace google {
 namespace fhir {

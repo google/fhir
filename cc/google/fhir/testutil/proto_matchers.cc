@@ -19,14 +19,14 @@
 #include <string>
 #include <vector>
 
-#include "google/protobuf/descriptor.h"
-#include "google/protobuf/message.h"
-#include "google/protobuf/text_format.h"
 #include "google/protobuf/util/message_differencer.h"
 #include "gtest/gtest.h"
 #include "absl/strings/string_view.h"
 #include "absl/strings/substitute.h"
+#include "google/protobuf/descriptor.h"
 #include "google/protobuf/io/tokenizer.h"
+#include "google/protobuf/message.h"
+#include "google/protobuf/text_format.h"
 
 namespace google::fhir::testutil::internal {
 

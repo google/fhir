@@ -22,11 +22,11 @@
 #include <type_traits>
 #include <vector>
 
-#include "google/protobuf/message.h"
 #include "google/protobuf/util/message_differencer.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/strings/string_view.h"
+#include "google/protobuf/message.h"
 
 namespace google::fhir::testutil {
 

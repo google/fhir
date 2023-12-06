@@ -23,7 +23,6 @@
 #include <vector>
 
 
-#include "google/protobuf/message.h"
 #include "absl/log/check.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
@@ -34,6 +33,7 @@
 #include "google/fhir/fhir_types.h"
 #include "google/fhir/status/statusor.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
+#include "google/protobuf/message.h"
 
 namespace google::fhir {
 

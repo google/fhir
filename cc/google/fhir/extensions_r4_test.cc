@@ -16,7 +16,6 @@
 
 #include <vector>
 
-#include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
@@ -29,6 +28,7 @@
 #include "proto/google/fhir/proto/r4/core/resources/composition.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
+#include "google/protobuf/text_format.h"
 
 namespace google {
 namespace fhir {

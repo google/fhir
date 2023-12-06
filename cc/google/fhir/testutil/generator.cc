@@ -19,7 +19,6 @@
 #include <vector>
 
 #include "google/protobuf/any.pb.h"
-#include "google/protobuf/descriptor.h"
 #include "absl/random/distributions.h"
 #include "absl/status/status.h"
 #include "google/fhir/annotations.h"
@@ -28,6 +27,7 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/references.h"
 #include "google/fhir/util.h"
+#include "google/protobuf/descriptor.h"
 
 namespace google {
 namespace fhir {

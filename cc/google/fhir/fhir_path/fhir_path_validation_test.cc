@@ -18,8 +18,6 @@
 #include <string>
 #include <utility>
 
-#include "google/protobuf/message.h"
-#include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
@@ -43,6 +41,8 @@
 #include "proto/google/fhir/proto/stu3/resources.pb.h"
 #include "proto/google/fhir/proto/stu3/uscore.pb.h"
 #include "proto/google/fhir/proto/stu3/uscore_codes.pb.h"
+#include "google/protobuf/message.h"
+#include "google/protobuf/text_format.h"
 
 namespace google {
 namespace fhir {

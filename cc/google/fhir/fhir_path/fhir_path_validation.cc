@@ -23,7 +23,6 @@
 #include <utility>
 #include <vector>
 
-#include "google/protobuf/descriptor.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
 #include "google/fhir/annotations.h"
@@ -36,6 +35,7 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
+#include "google/protobuf/descriptor.h"
 
 namespace google {
 namespace fhir {

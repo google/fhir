@@ -16,8 +16,6 @@
 
 #include <string>
 
-#include "google/protobuf/descriptor.h"
-#include "google/protobuf/message.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
@@ -27,6 +25,8 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/statusor.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/message.h"
 
 namespace google {
 namespace fhir {

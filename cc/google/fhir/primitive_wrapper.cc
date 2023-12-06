@@ -28,8 +28,6 @@
 #include <vector>
 
 
-#include "google/protobuf/descriptor.h"
-#include "google/protobuf/message.h"
 #include "absl/container/flat_hash_map.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
@@ -48,6 +46,8 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/message.h"
 #include "re2/re2.h"
 
 namespace google {

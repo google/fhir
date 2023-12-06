@@ -14,7 +14,6 @@
 
 #include "google/fhir/testutil/generator.h"
 
-#include "google/protobuf/descriptor.h"
 #include "gtest/gtest.h"
 #include "absl/time/time.h"
 #include "google/fhir/proto_util.h"
@@ -24,6 +23,7 @@
 #include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/plan_definition.pb.h"
+#include "google/protobuf/descriptor.h"
 
 namespace google {
 namespace fhir {

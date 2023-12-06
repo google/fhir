@@ -18,7 +18,6 @@
 
 #include <string>
 
-#include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
@@ -26,6 +25,7 @@
 #include "google/fhir/status/status.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/r4/core/resources/operation_outcome.pb.h"
+#include "google/protobuf/text_format.h"
 
 namespace google::fhir::r4 {
 

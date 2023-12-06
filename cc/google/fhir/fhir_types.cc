@@ -14,8 +14,8 @@
 
 #include "google/fhir/fhir_types.h"
 
-#include "google/protobuf/message.h"
 #include "google/fhir/annotations.h"
+#include "google/protobuf/message.h"
 
 namespace google {
 namespace fhir {

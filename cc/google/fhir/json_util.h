@@ -19,9 +19,9 @@
 
 #include <string>
 
-#include "google/protobuf/descriptor.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/string_view.h"
+#include "google/protobuf/descriptor.h"
 
 namespace google::fhir {
 

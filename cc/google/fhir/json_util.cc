@@ -18,12 +18,12 @@
 
 #include <string>
 
-#include "google/protobuf/descriptor.h"
 #include "absl/container/flat_hash_map.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/string_view.h"
 #include "google/fhir/annotations.h"
+#include "google/protobuf/descriptor.h"
 
 namespace google::fhir {
 

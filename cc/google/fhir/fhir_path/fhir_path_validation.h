@@ -19,7 +19,6 @@
 #include <string>
 #include <unordered_map>
 
-#include "google/protobuf/message.h"
 #include "absl/base/macros.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/string_view.h"
@@ -29,6 +28,7 @@
 #include "google/fhir/fhir_path/fhir_path.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/status/statusor.h"
+#include "google/protobuf/message.h"
 
 namespace google {
 namespace fhir {

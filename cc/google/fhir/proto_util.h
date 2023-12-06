@@ -22,14 +22,14 @@
 
 
 #include "glog/logging.h"
-#include "google/protobuf/descriptor.h"
-#include "google/protobuf/message.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/substitute.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/message.h"
 
 namespace google {
 namespace fhir {

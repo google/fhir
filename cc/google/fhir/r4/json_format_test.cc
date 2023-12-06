@@ -25,7 +25,6 @@
 #include <vector>
 
 #include "google/protobuf/descriptor.pb.h"
-#include "google/protobuf/text_format.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/log/check.h"
@@ -198,6 +197,7 @@
 #include "proto/google/fhir/proto/r4/core/resources/verification_result.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/vision_prescription.pb.h"
 #include "testdata/r4/profiles/test.pb.h"
+#include "google/protobuf/text_format.h"
 
 namespace google {
 namespace fhir {

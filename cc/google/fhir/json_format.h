@@ -20,7 +20,6 @@
 #include <string>
 #include <unordered_map>
 
-#include "google/protobuf/message.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/string_view.h"
 #include "absl/time/time.h"
@@ -28,6 +27,7 @@
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json_format_results.h"
 #include "google/fhir/primitive_handler.h"
+#include "google/protobuf/message.h"
 
 namespace google::fhir {
 

@@ -20,8 +20,6 @@
 #include <utility>
 #include <vector>
 
-#include "google/protobuf/descriptor.h"
-#include "google/protobuf/message.h"
 #include "absl/container/flat_hash_map.h"
 #include "absl/random/distributions.h"
 #include "absl/random/random.h"
@@ -29,6 +27,8 @@
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/status/status.h"
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/message.h"
 
 namespace google {
 namespace fhir {

@@ -27,9 +27,6 @@
 
 #include "google/protobuf/any.pb.h"
 #include "google/protobuf/descriptor.pb.h"
-#include "google/protobuf/descriptor.h"
-#include "google/protobuf/message.h"
-#include "google/protobuf/reflection.h"
 #include "absl/base/macros.h"
 #include "absl/container/flat_hash_set.h"
 #include "absl/status/status.h"
@@ -45,13 +42,16 @@
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/type_macros.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/message.h"
+#include "google/protobuf/reflection.h"
 #include "re2/re2.h"
 
 namespace google {
 namespace fhir {
 
-using ::google::protobuf::Message;
 using ::google::protobuf::Descriptor;
+using ::google::protobuf::Message;
 
 // Builds an absl::Time from a time-like fhir Element.
 // Must have a value_us field.
@@ -60,8 +60,7 @@ absl::Time GetTimeFromTimelikeElement(const T& timelike) {
   return absl::FromUnixMicros(timelike.value_us());
 }
 
-absl::StatusOr<absl::Time> GetTimeFromTimelikeElement(
-    const Message& timelike);
+absl::StatusOr<absl::Time> GetTimeFromTimelikeElement(const Message& timelike);
 
 // Converts a time zone string of the forms found in time-like primitive types
 // into an absl::TimeZone
@@ -240,11 +239,10 @@ GetResourceExtensionsFromBundleEntry(const EntryLike& entry) {
 
 absl::Status SetPrimitiveStringValue(Message* primitive,
                                      const std::string& value);
+absl::StatusOr<std::string> GetPrimitiveStringValue(const Message& primitive,
+                                                    std::string* scratch);
 absl::StatusOr<std::string> GetPrimitiveStringValue(
-    const Message& primitive, std::string* scratch);
-absl::StatusOr<std::string> GetPrimitiveStringValue(
-    const Message& parent, const std::string& field_name,
-    std::string* scratch);
+    const Message& parent, const std::string& field_name, std::string* scratch);
 absl::StatusOr<int> GetPrimitiveIntValue(const Message& primitive);
 
 // Finds a resource of a templatized type within a bundle, by reference id.
@@ -346,8 +344,7 @@ absl::StatusOr<Message*> UnpackAnyAsContainedResource(
 // ContainedResource, and a NotFoundError if there is no field whose type has
 // the provided name.
 absl::StatusOr<const Descriptor*> GetResourceDescriptorByName(
-    const Descriptor* contained_resource_type,
-    absl::string_view name);
+    const Descriptor* contained_resource_type, absl::string_view name);
 
 }  // namespace fhir
 }  // namespace google

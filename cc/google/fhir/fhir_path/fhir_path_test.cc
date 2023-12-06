@@ -23,9 +23,6 @@
 #include <vector>
 
 #include "google/protobuf/any.pb.h"
-#include "google/protobuf/descriptor.h"
-#include "google/protobuf/message.h"
-#include "google/protobuf/text_format.h"
 #include "google/protobuf/util/message_differencer.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -64,6 +61,9 @@
 #include "proto/google/fhir/proto/stu3/resources.pb.h"
 #include "proto/google/fhir/proto/stu3/uscore.pb.h"
 #include "proto/google/fhir/proto/stu3/uscore_codes.pb.h"
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/message.h"
+#include "google/protobuf/text_format.h"
 
 namespace google {
 namespace fhir {

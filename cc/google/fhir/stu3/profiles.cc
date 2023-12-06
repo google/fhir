@@ -14,11 +14,11 @@
 
 #include "google/fhir/stu3/profiles.h"
 
-#include "google/protobuf/message.h"
 #include "google/fhir/profiles_lib.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/stu3/operation_error_reporter.h"
 #include "google/fhir/stu3/primitive_handler.h"
+#include "google/protobuf/message.h"
 
 namespace google {
 namespace fhir {

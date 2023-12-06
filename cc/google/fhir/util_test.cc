@@ -14,7 +14,6 @@
 
 #include "google/fhir/util.h"
 
-#include "google/protobuf/descriptor.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/memory/memory.h"
@@ -33,6 +32,7 @@
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 #include "proto/google/fhir/proto/stu3/resources.pb.h"
 #include "testdata/r4/profiles/test.pb.h"
+#include "google/protobuf/descriptor.h"
 
 namespace google {
 namespace fhir {

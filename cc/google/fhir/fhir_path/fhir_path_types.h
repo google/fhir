@@ -15,10 +15,10 @@
 #ifndef GOOGLE_FHIR_FHIR_PATH_FHIR_PATH_TYPES_H_
 #define GOOGLE_FHIR_FHIR_PATH_FHIR_PATH_TYPES_H_
 
-#include "google/protobuf/message.h"
 #include "absl/container/flat_hash_map.h"
 #include "absl/status/statusor.h"
 #include "google/fhir/status/statusor.h"
+#include "google/protobuf/message.h"
 
 namespace google::fhir::fhir_path::internal {
 enum class FhirPathSystemType {

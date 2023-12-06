@@ -21,7 +21,6 @@
 #include <vector>
 
 #include "google/protobuf/descriptor.pb.h"
-#include "google/protobuf/message.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/types/optional.h"
@@ -31,6 +30,7 @@
 #include "google/fhir/status/statusor.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
+#include "google/protobuf/message.h"
 
 namespace google {
 namespace fhir {

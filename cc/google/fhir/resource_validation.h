@@ -17,11 +17,11 @@
 #ifndef GOOGLE_FHIR_RESOURCE_VALIDATION_H_
 #define GOOGLE_FHIR_RESOURCE_VALIDATION_H_
 
-#include "google/protobuf/message.h"
 #include "absl/status/status.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/fhir_path/fhir_path_validation.h"
 #include "google/fhir/primitive_handler.h"
+#include "google/protobuf/message.h"
 
 // TODO(b/181018290): Refactor this into an internal namespace and directory.
 namespace google {

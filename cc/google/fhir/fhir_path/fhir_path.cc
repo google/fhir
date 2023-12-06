@@ -25,7 +25,6 @@
 #include <utility>
 
 #include "google/protobuf/any.pb.h"
-#include "google/protobuf/descriptor.h"
 #include "google/protobuf/util/message_differencer.h"
 #include "absl/container/flat_hash_set.h"
 #include "absl/container/node_hash_set.h"
@@ -55,6 +54,7 @@
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 #include "icu4c/source/common/unicode/unistr.h"
+#include "google/protobuf/descriptor.h"
 
 namespace google {
 namespace fhir {

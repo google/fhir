@@ -17,7 +17,6 @@
 #include <unordered_map>
 
 #include "google/protobuf/descriptor.pb.h"
-#include "google/protobuf/descriptor.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/ascii.h"
 #include "absl/synchronization/mutex.h"
@@ -26,6 +25,7 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
+#include "google/protobuf/descriptor.h"
 
 namespace google {
 namespace fhir {

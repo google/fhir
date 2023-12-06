@@ -19,13 +19,13 @@
 
 #include <memory>
 
-#include "google/protobuf/descriptor.h"
 #include "absl/status/statusor.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/status/statusor.h"
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 #include "proto/google/fhir/proto/stu3/resources.pb.h"
+#include "google/protobuf/descriptor.h"
 
 namespace google {
 namespace fhir {

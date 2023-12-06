@@ -14,7 +14,6 @@
 
 #include "google/fhir/codes.h"
 
-#include "google/protobuf/descriptor.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "google/fhir/proto_util.h"
@@ -28,6 +27,7 @@
 #include "proto/google/fhir/proto/r4/core/resources/metadata_resource.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
 #include "proto/google/fhir/proto/r4/uscore.pb.h"
+#include "google/protobuf/descriptor.h"
 
 namespace google {
 namespace fhir {

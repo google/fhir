@@ -15,9 +15,9 @@
 #ifndef GOOGLE_FHIR_FHIR_PATH_R4_FHIR_PATH_VALIDATION_H_
 #define GOOGLE_FHIR_FHIR_PATH_R4_FHIR_PATH_VALIDATION_H_
 
-#include "google/protobuf/message.h"
 #include "absl/base/macros.h"
 #include "google/fhir/fhir_path/fhir_path_validation.h"
+#include "google/protobuf/message.h"
 
 namespace google {
 namespace fhir {

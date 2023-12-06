@@ -20,8 +20,6 @@
 
 
 #include "google/protobuf/descriptor.pb.h"
-#include "google/protobuf/descriptor.h"
-#include "google/protobuf/reflection.h"
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
@@ -34,6 +32,8 @@
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/reflection.h"
 
 namespace google {
 namespace fhir {
