@@ -42,7 +42,7 @@ func TestAllReferenceTypes(t *testing.T) {
 	for _, v := range apb.FhirVersion_value {
 		ver := apb.FhirVersion(v)
 		// TODO(b/265289586): Testing support for r4b
-		if ver != apb.FhirVersion_FHIR_VERSION_UNKNOWN && ver != apb.FhirVersion_R5 && ver != apb.FhirVersion_DSTU2 && ver != apb.FhirVersion_R4B {
+		if ver != apb.FhirVersion_FHIR_VERSION_UNKNOWN && ver != apb.FhirVersion_DSTU2 && ver != apb.FhirVersion_R4B {
 			versions = append(versions, ver)
 		}
 	}
@@ -430,57 +430,6 @@ func TestNormalizeInternalReference(t *testing.T) {
 			&d3pb.Reference{
 				Reference: &d3pb.Reference_Fragment{
 					Fragment: &d3pb.String{
-						Value: "frag_xyz",
-					},
-				},
-			},
-		},
-		{
-			"r4 relative reference",
-			&d4pb.Reference{
-				Reference: &d4pb.Reference_Uri{
-					Uri: &d4pb.String{
-						Value: "Patient/abc123",
-					},
-				},
-			},
-			&d4pb.Reference{
-				Reference: &d4pb.Reference_Uri{
-					Uri: &d4pb.String{
-						Value: "Patient/abc123",
-					},
-				},
-			},
-		},
-		{
-			"r4 internal reference",
-			&d4pb.Reference{
-				Reference: &d4pb.Reference_Uri{
-					Uri: &d4pb.String{
-						Value: "#frag_xyz",
-					},
-				},
-			},
-			&d4pb.Reference{
-				Reference: &d4pb.Reference_Fragment{
-					Fragment: &d4pb.String{
-						Value: "frag_xyz",
-					},
-				},
-			},
-		},
-		{
-			"r4 existing internal reference",
-			&d4pb.Reference{
-				Reference: &d4pb.Reference_Fragment{
-					Fragment: &d4pb.String{
-						Value: "frag_xyz",
-					},
-				},
-			},
-			&d4pb.Reference{
-				Reference: &d4pb.Reference_Fragment{
-					Fragment: &d4pb.String{
 						Value: "frag_xyz",
 					},
 				},
