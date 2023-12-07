@@ -18,16 +18,18 @@
 #include <functional>
 #include <string>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
-#include "absl/base/macros.h"
+#include "absl/base/attributes.h"
+#include "absl/base/thread_annotations.h"
+#include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/string_view.h"
 #include "absl/synchronization/mutex.h"
-#include "google/fhir/annotations.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/fhir_path/fhir_path.h"
 #include "google/fhir/primitive_handler.h"
-#include "google/fhir/status/statusor.h"
 #include "google/protobuf/message.h"
 
 namespace google {
@@ -138,13 +140,14 @@ class FhirPathValidator {
   // Validates the fhir_path_constraint annotations on the given message.
   ABSL_MUST_USE_RESULT
   absl::Status Validate(const ::google::protobuf::Message& message,
-                        ErrorHandler& error_handler);
+                        ErrorHandler& error_handler) const;
 
   // Validates the fhir_path_constraint annotations on the given message,
   // and returns a ValidationResults object.
   // Deprecated - use the variant that takes an ErrorHandler.
   ABSL_MUST_USE_RESULT
-  absl::StatusOr<ValidationResults> Validate(const ::google::protobuf::Message& message);
+  absl::StatusOr<ValidationResults> Validate(
+      const ::google::protobuf::Message& message) const;
 
  private:
   // A cache of constraints for a given message definition
@@ -168,17 +171,18 @@ class FhirPathValidator {
   };
 
   // Loads constraints for the given descriptor.
-  MessageConstraints* ConstraintsFor(const ::google::protobuf::Descriptor* descriptor);
+  MessageConstraints* ConstraintsFor(const ::google::protobuf::Descriptor* descriptor)
+      const ABSL_SHARED_LOCKS_REQUIRED(mutex_);
 
   // Recursively called validation method that aggregates results into the
   // provided ScopedErrorReporter
   absl::Status Validate(const internal::WorkspaceMessage& message,
-                        const ScopedErrorReporter& error_reporter);
+                        const ScopedErrorReporter& error_reporter) const;
 
   const PrimitiveHandler* primitive_handler_;
-  absl::Mutex mutex_;
-  std::unordered_map<std::string, std::unique_ptr<MessageConstraints>>
-      constraints_cache_;
+  mutable absl::Mutex mutex_;
+  mutable std::unordered_map<std::string, std::unique_ptr<MessageConstraints>>
+      constraints_cache_ ABSL_GUARDED_BY(mutex_);
 };
 
 }  // namespace fhir_path

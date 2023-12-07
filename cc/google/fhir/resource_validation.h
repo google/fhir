@@ -31,7 +31,7 @@ namespace fhir {
 // report all errors to the given error reporter.
 ::absl::Status Validate(const ::google::protobuf::Message& resource,
                         const PrimitiveHandler* primitive_handler,
-                        fhir_path::FhirPathValidator* message_validator,
+                        const fhir_path::FhirPathValidator* message_validator,
                         ErrorHandler& error_handler,
                         bool validate_reference_field_ids = false);
 

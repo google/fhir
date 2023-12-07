@@ -24,8 +24,8 @@ FhirPathValidator::FhirPathValidator()
     : google::fhir::fhir_path::FhirPathValidator(
           google::fhir::stu3::Stu3PrimitiveHandler::GetInstance()) {}
 
-google::fhir::fhir_path::FhirPathValidator* GetFhirPathValidator() {
-  static google::fhir::fhir_path::FhirPathValidator* validator =
+const google::fhir::fhir_path::FhirPathValidator* GetFhirPathValidator() {
+  static const google::fhir::fhir_path::FhirPathValidator* validator =
       new FhirPathValidator;
   return validator;
 }

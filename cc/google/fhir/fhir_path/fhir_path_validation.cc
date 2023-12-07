@@ -23,6 +23,7 @@
 #include <utility>
 #include <vector>
 
+#include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
 #include "google/fhir/annotations.h"
@@ -221,7 +222,7 @@ void AddFieldConstraints(
 // Build the constraints for the given message type and
 // add it to the constraints cache.
 FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
-    const Descriptor* descriptor) {
+    const Descriptor* descriptor) const {
   // Simply return the cached constraint if it exists.
   auto iter = constraints_cache_.find(descriptor->full_name());
 
@@ -351,7 +352,7 @@ absl::Status HandleFieldConstraint(
 
 absl::Status FhirPathValidator::Validate(
     const internal::WorkspaceMessage& message,
-    const ScopedErrorReporter& error_reporter) {
+    const ScopedErrorReporter& error_reporter) const {
   // ConstraintsFor may recursively build constraints so
   // we lock the mutex here to ensure thread safety.
   mutex_.Lock();
@@ -421,9 +422,9 @@ absl::Status ValidationResults::LegacyValidationResult() const {
 }
 
 absl::Status FhirPathValidator::Validate(const Message& message,
-                                         ErrorHandler& error_handler) {
+                                         ErrorHandler& error_handler) const {
   // ContainedResource is an implementation detail of FHIR protos. Extract the
-  // resource from the wrapper before prcoessing so that wrapper is not included
+  // resource from the wrapper before processing so that wrapper is not included
   // in the node/constraint path of the validation results.
   if (IsContainedResource(message)) {
     FHIR_ASSIGN_OR_RETURN(const Message* resource,
@@ -437,7 +438,7 @@ absl::Status FhirPathValidator::Validate(const Message& message,
 }
 
 absl::StatusOr<ValidationResults> FhirPathValidator::Validate(
-    const ::google::protobuf::Message& message) {
+    const ::google::protobuf::Message& message) const {
   ValidationResultsErrorHandler error_reporter;
   FHIR_RETURN_IF_ERROR(Validate(message, error_reporter));
   return error_reporter.GetValidationResults();

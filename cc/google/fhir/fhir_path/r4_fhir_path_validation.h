@@ -36,7 +36,7 @@ class FhirPathValidator : public ::google::fhir::fhir_path::FhirPathValidator {
 
 // Returns a shared instance of the R4 message validator.
 ABSL_MUST_USE_RESULT
-::google::fhir::fhir_path::FhirPathValidator* GetFhirPathValidator();
+const ::google::fhir::fhir_path::FhirPathValidator* GetFhirPathValidator();
 
 }  // namespace r4
 }  // namespace fhir

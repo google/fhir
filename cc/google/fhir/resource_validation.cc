@@ -23,6 +23,7 @@
 #include "absl/strings/str_cat.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/error_reporter.h"
+#include "google/fhir/fhir_path/fhir_path_validation.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
@@ -118,7 +119,7 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
 
 ::absl::Status Validate(const ::google::protobuf::Message& resource,
                         const PrimitiveHandler* primitive_handler,
-                        fhir_path::FhirPathValidator* message_validator,
+                        const fhir_path::FhirPathValidator* message_validator,
                         ErrorHandler& error_handler,
                         const bool validate_reference_field_ids) {
   FHIR_RETURN_IF_ERROR(ValidateWithoutFhirPath(resource, primitive_handler,

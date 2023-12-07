@@ -15,9 +15,8 @@
 #ifndef GOOGLE_FHIR_FHIR_PATH_STU3_FHIR_PATH_VALIDATION_H_
 #define GOOGLE_FHIR_FHIR_PATH_STU3_FHIR_PATH_VALIDATION_H_
 
-#include "absl/base/macros.h"
+#include "absl/base/attributes.h"
 #include "google/fhir/fhir_path/fhir_path_validation.h"
-#include "google/protobuf/message.h"
 
 namespace google {
 namespace fhir {
@@ -36,7 +35,7 @@ class FhirPathValidator : public ::google::fhir::fhir_path::FhirPathValidator {
 
 // Returns a shared instance of the STU3 message validator.
 ABSL_MUST_USE_RESULT
-::google::fhir::fhir_path::FhirPathValidator* GetFhirPathValidator();
+const ::google::fhir::fhir_path::FhirPathValidator* GetFhirPathValidator();
 
 }  // namespace stu3
 }  // namespace fhir
