@@ -28,6 +28,7 @@ import (
 	c4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/codes_go_proto"
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	r4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
+	drpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/device_request_go_proto"
 	r4outcomepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/operation_outcome_go_proto"
 	r4patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/patient_go_proto"
 	c3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/codes_go_proto"
@@ -65,6 +66,22 @@ error at "Patient.link[0]": missing required field "type"`
 		} else if err.Error() != wantErr {
 			t.Errorf("Validate %v: got error %q, want: %q", test, err.Error(), wantErr)
 		}
+	}
+}
+
+func TestRequired_ChoiceField(t *testing.T) {
+	test := &r4pb.ContainedResource{
+		OneofResource: &r4pb.ContainedResource_DeviceRequest{
+			DeviceRequest: &drpb.DeviceRequest{
+				Intent:  &drpb.DeviceRequest_IntentCode{Value: c4pb.RequestIntentCode_REFLEX_ORDER},
+				Subject: &d4pb.Reference{Reference: &d4pb.Reference_PatientId{PatientId: &d4pb.ReferenceId{Value: "1"}}},
+			},
+		},
+	}
+	wantErr := `error at "DeviceRequest": missing required field "code[x]"`
+	err := Validate(test)
+	if err == nil || err.Error() != wantErr {
+		t.Fatalf("Validate %v failed: got error %v, want %q", test, err, wantErr)
 	}
 }
 

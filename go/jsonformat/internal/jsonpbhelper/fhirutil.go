@@ -997,10 +997,14 @@ func ValidateRequiredFields(pb protoreflect.Message, disallowNull bool) error {
 	var el UnmarshalErrorList
 	for _, requiredField := range requiredFields[pb.Descriptor().FullName()] {
 		field := pb.Descriptor().Fields().ByNumber(requiredField)
+		fieldName := field.JSONName()
+		if IsChoice(field.Message()) {
+			fieldName += "[x]"
+		}
 		if !pb.Has(field) {
 			el = append(el, &UnmarshalError{
 				Type:    RequiredFieldError,
-				Details: fmt.Sprintf("missing required field %q", field.JSONName()),
+				Details: fmt.Sprintf("missing required field %q", fieldName),
 			})
 		} else if disallowNull {
 			if field.Kind() != protoreflect.MessageKind || field.IsList() || IsPrimitiveType(field.Message()) {
@@ -1011,7 +1015,7 @@ func ValidateRequiredFields(pb protoreflect.Message, disallowNull bool) error {
 			if isEmpty {
 				el = append(el, &UnmarshalError{
 					Type:    RequiredFieldError,
-					Details: fmt.Sprintf("required field %q is either null or empty value", field.JSONName()),
+					Details: fmt.Sprintf("required field %q is either null or empty value", fieldName),
 				})
 			}
 

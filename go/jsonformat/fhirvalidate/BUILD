@@ -37,6 +37,7 @@ go_test(
         "//proto/google/fhir/proto/r4/core:codes_go_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_go_proto",
+        "//proto/google/fhir/proto/r4/core/resources:device_request_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:operation_outcome_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:patient_go_proto",
         "//proto/google/fhir/proto/stu3:codes_go_proto",
