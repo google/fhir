@@ -461,6 +461,7 @@ cc_library(
         ":json_format_results",
         ":primitive_wrapper",
         ":proto_util",
+        ":type_macros",
         ":util",
         "//cc/google/fhir/json:fhir_json",
         "//cc/google/fhir/status",
@@ -686,6 +687,7 @@ cc_test(
     srcs = ["json_format_test.cc"],
     data = [
         "@hl7.fhir.r4.core_4.0.1//file",
+        "@hl7.fhir.r5.core_5.0.0//file",
     ],
     shard_count = 16,
     deps = [
@@ -695,9 +697,12 @@ cc_test(
         ":primitive_handler",
         "//cc/google/fhir/json:fhir_json",
         "//cc/google/fhir/json:json_sax_handler",
+        "//cc/google/fhir/json:test_matchers",
         "//cc/google/fhir/r4:primitive_handler",
+        "//cc/google/fhir/r5:primitive_handler",
         "//cc/google/fhir/status",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
+        "//proto/google/fhir/proto/r5/core/resources:bundle_and_contained_resource_cc_proto",
         "@com_google_absl//absl/container:flat_hash_set",
         "@com_google_absl//absl/log:check",
         "@com_google_absl//absl/status",

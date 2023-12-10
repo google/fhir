@@ -17,6 +17,8 @@
 #ifndef GOOGLE_FHIR_PRIMITIVE_WRAPPER_H_
 #define GOOGLE_FHIR_PRIMITIVE_WRAPPER_H_
 
+#include <cstddef>
+#include <cstdint>
 #include <limits>
 #include <memory>
 #include <string>
@@ -28,6 +30,8 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/escaping.h"
+#include "absl/strings/match.h"
+#include "absl/strings/numbers.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
 #include "absl/strings/str_replace.h"
@@ -279,7 +283,7 @@ class ExtensibleWrapper : public SpecificWrapper<T> {
 
  protected:
   virtual absl::Status ValidateProtoTypeSpecific(
-      const bool has_no_value_extension,
+      bool has_no_value_extension,
       const ScopedErrorReporter& error_reporter) const = 0;
 
   absl::Status InitializeNull() {
@@ -301,7 +305,7 @@ bool MatchesFhirRegexExtension(absl::string_view string_value) {
           RE2::FullMatch(string_value, *valid_regex_pattern));
 }
 
-// Should be used when a regex failure means a primitive is unpareasble, such as
+// Should be used when a regex failure means a primitive is unparsable, such as
 // decimal or datetime.
 inline absl::Status ReportRegexFatal(
     const Descriptor* descriptor, const ScopedErrorReporter& error_reporter) {
@@ -309,7 +313,7 @@ inline absl::Status ReportRegexFatal(
       absl::StrCat("Unparseable JSON string for ", descriptor->full_name())));
 }
 
-// Should be used when a regex failure means a primitive is unpareasble, such as
+// Should be used when a regex failure means a primitive is unparsable, such as
 // decimal or datetime.
 inline absl::Status ReportRegexError(
     const Descriptor* descriptor, const ScopedErrorReporter& error_reporter) {
@@ -343,7 +347,7 @@ class StringInputWrapper : public ExtensibleWrapper<T> {
       return ParseResult::kFailed;
     }
     if (!MatchesFhirRegexExtension<T>(*string_value)) {
-      // The input string is parseable, but not valid fhir
+      // The input string is parsable, but not valid fhir
       // This records a fhir error, but does not early return
       FHIR_RETURN_IF_ERROR(ReportRegexError(T::descriptor(), error_reporter));
     }
@@ -1069,6 +1073,52 @@ class UnsignedIntWrapper : public IntegerTypeWrapper<UnsignedIntType> {
                            std::numeric_limits<int32_t>::max()));
     }
     return absl::OkStatus();
+  }
+};
+
+template <typename Integer64Type>
+class Integer64Wrapper : public StringInputWrapper<Integer64Type> {
+ public:
+  absl::StatusOr<std::string> ToNonNullValueString() const override {
+    return absl::StrCat("\"", this->GetWrapped()->value(), "\"");
+  }
+
+ protected:
+  absl::Status ValidateProtoTypeSpecific(
+      const bool has_no_value_extension,
+      const ScopedErrorReporter& error_reporter) const override {
+    if (has_no_value_extension) {
+      if (this->GetWrapped()->value() != 0) {
+        return error_reporter.ReportFhirError(absl::StrCat(
+            Integer64Type::descriptor()->full_name(),
+            " has both a value, and a PrimitiveHasNoValueExtension."));
+      }
+      return absl::OkStatus();
+    }
+    // Note that the bounds of the proto type sint64 are the same as the bounds
+    // for Integer64, so any value is ok.
+    return absl::OkStatus();
+  }
+
+ private:
+  absl::StatusOr<ParseResult> ParseString(
+      const std::string& json_string,
+      const ScopedErrorReporter& error_reporter) override {
+    int64_t value;
+    if (!absl::SimpleAtoi(json_string, &value)) {
+      // Note that this is fatal, since it indicates that data is dropped.
+      FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirFatal(
+          absl::InvalidArgumentError(absl::Substitute(
+              "Failed converting \"$0\" to sint64 for Integer64 primitive.",
+              json_string))));
+      return ParseResult::kFailed;
+    }
+
+    std::unique_ptr<Integer64Type> wrapped = absl::make_unique<Integer64Type>();
+    wrapped->set_value(value);
+
+    this->WrapAndManage(std::move(wrapped));
+    return ParseResult::kSucceeded;
   }
 };
 

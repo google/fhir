@@ -52,8 +52,7 @@ const bool IsProfile(const ::google::protobuf::Descriptor* descriptor) {
           (descriptor->full_name() !=
                "google.fhir.stu3.proto.ContainedResource" &&
            descriptor->full_name() != "google.fhir.r4.core.ContainedResource" &&
-           descriptor->full_name() !=
-               "google.fhir.r5.proto.ContainedResource" &&
+           descriptor->full_name() != "google.fhir.r5.core.ContainedResource" &&
            descriptor->full_name() !=
                "google.fhir.dstu2.proto.ContainedResource"));
 }

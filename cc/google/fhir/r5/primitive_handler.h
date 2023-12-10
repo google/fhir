@@ -1,0 +1,56 @@
+/*
+ * Copyright 2023 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef GOOGLE_FHIR_R5_PRIMITIVE_HANDLER_H_
+#define GOOGLE_FHIR_R5_PRIMITIVE_HANDLER_H_
+
+#include <memory>
+
+#include "absl/status/status.h"
+#include "absl/status/statusor.h"
+#include "google/fhir/primitive_handler.h"
+#include "google/fhir/primitive_wrapper.h"
+#include "proto/google/fhir/proto/r5/core/datatypes.pb.h"
+#include "proto/google/fhir/proto/r5/core/resources/bundle_and_contained_resource.pb.h"
+#include "google/protobuf/descriptor.h"
+
+namespace google {
+namespace fhir {
+namespace r5 {
+
+class R5PrimitiveHandler
+    : public google::fhir::primitives_internal::PrimitiveHandlerTemplate<
+          core::Bundle> {
+ public:
+  static const R5PrimitiveHandler* GetInstance();
+
+  // Copies any codeable concept-like message into any other codeable
+  // concept-like message.  An ok status guarantees that all codings present on
+  // the source will be present on the target, in the correct profiled fields on
+  // the target.
+  absl::Status CopyCodeableConcept(const google::protobuf::Message& source,
+                                   google::protobuf::Message* target) const override;
+
+ protected:
+  absl::StatusOr<std::unique_ptr<primitives_internal::PrimitiveWrapper>>
+  GetWrapper(const google::protobuf::Descriptor* target_descriptor) const override;
+};
+
+}  // namespace r5
+}  // namespace fhir
+}  // namespace google
+
+#endif  // GOOGLE_FHIR_R5_PRIMITIVE_HANDLER_H_

@@ -27,17 +27,21 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/match.h"
+#include "absl/strings/str_replace.h"
 #include "absl/strings/string_view.h"
 #include "absl/strings/substitute.h"
 #include "absl/time/time.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json/json_sax_handler.h"
+#include "google/fhir/json/test_matchers.h"
 #include "google/fhir/json_format_results.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/r4/primitive_handler.h"
+#include "google/fhir/r5/primitive_handler.h"
 #include "google/fhir/status/status.h"
 #include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
+#include "proto/google/fhir/proto/r5/core/resources/bundle_and_contained_resource.pb.h"
 #include "libarchive/archive.h"
 #include "libarchive/archive_entry.h"
 
@@ -95,12 +99,14 @@ absl::StatusOr<std::vector<JsonFile>> GetResourceJsonFiles(
 
     // Skip non-JSON files, along with some package JSON files that are not
     // resources.
-    static absl::flat_hash_set<std::string>* kSkipList =
-        new absl::flat_hash_set<std::string>(
-            {"package/.index.json", "package/package.json"});
-    if (!absl::EndsWith(entry_name, ".json") ||
-        absl::EndsWith(entry_name, ".schema.json") ||
-        kSkipList->contains(entry_name)) {
+    static const absl::flat_hash_set<std::string>* kSkipList =
+        new absl::flat_hash_set<std::string>({".index.json", "package.json"});
+    const std::string file_name =
+        entry_name.substr(entry_name.find_last_of('/') + 1);
+
+    if (!absl::EndsWith(file_name, ".json") ||
+        absl::EndsWith(file_name, ".schema.json") ||
+        kSkipList->contains(file_name)) {
       continue;
     }
 
@@ -119,7 +125,7 @@ absl::StatusOr<std::vector<JsonFile>> GetResourceJsonFiles(
 }
 
 template <typename ContainedResourceType>
-absl::StatusOr<r4::core::ContainedResource> ToContainedResource(
+absl::StatusOr<ContainedResourceType> ToContainedResource(
     const std::string_view json, const PrimitiveHandler* primitive_handler) {
   ContainedResourceType resource;
   Parser parser(primitive_handler);
@@ -128,10 +134,11 @@ absl::StatusOr<r4::core::ContainedResource> ToContainedResource(
           json, &resource, absl::UTCTimeZone(),
           /*validate=*/false, FailFastErrorHandler::FailOnFatalOnly());
 
-  if (!status_or_result.ok()) {
+  if (!status_or_result.ok() || *status_or_result == ParseResult::kFailed) {
     return absl::InternalError(absl::Substitute(
         "Failed parsing $0: $1", json, status_or_result.status().message()));
   }
+
   return resource;
 }
 
@@ -142,7 +149,15 @@ void CheckJsonEq(const absl::string_view actual,
   internal::FhirJson actual_json, expected_json;
   ASSERT_TRUE(internal::ParseJsonValue(actual, actual_json).ok());
   ASSERT_TRUE(internal::ParseJsonValue(expected, expected_json).ok());
-  EXPECT_EQ(actual_json, expected_json);
+  EXPECT_THAT(actual_json, internal::JsonEq(&expected_json));
+}
+
+template <typename TestSuite>
+std::string GetTestName(
+    const testing::TestParamInfo<typename TestSuite::ParamType>& info) {
+  absl::string_view name = info.param.name;
+  name = name.substr(name.find_last_of('/') + 1);
+  return absl::StrReplaceAll(name, {{"-", "_"}, {".", "_"}});
 }
 
 // Checks to ensure we are successfully loading the resource examples from the
@@ -160,10 +175,10 @@ TEST(R4JsonFormatTest, NpmSanityTest) {
 
 using R4JsonFormatTest = TestWithParam<JsonFile>;
 
-// Tests that the parser and printer can losslessly convert examples resources.
-// Given a JSON file, converts it to a Resource proto, and then back to JSON.
-// The resulting JSON should be identical in content (if not formatting) to the
-// original JSON.
+// Tests that the parser and printer can losslessly convert examples
+// resources. Given a JSON file, converts it to a Resource proto, and then
+// back to JSON. The resulting JSON should be identical in content (if not
+// formatting) to the original JSON.
 TEST_P(R4JsonFormatTest, RoundTripTest) {
   const JsonFile& file = GetParam();
 
@@ -187,7 +202,52 @@ INSTANTIATE_TEST_SUITE_P(
     testing::ValuesIn(
         GetResourceJsonFiles(
             "external/hl7.fhir.r4.core_4.0.1/file/hl7.fhir.r4.core@4.0.1.tgz")
-            .value()));
+            .value()),
+    GetTestName<R4JsonFormatTest>);
 
+// Checks to ensure we are successfully loading the resource examples from the
+// R5 NPM, and not just trivially passing.
+TEST(R5JsonFormatTest, NpmSanityTest) {
+  absl::StatusOr<std::vector<JsonFile>> files = GetResourceJsonFiles(
+      "external/hl7.fhir.r5.core_5.0.0/file/hl7.fhir.r5.core@5.0.0.tgz");
+  FHIR_ASSERT_OK(files.status());
+
+  EXPECT_EQ(files->size(), 2968);
+  for (const auto& file : *files) {
+    EXPECT_GT(file.contents.size(), 0);
+  }
+}
+
+using R5JsonFormatTest = TestWithParam<JsonFile>;
+
+// Tests that the parser and printer can losslessly convert examples
+// resources. Given a JSON file, converts it to a Resource proto, and then
+// back to JSON. The resulting JSON should be identical in content (if not
+// formatting) to the original JSON.
+TEST_P(R5JsonFormatTest, RoundTripTest) {
+  const JsonFile& file = GetParam();
+
+  absl::StatusOr<r5::core::ContainedResource> resource =
+      ToContainedResource<r5::core::ContainedResource>(
+          file.contents, r5::R5PrimitiveHandler::GetInstance());
+
+  FHIR_ASSERT_OK(resource.status());
+
+  Printer printer(r5::R5PrimitiveHandler::GetInstance());
+
+  absl::StatusOr<std::string> printed_json =
+      printer.PrintFhirToJsonString(*resource);
+
+  CHECK_OK(printed_json.status());
+  CheckJsonEq(printed_json.value(), file.contents);
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    R5Tests, R5JsonFormatTest,
+    testing::ValuesIn(
+        GetResourceJsonFiles(
+            "external/hl7.fhir.r5.core_5.0.0/file/hl7.fhir.r5.core@5.0.0.tgz")
+            .value()),
+    GetTestName<R5JsonFormatTest>);
 }  // namespace
 }  // namespace google::fhir

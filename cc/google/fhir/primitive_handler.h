@@ -33,6 +33,7 @@
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
+#include "google/fhir/type_macros.h"
 #include "google/fhir/util.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
@@ -752,6 +753,28 @@ std::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForR4Types(
         new StringTypeWrapper<FHIR_DATATYPE(ExtensionType, uuid)>());
   }
   return std::optional<std::unique_ptr<PrimitiveWrapper>>();
+}
+
+// Helper function for handling primitive types that are universally present in
+// all FHIR versions >= R5.
+template <typename ExtensionType, typename XhtmlType,
+          typename Base64BinarySeparatorStrideType>
+std::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForR5Types(
+    const Descriptor* target_descriptor) {
+  std::optional<std::unique_ptr<PrimitiveWrapper>> wrapper_for_r4_types =
+      primitives_internal::GetWrapperForR4Types<
+          ExtensionType, XhtmlType, Base64BinarySeparatorStrideType>(
+          target_descriptor);
+
+  if (wrapper_for_r4_types.has_value()) {
+    return std::move(wrapper_for_r4_types.value());
+  }
+
+  if (IsMessageType<FHIR_DATATYPE(ExtensionType, integer64)>(
+          target_descriptor)) {
+    return std::unique_ptr<PrimitiveWrapper>(
+        new Integer64Wrapper<FHIR_DATATYPE(ExtensionType, integer64)>());
+  }
 }
 
 }  // namespace primitives_internal
