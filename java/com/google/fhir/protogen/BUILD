@@ -134,8 +134,13 @@ java_binary(
     name = "ProtoGeneratorV2",
     srcs = ["ProtoGeneratorMainV2.java"],
     main_class = "com.google.fhir.protogen.ProtoGeneratorMainV2",
+    runtime_deps = [
+        # For field retagging against R4
+        "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_java_proto",
+    ],
     deps = [
         ":fhir_package",
+        ":field_retagger",
         ":generator_utils",
         ":proto_file_printer",
         ":proto_generator_v2",

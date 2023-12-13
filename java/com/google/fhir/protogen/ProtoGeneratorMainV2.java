@@ -14,6 +14,7 @@
 
 package com.google.fhir.protogen;
 
+import static com.google.fhir.protogen.FieldRetagger.retagMessage;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.beust.jcommander.JCommander;
@@ -24,7 +25,9 @@ import com.google.fhir.proto.ProtogenConfig;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
+import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
+import com.google.protobuf.Descriptors.Descriptor;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -84,6 +87,11 @@ class ProtoGeneratorMainV2 {
                 + " ContainedResources from different versions of FHIR don't use overlapping"
                 + " numbers, so they can eventually be combined.  See: go/StableFhirProtos")
     private int containedResourceOffset = 0;
+
+    @Parameter(
+        names = {"--legacy_retagging"},
+        description = "If true, will ensure tag numbers align with R4.")
+    private boolean legacyRetagging = false;
   }
 
   ProtoGeneratorMainV2(Args args) {
@@ -110,6 +118,9 @@ class ProtoGeneratorMainV2 {
             .build();
 
     List<ProtoFile> files = makePackageFiles(inputPackage, config);
+    if (args.legacyRetagging) {
+      retagFiles(files);
+    }
 
     try (ZipOutputStream zipOutputStream =
         new ZipOutputStream(new FileOutputStream(new File(args.outputDirectory, "output.zip")))) {
@@ -201,6 +212,77 @@ class ProtoGeneratorMainV2 {
       zipOutputStream.putNextEntry(new ZipEntry(protoFile.filepath));
       byte[] entryBytes = printer.print(protoFile.fileDescriptor).getBytes(UTF_8);
       zipOutputStream.write(entryBytes, 0, entryBytes.length);
+    }
+  }
+
+  // Retags a list of proto files against their current R4 counterparts, where possible.
+  // This process ensures that any field that is the same in the reference package (current R4) as
+  // the package being generated will have the same tag numbers, and any new fields in the
+  // new message will use a tag number that is not in use by the reference counterpart.
+  //
+  // This is done to grant the maximum possible flexibility for ultimately moving to a combined
+  // versionless representation of normative resources.  For instance, since Patient is normative,
+  // an R4 or an R5 Patient should theoretically "fit" in an R6 proto, but this is only possible if
+  // tag numbers line up between versions.  This currently uses R4 as the reference version, but
+  // ultimately this should use the most recent published version.
+  //
+  // Note that this is a best-effort algorithm, and does not guarantee binary compatibility.
+  // Binary compatibility should be independently verified before anything relies on it.
+  private static void retagFiles(List<ProtoFile> files) {
+    // Whether we've found ANY matching descriptors.  This serves as a sanity check.
+    boolean foundMatchingDescriptor = false;
+    for (ProtoFile file : files) {
+      List<DescriptorProto> retaggedMessageTypeList = new ArrayList<>();
+      for (DescriptorProto descriptor : file.fileDescriptor.getMessageTypeList()) {
+        String fullName =
+            file.fileDescriptor.getOptions().getJavaPackage() + "." + descriptor.getName();
+
+        // Name of this message in the reference (i.e., current R4) package.
+        String r4FullName = fullName.replaceFirst("\\.r[0-9]*\\.", ".r4.");
+
+        // Skip ContainedResource - each version gets its own range of numbers in ContainedResource,
+        // governed by the `contained_resource_offset` flag.
+        if (fullName.endsWith(".ContainedResource")) {
+          retaggedMessageTypeList.add(descriptor);
+          continue;
+        }
+
+        // Skip SearchParameters and OperationDefinition for now, since there is an issue with
+        // changed ValueSets.
+        // TODO(b/315841051): Figure out something smart to do here.
+        if (fullName.endsWith(".SearchParameter") || fullName.endsWith(".OperationDefinition")) {
+          System.out.println("Warning!  Skipping " + fullName);
+          retaggedMessageTypeList.add(descriptor);
+          continue;
+        }
+
+        try {
+          Class<?> r4MessageClass = Class.forName(r4FullName);
+          try {
+            DescriptorProto r4Descriptor =
+                ((Descriptor) r4MessageClass.getMethod("getDescriptor").invoke(null)).toProto();
+            retaggedMessageTypeList.add(retagMessage(descriptor, r4Descriptor));
+            foundMatchingDescriptor = true;
+          } catch (ReflectiveOperationException e) {
+            // If we find a class with the expected name, it should always have a "getDescriptor".
+            throw new IllegalStateException(e);
+          }
+        } catch (ClassNotFoundException e) {
+          // No matching class in R4 - that's ok, it's something new in this version.
+          retaggedMessageTypeList.add(descriptor);
+        }
+        file.fileDescriptor =
+            file.fileDescriptor.toBuilder()
+                .clearMessageType()
+                .addAllMessageType(retaggedMessageTypeList)
+                .build();
+      }
+    }
+    if (!foundMatchingDescriptor) {
+      // We didn't find a single match.  This almost certainly means that there is a problem with
+      // how we're resolving matches - e.g., missing a run-time dep, or inferring wrong class names.
+      throw new AssertionError(
+          "Legacy field tagging requested, but no matching descriptors found.");
     }
   }
 
