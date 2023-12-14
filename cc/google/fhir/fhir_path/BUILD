@@ -156,7 +156,9 @@ cc_library(
         "fhir_path_types.h",
     ],
     strip_include_prefix = "//cc/",
-    visibility = [":__pkg__"],
+    visibility = [
+        "//visibility:private",  # Only private by automation, not intent. Owner may accept CLs adding visibility. See go/scheuklappen#explicit-private.
+    ],
     deps = [
         "//cc/google/fhir:annotations",
         "//cc/google/fhir:fhir_types",
@@ -177,7 +179,9 @@ cc_library(
         "utils.h",
     ],
     strip_include_prefix = "//cc/",
-    visibility = [":__pkg__"],
+    visibility = [
+        "//visibility:private",  # Only private by automation, not intent. Owner may accept CLs adding visibility. See go/scheuklappen#explicit-private.
+    ],
     deps = [
         "//cc/google/fhir:annotations",
         "//cc/google/fhir:json_util",
