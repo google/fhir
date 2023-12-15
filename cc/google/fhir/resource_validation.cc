@@ -125,7 +125,8 @@ absl::Status CheckField(const Message& message, const FieldDescriptor* field,
   FHIR_RETURN_IF_ERROR(ValidateWithoutFhirPath(resource, primitive_handler,
                                                error_handler,
                                                validate_reference_field_ids));
-  return message_validator->Validate(resource, error_handler);
+  return message_validator->Validate(resource, primitive_handler,
+                                     error_handler);
 }
 
 ::absl::Status ValidateWithoutFhirPath(

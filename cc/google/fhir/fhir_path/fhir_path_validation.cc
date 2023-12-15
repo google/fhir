@@ -146,8 +146,6 @@ class ValidationResultsErrorHandler : public ErrorHandler {
   std::vector<ValidationResult> results_;
 };
 
-FhirPathValidator::~FhirPathValidator() {}
-
 namespace {
 
 enum class Severity { kFailure, kWarning };
@@ -222,7 +220,8 @@ void AddFieldConstraints(
 // Build the constraints for the given message type and
 // add it to the constraints cache.
 FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
-    const Descriptor* descriptor) const {
+    const Descriptor* descriptor,
+    const PrimitiveHandler* primitive_handler) const {
   // Simply return the cached constraint if it exists.
   auto iter = constraints_cache_.find(descriptor->full_name());
 
@@ -231,17 +230,17 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
   }
 
   auto constraints = std::make_unique<MessageConstraints>();
-  AddMessageConstraints(descriptor, Severity::kFailure, primitive_handler_,
+  AddMessageConstraints(descriptor, Severity::kFailure, primitive_handler,
                         &constraints->message_error_expressions);
-  AddMessageConstraints(descriptor, Severity::kWarning, primitive_handler_,
+  AddMessageConstraints(descriptor, Severity::kWarning, primitive_handler,
                         &constraints->message_warning_expressions);
 
   for (int i = 0; i < descriptor->field_count(); i++) {
     AddFieldConstraints(descriptor->field(i), Severity::kFailure,
-                        primitive_handler_,
+                        primitive_handler,
                         &constraints->field_error_expressions);
     AddFieldConstraints(descriptor->field(i), Severity::kWarning,
-                        primitive_handler_,
+                        primitive_handler,
                         &constraints->field_warning_expressions);
   }
 
@@ -259,7 +258,7 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
     // Constraints only apply to non-primitives.
     if (field_type != nullptr) {
       // Validate the field type.
-      auto child_constraints = ConstraintsFor(field_type);
+      auto child_constraints = ConstraintsFor(field_type, primitive_handler);
 
       // Nested fields that directly or transitively have constraints
       // are retained and used when applying constraints.
@@ -352,12 +351,13 @@ absl::Status HandleFieldConstraint(
 
 absl::Status FhirPathValidator::Validate(
     const internal::WorkspaceMessage& message,
+    const PrimitiveHandler* primitive_handler,
     const ScopedErrorReporter& error_reporter) const {
   // ConstraintsFor may recursively build constraints so
   // we lock the mutex here to ensure thread safety.
   mutex_.Lock();
   MessageConstraints* constraints =
-      ConstraintsFor(message.Message()->GetDescriptor());
+      ConstraintsFor(message.Message()->GetDescriptor(), primitive_handler);
   mutex_.Unlock();
 
   // Validate the constraints attached to the message root.
@@ -395,7 +395,7 @@ absl::Status FhirPathValidator::Validate(
       const Message& child = GetPotentiallyRepeatedMessage(proto, field, i);
 
       FHIR_RETURN_IF_ERROR(Validate(
-          internal::WorkspaceMessage(message, &child),
+          internal::WorkspaceMessage(message, &child), primitive_handler,
           error_reporter.WithScope(
               path_term, field->is_repeated() ? std::optional<std::uint8_t>(i)
                                               : std::nullopt)
@@ -421,26 +421,29 @@ absl::Status ValidationResults::LegacyValidationResult() const {
                    ": \"", (*result).Constraint(), "\""));
 }
 
-absl::Status FhirPathValidator::Validate(const Message& message,
-                                         ErrorHandler& error_handler) const {
+absl::Status FhirPathValidator::Validate(
+    const Message& message, const PrimitiveHandler* primitive_handler,
+    ErrorHandler& error_handler) const {
   // ContainedResource is an implementation detail of FHIR protos. Extract the
   // resource from the wrapper before processing so that wrapper is not included
   // in the node/constraint path of the validation results.
   if (IsContainedResource(message)) {
     FHIR_ASSIGN_OR_RETURN(const Message* resource,
                           GetContainedResource(message));
-    return Validate(*resource, error_handler);
+    return Validate(*resource, primitive_handler, error_handler);
   }
 
   const ScopedErrorReporter reporter(&error_handler,
                                      message.GetDescriptor()->name());
-  return Validate(internal::WorkspaceMessage(&message), reporter);
+  return Validate(internal::WorkspaceMessage(&message), primitive_handler,
+                  reporter);
 }
 
 absl::StatusOr<ValidationResults> FhirPathValidator::Validate(
-    const ::google::protobuf::Message& message) const {
+    const ::google::protobuf::Message& message,
+    const PrimitiveHandler* primitive_handler) const {
   ValidationResultsErrorHandler error_reporter;
-  FHIR_RETURN_IF_ERROR(Validate(message, error_reporter));
+  FHIR_RETURN_IF_ERROR(Validate(message, primitive_handler, error_reporter));
   return error_reporter.GetValidationResults();
 }
 

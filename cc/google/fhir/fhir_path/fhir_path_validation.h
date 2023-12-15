@@ -16,6 +16,7 @@
 #define GOOGLE_FHIR_FHIR_PATH_FHIR_PATH_VALIDATION_H_
 
 #include <functional>
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -30,6 +31,7 @@
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/fhir_path/fhir_path.h"
 #include "google/fhir/primitive_handler.h"
+#include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 
 namespace google {
@@ -133,13 +135,10 @@ class ValidationResults {
 // This class is thread safe.
 class FhirPathValidator {
  public:
-  explicit FhirPathValidator(const PrimitiveHandler* primitive_handler)
-      : primitive_handler_(primitive_handler) {}
-  virtual ~FhirPathValidator();
-
   // Validates the fhir_path_constraint annotations on the given message.
   ABSL_MUST_USE_RESULT
   absl::Status Validate(const ::google::protobuf::Message& message,
+                        const PrimitiveHandler* primitive_handler,
                         ErrorHandler& error_handler) const;
 
   // Validates the fhir_path_constraint annotations on the given message,
@@ -147,9 +146,19 @@ class FhirPathValidator {
   // Deprecated - use the variant that takes an ErrorHandler.
   ABSL_MUST_USE_RESULT
   absl::StatusOr<ValidationResults> Validate(
-      const ::google::protobuf::Message& message) const;
+      const ::google::protobuf::Message& message,
+      const PrimitiveHandler* primitive_handler) const;
+
+  // Provide a singleton instance to make use of efficient caching.
+  static const FhirPathValidator& GetInstance() {
+    static const FhirPathValidator* const instance = new FhirPathValidator();
+    return *instance;
+  }
 
  private:
+  // This class should only be referenced via the singleton instance.
+  FhirPathValidator() = default;
+
   // A cache of constraints for a given message definition
   struct MessageConstraints {
     // FHIRPath constraints at the "root" FHIR element, which is just the
@@ -171,16 +180,23 @@ class FhirPathValidator {
   };
 
   // Loads constraints for the given descriptor.
-  MessageConstraints* ConstraintsFor(const ::google::protobuf::Descriptor* descriptor)
+  MessageConstraints* ConstraintsFor(const ::google::protobuf::Descriptor* descriptor,
+                                     const PrimitiveHandler* primitive_handler)
       const ABSL_SHARED_LOCKS_REQUIRED(mutex_);
 
   // Recursively called validation method that aggregates results into the
   // provided ScopedErrorReporter
   absl::Status Validate(const internal::WorkspaceMessage& message,
+                        const PrimitiveHandler* primitive_handler,
                         const ScopedErrorReporter& error_reporter) const;
 
-  const PrimitiveHandler* primitive_handler_;
   mutable absl::Mutex mutex_;
+
+  // Cache from Message descriptor full name to MessageConstraints for that
+  // Message.  Note that since this uses full name, it includes version
+  // information - e.g., R4 Patient will have a different key/entry than R5
+  // Patient.
+  // TODO(b/315352519): change this to a LRU cache to ensure it doesn't balloon.
   mutable std::unordered_map<std::string, std::unique_ptr<MessageConstraints>>
       constraints_cache_ ABSL_GUARDED_BY(mutex_);
 };

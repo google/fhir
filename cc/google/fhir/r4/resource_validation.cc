@@ -18,7 +18,7 @@
 
 #include "absl/status/status.h"
 #include "google/fhir/error_reporter.h"
-#include "google/fhir/fhir_path/r4_fhir_path_validation.h"
+#include "google/fhir/fhir_path/fhir_path_validation.h"
 #include "google/fhir/r4/operation_error_reporter.h"
 #include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/r4/profiles.h"
@@ -42,8 +42,8 @@ absl::Status Validate(const ::google::protobuf::Message& resource,
                       ErrorHandler& error_handler,
                       const bool validate_reference_field_ids) {
   return ::google::fhir::Validate(resource, R4PrimitiveHandler::GetInstance(),
-                                  GetFhirPathValidator(), error_handler,
-                                  validate_reference_field_ids);
+                                  &fhir_path::FhirPathValidator::GetInstance(),
+                                  error_handler, validate_reference_field_ids);
 }
 
 absl::StatusOr<ValidationOutcome> Validate(

@@ -178,7 +178,7 @@ cc_library(
         ":primitive_handler",
         "//cc/google/fhir:error_reporter",
         "//cc/google/fhir:resource_validation",
-        "//cc/google/fhir/fhir_path:stu3_fhir_path_validation",
+        "//cc/google/fhir/fhir_path:fhir_path_validation",
         "//proto/google/fhir/proto/stu3:resources_cc_proto",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",

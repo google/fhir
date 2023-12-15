@@ -115,39 +115,6 @@ cc_library(
 )
 
 cc_library(
-    name = "r4_fhir_path_validation",
-    srcs = [
-        "r4_fhir_path_validation.cc",
-    ],
-    hdrs = [
-        "r4_fhir_path_validation.h",
-    ],
-    strip_include_prefix = "//cc/",
-    deps = [
-        ":fhir_path_validation",
-        "//cc/google/fhir/r4:primitive_handler",
-        "@com_google_absl//absl/base:core_headers",
-        "@com_google_protobuf//:protobuf",
-    ],
-)
-
-cc_library(
-    name = "stu3_fhir_path_validation",
-    srcs = [
-        "stu3_fhir_path_validation.cc",
-    ],
-    hdrs = [
-        "stu3_fhir_path_validation.h",
-    ],
-    strip_include_prefix = "//cc/",
-    deps = [
-        ":fhir_path_validation",
-        "//cc/google/fhir/stu3:primitive_handler",
-        "@com_google_absl//absl/base:core_headers",
-    ],
-)
-
-cc_library(
     name = "fhir_path_types",
     srcs = [
         "fhir_path_types.cc",
@@ -247,10 +214,11 @@ cc_test(
     ],
     deps = [
         ":fhir_path_validation",
-        ":r4_fhir_path_validation",
-        ":stu3_fhir_path_validation",
+        "//cc/google/fhir:error_reporter",
+        "//cc/google/fhir/r4:primitive_handler",
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
+        "//cc/google/fhir/stu3:primitive_handler",
         "//cc/google/fhir/testutil:fhir_test_env",
         "//proto/google/fhir/proto/r4:uscore_cc_proto",
         "//proto/google/fhir/proto/r4:uscore_codes_cc_proto",
@@ -268,6 +236,7 @@ cc_test(
         "//proto/google/fhir/proto/stu3:uscore_cc_proto",
         "//proto/google/fhir/proto/stu3:uscore_codes_cc_proto",
         "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
         "@com_google_googletest//:gtest_main",
         "@com_google_protobuf//:protobuf",
     ],

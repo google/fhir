@@ -362,7 +362,7 @@ cc_library(
         "//cc/google/fhir:references",
         "//cc/google/fhir:resource_validation",
         "//cc/google/fhir:util",
-        "//cc/google/fhir/fhir_path:r4_fhir_path_validation",
+        "//cc/google/fhir/fhir_path:fhir_path_validation",
         "//cc/google/fhir/status:statusor",
         "//proto/google/fhir/proto/r4:fhirproto_cc_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",

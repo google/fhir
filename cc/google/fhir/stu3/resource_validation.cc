@@ -17,7 +17,7 @@
 #include "google/fhir/stu3/resource_validation.h"
 
 #include "google/fhir/error_reporter.h"
-#include "google/fhir/fhir_path/stu3_fhir_path_validation.h"
+#include "google/fhir/fhir_path/fhir_path_validation.h"
 #include "google/fhir/resource_validation.h"
 #include "google/fhir/stu3/operation_error_reporter.h"
 #include "google/fhir/stu3/primitive_handler.h"
@@ -31,7 +31,8 @@ using ::google::fhir::stu3::proto::OperationOutcome;
 absl::Status Validate(const ::google::protobuf::Message& resource,
                       ErrorHandler& error_handler) {
   return ::google::fhir::Validate(resource, Stu3PrimitiveHandler::GetInstance(),
-                                  GetFhirPathValidator(), error_handler);
+                                  &fhir_path::FhirPathValidator::GetInstance(),
+                                  error_handler);
 }
 
 absl::StatusOr<OperationOutcome> Validate(const ::google::protobuf::Message& resource) {

@@ -21,10 +21,12 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
-#include "google/fhir/fhir_path/r4_fhir_path_validation.h"
-#include "google/fhir/fhir_path/stu3_fhir_path_validation.h"
+#include "absl/status/statusor.h"
+#include "google/fhir/error_reporter.h"
+#include "google/fhir/r4/primitive_handler.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
+#include "google/fhir/stu3/primitive_handler.h"
 #include "google/fhir/testutil/fhir_test_env.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
@@ -77,19 +79,28 @@ static ::google::protobuf::TextFormat::Parser parser;  // NOLINT
 template <typename T>
 class FhirPathValidationTest : public ::testing::Test {
  public:
-  static ValidationResults Validate(const ::google::protobuf::Message& message) {
-    return *typename T::FhirPathValidator().Validate(message);
+  static absl::StatusOr<ValidationResults> Validate(
+      const ::google::protobuf::Message& message) {
+    return FhirPathValidator::GetInstance().Validate(
+        message, T::PrimitiveHandler::GetInstance());
+  }
+
+  static void ExpectValid(const ::google::protobuf::Message& message) {
+    FHIR_ASSERT_OK_AND_ASSIGN(ValidationResults results,
+                              FhirPathValidator::GetInstance().Validate(
+                                  message, T::PrimitiveHandler::GetInstance()));
+    EXPECT_TRUE(results.IsValid());
   }
 };
 
 struct Stu3CoreTestEnv : public testutil::Stu3CoreTestEnv {
-  using FhirPathValidator = ::google::fhir::stu3::FhirPathValidator;
   using SimpleQuantity = ::google::fhir::stu3::proto::SimpleQuantity;
+  using PrimitiveHandler = stu3::Stu3PrimitiveHandler;
 };
 
 struct R4CoreTestEnv : public testutil::R4CoreTestEnv {
-  using FhirPathValidator = ::google::fhir::r4::FhirPathValidator;
   using SimpleQuantity = ::google::fhir::r4::core::SimpleQuantity;
+  using PrimitiveHandler = r4::R4PrimitiveHandler;
 };
 
 using TesEnvs = ::testing::Types<Stu3CoreTestEnv, R4CoreTestEnv>;
@@ -106,7 +117,7 @@ T ParseFromString(const std::string& str) {
 
 template <typename T>
 T ValidObservation() {
-  return ParseFromString<T>(R"proto(
+  return ParseFromString<T>(R"pb(
     status { value: FINAL }
     code {
       coding {
@@ -115,66 +126,65 @@ T ValidObservation() {
       }
     }
     id { value: "123" }
-  )proto");
+  )pb");
 }
 
 template <typename T>
 T ValidValueSet() {
-  return ParseFromString<T>(R"proto(
+  return ParseFromString<T>(R"pb(
     url { value: "http://example.com/valueset" }
-  )proto");
+  )pb");
 }
 
 template <typename T>
 T ValidUsCorePatient() {
-  return ParseFromString<T>(R"proto(
+  return ParseFromString<T>(R"pb(
     identifier {
       system { value: "foo" },
       value: { value: "http://example.com/patient" }
     }
-  )proto");
+  )pb");
 }
 
 TYPED_TEST(FhirPathValidationTest, EmptyContainedResource) {
   auto resource = ParseFromString<typename TypeParam::ContainedResource>("");
 
-  FHIR_ASSERT_STATUS(
-      typename TypeParam::FhirPathValidator().Validate(resource).status(),
-      "ContainedResource is empty.");
+  FHIR_ASSERT_STATUS(TestFixture::Validate(resource).status(),
+                     "ContainedResource is empty.");
 }
 
 TYPED_TEST(FhirPathValidationTest, ConstraintViolation) {
   auto organization = ParseFromString<typename TypeParam::Organization>(
-      R"proto(
+      R"pb(
         name: { value: 'myorg' }
         telecom: { use: { value: HOME } }
-      )proto");
+      )pb");
 
-  ValidationResults results = TestFixture::Validate(organization);
-  EXPECT_FALSE(results.IsValid());
+  absl::StatusOr<ValidationResults> results =
+      TestFixture::Validate(organization);
+  FHIR_ASSERT_OK(results.status());
+  EXPECT_FALSE(results->IsValid());
 
-  ASSERT_THAT(
-      results.Results(),
-      Contains(AllOf(
-          Property(&ValidationResult::Constraint,
-                   StrEq("where(use = 'home').empty()")),
-          Property(&ValidationResult::ConstraintPath,
-                   StrEq("Organization.telecom")),
-          Property(&ValidationResult::NodePath,
-                   StrEq("Organization.telecom[0]")),
-          ResultOf([](auto x) { return x.EvaluationResult().value(); },
-                   Eq(false)))));
+  EXPECT_THAT(results->Results(),
+              Contains(AllOf(
+                  Property(&ValidationResult::Constraint,
+                           StrEq("where(use = 'home').empty()")),
+                  Property(&ValidationResult::ConstraintPath,
+                           StrEq("Organization.telecom")),
+                  Property(&ValidationResult::NodePath,
+                           StrEq("Organization.telecom[0]")),
+                  ResultOf([](auto x) { return x.EvaluationResult().value(); },
+                           Eq(false)))));
 }
 
 TYPED_TEST(FhirPathValidationTest, ConstraintViolationResultPaths) {
   auto bundle = ParseFromString<typename TypeParam::Bundle>(
-      R"proto(entry: {
-                resource: {
-                  organization: { telecom: { use: { value: HOME } } }
-                }
-              })proto");
+      R"pb(entry: {
+             resource: { organization: { telecom: { use: { value: HOME } } } }
+           })pb");
 
-  ValidationResults results = TestFixture::Validate(bundle);
+  FHIR_ASSERT_OK_AND_ASSIGN(ValidationResults results,
+                            TestFixture::Validate(bundle));
 
   ASSERT_THAT(
       results.Results(),
@@ -203,7 +213,7 @@ TYPED_TEST(FhirPathValidationTest, ConstraintSatisfied) {
 
   ref_range->set_allocated_high(high);
 
-  EXPECT_TRUE(TestFixture::Validate(observation).IsValid());
+  TestFixture::ExpectValid(observation);
 }
 
 TYPED_TEST(FhirPathValidationTest, NestedConstraintViolated) {
@@ -215,20 +225,20 @@ TYPED_TEST(FhirPathValidationTest, NestedConstraintViolated) {
   value_set.mutable_name()->set_value("Placeholder");
   value_set.set_allocated_expansion(expansion);
 
-  ValidationResults results = TestFixture::Validate(value_set);
+  FHIR_ASSERT_OK_AND_ASSIGN(ValidationResults results,
+                            TestFixture::Validate(value_set));
   EXPECT_FALSE(results.IsValid());
 
-  ASSERT_THAT(
-      results.Results(),
-      Contains(AllOf(
-          Property(&ValidationResult::Constraint,
-                   StrEq("code.exists() or display.exists()")),
-          Property(&ValidationResult::ConstraintPath,
-                   StrEq("ValueSet.expansion.contains")),
-          Property(&ValidationResult::NodePath,
-                   StrEq("ValueSet.expansion.contains[0]")),
-          ResultOf([](auto x) { return x.EvaluationResult().value(); },
-                   Eq(false)))));
+  ASSERT_THAT(results.Results(),
+              Contains(AllOf(
+                  Property(&ValidationResult::Constraint,
+                           StrEq("code.exists() or display.exists()")),
+                  Property(&ValidationResult::ConstraintPath,
+                           StrEq("ValueSet.expansion.contains")),
+                  Property(&ValidationResult::NodePath,
+                           StrEq("ValueSet.expansion.contains[0]")),
+                  ResultOf([](auto x) { return x.EvaluationResult().value(); },
+                           Eq(false)))));
 }
 
 TYPED_TEST(FhirPathValidationTest, NestedConstraintSatisfied) {
@@ -249,58 +259,60 @@ TYPED_TEST(FhirPathValidationTest, NestedConstraintSatisfied) {
 
   value_set.set_allocated_expansion(expansion);
 
-  EXPECT_TRUE(TestFixture::Validate(value_set).IsValid());
+  TestFixture::ExpectValid(value_set);
 }
 
 TYPED_TEST(FhirPathValidationTest, MessageLevelConstraint) {
-  auto period = ParseFromString<typename TypeParam::Period>(R"proto(
+  auto period = ParseFromString<typename TypeParam::Period>(R"pb(
     start: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
     end: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
-  )proto");
+  )pb");
 
-  EXPECT_TRUE(TestFixture::Validate(period).IsValid());
+  TestFixture::ExpectValid(period);
 }
 
 // TODO(b/148992850): Templatize tests to work with both STU3 and R4
 TEST(FhirPathValidationTest, MessageLevelConstraintViolated) {
-  auto end_before_start_period = ParseFromString<r4::core::Period>(R"proto(
+  auto end_before_start_period = ParseFromString<r4::core::Period>(R"pb(
     start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
     end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
-  )proto");
+  )pb");
 
   FHIR_ASSERT_OK_AND_ASSIGN(
       ValidationResults results,
-      r4::FhirPathValidator().Validate(end_before_start_period));
+      FhirPathValidator::GetInstance().Validate(
+          end_before_start_period, r4::R4PrimitiveHandler::GetInstance()));
   EXPECT_FALSE(results.IsValid());
 }
 
 TYPED_TEST(FhirPathValidationTest, NestedMessageLevelConstraint) {
   auto start_with_no_end_encounter =
-      ParseFromString<typename TypeParam::Encounter>(R"proto(
+      ParseFromString<typename TypeParam::Encounter>(R"pb(
         status { value: TRIAGED }
         id { value: "123" }
         period {
           start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
         }
-      )proto");
+      )pb");
 
-  EXPECT_TRUE(TestFixture::Validate(start_with_no_end_encounter).IsValid());
+  TestFixture::ExpectValid(start_with_no_end_encounter);
 }
 
 TEST(FhirPathValidationTest, NestedMessageLevelConstraintViolated) {
-  auto end_before_start_encounter = ParseFromString<r4::core::Encounter>(R"proto(
+  auto end_before_start_encounter = ParseFromString<r4::core::Encounter>(R"pb(
     status { value: TRIAGED }
     id { value: "123" }
     period {
       start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
       end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
     }
-  )proto");
+  )pb");
 
-  FHIR_ASSERT_OK_AND_ASSIGN(
-      ValidationResults results,
-      r4::FhirPathValidator().Validate(end_before_start_encounter));
-  EXPECT_FALSE(results.IsValid());
+  EXPECT_FALSE(FhirPathValidator::GetInstance()
+                   .Validate(end_before_start_encounter,
+                             r4::R4PrimitiveHandler::GetInstance(),
+                             FailFastErrorHandler::FailOnErrorOrFatal())
+                   .ok());
 }
 
 // TODO(b/148992850): Templatize tests to work with both STU3 and R4
@@ -308,8 +320,10 @@ TEST(FhirPathValidationTest, ProfiledEmptyExtension) {
   r4::uscore::USCorePatientProfile patient =
       ValidUsCorePatient<r4::uscore::USCorePatientProfile>();
 
-  FHIR_ASSERT_OK_AND_ASSIGN(ValidationResults results,
-                            r4::FhirPathValidator().Validate(patient));
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      ValidationResults results,
+      FhirPathValidator::GetInstance().Validate(
+          patient, r4::R4PrimitiveHandler::GetInstance()));
   EXPECT_TRUE(results.IsValid());
 }
 
@@ -325,8 +339,10 @@ TEST(FhirPathValidationTest, ProfiledWithExtensionsR4) {
 
   patient.mutable_birthsex()->set_value(r4::uscore::BirthSexValueSet::M);
 
-  FHIR_ASSERT_OK_AND_ASSIGN(ValidationResults results,
-                            r4::FhirPathValidator().Validate(patient));
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      ValidationResults results,
+      FhirPathValidator::GetInstance().Validate(
+          patient, r4::R4PrimitiveHandler::GetInstance()));
   EXPECT_TRUE(results.IsValid());
 }
 
@@ -341,8 +357,10 @@ TEST(FhirPathValidationTest, ProfiledWithExtensionsSTU3) {
 
   patient.mutable_birthsex()->set_value(stu3::uscore::UsCoreBirthSexCode::MALE);
 
-  FHIR_ASSERT_OK_AND_ASSIGN(ValidationResults results,
-                            stu3::FhirPathValidator().Validate(patient));
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      ValidationResults results,
+      FhirPathValidator::GetInstance().Validate(
+          patient, stu3::Stu3PrimitiveHandler::GetInstance()));
   EXPECT_TRUE(results.IsValid());
 }
 
