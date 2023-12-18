@@ -263,11 +263,14 @@ func walkMessage(msg protoreflect.Message, fd protoreflect.FieldDescriptor, json
 		if fd.Message() == nil {
 			return true
 		}
-		jsonPath := addFieldToPath(jsonPath, fd.JSONName())
+		newPath := addFieldToPath(jsonPath, fd.JSONName())
+		if jsonpbhelper.IsChoice(msg.Descriptor()) {
+			newPath = jsonPath + strings.Title(fd.JSONName())
+		}
 		if fd.IsList() {
 			l := value.List()
 			for i := 0; i < l.Len(); i++ {
-				if err := walkMessage(l.Get(i).Message(), fd, jsonpbhelper.AddIndexToPath(jsonPath, i), validators, opts...); err != nil {
+				if err := walkMessage(l.Get(i).Message(), fd, jsonpbhelper.AddIndexToPath(newPath, i), validators, opts...); err != nil {
 					if err := jsonpbhelper.AppendUnmarshalError(&errors, err); err != nil {
 						fatalErr = err
 						return false
@@ -275,7 +278,7 @@ func walkMessage(msg protoreflect.Message, fd protoreflect.FieldDescriptor, json
 				}
 			}
 		} else {
-			err := walkMessage(value.Message(), fd, jsonPath, validators, opts...)
+			err := walkMessage(value.Message(), fd, newPath, validators, opts...)
 			if err := jsonpbhelper.AppendUnmarshalError(&errors, err); err != nil {
 				fatalErr = err
 				return false
@@ -303,17 +306,20 @@ func walkMessageWithErrorReporter(msg protoreflect.Message, fd protoreflect.Fiel
 		if fd.Message() == nil {
 			return true
 		}
-		jsonPath := addFieldToPath(jsonPath, fd.JSONName())
+		newPath := addFieldToPath(jsonPath, fd.JSONName())
+		if jsonpbhelper.IsChoice(msg.Descriptor()) {
+			newPath = jsonPath + strings.Title(fd.JSONName())
+		}
 		if fd.IsList() {
 			l := value.List()
 			for i := 0; i < l.Len(); i++ {
-				if err := walkMessageWithErrorReporter(l.Get(i).Message(), fd, jsonpbhelper.AddIndexToPath(jsonPath, i), validators, er); err != nil {
+				if err := walkMessageWithErrorReporter(l.Get(i).Message(), fd, jsonpbhelper.AddIndexToPath(newPath, i), validators, er); err != nil {
 					fatalErr = err
 					return false
 				}
 			}
 		} else {
-			if err := walkMessageWithErrorReporter(value.Message(), fd, jsonPath, validators, er); err != nil {
+			if err := walkMessageWithErrorReporter(value.Message(), fd, newPath, validators, er); err != nil {
 				fatalErr = err
 				return false
 			}

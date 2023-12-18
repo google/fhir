@@ -1950,9 +1950,9 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 			"Missing required field",
 			`
 		{
-      "resourceType": "Patient",
-      "link": [{}]
-    }`,
+		  "resourceType": "Patient",
+		  "link": [{}]
+		}`,
 			jsonpbhelper.UnmarshalErrorList{
 				{Path: "Patient.link[0]", Details: `missing required field "other"`, Type: jsonpbhelper.RequiredFieldError},
 				{Path: "Patient.link[0]", Details: `missing required field "type"`, Type: jsonpbhelper.RequiredFieldError},
@@ -1960,11 +1960,27 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 			allVers,
 		},
 		{
+			"Missing required field in oneof",
+			`
+		{
+			"valueQuantity": {
+				"extension": [{"valueCode": "foo"}]
+			},
+      "resourceType": "Observation",
+			"status": "final",
+			"code": {
+				"text": "bar"
+			}
+    }`,
+			&jsonpbhelper.UnmarshalError{Path: "Observation.valueQuantity.extension[0]", Details: `missing required field "url"`, Type: jsonpbhelper.RequiredFieldError},
+			allVers,
+		},
+		{
 			"Missing required repeated field",
 			`
 		{
-      "resourceType": "OperationOutcome"
-    }`,
+		  "resourceType": "OperationOutcome"
+		}`,
 			&jsonpbhelper.UnmarshalError{Path: "OperationOutcome", Details: `missing required field "issue"`, Type: jsonpbhelper.RequiredFieldError},
 			allVers,
 		},
