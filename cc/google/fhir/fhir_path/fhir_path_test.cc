@@ -28,6 +28,7 @@
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
+#include "absl/strings/match.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/string_view.h"
 #include "absl/strings/substitute.h"
@@ -55,6 +56,13 @@
 #include "proto/google/fhir/proto/r4/core/resources/patient.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/structure_definition.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/value_set.pb.h"
+#include "proto/google/fhir/proto/r5/core/codes.pb.h"
+#include "proto/google/fhir/proto/r5/core/resources/bundle_and_contained_resource.pb.h"
+#include "proto/google/fhir/proto/r5/core/resources/encounter.pb.h"
+#include "proto/google/fhir/proto/r5/core/resources/observation.pb.h"
+#include "proto/google/fhir/proto/r5/core/resources/parameters.pb.h"
+#include "proto/google/fhir/proto/r5/core/resources/patient.pb.h"
+#include "proto/google/fhir/proto/r5/core/resources/structure_definition.pb.h"
 #include "proto/google/fhir/proto/stu3/codes.pb.h"
 #include "proto/google/fhir/proto/stu3/datatypes.pb.h"
 #include "proto/google/fhir/proto/stu3/metadatatypes.pb.h"
@@ -241,19 +249,30 @@ T ParseFromString(const std::string& str) {
 
 template <typename T>
 T ValidEncounter() {
-  return ParseFromString<T>(R"proto(
-    status { value: TRIAGED }
+  return ParseFromString<T>(R"pb(
+    status { value: PLANNED }
     id { value: "123" }
     period {
       start: { value_us: 1556750153000 timezone: "America/Los_Angeles" }
     }
     status_history { status { value: ARRIVED } }
-  )proto");
+  )pb");
+}
+
+template <>
+r5::core::Encounter ValidEncounter() {
+  return ParseFromString<r5::core::Encounter>(R"pb(
+    status { value: PLANNED }
+    id { value: "123" }
+    actual_period {
+      start: { value_us: 1556750153000 timezone: "America/Los_Angeles" }
+    }
+  )pb");
 }
 
 template <typename T>
 T ValidObservation() {
-  return ParseFromString<T>(R"proto(
+  return ParseFromString<T>(R"pb(
     status { value: FINAL }
     code {
       coding {
@@ -263,7 +282,7 @@ T ValidObservation() {
     }
     id { value: "123" }
     effective { date_time { value_us: 0 timezone: "America/Los_Angeles" } }
-  )proto");
+  )pb");
 }
 
 template <typename T, typename P>
@@ -283,14 +302,6 @@ P CreatePeriod(const D& start, const D& end) {
   *period.mutable_end() = end;
   return period;
 }
-
-struct Stu3CoreTestEnv : public testutil::Stu3CoreTestEnv {
-  using EncounterStatusCode = ::google::fhir::stu3::proto::EncounterStatusCode;
-};
-
-struct R4CoreTestEnv : public testutil::R4CoreTestEnv {
-  using EncounterStatusCode = ::google::fhir::r4::core::EncounterStatusCode;
-};
 
 template <typename T>
 class FhirPathTest : public ::testing::Test {
@@ -317,16 +328,36 @@ class FhirPathTest : public ::testing::Test {
       const std::string& expression) {
     // FHIRPath assumes a resource object during evaluation, so we use an
     // encounter as a placeholder.
-    auto test_encounter = ValidEncounter<typename T::Encounter>();
-    auto result = Evaluate<typename T::Encounter>(test_encounter, expression);
+    auto test_observation = ValidObservation<typename T::Observation>();
+    auto result =
+        Evaluate<typename T::Observation>(test_observation, expression);
     CHECK(!result.ok() ||
           (result.ok() && !result.value().CallbackFunctionName().has_value()));
     return result;
   }
 };
 
-using TestEnvs = ::testing::Types<Stu3CoreTestEnv, R4CoreTestEnv>;
-TYPED_TEST_SUITE(FhirPathTest, TestEnvs);
+template <typename T>
+class Stu3AndR4FhirPathTest : public FhirPathTest<T> {};
+
+struct Stu3CoreTestEnv : public testutil::Stu3CoreTestEnv {
+  using EncounterStatusCode = ::google::fhir::stu3::proto::EncounterStatusCode;
+};
+
+struct R4CoreTestEnv : public testutil::R4CoreTestEnv {
+  using EncounterStatusCode = ::google::fhir::r4::core::EncounterStatusCode;
+};
+
+struct R5CoreTestEnv : public testutil::R5CoreTestEnv {
+  using EncounterStatusCode = ::google::fhir::r5::core::EncounterStatusCode;
+};
+
+using Stu3AndR4TestEnvs = ::testing::Types<Stu3CoreTestEnv, R4CoreTestEnv>;
+TYPED_TEST_SUITE(Stu3AndR4FhirPathTest, Stu3AndR4TestEnvs);
+
+using AllVersionEnvs =
+    ::testing::Types<Stu3CoreTestEnv, R4CoreTestEnv, R5CoreTestEnv>;
+TYPED_TEST_SUITE(FhirPathTest, AllVersionEnvs);
 
 TYPED_TEST(FhirPathTest, TestExternalConstants) {
   EXPECT_THAT(TestFixture::Evaluate("%ucum"),
@@ -376,7 +407,7 @@ TYPED_TEST(FhirPathTest, TestGetDirectChild) {
       UnorderedElementsAreArray({EqualsProto(test_encounter.status())}));
 }
 
-TYPED_TEST(FhirPathTest, TestExpressionsStartingWithOptionalType) {
+TYPED_TEST(Stu3AndR4FhirPathTest, TestExpressionsStartingWithOptionalType) {
   auto expr = TestFixture::Compile(TypeParam::Encounter::descriptor(),
                                    "Patient.status");
   EXPECT_THAT(expr, HasStatusCode(StatusCode::kNotFound));
@@ -441,11 +472,11 @@ TYPED_TEST(FhirPathTest, TestExpressionsStartingWithOptionalType) {
   EXPECT_THAT(TestFixture::Evaluate(
                   test_encounter,
                   ("Resource.period.start.exists() implies "
-                   "(Encounter.status='triaged' or status.exists().not())")),
+                   "(Encounter.status='planned' or status.exists().not())")),
               EvalsToTrue());
 }
 
-TYPED_TEST(FhirPathTest, TestElementDefinition) {
+TYPED_TEST(Stu3AndR4FhirPathTest, TestElementDefinition) {
   auto expr = TestFixture::Compile(TypeParam::Encounter::descriptor(),
                                    "Element.exists()");
   EXPECT_THAT(expr, HasStatusCode(StatusCode::kNotFound));
@@ -458,11 +489,10 @@ TYPED_TEST(FhirPathTest, TestElementDefinition) {
           .value()
           .GetMessages(),
       UnorderedElementsAreArray({EqualsProto(test_encounter.period())}));
-  EXPECT_THAT(
-      TestFixture::Evaluate(test_encounter, "id.where(Element = '123')")
-          .value()
-          .GetMessages(),
-      UnorderedElementsAreArray({EqualsProto(test_encounter.id())}));
+  EXPECT_THAT(TestFixture::Evaluate(test_encounter, "id.where(Element = '123')")
+                  .value()
+                  .GetMessages(),
+              UnorderedElementsAreArray({EqualsProto(test_encounter.id())}));
   EXPECT_THAT(
       TestFixture::Evaluate(test_encounter, "period.select(Element.start)")
           .value()
@@ -471,7 +501,7 @@ TYPED_TEST(FhirPathTest, TestElementDefinition) {
           {EqualsProto(test_encounter.period().start())}));
 }
 
-TYPED_TEST(FhirPathTest, TestGetGrandchild) {
+TYPED_TEST(Stu3AndR4FhirPathTest, TestGetGrandchild) {
   auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
   EvaluationResult result =
       TestFixture::Evaluate(test_encounter, "period.start").value();
@@ -497,14 +527,14 @@ TYPED_TEST(FhirPathTest, TestFieldNameIsReservedWord) {
       UnorderedElementsAreArray({EqualsProto(test_encounter.text().div())}));
 }
 
-TYPED_TEST(FhirPathTest, TestGetEmptyGrandchild) {
+TYPED_TEST(Stu3AndR4FhirPathTest, TestGetEmptyGrandchild) {
   EXPECT_THAT(
       TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
                             "period.end"),
       EvalsToEmpty());
 }
 
-TYPED_TEST(FhirPathTest, TestFieldExists) {
+TYPED_TEST(Stu3AndR4FhirPathTest, TestFieldExists) {
   auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
   test_encounter.mutable_class_value()->mutable_display()->set_value("foo");
 
@@ -565,7 +595,7 @@ TYPED_TEST(FhirPathTest, TestNoSuchField) {
             std::string::npos);
 
   auto child_expr = TestFixture::Compile(TypeParam::Encounter::descriptor(),
-                                         "period.boguschildfield");
+                                         "participant.boguschildfield");
 
   EXPECT_THAT(child_expr, HasStatusCode(StatusCode::kNotFound));
   EXPECT_NE(child_expr.status().message().find("boguschildfield"),
@@ -573,13 +603,13 @@ TYPED_TEST(FhirPathTest, TestNoSuchField) {
 
   EXPECT_THAT(
       TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
-                            "(period | status).boguschildfield"),
+                            "(participant | status).boguschildfield"),
       EvalsToEmpty());
 }
 
 TYPED_TEST(FhirPathTest, TestNoSuchFunction) {
   auto root_expr = TestFixture::Compile(TypeParam::Encounter::descriptor(),
-                                        "period.bogusfunction()");
+                                        "participant.bogusfunction()");
 
   EXPECT_THAT(root_expr, HasStatusCode(StatusCode::kNotFound));
   EXPECT_NE(root_expr.status().message().find("bogusfunction"),
@@ -590,42 +620,42 @@ TYPED_TEST(FhirPathTest, TestFunctionTopLevelInvocation) {
   EXPECT_THAT(TestFixture::Evaluate("exists()"), EvalsToTrue());
 }
 
-TYPED_TEST(FhirPathTest, TestFunctionExists) {
+TYPED_TEST(Stu3AndR4FhirPathTest, TestFunctionExists) {
   EXPECT_THAT(
       TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
                             "period.start.exists()"),
       EvalsToTrue());
 }
 
-TYPED_TEST(FhirPathTest, TestFunctionExistsNegation) {
+TYPED_TEST(Stu3AndR4FhirPathTest, TestFunctionExistsNegation) {
   EXPECT_THAT(
       TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
                             "period.start.exists().not()"),
       EvalsToFalse());
 }
 
-TYPED_TEST(FhirPathTest, TestFunctionNotExists) {
+TYPED_TEST(Stu3AndR4FhirPathTest, TestFunctionNotExists) {
   EXPECT_THAT(
       TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
                             "period.end.exists()"),
       EvalsToFalse());
 }
 
-TYPED_TEST(FhirPathTest, TestFunctionNotExistsNegation) {
+TYPED_TEST(Stu3AndR4FhirPathTest, TestFunctionNotExistsNegation) {
   EXPECT_THAT(
       TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
                             "period.end.exists().not()"),
       EvalsToTrue());
 }
 
-TYPED_TEST(FhirPathTest, TestFunctionHasValue) {
+TYPED_TEST(Stu3AndR4FhirPathTest, TestFunctionHasValue) {
   EXPECT_THAT(
       TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
                             "period.start.hasValue()"),
       EvalsToTrue());
 }
 
-TYPED_TEST(FhirPathTest, TestLogicalValueFieldExists) {
+TYPED_TEST(Stu3AndR4FhirPathTest, TestLogicalValueFieldExists) {
   // The logical .value field on primitives should return the primitive itself.
   typename TypeParam::Quantity quantity;
   quantity.mutable_value()->set_value("100");
@@ -633,7 +663,7 @@ TYPED_TEST(FhirPathTest, TestLogicalValueFieldExists) {
               EvalsToTrue());
 }
 
-TYPED_TEST(FhirPathTest, TestFunctionHasValueNegation) {
+TYPED_TEST(Stu3AndR4FhirPathTest, TestFunctionHasValueNegation) {
   auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
   EXPECT_THAT(
       TestFixture::Evaluate(test_encounter, "period.start.hasValue().not()"),
@@ -647,12 +677,12 @@ TYPED_TEST(FhirPathTest, TestFunctionHasValueNegation) {
 
 TYPED_TEST(FhirPathTest, TestFunctionChildren) {
   auto structure_definition =
-      ParseFromString<typename TypeParam::StructureDefinition>(R"proto(
+      ParseFromString<typename TypeParam::StructureDefinition>(R"pb(
         name { value: "foo" }
         context_invariant { value: "bar" }
         snapshot { element { label { value: "snapshot" } } }
         differential { element { label { value: "differential" } } }
-      )proto");
+      )pb");
 
   EXPECT_THAT(TestFixture::Evaluate(structure_definition, "children()")
                   .value()
@@ -674,12 +704,12 @@ TYPED_TEST(FhirPathTest, TestFunctionChildren) {
 
 TYPED_TEST(FhirPathTest, TestFunctionDescendants) {
   auto structure_definition =
-      ParseFromString<typename TypeParam::StructureDefinition>(R"proto(
+      ParseFromString<typename TypeParam::StructureDefinition>(R"pb(
         name { value: "foo" }
         context_invariant { value: "bar" }
         snapshot { element { label { value: "snapshot" } } }
         differential { element { label { value: "differential" } } }
-      )proto");
+      )pb");
 
   EXPECT_THAT(
       TestFixture::Evaluate(structure_definition, "descendants()")
@@ -1097,7 +1127,7 @@ TYPED_TEST(FhirPathTest, TestFunctionTrace) {
   EXPECT_THAT(TestFixture::Evaluate("{}.trace('debug')"), EvalsToEmpty());
 }
 
-TYPED_TEST(FhirPathTest, TestFunctionHasValueComplex) {
+TYPED_TEST(Stu3AndR4FhirPathTest, TestFunctionHasValueComplex) {
   // hasValue should return false for non-primitive types.
   EXPECT_THAT(
       TestFixture::Evaluate(ValidEncounter<typename TypeParam::Encounter>(),
@@ -1222,7 +1252,7 @@ TYPED_TEST(FhirPathTest, TestFunctionOfTypePrimitives) {
 
 TYPED_TEST(FhirPathTest, TestFunctionOfTypeResources) {
   auto observation =
-      ParseFromString<typename TypeParam::Observation>(R"proto()proto");
+      ParseFromString<typename TypeParam::Observation>(R"pb()pb");
 
   EXPECT_THAT(TestFixture::Evaluate(observation, "$this.ofType(Boolean)"),
               EvalsToEmpty());
@@ -1256,7 +1286,7 @@ TYPED_TEST(FhirPathTest, TestFunctionAsPrimitives) {
 
 TYPED_TEST(FhirPathTest, TestFunctionAsResources) {
   auto observation =
-      ParseFromString<typename TypeParam::Observation>(R"proto()proto");
+      ParseFromString<typename TypeParam::Observation>(R"pb()pb");
 
   EXPECT_THAT(TestFixture::Evaluate(observation, "$this.as(Boolean)"),
               EvalsToEmpty());
@@ -1289,7 +1319,7 @@ TYPED_TEST(FhirPathTest, TestOperatorAsPrimitives) {
 
 TYPED_TEST(FhirPathTest, TestOperatorAsResources) {
   auto observation =
-      ParseFromString<typename TypeParam::Observation>(R"proto()proto");
+      ParseFromString<typename TypeParam::Observation>(R"pb()pb");
 
   EXPECT_THAT(TestFixture::Evaluate(observation, "$this as Boolean"),
               EvalsToEmpty());
@@ -1330,7 +1360,7 @@ TYPED_TEST(FhirPathTest, TestFunctionIsPrimitives) {
 
 TYPED_TEST(FhirPathTest, TestFunctionIsResources) {
   auto observation =
-      ParseFromString<typename TypeParam::Observation>(R"proto()proto");
+      ParseFromString<typename TypeParam::Observation>(R"pb()pb");
 
   EXPECT_THAT(TestFixture::Evaluate(observation, "$this.is(Boolean)"),
               EvalsToFalse());
@@ -1358,7 +1388,7 @@ TYPED_TEST(FhirPathTest, TestOperatorIsPrimitives) {
 
 TYPED_TEST(FhirPathTest, TestOperatorIsResources) {
   auto observation =
-      ParseFromString<typename TypeParam::Observation>(R"proto()proto");
+      ParseFromString<typename TypeParam::Observation>(R"pb()pb");
 
   EXPECT_THAT(TestFixture::Evaluate(observation, "$this is Boolean"),
               EvalsToFalse());
@@ -1370,7 +1400,7 @@ TYPED_TEST(FhirPathTest, TestOperatorIsResources) {
 
 TYPED_TEST(FhirPathTest, TestFunctionTailMaintainsOrder) {
   auto codeable_concept =
-      ParseFromString<typename TypeParam::CodeableConcept>(R"proto(
+      ParseFromString<typename TypeParam::CodeableConcept>(R"pb(
         coding {
           system { value: "foo" }
           code { value: "abc" }
@@ -1383,7 +1413,7 @@ TYPED_TEST(FhirPathTest, TestFunctionTailMaintainsOrder) {
           system { value: "foo" }
           code { value: "ghi" }
         }
-      )proto");
+      )pb");
 
   auto code_def = ParseFromString<typename TypeParam::Code>("value: 'def'");
   auto code_ghi = ParseFromString<typename TypeParam::Code>("value: 'ghi'");
@@ -1424,7 +1454,7 @@ TYPED_TEST(FhirPathTest, TestUnionOperatorDeduplicationPrimitives) {
                    EqualsProto(string_foo_proto)}));
 }
 
-TYPED_TEST(FhirPathTest, TestUnionOperatorDeduplicationObjects) {
+TYPED_TEST(Stu3AndR4FhirPathTest, TestUnionOperatorDeduplicationObjects) {
   auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
 
   EvaluationResult evaluation_result =
@@ -1488,7 +1518,7 @@ TYPED_TEST(FhirPathTest, TestUnionFunctionDeduplicationPrimitives) {
                    EqualsProto(string_foo_proto)}));
 }
 
-TYPED_TEST(FhirPathTest, TestUnionFunctionDeduplicationObjects) {
+TYPED_TEST(Stu3AndR4FhirPathTest, TestUnionFunctionDeduplicationObjects) {
   auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
 
   EvaluationResult evaluation_result =
@@ -1636,21 +1666,20 @@ TYPED_TEST(FhirPathTest, TestImplies) {
 }
 
 TYPED_TEST(FhirPathTest, TestWhere) {
-  auto observation =
-      ParseFromString<typename TypeParam::CodeableConcept>(R"proto(
-        coding {
-          system { value: "foo" }
-          code { value: "abc" }
-        }
-        coding {
-          system { value: "bar" }
-          code { value: "def" }
-        }
-        coding {
-          system { value: "foo" }
-          code { value: "ghi" }
-        }
-      )proto");
+  auto observation = ParseFromString<typename TypeParam::CodeableConcept>(R"pb(
+    coding {
+      system { value: "foo" }
+      code { value: "abc" }
+    }
+    coding {
+      system { value: "bar" }
+      code { value: "def" }
+    }
+    coding {
+      system { value: "foo" }
+      code { value: "ghi" }
+    }
+  )pb");
 
   auto code_abc = ParseFromString<typename TypeParam::Code>("value: 'abc'");
   auto code_ghi = ParseFromString<typename TypeParam::Code>("value: 'ghi'");
@@ -1755,10 +1784,10 @@ TYPED_TEST(FhirPathTest, TestAll) {
 
 TYPED_TEST(FhirPathTest, TestAllReadsFieldFromDifferingTypes) {
   auto structure_definition =
-      ParseFromString<typename TypeParam::StructureDefinition>(R"proto(
+      ParseFromString<typename TypeParam::StructureDefinition>(R"pb(
         snapshot { element {} }
         differential { element {} }
-      )proto");
+      )pb");
 
   EXPECT_THAT(
       TestFixture::Evaluate(structure_definition,
@@ -1847,9 +1876,9 @@ TYPED_TEST(FhirPathTest, TestXor) {
 }
 
 TYPED_TEST(FhirPathTest, TestMultiOrShortCircuit) {
-  auto no_end_period = ParseFromString<typename TypeParam::Period>(R"proto(
+  auto no_end_period = ParseFromString<typename TypeParam::Period>(R"pb(
     start: { value_us: 1556750000000 timezone: "America/Los_Angeles" }
-  )proto");
+  )pb");
 
   EXPECT_THAT(
       TestFixture::Evaluate(
@@ -1954,7 +1983,7 @@ TYPED_TEST(FhirPathTest, TestStringAddition) {
 TYPED_TEST(FhirPathTest, TestStringAdditionWithCodeEnum) {
   auto encounter = ValidEncounter<typename TypeParam::Encounter>();
   EXPECT_THAT(TestFixture::Evaluate(encounter, "status + 'foo'"),
-              EvalsToStringThatMatches(StrEq("triagedfoo")));
+              EvalsToStringThatMatches(StrEq("plannedfoo")));
 }
 
 TYPED_TEST(FhirPathTest, TestStringConcatenation) {
@@ -1971,7 +2000,7 @@ TYPED_TEST(FhirPathTest, TestStringConcatenation) {
 TYPED_TEST(FhirPathTest, TestStringConcatenationWithCodeEnum) {
   auto encounter = ValidEncounter<typename TypeParam::Encounter>();
   EXPECT_THAT(TestFixture::Evaluate(encounter, "status & 'foo'"),
-              EvalsToStringThatMatches(StrEq("triagedfoo")));
+              EvalsToStringThatMatches(StrEq("plannedfoo")));
 }
 
 TYPED_TEST(FhirPathTest, TestEmptyComparisons) {
@@ -2023,12 +2052,12 @@ TYPED_TEST(FhirPathTest, TestIntegerComparisons) {
 }
 
 TYPED_TEST(FhirPathTest, TestIntegerLikeComparison) {
-  auto parameters = ParseFromString<typename TypeParam::Parameters>(R"proto(
+  auto parameters = ParseFromString<typename TypeParam::Parameters>(R"pb(
     parameter { value { integer { value: -1 } } }
     parameter { value { integer { value: 0 } } }
     parameter { value { integer { value: 1 } } }
     parameter { value { unsigned_int { value: 0 } } }
-  )proto");
+  )pb");
 
   // lhs = -1 (signed), rhs = 0 (unsigned)
   EXPECT_THAT(TestFixture::Evaluate(parameters,
@@ -2309,21 +2338,21 @@ TYPED_TEST(FhirPathTest, TestTimeComparisonsWithLiterals) {
 TYPED_TEST(FhirPathTest, TimeComparison) {
   using Period = typename TypeParam::Period;
 
-  Period start_before_end_period = ParseFromString<Period>(R"proto(
+  Period start_before_end_period = ParseFromString<Period>(R"pb(
     start: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
     end: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
-  )proto");
+  )pb");
   EXPECT_THAT(TestFixture::Evaluate(start_before_end_period, "start <= end"),
               EvalsToTrue());
 
-  Period end_before_start_period = ParseFromString<Period>(R"proto(
+  Period end_before_start_period = ParseFromString<Period>(R"pb(
     start: { value_us: 1556750153000000 timezone: "America/Los_Angeles" }
     end: { value_us: 1556750000000000 timezone: "America/Los_Angeles" }
-  )proto");
+  )pb");
   EXPECT_THAT(TestFixture::Evaluate(end_before_start_period, "start <= end"),
               EvalsToFalse());
 
-  Period dst_transition = ParseFromString<Period>(R"proto(
+  Period dst_transition = ParseFromString<Period>(R"pb(
     # 2001-10-28T01:59:00
     start: {
       value_us: 1004248740000000
@@ -2336,7 +2365,7 @@ TYPED_TEST(FhirPathTest, TimeComparison) {
       timezone: "America/New_York"
       precision: SECOND
     }
-  )proto");
+  )pb");
   EXPECT_THAT(TestFixture::Evaluate(dst_transition, "start <= end"),
               EvalsToTrue());
 }
@@ -2436,7 +2465,7 @@ TYPED_TEST(FhirPathTest, TimeCompareMicroseconds) {
 }
 
 TYPED_TEST(FhirPathTest, SimpleQuantityComparisons) {
-  auto range = ParseFromString<typename TypeParam::Range>(R"proto(
+  auto range = ParseFromString<typename TypeParam::Range>(R"pb(
     low {
       value { value: "1.1" }
       system { value: "http://valuesystem.example.org/foo" }
@@ -2447,7 +2476,7 @@ TYPED_TEST(FhirPathTest, SimpleQuantityComparisons) {
       system { value: "http://valuesystem.example.org/foo" }
       code { value: "bar" }
     }
-  )proto");
+  )pb");
 
   EXPECT_THAT(TestFixture::Evaluate(range, "low < low"), EvalsToFalse());
   EXPECT_THAT(TestFixture::Evaluate(range, "low <= low"), EvalsToTrue());
@@ -2465,25 +2494,24 @@ TYPED_TEST(FhirPathTest, SimpleQuantityComparisons) {
   EXPECT_THAT(TestFixture::Evaluate(range, "low > high"), EvalsToFalse());
 
   // Different quantity codes
-  auto range_different_codes =
-      ParseFromString<typename TypeParam::Range>(R"proto(
-        low {
-          value { value: "1.1" }
-          system { value: "http://valuesystem.example.org/foo" }
-          code { value: "bar" }
-        }
-        high {
-          value { value: "1.1" }
-          system { value: "http://valuesystem.example.org/foo" }
-          code { value: "different" }
-        }
-      )proto");
+  auto range_different_codes = ParseFromString<typename TypeParam::Range>(R"pb(
+    low {
+      value { value: "1.1" }
+      system { value: "http://valuesystem.example.org/foo" }
+      code { value: "bar" }
+    }
+    high {
+      value { value: "1.1" }
+      system { value: "http://valuesystem.example.org/foo" }
+      code { value: "different" }
+    }
+  )pb");
   EXPECT_THAT(TestFixture::Evaluate(range_different_codes, "low > high"),
               HasStatusCode(StatusCode::kInvalidArgument));
 
   // Different quantity systems
   auto range_different_systems =
-      ParseFromString<typename TypeParam::Range>(R"proto(
+      ParseFromString<typename TypeParam::Range>(R"pb(
         low {
           value { value: "1.1" }
           system { value: "http://valuesystem.example.org/foo" }
@@ -2494,7 +2522,7 @@ TYPED_TEST(FhirPathTest, SimpleQuantityComparisons) {
           system { value: "http://valuesystem.example.org/different" }
           code { value: "bar" }
         }
-      )proto");
+      )pb");
   EXPECT_THAT(TestFixture::Evaluate(range_different_systems, "low > high"),
               HasStatusCode(StatusCode::kInvalidArgument));
 }
@@ -2502,22 +2530,20 @@ TYPED_TEST(FhirPathTest, SimpleQuantityComparisons) {
 TYPED_TEST(FhirPathTest, TestCompareEnumToString) {
   auto encounter = ValidEncounter<typename TypeParam::Encounter>();
 
-  EXPECT_THAT(TestFixture::Evaluate(encounter, "status = 'triaged'"),
+  EXPECT_THAT(TestFixture::Evaluate(encounter, "status = 'planned'"),
               EvalsToTrue());
 
   encounter.mutable_status()->set_value(
-      TypeParam::EncounterStatusCode::FINISHED);
-  EXPECT_THAT(TestFixture::Evaluate(encounter, "status = 'triaged'"),
+      TypeParam::EncounterStatusCode::CANCELLED);
+  EXPECT_THAT(TestFixture::Evaluate(encounter, "status = 'planned'"),
               EvalsToFalse());
 }
 
 TYPED_TEST(FhirPathTest, PathNavigationAfterContainedResourceAndValueX) {
   auto bundle = ParseFromString<typename TypeParam::Bundle>(
-      R"proto(entry: {
-                resource: {
-                  patient: { deceased: { boolean: { value: true } } }
-                }
-              })proto");
+      R"pb(entry: {
+             resource: { patient: { deceased: { boolean: { value: true } } } }
+           })pb");
 
   auto expected = ParseFromString<typename TypeParam::Boolean>("value: true");
 
@@ -2539,29 +2565,25 @@ TEST(FhirPathTest, PathNavigationAfterContainedResourceR4Any) {
 
 TYPED_TEST(FhirPathTest, ResourceReference) {
   auto bundle = ParseFromString<typename TypeParam::Bundle>(
-      R"proto(entry: {
-                resource: {
-                  patient: { deceased: { boolean: { value: true } } }
-                }
-              }
-              entry: {
-                resource: {
-                  observation: { value: { string_value: { value: "foo" } } }
-                }
-              }
-              entry: {
-                resource: {
-                  bundle: {
-                    entry: {
-                      resource: {
-                        observation: {
-                          value: { string_value: { value: "bar" } }
-                        }
-                      }
-                    }
-                  }
-                }
-              })proto");
+      R"pb(entry: {
+             resource: { patient: { deceased: { boolean: { value: true } } } }
+           }
+           entry: {
+             resource: {
+               observation: { value: { string_value: { value: "foo" } } }
+             }
+           }
+           entry: {
+             resource: {
+               bundle: {
+                 entry: {
+                   resource: {
+                     observation: { value: { string_value: { value: "bar" } } }
+                   }
+                 }
+               }
+             }
+           })pb");
 
   EXPECT_THAT(TestFixture::Evaluate(bundle, "%resource").value().GetMessages(),
               ElementsAreArray({EqualsProto(bundle)}));
@@ -2769,35 +2791,33 @@ class FhirPathTestForValueSets : public FhirPathTest<T> {
                                        fhir_path, &fake_terminology_resolver_);
   }
 };
-TYPED_TEST_SUITE(FhirPathTestForValueSets, TestEnvs);
+TYPED_TEST_SUITE(FhirPathTestForValueSets, AllVersionEnvs);
 
 TYPED_TEST(FhirPathTestForValueSets, MemberOf) {
-  auto obs = ParseFromString<typename TypeParam::Observation>(R"(
-      category {
-        coding {
-          code { value: "something else" }
-        }
-        coding {
-          # system not specified (expect to match)
-          code { value: "Peanuts" }
-        }
-        coding {
-          system { value: "wrong_system" }
-          code { value: "Walnuts" }
-        }
-        coding {
-          system { value: "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical" }
-          code { value: "Hazelnuts" }
-        }
+  auto obs = ParseFromString<typename TypeParam::Observation>(R"pb(
+    category {
+      coding { code { value: "something else" } }
+      coding {
+        # system not specified (expect to match)
+        code { value: "Peanuts" }
       }
-      code {
-        coding {
-          code { value: "L" }
-        }
+      coding {
+        system { value: "wrong_system" }
+        code { value: "Walnuts" }
       }
-      reference_range {
-        text { value: "H" }
-      })");
+      coding {
+        system {
+          value: "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical"
+        }
+        code { value: "Hazelnuts" }
+      }
+    }
+    code {
+      coding { code { value: "L" } }
+      text { value: "H" }
+    }
+    reference_range {}
+  )pb");
   auto true_obj = ParseFromString<typename TypeParam::Boolean>("value: true");
   auto false_obj = ParseFromString<typename TypeParam::Boolean>("value: false");
 
@@ -2805,22 +2825,21 @@ TYPED_TEST(FhirPathTestForValueSets, MemberOf) {
   // one code system in our fake value set repository, so this is OK.
   EXPECT_THAT(
       TestFixture::Evaluate(
-          obs, absl::Substitute("referenceRange.text.memberOf('$0')",
-                                kRangeValueSetUrl)),
+          obs, absl::Substitute("code.text.memberOf('$0')", kRangeValueSetUrl)),
       IsOkWithMessages(std::vector<typename TypeParam::Boolean>{true_obj}));
 
   // The "Allergies" value set has 2 code systems in our fake repository,
   // so evaluating memberOf() gives an error.
-  EXPECT_THAT(TestFixture::Evaluate(
-                  obs, absl::Substitute("referenceRange.text.memberOf('$0')",
-                                        kAllergyValueSetUrl)),
-              HasStatusCode(absl::StatusCode::kFailedPrecondition));
+  EXPECT_THAT(
+      TestFixture::Evaluate(obs, absl::Substitute("code.text.memberOf('$0')",
+                                                  kAllergyValueSetUrl)),
+      HasStatusCode(absl::StatusCode::kFailedPrecondition));
 
   // The "not_a_value_set" is not specified in the fake repository, hence
   // memberOf gives a not found error.
-  EXPECT_THAT(TestFixture::Evaluate(
-                  obs, "referenceRange.text.memberOf('not_a_value_set')"),
-              HasStatusCode(absl::StatusCode::kNotFound));
+  EXPECT_THAT(
+      TestFixture::Evaluate(obs, "code.text.memberOf('not_a_value_set')"),
+      HasStatusCode(absl::StatusCode::kNotFound));
 
   // memberOf() cannot be invoked on "ReferenceRange" objects.
   EXPECT_THAT(TestFixture::Evaluate(
@@ -3078,7 +3097,7 @@ class FhirPathUserDefinedFnsTest : public ::testing::Test {
   };
 };
 
-TYPED_TEST_SUITE(FhirPathUserDefinedFnsTest, TestEnvs);
+TYPED_TEST_SUITE(FhirPathUserDefinedFnsTest, AllVersionEnvs);
 
 TYPED_TEST(FhirPathUserDefinedFnsTest, TestFooFunction) {
   EXPECT_THAT(TestFixture::Evaluate("foo()", {}),
@@ -3102,7 +3121,7 @@ TYPED_TEST(FhirPathUserDefinedFnsTest, TestFooFunction) {
 TYPED_TEST(FhirPathUserDefinedFnsTest, TestHasFunction) {
   typename TestFixture::HasFunction has_function;
   auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
-  EXPECT_THAT(TestFixture::Evaluate(test_encounter, "Encounter.has(period)",
+  EXPECT_THAT(TestFixture::Evaluate(test_encounter, "Encounter.has(status)",
                                     {&has_function}),
               EvalsToTrue());
   EXPECT_THAT(TestFixture::Evaluate(test_encounter, "Encounter.has(bar)",

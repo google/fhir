@@ -719,7 +719,7 @@ std::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForStu3Types(
   } else if (IsMessageType<XhtmlType>(target_descriptor)) {
     return std::unique_ptr<PrimitiveWrapper>(new XhtmlWrapper<XhtmlType>());
   }
-  return std::optional<std::unique_ptr<PrimitiveWrapper>>();
+  return std::nullopt;
 }
 
 // Helper function for handling primitive types that are universally present in
@@ -752,7 +752,7 @@ std::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForR4Types(
     return std::unique_ptr<PrimitiveWrapper>(
         new StringTypeWrapper<FHIR_DATATYPE(ExtensionType, uuid)>());
   }
-  return std::optional<std::unique_ptr<PrimitiveWrapper>>();
+  return std::nullopt;
 }
 
 // Helper function for handling primitive types that are universally present in
@@ -775,6 +775,8 @@ std::optional<std::unique_ptr<PrimitiveWrapper>> GetWrapperForR5Types(
     return std::unique_ptr<PrimitiveWrapper>(
         new Integer64Wrapper<FHIR_DATATYPE(ExtensionType, integer64)>());
   }
+
+  return std::nullopt;
 }
 
 }  // namespace primitives_internal

@@ -15,11 +15,10 @@
 #ifndef GOOGLE_FHIR_TESTUTIL_FHIR_TEST_ENV_H_
 #define GOOGLE_FHIR_TESTUTIL_FHIR_TEST_ENV_H_
 
-#include "google/fhir/primitive_handler.h"
 #include "google/fhir/r4/primitive_handler.h"
+#include "google/fhir/r5/primitive_handler.h"
 #include "google/fhir/stu3/primitive_handler.h"
 #include "google/fhir/type_macros.h"
-#include "google/fhir/util.h"
 #include "proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/claim.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/composition.pb.h"
@@ -34,6 +33,7 @@
 #include "proto/google/fhir/proto/r4/core/resources/procedure.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/structure_definition.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/value_set.pb.h"
+#include "proto/google/fhir/proto/r5/core/resources/bundle_and_contained_resource.pb.h"
 #include "proto/google/fhir/proto/stu3/resources.pb.h"
 
 namespace google {
@@ -87,10 +87,11 @@ struct FhirTestEnv {
   using ValueSet = BUNDLE_TYPE(BundleType, value_set);
 };
 
-// "Core" environents per version
+// "Core" enviroments per version
 using Stu3CoreTestEnv =
     FhirTestEnv<stu3::proto::Bundle, stu3::Stu3PrimitiveHandler>;
 using R4CoreTestEnv = FhirTestEnv<r4::core::Bundle, r4::R4PrimitiveHandler>;
+using R5CoreTestEnv = FhirTestEnv<r5::core::Bundle, r5::R5PrimitiveHandler>;
 
 }  // namespace testutil
 }  // namespace fhir

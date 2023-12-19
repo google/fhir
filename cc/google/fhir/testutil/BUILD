@@ -25,10 +25,9 @@ cc_library(
     hdrs = ["fhir_test_env.h"],
     strip_include_prefix = "//cc/",
     deps = [
-        "//cc/google/fhir:primitive_handler",
         "//cc/google/fhir:type_macros",
-        "//cc/google/fhir:util",
         "//cc/google/fhir/r4:primitive_handler",
+        "//cc/google/fhir/r5:primitive_handler",
         "//cc/google/fhir/stu3:primitive_handler",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:claim_cc_proto",
@@ -44,6 +43,7 @@ cc_library(
         "//proto/google/fhir/proto/r4/core/resources:procedure_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:value_set_cc_proto",
+        "//proto/google/fhir/proto/r5/core/resources:bundle_and_contained_resource_cc_proto",
         "//proto/google/fhir/proto/stu3:resources_cc_proto",
     ],
 )
