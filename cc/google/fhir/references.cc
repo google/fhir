@@ -87,6 +87,10 @@ absl::StatusOr<absl::optional<std::string>> ReferenceProtoToString(
   if (reference_field == nullptr) {
     return absl::nullopt;
   }
+  if (reference_field->name() == "uri" ||
+      reference_field->name() == "fragment") {
+    return absl::nullopt;
+  }
 
   std::string prefix;
   bool start = true;

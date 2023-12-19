@@ -701,6 +701,24 @@ TYPED_TEST(FhirPathTest, TestFunctionDescendantsOnEmptyCollection) {
   EXPECT_THAT(TestFixture::Evaluate("{}.descendants()"), EvalsToEmpty());
 }
 
+TYPED_TEST(FhirPathTest, TestFunctionDescendantsWithEmptyReference) {
+  auto encounter = ParseFromString<typename TypeParam::Encounter>(R"pb(
+    meta { extension
+           [ {
+             url { value: "https://foo.com/bar" }
+             value { reference { uri {} } }
+           }] }
+  )pb");
+
+  EXPECT_THAT(
+      TestFixture::Evaluate(encounter, "descendants()").value().GetMessages(),
+      UnorderedElementsAreArray(
+          {EqualsProto(encounter.meta()),
+           EqualsProto(encounter.meta().extension(0)),
+           EqualsProto(encounter.meta().extension(0).url()),
+           EqualsProto(encounter.meta().extension(0).value().reference())}));
+}
+
 TYPED_TEST(FhirPathTest, TestFunctionContains) {
   // Wrong number and/or types of arguments.
   EXPECT_THAT(TestFixture::Evaluate("'foo'.contains()"),
