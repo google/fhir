@@ -266,6 +266,8 @@ func walkMessage(msg protoreflect.Message, fd protoreflect.FieldDescriptor, json
 		newPath := addFieldToPath(jsonPath, fd.JSONName())
 		if jsonpbhelper.IsChoice(msg.Descriptor()) {
 			newPath = jsonPath + strings.Title(fd.JSONName())
+		} else if jsonpbhelper.IsResourceType(fd.Message()) && jsonPath != "" {
+			newPath = addFieldToPath(jsonPath, fmt.Sprintf("ofType(%s)", strings.Title(fd.JSONName())))
 		}
 		if fd.IsList() {
 			l := value.List()
@@ -309,6 +311,8 @@ func walkMessageWithErrorReporter(msg protoreflect.Message, fd protoreflect.Fiel
 		newPath := addFieldToPath(jsonPath, fd.JSONName())
 		if jsonpbhelper.IsChoice(msg.Descriptor()) {
 			newPath = jsonPath + strings.Title(fd.JSONName())
+		} else if jsonpbhelper.IsResourceType(fd.Message()) && jsonpbhelper.IsContainedResource(msg.Descriptor()) && jsonPath != "" {
+			newPath = addFieldToPath(jsonPath, fmt.Sprintf("ofType(%s)", strings.Title(fd.JSONName())))
 		}
 		if fd.IsList() {
 			l := value.List()

@@ -2006,6 +2006,35 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 			&jsonpbhelper.UnmarshalError{Path: "Patient.managingOrganization", Details: `invalid reference to a Patient resource, want Organization`, Type: jsonpbhelper.ReferenceTypeError},
 			allVers,
 		},
+		{
+			"Invalid bundle",
+			`
+			{
+				"resourceType": "Bundle",
+				"type": "searchset",
+				"entry": [{
+					"resource": {
+						"resourceType": "Observation",
+						"extension": 1
+					}
+				}]
+			}`,
+			&jsonpbhelper.UnmarshalError{Path: "Bundle.entry[0].resource.ofType(Observation).extension", Details: `expected array`},
+			allVers,
+		},
+		{
+			"Invalid contained resource",
+			`
+			{
+				"resourceType": "Patient",
+				"contained": [{
+					"resourceType": "Observation",
+					"status": "foo"
+				}]
+			}`,
+			&jsonpbhelper.UnmarshalError{Path: "Patient.contained[0].ofType(Observation).status", Details: `code type mismatch`, Diagnostics: `"foo" is not a ObservationStatusCode`},
+			[]fhirversion.Version{fhirversion.DSTU2, fhirversion.STU3},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {

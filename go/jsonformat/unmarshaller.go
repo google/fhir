@@ -233,7 +233,11 @@ func (u *Unmarshaller) parseContainedResource(jsonPath string, decmap map[string
 		}
 	}
 	delete(decmap, jsonpbhelper.ResourceTypeField)
-	jsonPath = jsonpbhelper.AddFieldToPath(jsonPath, rtstr)
+	if jsonPath != "" {
+		jsonPath = jsonpbhelper.AddFieldToPath(jsonPath, fmt.Sprintf("ofType(%s)", rtstr))
+	} else {
+		jsonPath = jsonpbhelper.AddFieldToPath(jsonPath, rtstr)
+	}
 
 	// Populate the fields in the protobuf message to return.
 	// Encapsulate in a ContainedResource.

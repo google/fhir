@@ -402,6 +402,118 @@ func TestValidateWithErrorReporter(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "invalid fhir bundles",
+			msgs: []proto.Message{
+				&r3pb.ContainedResource{
+					OneofResource: &r3pb.ContainedResource_Bundle{
+						Bundle: &r3pb.Bundle{
+							Type: &c3pb.BundleTypeCode{Value: c3pb.BundleTypeCode_BATCH},
+							Entry: []*r3pb.Bundle_Entry{
+								{Resource: &r3pb.ContainedResource{OneofResource: &r3pb.ContainedResource_Patient{
+									Patient: &r3pb.Patient{
+										Extension: []*d3pb.Extension{{}},
+									},
+								}}},
+							},
+						},
+					},
+				},
+				&r4pb.ContainedResource{
+					OneofResource: &r4pb.ContainedResource_Bundle{
+						Bundle: &r4pb.Bundle{
+							Type: &r4pb.Bundle_TypeCode{Value: c4pb.BundleTypeCode_BATCH},
+							Entry: []*r4pb.Bundle_Entry{
+								{Resource: &r4pb.ContainedResource{OneofResource: &r4pb.ContainedResource_Patient{
+									Patient: &r4patientpb.Patient{
+										Extension: []*d4pb.Extension{{}},
+									},
+								}}},
+							},
+						},
+					},
+				},
+			},
+			wantOutcomes: []*errorreporter.MultiVersionOperationOutcome{
+				&errorreporter.MultiVersionOperationOutcome{
+					Version: fhirversion.STU3,
+					R3Outcome: &r3pb.OperationOutcome{
+						Issue: []*r3pb.OperationOutcome_Issue{
+							&r3pb.OperationOutcome_Issue{
+								Code: &c3pb.IssueTypeCode{
+									Value: c3pb.IssueTypeCode_VALUE,
+								},
+								Severity: &c3pb.IssueSeverityCode{
+									Value: c3pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d3pb.String{Value: `error at "Bundle.entry[0].resource.ofType(Patient).extension[0]": missing required field "url"`},
+								Expression: []*d3pb.String{
+									&d3pb.String{Value: `Bundle.entry[0].resource.ofType(Patient).extension[0]`},
+								},
+							},
+						},
+					},
+				},
+				&errorreporter.MultiVersionOperationOutcome{
+					Version: fhirversion.R4,
+					R4Outcome: &r4outcomepb.OperationOutcome{
+						Issue: []*r4outcomepb.OperationOutcome_Issue{
+							&r4outcomepb.OperationOutcome_Issue{
+								Code: &r4outcomepb.OperationOutcome_Issue_CodeType{
+									Value: c4pb.IssueTypeCode_VALUE,
+								},
+								Severity: &r4outcomepb.OperationOutcome_Issue_SeverityCode{
+									Value: c4pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d4pb.String{Value: `error at "Bundle.entry[0].resource.ofType(Patient).extension[0]": missing required field "url"`},
+								Expression: []*d4pb.String{
+									&d4pb.String{Value: `Bundle.entry[0].resource.ofType(Patient).extension[0]`},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "invalid contained resource STU3", // no validation in R4
+			msgs: []proto.Message{
+				&r3pb.ContainedResource{
+					OneofResource: &r3pb.ContainedResource_Patient{
+						Patient: &r3pb.Patient{
+							Contained: []*r3pb.ContainedResource{
+								&r3pb.ContainedResource{OneofResource: &r3pb.ContainedResource_Patient{
+									Patient: &r3pb.Patient{
+										Extension: []*d3pb.Extension{{}},
+									},
+								}},
+							},
+						},
+					},
+				},
+			},
+			wantOutcomes: []*errorreporter.MultiVersionOperationOutcome{
+				&errorreporter.MultiVersionOperationOutcome{
+					Version: fhirversion.STU3,
+					R3Outcome: &r3pb.OperationOutcome{
+						Issue: []*r3pb.OperationOutcome_Issue{
+							&r3pb.OperationOutcome_Issue{
+								Code: &c3pb.IssueTypeCode{
+									Value: c3pb.IssueTypeCode_VALUE,
+								},
+								Severity: &c3pb.IssueSeverityCode{
+									Value: c3pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d3pb.String{Value: `error at "Patient.contained[0].ofType(Patient).extension[0]": missing required field "url"`},
+								Expression: []*d3pb.String{
+									&d3pb.String{Value: `Patient.contained[0].ofType(Patient).extension[0]`},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
