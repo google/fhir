@@ -38,8 +38,6 @@ message Appointment {
       "start.exists() = end.exists()";
   option (.google.fhir.proto.fhir_path_message_constraint) =
       "(start.exists() and end.exists()) or (status in ('proposed' | 'cancelled' | 'waitlist'))";
-  option (.google.fhir.proto.fhir_path_message_constraint) =
-      "Appointment.cancelationReason.exists() implies (Appointment.status='no-show' or Appointment.status='cancelled')";
 
   // Logical id of this artifact
   Id id = 1;

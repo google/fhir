@@ -182,6 +182,9 @@ public class ProtoGeneratorV2 {
               "element.all(definition and min and max)",
               // See https://jira.hl7.org/browse/FHIR-25796
               "probability is decimal implies (probability as decimal) <= 100",
+              // R4 Appointment constraint is disabled for legacy reasons (b/302720776)
+              "Appointment.cancelationReason.exists() implies (Appointment.status='no-show' or"
+                  + " Appointment.status='cancelled')",
               // Contains an invalid double-quoted string.
               // See: https://jira.hl7.org/browse/FHIR-41873
               "binding.empty() or type.code.empty() or type.code.contains(\":\") or"
