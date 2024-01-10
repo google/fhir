@@ -53,6 +53,7 @@ import com.google.protobuf.DescriptorProtos.FileOptions;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
 import com.google.protobuf.DescriptorProtos.OneofDescriptorProto;
 import com.google.protobuf.DescriptorProtos.OneofOptions;
+import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Message;
 import java.io.File;
 import java.util.ArrayList;
@@ -262,6 +263,7 @@ public class ProtoGeneratorV2 {
             .addExtension(
                 Annotations.fhirProfileBase, structureDefinition.getBaseDefinition().getValue());
       }
+
       return builder.build();
     }
 
@@ -948,7 +950,66 @@ public class ProtoGeneratorV2 {
     addReferenceType(fileBuilder, resourceNames);
     addReferenceIdType(fileBuilder);
 
-    return fileBuilder.build();
+    return protogenConfig.getLegacyRetagging()
+        ? retagFile(fileBuilder.build())
+        : fileBuilder.build();
+  }
+
+  // TODO(b/292116008): Infer version directly from Structure Definition directly.  Currently not
+  // possible since this uses R4 StructureDefinition, which can't parse R5 version code.
+  public FileDescriptorProto generateResourceFileDescriptor(
+      StructureDefinition def, String semanticVersion) throws InvalidFhirException {
+    FileDescriptorProto file =
+        generateFileDescriptor(ImmutableList.of(def), semanticVersion)
+            .addDependency(protogenConfig.getSourceDirectory() + "/datatypes.proto")
+            .addDependency("google/protobuf/any.proto")
+            .build();
+    return protogenConfig.getLegacyRetagging() ? retagFile(file) : file;
+  }
+
+  // Generates a single file for two types: the Bundle type, and the ContainedResource type.
+  public FileDescriptorProto generateBundleAndContainedResource(
+      StructureDefinition bundleDefinition,
+      String semanticVersion,
+      List<String> resourceTypes,
+      int fieldNumberOffset)
+      throws InvalidFhirException {
+    FileDescriptorProto.Builder fileBuilder =
+        generateResourceFileDescriptor(bundleDefinition, semanticVersion).toBuilder();
+
+    DescriptorProto.Builder contained =
+        fileBuilder
+            .addMessageTypeBuilder()
+            .setName("ContainedResource")
+            .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource"));
+    // When generating contained resources, iterate through all the resources sorted alphabetically,
+    // assigning tag numbers as you go
+    TreeSet<String> sortedResources = new TreeSet<>(resourceTypes);
+    sortedResources.add("Bundle");
+    int tagNumber = 1 + fieldNumberOffset;
+    for (String type : sortedResources) {
+      if (!type.equals("Bundle")) {
+        // Don't add a dep for Bundle since it's defined in the same file.
+        fileBuilder.addDependency(
+            new File(
+                    protogenConfig.getSourceDirectory()
+                        + "/resources/"
+                        + GeneratorUtils.resourceNameToFileName(type))
+                .toString());
+      }
+      contained.addField(
+          FieldDescriptorProto.newBuilder()
+              .setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type))
+              .setNumber(tagNumber++)
+              .setTypeName("." + protogenConfig.getProtoPackage() + "." + type)
+              .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+              .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
+              .setOneofIndex(0 /* the oneof_resource */)
+              .build());
+    }
+    return protogenConfig.getLegacyRetagging()
+        ? retagFile(fileBuilder.build())
+        : fileBuilder.build();
   }
 
   // We generate a custom Reference datatype, since we have typed reference ID fields that are
@@ -1201,59 +1262,6 @@ public class ProtoGeneratorV2 {
         .setNumber(4);
   }
 
-  // TODO(b/292116008): Infer version directly from Structure Definition directly.  Currently not
-  // possible since this uses R4 StructureDefinition, which can't parse R5 version code.
-  public FileDescriptorProto generateResourceFileDescriptor(
-      StructureDefinition def, String semanticVersion) throws InvalidFhirException {
-    return generateFileDescriptor(ImmutableList.of(def), semanticVersion)
-        .addDependency(protogenConfig.getSourceDirectory() + "/datatypes.proto")
-        .addDependency("google/protobuf/any.proto")
-        .build();
-  }
-
-  // Generates a single file for two types: the Bundle type, and the ContainedResource type.
-  public FileDescriptorProto generateBundleAndContainedResource(
-      StructureDefinition bundleDefinition,
-      String semanticVersion,
-      List<String> resourceTypes,
-      int fieldNumberOffset)
-      throws InvalidFhirException {
-    FileDescriptorProto.Builder fileBuilder =
-        generateResourceFileDescriptor(bundleDefinition, semanticVersion).toBuilder();
-
-    DescriptorProto.Builder contained =
-        fileBuilder
-            .addMessageTypeBuilder()
-            .setName("ContainedResource")
-            .addOneofDecl(OneofDescriptorProto.newBuilder().setName("oneof_resource"));
-    // When generating contained resources, iterate through all the resources sorted alphabetically,
-    // assigning tag numbers as you go
-    TreeSet<String> sortedResources = new TreeSet<>(resourceTypes);
-    sortedResources.add("Bundle");
-    int tagNumber = 1 + fieldNumberOffset;
-    for (String type : sortedResources) {
-      if (!type.equals("Bundle")) {
-        // Don't add a dep for Bundle since it's defined in the same file.
-        fileBuilder.addDependency(
-            new File(
-                    protogenConfig.getSourceDirectory()
-                        + "/resources/"
-                        + GeneratorUtils.resourceNameToFileName(type))
-                .toString());
-      }
-      contained.addField(
-          FieldDescriptorProto.newBuilder()
-              .setName(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type))
-              .setNumber(tagNumber++)
-              .setTypeName("." + protogenConfig.getProtoPackage() + "." + type)
-              .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
-              .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL)
-              .setOneofIndex(0 /* the oneof_resource */)
-              .build());
-    }
-    return fileBuilder.build();
-  }
-
   private FileDescriptorProto.Builder generateFileDescriptor(
       List<StructureDefinition> defs, String semanticVersion) throws InvalidFhirException {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
@@ -1479,5 +1487,61 @@ public class ProtoGeneratorV2 {
       return Annotations.FhirVersion.R5;
     }
     return Annotations.FhirVersion.FHIR_VERSION_UNKNOWN;
+  }
+
+  // Retags a DescriptorProto against their current R4 counterparts, where possible.
+  // This process ensures that any field that is the same in the reference package (current R4) as
+  // the package being generated will have the same tag numbers, and any new fields in the
+  // new message will use a tag number that is not in use by the reference counterpart.
+  //
+  // This is done to grant the maximum possible flexibility for ultimately moving to a combined
+  // versionless representation of normative resources.  For instance, since Patient is normative,
+  // an R4 or an R5 Patient should theoretically "fit" in an R6 proto, but this is only possible if
+  // tag numbers line up between versions.  This currently uses R4 as the reference version, but
+  // ultimately this should use the most recent published version.
+  //
+  // Note that this is a best-effort algorithm, and does not guarantee binary compatibility.
+  // Binary compatibility should be independently verified before anything relies on it.
+  private FileDescriptorProto retagFile(FileDescriptorProto original) {
+    List<DescriptorProto> retaggedMessages = new ArrayList<>();
+
+    for (DescriptorProto originalDescriptor : original.getMessageTypeList()) {
+      String fullName = protogenConfig.getJavaProtoPackage() + "." + originalDescriptor.getName();
+
+      // Name of this message in the reference (i.e., current R4) package.
+      String r4FullName = fullName.replaceFirst("\\.r[0-9]*\\.", ".r4.");
+
+      // Skip ContainedResource - each version gets its own range of numbers in ContainedResource,
+      // governed by the `contained_resource_offset` flag.
+      if (fullName.endsWith(".ContainedResource")) {
+        retaggedMessages.add(originalDescriptor);
+        continue;
+      }
+
+      // Skip SearchParameters and OperationDefinition for now, since there is an issue with
+      // changed ValueSets.
+      // TODO(b/315841051): Figure out something smart to do here.
+      if (fullName.endsWith(".SearchParameter") || fullName.endsWith(".OperationDefinition")) {
+        System.out.println("Warning!  Skipping " + fullName);
+        retaggedMessages.add(originalDescriptor);
+        continue;
+      }
+
+      try {
+        Class<?> r4MessageClass = Class.forName(r4FullName);
+        try {
+          DescriptorProto r4Descriptor =
+              ((Descriptor) r4MessageClass.getMethod("getDescriptor").invoke(null)).toProto();
+          retaggedMessages.add(FieldRetagger.retagMessage(originalDescriptor, r4Descriptor));
+        } catch (ReflectiveOperationException e) {
+          // If we find a class with the expected name, it should always have a "getDescriptor".
+          throw new IllegalStateException(e);
+        }
+      } catch (ClassNotFoundException e) {
+        // No matching class in R4 - that's ok, it's something new in this version.
+        retaggedMessages.add(originalDescriptor);
+      }
+    }
+    return original.toBuilder().clearMessageType().addAllMessageType(retaggedMessages).build();
   }
 }

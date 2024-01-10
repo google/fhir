@@ -95,6 +95,7 @@ public final class ProtoGeneratorV2Test {
             .setJavaProtoPackage("com.google.fhir.r5.core")
             .setLicenseDate("1995")
             .setSourceDirectory("proto/google/fhir/proto/r5/core")
+            .setLegacyRetagging(true)
             .build();
     FhirPackage r5Package = getR5Package();
     return new ProtoGeneratorV2(r5Package, config);

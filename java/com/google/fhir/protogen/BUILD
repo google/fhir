@@ -130,17 +130,11 @@ java_binary(
     ],
 )
 
-java_binary(
-    name = "ProtoGeneratorV2",
+java_library(
+    name = "proto_generator_main_v2",
     srcs = ["ProtoGeneratorMainV2.java"],
-    main_class = "com.google.fhir.protogen.ProtoGeneratorMainV2",
-    runtime_deps = [
-        # For field retagging against R4
-        "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_java_proto",
-    ],
     deps = [
         ":fhir_package",
-        ":field_retagger",
         ":generator_utils",
         ":proto_file_printer",
         ":proto_generator_v2",
@@ -151,6 +145,16 @@ java_binary(
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_java_proto",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_beust_jcommander",
+    ],
+)
+
+java_binary(
+    name = "ProtoGeneratorV2",
+    main_class = "com.google.fhir.protogen.ProtoGeneratorMainV2",
+    runtime_deps = [
+        ":proto_generator_main_v2",
+        # For field retagging against R4
+        "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_java_proto",
     ],
 )
 
@@ -201,6 +205,7 @@ java_library(
     srcs = ["ProtoGeneratorV2.java"],
     deps = [
         ":fhir_package",
+        ":field_retagger",
         ":generator_utils",
         ":value_set_generator_v2",
         "//java/com/google/fhir/common:exceptions",

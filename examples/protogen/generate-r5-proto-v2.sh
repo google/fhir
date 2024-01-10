@@ -35,6 +35,7 @@ $PROTO_GENERATOR \
   --java_proto_package "com.google.fhir.r5.core" \
   --license_date "2023" \
   --contained_resource_offset 5000 \
+  --legacy_retagging \
   --output_directory "${OUTPUT_PATH}"
 
 unzip -qo "${OUTPUT_PATH}/output.zip" -d "${OUTPUT_PATH}"

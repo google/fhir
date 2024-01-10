@@ -122,6 +122,12 @@ public class ProtoFilePrinter {
     this.syntax = Syntax.PROTO3;
   }
 
+  public ProtoFilePrinter(String licenseDate) {
+    license = PackageInfo.License.APACHE;
+    this.licenseDate = licenseDate;
+    this.syntax = Syntax.PROTO3;
+  }
+
   /** Generate a .proto file corresponding to the provided FileDescriptorProto. */
   public String print(FileDescriptorProto fileDescriptor) {
     String fullyQualifiedPackageName = "." + fileDescriptor.getPackage();

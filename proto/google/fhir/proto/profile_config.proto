@@ -49,6 +49,10 @@ message ProtogenConfig {
   // The copyright date to be included in the license text, which
   // may simply be a year.
   string license_date = 6;
+
+  // If true, will attempt to retag the newly generated protos to match tag
+  // numbers of existing protos.
+  bool legacy_retagging = 7;
 }
 
 // Metadata for generating FHIR packages
