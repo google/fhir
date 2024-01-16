@@ -49,6 +49,12 @@ class ResourceCollection<T extends Message> implements Iterable<T> {
     this.protoClass = protoClass;
   }
 
+  ResourceCollection(Map<String, T> parsedResourcesByUri, Class<T> protoClass) {
+    this.jsonParser = null;
+    this.parsedResourcesByUri.putAll(parsedResourcesByUri);
+    this.protoClass = protoClass;
+  }
+
   /**
    * Sets a filter for the collection.
    *

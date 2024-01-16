@@ -201,3 +201,19 @@ java_test(
         "@maven//:junit_junit",
     ],
 )
+
+java_test(
+    name = "TerminologyExpanderTest",
+    size = "small",
+    srcs = ["TerminologyExpanderTest.java"],
+    deps = [
+        "//java/com/google/fhir/common:terminology_expander",
+        "//java/com/google/fhir/protogen:fhir_package",
+        "//proto/google/fhir/proto/r4/core:codes_java_proto",
+        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:code_system_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:value_set_java_proto",
+        "@maven//:com_google_truth_truth",
+        "@maven//:junit_junit",
+    ],
+)

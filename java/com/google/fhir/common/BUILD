@@ -180,3 +180,16 @@ java_library(
         "@maven//:com_google_guava_guava",
     ],
 )
+
+java_library(
+    name = "terminology_expander",
+    srcs = ["TerminologyExpander.java"],
+    deps = [
+        ":exceptions",
+        "//java/com/google/fhir/protogen:fhir_package",
+        "//proto/google/fhir/proto/r4/core:datatypes_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:code_system_java_proto",
+        "//proto/google/fhir/proto/r4/core/resources:value_set_java_proto",
+        "@maven//:com_google_guava_guava",
+    ],
+)

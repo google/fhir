@@ -187,6 +187,7 @@ java_library(
         "//java/com/google/fhir/common:annotation_utils",
         "//java/com/google/fhir/common:codes",
         "//java/com/google/fhir/common:exceptions",
+        "//java/com/google/fhir/common:terminology_expander",
         "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto:profile_config_java_proto",
         "//proto/google/fhir/proto:protogenerator_annotations_java_proto",

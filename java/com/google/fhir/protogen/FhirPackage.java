@@ -14,6 +14,7 @@
 
 package com.google.fhir.protogen;
 
+import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.google.common.base.Ascii;
@@ -96,6 +97,40 @@ public class FhirPackage implements Comparable<FhirPackage> {
     this.searchParameterCollection = searchParameters;
     this.codeSystemCollection = codeSystems;
     this.valueSetCollection = valueSets;
+  }
+
+  public FhirPackage(
+      List<StructureDefinition> structureDefinitions,
+      List<SearchParameter> searchParameters,
+      List<CodeSystem> codeSystems,
+      List<ValueSet> valueSets) {
+    packageInfo = null;
+    packageJson = null;
+    this.structureDefinitionCollection =
+        new ResourceCollection<StructureDefinition>(
+            structureDefinitions.stream()
+                .collect(
+                    toImmutableMap(resource -> resource.getUrl().getValue(), resource -> resource)),
+            StructureDefinition.class);
+
+    this.searchParameterCollection =
+        new ResourceCollection<SearchParameter>(
+            searchParameters.stream()
+                .collect(
+                    toImmutableMap(resource -> resource.getUrl().getValue(), resource -> resource)),
+            SearchParameter.class);
+    this.codeSystemCollection =
+        new ResourceCollection<CodeSystem>(
+            codeSystems.stream()
+                .collect(
+                    toImmutableMap(resource -> resource.getUrl().getValue(), resource -> resource)),
+            CodeSystem.class);
+    this.valueSetCollection =
+        new ResourceCollection<ValueSet>(
+            valueSets.stream()
+                .collect(
+                    toImmutableMap(resource -> resource.getUrl().getValue(), resource -> resource)),
+            ValueSet.class);
   }
 
   @Override
