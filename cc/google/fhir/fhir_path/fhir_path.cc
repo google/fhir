@@ -17,6 +17,7 @@
 #include <algorithm>
 #include <any>
 #include <cstddef>
+#include <cstdint>
 #include <iterator>
 #include <map>
 #include <memory>
@@ -2835,7 +2836,7 @@ class CustomFunction : public FunctionNode {
   absl::StatusOr<CustomFunction*> static Create(
       const std::shared_ptr<ExpressionNode>& child_expression,
       const std::vector<FhirPathParser::ExpressionContext*>& params,
-      const UserDefinedFunction* user_defined_function,
+      const UserDefinedFunction* user_defined_function, const int32_t id,
       FhirPathBaseVisitor* base_context_visitor,
       FhirPathBaseVisitor* child_context_visitor,
       const PrimitiveHandler* primitive_handler) {
@@ -2847,7 +2848,7 @@ class CustomFunction : public FunctionNode {
     FHIR_RETURN_IF_ERROR(
         user_defined_function->ValidateParams(compiled_params));
     return new CustomFunction(child_expression, compiled_params,
-                              user_defined_function, next_id_++);
+                              user_defined_function, id);
   }
 
   static absl::StatusOr<std::vector<std::shared_ptr<ExpressionNode>>>
@@ -2929,8 +2930,6 @@ class CustomFunction : public FunctionNode {
  private:
   const UserDefinedFunction* function_;
   int32_t id_;
-
-  inline static int32_t next_id_ = 1;
 };
 
 class ComparisonOperator : public BinaryOperator {
@@ -4353,7 +4352,8 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
                user_defined_functions_.end()) {
       result = CustomFunction::Create(
           child_expression, params, user_defined_functions_.at(function_name),
-          this, &child_context_visitor, primitive_handler);
+          next_user_defined_function_id_++, this, &child_context_visitor,
+          primitive_handler);
     } else {
       SetError(NotFoundError(
           absl::StrCat("The function ", function_name, " does not exist.")));
@@ -4421,6 +4421,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   absl::Status error_;
   const PrimitiveHandler* primitive_handler_;
   const std::map<std::string, UserDefinedFunction*> user_defined_functions_;
+  int32_t next_user_defined_function_id_ = 0;
 };
 
 absl::StatusOr<std::unique_ptr<internal::WorkSpace>> EvaluateCompiledExpression(
