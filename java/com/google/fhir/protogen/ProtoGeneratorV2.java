@@ -1518,15 +1518,6 @@ public class ProtoGeneratorV2 {
         continue;
       }
 
-      // Skip SearchParameters and OperationDefinition for now, since there is an issue with
-      // changed ValueSets.
-      // TODO(b/315841051): Figure out something smart to do here.
-      if (fullName.endsWith(".SearchParameter") || fullName.endsWith(".OperationDefinition")) {
-        System.out.println("Warning!  Skipping " + fullName);
-        retaggedMessages.add(originalDescriptor);
-        continue;
-      }
-
       try {
         Class<?> r4MessageClass = Class.forName(r4FullName);
         try {

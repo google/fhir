@@ -17,11 +17,14 @@ package com.google.fhir.protogen;
 import com.google.common.base.Ascii;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.fhir.common.AnnotationUtils;
 import com.google.fhir.common.Codes;
 import com.google.fhir.common.InvalidFhirException;
+import com.google.fhir.common.TerminologyExpander;
+import com.google.fhir.common.TerminologyExpander.ValueSetCode;
 import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.proto.ProtogenConfig;
@@ -30,10 +33,8 @@ import com.google.fhir.r4.core.Code;
 import com.google.fhir.r4.core.CodeSystem;
 import com.google.fhir.r4.core.CodeSystem.ConceptDefinition;
 import com.google.fhir.r4.core.ElementDefinition;
-import com.google.fhir.r4.core.FilterOperatorCode;
 import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.ValueSet;
-import com.google.fhir.r4.core.ValueSet.Compose.ConceptSet.Filter;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
@@ -52,7 +53,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /** Generator for FHIR Terminology protos. */
 class ValueSetGeneratorV2 {
@@ -60,6 +60,8 @@ class ValueSetGeneratorV2 {
   private final FhirPackage fhirPackage;
   // Config information to use for generating protos.
   private final ProtogenConfig protogenConfig;
+  // Utility for expanding terminologies
+  private final TerminologyExpander terminologyExpander;
 
   // From http://hl7.org/fhir/concept-properties to tag code values as deprecated
   public static final String CODE_VALUE_STATUS_PROPERTY =
@@ -70,6 +72,7 @@ class ValueSetGeneratorV2 {
   public ValueSetGeneratorV2(FhirPackage inputPackage, ProtogenConfig protogenConfig) {
     this.fhirPackage = inputPackage;
     this.protogenConfig = protogenConfig;
+    this.terminologyExpander = new TerminologyExpander(fhirPackage);
   }
 
   FileDescriptorProto makeCodeSystemFile() throws InvalidFhirException {
@@ -134,6 +137,54 @@ class ValueSetGeneratorV2 {
     return descriptor.addEnumType(generateCodeSystemEnum(codeSystem)).build();
   }
 
+  private EnumDescriptorProto generateCodeSystemEnum(CodeSystem codeSystem) {
+    String url = codeSystem.getUrl().getValue();
+    EnumDescriptorProto.Builder enumDescriptor = EnumDescriptorProto.newBuilder();
+    enumDescriptor
+        .setName("Value")
+        .addValue(
+            EnumValueDescriptorProto.newBuilder().setNumber(0).setName("INVALID_UNINITIALIZED"));
+
+    int enumNumber = 1;
+    List<ConceptDefinition> concepts = TerminologyExpander.expandCodeSystem(codeSystem);
+    for (ConceptDefinition concept : concepts) {
+      EnumValueDescriptorProto.Builder valueBuilder =
+          EnumValueDescriptorProto.newBuilder()
+              .setNumber(enumNumber++)
+              .setName(toEnumCase(concept.getCode().getValue(), concept.getDisplay().getValue()));
+      String originalCode = concept.getCode().getValue();
+
+      // Try to use the standard heuristics to the enum name to determine the original code.
+      // If that doesn't work, add an original-code annotation so that we can always determine the
+      // correct original code.
+      if (!Codes.enumValueToCodeString(valueBuilder).equals(originalCode)) {
+        valueBuilder.getOptionsBuilder().setExtension(Annotations.fhirOriginalCode, originalCode);
+      }
+
+      // Check the http://hl7.org/fhir/concept-properties to determine if the code value
+      // has been deprecated.
+      boolean isDeprecated =
+          concept.getPropertyList().stream()
+              .anyMatch(
+                  property ->
+                      property.getCode().getValue().equals(CODE_VALUE_STATUS)
+                          && property.getValue().hasCode()
+                          && property
+                              .getValue()
+                              .getCode()
+                              .getValue()
+                              .equals(CODE_VALUE_STATUS_DEPRECATED));
+      if (isDeprecated) {
+        valueBuilder.getOptionsBuilder().setExtension(Annotations.deprecatedCode, true);
+      }
+
+      enumDescriptor.addValue(valueBuilder);
+    }
+
+    enumDescriptor.getOptionsBuilder().setExtension(Annotations.fhirCodeSystemUrl, url);
+    return enumDescriptor.build();
+  }
+
   private Optional<DescriptorProto> generateValueSetProto(ValueSet valueSet)
       throws InvalidFhirException {
     String valueSetName = getValueSetName(valueSet);
@@ -161,61 +212,41 @@ class ValueSetGeneratorV2 {
     }
   }
 
-  private static EnumDescriptorProto generateCodeSystemEnum(CodeSystem codeSystem) {
-    String url = codeSystem.getUrl().getValue();
-    EnumDescriptorProto.Builder enumDescriptor = EnumDescriptorProto.newBuilder();
-    enumDescriptor
-        .setName("Value")
-        .addValue(
-            EnumValueDescriptorProto.newBuilder().setNumber(0).setName("INVALID_UNINITIALIZED"));
-
-    int enumNumber = 1;
-    for (EnumValueDescriptorProto.Builder enumValue :
-        buildEnumValues(
-            codeSystem,
-            null /* don't include system annotation */,
-            new ArrayList<>() /* no filters */)) {
-      enumDescriptor.addValue(enumValue.setNumber(enumNumber++));
-    }
-
-    enumDescriptor.getOptionsBuilder().setExtension(Annotations.fhirCodeSystemUrl, url);
-    return enumDescriptor.build();
-  }
-
   private Optional<EnumDescriptorProto> generateValueSetEnum(ValueSet valueSet)
       throws InvalidFhirException {
-    String url = valueSet.getUrl().getValue();
-    List<ValueSet.Compose.ConceptSet> includes = valueSet.getCompose().getIncludeList();
-    Map<String, ValueSet.Compose.ConceptSet> excludesBySystem =
-        valueSet.getCompose().getExcludeList().stream()
-            .collect(
-                Collectors.toMap(exclude -> exclude.getSystem().getValue(), exclude -> exclude));
-
     EnumDescriptorProto.Builder builder = EnumDescriptorProto.newBuilder().setName("Value");
-    builder.getOptionsBuilder().setExtension(Annotations.enumValuesetUrl, url);
+    builder
+        .getOptionsBuilder()
+        .setExtension(Annotations.enumValuesetUrl, valueSet.getUrl().getValue());
     builder.addValue(
         EnumValueDescriptorProto.newBuilder().setNumber(0).setName("INVALID_UNINITIALIZED"));
     int enumNumber = 1;
-    for (ValueSet.Compose.ConceptSet conceptSet : includes) {
-      if (!conceptSet.getValueSetList().isEmpty()) {
-        printNoEnumWarning(url, "Complex ConceptSets are not yet implemented");
-        return Optional.empty();
-      }
-      List<EnumValueDescriptorProto.Builder> enums =
-          getEnumsForValueConceptSet(
-              conceptSet,
-              excludesBySystem.getOrDefault(
-                  conceptSet.getSystem().getValue(),
-                  ValueSet.Compose.ConceptSet.getDefaultInstance()));
 
-      for (EnumValueDescriptorProto.Builder valueBuilder : enums) {
-        if (valueBuilder == null) {
-          printNoEnumWarning(
-              url, "Unable to find all codes for system: " + conceptSet.getSystem().getValue());
-          return Optional.empty();
-        }
-        builder.addValue(valueBuilder.setNumber(enumNumber++));
+    ImmutableList<ValueSetCode> codesWithSource = terminologyExpander.expandValueSet(valueSet);
+    if (codesWithSource.isEmpty()) {
+      // This ValueSet could not be expanded
+      return Optional.empty();
+    }
+
+    for (ValueSetCode valueSetCode : codesWithSource) {
+      EnumValueDescriptorProto.Builder valueBuilder =
+          EnumValueDescriptorProto.newBuilder()
+              .setNumber(enumNumber++)
+              .setName(toEnumCase(valueSetCode.code, valueSetCode.display));
+      // Add a system annotation
+      valueBuilder
+          .getOptionsBuilder()
+          .setExtension(Annotations.sourceCodeSystem, valueSetCode.sourceSystem);
+
+      // Try to use the standard enum-to-code heuristic to determine the original code.
+      // If that doesn't work, add an original-code annotation so that we can always determine the
+      // correct original code.
+      if (!Codes.enumValueToCodeString(valueBuilder).equals(valueSetCode.code)) {
+        valueBuilder
+            .getOptionsBuilder()
+            .setExtension(Annotations.fhirOriginalCode, valueSetCode.code);
       }
+      builder.addValue(valueBuilder);
     }
     if (builder.getValueCount() == 1) {
       // Note: 1 because we start by adding the INVALID_UNINITIALIZED code
@@ -248,251 +279,6 @@ class ValueSetGeneratorV2 {
     return dedupedEnum;
   }
 
-  private static void printNoEnumWarning(String url, String warning) {
-    System.out.println("Warning: Not generating enum for " + url + " - " + warning);
-  }
-
-  private static class EnumValueWithBackupName {
-    final EnumValueDescriptorProto.Builder enumValue;
-    final String backupName;
-
-    EnumValueWithBackupName(EnumValueDescriptorProto.Builder enumValue, String backupName) {
-      this.enumValue = enumValue;
-      this.backupName = backupName;
-    }
-
-    String originalName() {
-      return enumValue.getName();
-    }
-
-    EnumValueDescriptorProto.Builder get(boolean withBackupName) {
-      if (!withBackupName) {
-        return enumValue;
-      }
-      return enumValue.setName(backupName);
-    }
-  }
-
-  private static List<EnumValueDescriptorProto.Builder> toEnumValueList(
-      List<EnumValueWithBackupName> enumsWithBackup) {
-    Set<String> usedNames = new HashSet<>();
-    Set<String> duplicatedNames = new HashSet<>();
-    for (EnumValueWithBackupName enumWithBackup : enumsWithBackup) {
-      if (!usedNames.add(enumWithBackup.originalName())) {
-        duplicatedNames.add(enumWithBackup.originalName());
-      }
-    }
-    List<EnumValueDescriptorProto.Builder> enumList = new ArrayList<>();
-    Set<String> finalUsedNames = new HashSet<>();
-    for (EnumValueWithBackupName enumWithBackup : enumsWithBackup) {
-      EnumValueDescriptorProto.Builder finalEnum =
-          enumWithBackup.get(duplicatedNames.contains(enumWithBackup.originalName()));
-      if (finalUsedNames.add(finalEnum.getName())) {
-        enumList.add(finalEnum);
-      } else if (finalEnum
-          .getOptions()
-          .getExtension(Annotations.sourceCodeSystem)
-          .equals("http://hl7.org/fhir/sid/ndc")) {
-        // This valueset has duplicate codes :( ignore.
-      } else {
-        throw new IllegalArgumentException("Found duplicate code: " + finalEnum);
-      }
-    }
-    return enumList;
-  }
-
-  private List<EnumValueDescriptorProto.Builder> getEnumsForValueConceptSet(
-      ValueSet.Compose.ConceptSet conceptSet, ValueSet.Compose.ConceptSet excludeSet)
-      throws InvalidFhirException {
-    String systemUrl = conceptSet.getSystem().getValue();
-    Optional<CodeSystem> knownSystem = fhirPackage.getCodeSystem(systemUrl);
-    Set<String> excludeCodes =
-        excludeSet.getConceptList().stream()
-            .map(concept -> concept.getCode().getValue())
-            .collect(Collectors.toSet());
-    if (knownSystem.isPresent()) {
-      CodeSystem codeSystem = knownSystem.get();
-      boolean codeSystemHasConcepts = !codeSystem.getConceptList().isEmpty();
-      boolean valueSetHasConcepts = !conceptSet.getConceptList().isEmpty();
-      if (valueSetHasConcepts) {
-        if (codeSystemHasConcepts) {
-          // The ValueSet lists concepts to use explicitly, and the source code system explicitly
-          // lists concepts.
-          // Only include those Codes from the code system that are explicitly mentioned
-          final Map<String, EnumValueDescriptorProto.Builder> valuesByCode =
-              buildEnumValues(codeSystem, systemUrl, conceptSet.getFilterList()).stream()
-                  .collect(Collectors.toMap(Codes::enumValueToCodeString, c -> c));
-          return conceptSet.getConceptList().stream()
-              .map(concept -> valuesByCode.get(concept.getCode().getValue()))
-              .collect(Collectors.toList());
-        } else {
-          // The ValueSet lists concepts to use explicitly, but the source system has no enumerated
-          // codes (e.g., http://snomed.info/sct).
-          // Take the ValueSet at its word that the codes are valid codes from that system, and
-          // generate an enum with those.
-          return toEnumValueList(
-              conceptSet.getConceptList().stream()
-                  .map(
-                      concept ->
-                          buildEnumValue(
-                              concept.getCode(), concept.getDisplay().getValue(), systemUrl))
-                  .collect(Collectors.toList()));
-        }
-      } else {
-        if (codeSystemHasConcepts) {
-          // There are CodeSystem enums, but no explicit concept list on the ValueSet, so default
-          // to all codes from that system that aren't in the excludes set.
-          return buildEnumValues(codeSystem, systemUrl, conceptSet.getFilterList()).stream()
-              .filter(enumValue -> !excludeCodes.contains(Codes.enumValueToCodeString(enumValue)))
-              .collect(Collectors.toList());
-        } else {
-          // There are no enums listed on the code system, and no enums listed in the value set
-          // include list.  This is not a valid definition.
-          printNoEnumWarning(systemUrl, "Could not find any valid codes for CodeSystem");
-          return new ArrayList<>();
-        }
-      }
-    } else {
-      return toEnumValueList(
-          conceptSet.getConceptList().stream()
-              .map(
-                  concept ->
-                      buildEnumValue(concept.getCode(), concept.getDisplay().getValue(), systemUrl))
-              .collect(Collectors.toList()));
-    }
-  }
-
-  private static List<EnumValueDescriptorProto.Builder> buildEnumValues(
-      CodeSystem codeSystem, String system, List<Filter> filters) {
-    filters =
-        filters.stream()
-            .filter(
-                filter -> {
-                  if (filter.getOp().getValue() != FilterOperatorCode.Value.IS_A) {
-                    System.out.println(
-                        "Warning: value filters other than is-a are ignored.  Found: "
-                            + Codes.enumValueToCodeString(
-                                filter.getOp().getValue().getValueDescriptor().toProto()));
-                    return false;
-                  }
-                  if (!filter.getProperty().getValue().equals("concept")) {
-                    System.out.println(
-                        "Warning: value filters by property other than concept are not supported. "
-                            + " Found: "
-                            + filter.getProperty().getValue());
-                    return false;
-                  }
-                  return true;
-                })
-            .collect(Collectors.toList());
-
-    return toEnumValueList(
-        buildEnumValues(codeSystem.getConceptList(), system, new HashSet<>(), filters));
-  }
-
-  private static List<EnumValueWithBackupName> buildEnumValues(
-      List<ConceptDefinition> concepts,
-      String system,
-      Set<String> classifications,
-      List<Filter> filters) {
-    List<EnumValueWithBackupName> valueList = new ArrayList<>();
-    for (ConceptDefinition concept : concepts) {
-      if (conceptMatchesFilters(concept, classifications, filters)) {
-        // Check the http://hl7.org/fhir/concept-properties to determine if the code value
-        // has been deprecated.
-        boolean isDeprecated =
-            concept.getPropertyList().stream()
-                .anyMatch(
-                    property ->
-                        property.getCode().getValue().equals(CODE_VALUE_STATUS)
-                            && property.getValue().hasCode()
-                            && property
-                                .getValue()
-                                .getCode()
-                                .getValue()
-                                .equals(CODE_VALUE_STATUS_DEPRECATED));
-        valueList.add(
-            buildEnumValue(
-                concept.getCode(), concept.getDisplay().getValue(), system, isDeprecated));
-      }
-
-      Set<String> childClassifications = new HashSet<>(classifications);
-      childClassifications.add(concept.getCode().getValue());
-      valueList.addAll(
-          buildEnumValues(concept.getConceptList(), system, childClassifications, filters));
-    }
-    return valueList;
-  }
-
-  private static boolean conceptMatchesFilters(
-      ConceptDefinition concept, Set<String> classifications, List<Filter> filters) {
-    if (filters.isEmpty()) {
-      return true;
-    }
-    for (Filter filter : filters) {
-      if (conceptMatchesFilter(concept, classifications, filter)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // See http://hl7.org/fhir/valueset-filter-operator.html
-  private static boolean conceptMatchesFilter(
-      ConceptDefinition concept, Set<String> classifications, Filter filter) {
-    String codeString = concept.getCode().getValue();
-    String filterValue = filter.getValue().getValue();
-    switch (filter.getOp().getValue()) {
-      case EQUALS:
-        return codeString.equals(filterValue);
-      case IS_A:
-        return codeString.equals(filterValue) || classifications.contains(filterValue);
-      case DESCENDENT_OF:
-        return classifications.contains(codeString);
-      case IS_NOT_A:
-        return !codeString.equals(filterValue);
-      case REGEX:
-        return codeString.matches(filterValue);
-      case IN:
-        return Splitter.on(",").splitToList(filterValue).contains(codeString);
-      case NOT_IN:
-        return !Splitter.on(",").splitToList(filterValue).contains(codeString);
-      case EXISTS:
-        return ("true".equals(filterValue)) == codeString.isEmpty();
-      default:
-        // "generalizes" is not supported - default to returning true so we're overly permissive
-        // rather than rejecting valid codes.
-        return true;
-    }
-  }
-
-  private static EnumValueWithBackupName buildEnumValue(Code code, String display, String system) {
-    return buildEnumValue(code, display, system, false);
-  }
-
-  private static EnumValueWithBackupName buildEnumValue(
-      Code code, String display, String system, boolean isDeprecated) {
-    String originalCode = code.getValue();
-    String enumCase = toEnumCase(code, display, false);
-    String backupName = toEnumCase(code, display, true);
-
-    EnumValueDescriptorProto.Builder builder =
-        EnumValueDescriptorProto.newBuilder().setName(enumCase);
-
-    if (!Codes.enumValueToCodeString(builder).equals(originalCode)) {
-      builder.getOptionsBuilder().setExtension(Annotations.fhirOriginalCode, originalCode);
-    }
-    if (system != null) {
-      builder.getOptionsBuilder().setExtension(Annotations.sourceCodeSystem, system);
-    }
-
-    if (isDeprecated) {
-      builder.getOptionsBuilder().setExtension(Annotations.deprecatedCode, true);
-    }
-
-    return new EnumValueWithBackupName(builder, backupName);
-  }
-
   private static final ImmutableMap<String, String> CODE_RENAMES =
       ImmutableMap.<String, String>builder()
           .put("NaN", "NOT_A_NUMBER")
@@ -518,70 +304,67 @@ class ValueSetGeneratorV2 {
 
   private static final Pattern ACRONYM_PATTERN = Pattern.compile("([A-Z])([A-Z]+)(?![a-z])");
 
-  private static String toEnumCase(Code code, String display, boolean fullySpecify) {
-    // TODO(b/244184211): handle more cases of fullySpecify
-    String rawCode = code.getValue();
-    if (CODE_RENAMES.containsKey(rawCode)) {
-      return CODE_RENAMES.get(rawCode);
-    }
-    if (Character.isDigit(rawCode.charAt(0))) {
+  private static String toEnumCase(String code, String display) {
+    String enumCaseCode = code;
+    if (Character.isDigit(enumCaseCode.charAt(0))) {
       if (!display.isEmpty() && !Character.isDigit(display.charAt(0))) {
-        rawCode = fullySpecify ? display + "_" + rawCode : display;
+        enumCaseCode = display;
       } else {
-        rawCode = Ascii.toUpperCase("V_" + rawCode);
+        enumCaseCode = Ascii.toUpperCase("V_" + enumCaseCode);
       }
     }
-    if (CODE_RENAMES.containsKey(rawCode)) {
-      return CODE_RENAMES.get(rawCode);
+    if (CODE_RENAMES.containsKey(enumCaseCode)) {
+      return CODE_RENAMES.get(enumCaseCode);
     }
     for (Map.Entry<String, String> entry : SYMBOLS.entrySet()) {
-      if (rawCode.contains(entry.getKey())) {
-        rawCode = rawCode.replaceAll(Pattern.quote(entry.getKey()), "_" + entry.getValue() + "_");
-        if (rawCode.endsWith("_")) {
-          rawCode = rawCode.substring(0, rawCode.length() - 1);
+      if (enumCaseCode.contains(entry.getKey())) {
+        enumCaseCode =
+            enumCaseCode.replaceAll(Pattern.quote(entry.getKey()), "_" + entry.getValue() + "_");
+        if (enumCaseCode.endsWith("_")) {
+          enumCaseCode = enumCaseCode.substring(0, enumCaseCode.length() - 1);
         }
-        if (rawCode.startsWith("_")) {
-          rawCode = rawCode.substring(1);
+        if (enumCaseCode.startsWith("_")) {
+          enumCaseCode = enumCaseCode.substring(1);
         }
       }
     }
-    if (rawCode.charAt(0) == '/') {
-      rawCode = "PER_" + rawCode.substring(1);
+    if (enumCaseCode.charAt(0) == '/') {
+      enumCaseCode = "PER_" + enumCaseCode.substring(1);
     }
-    String sanitizedCode =
-        rawCode
+    enumCaseCode =
+        enumCaseCode
             .replaceAll("[',]", "")
             .replace('\u00c2' /* Â */, 'A')
             .replaceAll("[^A-Za-z0-9]", "_");
-    if (sanitizedCode.startsWith("_")) {
-      sanitizedCode = sanitizedCode.substring(1);
+    if (enumCaseCode.startsWith("_")) {
+      enumCaseCode = enumCaseCode.substring(1);
     }
-    if (sanitizedCode.endsWith("_")) {
-      sanitizedCode = sanitizedCode.substring(0, sanitizedCode.length() - 1);
+    if (enumCaseCode.endsWith("_")) {
+      enumCaseCode = enumCaseCode.substring(0, enumCaseCode.length() - 1);
     }
-    if (sanitizedCode.length() == 0) {
+    if (enumCaseCode.length() == 0) {
       throw new IllegalArgumentException("Unable to generate enum for code: " + code);
     }
-    if (Character.isDigit(sanitizedCode.charAt(0))) {
-      return Ascii.toUpperCase("NUM_" + sanitizedCode);
+    if (Character.isDigit(enumCaseCode.charAt(0))) {
+      return Ascii.toUpperCase("NUM_" + enumCaseCode);
     }
     // Don't change FOO into F_O_O
-    if (sanitizedCode.equals(Ascii.toUpperCase(sanitizedCode))) {
-      return sanitizedCode.replaceAll("__+", "_");
+    if (enumCaseCode.equals(Ascii.toUpperCase(enumCaseCode))) {
+      return enumCaseCode.replaceAll("__+", "_");
     }
 
     // Turn acronyms into single words, e.g., FHIR_is_GREAT -> Fhir_is_Great, so that it ultimately
     // becomes FHIR_IS_GREAT instead of F_H_I_R_IS_G_R_E_A_T
-    Matcher matcher = ACRONYM_PATTERN.matcher(sanitizedCode);
+    Matcher matcher = ACRONYM_PATTERN.matcher(enumCaseCode);
     StringBuffer sb = new StringBuffer();
     while (matcher.find()) {
       matcher.appendReplacement(sb, matcher.group(1) + Ascii.toLowerCase(matcher.group(2)));
     }
     matcher.appendTail(sb);
-    sanitizedCode = sb.toString();
+    enumCaseCode = sb.toString();
 
     return CaseFormat.LOWER_CAMEL
-        .to(CaseFormat.UPPER_UNDERSCORE, sanitizedCode)
+        .to(CaseFormat.UPPER_UNDERSCORE, enumCaseCode)
         .replaceAll("__+", "_");
   }
 
