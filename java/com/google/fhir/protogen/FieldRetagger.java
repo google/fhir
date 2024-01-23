@@ -59,6 +59,30 @@ final class FieldRetagger {
     return newBuilder.build();
   }
 
+  /**
+   * Replaces a version-specific package token (e.g., r5 in google.fhir.r5.Code) with a versionless
+   * token "V". This allows comparing two FHIR types from different versions to see if they refer to
+   * the same underlying FHIR type.
+   */
+  private static String versionIndependantType(String typeName) {
+    return typeName.replaceAll("\\.r[0-9]*\\.", ".V.");
+  }
+
+  private static boolean sameFhirType(FieldDescriptorProto first, FieldDescriptorProto second) {
+    if (first.getType() != second.getType()) {
+      // Different data types.  Definitely not the same FHIR type.
+      return false;
+    }
+
+    if (first.getType() != FieldDescriptorProto.Type.TYPE_MESSAGE) {
+      // Same primitive types.  That's always compatible.
+      return true;
+    }
+
+    return versionIndependantType(first.getTypeName())
+        .equals(versionIndependantType(second.getTypeName()));
+  }
+
   private static void retagMessage(DescriptorProto.Builder newBuilder, DescriptorProto golden) {
     Map<String, FieldDescriptorProto> referenceMap = getFieldMap(golden.getFieldList());
     // List of fields with no corresponding field in the golden message.
@@ -67,7 +91,7 @@ final class FieldRetagger {
 
     for (FieldDescriptorProto.Builder fieldBuilder : newBuilder.getFieldBuilderList()) {
       FieldDescriptorProto goldenField = referenceMap.get(fieldBuilder.getName());
-      if (goldenField == null) {
+      if (goldenField == null || !sameFhirType(fieldBuilder.build(), goldenField)) {
         if (fieldBuilder.getOptions().hasExtension(ProtoGeneratorAnnotations.reservedReason)) {
           checkReservedField(fieldBuilder.getNumber(), golden);
         } else {
