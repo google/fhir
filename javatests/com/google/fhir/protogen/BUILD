@@ -154,6 +154,7 @@ java_test(
     test_class = "com.google.fhir.protogen.FieldRetaggerTest",
     deps = [
         "//java/com/google/fhir/protogen:field_retagger",
+        "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto:protogenerator_annotations_java_proto",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_guava_guava",

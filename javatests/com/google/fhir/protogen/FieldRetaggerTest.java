@@ -18,9 +18,11 @@ import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
+import com.google.protobuf.DescriptorProtos.MessageOptions;
 import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -332,6 +334,51 @@ public final class FieldRetaggerTest {
 
     DescriptorProto.Builder expectedMessage = newMessage.toBuilder();
     expectedMessage.getFieldBuilder(0).setNumber(3);
+
+    assertThat(FieldRetagger.retagMessage(newMessage, goldenMessage))
+        .isEqualTo(expectedMessage.build());
+  }
+
+  @Test
+  public void retagMessage_changedValueSetBinding_moved() {
+    DescriptorProto newMessage =
+        DescriptorProto.newBuilder()
+            .setName("Top")
+            .addField(
+                FieldDescriptorProto.newBuilder()
+                    .setName("status")
+                    .setNumber(1)
+                    .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                    .setTypeName("package.Top.StatusCode"))
+            .addNestedType(
+                DescriptorProto.newBuilder()
+                    .setName("StatusCode")
+                    .setOptions(
+                        MessageOptions.newBuilder()
+                            .setExtension(Annotations.fhirValuesetUrl, "url-1"))
+                    .build())
+            .build();
+
+    DescriptorProto goldenMessage =
+        DescriptorProto.newBuilder()
+            .setName("Top")
+            .addField(
+                FieldDescriptorProto.newBuilder()
+                    .setName("status")
+                    .setNumber(1)
+                    .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                    .setTypeName("package.Top.StatusCode"))
+            .addNestedType(
+                DescriptorProto.newBuilder()
+                    .setName("StatusCode")
+                    .setOptions(
+                        MessageOptions.newBuilder()
+                            .setExtension(Annotations.fhirValuesetUrl, "url-2"))
+                    .build())
+            .build();
+
+    DescriptorProto.Builder expectedMessage = newMessage.toBuilder();
+    expectedMessage.getFieldBuilder(0).setNumber(2);
 
     assertThat(FieldRetagger.retagMessage(newMessage, goldenMessage))
         .isEqualTo(expectedMessage.build());

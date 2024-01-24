@@ -162,8 +162,10 @@ java_library(
     name = "field_retagger",
     srcs = ["FieldRetagger.java"],
     deps = [
+        "//proto/google/fhir/proto:annotations_java_proto",
         "//proto/google/fhir/proto:protogenerator_annotations_java_proto",
         "@com_google_protobuf//:protobuf_java",
+        "@maven//:com_google_guava_guava",
     ],
 )
 

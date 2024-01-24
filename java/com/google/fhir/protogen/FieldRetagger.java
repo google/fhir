@@ -14,9 +14,11 @@
 
 package com.google.fhir.protogen;
 
+import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static java.lang.Math.max;
 import static java.util.stream.Collectors.toMap;
 
+import com.google.fhir.proto.Annotations;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.DescriptorProtoOrBuilder;
@@ -59,6 +61,15 @@ final class FieldRetagger {
     return newBuilder.build();
   }
 
+  private static DescriptorProto findLocalType(DescriptorProto message, String name) {
+    for (DescriptorProto nested : message.getNestedTypeList()) {
+      if (name.endsWith(message.getName() + "." + nested.getName())) {
+        return nested;
+      }
+    }
+    return null;
+  }
+
   /**
    * Replaces a version-specific package token (e.g., r5 in google.fhir.r5.Code) with a versionless
    * token "V". This allows comparing two FHIR types from different versions to see if they refer to
@@ -68,19 +79,43 @@ final class FieldRetagger {
     return typeName.replaceAll("\\.r[0-9]*\\.", ".V.");
   }
 
-  private static boolean sameFhirType(FieldDescriptorProto first, FieldDescriptorProto second) {
-    if (first.getType() != second.getType()) {
+  private static boolean sameFhirType(
+      DescriptorProto firstParent,
+      FieldDescriptorProto firstField,
+      DescriptorProto secondParent,
+      FieldDescriptorProto secondField) {
+    if (firstField.getType() != secondField.getType()) {
       // Different data types.  Definitely not the same FHIR type.
       return false;
     }
 
-    if (first.getType() != FieldDescriptorProto.Type.TYPE_MESSAGE) {
+    if (firstField.getType() != FieldDescriptorProto.Type.TYPE_MESSAGE) {
       // Same primitive types.  That's always compatible.
       return true;
     }
 
-    return versionIndependantType(first.getTypeName())
-        .equals(versionIndependantType(second.getTypeName()));
+    DescriptorProto firstLocalType = findLocalType(firstParent, firstField.getTypeName());
+    DescriptorProto secondLocalType = findLocalType(secondParent, secondField.getTypeName());
+
+    if ((firstLocalType == null) != (secondLocalType == null)) {
+      // One is a local type, the other is a datatype.  Not the same.
+      return false;
+    }
+
+    if (firstLocalType != null
+        && !findLocalType(firstParent, firstField.getTypeName())
+            .getOptions()
+            .getExtension(Annotations.fhirValuesetUrl)
+            .equals(
+                findLocalType(secondParent, secondField.getTypeName())
+                    .getOptions()
+                    .getExtension(Annotations.fhirValuesetUrl))) {
+      // At least one is a code with a bound Valueset, but both are not bound to the same Valueset.
+      return false;
+    }
+
+    return versionIndependantType(firstField.getTypeName())
+        .equals(versionIndependantType(secondField.getTypeName()));
   }
 
   private static void retagMessage(DescriptorProto.Builder newBuilder, DescriptorProto golden) {
@@ -91,7 +126,8 @@ final class FieldRetagger {
 
     for (FieldDescriptorProto.Builder fieldBuilder : newBuilder.getFieldBuilderList()) {
       FieldDescriptorProto goldenField = referenceMap.get(fieldBuilder.getName());
-      if (goldenField == null || !sameFhirType(fieldBuilder.build(), goldenField)) {
+      if (goldenField == null
+          || !sameFhirType(newBuilder.build(), fieldBuilder.build(), golden, goldenField)) {
         if (fieldBuilder.getOptions().hasExtension(ProtoGeneratorAnnotations.reservedReason)) {
           checkReservedField(fieldBuilder.getNumber(), golden);
         } else {
@@ -160,7 +196,7 @@ final class FieldRetagger {
   }
 
   private static Map<String, DescriptorProto> getMessageMap(List<DescriptorProto> messages) {
-    return messages.stream().collect(toMap(DescriptorProto::getName, message -> message));
+    return messages.stream().collect(toImmutableMap(DescriptorProto::getName, message -> message));
   }
 
   private static Map<String, FieldDescriptorProto> getFieldMap(List<FieldDescriptorProto> fields) {
