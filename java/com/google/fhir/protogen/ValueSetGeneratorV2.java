@@ -14,6 +14,8 @@
 
 package com.google.fhir.protogen;
 
+import static com.google.fhir.protogen.FieldRetagger.retagTerminologyFile;
+
 import com.google.common.base.Ascii;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
@@ -94,7 +96,9 @@ class ValueSetGeneratorV2 {
         .sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
         .forEach(proto -> builder.addMessageType(proto));
 
-    return builder.build();
+    return protogenConfig.getLegacyRetagging()
+        ? retagTerminologyFile(builder.build(), protogenConfig)
+        : builder.build();
   }
 
   FileDescriptorProto makeValueSetFile() throws InvalidFhirException {
@@ -120,7 +124,11 @@ class ValueSetGeneratorV2 {
         }
       }
     }
-    return builder.addAllMessageType(messages).build();
+    builder.addAllMessageType(messages);
+
+    return protogenConfig.getLegacyRetagging()
+        ? retagTerminologyFile(builder.build(), protogenConfig)
+        : builder.build();
   }
 
   private DescriptorProto generateCodeSystemProto(CodeSystem codeSystem) {

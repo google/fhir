@@ -16,6 +16,7 @@ package com.google.fhir.protogen;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.collect.Streams.stream;
+import static com.google.fhir.protogen.FieldRetagger.retagFile;
 import static com.google.fhir.protogen.GeneratorUtils.isProfile;
 import static com.google.fhir.protogen.GeneratorUtils.lastIdToken;
 import static com.google.fhir.protogen.GeneratorUtils.nameFromQualifiedName;
@@ -53,7 +54,6 @@ import com.google.protobuf.DescriptorProtos.FileOptions;
 import com.google.protobuf.DescriptorProtos.MessageOptions;
 import com.google.protobuf.DescriptorProtos.OneofDescriptorProto;
 import com.google.protobuf.DescriptorProtos.OneofOptions;
-import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Message;
 import java.io.File;
 import java.util.ArrayList;
@@ -951,7 +951,7 @@ public class ProtoGeneratorV2 {
     addReferenceIdType(fileBuilder);
 
     return protogenConfig.getLegacyRetagging()
-        ? retagFile(fileBuilder.build())
+        ? retagFile(fileBuilder.build(), protogenConfig)
         : fileBuilder.build();
   }
 
@@ -964,7 +964,9 @@ public class ProtoGeneratorV2 {
             .addDependency(protogenConfig.getSourceDirectory() + "/datatypes.proto")
             .addDependency("google/protobuf/any.proto")
             .build();
-    return protogenConfig.getLegacyRetagging() ? retagFile(file) : file;
+    return protogenConfig.getLegacyRetagging()
+        ? FieldRetagger.retagFile(file, protogenConfig)
+        : file;
   }
 
   // Generates a single file for two types: the Bundle type, and the ContainedResource type.
@@ -1008,7 +1010,7 @@ public class ProtoGeneratorV2 {
               .build());
     }
     return protogenConfig.getLegacyRetagging()
-        ? retagFile(fileBuilder.build())
+        ? retagFile(fileBuilder.build(), protogenConfig)
         : fileBuilder.build();
   }
 
@@ -1487,52 +1489,5 @@ public class ProtoGeneratorV2 {
       return Annotations.FhirVersion.R5;
     }
     return Annotations.FhirVersion.FHIR_VERSION_UNKNOWN;
-  }
-
-  // Retags a DescriptorProto against their current R4 counterparts, where possible.
-  // This process ensures that any field that is the same in the reference package (current R4) as
-  // the package being generated will have the same tag numbers, and any new fields in the
-  // new message will use a tag number that is not in use by the reference counterpart.
-  //
-  // This is done to grant the maximum possible flexibility for ultimately moving to a combined
-  // versionless representation of normative resources.  For instance, since Patient is normative,
-  // an R4 or an R5 Patient should theoretically "fit" in an R6 proto, but this is only possible if
-  // tag numbers line up between versions.  This currently uses R4 as the reference version, but
-  // ultimately this should use the most recent published version.
-  //
-  // Note that this is a best-effort algorithm, and does not guarantee binary compatibility.
-  // Binary compatibility should be independently verified before anything relies on it.
-  private FileDescriptorProto retagFile(FileDescriptorProto original) {
-    List<DescriptorProto> retaggedMessages = new ArrayList<>();
-
-    for (DescriptorProto originalDescriptor : original.getMessageTypeList()) {
-      String fullName = protogenConfig.getJavaProtoPackage() + "." + originalDescriptor.getName();
-
-      // Name of this message in the reference (i.e., current R4) package.
-      String r4FullName = fullName.replaceFirst("\\.r[0-9]*\\.", ".r4.");
-
-      // Skip ContainedResource - each version gets its own range of numbers in ContainedResource,
-      // governed by the `contained_resource_offset` flag.
-      if (fullName.endsWith(".ContainedResource")) {
-        retaggedMessages.add(originalDescriptor);
-        continue;
-      }
-
-      try {
-        Class<?> r4MessageClass = Class.forName(r4FullName);
-        try {
-          DescriptorProto r4Descriptor =
-              ((Descriptor) r4MessageClass.getMethod("getDescriptor").invoke(null)).toProto();
-          retaggedMessages.add(FieldRetagger.retagMessage(originalDescriptor, r4Descriptor));
-        } catch (ReflectiveOperationException e) {
-          // If we find a class with the expected name, it should always have a "getDescriptor".
-          throw new IllegalStateException(e);
-        }
-      } catch (ClassNotFoundException e) {
-        // No matching class in R4 - that's ok, it's something new in this version.
-        retaggedMessages.add(originalDescriptor);
-      }
-    }
-    return original.toBuilder().clearMessageType().addAllMessageType(retaggedMessages).build();
   }
 }

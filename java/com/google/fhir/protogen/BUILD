@@ -162,8 +162,12 @@ java_library(
     name = "field_retagger",
     srcs = ["FieldRetagger.java"],
     deps = [
+        "//java/com/google/fhir/common:codes",
         "//proto/google/fhir/proto:annotations_java_proto",
+        "//proto/google/fhir/proto:profile_config_java_proto",
         "//proto/google/fhir/proto:protogenerator_annotations_java_proto",
+        "//proto/google/fhir/proto/r4/core:codes_java_proto",
+        "//proto/google/fhir/proto/r4/core:valuesets_java_proto",
         "@com_google_protobuf//:protobuf_java",
         "@maven//:com_google_guava_guava",
     ],
@@ -185,6 +189,7 @@ java_library(
     srcs = ["ValueSetGeneratorV2.java"],
     deps = [
         ":fhir_package",
+        ":field_retagger",
         ":generator_utils",
         "//java/com/google/fhir/common:annotation_utils",
         "//java/com/google/fhir/common:codes",

@@ -69,6 +69,7 @@ public final class ValueSetGeneratorV2Test {
     return ProtogenConfig.newBuilder()
         .setProtoPackage(testEnv.protoPackage)
         .setJavaProtoPackage(testEnv.javaProtoPackage)
+        .setLegacyRetagging(true)
         .build();
   }
 
