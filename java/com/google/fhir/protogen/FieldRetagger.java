@@ -193,7 +193,8 @@ final class FieldRetagger {
     for (FieldDescriptorProto.Builder fieldBuilder : newBuilder.getFieldBuilderList()) {
       FieldDescriptorProto goldenField = referenceMap.get(fieldBuilder.getName());
       if (goldenField == null
-          || !sameFhirType(newBuilder.build(), fieldBuilder.build(), golden, goldenField)) {
+          || !sameFhirType(newBuilder.build(), fieldBuilder.build(), golden, goldenField)
+          || fieldBuilder.getLabel() != goldenField.getLabel()) {
         if (fieldBuilder.getOptions().hasExtension(ProtoGeneratorAnnotations.reservedReason)) {
           checkReservedField(fieldBuilder.getNumber(), golden);
         } else {

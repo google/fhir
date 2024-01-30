@@ -383,4 +383,37 @@ public final class FieldRetaggerTest {
     assertThat(FieldRetagger.retagMessage(newMessage, goldenMessage))
         .isEqualTo(expectedMessage.build());
   }
+
+  @Test
+  public void retagMessage_changedCardinality_moved() {
+    DescriptorProto newMessage =
+        DescriptorProto.newBuilder()
+            .setName("Top")
+            .addField(
+                FieldDescriptorProto.newBuilder()
+                    .setName("status")
+                    .setNumber(1)
+                    .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                    .setTypeName("package.Faaz")
+                    .setLabel(FieldDescriptorProto.Label.LABEL_OPTIONAL))
+            .build();
+
+    DescriptorProto goldenMessage =
+        DescriptorProto.newBuilder()
+            .setName("Top")
+            .addField(
+                FieldDescriptorProto.newBuilder()
+                    .setName("status")
+                    .setNumber(1)
+                    .setLabel(FieldDescriptorProto.Label.LABEL_REPEATED)
+                    .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
+                    .setTypeName("package.Faaz"))
+            .build();
+
+    DescriptorProto.Builder expectedMessage = newMessage.toBuilder();
+    expectedMessage.getFieldBuilder(0).setNumber(2);
+
+    assertThat(FieldRetagger.retagMessage(newMessage, goldenMessage))
+        .isEqualTo(expectedMessage.build());
+  }
 }
