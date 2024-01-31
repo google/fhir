@@ -14,10 +14,13 @@
 
 #include "google/fhir/testutil/generator.h"
 
+#include <memory>
+
 #include "gtest/gtest.h"
 #include "absl/time/time.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/r4/primitive_handler.h"
+#include "google/fhir/status/status.h"
 #include "google/fhir/testutil/fhir_test_env.h"
 #include "google/fhir/testutil/proto_matchers.h"
 #include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
@@ -121,6 +124,41 @@ TEST(RandomValueProviderTest, TestMaxRecursionDepth) {
   ASSERT_GT(plan_definition.action_size(), 0);
   ASSERT_GT(plan_definition.action(0).action_size(), 0);
   ASSERT_EQ(plan_definition.action(0).action(0).action_size(), 0);
+}
+
+TEST(RandomValueProviderTest, TestFillExtensionsDefaultTrue) {
+  RandomValueProvider::Params params = RandomValueProvider::DefaultParams();
+  params.optional_set_probability = 1;
+  params.optional_set_ratio_per_level = 1;
+  params.max_recursion_depth = 1;
+  FhirGenerator generator(
+      std::make_unique<RandomValueProvider>(params),
+      ::google::fhir::r4::R4PrimitiveHandler::GetInstance());
+
+  ::google::fhir::r4::core::PlanDefinition plan_definition;
+
+  FHIR_ASSERT_OK(generator.Fill(&plan_definition));
+
+  EXPECT_GT(plan_definition.extension_size(), 0);
+  EXPECT_GT(plan_definition.action(0).extension_size(), 0);
+}
+
+TEST(RandomValueProviderTest, TestFillExtensionsFalse) {
+  RandomValueProvider::Params params = RandomValueProvider::DefaultParams();
+  params.optional_set_probability = 1;
+  params.optional_set_ratio_per_level = 1;
+  params.max_recursion_depth = 1;
+  params.fill_extensions = false;
+  FhirGenerator generator(
+      std::make_unique<RandomValueProvider>(params),
+      ::google::fhir::r4::R4PrimitiveHandler::GetInstance());
+
+  ::google::fhir::r4::core::PlanDefinition plan_definition;
+
+  FHIR_ASSERT_OK(generator.Fill(&plan_definition));
+
+  EXPECT_EQ(plan_definition.extension_size(), 0);
+  EXPECT_EQ(plan_definition.action(0).extension_size(), 0);
 }
 
 }  // namespace

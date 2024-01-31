@@ -148,6 +148,7 @@ class RandomValueProvider : public ValueProvider {
     int low_value;
     int max_string_length;
     int max_recursion_depth;
+    bool fill_extensions;
   };
 
   static Params DefaultParams() {
@@ -158,14 +159,13 @@ class RandomValueProvider : public ValueProvider {
             .high_value = 10000000,
             .low_value = -10000000,
             .max_string_length = 20,
-            .max_recursion_depth = 10};
+            .max_recursion_depth = 10,
+            .fill_extensions = true};
   }
 
-  explicit RandomValueProvider(const Params& params)
-      : params_(params) {}
+  explicit RandomValueProvider(const Params& params) : params_(params) {}
 
-  RandomValueProvider()
-      : RandomValueProvider(DefaultParams()) {}
+  RandomValueProvider() : RandomValueProvider(DefaultParams()) {}
 
   bool ShouldFill(const ::google::protobuf::FieldDescriptor*,
                   int recursion_depth) override;

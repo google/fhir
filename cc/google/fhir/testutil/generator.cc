@@ -73,6 +73,10 @@ bool RandomValueProvider::ShouldFill(const google::protobuf::FieldDescriptor* fi
   if (recursion_depth >= params_.max_recursion_depth) {
     return false;
   }
+  if (field->message_type() && field->message_type()->name() == "Extension" &&
+      !params_.fill_extensions) {
+    return false;
+  }
   return absl::Bernoulli(bitgen_,
                          params_.optional_set_probability *
                              std::pow(params_.optional_set_ratio_per_level,

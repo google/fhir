@@ -81,6 +81,7 @@ cc_test(
         ":proto_matchers",
         "//cc/google/fhir:proto_util",
         "//cc/google/fhir/r4:primitive_handler",
+        "//cc/google/fhir/status",
         "//proto/google/fhir/proto/r4/core/resources:observation_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:patient_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:plan_definition_cc_proto",
