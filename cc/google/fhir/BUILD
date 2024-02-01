@@ -713,3 +713,20 @@ cc_test(
         "@libarchive",
     ],
 )
+
+cc_test(
+    name = "type_macros_test",
+    srcs = ["type_macros_test.cc"],
+    deps = [
+        ":type_macros",
+        "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:observation_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:structure_definition_cc_proto",
+        "//proto/google/fhir/proto/r5/core:datatypes_cc_proto",
+        "//proto/google/fhir/proto/r5/core/resources:bundle_and_contained_resource_cc_proto",
+        "//proto/google/fhir/proto/r5/core/resources:observation_cc_proto",
+        "//proto/google/fhir/proto/r5/core/resources:structure_definition_cc_proto",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
