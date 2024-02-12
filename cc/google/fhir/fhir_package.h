@@ -35,6 +35,7 @@
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "proto/google/fhir/proto/r4/core/resources/code_system.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/implementation_guide.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/search_parameter.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/structure_definition.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/value_set.pb.h"
@@ -330,6 +331,8 @@ struct FhirPackage {
   ResourceCollection<google::fhir::r4::core::SearchParameter> search_parameters;
   ResourceCollection<google::fhir::r4::core::CodeSystem> code_systems;
   ResourceCollection<google::fhir::r4::core::ValueSet> value_sets;
+  std::unique_ptr<google::fhir::r4::core::ImplementationGuide>
+      implementation_guide;
 
   // Builds a FhirPackage instance from the archive at `archive_file_path`.
   // Processes each .json file in the archive for future access as protos via

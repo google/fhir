@@ -631,6 +631,7 @@ cc_library(
         "//cc/google/fhir/status:statusor",
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:code_system_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:implementation_guide_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:search_parameter_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:structure_definition_cc_proto",
         "//proto/google/fhir/proto/r4/core/resources:value_set_cc_proto",
