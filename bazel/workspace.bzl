@@ -17,7 +17,7 @@ def fhirproto_workspace(core_lib = False):
             "com.google.guava:guava-testlib:31.1-jre",
             "com.google.guava:guava:31.1-jre",
             "com.google.http-client:google-http-client-gson:1.43.0",
-            "com.google.testparameterinjector:test-parameter-injector:1.8",
+            "com.google.testparameterinjector:test-parameter-injector:1.15",
             "com.google.truth:truth:0.42",
             "com.google.truth.extensions:truth-proto-extension:1.1",
             "junit:junit:4.13-rc-1",
