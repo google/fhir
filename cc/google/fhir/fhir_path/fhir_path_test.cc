@@ -663,6 +663,44 @@ TYPED_TEST(Stu3AndR4FhirPathTest, TestLogicalValueFieldExists) {
               EvalsToTrue());
 }
 
+TYPED_TEST(FhirPathTest, TestFunctionExistsWithCriteria) {
+  auto observation = ParseFromString<typename TypeParam::CodeableConcept>(R"pb(
+    coding {
+      system { value: "foo" }
+      code { value: "abc" }
+    }
+    coding {
+      system { value: "bar" }
+      code { value: "ghi" }
+    }
+  )pb");
+
+  EXPECT_THAT(
+      TestFixture::Evaluate(observation, "coding.exists(system = 'bar')"),
+      EvalsToTrue());
+  EXPECT_THAT(TestFixture::Evaluate(observation, "coding.code.exists(true)"),
+              EvalsToTrue());
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionExistsWithCriteriaNoMatches) {
+  EXPECT_THAT(TestFixture::Evaluate("('a' | 'b' | 'c').exists(false)"),
+              EvalsToFalse());
+  EXPECT_THAT(TestFixture::Evaluate("{}.exists(true)"), EvalsToFalse());
+}
+
+TYPED_TEST(FhirPathTest, TestFunctionExistsWithInvalidCriteria) {
+  EXPECT_THAT(TestFixture::Evaluate("{}.exists(true, false)"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidObservation<typename TypeParam::Observation>(),
+                            "code.coding.exists(does_not_exist = 'foo')"),
+      HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(
+      TestFixture::Evaluate(ValidObservation<typename TypeParam::Observation>(),
+                            "code.coding.exists(foo())"),
+      HasStatusCode(StatusCode::kInvalidArgument));
+}
+
 TYPED_TEST(Stu3AndR4FhirPathTest, TestFunctionHasValueNegation) {
   auto test_encounter = ValidEncounter<typename TypeParam::Encounter>();
   EXPECT_THAT(

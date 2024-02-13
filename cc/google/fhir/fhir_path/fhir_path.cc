@@ -706,22 +706,66 @@ class SingleValueFunctionNode : public SingleParameterFunctionNode {
 };
 
 // Implements the FHIRPath .exists() function
-class ExistsFunction : public ZeroParameterFunctionNode {
+class ExistsFunction : public FunctionNode {
  public:
+  static absl::Status ValidateParams(
+      const std::vector<std::shared_ptr<ExpressionNode>>& params) {
+    if (params.size() > 1) {
+      return InvalidArgumentError("Function requires 0 or 1 arguments.");
+    }
+
+    return absl::OkStatus();
+  }
+
+  static absl::StatusOr<std::vector<std::shared_ptr<ExpressionNode>>>
+  CompileParams(const std::vector<FhirPathParser::ExpressionContext*>& params,
+                FhirPathBaseVisitor*,
+                FhirPathBaseVisitor* child_context_visitor) {
+    return FunctionNode::CompileParams(params, child_context_visitor);
+  }
+
   ExistsFunction(const std::shared_ptr<ExpressionNode>& child,
                  const std::vector<std::shared_ptr<ExpressionNode>>& params)
-      : ZeroParameterFunctionNode(child, params) {}
+      : FunctionNode(child, params) {
+    FHIR_DCHECK_OK(ValidateParams(params));
+  }
 
   absl::Status Evaluate(WorkSpace* work_space,
                         std::vector<WorkspaceMessage>* results) const override {
     std::vector<WorkspaceMessage> child_results;
     FHIR_RETURN_IF_ERROR(child_->Evaluate(work_space, &child_results));
 
+    if (params_.empty()) {
+      Message* result =
+          work_space->GetPrimitiveHandler()->NewBoolean(!child_results.empty());
+      work_space->DeleteWhenFinished(result);
+      results->push_back(WorkspaceMessage(result));
+      return absl::OkStatus();
+    }
+
+    for (const WorkspaceMessage& message : child_results) {
+      std::vector<WorkspaceMessage> param_results;
+      WorkSpace expression_work_space(work_space->GetPrimitiveHandler(),
+                                      work_space->MessageContextStack(),
+                                      message);
+      FHIR_RETURN_IF_ERROR(
+          params_[0]->Evaluate(&expression_work_space, &param_results));
+      FHIR_ASSIGN_OR_RETURN(
+          absl::StatusOr<std::optional<bool>> allowed,
+          (BooleanOrEmpty(work_space->GetPrimitiveHandler(), param_results)));
+      if (allowed.value().value_or(false)) {
+        Message* result =
+            work_space->GetPrimitiveHandler()->NewBoolean(true);
+        work_space->DeleteWhenFinished(result);
+        results->push_back(WorkspaceMessage(result));
+        return absl::OkStatus();
+      }
+    }
+
     Message* result =
-        work_space->GetPrimitiveHandler()->NewBoolean(!child_results.empty());
+        work_space->GetPrimitiveHandler()->NewBoolean(false);
     work_space->DeleteWhenFinished(result);
     results->push_back(WorkspaceMessage(result));
-
     return absl::OkStatus();
   }
 
@@ -2284,7 +2328,7 @@ class IifFunction : public FunctionNode {
                 FhirPathBaseVisitor* base_context_visitor,
                 FhirPathBaseVisitor* child_context_visitor) {
     if (params.size() < 2 || params.size() > 3) {
-      return InvalidArgumentError("iif() requires 2 or 3 arugments.");
+      return InvalidArgumentError("iif() requires 2 or 3 arguments.");
     }
 
     std::vector<std::shared_ptr<ExpressionNode>> compiled_params;
