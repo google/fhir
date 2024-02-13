@@ -23,8 +23,8 @@ import com.google.fhir.common.InvalidFhirException;
 import com.google.fhir.proto.ProtogenConfig;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.testing.junit.testparameterinjector.TestParameter;
-import com.google.testing.junit.testparameterinjector.TestParameter.TestParameterValuesProvider;
 import com.google.testing.junit.testparameterinjector.TestParameterInjector;
+import com.google.testing.junit.testparameterinjector.TestParameterValuesProvider;
 import java.io.IOException;
 import java.util.List;
 import org.junit.Test;
@@ -97,9 +97,9 @@ public final class ValueSetGeneratorV2Test {
     }
   }
 
-  private static class TestEnvProvider implements TestParameterValuesProvider {
+  private static class TestEnvProvider extends TestParameterValuesProvider {
     @Override
-    public List<TestEnv> provideValues() {
+    public List<TestEnv> provideValues(Context context) {
       try {
         return ImmutableList.of(
             new TestEnv(

@@ -32,8 +32,8 @@ import com.google.protobuf.DescriptorProtos.DescriptorProto;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.testing.junit.testparameterinjector.TestParameter;
-import com.google.testing.junit.testparameterinjector.TestParameter.TestParameterValuesProvider;
 import com.google.testing.junit.testparameterinjector.TestParameterInjector;
+import com.google.testing.junit.testparameterinjector.TestParameterValuesProvider;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -153,7 +153,7 @@ public final class ProtoGeneratorV2Test {
   /**
    * Parameter provider for getting all resources that have a file generated for a given package.
    */
-  private abstract static class ResourceProvider implements TestParameterValuesProvider {
+  private abstract static class ResourceProvider extends TestParameterValuesProvider {
     /** Returns the expected number of resources from the package, as a sanity check. */
     protected abstract int getNumberOfExpectedResources();
 
@@ -161,7 +161,7 @@ public final class ProtoGeneratorV2Test {
     protected abstract FhirPackage getPackage() throws IOException, InvalidFhirException;
 
     @Override
-    public List<StructureDefinition> provideValues() {
+    public List<StructureDefinition> provideValues(Context context) {
       FhirPackage fhirPackage;
       try {
         fhirPackage = getPackage();
