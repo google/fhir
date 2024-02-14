@@ -2136,7 +2136,7 @@ type Date struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The absolute time of the event as a Unix epoch in mircoseconds.
+	// The absolute time of the event as a Unix epoch in microseconds.
 	ValueUs int64 `protobuf:"varint,1,opt,name=value_us,json=valueUs,proto3" json:"value_us,omitempty"`
 	// The local timezone in which the event was recorded.
 	Timezone  string         `protobuf:"bytes,2,opt,name=timezone,proto3" json:"timezone,omitempty"`
@@ -2222,7 +2222,7 @@ type DateTime struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The absolute time of the event as a Unix epoch in mircoseconds.
+	// The absolute time of the event as a Unix epoch in microseconds.
 	ValueUs int64 `protobuf:"varint,1,opt,name=value_us,json=valueUs,proto3" json:"value_us,omitempty"`
 	// The local timezone in which the event was recorded.
 	Timezone  string             `protobuf:"bytes,2,opt,name=timezone,proto3" json:"timezone,omitempty"`
@@ -3820,7 +3820,7 @@ type Instant struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The absolute time of the event as a Unix epoch in mircoseconds.
+	// The absolute time of the event as a Unix epoch in microseconds.
 	ValueUs int64 `protobuf:"varint,1,opt,name=value_us,json=valueUs,proto3" json:"value_us,omitempty"`
 	// The local timezone in which the event was recorded.
 	Timezone  string            `protobuf:"bytes,2,opt,name=timezone,proto3" json:"timezone,omitempty"`
@@ -8581,7 +8581,7 @@ type Time struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The absolute time of the event as a Unix epoch in mircoseconds.
+	// The absolute time of the event as a Unix epoch in microseconds.
 	ValueUs   int64          `protobuf:"varint,1,opt,name=value_us,json=valueUs,proto3" json:"value_us,omitempty"`
 	Precision Time_Precision `protobuf:"varint,2,opt,name=precision,proto3,enum=google.fhir.r5.core.Time_Precision" json:"precision,omitempty"`
 	// xml:id (or equivalent in JSON)

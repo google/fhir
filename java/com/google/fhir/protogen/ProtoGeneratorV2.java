@@ -413,7 +413,7 @@ public class ProtoGeneratorV2 {
             .getOptionsBuilder()
             .setExtension(
                 ProtoGeneratorAnnotations.fieldDescription,
-                "The absolute time of the event as a Unix epoch in mircoseconds.");
+                "The absolute time of the event as a Unix epoch in microseconds.");
         fieldsToAdd.add(valueField.build());
         if (TYPES_WITH_TIMEZONE.contains(defId)) {
           fieldsToAdd.add(TIMEZONE_FIELD);
