@@ -269,13 +269,12 @@ def gen_fhir_definitions_and_protos(
             outs = [package_rename_path],
             cmd = "cp $< $@",
         )
-        json_outs.append(package_rename_path)
-    elif package_json:
-        json_outs.append(package_json)
 
     fhir_package(
         name = name,
-        definitions = json_outs,
+        definitions = native.glob([
+            "**/*.json",
+        ]),
         package_info = package_info,
     )
 
