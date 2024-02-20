@@ -765,7 +765,7 @@ func (m *Marshaller) marshalPrimitiveType(rpb protoreflect.Message) (jsonpbhelpe
 		}
 		return jsonpbhelper.JSONString(date), nil
 	case "DateTime":
-		dateTime, err := serializeDateTime(pb)
+		dateTime, err := SerializeDateTime(pb)
 		if err != nil {
 			return nil, fmt.Errorf("serialize dateTime: %w", err)
 		}

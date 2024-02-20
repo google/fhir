@@ -307,7 +307,7 @@ func TestDateTime(t *testing.T) {
 					t.Errorf("ParseDateTimeFromJSON(%q, %q, %T): got %v, want %v", test.json, l, parsed, parsed, want)
 				}
 
-				serialized, err := serializeDateTime(dt)
+				serialized, err := SerializeDateTime(dt)
 				if err != nil {
 					t.Fatalf("SerializeDateTime(%q): %v", dt, err)
 				}

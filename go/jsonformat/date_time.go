@@ -198,8 +198,8 @@ func parseDateTimeFromJSON(rm json.RawMessage, l *time.Location, m proto.Message
 	return parseDateTimeFromStr(date, l, m)
 }
 
-// serializeDateTime serializes a FHIR DateTime proto message to a JSON string.
-func serializeDateTime(dt proto.Message) (string, error) {
+// SerializeDateTime serializes a FHIR DateTime proto message to a JSON string.
+func SerializeDateTime(dt proto.Message) (string, error) {
 	rdt := dt.ProtoReflect()
 	valueUs, err := accessor.GetInt64(rdt, "value_us")
 	if err != nil {
