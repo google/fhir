@@ -664,6 +664,19 @@ TEST(FhirPackageTest, ImplementationGuideEmptyForPackageWithoutIG) {
   EXPECT_EQ(fhir_package->implementation_guide, nullptr);
 }
 
+TEST(FhirPackageTest, IgR4Ignored) {
+  FHIR_ASSERT_OK_AND_ASSIGN(
+      std::string temp_name,
+      CreateZipFileContaining(
+          {{"ig-r4.json", "gobbledygook ( that \" doesn't parse"}}));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
+
+  FHIR_ASSERT_OK_AND_ASSIGN(std::unique_ptr<FhirPackage> fhir_package,
+                            FhirPackage::Load(temp_name));
+
+  EXPECT_EQ(fhir_package->implementation_guide, nullptr);
+}
+
 TEST(FhirPackageTest, ImplementationGuidePopulatedForPackageWithIG) {
   FHIR_ASSERT_OK_AND_ASSIGN(std::string temp_name,
                             CreateZipFileContaining({{"ig.json",
