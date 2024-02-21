@@ -23,6 +23,7 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_format.h"
+#include "absl/strings/string_view.h"
 #include "libarchive/archive.h"
 #include "libarchive/archive_entry.h"
 
@@ -36,7 +37,8 @@ namespace {
 // type of the archive.
 absl::StatusOr<std::string> CreateArchiveContaining(
     const std::vector<ArchiveContents>& contents,
-    const std::function<int(archive*)>& set_archive_format) {
+    const std::function<int(archive*)>& set_archive_format,
+    absl::string_view filename = "") {
   archive* archive = archive_write_new();
   absl::Cleanup archive_closer = [&archive] { archive_write_free(archive); };
 
@@ -46,7 +48,8 @@ absl::StatusOr<std::string> CreateArchiveContaining(
         "Failed to create archive due to error code: %d.", errorp));
   }
 
-  std::string temp_name = std::tmpnam(nullptr);
+  std::string temp_name =
+      filename.empty() ? std::tmpnam(nullptr) : std::string(filename);
   errorp = archive_write_open_filename(archive, temp_name.c_str());
   if (errorp != ARCHIVE_OK) {
     return absl::UnavailableError(
@@ -89,10 +92,11 @@ absl::StatusOr<std::string> CreateZipFileContaining(
 }
 
 absl::StatusOr<std::string> CreateTarFileContaining(
-    const std::vector<ArchiveContents>& contents) {
-  return CreateArchiveContaining(contents, [](archive* archive) {
-    return archive_write_set_format_ustar(archive);
-  });
+    const std::vector<ArchiveContents>& contents, absl::string_view filename) {
+  return CreateArchiveContaining(
+      contents,
+      [](archive* archive) { return archive_write_set_format_ustar(archive); },
+      filename);
 }
 
 }  // namespace google::fhir::testutil

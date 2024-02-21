@@ -20,6 +20,7 @@
 #include <vector>
 
 #include "absl/status/statusor.h"
+#include "absl/strings/string_view.h"
 #include "libarchive/archive.h"
 #include "libarchive/archive_entry.h"
 
@@ -33,13 +34,16 @@ struct ArchiveContents {
 
 // Writes a zip file to a temporary file containing the given {name, data}
 // structs. Returns the path to the temporary file.
+// This is only provided for legacy usage - users should prefer to use
+// CreateTarFileContaining instead.
 absl::StatusOr<std::string> CreateZipFileContaining(
     const std::vector<ArchiveContents>& contents);
 
 // Writes a tar file to a temporary file containing the given {name, data}
 // structs. Returns the path to the temporary file.
 absl::StatusOr<std::string> CreateTarFileContaining(
-    const std::vector<ArchiveContents>& contents);
+    const std::vector<ArchiveContents>& contents,
+    absl::string_view filename = "");
 
 }  // namespace google::fhir::testutil
 
