@@ -759,7 +759,7 @@ func (m *Marshaller) marshalPrimitiveType(rpb protoreflect.Message) (jsonpbhelpe
 		val := rpb.Get(desc.Fields().ByName("value"))
 		return jsonpbhelper.JSONRawValue(fmt.Sprintf("%v", val.Interface())), nil
 	case "Date":
-		date, err := serializeDate(pb)
+		date, err := SerializeDate(pb)
 		if err != nil {
 			return nil, fmt.Errorf("serialize date: %w", err)
 		}

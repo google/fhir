@@ -88,8 +88,8 @@ func parseDateFromJSON(rm json.RawMessage, l *time.Location, m proto.Message) er
 	return parseDateFromStr(date, l, m)
 }
 
-// serializeDate serializes a FHIR Date proto message to a JSON string.
-func serializeDate(d proto.Message) (string, error) {
+// SerializeDate serializes a FHIR Date proto message to a JSON string.
+func SerializeDate(d proto.Message) (string, error) {
 	rd := d.ProtoReflect()
 	valueUs, err := accessor.GetInt64(rd, "value_us")
 	if err != nil {

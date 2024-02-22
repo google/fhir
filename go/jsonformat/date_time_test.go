@@ -135,7 +135,7 @@ func TestDate(t *testing.T) {
 				t.Errorf("ParseDateFromJSON(%q, %s, %T): got %v, want %v", test.json, l, parsed, parsed, want)
 			}
 
-			serialized, err := serializeDate(d)
+			serialized, err := SerializeDate(d)
 			if err != nil {
 				t.Fatalf("SerializeDate(%q): %v", d, err)
 			}
