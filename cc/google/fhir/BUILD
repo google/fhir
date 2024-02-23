@@ -624,6 +624,7 @@ cc_library(
     hdrs = ["fhir_package.h"],
     strip_include_prefix = "//cc/",
     deps = [
+        ":error_reporter",
         "//cc/google/fhir/json:fhir_json",
         "//cc/google/fhir/json:json_sax_handler",
         "//cc/google/fhir/r4:json_format",

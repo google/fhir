@@ -27,6 +27,7 @@
 #include "absl/strings/str_format.h"
 #include "absl/strings/string_view.h"
 #include "absl/time/time.h"
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json/json_sax_handler.h"
 #include "google/fhir/r4/json_format.h"
@@ -82,8 +83,8 @@ absl::Status MaybeAddResourceToFhirPackage(
         std::make_unique<google::fhir::r4::core::ImplementationGuide>();
     FHIR_RETURN_IF_ERROR(google::fhir::r4::MergeJsonFhirObjectIntoProto(
         resource_json, fhir_package.implementation_guide.get(),
-        absl::UTCTimeZone(), /*validate=*/false));
-
+        absl::UTCTimeZone(), /*validate=*/false,
+        FailFastErrorHandler::FailOnFatalOnly()));
   } else if (*resource_type == "Bundle") {
     absl::StatusOr<const internal::FhirJson*> entries =
         resource_json.get("entry");
