@@ -36,7 +36,7 @@ namespace internal {
 absl::Status PopulateTypedReferenceId(const std::string& resource_id,
                                       const std::string& version,
                                       ::google::protobuf::Message* reference_id);
-absl::StatusOr<const ::google::protobuf::FieldDescriptor*> GetReferenceFieldForResource(
+const ::google::protobuf::FieldDescriptor* GetReferenceFieldForResource(
     const ::google::protobuf::Message& reference, const std::string& resource_type);
 
 }  // namespace internal
@@ -123,9 +123,14 @@ absl::StatusOr<ReferenceType> GetReferenceProtoToResource(
     base_resource_type = resource.GetDescriptor();
   }
 
-  FHIR_ASSIGN_OR_RETURN(const google::protobuf::FieldDescriptor* reference_id_field,
-                        internal::GetReferenceFieldForResource(
-                            reference, base_resource_type->name()));
+  const google::protobuf::FieldDescriptor* reference_id_field =
+      internal::GetReferenceFieldForResource(reference,
+                                             base_resource_type->name());
+  if (reference_id_field == nullptr) {
+    return absl::InvalidArgumentError(absl::Substitute(
+        "$0 has no reference field for type $1",
+        reference.GetDescriptor()->full_name(), base_resource_type->name()));
+  }
   ::google::protobuf::Message* reference_id =
       reference.GetReflection()->MutableMessage(&reference, reference_id_field);
   FHIR_RETURN_IF_ERROR(internal::PopulateTypedReferenceId(

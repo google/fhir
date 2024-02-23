@@ -90,6 +90,21 @@ TEST(GetReferenceProtoToResourceTest, UnprofiledProto) {
               EqualsProto(expected));
 }
 
+TEST(ReferencesTest, RelativeReferenceSplit) {
+  Reference r;
+  r.mutable_uri()->set_value("Patient/123");
+  ASSERT_TRUE(google::fhir::SplitIfRelativeReference(&r).ok());
+  EXPECT_EQ(r.patient_id().value(), "123");
+  EXPECT_TRUE(r.uri().value().empty());
+}
+
+TEST(ReferencesTest, UnrecognizedRelativeReferenceStaysAbsolute) {
+  Reference r;
+  r.mutable_uri()->set_value("Garbage/123");
+  ASSERT_TRUE(google::fhir::SplitIfRelativeReference(&r).ok());
+  EXPECT_EQ(r.uri().value(), "Garbage/123");
+}
+
 }  // namespace
 }  // namespace fhir
 }  // namespace google

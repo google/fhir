@@ -152,9 +152,13 @@ absl::Status SplitIfRelativeReference(Message* reference) {
   std::string version;
   if (RE2::FullMatch(uri_string, *kInternalReferenceRegex, &resource_type,
                      &resource_id, &version)) {
-    FHIR_ASSIGN_OR_RETURN(
-        const FieldDescriptor* reference_id_field,
-        internal::GetReferenceFieldForResource(*reference, resource_type));
+    const FieldDescriptor* reference_id_field =
+        internal::GetReferenceFieldForResource(*reference, resource_type);
+    if (reference_id_field == nullptr) {
+      // Not a recognized relative reference.
+      return absl::OkStatus();
+    }
+
     // Note that we make the reference_id off of the reference before adding it,
     // since adding the reference_id would destroy the uri field, since they are
     // in the same oneof.  This way allows us to copy fields from uri to
@@ -220,19 +224,11 @@ absl::Status PopulateTypedReferenceId(const std::string& resource_id,
   return absl::OkStatus();
 }
 
-absl::StatusOr<const FieldDescriptor*> GetReferenceFieldForResource(
+const FieldDescriptor* GetReferenceFieldForResource(
     const Message& reference, const std::string& resource_type) {
   const std::string field_name =
       absl::StrCat(ToSnakeCase(resource_type), "_id");
-  const FieldDescriptor* field =
-      reference.GetDescriptor()->FindFieldByName(field_name);
-  if (field == nullptr) {
-    return InvalidArgumentError(
-        absl::StrCat("Resource type ", resource_type,
-                     " is not valid for a reference (field ", field_name,
-                     " does not exist)."));
-  }
-  return field;
+  return reference.GetDescriptor()->FindFieldByName(field_name);
 }
 
 }  // namespace internal
