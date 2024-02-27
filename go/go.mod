@@ -4,12 +4,13 @@ go 1.19
 
 require (
 	bitbucket.org/creachadair/stringset v0.0.9
+	github.com/antlr4-go/antlr/v4 v4.13.0
 	github.com/bazelbuild/rules_go v0.24.5
 	github.com/golang/protobuf v1.4.3
 	github.com/google/go-cmp v0.5.8
 	github.com/json-iterator/go v1.1.10
 	github.com/serenize/snaker v0.0.0-20201027110005-a7ad2135616e
-	golang.org/x/exp v0.0.0-20230315142452-642cacee5cc0
+	golang.org/x/exp v0.0.0-20230515195305-f3d0a9c9a5cc
 	google.golang.org/protobuf v1.25.0
 )
 
