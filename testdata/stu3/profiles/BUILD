@@ -3,7 +3,7 @@ load("//bazel:proto.bzl", "fhir_proto_library")
 licenses(["notice"])
 
 package(
-    default_compatible_with = ["//buildenv/target:non_prod"],
+    
     default_visibility = ["//visibility:public"],
 )
 
