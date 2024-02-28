@@ -1,5 +1,5 @@
 package(
-    
+    default_compatible_with = ["//buildenv/target:non_prod"],
     default_visibility = ["//visibility:public"],
 )
 

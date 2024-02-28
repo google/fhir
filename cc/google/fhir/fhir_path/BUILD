@@ -3,7 +3,7 @@ load("//bazel:antlr4_cc.bzl", "antlr4_cc_lexer", "antlr4_cc_parser")
 licenses(["notice"])
 
 package(
-    
+    default_compatible_with = ["//buildenv/target:non_prod"],
     default_visibility = ["//visibility:public"],
 )
 
