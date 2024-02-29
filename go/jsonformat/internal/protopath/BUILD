@@ -1,12 +1,9 @@
-package(
-    
-    default_visibility = ["//visibility:public"],
-)
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
-
-load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
-load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 
 proto_library(
     name = "protopathtest_proto",
@@ -21,7 +18,7 @@ proto_library(
 go_proto_library(
     name = "protopathtest_go_proto",
     importpath = "github.com/google/fhir/go/jsonformat/internal/protopath/protopathtest_go_proto",
-    proto = ":protopathtest_proto",
+    protos = [":protopathtest_proto"],
 )
 
 go_library(

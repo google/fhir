@@ -1,7 +1,4 @@
-package(
-    
-    default_visibility = ["//visibility:public"],
-)
+package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "primitive_handler",

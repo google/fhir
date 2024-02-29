@@ -2,10 +2,7 @@ load("//bazel:proto.bzl", "fhir_proto_library")
 
 licenses(["notice"])
 
-package(
-    
-    default_visibility = ["//visibility:public"],
-)
+package(default_visibility = ["//visibility:public"])
 
 fhir_proto_library(
     srcs = [

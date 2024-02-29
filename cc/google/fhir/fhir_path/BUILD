@@ -2,10 +2,7 @@ load("//bazel:antlr4_cc.bzl", "antlr4_cc_lexer", "antlr4_cc_parser")
 
 licenses(["notice"])
 
-package(
-    
-    default_visibility = ["//visibility:public"],
-)
+package(default_visibility = ["//visibility:public"])
 
 exports_files(["FhirPath.g4"])
 
