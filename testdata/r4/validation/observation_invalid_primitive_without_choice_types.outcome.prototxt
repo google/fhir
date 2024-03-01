@@ -40,9 +40,6 @@ issue {
     value: "Observation.referenceRange[0].text"
   }
 }
-subject {
-    observation_id {value: "123"}
-}
 issue {
   severity {
     value: ERROR

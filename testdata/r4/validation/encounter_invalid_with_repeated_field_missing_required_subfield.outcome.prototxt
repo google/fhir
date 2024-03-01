@@ -12,6 +12,3 @@ issue {
     value: "Encounter.statusHistory[1].period"
   }
 }
-subject {
-    encounter_id {value: "123"}
-}

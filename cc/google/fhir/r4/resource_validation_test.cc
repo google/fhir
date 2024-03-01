@@ -22,7 +22,9 @@
 #include "gtest/gtest.h"
 #include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
+#include "google/fhir/r4/operation_error_reporter.h"
 #include "google/fhir/references.h"
+#include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/test_helper.h"
 #include "google/fhir/testutil/proto_matchers.h"
@@ -31,8 +33,10 @@
 #include "proto/google/fhir/proto/r4/core/resources/coverage_eligibility_request.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/encounter.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/observation.pb.h"
+#include "proto/google/fhir/proto/r4/core/resources/operation_outcome.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/practitioner_role.pb.h"
 #include "proto/google/fhir/proto/r4/fhirproto.pb.h"
+#include "proto/google/fhir/proto/r4/fhirproto_extensions.pb.h"
 #include "testdata/r4/profiles/test.pb.h"
 #include "google/protobuf/text_format.h"
 
@@ -43,7 +47,7 @@ namespace r4 {
 namespace {
 
 using namespace ::google::fhir::r4::core;  // NOLINT
-using ::google::fhir::r4::fhirproto::ValidationOutcome;
+using ::google::fhir::r4::OperationOutcomeErrorHandler;
 using ::google::fhir::testutil::EqualsProto;
 using ::google::fhir::testutil::IgnoringRepeatedFieldOrdering;
 
@@ -52,20 +56,14 @@ void ValidTest(const absl::string_view name, const bool has_resource_id = true,
                const bool validate_reference_ids = false) {
   T resource =
       ReadProto<T>(absl::StrCat("testdata/r4/validation/", name, ".prototxt"));
-  absl::StatusOr<ValidationOutcome> outcome =
-      Validate(resource, validate_reference_ids);
-  FHIR_ASSERT_OK(outcome.status());
 
-  // The ValidationOutcome should be empty except for the subject, if the
-  // resource has an ID.
-  ValidationOutcome expected;
-  if (has_resource_id) {
-    FHIR_ASSERT_OK_AND_ASSIGN(
-        *expected.mutable_subject(),
-        GetReferenceProtoToResource<::google::fhir::r4::core::Reference>(
-            resource));
-  }
-  EXPECT_THAT(*outcome, IgnoringRepeatedFieldOrdering(EqualsProto(expected)));
+  OperationOutcome outcome;
+  OperationOutcomeErrorHandler error_handler(&outcome);
+  FHIR_ASSERT_OK(Validate(resource, error_handler, validate_reference_ids));
+
+  // The ValidationOutcome should be empty.
+  OperationOutcome expected;
+  EXPECT_THAT(outcome, IgnoringRepeatedFieldOrdering(EqualsProto(expected)));
 }
 
 template <typename T>
@@ -80,13 +78,13 @@ void InvalidTest(absl::string_view name,
       error_msg.erase(error_msg.length() - 1);
     }
   }
-  absl::StatusOr<ValidationOutcome> outcome =
-      Validate(resource, validate_reference_ids);
-  FHIR_ASSERT_OK(outcome.status());
+  OperationOutcome outcome;
+  OperationOutcomeErrorHandler error_handler(&outcome);
+  FHIR_ASSERT_OK(Validate(resource, error_handler, validate_reference_ids));
 
-  ValidationOutcome expected_outcome = ReadProto<ValidationOutcome>(
+  OperationOutcome expected_outcome = ReadProto<OperationOutcome>(
       absl::StrCat("testdata/r4/validation/", name, ".outcome.prototxt"));
-  EXPECT_THAT(*outcome,
+  EXPECT_THAT(outcome,
               IgnoringRepeatedFieldOrdering(EqualsProto(expected_outcome)));
 }
 

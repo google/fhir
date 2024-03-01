@@ -12,6 +12,3 @@ issue{
     value: "Encounter.meta.extension"
   }
 }
-subject {
-    encounter_id {value: "example"}
-}

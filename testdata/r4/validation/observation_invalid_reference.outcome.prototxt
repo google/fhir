@@ -40,6 +40,3 @@ issue{
     value: "Observation.performer[2]"
   }
 }
-subject {
-    observation_id {value: "123"}
-}

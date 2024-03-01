@@ -12,9 +12,6 @@ issue {
     value: "Observation.status"
   }
 }
-subject {
-    observation_id {value: "123"}
-}
 
 issue {
   severity {

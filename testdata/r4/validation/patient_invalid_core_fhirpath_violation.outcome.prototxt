@@ -26,8 +26,3 @@ issue {
     value: "Patient.contact[0]"
   }
 }
-subject {
-  patient_id {
-    value: "fppatient"
-  }
-}

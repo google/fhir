@@ -12,6 +12,3 @@ issue {
     value: "Encounter.period.start"
   }
 }
-subject {
-    encounter_id {value: "123"}
-}
