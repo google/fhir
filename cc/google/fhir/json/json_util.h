@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef GOOGLE_FHIR_JSON_UTIL_H_
-#define GOOGLE_FHIR_JSON_UTIL_H_
+#ifndef GOOGLE_FHIR_JSON_JSON_UTIL_H_
+#define GOOGLE_FHIR_JSON_JSON_UTIL_H_
 
 #include <string>
 
@@ -50,4 +50,4 @@ const std::string& FhirJsonName(const google::protobuf::FieldDescriptor* field);
 
 }  // namespace google::fhir
 
-#endif  // GOOGLE_FHIR_JSON_UTIL_H_
+#endif  // GOOGLE_FHIR_JSON_JSON_UTIL_H_

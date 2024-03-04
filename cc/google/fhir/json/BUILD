@@ -64,3 +64,31 @@ cc_test(
         "@com_google_googletest//:gtest_main",
     ],
 )
+
+cc_library(
+    name = "json_util",
+    srcs = ["json_util.cc"],
+    hdrs = ["json_util.h"],
+    strip_include_prefix = "//cc/",
+    deps = [
+        "//cc/google/fhir:annotations",
+        "@com_google_absl//absl/container:flat_hash_map",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
+        "@com_google_absl//absl/strings",
+        "@com_google_protobuf//:protobuf",
+    ],
+)
+
+cc_test(
+    name = "json_util_test",
+    srcs = ["json_util_test.cc"],
+    deps = [
+        ":json_util",
+        "//cc/google/fhir/status",
+        "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:observation_cc_proto",
+        "//proto/google/fhir/proto/r4/core/resources:patient_cc_proto",
+        "@com_google_googletest//:gtest_main",
+    ],
+)

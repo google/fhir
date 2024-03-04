@@ -43,7 +43,7 @@
 #include "google/fhir/extensions.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json_format_results.h"
-#include "google/fhir/json_util.h"
+#include "google/fhir/json/json_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/type_macros.h"

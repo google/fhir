@@ -43,7 +43,7 @@
 #include "google/fhir/json/json_sax_handler.h"
 #include "google/fhir/json_format.h"
 #include "google/fhir/json_format_results.h"
-#include "google/fhir/json_util.h"
+#include "google/fhir/json/json_util.h"
 #include "google/fhir/primitive_wrapper.h"
 #include "google/fhir/r4/profiles.h"
 #include "google/fhir/references.h"

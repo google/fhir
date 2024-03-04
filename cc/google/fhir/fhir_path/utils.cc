@@ -19,7 +19,7 @@
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
 #include "google/fhir/annotations.h"
-#include "google/fhir/json_util.h"
+#include "google/fhir/json/json_util.h"
 #include "google/fhir/references.h"
 #include "google/fhir/util.h"
 #include "google/protobuf/descriptor.h"

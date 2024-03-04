@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "google/fhir/json_util.h"
+#include "google/fhir/json/json_util.h"
 
 #include "gtest/gtest.h"
 #include "google/fhir/status/status.h"
