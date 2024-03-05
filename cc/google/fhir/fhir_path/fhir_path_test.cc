@@ -1857,9 +1857,8 @@ TYPED_TEST(FhirPathTest, TestSelect) {
 }
 
 TYPED_TEST(FhirPathTest, TestSelectEmptyResult) {
-  EXPECT_THAT(TestFixture::Evaluate("{}.where(true)"), EvalsToEmpty());
-  EXPECT_THAT(TestFixture::Evaluate("(1 | 2 | 3).where(false)"),
-              EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("{}.select(true)"), EvalsToEmpty());
+  EXPECT_THAT(TestFixture::Evaluate("(1 | 2 | 3).select({})"), EvalsToEmpty());
 }
 
 TYPED_TEST(FhirPathTest, TestSelectValidatesArguments) {
