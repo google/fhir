@@ -19,14 +19,8 @@
 #include "absl/status/status.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/fhir_path/fhir_path_validation.h"
-#include "google/fhir/r4/operation_error_reporter.h"
 #include "google/fhir/r4/primitive_handler.h"
-#include "google/fhir/r4/profiles.h"
-#include "google/fhir/r4/validation_error_handler.h"
-#include "google/fhir/references.h"
 #include "google/fhir/resource_validation.h"
-#include "google/fhir/status/statusor.h"
-#include "google/fhir/util.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 #include "proto/google/fhir/proto/r4/fhirproto.pb.h"
 
@@ -34,33 +28,12 @@ namespace google {
 namespace fhir {
 namespace r4 {
 
-using ::google::fhir::r4::ValidationOutcomeErrorHandler;
-using ::google::fhir::r4::core::Reference;
-using ::google::fhir::r4::fhirproto::ValidationOutcome;
-
 absl::Status Validate(const ::google::protobuf::Message& resource,
                       ErrorHandler& error_handler,
                       const bool validate_reference_field_ids) {
   return ::google::fhir::Validate(resource, R4PrimitiveHandler::GetInstance(),
                                   &fhir_path::FhirPathValidator::GetInstance(),
                                   error_handler, validate_reference_field_ids);
-}
-
-absl::StatusOr<ValidationOutcome> Validate(
-    const ::google::protobuf::Message& resource,
-    const bool validate_reference_field_ids) {
-  ValidationOutcome validation_outcome;
-
-  if (ResourceHasId(resource)) {
-    FHIR_ASSIGN_OR_RETURN(*validation_outcome.mutable_subject(),
-                          GetReferenceProtoToResource<Reference>(resource));
-  }
-
-  ValidationOutcomeErrorHandler error_handler(&validation_outcome);
-  FHIR_RETURN_IF_ERROR(
-      Validate(resource, error_handler, validate_reference_field_ids));
-
-  return validation_outcome;
 }
 
 absl::Status ValidateWithoutFhirPath(const ::google::protobuf::Message& resource) {
