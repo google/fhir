@@ -155,6 +155,7 @@ class ValueSetGeneratorV2 {
 
     int enumNumber = 1;
     List<ConceptDefinition> concepts = TerminologyExpander.expandCodeSystem(codeSystem);
+
     for (ConceptDefinition concept : concepts) {
       EnumValueDescriptorProto.Builder valueBuilder =
           EnumValueDescriptorProto.newBuilder()
@@ -188,6 +189,20 @@ class ValueSetGeneratorV2 {
 
       enumDescriptor.addValue(valueBuilder);
     }
+    if (url.equals("http://hl7.org/fhir/FHIR-version")
+        && codeSystem.getVersion().getValue().equals("4.0.1")) {
+      // In order to more easily facilitate cross-version support, add an R5 code to the R4 Versions
+      // codesystem, using enum number 51 to match the enum number in R5 and later versions.
+      // This helps in cases where things are incorrectly labeled as R5, such as the R4 Extensions
+      // IG.  It also allows R5 resources to be parsed into R4 protos if they are otherwise
+      // compatible.
+      // See:
+      // https://chat.fhir.org/#narrow/stream/179166-implementers/topic/Confused.20about.20hl7.2Efhir.2Euv.2Eextensions.2Er4.20npm
+      EnumValueDescriptorProto.Builder v5Builder =
+          EnumValueDescriptorProto.newBuilder().setNumber(51).setName("V_5_0_0");
+      v5Builder.getOptionsBuilder().setExtension(Annotations.fhirOriginalCode, "5.0.0");
+      enumDescriptor.addValue(v5Builder);
+    }
 
     enumDescriptor.getOptionsBuilder().setExtension(Annotations.fhirCodeSystemUrl, url);
     return enumDescriptor.build();
@@ -220,8 +235,7 @@ class ValueSetGeneratorV2 {
     }
   }
 
-  private Optional<EnumDescriptorProto> generateValueSetEnum(ValueSet valueSet)
-      throws InvalidFhirException {
+  private Optional<EnumDescriptorProto> generateValueSetEnum(ValueSet valueSet) {
     EnumDescriptorProto.Builder builder = EnumDescriptorProto.newBuilder().setName("Value");
     builder
         .getOptionsBuilder()

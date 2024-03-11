@@ -294,7 +294,26 @@ final class FieldRetagger {
     }
 
     int nextTag = Collections.max(goldenTerminology.values()) + 1;
+
+    // There is a bug in the R4 Extensions IG that causes it to be mislabeled as R5.
+    // To make these resources parse, we hardcode an R5 version enum into the R4 version
+    // terminology.
+    // The hardcoded enum is assigned tag number 51 in the ValueSetGeneratorV2 in order to match the
+    // enum assigned in R5.  However, this messes with the retagging logic here, since this starts
+    // assigning new tag numbers after the max tag number in use, because the hardcoded tag changes
+    // the max tag number.  So, in this special case, start from the max non-hardcoded tag number
+    // (22), and skip over 51.
+    boolean isR5VersionEnum =
+        getTerminologyUrl(terminologyEnum).equals("http://hl7.org/fhir/FHIR-version")
+            && nextTag == 52;
+    if (isR5VersionEnum) {
+      nextTag = 23;
+    }
+
     for (EnumValueDescriptorProto.Builder value : newCodes) {
+      if (isR5VersionEnum && nextTag == 51) {
+        nextTag++;
+      }
       value.setNumber(nextTag++);
     }
 

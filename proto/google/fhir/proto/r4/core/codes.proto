@@ -1810,6 +1810,7 @@ message FHIRVersionCode {
     V_3_5_0 = 20 [(.google.fhir.proto.fhir_original_code) = "3.5.0"];
     V_4_0_0 = 21 [(.google.fhir.proto.fhir_original_code) = "4.0.0"];
     V_4_0_1 = 22 [(.google.fhir.proto.fhir_original_code) = "4.0.1"];
+    V_5_0_0 = 51 [(.google.fhir.proto.fhir_original_code) = "5.0.0"];
   }
 }
 
