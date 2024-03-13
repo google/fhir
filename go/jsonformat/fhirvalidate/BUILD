@@ -9,6 +9,7 @@ go_library(
     srcs = ["fhirvalidate.go"],
     importpath = "github.com/google/fhir/go/jsonformat/fhirvalidate",
     deps = [
+        "//go/fhirpath",
         "//go/jsonformat/errorreporter",
         "//go/jsonformat/internal/jsonpbhelper",
         "//proto/google/fhir/proto:annotations_go_proto",
