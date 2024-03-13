@@ -886,7 +886,11 @@ func sanitizeFieldName(fieldName string) string {
 
 	// if the field name does not start with a letter or underscore, add an underscore as prefix.
 	if invalidBQStart.MatchString(fieldName) {
-		fieldName = fmt.Sprintf("_%s", fieldName)
+		fieldName = "_" + fieldName
+	}
+
+	if len(fieldName) > 300 {
+		fieldName = fieldName[:300]
 	}
 
 	return fieldName

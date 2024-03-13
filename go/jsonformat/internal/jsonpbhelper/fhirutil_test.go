@@ -19,6 +19,7 @@ import (
 	"errors"
 	"regexp"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -990,6 +991,10 @@ func TestExtensionFieldName(t *testing.T) {
 			"http://example.org//",
 			"",
 		},
+		{
+			"http://example.com/" + strings.Repeat("a", 301),
+			strings.Repeat("a", 300),
+		},
 	}
 	for _, test := range tests {
 		if got := ExtensionFieldName(test.url); got != test.want {
@@ -1021,6 +1026,10 @@ func TestFullExtensionFieldName(t *testing.T) {
 		{
 			"1",
 			"_1",
+		},
+		{
+			"http://example.com/" + strings.Repeat("a", 300),
+			"example_com_" + strings.Repeat("a", 288),
 		},
 	}
 	for _, test := range tests {
