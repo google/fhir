@@ -23,6 +23,7 @@
 #include "google/fhir/references.h"
 #include "google/fhir/util.h"
 #include "google/protobuf/descriptor.h"
+#include "google/protobuf/message.h"
 
 namespace google {
 namespace fhir {
@@ -128,7 +129,7 @@ absl::Status RetrieveField(
       root, &field, [&](const Message& child) {
         // R4+ packs contained resources in Any protos.
         if (IsMessageType<google::protobuf::Any>(child)) {
-          auto any = dynamic_cast<const google::protobuf::Any&>(child);
+          auto any = google::protobuf::DownCastToGenerated<google::protobuf::Any>(child);
 
           FHIR_ASSIGN_OR_RETURN(
               Message * unpacked_message,
