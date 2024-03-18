@@ -287,7 +287,7 @@ absl::Status AddCoding(Message* concept_proto, const Coding& coding) {
           Message* target_coding =
               MutableOrAddMessage(concept_proto, profiled_field);
           CodingWithFixedCode* fixed_system_code =
-              static_cast<CodingWithFixedCode*>(target_coding);
+              google::protobuf::DownCastToGenerated<CodingWithFixedCode>(target_coding);
           CopyCommonCodingFields(coding, fixed_system_code);
           return absl::OkStatus();
         }
