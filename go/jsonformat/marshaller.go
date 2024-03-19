@@ -289,7 +289,7 @@ func (m *Marshaller) marshalRepeatedFieldValue(decmap jsonpbhelper.JSONObject, f
 
 	for i, pb := range pbs {
 		if isPrimitive {
-			rm, err := m.marshalPrimitiveType(pb)
+			rm, err := jsonpbhelper.MarshalPrimitiveType(pb)
 			if err != nil {
 				return err
 			}
@@ -594,7 +594,7 @@ func (m *Marshaller) marshalFieldValue(decmap jsonpbhelper.JSONObject, f protore
 		}
 	}
 	if jsonpbhelper.IsPrimitiveType(f.Message()) {
-		base, err := m.marshalPrimitiveType(pb)
+		base, err := jsonpbhelper.MarshalPrimitiveType(pb)
 		if err != nil {
 			return err
 		}
@@ -739,78 +739,7 @@ func (m *Marshaller) marshalMessageToMap(pb protoreflect.Message) (jsonpbhelper.
 	return decmap, nil
 }
 
-func (m *Marshaller) marshalPrimitiveType(rpb protoreflect.Message) (jsonpbhelper.IsJSON, error) {
-	pb := rpb.Interface().(proto.Message)
-	if jsonpbhelper.HasExtension(pb, jsonpbhelper.PrimitiveHasNoValueURL) {
-		return nil, nil
-	}
-
-	desc := rpb.Descriptor()
-	switch desc.Name() {
-	case "Base64Binary":
-		binary, err := serializeBinary(pb)
-		if err != nil {
-			return nil, fmt.Errorf("serialize base64Binary: %w", err)
-		}
-		return jsonpbhelper.JSONString(binary), nil
-	case "Canonical", "Code", "Markdown", "Oid", "String", "Uri", "Url", "Uuid", "Xhtml", "ReferenceId", "Id":
-		return jsonpbhelper.JSONString(rpb.Get(desc.Fields().ByName("value")).String()), nil
-	case "Boolean", "Integer", "PositiveInt", "UnsignedInt", "Decimal":
-		val := rpb.Get(desc.Fields().ByName("value"))
-		return jsonpbhelper.JSONRawValue(fmt.Sprintf("%v", val.Interface())), nil
-	case "Date":
-		date, err := SerializeDate(pb)
-		if err != nil {
-			return nil, fmt.Errorf("serialize date: %w", err)
-		}
-		return jsonpbhelper.JSONString(date), nil
-	case "DateTime":
-		dateTime, err := SerializeDateTime(pb)
-		if err != nil {
-			return nil, fmt.Errorf("serialize dateTime: %w", err)
-		}
-		return jsonpbhelper.JSONString(dateTime), nil
-	case "Time":
-		t, err := serializeTime(pb)
-		if err != nil {
-			return nil, fmt.Errorf("serialize time: %w", err)
-		}
-		return jsonpbhelper.JSONString(t), nil
-	case "Instant":
-		t, err := SerializeInstant(pb)
-		if err != nil {
-			return nil, fmt.Errorf("serialize instant: %w", err)
-		}
-		return jsonpbhelper.JSONString(t), nil
-	default:
-		if !proto.HasExtension(desc.Options(), apb.E_FhirValuesetUrl) {
-			return nil, fmt.Errorf("not a supported primitive type: %v", desc.Name())
-		}
-		// Handle specialized codes
-		f := desc.Fields().ByName("value")
-		if f == nil {
-			return nil, fmt.Errorf("value field not found in proto: %s", desc.Name())
-		}
-		switch f.Kind() {
-		case protoreflect.StringKind:
-			return jsonpbhelper.JSONString(rpb.Get(f).String()), nil
-		case protoreflect.EnumKind:
-			num := rpb.Get(f).Enum()
-			// ignore if uninitialized
-			if num == 0 {
-				return nil, nil
-			}
-			// Observe the FHIR original codes if set.
-			ed := f.Enum()
-			ev := ed.Values().ByNumber(num)
-			origCode := proto.GetExtension(ev.Options(), apb.E_FhirOriginalCode).(string)
-			if origCode != "" {
-				return jsonpbhelper.JSONString(origCode), nil
-			}
-			enum := string(ev.Name())
-			return jsonpbhelper.JSONString(strings.Replace(strings.ToLower(enum), "_", "-", -1)), nil
-		default:
-			return nil, fmt.Errorf("unexpected kind %v, want enum", f.Kind())
-		}
-	}
+// SerializeInstant takes an Instant proto message and serializes it to a datetime string.
+func SerializeInstant(instant proto.Message) (string, error) {
+	return jsonpbhelper.SerializeInstant(instant)
 }

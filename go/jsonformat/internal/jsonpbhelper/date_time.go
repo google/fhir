@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package jsonformat provides utility functions for FHIR proto conversion.
-package jsonformat
+package jsonpbhelper
 
 import (
 	"encoding/json"
@@ -21,7 +20,6 @@ import (
 	"time"
 
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
-	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
@@ -36,11 +34,11 @@ func checkEnumValueNames(enum protoreflect.EnumDescriptor, valueNames ...string)
 	return nil
 }
 
-// parseDateFromStr parses a FHIR date string into a Date proto message, m.
-func parseDateFromStr(date string, l *time.Location, m proto.Message) error {
+// ParseDateFromString parses a FHIR date string into a Date proto message, m.
+func ParseDateFromString(date string, l *time.Location, m proto.Message) error {
 	mr := m.ProtoReflect()
 	// Date regular expression definition from https://www.hl7.org/fhir/datatypes.html
-	matched := jsonpbhelper.DateCompiledRegex.MatchString(date)
+	matched := DateCompiledRegex.MatchString(date)
 	timeZone := l.String()
 	precEnum, err := accessor.GetEnumDescriptor(mr.Descriptor(), "precision")
 	if err != nil {
@@ -67,25 +65,16 @@ func parseDateFromStr(date string, l *time.Location, m proto.Message) error {
 	if !matched {
 		return fmt.Errorf("invalid date: %v", date)
 	}
-	if t, err := time.ParseInLocation(jsonpbhelper.LayoutDay, date, l); err == nil {
-		return createDate(day, jsonpbhelper.GetTimestampUsec(t))
+	if t, err := time.ParseInLocation(LayoutDay, date, l); err == nil {
+		return createDate(day, GetTimestampUsec(t))
 	}
-	if t, err := time.ParseInLocation(jsonpbhelper.LayoutMonth, date, l); err == nil {
-		return createDate(month, jsonpbhelper.GetTimestampUsec(t))
+	if t, err := time.ParseInLocation(LayoutMonth, date, l); err == nil {
+		return createDate(month, GetTimestampUsec(t))
 	}
-	if t, err := time.ParseInLocation(jsonpbhelper.LayoutYear, date, l); err == nil {
-		return createDate(year, jsonpbhelper.GetTimestampUsec(t))
+	if t, err := time.ParseInLocation(LayoutYear, date, l); err == nil {
+		return createDate(year, GetTimestampUsec(t))
 	}
 	return fmt.Errorf("invalid date layout (expecting YYYY or YYYY-MM or YYYY-MM-DD): %v", date)
-}
-
-// parseDateFromJSON parses a FHIR date string into a Date proto message, m.
-func parseDateFromJSON(rm json.RawMessage, l *time.Location, m proto.Message) error {
-	var date string
-	if err := jsonpbhelper.JSP.Unmarshal(rm, &date); err != nil {
-		return err
-	}
-	return parseDateFromStr(date, l, m)
 }
 
 // SerializeDate serializes a FHIR Date proto message to a JSON string.
@@ -99,7 +88,7 @@ func SerializeDate(d proto.Message) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	ts, err := jsonpbhelper.GetTimeFromUsec(valueUs, tz)
+	ts, err := GetTimeFromUsec(valueUs, tz)
 	if err != nil {
 		return "", err
 	}
@@ -122,23 +111,23 @@ func SerializeDate(d proto.Message) (string, error) {
 	var dstr string
 	switch prec {
 	case day:
-		dstr = ts.Format(jsonpbhelper.LayoutDay)
+		dstr = ts.Format(LayoutDay)
 	case month:
-		dstr = ts.Format(jsonpbhelper.LayoutMonth)
+		dstr = ts.Format(LayoutMonth)
 	case year:
-		dstr = ts.Format(jsonpbhelper.LayoutYear)
+		dstr = ts.Format(LayoutYear)
 	default:
 		return "", fmt.Errorf("invalid Date precision in %v", d)
 	}
 	return dstr, nil
 }
 
-// parseDateTimeFromStr parses a FHIR dateTime string, and returns, if successful, a DateTime proto
+// ParseDateTimeFromString parses a FHIR dateTime string, and returns, if successful, a DateTime proto
 // message with the parsed date/time information.
-func parseDateTimeFromStr(date string, l *time.Location, m proto.Message) error {
+func ParseDateTimeFromString(date string, l *time.Location, m proto.Message) error {
 	mr := m.ProtoReflect()
 	// DateTime regular expression definition from https://www.hl7.org/fhir/datatypes.html
-	matched := jsonpbhelper.DateTimeCompiledRegex.MatchString(date)
+	matched := DateTimeCompiledRegex.MatchString(date)
 	if !matched {
 		return fmt.Errorf("invalid dateTime: %v", date)
 	}
@@ -170,32 +159,23 @@ func parseDateTimeFromStr(date string, l *time.Location, m proto.Message) error 
 	}
 
 	precision := second
-	if jsonpbhelper.IsSubmilli(date) {
+	if IsSubmilli(date) {
 		precision = microsecond
-	} else if jsonpbhelper.IsSubsecond(date) {
+	} else if IsSubsecond(date) {
 		precision = millisecond
 	}
-	if t, err := time.Parse(jsonpbhelper.LayoutSeconds, date); err == nil {
-		return createDateTime(precision, jsonpbhelper.GetTimestampUsec(t), jsonpbhelper.ExtractTimezone(t))
-	} else if t, err := time.Parse(jsonpbhelper.LayoutSecondsUTC, date); err == nil {
-		return createDateTime(precision, jsonpbhelper.GetTimestampUsec(t), jsonpbhelper.UTC)
-	} else if t, err := time.ParseInLocation(jsonpbhelper.LayoutDay, date, l); err == nil {
-		return createDateTime(day, jsonpbhelper.GetTimestampUsec(t), l.String())
-	} else if t, err := time.ParseInLocation(jsonpbhelper.LayoutMonth, date, l); err == nil {
-		return createDateTime(month, jsonpbhelper.GetTimestampUsec(t), l.String())
-	} else if t, err := time.ParseInLocation(jsonpbhelper.LayoutYear, date, l); err == nil {
-		return createDateTime(year, jsonpbhelper.GetTimestampUsec(t), l.String())
+	if t, err := time.Parse(LayoutSeconds, date); err == nil {
+		return createDateTime(precision, GetTimestampUsec(t), ExtractTimezone(t))
+	} else if t, err := time.Parse(LayoutSecondsUTC, date); err == nil {
+		return createDateTime(precision, GetTimestampUsec(t), UTC)
+	} else if t, err := time.ParseInLocation(LayoutDay, date, l); err == nil {
+		return createDateTime(day, GetTimestampUsec(t), l.String())
+	} else if t, err := time.ParseInLocation(LayoutMonth, date, l); err == nil {
+		return createDateTime(month, GetTimestampUsec(t), l.String())
+	} else if t, err := time.ParseInLocation(LayoutYear, date, l); err == nil {
+		return createDateTime(year, GetTimestampUsec(t), l.String())
 	}
 	return fmt.Errorf("invalid dateTime layout: %v", date)
-}
-
-// parseDateTimeFromJSON parses a FHIR date string into a DateTime proto, m.
-func parseDateTimeFromJSON(rm json.RawMessage, l *time.Location, m proto.Message) error {
-	var date string
-	if err := jsonpbhelper.JSP.Unmarshal(rm, &date); err != nil {
-		return err
-	}
-	return parseDateTimeFromStr(date, l, m)
 }
 
 // SerializeDateTime serializes a FHIR DateTime proto message to a JSON string.
@@ -209,7 +189,7 @@ func SerializeDateTime(dt proto.Message) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	ts, err := jsonpbhelper.GetTimeFromUsec(valueUs, tz)
+	ts, err := GetTimeFromUsec(valueUs, tz)
 	if err != nil {
 		return "", err
 	}
@@ -236,29 +216,29 @@ func SerializeDateTime(dt proto.Message) (string, error) {
 	var dtstr string
 	switch prec {
 	case second:
-		if tz == jsonpbhelper.UTC {
-			dtstr = ts.Format(jsonpbhelper.LayoutSecondsUTC)
+		if tz == UTC {
+			dtstr = ts.Format(LayoutSecondsUTC)
 		} else {
-			dtstr = ts.Format(jsonpbhelper.LayoutSeconds)
+			dtstr = ts.Format(LayoutSeconds)
 		}
 	case millisecond:
-		if tz == jsonpbhelper.UTC {
-			dtstr = ts.Format(jsonpbhelper.LayoutMillisUTC)
+		if tz == UTC {
+			dtstr = ts.Format(LayoutMillisUTC)
 		} else {
-			dtstr = ts.Format(jsonpbhelper.LayoutMillis)
+			dtstr = ts.Format(LayoutMillis)
 		}
 	case microsecond:
-		if tz == jsonpbhelper.UTC {
-			dtstr = ts.Format(jsonpbhelper.LayoutMicrosUTC)
+		if tz == UTC {
+			dtstr = ts.Format(LayoutMicrosUTC)
 		} else {
-			dtstr = ts.Format(jsonpbhelper.LayoutMicros)
+			dtstr = ts.Format(LayoutMicros)
 		}
 	case day:
-		dtstr = ts.Format(jsonpbhelper.LayoutDay)
+		dtstr = ts.Format(LayoutDay)
 	case month:
-		dtstr = ts.Format(jsonpbhelper.LayoutMonth)
+		dtstr = ts.Format(LayoutMonth)
 	case year:
-		dtstr = ts.Format(jsonpbhelper.LayoutYear)
+		dtstr = ts.Format(LayoutYear)
 	default:
 		return "", fmt.Errorf("invalid DateTime precision in %v", dt)
 	}
@@ -266,10 +246,10 @@ func SerializeDateTime(dt proto.Message) (string, error) {
 	return dtstr, nil
 }
 
-// parseTime parses a FHIR time string into a Time proto message.
-func parseTime(rm json.RawMessage, m proto.Message) error {
+// ParseTime parses a FHIR time string into a Time proto message.
+func ParseTime(rm json.RawMessage, m proto.Message) error {
 	mr := m.ProtoReflect()
-	t, err := jsonpbhelper.ParseTime(rm)
+	t, err := parseTimeToGoTime(rm)
 	if err != nil {
 		return err
 	}
@@ -286,11 +266,11 @@ func parseTime(rm json.RawMessage, m proto.Message) error {
 
 	var p protoreflect.EnumNumber
 	switch t.Precision {
-	case jsonpbhelper.PrecisionSecond:
+	case PrecisionSecond:
 		p = second
-	case jsonpbhelper.PrecisionMillisecond:
+	case PrecisionMillisecond:
 		p = millisecond
-	case jsonpbhelper.PrecisionMicrosecond:
+	case PrecisionMicrosecond:
 		p = microsecond
 	default:
 		return fmt.Errorf("invalid time precision: %v", t.Precision)
@@ -304,8 +284,8 @@ func parseTime(rm json.RawMessage, m proto.Message) error {
 	return nil
 }
 
-// serializeTime serializes a FHIR Time proto message to a JSON string.
-func serializeTime(t proto.Message) (string, error) {
+// SerializeTime serializes a FHIR Time proto message to a JSON string.
+func SerializeTime(t proto.Message) (string, error) {
 	rt := t.ProtoReflect()
 	precEnum, err := accessor.GetEnumDescriptor(rt.Descriptor(), "precision")
 	if err != nil {
@@ -321,14 +301,14 @@ func serializeTime(t proto.Message) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	var p jsonpbhelper.Precision
+	var p Precision
 	switch prec {
 	case second:
-		p = jsonpbhelper.PrecisionSecond
+		p = PrecisionSecond
 	case millisecond:
-		p = jsonpbhelper.PrecisionMillisecond
+		p = PrecisionMillisecond
 	case microsecond:
-		p = jsonpbhelper.PrecisionMicrosecond
+		p = PrecisionMicrosecond
 	default:
 		return "", fmt.Errorf("invalid time precision in %v", t)
 	}
@@ -336,19 +316,39 @@ func serializeTime(t proto.Message) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return jsonpbhelper.SerializeTime(valueUs, p)
+	return serializeTime(valueUs, p)
 }
 
-// parseInstant parses a FHIR instant string into an Instant proto message, m.
-func parseInstant(rm json.RawMessage, m proto.Message) error {
+// serializeTime serializes the values from a Time proto message to a JSON string.
+func serializeTime(us int64, precision Precision) (string, error) {
+	ts, err := GetTimeFromUsec(us, UTC)
+	if err != nil {
+		return "", fmt.Errorf("in GetTimeFromUsec(): %v", err)
+	}
+	var tstr string
+	switch precision {
+	case PrecisionSecond:
+		tstr = ts.Format(LayoutTimeSecond)
+	case PrecisionMillisecond:
+		tstr = ts.Format(LayoutTimeMilliSecond)
+	case PrecisionMicrosecond:
+		tstr = ts.Format(LayoutTimeMicroSecond)
+	default:
+		return "", fmt.Errorf("invalid time precision %v", precision)
+	}
+	return tstr, nil
+}
+
+// ParseInstant parses a FHIR instant string into an Instant proto message, m.
+func ParseInstant(rm json.RawMessage, m proto.Message) error {
 	mr := m.ProtoReflect()
 	var instant string
-	if err := jsonpbhelper.JSP.Unmarshal(rm, &instant); err != nil {
+	if err := JSP.Unmarshal(rm, &instant); err != nil {
 		return err
 	}
 	// Instant is dateTime to the precision of at least SECOND and always includes a timezone,
 	// as specified in https://www.hl7.org/fhir/datatypes.html
-	matched := jsonpbhelper.InstantCompiledRegex.MatchString(instant)
+	matched := InstantCompiledRegex.MatchString(instant)
 	if !matched {
 		return fmt.Errorf("invalid instant")
 	}
@@ -377,15 +377,15 @@ func parseInstant(rm json.RawMessage, m proto.Message) error {
 	}
 
 	precision := second
-	if jsonpbhelper.IsSubmilli(instant) {
+	if IsSubmilli(instant) {
 		precision = microsecond
-	} else if jsonpbhelper.IsSubsecond(instant) {
+	} else if IsSubsecond(instant) {
 		precision = millisecond
 	}
-	if t, err := time.Parse(jsonpbhelper.LayoutSecondsUTC, instant); err == nil {
-		return createInstant(precision, jsonpbhelper.GetTimestampUsec(t), jsonpbhelper.UTC)
-	} else if t, err := time.Parse(jsonpbhelper.LayoutSeconds, instant); err == nil {
-		return createInstant(precision, jsonpbhelper.GetTimestampUsec(t), jsonpbhelper.ExtractTimezone(t))
+	if t, err := time.Parse(LayoutSecondsUTC, instant); err == nil {
+		return createInstant(precision, GetTimestampUsec(t), UTC)
+	} else if t, err := time.Parse(LayoutSeconds, instant); err == nil {
+		return createInstant(precision, GetTimestampUsec(t), ExtractTimezone(t))
 	}
 	return fmt.Errorf("invalid instant layout: %v", instant)
 }
@@ -416,26 +416,26 @@ func SerializeInstant(instant proto.Message) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	ts, err := jsonpbhelper.GetTimeFromUsec(usec, tz)
+	ts, err := GetTimeFromUsec(usec, tz)
 	if err != nil {
 		return "", fmt.Errorf("in GetTimeFromUsec(): %w", err)
 	}
 	switch precision {
 	case second:
-		if tz == jsonpbhelper.UTC {
-			return ts.Format(jsonpbhelper.LayoutSecondsUTC), nil
+		if tz == UTC {
+			return ts.Format(LayoutSecondsUTC), nil
 		}
-		return ts.Format(jsonpbhelper.LayoutSeconds), nil
+		return ts.Format(LayoutSeconds), nil
 	case millisecond:
-		if tz == jsonpbhelper.UTC {
-			return ts.Format(jsonpbhelper.LayoutMillisUTC), nil
+		if tz == UTC {
+			return ts.Format(LayoutMillisUTC), nil
 		}
-		return ts.Format(jsonpbhelper.LayoutMillis), nil
+		return ts.Format(LayoutMillis), nil
 	case microsecond:
-		if tz == jsonpbhelper.UTC {
-			return ts.Format(jsonpbhelper.LayoutMicrosUTC), nil
+		if tz == UTC {
+			return ts.Format(LayoutMicrosUTC), nil
 		}
-		return ts.Format(jsonpbhelper.LayoutMicros), nil
+		return ts.Format(LayoutMicros), nil
 	default:
 		return "", fmt.Errorf("invalid instant precision: %v", precision)
 	}
