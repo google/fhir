@@ -1,9 +1,10 @@
+load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
+
 # Simple client to download data from FHIR server (using bulk data protocol)
 load(
     "@rules_python//python:python.bzl",
     "py_binary",
 )
-load("@fhir_bazel_pip_dependencies//:requirements.bzl", "requirement")
 
 licenses(["notice"])
 

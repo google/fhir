@@ -1,9 +1,9 @@
+load("//bazel:proto.bzl", "fhir_proto_library")
+load("//bazel:protogen.bzl", "gen_fhir_definitions_and_protos")
+
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
-
-load("//bazel:protogen.bzl", "gen_fhir_definitions_and_protos")
-load("//bazel:proto.bzl", "fhir_proto_library")
 
 gen_fhir_definitions_and_protos(
     name = "demo",
