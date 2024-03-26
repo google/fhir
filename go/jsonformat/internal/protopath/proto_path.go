@@ -204,7 +204,7 @@ func getAnyOneOfField(pb protoreflect.Message, oneofField protoreflect.OneofDesc
 	return caseValue.Interface(), nil
 }
 
-func oneOfFieldByMessageType(oneOfDesc protoreflect.OneofDescriptor, valPB protoreflect.Message) (protoreflect.FieldDescriptor, error) {
+func oneOfFieldByMessageType(m protoreflect.Message, oneOfDesc protoreflect.OneofDescriptor, valPB protoreflect.Message) (protoreflect.FieldDescriptor, error) {
 	var messageField protoreflect.FieldDescriptor
 	valType := valPB.Descriptor()
 	fields := oneOfDesc.Fields()
@@ -213,7 +213,7 @@ func oneOfFieldByMessageType(oneOfDesc protoreflect.OneofDescriptor, valPB proto
 		if f.Kind() != protoreflect.MessageKind {
 			continue
 		}
-		if canAssignValueToField(valPB.Interface(), f) {
+		if canAssignValueToField(m, f, valPB.Interface()) {
 			if messageField != nil {
 				return nil, fmt.Errorf("multiple fields of %s have type %s", oneOfDesc.FullName(), valType.FullName())
 			}
@@ -237,7 +237,7 @@ func getEnumValueByName(ed protoreflect.EnumDescriptor, val string) (protoreflec
 	return 0, false
 }
 
-func canAssignValueToField(val any, fd protoreflect.FieldDescriptor) bool {
+func canAssignValueToField(m protoreflect.Message, fd protoreflect.FieldDescriptor, val any) bool {
 	fdKind := fd.Kind()
 	if val == nil {
 		return fdKind == protoreflect.MessageKind || fdKind == protoreflect.BytesKind || fd.IsList()
@@ -249,6 +249,9 @@ func canAssignValueToField(val any, fd protoreflect.FieldDescriptor) bool {
 	}
 
 	if valType.Kind() == reflect.Slice {
+		if !fd.IsList() {
+			return false
+		}
 		valType = valType.Elem()
 	}
 
@@ -270,7 +273,12 @@ func canAssignValueToField(val any, fd protoreflect.FieldDescriptor) bool {
 		}
 	}
 
-	def := reflect.ValueOf(fd.Default().Interface())
+	var def reflect.Value
+	if fd.IsList() {
+		def = reflect.ValueOf(m.Get(fd).List().NewElement().Interface())
+	} else {
+		def = reflect.ValueOf(fd.Default().Interface())
+	}
 	if !def.IsValid() {
 		return false
 	}
@@ -288,13 +296,13 @@ func valAsReflectMessage(val any) (protoreflect.Message, bool) {
 	}
 }
 
-func oneOfFieldByPrimitiveType(oneOfDesc protoreflect.OneofDescriptor, val any) (protoreflect.FieldDescriptor, error) {
+func oneOfFieldByPrimitiveType(m protoreflect.Message, oneOfDesc protoreflect.OneofDescriptor, val any) (protoreflect.FieldDescriptor, error) {
 	var typeField protoreflect.FieldDescriptor
 	valType := reflect.TypeOf(val)
 	fields := oneOfDesc.Fields()
 	for i := 0; i < fields.Len(); i++ {
 		f := fields.Get(i)
-		if canAssignValueToField(val, f) {
+		if canAssignValueToField(m, f, val) {
 			if typeField != nil {
 				return nil, fmt.Errorf("multiple fields of %s have type %s", oneOfDesc.FullName(), valType.Name())
 			}
@@ -312,9 +320,9 @@ func setOneOfFieldByType(m protoreflect.Message, oneOfDesc protoreflect.OneofDes
 	var err error
 	if rpb, ok := valAsReflectMessage(val); ok {
 		val = rpb
-		innerField, err = oneOfFieldByMessageType(oneOfDesc, rpb)
+		innerField, err = oneOfFieldByMessageType(m, oneOfDesc, rpb)
 	} else {
-		innerField, err = oneOfFieldByPrimitiveType(oneOfDesc, val)
+		innerField, err = oneOfFieldByPrimitiveType(m, oneOfDesc, val)
 	}
 	if err != nil {
 		return err
@@ -394,7 +402,7 @@ func assignValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path [
 		return nil
 	}
 
-	if !canAssignValueToField(value, fd) {
+	if !canAssignValueToField(m, fd, value) {
 		defVal, err := goValueFromProtoValue(fd, fd.Default())
 		if err != nil {
 			return err
@@ -413,7 +421,12 @@ func assignValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path [
 	}
 	i, err := strconv.Atoi(string(path[0]))
 	if err != nil {
-		return err
+		// Last element of path is not a valid index.
+		defVal, err := goValueFromProtoValue(fd, fd.Default())
+		if err != nil {
+			return err
+		}
+		return fmt.Errorf("cannot assign %T to %T", value, defVal)
 	}
 	slice := m.Get(fd).List()
 	// index has already been validated by `getSliceElement`, and the slice was
@@ -568,7 +581,7 @@ func checkDefaultValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, 
 		}
 		return rv, nil
 	}
-	if !canAssignValueToField(defVal, ft) {
+	if !canAssignValueToField(m, ft, defVal) {
 		return nil, fmt.Errorf("invalid type %T for default value, expected %v", defVal, ft.Name())
 	}
 	return defVal, nil
