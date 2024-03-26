@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package jsonformat
+package jsonpbhelper
 
 import (
 	"encoding/base64"
@@ -22,17 +22,17 @@ import (
 	"strings"
 
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
-	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/fhir/go/jsonformat/internal/protopath"
+	apb "github.com/google/fhir/go/proto/google/fhir/proto/annotations_go_proto"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-// protoToExtension converts a FHIR extension proto (e.g. Base64BinarySeparatorStride or
+// ProtoToExtension converts a FHIR extension proto (e.g. Base64BinarySeparatorStride or
 // PrimitiveHasNoValue) into a Google-defined FHIR extension describing the proto.
-func protoToExtension(pb, ext proto.Message) error {
+func ProtoToExtension(pb, ext proto.Message) error {
 	rpb := pb.ProtoReflect()
-	url, err := jsonpbhelper.InternalExtensionURL(rpb.Descriptor())
+	url, err := InternalExtensionURL(rpb.Descriptor())
 	if err != nil {
 		return err
 	}
@@ -61,7 +61,7 @@ func protoToExtension(pb, ext proto.Message) error {
 		if d == nil {
 			return fmt.Errorf("unexpected field type %v, want Message type", f.Kind())
 		}
-		if !jsonpbhelper.IsPrimitiveType(d) {
+		if !IsPrimitiveType(d) {
 			return fmt.Errorf("unexpected field %v of non-primitive type %v", f.Name(), d.Name())
 		}
 		if f.Cardinality() == protoreflect.Repeated {
@@ -102,11 +102,11 @@ func protoToExtension(pb, ext proto.Message) error {
 	return nil
 }
 
-// parseDecimal parses a FHIR decimal data object into a Decimal proto message, m.
-func parseDecimal(decimal json.RawMessage, m proto.Message) error {
+// ParseDecimal parses a FHIR decimal data object into a Decimal proto message, m.
+func ParseDecimal(decimal json.RawMessage, m proto.Message) error {
 	mr := m.ProtoReflect()
 	fn := mr.Descriptor().FullName()
-	regex, has := jsonpbhelper.RegexValues[fn]
+	regex, has := RegexValues[fn]
 	if !has {
 		return fmt.Errorf("regex not found for %v type", fn)
 	}
@@ -186,8 +186,8 @@ func decodeBase64(data []byte) (base64Data, error) {
 	}, nil
 }
 
-// parseBinary parses a FHIR Binary resource object into a Binary proto message, m.
-func parseBinary(binary json.RawMessage, m proto.Message, createSepStride base64BinarySeparatorStrideCreator) error {
+// ParseBinary parses a FHIR Binary resource object into a Binary proto message, m.
+func ParseBinary(binary json.RawMessage, m proto.Message, createSepStride base64BinarySeparatorStrideCreator) error {
 	if len(binary) < 2 || binary[0] != '"' || binary[len(binary)-1] != '"' {
 		return fmt.Errorf("binary data is not a string")
 	}
@@ -203,7 +203,7 @@ func parseBinary(binary json.RawMessage, m proto.Message, createSepStride base64
 		}
 		ext := extList.NewElement().Message().Interface().(proto.Message)
 		sepAndStride := createSepStride(strings.Repeat(" ", val.sep), uint32(val.stride))
-		if err := protoToExtension(sepAndStride, ext); err != nil {
+		if err := ProtoToExtension(sepAndStride, ext); err != nil {
 			return err
 		}
 		if err := protopath.Set(m, protopath.NewPath("extension.-1"), ext); err != nil {
@@ -215,7 +215,7 @@ func parseBinary(binary json.RawMessage, m proto.Message, createSepStride base64
 
 // serializeBinary serializes proto representation of a FHIR Binary data object into a JSON message.
 func serializeBinary(binary proto.Message) (string, error) {
-	ext, err := jsonpbhelper.GetExtension(binary, jsonpbhelper.Base64BinarySeparatorStrideURL)
+	ext, err := GetExtension(binary, Base64BinarySeparatorStrideURL)
 	if err != nil {
 		return "", err
 	}
@@ -261,4 +261,81 @@ func serializeBinary(binary proto.Message) (string, error) {
 	}
 	ret = ret + encoded[pos*stride:]
 	return ret, nil
+}
+
+// MarshalPrimitiveType from a proto to JSON data.
+func MarshalPrimitiveType(rpb protoreflect.Message) (IsJSON, error) {
+	pb := rpb.Interface().(proto.Message)
+	if HasExtension(pb, PrimitiveHasNoValueURL) {
+		return nil, nil
+	}
+
+	desc := rpb.Descriptor()
+	switch desc.Name() {
+	case "Base64Binary":
+		binary, err := serializeBinary(pb)
+		if err != nil {
+			return nil, fmt.Errorf("serialize base64Binary: %w", err)
+		}
+		return JSONString(binary), nil
+	case "Canonical", "Code", "Markdown", "Oid", "String", "Uri", "Url", "Uuid", "Xhtml", "ReferenceId", "Id":
+		return JSONString(rpb.Get(desc.Fields().ByName("value")).String()), nil
+	case "Boolean", "Integer", "PositiveInt", "UnsignedInt", "Decimal":
+		val := rpb.Get(desc.Fields().ByName("value"))
+		return JSONRawValue(fmt.Sprintf("%v", val.Interface())), nil
+	case "Date":
+		date, err := SerializeDate(pb)
+		if err != nil {
+			return nil, fmt.Errorf("serialize date: %w", err)
+		}
+		return JSONString(date), nil
+	case "DateTime":
+		dateTime, err := SerializeDateTime(pb)
+		if err != nil {
+			return nil, fmt.Errorf("serialize dateTime: %w", err)
+		}
+		return JSONString(dateTime), nil
+	case "Time":
+		t, err := SerializeTime(pb)
+		if err != nil {
+			return nil, fmt.Errorf("serialize time: %w", err)
+		}
+		return JSONString(t), nil
+	case "Instant":
+		t, err := SerializeInstant(pb)
+		if err != nil {
+			return nil, fmt.Errorf("serialize instant: %w", err)
+		}
+		return JSONString(t), nil
+	default:
+		if !proto.HasExtension(desc.Options(), apb.E_FhirValuesetUrl) {
+			return nil, fmt.Errorf("not a supported primitive type: %v", desc.Name())
+		}
+		// Handle specialized codes
+		f := desc.Fields().ByName("value")
+		if f == nil {
+			return nil, fmt.Errorf("value field not found in proto: %s", desc.Name())
+		}
+		switch f.Kind() {
+		case protoreflect.StringKind:
+			return JSONString(rpb.Get(f).String()), nil
+		case protoreflect.EnumKind:
+			num := rpb.Get(f).Enum()
+			// ignore if uninitialized
+			if num == 0 {
+				return nil, nil
+			}
+			// Observe the FHIR original codes if set.
+			ed := f.Enum()
+			ev := ed.Values().ByNumber(num)
+			origCode := proto.GetExtension(ev.Options(), apb.E_FhirOriginalCode).(string)
+			if origCode != "" {
+				return JSONString(origCode), nil
+			}
+			enum := string(ev.Name())
+			return JSONString(strings.Replace(strings.ToLower(enum), "_", "-", -1)), nil
+		default:
+			return nil, fmt.Errorf("unexpected kind %v, want enum", f.Kind())
+		}
+	}
 }

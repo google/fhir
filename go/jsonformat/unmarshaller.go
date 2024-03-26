@@ -576,7 +576,7 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 			return nil, fmt.Errorf("get repeated field: extension failed, err: %v", err)
 		}
 		ext := extListInPb.NewElement().Message().Interface()
-		if err := protoToExtension(u.cfg.newPrimitiveHasNoValue(true), ext); err != nil {
+		if err := jsonpbhelper.ProtoToExtension(u.cfg.newPrimitiveHasNoValue(true), ext); err != nil {
 			return nil, err
 		}
 		if err := jsonpbhelper.AddInternalExtension(pb.Interface(), ext); err != nil {
@@ -606,7 +606,7 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 	switch d.Name() {
 	case "Base64Binary":
 		m := in.New().Interface()
-		if err := parseBinary(rm, m, u.cfg.newBase64BinarySeparatorStride); err != nil {
+		if err := jsonpbhelper.ParseBinary(rm, m, u.cfg.newBase64BinarySeparatorStride); err != nil {
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
 				Details:     "expected binary data",
@@ -635,8 +635,16 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 		}
 		return createAndSetValue(val)
 	case "Date":
+		var date string
+		if err := jsonpbhelper.JSP.Unmarshal(rm, &date); err != nil {
+			return nil, &jsonpbhelper.UnmarshalError{
+				Path:        jsonPath,
+				Details:     "expected date",
+				Diagnostics: fmt.Sprintf("found %s", rm),
+			}
+		}
 		m := in.New().Interface()
-		if err := parseDateFromJSON(rm, u.TimeZone, m); err != nil {
+		if err := jsonpbhelper.ParseDateFromString(date, u.TimeZone, m); err != nil {
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
 				Details:     "expected date",
@@ -645,8 +653,16 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 		}
 		return m, nil
 	case "DateTime":
+		var date string
+		if err := jsonpbhelper.JSP.Unmarshal(rm, &date); err != nil {
+			return nil, &jsonpbhelper.UnmarshalError{
+				Path:        jsonPath,
+				Details:     "expected datetime",
+				Diagnostics: fmt.Sprintf("found %s", rm),
+			}
+		}
 		m := in.New().Interface()
-		if err := parseDateTimeFromJSON(rm, u.TimeZone, m); err != nil {
+		if err := jsonpbhelper.ParseDateTimeFromString(date, u.TimeZone, m); err != nil {
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
 				Details:     "expected datetime",
@@ -656,7 +672,7 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 		return m, nil
 	case "Decimal":
 		m := in.New().Interface()
-		if err := parseDecimal(rm, m); err != nil {
+		if err := jsonpbhelper.ParseDecimal(rm, m); err != nil {
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
 				Details:     "expected decimal",
@@ -676,7 +692,7 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 		return createAndSetValue(val)
 	case "Instant":
 		m := in.New().Interface()
-		if err := parseInstant(rm, m); err != nil {
+		if err := jsonpbhelper.ParseInstant(rm, m); err != nil {
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
 				Details:     "expected instant",
@@ -735,7 +751,7 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 		return createAndSetValue(val)
 	case "Time":
 		m := in.New().Interface()
-		if err := parseTime(rm, m); err != nil {
+		if err := jsonpbhelper.ParseTime(rm, m); err != nil {
 			return nil, &jsonpbhelper.UnmarshalError{
 				Path:        jsonPath,
 				Details:     "invalid time",
