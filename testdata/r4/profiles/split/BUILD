@@ -1,5 +1,5 @@
-load("//bazel:protogen.bzl", "gen_fhir_definitions_and_protos")
 load("//bazel:proto.bzl", "fhir_proto_library")
+load("//bazel:protogen.bzl", "gen_fhir_definitions_and_protos")
 
 licenses(["notice"])
 
