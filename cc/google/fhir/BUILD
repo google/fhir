@@ -462,6 +462,7 @@ cc_library(
         ":util",
         "//cc/google/fhir/json:fhir_json",
         "//cc/google/fhir/status",
+        "//cc/google/fhir/status:statusor",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",

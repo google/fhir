@@ -1213,22 +1213,22 @@ func TestTime(t *testing.T) {
 	}
 	// Test time parsing
 	for _, test := range tests {
-		got, err := ParseTime([]byte(strconv.Quote(test.json)))
+		got, err := parseTimeToGoTime([]byte(strconv.Quote(test.json)))
 		if err != nil {
-			t.Fatalf("ParseTime(%q): %v", test.json, err)
+			t.Fatalf("parseTimeToGoTime(%q): %v", test.json, err)
 		}
 		if want := test.time; !cmp.Equal(want, got) {
-			t.Errorf("ParseTime(%q): got %v, want %v", test.json, got, want)
+			t.Errorf("parseTimeToGoTime(%q): got %v, want %v", test.json, got, want)
 		}
 	}
 	// Test time serializing
 	for _, test := range tests {
-		got, err := SerializeTime(test.time.ValueUs, test.time.Precision)
+		got, err := serializeTime(test.time.ValueUs, test.time.Precision)
 		if err != nil {
-			t.Fatalf("SerializeTime(%q): %v", test.json, err)
+			t.Fatalf("serializeTime(%q): %v", test.json, err)
 		}
 		if want := test.json; want != got {
-			t.Errorf("SerializeTime(%q): got %q, want %q", test.json, got, want)
+			t.Errorf("serializeTime(%q): got %q, want %q", test.json, got, want)
 		}
 	}
 }
@@ -1248,15 +1248,15 @@ func TestParseTime_Invalid(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		if _, err := ParseTime(test.time); err == nil {
-			t.Errorf("ParseTime(%q) succeeded, want error", string(test.time))
+		if _, err := parseTimeToGoTime(test.time); err == nil {
+			t.Errorf("parseTimeToGoTime(%q) succeeded, want error", string(test.time))
 		}
 	}
 }
 
 func TestSerializeTime_Invalid(t *testing.T) {
 	time := Time{ValueUs: 43200000000, Precision: PrecisionUnspecified}
-	if _, err := SerializeTime(time.ValueUs, time.Precision); err == nil {
+	if _, err := serializeTime(time.ValueUs, time.Precision); err == nil {
 		t.Errorf("ParseTime(%v) succeeded, want error", t)
 	}
 }

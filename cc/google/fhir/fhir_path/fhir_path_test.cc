@@ -2407,6 +2407,30 @@ TYPED_TEST(FhirPathTest, TimeComparison) {
               EvalsToTrue());
 }
 
+TYPED_TEST(FhirPathTest, TimeComparison_Instant) {
+  auto observation = ParseFromString<typename TypeParam::Observation>(R"pb(
+    # 2001-10-28T01:59:00Z
+    meta: {
+      last_updated: {
+        value_us: 1004234340000000
+        timezone: "UTC"
+        precision: MICROSECOND
+      }
+    }
+  )pb");
+  EXPECT_THAT(
+      TestFixture::Evaluate(observation, "meta.lastUpdated = meta.lastUpdated"),
+      EvalsToTrue());
+  EXPECT_THAT(
+      TestFixture::Evaluate(observation, "meta.lastUpdated < meta.lastUpdated"),
+      EvalsToFalse());
+  EXPECT_THAT(
+      TestFixture::Evaluate(observation,
+                            "meta.lastUpdated < @2001-10-28T01:59:10Z and "
+                            "@2001-10-28T01:58:50 < meta.lastUpdated"),
+      EvalsToTrue());
+}
+
 TYPED_TEST(FhirPathTest, TimeCompareDifferentPrecision) {
   using DateTime = typename TypeParam::DateTime;
   using DateTimePrecision = typename TypeParam::DateTime::Precision;

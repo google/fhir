@@ -41,6 +41,7 @@ message Message {
     oneof inner_oneof {
       InnerMessage2 inner_oneof_message_field = 4;
     }
+    map<int32, MessageType> map_int32_enum_field = 5;
   }
 
   message InnerMessage2 {
@@ -74,4 +75,10 @@ message Message {
   bytes bytes_field = 13;
 
   protobuf.Any any_field = 14;
+
+  map<string, string> map_string_string_field = 15;
+  map<int32, bytes> map_int32_bytes_field = 16;
+  map<bool, int32> map_bool_int32_field = 17;
+
+  map<string, InnerMessage> map_string_message_field = 18;
 }
