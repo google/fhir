@@ -98,6 +98,41 @@ func TestSet(t *testing.T) {
 			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}, {InnerField: 2}}},
 		},
 		{
+			"repeated scalar field - set",
+			NewPath("message_field.repeated_inner_field"),
+			[]int32{1, 2},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{}},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{RepeatedInnerField: []int32{1, 2}}},
+		},
+		{
+			"repeated scalar field - clear",
+			NewPath("message_field.repeated_inner_field"),
+			Zero,
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{RepeatedInnerField: []int32{1, 2}}},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{}},
+		},
+		{
+			"repeated scalar field - no parent",
+			NewPath("message_field.repeated_inner_field"),
+			[]int32{1, 2},
+			&pptpb.Message{},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{RepeatedInnerField: []int32{1, 2}}},
+		},
+		{
+			"repeated nested scalar field - no parent",
+			NewPath("repeated_message_field.-1.repeated_inner_field"),
+			[]int32{1, 2},
+			&pptpb.Message{},
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{RepeatedInnerField: []int32{1, 2}}}},
+		},
+		{
+			"repeated scalar field element",
+			NewPath("message_field.repeated_inner_field.-1"),
+			int32(1),
+			&pptpb.Message{},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{RepeatedInnerField: []int32{1}}},
+		},
+		{
 			"repeated field element",
 			NewPath("repeated_message_field.-1"),
 			&pptpb.Message_InnerMessage{InnerField: 1},
@@ -377,6 +412,36 @@ func TestSet_Errors(t *testing.T) {
 			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}}},
 		},
 		{
+			"repeated field - invalid scalar type for message field",
+			NewPath("message_field.repeated_inner_field"),
+			[]int64{1},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{}},
+		},
+		{
+			"repeated field - invalid message type",
+			NewPath("message_field.repeated_inner_field"),
+			[]*pptpb.Message{},
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{}},
+		},
+		{
+			"repeated field - invalid repeated message type",
+			NewPath("repeated_message_field"),
+			[]*pptpb.Message{},
+			&pptpb.Message{},
+		},
+		{
+			"repeated field - invalid string type for repeated message field",
+			NewPath("repeated_message_field"),
+			"foo",
+			&pptpb.Message{},
+		},
+		{
+			"repeated field - invalid scalar type for repeated scalar field",
+			NewPath("message_field.repeated_inner_field"),
+			int32(1),
+			&pptpb.Message{MessageField: &pptpb.Message_InnerMessage{}},
+		},
+		{
 			"oneof",
 			NewPath("foo.inner_field"),
 			Zero,
@@ -514,6 +579,15 @@ func TestGet(t *testing.T) {
 			},
 			want: []proto.Message{proto.Message(innerMsg)},
 		},
+		{
+			name: "scalar slice",
+			msg:  &pptpb.Message{MessageField: &pptpb.Message_InnerMessage{RepeatedInnerField: []int32{1, 2}}},
+			path: NewPath("message_field.repeated_inner_field"),
+			fn: func(m proto.Message, path Path) (any, error) {
+				return Get[[]int32](m, path)
+			},
+			want: []int32{1, 2},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -628,6 +702,13 @@ func TestGetWithDefault(t *testing.T) {
 			Zero,
 			&pptpb.Message{},
 			[]*pptpb.Message_InnerMessage{},
+		},
+		{
+			"missing field - repeated scalar",
+			NewPath("message_field.repeated_inner_field"),
+			Zero,
+			&pptpb.Message{},
+			[]int32{},
 		},
 		{
 			"missing field - zero",
