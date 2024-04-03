@@ -1,5 +1,7 @@
 """Build rules to create C++ code from an Antlr4 grammar."""
 
+load("@rules_java//java:defs.bzl", "java_binary")
+
 def antlr4_cc_lexer(name, src, namespaces = None, imports = None, deps = None, lib_import = None):
     """Generates the C++ source corresponding to an antlr4 lexer definition.
 
@@ -25,8 +27,7 @@ def antlr4_cc_lexer(name, src, namespaces = None, imports = None, deps = None, l
         "%sLexer.h" % base_file_prefix,
         "%sLexer.cpp" % base_file_prefix,
     ]
-
-    native.java_binary(
+    java_binary(
         name = "antlr_tool",
         jvm_flags = ["-Xmx256m"],
         main_class = "org.antlr.v4.Tool",
