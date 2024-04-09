@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package jsonformat
+package jsonpbhelper
 
 import (
 	"encoding/json"
@@ -128,7 +128,7 @@ func TestDate(t *testing.T) {
 		dates := newDatesForTest(test.val, test.prec, test.protoTz)
 		for _, d := range dates {
 			parsed := d.ProtoReflect().New().Interface().(proto.Message)
-			if err := parseDateFromJSON(json.RawMessage(strconv.Quote(test.json)), l, parsed); err != nil {
+			if err := ParseDateFromString(test.json, l, parsed); err != nil {
 				t.Fatalf("ParseDateFromJSON(%q, %s, %T): %v", test.json, l, parsed, err)
 			}
 			if want := d; !cmp.Equal(want, parsed, protocmp.Transform()) {
@@ -148,24 +148,12 @@ func TestDate(t *testing.T) {
 
 func TestParseDateFromJSON_Invalid(t *testing.T) {
 	loc, _ := time.LoadLocation("Asia/Shanghai")
-	tests := []struct {
-		date json.RawMessage
-	}{
-		{
-			json.RawMessage(`"2018-6-1"`),
-		},
-		{
-			json.RawMessage(`"236-06-01"`),
-		},
-		{
-			json.RawMessage(`"12345"`),
-		},
-		{
-			json.RawMessage(`"2018-02-18Z"`),
-		},
-		{
-			json.RawMessage(`"2019-02-29"`),
-		},
+	tests := []string{
+		"2018-6-1",
+		"236-06-01",
+		"12345",
+		"2018-02-18Z",
+		"2019-02-29",
 	}
 	for _, test := range tests {
 		messages := []proto.Message{
@@ -173,8 +161,8 @@ func TestParseDateFromJSON_Invalid(t *testing.T) {
 			&d4pb.Date{},
 		}
 		for _, m := range messages {
-			if err := parseDateFromJSON(test.date, loc, m); err == nil {
-				t.Errorf("ParseDateFromJSON(%q, %q, %T) succeeded, want error", string(test.date), loc, m)
+			if err := ParseDateFromString(test, loc, m); err == nil {
+				t.Errorf("ParseDateFromJSON(%q, %q, %T) succeeded, want error", test, loc, m)
 			}
 		}
 	}
@@ -300,7 +288,7 @@ func TestDateTime(t *testing.T) {
 			dts := newDateTimesForTest(test.val, test.prec, test.protoTz)
 			for _, dt := range dts {
 				parsed := dt.ProtoReflect().Interface().(proto.Message)
-				if err := parseDateTimeFromJSON(json.RawMessage(strconv.Quote(test.json)), l, parsed); err != nil {
+				if err := ParseDateTimeFromString(test.json, l, parsed); err != nil {
 					t.Fatalf("parseDateTimeFromJSON(%q, %q, %T): %v", test.json, l, parsed, err)
 				}
 				if want := dt; !cmp.Equal(want, parsed, protocmp.Transform()) {
@@ -321,27 +309,13 @@ func TestDateTime(t *testing.T) {
 
 func TestParseDateTimeFromJSON_Invalid(t *testing.T) {
 	loc, _ := time.LoadLocation("Asia/Shanghai")
-	tests := []struct {
-		date json.RawMessage
-	}{
-		{
-			json.RawMessage(`"2018-06-01 12:00"`),
-		},
-		{
-			json.RawMessage(`"2018-06-01T12:61"`),
-		},
-		{
-			json.RawMessage(`"2018-06-01T12:61-07:00"`),
-		},
-		{
-			json.RawMessage(`"2018-06-01T12:34:56.789+14:61"`),
-		},
-		{
-			json.RawMessage(`"2018-06-01Z"`),
-		},
-		{
-			json.RawMessage(`"2018-02-29T00:00:00Z"`),
-		},
+	tests := []string{
+		"2018-06-01 12:00",
+		"2018-06-01T12:61",
+		"2018-06-01T12:61-07:00",
+		"2018-06-01T12:34:56.789+14:61",
+		"2018-06-01Z",
+		"2018-02-29T00:00:00Z",
 	}
 	for _, test := range tests {
 		messages := []proto.Message{
@@ -349,8 +323,8 @@ func TestParseDateTimeFromJSON_Invalid(t *testing.T) {
 			&d4pb.DateTime{},
 		}
 		for _, m := range messages {
-			if err := parseDateTimeFromJSON(test.date, loc, m); err == nil {
-				t.Errorf("parseDateTimeFromJSON(%q, %q, %T) succeeded, want error", string(test.date), loc, m)
+			if err := ParseDateTimeFromString(test, loc, m); err == nil {
+				t.Errorf("ParseDateTimeFromString(%q, %q, %T) succeeded, want error", test, loc, m)
 			}
 		}
 	}
@@ -370,7 +344,7 @@ func newTimesForTest(val int64, precName string) []proto.Message {
 	return ret
 }
 
-func TestTime(t *testing.T) {
+func TestTimeProto(t *testing.T) {
 	tests := []struct {
 		json string
 		val  int64
@@ -396,46 +370,19 @@ func TestTime(t *testing.T) {
 		ts := newTimesForTest(test.val, test.prec)
 		for _, tm := range ts {
 			parsed := tm.ProtoReflect().New().Interface().(proto.Message)
-			if err := parseTime(json.RawMessage(strconv.Quote(test.json)), parsed); err != nil {
+			if err := ParseTime(json.RawMessage(strconv.Quote(test.json)), parsed); err != nil {
 				t.Fatalf("parseTime(m, %q): %v", test.json, err)
 			}
 			if want := tm; !cmp.Equal(want, parsed, protocmp.Transform()) {
 				t.Errorf("parseTime(m, %q): got %v, want %v", test.json, parsed, want)
 			}
 
-			serialized, err := serializeTime(tm)
+			serialized, err := SerializeTime(tm)
 			if err != nil {
 				t.Fatalf("SerializeTime(%q): %v", tm, err)
 			}
 			if want := test.json; want != serialized {
 				t.Errorf("SerializeTime(%q): got %q, want %q", tm, serialized, want)
-			}
-		}
-	}
-}
-
-func TestParseTime_Invalid(t *testing.T) {
-	tests := []struct {
-		time json.RawMessage
-	}{
-		{
-			json.RawMessage(`"24:00:00"`),
-		},
-		{
-			json.RawMessage(`"12:60:61"`),
-		},
-		{
-			json.RawMessage(`"12:00"`),
-		},
-	}
-	for _, test := range tests {
-		messages := []proto.Message{
-			&d3pb.Time{},
-			&d4pb.Time{},
-		}
-		for _, m := range messages {
-			if err := parseTime(test.time, m); err == nil {
-				t.Errorf("parseTime(%q, %T) succeeded, want error", string(test.time), m)
 			}
 		}
 	}
@@ -531,11 +478,11 @@ func TestInstant(t *testing.T) {
 		instants := newInstantsForTest(test.value, test.precision, test.protoTz)
 		for _, it := range instants {
 			parsed := it.ProtoReflect().New().Interface().(proto.Message)
-			if err := parseInstant(json.RawMessage(strconv.Quote(test.datetime)), parsed); err != nil {
-				t.Fatalf("%s parseInstant(%q, %T): %v", test.name, test.datetime, parsed, err)
+			if err := ParseInstant(json.RawMessage(strconv.Quote(test.datetime)), parsed); err != nil {
+				t.Fatalf("%s ParseInstant(%q, %T): %v", test.name, test.datetime, parsed, err)
 			}
 			if want := it; !cmp.Equal(want, parsed, protocmp.Transform()) {
-				t.Errorf("%s parseInstant(%q): got %v, want %v", test.name, test.datetime, parsed, want)
+				t.Errorf("%s ParseInstant(%q): got %v, want %v", test.name, test.datetime, parsed, want)
 			}
 
 			serialized, err := SerializeInstant(it)
@@ -569,8 +516,8 @@ func TestParseInstant_Invalid(t *testing.T) {
 			&d4pb.Instant{},
 		}
 		for _, m := range messages {
-			if err := parseInstant(test.instant, m); err == nil {
-				t.Errorf("parseInstant(%q, %T) succeeded, want error", test.instant, m)
+			if err := ParseInstant(test.instant, m); err == nil {
+				t.Errorf("ParseInstant(%q, %T) succeeded, want error", test.instant, m)
 			}
 		}
 	}

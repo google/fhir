@@ -191,6 +191,15 @@ const (
 	// PrecisionMicrosecond indicates that the precision of the ValueUs field in a
 	// Time is to the microsecond.
 	PrecisionMicrosecond Precision = 3
+	// PrecisionYear indicates that the precision of the ValueUs field in a
+	// Time is to the year.
+	PrecisionYear Precision = 4
+	// PrecisionMonth indicates that the precision of the ValueUs field in a
+	// Time is to the month.
+	PrecisionMonth Precision = 5
+	// PrecisionDay indicates that the precision of the ValueUs field in a
+	// Time is to the day.
+	PrecisionDay Precision = 6
 )
 
 // Time contains the result of a parsed FHIR time. The fields correspond to the
@@ -554,6 +563,12 @@ func IsPrimitiveType(d protoreflect.MessageDescriptor) bool {
 	return ext == apb.StructureDefinitionKindValue_KIND_PRIMITIVE_TYPE
 }
 
+// IsReferenceType returns true iff type d is a FHIR reference type.
+func IsReferenceType(d protoreflect.MessageDescriptor) bool {
+	ext := proto.GetExtension(d.Options(), apb.E_FhirStructureDefinitionUrl)
+	return ext == "http://hl7.org/fhir/StructureDefinition/Reference"
+}
+
 // IsResourceType returns true iff the message type d is a FHIR resource type.
 func IsResourceType(d protoreflect.MessageDescriptor) bool {
 	ext := proto.GetExtension(d.Options(), apb.E_StructureDefinitionKind).(apb.StructureDefinitionKindValue)
@@ -563,6 +578,11 @@ func IsResourceType(d protoreflect.MessageDescriptor) bool {
 // IsChoice returns true iff the message type d is a FHIR choice type.
 func IsChoice(d protoreflect.MessageDescriptor) bool {
 	return d != nil && proto.HasExtension(d.Options(), apb.E_IsChoiceType)
+}
+
+// FHIRVersion of the proto message.
+func FHIRVersion(d protoreflect.MessageDescriptor) apb.FhirVersion {
+	return proto.GetExtension(d.ParentFile().Options(), apb.E_FhirVersion).(apb.FhirVersion)
 }
 
 // IsContainedResource returns true iff the message type d is a FHIR contained resource.
@@ -586,6 +606,36 @@ func GetContainedResource(msg proto.Message) (proto.Message, error) {
 	return rpb.Get(f).Message().Interface(), nil
 }
 
+// IsChoiceField is true if the field d is a message and if that message is a choice.
+func IsChoiceField(d protoreflect.FieldDescriptor) bool {
+	return d.Kind() == protoreflect.MessageKind && IsChoice(d.Message())
+}
+
+// IsResource is true if the message has a StructureDefinitionKind of "resource".
+func IsResource(d protoreflect.MessageDescriptor) bool {
+	return proto.GetExtension(d.Options(), apb.E_StructureDefinitionKind) == apb.StructureDefinitionKindValue_KIND_RESOURCE
+}
+
+// IsReference is true if the message is a reference type.
+func IsReference(d protoreflect.MessageDescriptor) bool {
+	return proto.HasExtension(d.Options(), apb.E_FhirReferenceType)
+}
+
+// IsPrimitive is true if the message has a StructureDefinitionKind of "primitive".
+func IsPrimitive(d protoreflect.MessageDescriptor) bool {
+	return proto.GetExtension(d.Options(), apb.E_StructureDefinitionKind) == apb.StructureDefinitionKindValue_KIND_PRIMITIVE_TYPE
+}
+
+// IsComplex is true if the message has a StructureDefinitionKind of "complex".
+func IsComplex(d protoreflect.MessageDescriptor) bool {
+	return proto.GetExtension(d.Options(), apb.E_StructureDefinitionKind) == apb.StructureDefinitionKindValue_KIND_COMPLEX_TYPE
+}
+
+// HasValueset url set on the proto.
+func HasValueset(d protoreflect.Descriptor) bool {
+	return proto.GetExtension(d.Options(), apb.E_FhirValuesetUrl).(string) != ""
+}
+
 // GetExtensionFieldDesc returns the extension field descriptor.
 func GetExtensionFieldDesc(d protoreflect.MessageDescriptor) (protoreflect.FieldDescriptor, error) {
 	f := d.Fields().ByName("extension")
@@ -601,9 +651,9 @@ func GetExtensionFieldDesc(d protoreflect.MessageDescriptor) (protoreflect.Field
 	return f, nil
 }
 
-// ParseTime parses a time into a struct that provides the time from midnight
+// parseTimeToGoTime parses a time into a struct that provides the time from midnight
 // in microseconds and the precision of the original time.
-func ParseTime(rm []byte) (Time, error) {
+func parseTimeToGoTime(rm json.RawMessage) (Time, error) {
 	var input string
 	if err := JSP.Unmarshal(rm, &input); err != nil {
 		return Time{}, err
@@ -629,26 +679,6 @@ func ParseTime(rm []byte) (Time, error) {
 		}, nil
 	}
 	return Time{}, fmt.Errorf("invalid time layout: %v", input)
-}
-
-// SerializeTime serializes the values from a Time proto message to a JSON string.
-func SerializeTime(us int64, precision Precision) (string, error) {
-	ts, err := GetTimeFromUsec(us, UTC)
-	if err != nil {
-		return "", fmt.Errorf("in GetTimeFromUsec(): %v", err)
-	}
-	var tstr string
-	switch precision {
-	case PrecisionSecond:
-		tstr = ts.Format(LayoutTimeSecond)
-	case PrecisionMillisecond:
-		tstr = ts.Format(LayoutTimeMilliSecond)
-	case PrecisionMicrosecond:
-		tstr = ts.Format(LayoutTimeMicroSecond)
-	default:
-		return "", fmt.Errorf("invalid time precision %v", precision)
-	}
-	return tstr, nil
 }
 
 // GetOneofField returns the oneof field, ensuring the given field is part of the given oneof.
@@ -1173,9 +1203,18 @@ func buildFieldMap(desc protoreflect.MessageDescriptor) map[string]protoreflect.
 				fieldMap[name] = f
 			}
 		} else {
-			fieldMap[f.JSONName()] = f
+			// Historically the FHIR reference URI was mapped to the JSON name "reference", but this
+			// conflict between a JSON name and protobuf name is now disallowed in some languages, so
+			// we cannot rely on it in the protobuf definitions.
+			var jsonName string
+			if f.JSONName() == "uri" && IsReferenceType(desc) {
+				jsonName = "reference"
+			} else {
+				jsonName = f.JSONName()
+			}
+			fieldMap[jsonName] = f
 			if f.Kind() == protoreflect.MessageKind && IsPrimitiveType(f.Message()) {
-				fieldMap["_"+f.JSONName()] = f
+				fieldMap["_"+jsonName] = f
 			}
 		}
 	}

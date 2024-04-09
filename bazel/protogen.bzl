@@ -11,8 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 """Rules for generating Protos from FHIR definitions"""
+
+load("@rules_java//java:defs.bzl", "java_binary", "java_test")
 
 R4_PACKAGE_DEP = "@com_google_fhir//spec:fhir_r4"
 PROTO_GENERATOR = "@com_google_fhir//java/com/google/fhir/protogen:ProtoGenerator"
@@ -151,8 +152,7 @@ def gen_fhir_protos(
             "-Dgolden_dir=" + src_dir,
             "-Xmx4096M",
         ]
-
-        native.java_test(
+        java_test(
             name = "GeneratedProtoTest_" + name,
             size = "medium",
             srcs = ["//external:GeneratedProtoTest.java"],
@@ -294,7 +294,7 @@ def _get_tar_for_pkg(pkg):
     return pkg + "_package.tgz"
 
 def _proto_generator_with_runtime_deps_on_existing_protos(name, golden_java_protos_rules):
-    native.java_binary(
+    java_binary(
         name = name,
         main_class = "com.google.fhir.protogen.ProtoGeneratorMain",
         runtime_deps = golden_java_protos_rules +

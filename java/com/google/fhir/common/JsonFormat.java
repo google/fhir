@@ -111,7 +111,7 @@ public final class JsonFormat {
       return new Printer(true, jsonFormat);
     }
 
-    /*
+    /**
      * Create a new {@link Printer} which formats the output in a manner suitable for SQL queries.
      * This follows the in-progress analytics spec defined at
      * https://github.com/rbrush/sql-on-fhir/blob/master/sql-on-fhir.md
@@ -453,6 +453,12 @@ public final class JsonFormat {
       for (Map.Entry<FieldDescriptor, Object> entry : message.getAllFields().entrySet()) {
         printedField = maybeStartMessage(printedField);
         String name = entry.getKey().getJsonName();
+        // Historically the FHIR reference URI was mapped to the JSON name "reference", but this
+        // conflict between a JSON name and protobuf name is now disallowed in some languages, so
+        // we cannot rely on it in the protobuf definitions.
+        if (name.equals("uri") && FhirTypes.isReference(message.getDescriptorForType())) {
+          name = "reference";
+        }
         if (AnnotationUtils.isChoiceType(entry.getKey()) && jsonFormat == FhirJsonFormat.PURE) {
           printChoiceField(entry.getKey(), entry.getValue());
         } else if (isPrimitiveType(entry.getKey())) {
@@ -627,10 +633,10 @@ public final class JsonFormat {
         this.protoGenTransformer = ProtoGenTransformer.NO_OP;
       }
 
-      /*
-       * Create a new {@link Parser} with a default timezone. Any Dates and DateTimes parsed by
-       * this instance which do not have explicit timezone or timezone offset information will be
-       * assumed to be measured in the default timezone.
+      /**
+       * Create a new {@link Parser} with a default timezone. Any Dates and DateTimes parsed by this
+       * instance which do not have explicit timezone or timezone offset information will be assumed
+       * to be measured in the default timezone.
        */
       @CanIgnoreReturnValue
       Builder withDefaultTimeZone(ZoneId defaultTimeZone) {
@@ -709,7 +715,14 @@ public final class JsonFormat {
             }
           }
         } else {
-          nameToDescriptorMap.put(field.getJsonName(), field);
+          // Historically the FHIR reference URI was mapped to the JSON name "reference", but this
+          // conflict between a JSON name and protobuf name is now disallowed in some languages, so
+          // we cannot rely on it in the protobuf definitions.
+          if (field.getJsonName().equals("uri") && FhirTypes.isReference(descriptor)) {
+            nameToDescriptorMap.put("reference", field);
+          } else {
+            nameToDescriptorMap.put(field.getJsonName(), field);
+          }
           if (isPrimitiveType(field)) {
             // Handle extensions on primitive fields.
             nameToDescriptorMap.put("_" + field.getJsonName(), field);
