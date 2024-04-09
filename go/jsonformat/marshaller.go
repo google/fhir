@@ -572,7 +572,15 @@ func (m *Marshaller) marshalExtensions(pb protoreflect.Message, extField protore
 }
 
 func (m *Marshaller) marshalFieldValue(decmap jsonpbhelper.JSONObject, f protoreflect.FieldDescriptor, pb protoreflect.Message) error {
-	jsonName := f.JSONName()
+	// Historically the FHIR reference URI was mapped to the JSON name "reference", but this
+	// conflict between a JSON name and protobuf name is now disallowed in some languages, so
+	// we cannot rely on it in the protobuf definitions.
+	var jsonName string
+	if f.JSONName() == "uri" && jsonpbhelper.IsReferenceType(f.Parent().(protoreflect.MessageDescriptor)) {
+		jsonName = "reference"
+	} else {
+		jsonName = f.JSONName()
+	}
 	if m.jsonFormat == formatPure {
 		// for choice type fields in non-analytics output, we need to zoom into the field within oneof.
 		// e.g. value.quantity changed to valueQuantity

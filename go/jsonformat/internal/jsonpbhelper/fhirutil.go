@@ -563,6 +563,12 @@ func IsPrimitiveType(d protoreflect.MessageDescriptor) bool {
 	return ext == apb.StructureDefinitionKindValue_KIND_PRIMITIVE_TYPE
 }
 
+// IsReferenceType returns true iff type d is a FHIR reference type.
+func IsReferenceType(d protoreflect.MessageDescriptor) bool {
+	ext := proto.GetExtension(d.Options(), apb.E_FhirStructureDefinitionUrl)
+	return ext == "http://hl7.org/fhir/StructureDefinition/Reference"
+}
+
 // IsResourceType returns true iff the message type d is a FHIR resource type.
 func IsResourceType(d protoreflect.MessageDescriptor) bool {
 	ext := proto.GetExtension(d.Options(), apb.E_StructureDefinitionKind).(apb.StructureDefinitionKindValue)
@@ -1197,9 +1203,18 @@ func buildFieldMap(desc protoreflect.MessageDescriptor) map[string]protoreflect.
 				fieldMap[name] = f
 			}
 		} else {
-			fieldMap[f.JSONName()] = f
+			// Historically the FHIR reference URI was mapped to the JSON name "reference", but this
+			// conflict between a JSON name and protobuf name is now disallowed in some languages, so
+			// we cannot rely on it in the protobuf definitions.
+			var jsonName string
+			if f.JSONName() == "uri" && IsReferenceType(desc) {
+				jsonName = "reference"
+			} else {
+				jsonName = f.JSONName()
+			}
+			fieldMap[jsonName] = f
 			if f.Kind() == protoreflect.MessageKind && IsPrimitiveType(f.Message()) {
-				fieldMap["_"+f.JSONName()] = f
+				fieldMap["_"+jsonName] = f
 			}
 		}
 	}
