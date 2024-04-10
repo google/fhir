@@ -1084,7 +1084,6 @@ public class ProtoGeneratorV2 {
     reference.addField(
         FieldDescriptorProto.newBuilder()
             .setName("uri")
-            .setJsonName("reference")
             .setNumber(nextTag++)
             .setType(FieldDescriptorProto.Type.TYPE_MESSAGE)
             .setTypeName("." + protogenConfig.getProtoPackage() + ".String")
