@@ -2586,7 +2586,7 @@ message Reference {
     option (.google.fhir.proto.fhir_oneof_is_optional) = true;
 
     // Field representing absolute URIs, which are untyped.
-    String uri = 4 [json_name = "reference"];
+    String uri = 4;
 
     // Field representing fragment URIs, which are untyped, and represented here
     // without the leading '#'
