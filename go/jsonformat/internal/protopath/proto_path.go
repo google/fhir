@@ -49,6 +49,7 @@ type zeroType int
 // Path is a selector for a proto field.
 type Path struct {
 	parts []protoreflect.Name
+	err   error
 }
 
 // String implements the Stringer interface, returns a string representation of
@@ -64,8 +65,34 @@ func (p Path) String() string {
 // NewPath creates a Path from a string definition using proto field names.
 func NewPath(p string) Path {
 	path := Path{}
-	for _, part := range strings.Split(p, ".") {
-		path.parts = append(path.parts, protoreflect.Name(part))
+
+	i := 0
+	for i < len(p) {
+		if i > 0 {
+			if p[i] != '.' {
+				return Path{err: fmt.Errorf("invalid path %q", p)}
+			}
+			i++
+			if i == len(p) {
+				return Path{err: fmt.Errorf("invalid path %q", p)}
+			}
+		}
+
+		prefix, err := strconv.QuotedPrefix(p[i:])
+		if p[i] != '\'' && err == nil { // single-quoted map string keys are not allowed
+			prefix, _ = strconv.Unquote(prefix)
+			path.parts = append(path.parts, protoreflect.Name(prefix))
+			i += len(prefix) + 2
+		} else {
+			n := strings.IndexRune(p[i:], '.')
+			if n == -1 {
+				path.parts = append(path.parts, protoreflect.Name(p[i:]))
+				break
+			} else {
+				path.parts = append(path.parts, protoreflect.Name(p[i:n+i]))
+				i = n + i
+			}
+		}
 	}
 	return path
 }
@@ -93,11 +120,16 @@ func (p Path) IsValid() bool {
 }
 
 func isValidPath(p Path) bool {
+	if p.err != nil {
+		return false
+	}
 	if len(p.parts) == 0 {
+		p.err = fmt.Errorf("path cannot be empty")
 		return false
 	}
 	for _, part := range p.parts {
 		if part == "" {
+			p.err = fmt.Errorf("found empty component in path")
 			return false
 		}
 	}
@@ -117,11 +149,7 @@ func getMessageField(rpb protoreflect.Message, fieldName protoreflect.Name) (pro
 	return nil, fmt.Errorf("no field %s in %v", fieldName, desc.FullName())
 }
 
-func getSliceElement(m protoreflect.Message, fd protoreflect.FieldDescriptor, i protoreflect.Name, allowExtend bool) (protoreflect.Value, error) {
-	idx, err := strconv.Atoi(string(i))
-	if err != nil {
-		return protoreflect.Value{}, err
-	}
+func getSliceElement(m protoreflect.Message, fd protoreflect.FieldDescriptor, idx int, allowExtend bool) (protoreflect.Value, error) {
 	slice := m.Get(fd).List()
 	if idx == -1 {
 		if allowExtend {
@@ -146,13 +174,74 @@ func getSliceElement(m protoreflect.Message, fd protoreflect.FieldDescriptor, i 
 	return slice.Get(idx), nil
 }
 
+func getMapKey(fd protoreflect.FieldDescriptor, key string) (protoreflect.MapKey, error) {
+	var ret any
+	var err error
+	switch keyKind := fd.MapKey().Kind(); keyKind {
+	case protoreflect.StringKind:
+		ret = key
+	case protoreflect.BoolKind:
+		ret, err = strconv.ParseBool(key)
+	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
+		var k int64
+		k, err = strconv.ParseInt(key, 0, 32)
+		ret = int32(k)
+	case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
+		ret, err = strconv.ParseInt(key, 0, 64)
+	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
+		var k uint64
+		k, err = strconv.ParseUint(key, 0, 32)
+		ret = uint32(k)
+	case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
+		ret, err = strconv.ParseUint(key, 0, 64)
+	default:
+		return protoreflect.MapKey{}, fmt.Errorf("map field %v has unsupported key kind %v", fd.FullName(), keyKind)
+	}
+	if err != nil {
+		return protoreflect.MapKey{}, fmt.Errorf("invalid key %q: %v", key, err)
+	}
+	return protoreflect.ValueOf(ret).MapKey(), nil
+}
+
+func getMapElement(m protoreflect.Message, fd protoreflect.FieldDescriptor, k protoreflect.Name, allowAdd bool) (protoreflect.Value, error) {
+	key, err := getMapKey(fd, string(k))
+	if err != nil {
+		return protoreflect.Value{}, err
+	}
+	mp := m.Get(fd).Map()
+	if !m.Has(fd) {
+		mp = m.NewField(fd).Map()
+	}
+	if !mp.Has(key) {
+		if allowAdd {
+			v := mp.NewValue()
+			mp.Set(key, v)
+			m.Set(fd, protoreflect.ValueOfMap(mp))
+			return v, nil
+		}
+		return fd.MapValue().Default(), nil
+	}
+	return mp.Get(key), nil
+}
+
 // fillField will populate the struct or slice at the next level of the path if
 // the path refers to a field that is currently nil. The new value and path
 // will be returned. A new path is returned when selecting into a slice because
 // the field returned is an element of the slice.
 func fillField(m protoreflect.Message, field protoreflect.FieldDescriptor, path []protoreflect.Name) (protoreflect.Value, []protoreflect.Name, error) {
 	if field.IsList() && len(path) > 1 {
-		f, err := getSliceElement(m, field, path[1], true)
+		idx, err := strconv.Atoi(string(path[1]))
+		if err != nil {
+			return protoreflect.Value{}, nil, err
+		}
+		f, err := getSliceElement(m, field, idx, true)
+		if err != nil {
+			return f, nil, err
+		}
+		return f, path[1:], nil
+	}
+	if field.IsMap() && len(path) > 1 {
+		f, err := getMapElement(m, field, path[1], true)
 		if err != nil {
 			return f, nil, err
 		}
@@ -204,7 +293,7 @@ func getAnyOneOfField(pb protoreflect.Message, oneofField protoreflect.OneofDesc
 	return caseValue.Interface(), nil
 }
 
-func oneOfFieldByMessageType(oneOfDesc protoreflect.OneofDescriptor, valPB protoreflect.Message) (protoreflect.FieldDescriptor, error) {
+func oneOfFieldByMessageType(m protoreflect.Message, oneOfDesc protoreflect.OneofDescriptor, valPB protoreflect.Message) (protoreflect.FieldDescriptor, error) {
 	var messageField protoreflect.FieldDescriptor
 	valType := valPB.Descriptor()
 	fields := oneOfDesc.Fields()
@@ -213,7 +302,7 @@ func oneOfFieldByMessageType(oneOfDesc protoreflect.OneofDescriptor, valPB proto
 		if f.Kind() != protoreflect.MessageKind {
 			continue
 		}
-		if canAssignValueToField(valPB.Interface(), f) {
+		if canAssignValueToField(m, f, valPB.Interface()) {
 			if messageField != nil {
 				return nil, fmt.Errorf("multiple fields of %s have type %s", oneOfDesc.FullName(), valType.FullName())
 			}
@@ -237,10 +326,10 @@ func getEnumValueByName(ed protoreflect.EnumDescriptor, val string) (protoreflec
 	return 0, false
 }
 
-func canAssignValueToField(val any, fd protoreflect.FieldDescriptor) bool {
+func canAssignValueToField(m protoreflect.Message, fd protoreflect.FieldDescriptor, val any) bool {
 	fdKind := fd.Kind()
 	if val == nil {
-		return fdKind == protoreflect.MessageKind || fdKind == protoreflect.BytesKind || fd.IsList()
+		return fdKind == protoreflect.MessageKind || fdKind == protoreflect.BytesKind || fd.IsList() || fd.IsMap()
 	}
 
 	valType := reflect.TypeOf(val)
@@ -249,13 +338,30 @@ func canAssignValueToField(val any, fd protoreflect.FieldDescriptor) bool {
 	}
 
 	if valType.Kind() == reflect.Slice {
+		if !fd.IsList() {
+			return false
+		}
 		valType = valType.Elem()
 	}
+	if valType.Kind() == reflect.Map {
+		if !fd.IsMap() {
+			return false
+		}
+		k := reflect.ValueOf(fd.MapKey().Default().Interface())
+		v := reflect.ValueOf(fd.MapValue().Default().Interface())
+		if !k.IsValid() || !v.IsValid() {
+			return false
+		}
+		return valType.Key().AssignableTo(k.Type()) && valType.Elem().AssignableTo(v.Type())
+	}
 
-	if fdKind == protoreflect.MessageKind {
+	if valType.Kind() == reflect.Ptr {
 		rpb, ok := valAsReflectMessage(reflect.Zero(valType).Interface())
 		if !ok {
 			return false
+		}
+		if fd.IsMap() {
+			return fd.MapValue().Message() == rpb.Descriptor()
 		}
 		return fd.Message() == rpb.Descriptor()
 	} else if fdKind == protoreflect.EnumKind {
@@ -270,7 +376,14 @@ func canAssignValueToField(val any, fd protoreflect.FieldDescriptor) bool {
 		}
 	}
 
-	def := reflect.ValueOf(fd.Default().Interface())
+	var def reflect.Value
+	if fd.IsList() {
+		def = reflect.ValueOf(m.Get(fd).List().NewElement().Interface())
+	} else if fd.IsMap() {
+		def = reflect.ValueOf(fd.MapValue().Default().Interface())
+	} else {
+		def = reflect.ValueOf(fd.Default().Interface())
+	}
 	if !def.IsValid() {
 		return false
 	}
@@ -288,13 +401,13 @@ func valAsReflectMessage(val any) (protoreflect.Message, bool) {
 	}
 }
 
-func oneOfFieldByPrimitiveType(oneOfDesc protoreflect.OneofDescriptor, val any) (protoreflect.FieldDescriptor, error) {
+func oneOfFieldByPrimitiveType(m protoreflect.Message, oneOfDesc protoreflect.OneofDescriptor, val any) (protoreflect.FieldDescriptor, error) {
 	var typeField protoreflect.FieldDescriptor
 	valType := reflect.TypeOf(val)
 	fields := oneOfDesc.Fields()
 	for i := 0; i < fields.Len(); i++ {
 		f := fields.Get(i)
-		if canAssignValueToField(val, f) {
+		if canAssignValueToField(m, f, val) {
 			if typeField != nil {
 				return nil, fmt.Errorf("multiple fields of %s have type %s", oneOfDesc.FullName(), valType.Name())
 			}
@@ -312,9 +425,9 @@ func setOneOfFieldByType(m protoreflect.Message, oneOfDesc protoreflect.OneofDes
 	var err error
 	if rpb, ok := valAsReflectMessage(val); ok {
 		val = rpb
-		innerField, err = oneOfFieldByMessageType(oneOfDesc, rpb)
+		innerField, err = oneOfFieldByMessageType(m, oneOfDesc, rpb)
 	} else {
-		innerField, err = oneOfFieldByPrimitiveType(oneOfDesc, val)
+		innerField, err = oneOfFieldByPrimitiveType(m, oneOfDesc, val)
 	}
 	if err != nil {
 		return err
@@ -390,11 +503,13 @@ func assignValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path [
 	// Allow Zero to enables us to set proto fields to zero regardless of the
 	// underlying type.
 	if value == Zero {
-		m.Clear(fd)
+		if !fd.IsMap() || fd.TextName() == string(path[0]) {
+			m.Clear(fd)
+		}
 		return nil
 	}
 
-	if !canAssignValueToField(value, fd) {
+	if !canAssignValueToField(m, fd, value) {
 		defVal, err := goValueFromProtoValue(fd, fd.Default())
 		if err != nil {
 			return err
@@ -402,8 +517,9 @@ func assignValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path [
 		return fmt.Errorf("cannot assign %T to %T", value, defVal)
 	}
 	v := protoValueFromGoValue(m, fd, value)
-
-	if _, valIsList := v.Interface().(protoreflect.List); !fd.IsList() || valIsList {
+	_, valIsMap := v.Interface().(protoreflect.Map)
+	_, valIsList := v.Interface().(protoreflect.List)
+	if (!fd.IsList() && !fd.IsMap()) || valIsList || valIsMap || value == nil {
 		if v.IsValid() {
 			m.Set(fd, v)
 		} else {
@@ -411,17 +527,35 @@ func assignValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path [
 		}
 		return nil
 	}
-	i, err := strconv.Atoi(string(path[0]))
-	if err != nil {
-		return err
+
+	if fd.IsList() {
+		i, err := strconv.Atoi(string(path[0]))
+		if err != nil {
+			// Last element of path is not a valid index.
+			defVal, err := goValueFromProtoValue(fd, fd.Default())
+			if err != nil {
+				return err
+			}
+			return fmt.Errorf("cannot assign %T to %T", value, defVal)
+		}
+		slice := m.Get(fd).List()
+		// index has already been validated by `getSliceElement`, and the slice was
+		// extended, but we have to convert it again here.
+		if i == -1 {
+			i = slice.Len() - 1
+		}
+		slice.Set(i, v)
+	} else {
+		if fd.TextName() == string(path[0]) {
+			return fmt.Errorf("cannot assign %T to map", value)
+		}
+		key, err := getMapKey(fd, string(path[0]))
+		if err != nil {
+			return err
+		}
+		mp := m.Get(fd).Map()
+		mp.Set(key, v)
 	}
-	slice := m.Get(fd).List()
-	// index has already been validated by `getSliceElement`, and the slice was
-	// extended, but we have to convert it again here.
-	if i == -1 {
-		i = slice.Len() - 1
-	}
-	slice.Set(i, v)
 	return nil
 }
 
@@ -454,13 +588,24 @@ func protoValueFromGoValue(m protoreflect.Message, fd protoreflect.FieldDescript
 		return protoreflect.ValueOfEnum(v.Number())
 	}
 	rv := reflect.ValueOf(i)
-	slice := m.NewField(fd).List()
-	for i := 0; i < rv.Len(); i++ {
-		e := rv.Index(i)
-		eVal := protoValueFromGoValue(m, fd, e.Interface())
-		slice.Append(eVal)
+	if fd.IsList() {
+		slice := m.NewField(fd).List()
+		for i := 0; i < rv.Len(); i++ {
+			e := rv.Index(i)
+			eVal := protoValueFromGoValue(m, fd, e.Interface())
+			slice.Append(eVal)
+		}
+		return protoreflect.ValueOfList(slice)
 	}
-	return protoreflect.ValueOfList(slice)
+
+	mp := m.NewField(fd).Map()
+	iter := rv.MapRange()
+	for iter.Next() {
+		kVal := protoValueFromGoValue(m, fd, iter.Key().Interface())
+		vVal := protoValueFromGoValue(m, fd, iter.Value().Interface())
+		mp.Set(kVal.MapKey(), vVal)
+	}
+	return protoreflect.ValueOfMap(mp)
 }
 
 func goValueFromProtoValue(fd protoreflect.FieldDescriptor, v protoreflect.Value) (any, error) {
@@ -481,8 +626,47 @@ func goValueFromProtoValue(fd protoreflect.FieldDescriptor, v protoreflect.Value
 			slice.Index(i).Set(reflect.ValueOf(v))
 		}
 		return slice.Interface(), nil
+	case protoreflect.Map:
+		key, err := goValueFromProtoValue(fd, protoreflect.ValueOf(fd.MapKey().Default().Interface()))
+		if err != nil {
+			return nil, err
+		}
+		var val any
+		if _, ok := v.NewValue().Interface().(protoreflect.Message); ok {
+			val = v.NewValue().Message().Interface()
+		} else {
+			val, err = goValueFromProtoValue(fd, fd.MapValue().Default())
+			if err != nil {
+				return nil, err
+			}
+		}
+		mp := reflect.MakeMap(reflect.MapOf(reflect.TypeOf(key), reflect.TypeOf(val)))
+		var mErr error
+		v.Range(func(mKey protoreflect.MapKey, mVal protoreflect.Value) bool {
+			var k, e any
+			k, mErr = goValueFromProtoValue(fd, mKey.Value())
+			if mErr != nil {
+				return false
+			}
+			e, mErr = goValueFromProtoValue(fd, protoreflect.Value(mVal))
+			if mErr != nil {
+				return false
+			}
+			mp.SetMapIndex(reflect.ValueOf(k), reflect.ValueOf(e))
+			return true
+		})
+		if mErr != nil {
+			return nil, mErr
+		}
+		return mp.Interface(), nil
 	case protoreflect.EnumNumber:
-		enum, err := protoregistry.GlobalTypes.FindEnumByName(fd.Enum().FullName())
+		var n protoreflect.FullName
+		if fd.IsMap() {
+			n = fd.MapValue().Enum().FullName()
+		} else {
+			n = fd.Enum().FullName()
+		}
+		enum, err := protoregistry.GlobalTypes.FindEnumByName(n)
 		if err != nil {
 			return nil, err
 		}
@@ -524,6 +708,9 @@ func getDefaultValueAtPath(m protoreflect.Message, fd protoreflect.FieldDescript
 	v := m.NewField(fd)
 	if slice, ok := v.Interface().(protoreflect.List); ok {
 		m = slice.NewElement().Message()
+	} else if mp, ok := v.Interface().(protoreflect.Map); ok {
+		m = mp.NewValue().Message()
+		t = m.Descriptor()
 	} else {
 		m = v.Message()
 	}
@@ -544,20 +731,65 @@ func getDefaultValueAtPath(m protoreflect.Message, fd protoreflect.FieldDescript
 	if len(path) == 1 {
 		return m, ft, nil
 	}
-	if ft.Kind() != protoreflect.MessageKind && !ft.IsList() {
+	if ft.Kind() != protoreflect.MessageKind && !ft.IsList() && !ft.IsMap() {
 		return nil, nil, fmt.Errorf("found trailing path for scalar at %s", path[0])
 	}
 	if ft.IsList() {
 		path = path[1:]
+		_, err := strconv.Atoi(string(path[0]))
+		if err != nil {
+			return nil, nil, err
+		}
+	} else if ft.IsMap() {
+		path = path[1:]
+		if err := validateMapKeyInPath(ft, string(path[0])); err != nil {
+			return nil, nil, err
+		}
+		val := m.NewField(ft).Map().NewValue()
+		if _, ok := val.Interface().(protoreflect.Message); !ok {
+			return m, ft, nil
+		}
+		ft = ft.MapValue()
+		m = val.Message()
 	}
 	return getDefaultValueAtPath(m, ft, path[1:])
 }
 
+func validateMapKeyInPath(fd protoreflect.FieldDescriptor, kStr string) error {
+	key, err := getMapKey(fd, kStr)
+	if err != nil {
+		return err
+	}
+	k := reflect.ValueOf(fd.MapKey().Default().Interface())
+	if !k.IsValid() {
+		return fmt.Errorf("found invalid map key type at %s", kStr)
+	}
+	if !reflect.TypeOf(key.Interface()).AssignableTo(k.Type()) {
+		return fmt.Errorf("found invalid map key type at %s", kStr)
+	}
+	return nil
+}
+
 func checkDefaultValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, path []protoreflect.Name, defVal any) (any, error) {
-	m, ft, err := getDefaultValueAtPath(m, fd, path)
+	p := path
+	if fd.IsMap() || fd.IsList() {
+		p = p[2:]
+	}
+	m, ft, err := getDefaultValueAtPath(m, fd, p)
 	if err != nil {
 		return nil, err
 	}
+	if (ft.IsMap() || ft.IsList()) && ft.TextName() != string(path[len(path)-1]) {
+		if defVal == Zero {
+			rv, _ := goValueFromProtoValue(ft, m.NewField(ft))
+			return reflect.Zero(reflect.TypeOf(rv).Elem()).Interface(), nil
+		}
+		if !canAssignValueToField(m, ft, defVal) {
+			return nil, fmt.Errorf("invalid type %T for default value, expected %v", defVal, ft.Name())
+		}
+		return defVal, nil
+	}
+
 	// Allow untyped nil pointers which enables us to set proto fields regardless
 	// of the underlying type.
 	if defVal == Zero || defVal == nil && ft.Kind() == protoreflect.MessageKind {
@@ -568,7 +800,7 @@ func checkDefaultValue(m protoreflect.Message, fd protoreflect.FieldDescriptor, 
 		}
 		return rv, nil
 	}
-	if !canAssignValueToField(defVal, ft) {
+	if !canAssignValueToField(m, ft, defVal) {
 		return nil, fmt.Errorf("invalid type %T for default value, expected %v", defVal, ft.Name())
 	}
 	return defVal, nil
@@ -617,20 +849,44 @@ func get(m protoreflect.Message, defVal any, path []protoreflect.Name) (any, err
 		path = path[1:]
 	} else {
 		fd = field.(protoreflect.FieldDescriptor)
-		if m.Has(fd) || fd.IsList() && len(path) == 1 {
+		if m.Has(fd) || (fd.IsList() || fd.IsMap()) && len(path) == 1 {
 			if fd.IsList() && len(path) > 1 {
-				v, err = getSliceElement(m, fd, path[1], false)
+				idx, err := strconv.Atoi(string(path[1]))
 				if err != nil {
 					return nil, err
+				}
+				if idx < -1 || idx >= m.Get(fd).List().Len() {
+					return checkDefaultValue(m, fd, path, defVal)
+				}
+				v, err = getSliceElement(m, fd, idx, false)
+				if err != nil {
+					return nil, err
+				}
+				path = path[1:]
+			} else if fd.IsMap() && len(path) > 1 {
+				v, err = getMapElement(m, fd, path[1], false)
+				if err != nil {
+					return nil, err
+				}
+				if _, ok := v.Interface().(protoreflect.Message); ok {
+					m = v.Message()
+					fd = fd.MapValue()
 				}
 				path = path[1:]
 			} else {
 				v = m.Get(fd)
 			}
 		} else if fd.IsList() {
-			// Strip off the index (len of path must be greater than 1) so that we can
-			// find the correct default value.
-			path = path[1:]
+			_, err := strconv.Atoi(string(path[1]))
+			if err != nil {
+				return nil, err
+			}
+			return checkDefaultValue(m, fd, path, defVal)
+		} else if fd.IsMap() {
+			if err := validateMapKeyInPath(fd, string(path[1])); err != nil {
+				return nil, err
+			}
+			return checkDefaultValue(m, fd, path, defVal)
 		}
 	}
 
@@ -712,6 +968,15 @@ func getUntyped[T any](m proto.Message, path Path, defVal any) (T, error) {
 		ret := reflect.MakeSlice(retType, 0, valRef.Len())
 		for i := 0; i < valRef.Len(); i++ {
 			ret = reflect.Append(ret, valRef.Index(i).Convert(retElemType))
+		}
+		return ret.Interface().(T), nil
+	}
+	if retType.Kind() == reflect.Map && valType.Kind() == reflect.Map && valType.Elem().AssignableTo(retType.Elem()) {
+		valRef := reflect.ValueOf(val)
+		ret := reflect.MakeMap(retType)
+		iter := valRef.MapRange()
+		for iter.Next() {
+			ret.SetMapIndex(iter.Key(), iter.Value())
 		}
 		return ret.Interface().(T), nil
 	}

@@ -93,47 +93,47 @@ class OutcomeErrorHandler : public ErrorHandler {
   bool HasFatals() const override { return !GetFatals().empty(); }
 
   absl::Status HandleFhirFatal(const absl::Status& status,
-                               std::string_view element_path,
-                               std::string_view field_path) override {
+                               absl::string_view element_path,
+                               absl::string_view field_path) override {
     Handle(status.message(), IssueTypeCode::STRUCTURE, IssueSeverityCode::FATAL,
            element_path);
     return absl::OkStatus();
   };
 
-  absl::Status HandleFhirError(std::string_view msg,
-                               std::string_view element_path,
-                               std::string_view field_path) override {
+  absl::Status HandleFhirError(absl::string_view msg,
+                               absl::string_view element_path,
+                               absl::string_view field_path) override {
     Handle(msg, IssueTypeCode::VALUE, IssueSeverityCode::ERROR, element_path);
     return absl::OkStatus();
   };
 
-  absl::Status HandleFhirWarning(std::string_view msg,
-                                 std::string_view element_path,
-                                 std::string_view field_path) override {
+  absl::Status HandleFhirWarning(absl::string_view msg,
+                                 absl::string_view element_path,
+                                 absl::string_view field_path) override {
     Handle(msg, IssueTypeCode::VALUE, IssueSeverityCode::WARNING, element_path);
     return absl::OkStatus();
   };
 
   absl::Status HandleFhirPathFatal(const absl::Status& status,
-                                   std::string_view expression,
-                                   std::string_view element_path,
-                                   std::string_view field_path) override {
+                                   absl::string_view expression,
+                                   absl::string_view element_path,
+                                   absl::string_view field_path) override {
     Handle(absl::StrCat(expression, ":", status.message()),
            IssueTypeCode::STRUCTURE, IssueSeverityCode::FATAL, element_path);
     return absl::OkStatus();
   };
 
-  absl::Status HandleFhirPathError(std::string_view expression,
-                                   std::string_view element_path,
-                                   std::string_view field_path) override {
+  absl::Status HandleFhirPathError(absl::string_view expression,
+                                   absl::string_view element_path,
+                                   absl::string_view field_path) override {
     Handle(expression, IssueTypeCode::VALUE, IssueSeverityCode::ERROR,
            element_path);
     return absl::OkStatus();
   };
 
-  absl::Status HandleFhirPathWarning(std::string_view expression,
-                                     std::string_view element_path,
-                                     std::string_view field_path) override {
+  absl::Status HandleFhirPathWarning(absl::string_view expression,
+                                     absl::string_view element_path,
+                                     absl::string_view field_path) override {
     Handle(expression, IssueTypeCode::VALUE, IssueSeverityCode::WARNING,
            element_path);
     return absl::OkStatus();
