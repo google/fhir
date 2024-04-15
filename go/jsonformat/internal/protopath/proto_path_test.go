@@ -299,6 +299,61 @@ func TestSet(t *testing.T) {
 				}),
 			},
 		},
+		{
+			"set nil map",
+			NewPath("map_string_string_field"),
+			nil,
+			&pptpb.Message{},
+			&pptpb.Message{MapStringStringField: nil}},
+		{
+			"set zero map value",
+			NewPath("map_string_message_field.`foo`.map_int32_enum_field.1"),
+			Zero,
+			&pptpb.Message{MapStringMessageField: map[string]*pptpb.Message_InnerMessage{}},
+			&pptpb.Message{MapStringMessageField: map[string]*pptpb.Message_InnerMessage{"foo": &pptpb.Message_InnerMessage{MapInt32EnumField: map[int32]pptpb.MessageType{1: pptpb.MessageType_INVALID_UNINITIALIZED}}}},
+		},
+		{
+			"map<string, string> field",
+			NewPath("map_string_string_field"),
+			map[string]string{"foo": "bar"},
+			&pptpb.Message{},
+			&pptpb.Message{MapStringStringField: map[string]string{"foo": "bar"}},
+		},
+		{
+			"map<int32, bytes> field - update",
+			NewPath("map_int32_bytes_field"),
+			map[int32][]byte{1: []byte("bar"), 2: []byte("baz")},
+			&pptpb.Message{MapInt32BytesField: map[int32][]byte{1: []byte("foo")}},
+			&pptpb.Message{MapInt32BytesField: map[int32][]byte{1: []byte("bar"), 2: []byte("baz")}},
+		},
+		{
+			"set value in map<bool, int32>",
+			NewPath("map_bool_int32_field.true"),
+			int32(1),
+			&pptpb.Message{},
+			&pptpb.Message{MapBoolInt32Field: map[bool]int32{true: 1}},
+		},
+		{
+			"update value in map<string, InnerMessage>",
+			NewPath("map_string_message_field.foo"),
+			&pptpb.Message_InnerMessage{InnerField: 1},
+			&pptpb.Message{MapStringMessageField: map[string]*pptpb.Message_InnerMessage{"foo": nil}},
+			&pptpb.Message{MapStringMessageField: map[string]*pptpb.Message_InnerMessage{"foo": &pptpb.Message_InnerMessage{InnerField: 1}}},
+		},
+		{
+			"clear value in map<string, string>",
+			NewPath(`map_string_string_field`),
+			Zero,
+			&pptpb.Message{MapStringStringField: map[string]string{"foo": "bar"}},
+			&pptpb.Message{MapStringStringField: nil},
+		},
+		{
+			"add zero value map - no parent",
+			NewPath(`repeated_message_field.-1.map_int32_enum_field.10`),
+			Zero,
+			&pptpb.Message{},
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{MapInt32EnumField: map[int32]pptpb.MessageType{10: pptpb.MessageType_INVALID_UNINITIALIZED}}}},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -501,6 +556,72 @@ func TestSet_Errors(t *testing.T) {
 			int32(1),
 			&pptpb.Message{AnyField: &anypb.Any{}},
 		},
+		{
+			"map - set list value",
+			NewPath("map_int32_bytes_field"),
+			[][]byte{[]byte("foo")},
+			&pptpb.Message{},
+		},
+		{
+			"map - set message value",
+			NewPath("map_string_message_field"),
+			&pptpb.Message_InnerMessage{},
+			&pptpb.Message{},
+		},
+		{
+			"map - set scalar value",
+			NewPath("map_string_string_field"),
+			"foo",
+			&pptpb.Message{},
+		},
+		{
+			"map - invalid key type",
+			NewPath("map_int32_bytes_field"),
+			map[int64][]byte{1: []byte("foo")},
+			&pptpb.Message{},
+		},
+		{
+			"map - invalid value type",
+			NewPath("map_string_string_field"),
+			map[string]bool{"foo": true},
+			&pptpb.Message{},
+		},
+		{
+			"map - invalid key and value types",
+			NewPath("map_string_message_field"),
+			map[pptpb.MessageType]string{pptpb.MessageType_TYPE_1: "foo"},
+			&pptpb.Message{},
+		},
+		{
+			"map key - empty",
+			NewPath(`map_string_string_field.`),
+			"foo",
+			&pptpb.Message{},
+		},
+		{
+			"map key - unparseable type",
+			NewPath(`map_int32_bytes_field.$$$`),
+			[]byte("foo"),
+			&pptpb.Message{},
+		},
+		{
+			"map value - wrong scalar type",
+			NewPath(`map_string_string_field."foo"`),
+			int32(1),
+			&pptpb.Message{MapStringStringField: map[string]string{"foo": "bar"}},
+		},
+		{
+			"map value - scalar for message type",
+			NewPath(`map_string_message_field.foo`),
+			int32(1),
+			&pptpb.Message{},
+		},
+		{
+			"map value - message for scalar type",
+			NewPath(`map_string_string_field.foo`),
+			&pptpb.Message_InnerMessage{},
+			&pptpb.Message{},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -587,6 +708,42 @@ func TestGet(t *testing.T) {
 				return Get[[]int32](m, path)
 			},
 			want: []int32{1, 2},
+		},
+		{
+			name: "map",
+			msg:  &pptpb.Message{MapStringStringField: map[string]string{"foo": "bar"}},
+			path: NewPath("map_string_string_field"),
+			fn: func(m proto.Message, path Path) (any, error) {
+				return Get[map[string]string](m, path)
+			},
+			want: map[string]string{"foo": "bar"},
+		},
+		{
+			name: "map value - scalar",
+			msg:  &pptpb.Message{MapBoolInt32Field: map[bool]int32{false: 7}},
+			path: NewPath("map_bool_int32_field.false"),
+			fn: func(m proto.Message, path Path) (any, error) {
+				return Get[int32](m, path)
+			},
+			want: int32(7),
+		},
+		{
+			name: "map value - message",
+			msg:  &pptpb.Message{MapStringMessageField: map[string]*pptpb.Message_InnerMessage{"foo.bar": innerMsg}},
+			path: NewPath(`map_string_message_field."foo.bar"`),
+			fn: func(m proto.Message, path Path) (any, error) {
+				return Get[proto.Message](m, path)
+			},
+			want: innerMsg,
+		},
+		{
+			name: "map value - missing key",
+			msg:  &pptpb.Message{MapStringStringField: map[string]string{"foo": "bar"}},
+			path: NewPath(`map_string_string_field."missing"`),
+			fn: func(m proto.Message, path Path) (any, error) {
+				return Get[string](m, path)
+			},
+			want: "",
 		},
 	}
 	for _, test := range tests {
@@ -709,6 +866,20 @@ func TestGetWithDefault(t *testing.T) {
 			Zero,
 			&pptpb.Message{},
 			[]int32{},
+		},
+		{
+			"repeated field - index out of bounds",
+			NewPath("repeated_message_field.2.repeated_inner_field.0"),
+			Zero,
+			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{}}},
+			int32(0),
+		},
+		{
+			"repeated field - not specified - index out of bounds",
+			NewPath("repeated_message_field.0.repeated_inner_field.0"),
+			Zero,
+			&pptpb.Message{},
+			int32(0),
 		},
 		{
 			"missing field - zero",
@@ -848,6 +1019,76 @@ func TestGetWithDefault(t *testing.T) {
 			},
 			int32(1),
 		},
+		{
+			"map",
+			NewPath("map_string_string_field"),
+			Zero,
+			&pptpb.Message{MapStringStringField: map[string]string{"foo": "bar"}},
+			map[string]string{"foo": "bar"},
+		},
+		{
+			"map - proto value",
+			NewPath("map_string_message_field"),
+			Zero,
+			&pptpb.Message{MapStringMessageField: map[string]*pptpb.Message_InnerMessage{}},
+			map[string]*pptpb.Message_InnerMessage{},
+		},
+		{
+			"scalar map value",
+			NewPath("map_bool_int32_field.true"),
+			Zero,
+			&pptpb.Message{MapBoolInt32Field: map[bool]int32{true: 3}},
+			int32(3),
+		},
+		{
+			"scalar map value - empty",
+			NewPath("map_bool_int32_field.true"),
+			Zero,
+			&pptpb.Message{},
+			int32(0),
+		},
+		{
+			"nested map value",
+			NewPath("map_string_message_field.foo.map_int32_enum_field.1"),
+			Zero,
+			&pptpb.Message{MapStringMessageField: map[string]*pptpb.Message_InnerMessage{"foo": &pptpb.Message_InnerMessage{MapInt32EnumField: map[int32]pptpb.MessageType{1: pptpb.MessageType_TYPE_1}}}},
+			pptpb.MessageType_TYPE_1,
+		},
+		{
+			"map value - enum",
+			NewPath("map_int32_enum_field.1"),
+			Zero,
+			&pptpb.Message_InnerMessage{MapInt32EnumField: map[int32]pptpb.MessageType{1: pptpb.MessageType_TYPE_1}},
+			pptpb.MessageType_TYPE_1,
+		},
+		{
+			"proto map value",
+			NewPath("map_string_message_field.`bar`"),
+			Zero,
+			&pptpb.Message{MapStringMessageField: map[string]*pptpb.Message_InnerMessage{"bar": &pptpb.Message_InnerMessage{InnerField: 1}}},
+			&pptpb.Message_InnerMessage{InnerField: 1},
+		},
+		{
+			"missing map value - parent exists",
+			NewPath("map_string_message_field.foo.inner_field"),
+			Zero,
+			&pptpb.Message{},
+			int32(0),
+		},
+		{
+			"missing enum map value - parent exists",
+			NewPath("message_field.map_int32_enum_field.0"),
+			Zero,
+			&pptpb.Message{},
+			pptpb.MessageType_INVALID_UNINITIALIZED,
+		},
+		{
+			"missing enum map - parent exists",
+			NewPath("message_field.map_int32_enum_field"),
+			Zero,
+			&pptpb.Message{},
+			map[int32]pptpb.MessageType{},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -931,12 +1172,6 @@ func TestGetWithDefault_Errors(t *testing.T) {
 			&pptpb.Message{},
 		},
 		{
-			"repeated field - negative index",
-			NewPath("repeated_message_field.-2.inner_field"),
-			int32(1),
-			&pptpb.Message{RepeatedMessageField: []*pptpb.Message_InnerMessage{{InnerField: 1}}},
-		},
-		{
 			"repeated field - invalid index",
 			NewPath("repeated_message_field.foo.inner_field"),
 			Zero,
@@ -959,6 +1194,24 @@ func TestGetWithDefault_Errors(t *testing.T) {
 			NewPath("any_field.inner_field"),
 			Zero,
 			&pptpb.Message{AnyField: &anypb.Any{}},
+		},
+		{
+			"map key - invalid string",
+			NewPath("map_string_string_field.```"),
+			Zero,
+			&pptpb.Message{MapStringStringField: map[string]string{"1": "2"}},
+		},
+		{
+			"map key - unparseable type",
+			NewPath("map_int32_bytes_field.___"),
+			Zero,
+			&pptpb.Message{MapInt32BytesField: map[int32][]byte{}},
+		},
+		{
+			"map key - wrong type",
+			NewPath(`map_string_message_field.foo.map_int32_enum_field.true`),
+			Zero,
+			&pptpb.Message{MapStringMessageField: map[string]*pptpb.Message_InnerMessage{"foo": &pptpb.Message_InnerMessage{MapInt32EnumField: map[int32]pptpb.MessageType{}}}},
 		},
 	}
 	for _, test := range tests {
