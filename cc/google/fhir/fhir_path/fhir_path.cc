@@ -49,6 +49,7 @@
 #include "google/fhir/fhir_path/fhir_path_types.h"
 #include "google/fhir/fhir_path/utils.h"
 #include "google/fhir/fhir_types.h"
+#include "google/fhir/primitive_handler.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
@@ -56,6 +57,7 @@
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 #include "icu4c/source/common/unicode/unistr.h"
 #include "google/protobuf/descriptor.h"
+#include "google/protobuf/message.h"
 
 namespace google {
 namespace fhir {
@@ -3039,7 +3041,8 @@ class ComparisonOperator : public BinaryOperator {
 
     } else if (IsSystemString(*left_result) && IsSystemString(*right_result)) {
       return EvalStringComparison(primitive_handler, left, right);
-    } else if (IsDateTime(*left_result) && IsDateTime(*right_result)) {
+    } else if ((IsInstant(*left_result) || IsDateTime(*left_result)) &&
+               (IsInstant(*right_result) || IsDateTime(*right_result))) {
       return EvalDateTimeComparison(primitive_handler, *left_result,
                                     *right_result);
     } else if (IsSimpleQuantity(*left_result) &&
@@ -3147,12 +3150,33 @@ class ComparisonOperator : public BinaryOperator {
   absl::StatusOr<absl::optional<bool>> EvalDateTimeComparison(
       const PrimitiveHandler* primitive_handler, const Message& left_message,
       const Message& right_message) const {
-    FHIR_ASSIGN_OR_RETURN(
-        DateTimePrecision left_precision,
-        primitive_handler->GetDateTimePrecision(left_message));
-    FHIR_ASSIGN_OR_RETURN(
-        DateTimePrecision right_precision,
-        primitive_handler->GetDateTimePrecision(right_message));
+    const Message* left = &left_message;
+    const Message* right = &right_message;
+    std::vector<std::unique_ptr<const Message>> to_delete;
+    if (IsInstant(left_message)) {
+      FHIR_ASSIGN_OR_RETURN(
+          JsonPrimitive json_primitive,
+          primitive_handler->WrapPrimitiveProto(left_message));
+      json_primitive.value = absl::StripPrefix(json_primitive.value, "\"");
+      json_primitive.value = absl::StripSuffix(json_primitive.value, "\"");
+      FHIR_ASSIGN_OR_RETURN(
+          left, primitive_handler->NewDateTime(json_primitive.value));
+      to_delete.push_back(std::unique_ptr<const Message>(left));
+    }
+    if (IsInstant(right_message)) {
+      FHIR_ASSIGN_OR_RETURN(
+          JsonPrimitive json_primitive,
+          primitive_handler->WrapPrimitiveProto(right_message));
+      json_primitive.value = absl::StripPrefix(json_primitive.value, "\"");
+      json_primitive.value = absl::StripSuffix(json_primitive.value, "\"");
+      FHIR_ASSIGN_OR_RETURN(
+          right, primitive_handler->NewDateTime(json_primitive.value));
+      to_delete.push_back(std::unique_ptr<const Message>(right));
+    }
+    FHIR_ASSIGN_OR_RETURN(DateTimePrecision left_precision,
+                          primitive_handler->GetDateTimePrecision(*left));
+    FHIR_ASSIGN_OR_RETURN(DateTimePrecision right_precision,
+                          primitive_handler->GetDateTimePrecision(*right));
 
     // The FHIRPath spec (http://hl7.org/fhirpath/#comparison) states that "If
     // one value is specified to a different level of precision than the other,
@@ -3164,9 +3188,9 @@ class ComparisonOperator : public BinaryOperator {
     }
 
     FHIR_ASSIGN_OR_RETURN(absl::Time left_time,
-                          primitive_handler->GetDateTimeValue(left_message));
+                          primitive_handler->GetDateTimeValue(*left));
     FHIR_ASSIGN_OR_RETURN(absl::Time right_time,
-                          primitive_handler->GetDateTimeValue(right_message));
+                          primitive_handler->GetDateTimeValue(*right));
 
     // negative if left < right, positive if left > right, 0 if equal
     absl::civil_diff_t time_difference =
