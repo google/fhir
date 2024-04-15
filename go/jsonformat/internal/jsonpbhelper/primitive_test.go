@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package jsonformat
+package jsonpbhelper
 
 import (
 	"encoding/json"
@@ -21,14 +21,16 @@ import (
 
 	"github.com/google/fhir/go/fhirversion"
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
-	"github.com/google/fhir/go/jsonformat/internal/jsonpbhelper"
 	"github.com/google/go-cmp/cmp"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/testing/protocmp"
 
+	c4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/codes_go_proto"
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
+	rs4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/research_study_go_proto"
 	e4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/fhirproto_extensions_go_proto"
+	c3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/codes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 	e3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/fhirproto_extensions_go_proto"
 )
@@ -186,7 +188,7 @@ func TestProtoExtension(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			for _, d := range tc.data {
 				got := d.dstExtension.ProtoReflect().New().Interface().(proto.Message)
-				if err := protoToExtension(d.srcProto, got); err != nil {
+				if err := ProtoToExtension(d.srcProto, got); err != nil {
 					t.Fatalf("ProtoToExtension(%v, %T): %v", d.srcProto, got, err)
 				}
 				if diff := cmp.Diff(d.dstExtension, got, protocmp.Transform()); diff != "" {
@@ -297,11 +299,11 @@ func TestAddInternalExtension(t *testing.T) {
 			data := newAddInternalExtensionTestData(tc.bin, tc.sep, tc.stride, tc.extensionsAlreadyInBin)
 			for _, d := range data {
 				ext := d.dstExtension.ProtoReflect().New().Interface().(proto.Message)
-				if err := protoToExtension(d.srcProto, ext); err != nil {
+				if err := ProtoToExtension(d.srcProto, ext); err != nil {
 					t.Errorf("ProtoToExtension(%v, %T) got error: %v", d.srcProto, ext, err)
 				}
 				origSrcBin := proto.Clone(d.srcBinary)
-				if err := jsonpbhelper.AddInternalExtension(d.srcBinary, ext); err != nil {
+				if err := AddInternalExtension(d.srcBinary, ext); err != nil {
 					t.Errorf("AddInternalExtension(%v, %v) got error: %v", origSrcBin, ext, err)
 				}
 				if diff := cmp.Diff(d.dstBinary, d.srcBinary, protocmp.Transform()); diff != "" {
@@ -339,7 +341,7 @@ func TestDecimal(t *testing.T) {
 			for _, ver := range test.vers {
 				e := expects[ver]
 				got := e.ProtoReflect().New().Interface().(proto.Message)
-				if err := parseDecimal(json.RawMessage(test.value), got); err != nil {
+				if err := ParseDecimal(json.RawMessage(test.value), got); err != nil {
 					t.Fatalf("ParseDecimal(%q, %T) got error: %v", test, got, err)
 				}
 				if !cmp.Equal(e, got, protocmp.Transform()) {
@@ -379,7 +381,7 @@ func TestDecimal_Invalid(t *testing.T) {
 			fhirversion.R4:    &d4pb.Decimal{},
 		}
 		for _, ver := range test.vers {
-			if err := parseDecimal(json.RawMessage(test.json), msgs[ver]); err == nil {
+			if err := ParseDecimal(json.RawMessage(test.json), msgs[ver]); err == nil {
 				t.Errorf("ParseDecimal(%q, %T) succeeded, want error", test.name, msgs[ver])
 			}
 		}
@@ -438,7 +440,7 @@ func TestBinary(t *testing.T) {
 			for _, tnc := range typesAndCreators {
 				// Test parsing
 				parsed := tnc.message.ProtoReflect().New().Interface().(proto.Message)
-				if err := parseBinary(json.RawMessage(strconv.Quote(test.json)), parsed, tnc.creator); err != nil {
+				if err := ParseBinary(json.RawMessage(strconv.Quote(test.json)), parsed, tnc.creator); err != nil {
 					t.Fatalf("ParseBinary(%q, %T, %v) got error: %v", test.json, parsed, tnc.creator, err)
 				}
 				binary := tnc.message.ProtoReflect().New()
@@ -512,9 +514,224 @@ func TestParseBinary_Invalid(t *testing.T) {
 			}
 			for _, tnc := range typesAndCreators {
 				m := tnc.message.ProtoReflect().New().Interface().(proto.Message)
-				if err := parseBinary(json.RawMessage(strconv.Quote(test.json)), m, tnc.creator); err == nil {
+				if err := ParseBinary(json.RawMessage(strconv.Quote(test.json)), m, tnc.creator); err == nil {
 					t.Errorf("ParseBinary(%q, %T, %v) succeeded, want error", test.json, m, tnc.creator)
 				}
+			}
+		})
+	}
+}
+
+type mvr struct {
+	ver fhirversion.Version
+	r   proto.Message
+}
+
+func TestMarshalPrimitiveType(t *testing.T) {
+	tests := []struct {
+		name   string
+		inputs []mvr
+		want   IsJSON
+	}{
+		{
+			name: "Boolean",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &d3pb.Boolean{
+						Value: true,
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &d4pb.Boolean{
+						Value: true,
+					},
+				},
+			},
+			want: JSONRawValue("true"),
+		},
+		{
+			name: "Integer",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &d3pb.Integer{
+						Value: 1,
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &d4pb.Integer{
+						Value: 1,
+					},
+				},
+			},
+			want: JSONRawValue("1"),
+		},
+		{
+			name: "Canonical",
+			inputs: []mvr{
+				{
+					ver: fhirversion.R4,
+					r: &d4pb.Canonical{
+						Value: "c",
+					},
+				},
+			},
+			want: JSONString("c"),
+		},
+		{
+			name: "Code",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &d3pb.Code{
+						Value: "some code",
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &d4pb.Code{
+						Value: "some code",
+					},
+				},
+			},
+			want: JSONString("some code"),
+		},
+		{
+			name: "Id",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &d3pb.Id{
+						Value: "patient1234",
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &d4pb.Id{
+						Value: "patient1234",
+					},
+				},
+			},
+			want: JSONString("patient1234"),
+		},
+		{
+			name: "String",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &d3pb.String{
+						Value: "This is a string",
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &d4pb.String{
+						Value: "This is a string",
+					},
+				},
+			},
+			want: JSONString("This is a string"),
+		},
+		{
+			name: "Markdown",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &d3pb.Markdown{
+						Value: "md",
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &d4pb.Markdown{
+						Value: "md",
+					},
+				},
+			},
+			want: JSONString("md"),
+		},
+		{
+			name: "Url",
+			inputs: []mvr{
+				{
+					ver: fhirversion.R4,
+					r: &d4pb.Url{
+						Value: "u",
+					},
+				},
+			},
+			want: JSONString("u"),
+		},
+		{
+			name: "Uuid",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &d3pb.Uuid{
+						Value: "uuid",
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &d4pb.Uuid{
+						Value: "uuid",
+					},
+				},
+			},
+			want: JSONString("uuid"),
+		},
+		{
+			name: "ResearchStudyStatusCode",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &c3pb.ResearchStudyStatusCode{
+						Value: c3pb.ResearchStudyStatusCode_COMPLETED,
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &rs4pb.ResearchStudy_StatusCode{
+						Value: c4pb.ResearchStudyStatusCode_COMPLETED,
+					},
+				},
+			},
+			want: JSONString("completed"),
+		},
+		{
+			name: "ResearchStudyStatusCode uninitialized",
+			inputs: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &c3pb.ResearchStudyStatusCode{
+						Value: c3pb.ResearchStudyStatusCode_INVALID_UNINITIALIZED,
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &rs4pb.ResearchStudy_StatusCode{
+						Value: c4pb.ResearchStudyStatusCode_INVALID_UNINITIALIZED,
+					},
+				},
+			},
+			want: nil,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			for _, i := range test.inputs {
+				t.Run(i.ver.String(), func(t *testing.T) {
+					got, err := MarshalPrimitiveType(i.r.ProtoReflect())
+					if err != nil {
+						t.Fatalf("marshalPrimitiveType(%v): %v", test.name, err)
+					}
+					if diff := cmp.Diff(got, test.want); diff != "" {
+						t.Errorf("found diff for marshalPrimitiveType(%v): got %s, want %s, diff: %s", test.name, got, test.want, diff)
+					}
+				})
 			}
 		})
 	}
