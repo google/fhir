@@ -87,8 +87,8 @@ class ErrorHandler {
   // * field_path: Path to the field where the error occurred.  This will be
   //               identical to `element_path`, but without the field index.
   virtual absl::Status HandleFhirFatal(const absl::Status& status,
-                                       std::string_view element_path,
-                                       std::string_view field_path) = 0;
+                                       absl::string_view element_path,
+                                       absl::string_view field_path) = 0;
 
   // Handles an "Error" issue encountered.
   // This should be used when user data violates a precondition.  For instance,
@@ -105,9 +105,9 @@ class ErrorHandler {
   //                 (including index into repeated fields).
   // * field_path: Path to the field where the error occurred.  This will be
   //               identical to `element_path`, but without the field index.
-  virtual absl::Status HandleFhirError(std::string_view msg,
-                                       std::string_view element_path,
-                                       std::string_view field_path) = 0;
+  virtual absl::Status HandleFhirError(absl::string_view msg,
+                                       absl::string_view element_path,
+                                       absl::string_view field_path) = 0;
 
   // Handles a "Warning" issue encountered.
   // This should be used when user data violates a precondition at "Warning"
@@ -122,9 +122,9 @@ class ErrorHandler {
   //                 (including index into repeated fields).
   // * field_path: Path to the field where the warning occurred.  This will be
   //               identical to `element_path`, but without the field index.
-  virtual absl::Status HandleFhirWarning(std::string_view msg,
-                                         std::string_view element_path,
-                                         std::string_view field_path) = 0;
+  virtual absl::Status HandleFhirWarning(absl::string_view msg,
+                                         absl::string_view element_path,
+                                         absl::string_view field_path) = 0;
 
   // Handles a "Fatal" issue encountered during FHIRPath evaluation.
   // This indicates a process encountered a code error (e.g., a function call
@@ -142,9 +142,9 @@ class ErrorHandler {
   // * field_path: Path to the field where the error occurred.  This will be
   //               identical to `element_path`, but without the field index.
   virtual absl::Status HandleFhirPathFatal(const absl::Status& status,
-                                           std::string_view expression,
-                                           std::string_view element_path,
-                                           std::string_view field_path) = 0;
+                                           absl::string_view expression,
+                                           absl::string_view element_path,
+                                           absl::string_view field_path) = 0;
 
   // Handles an "Error" issue encountered during FHIRPath evaluation.
   // This indicates an Error-level FHIRPath requirement that was not met by a
@@ -157,9 +157,9 @@ class ErrorHandler {
   //                 (including index into repeated fields).
   // * field_path: Path to the field where the error occurred.  This will be
   //               identical to `element_path`, but without the field index.
-  virtual absl::Status HandleFhirPathError(std::string_view expression,
-                                           std::string_view element_path,
-                                           std::string_view field_path) = 0;
+  virtual absl::Status HandleFhirPathError(absl::string_view expression,
+                                           absl::string_view element_path,
+                                           absl::string_view field_path) = 0;
 
   // Handles a "Warning" issue encountered during FHIRPath evaluation.
   // This indicates a Warning-level FHIRPath requirement that was not met by a
@@ -172,9 +172,9 @@ class ErrorHandler {
   //                 (including index into repeated fields).
   // * field_path: Path to the field where the error occurred.  This will be
   //               identical to `element_path`, but without the field index.
-  virtual absl::Status HandleFhirPathWarning(std::string_view expression,
-                                             std::string_view element_path,
-                                             std::string_view field_path) = 0;
+  virtual absl::Status HandleFhirPathWarning(absl::string_view expression,
+                                             absl::string_view element_path,
+                                             absl::string_view field_path) = 0;
 
   // Returns true if any issues have been reported at WARNING level.
   virtual bool HasWarnings() const = 0;
@@ -343,8 +343,8 @@ class FailFastErrorHandler : public ErrorHandler {
   bool HasFatals() const override { return false; }
 
   absl::Status HandleFhirFatal(const absl::Status& status,
-                               std::string_view element_path,
-                               std::string_view field_path) override {
+                               absl::string_view element_path,
+                               absl::string_view field_path) override {
     return element_path.empty()
                ? status
                : absl::Status(
@@ -352,9 +352,9 @@ class FailFastErrorHandler : public ErrorHandler {
                      absl::StrCat(status.message(), " at ", element_path));
   }
 
-  absl::Status HandleFhirError(std::string_view msg,
-                               std::string_view element_path,
-                               std::string_view field_path) override {
+  absl::Status HandleFhirError(absl::string_view msg,
+                               absl::string_view element_path,
+                               absl::string_view field_path) override {
     if (behavior_ != FAIL_ON_ERROR_OR_FATAL) {
       return absl::OkStatus();
     }
@@ -363,34 +363,34 @@ class FailFastErrorHandler : public ErrorHandler {
                                       absl::StrCat(msg, " at ", element_path));
   }
 
-  absl::Status HandleFhirWarning(std::string_view msg,
-                                 std::string_view element_path,
-                                 std::string_view field_path) override {
+  absl::Status HandleFhirWarning(absl::string_view msg,
+                                 absl::string_view element_path,
+                                 absl::string_view field_path) override {
     return absl::OkStatus();
   }
 
   absl::Status HandleFhirPathFatal(const absl::Status& status,
-                                   std::string_view expression,
-                                   std::string_view element_path,
-                                   std::string_view field_path) override {
+                                   absl::string_view expression,
+                                   absl::string_view element_path,
+                                   absl::string_view field_path) override {
     return absl::Status(
         status.code(),
         absl::Substitute("Error evaluating FHIRPath expression `$0`: $1 at $2",
                          expression, status.message(), element_path));
   }
 
-  absl::Status HandleFhirPathError(std::string_view expression,
-                                   std::string_view element_path,
-                                   std::string_view field_path) override {
+  absl::Status HandleFhirPathError(absl::string_view expression,
+                                   absl::string_view element_path,
+                                   absl::string_view field_path) override {
     return behavior_ == FAIL_ON_ERROR_OR_FATAL
                ? absl::InvalidArgumentError(absl::Substitute(
                      "Failed expression `$0` at $1", expression, element_path))
                : absl::OkStatus();
   }
 
-  absl::Status HandleFhirPathWarning(std::string_view expression,
-                                     std::string_view element_path,
-                                     std::string_view field_path) override {
+  absl::Status HandleFhirPathWarning(absl::string_view expression,
+                                     absl::string_view element_path,
+                                     absl::string_view field_path) override {
     return absl::OkStatus();
   }
 
