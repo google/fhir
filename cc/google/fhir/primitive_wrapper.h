@@ -964,7 +964,10 @@ class PositiveIntWrapper : public IntegerTypeWrapper<PositiveIntType> {
   }
 };
 
-constexpr uint64_t DAY_IN_US = 24L * 60 * 60 * 1000 * 1000;
+// One day in microseconds: 24L * 60 * 60 * 1000 * 1000
+// Hard code expression for web assembly complilation, to avoid range outside of
+// long type error.
+constexpr uint64_t DAY_IN_US = 86400000000;
 
 template <typename TimeLike>
 class TimeWrapper : public StringInputWrapper<TimeLike> {
