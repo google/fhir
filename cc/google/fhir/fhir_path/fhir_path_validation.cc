@@ -74,48 +74,48 @@ class ValidationResultsErrorHandler : public ErrorHandler {
     return ValidationResults(results_);
   }
   absl::Status HandleFhirPathFatal(const absl::Status& status,
-                                   std::string_view expression,
-                                   std::string_view element_path,
-                                   std::string_view field_path) override {
+                                   absl::string_view expression,
+                                   absl::string_view element_path,
+                                   absl::string_view field_path) override {
     results_.push_back(
         ValidationResult(field_path, element_path, expression, status));
     return absl::OkStatus();
   }
 
-  absl::Status HandleFhirPathError(std::string_view expression,
-                                   std::string_view element_path,
-                                   std::string_view field_path) override {
+  absl::Status HandleFhirPathError(absl::string_view expression,
+                                   absl::string_view element_path,
+                                   absl::string_view field_path) override {
     results_.push_back(
         ValidationResult(field_path, element_path, expression, false));
     return absl::OkStatus();
   }
 
-  absl::Status HandleFhirPathWarning(std::string_view msg,
-                                     std::string_view element_path,
-                                     std::string_view field_path) override {
+  absl::Status HandleFhirPathWarning(absl::string_view msg,
+                                     absl::string_view element_path,
+                                     absl::string_view field_path) override {
     // Legacy FHIRPath API does not support warnings.
     return absl::OkStatus();
   }
 
   absl::Status HandleFhirFatal(const absl::Status& status,
-                               std::string_view element_path,
-                               std::string_view field_path) override {
+                               absl::string_view element_path,
+                               absl::string_view field_path) override {
     return absl::InternalError(
         "ValidationResultsErrorHandler should only use FHIRPath APIs.");
     return absl::OkStatus();
   }
 
-  absl::Status HandleFhirError(std::string_view msg,
-                               std::string_view element_path,
-                               std::string_view field_path) override {
+  absl::Status HandleFhirError(absl::string_view msg,
+                               absl::string_view element_path,
+                               absl::string_view field_path) override {
     return absl::InternalError(
         "ValidationResultsErrorHandler should only use FHIRPath APIs.");
     return absl::OkStatus();
   }
 
-  absl::Status HandleFhirWarning(std::string_view msg,
-                                 std::string_view element_path,
-                                 std::string_view field_path) override {
+  absl::Status HandleFhirWarning(absl::string_view msg,
+                                 absl::string_view element_path,
+                                 absl::string_view field_path) override {
     return absl::InternalError(
         "ValidationResultsErrorHandler should only use FHIRPath APIs.");
     return absl::OkStatus();
