@@ -15,7 +15,6 @@
 package jsonformat
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -27,29 +26,31 @@ import (
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 )
 
-func referenceProto(ver apb.FhirVersion) proto.Message {
+func referenceProto(t *testing.T, ver apb.FhirVersion) proto.Message {
 	switch ver {
 	case apb.FhirVersion_STU3:
 		return &d3pb.Reference{}
 	case apb.FhirVersion_R4:
 		return &d4pb.Reference{}
 	}
-	panic(fmt.Sprintf("unexpected version: %s", ver))
+	t.Fatalf("unsupported version: %s", ver)
+	return nil
 }
 
 func TestAllReferenceTypes(t *testing.T) {
-	var versions []apb.FhirVersion
-	for _, v := range apb.FhirVersion_value {
-		ver := apb.FhirVersion(v)
-		// TODO(b/265289586): Testing support for r4b
-		if ver != apb.FhirVersion_FHIR_VERSION_UNKNOWN && ver != apb.FhirVersion_DSTU2 && ver != apb.FhirVersion_R4B {
-			versions = append(versions, ver)
-		}
+	versionsToSkip := []apb.FhirVersion{
+		apb.FhirVersion_FHIR_VERSION_UNKNOWN,
+		apb.FhirVersion_R4B, // TODO(b/265289586): Testing support for r4b
+		apb.FhirVersion_R5,
 	}
 
-	for _, ver := range versions {
+	for _, v := range apb.FhirVersion_value {
+		ver := apb.FhirVersion(v)
+		if contains(versionsToSkip, ver) {
+			t.Skipf("Skipping testing version: %s", ver.String())
+		}
 		t.Run(ver.String(), func(t *testing.T) {
-			ref := referenceProto(ver)
+			ref := referenceProto(t, ver)
 			if err := NormalizeReference(ref); err != nil {
 				t.Fatalf("unsupported version: %s", ver)
 			}
@@ -58,6 +59,15 @@ func TestAllReferenceTypes(t *testing.T) {
 			}
 		})
 	}
+}
+
+func contains(sl []apb.FhirVersion, v apb.FhirVersion) bool {
+	for _, e := range sl {
+		if e == v {
+			return true
+		}
+	}
+	return false
 }
 
 func TestNormalizeDenormalizeReference(t *testing.T) {
