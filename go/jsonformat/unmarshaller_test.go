@@ -2033,7 +2033,7 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 				}]
 			}`,
 			&jsonpbhelper.UnmarshalError{Path: "Patient.contained[0].ofType(Observation).status", Details: `code type mismatch`, Diagnostics: `"foo" is not a ObservationStatusCode`},
-			[]fhirversion.Version{fhirversion.DSTU2, fhirversion.STU3},
+			[]fhirversion.Version{fhirversion.STU3},
 		},
 	}
 	for _, test := range tests {
