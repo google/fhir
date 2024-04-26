@@ -7,14 +7,12 @@ require (
 	github.com/antlr4-go/antlr/v4 v4.13.0
 	github.com/bazelbuild/rules_go v0.24.5
 	github.com/golang/protobuf v1.5.4
-	github.com/google/fhir/go/protopath v0.0.0-00010101000000-000000000000
+	github.com/google/fhir/go/protopath v0.7.4
 	github.com/google/go-cmp v0.6.0
 	github.com/json-iterator/go v1.1.10
 	golang.org/x/exp v0.0.0-20230515195305-f3d0a9c9a5cc
 	google.golang.org/protobuf v1.33.0
 )
-
-replace github.com/google/fhir/go/protopath => ./protopath
 
 require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
