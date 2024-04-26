@@ -17,7 +17,7 @@ import (
 	"testing"
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
-	pptpb "github.com/google/fhir/go/jsonformat/internal/protopath/protopathtest_go_proto"
+	pptpb "github.com/google/fhir/go/protopath/protopathtest_go_proto"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"google.golang.org/protobuf/proto"

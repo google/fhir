@@ -17,7 +17,7 @@ package protopath
 import (
 	"testing"
 
-	pptpb "github.com/google/fhir/go/jsonformat/internal/protopath/protopathtest_go_proto"
+	pptpb "github.com/google/fhir/go/protopath/protopathtest_go_proto"
 	"github.com/google/go-cmp/cmp"
 )
 

@@ -22,7 +22,7 @@ import (
 	"strings"
 
 	"github.com/google/fhir/go/jsonformat/internal/accessor"
-	"github.com/google/fhir/go/jsonformat/internal/protopath"
+	"github.com/google/fhir/go/protopath"
 	apb "github.com/google/fhir/go/proto/google/fhir/proto/annotations_go_proto"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"

@@ -18,16 +18,17 @@
 // versions:
 // 	protoc-gen-go v1.29.0
 // 	protoc        v3.21.12
-// source: go/jsonformat/internal/protopath/protopathtest.proto
+// source: go/protopath/protopathtest.proto
 
 package protopathtest_go_proto
 
 import (
+	"reflect"
+	"sync"
+
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	anypb "google.golang.org/protobuf/types/known/anypb"
-	reflect "reflect"
-	sync "sync"
 )
 
 const (

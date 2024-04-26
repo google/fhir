@@ -20,7 +20,7 @@ go_test(
         "//go/fhirversion",
         "//go/jsonformat",
         "//go/jsonformat/internal/jsonpbhelper",
-        "//go/jsonformat/internal/protopath",
+        "//go/protopath",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:composition_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:observation_go_proto",

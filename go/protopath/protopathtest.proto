@@ -19,7 +19,7 @@ package google.fhir.go.jsonformat.internal.protopath;
 
 import "google/protobuf/any.proto";
 
-option go_package = "github.com/google/fhir/go/jsonformat/internal/protopath/protopathtest_go_proto"; // NOLINT
+option go_package = "github.com/google/fhir/go/protopath/protopathtest_go_proto"; // NOLINT
 
 // Message type that will never be present in Message.
 message Missing {}

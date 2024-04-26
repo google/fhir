@@ -59,12 +59,12 @@ def move_generated_go_protos(tmp_dir: str):
       ), accessor_out)
 
   protopath_dest_dir = os.path.join(
-      dest_root, "go/jsonformat/internal/protopath/protopathtest_go_proto")
+      dest_root, "go/protopath/protopathtest_go_proto")
   shutil.rmtree(protopath_dest_dir, ignore_errors=True)
   shutil.copytree(
       os.path.join(
           tmp_dir,
-          "proto-out/github.com/google/fhir/go/jsonformat/internal/protopath/protopathtest_go_proto"
+          "proto-out/github.com/google/fhir/go/protopath/protopathtest_go_proto"
       ), protopath_dest_dir)
 
 

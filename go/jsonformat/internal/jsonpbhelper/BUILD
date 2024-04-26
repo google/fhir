@@ -15,7 +15,7 @@ go_library(
     importpath = "github.com/google/fhir/go/jsonformat/internal/jsonpbhelper",
     deps = [
         "//go/jsonformat/internal/accessor",
-        "//go/jsonformat/internal/protopath",
+        "//go/protopath",
         "//proto/google/fhir/proto:annotations_go_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_go_proto",
         "//proto/google/fhir/proto/r4/core/resources:bundle_and_contained_resource_go_proto",
