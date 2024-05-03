@@ -34,7 +34,6 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/reflect/protoregistry"
-	"github.com/serenize/snaker"
 )
 
 // Zero represents the zero value of any type, it can be used in Set as the
@@ -283,7 +282,7 @@ func getOneOfField(pb protoreflect.Message, oneofField protoreflect.OneofDescrip
 func getAnyOneOfField(pb protoreflect.Message, oneofField protoreflect.OneofDescriptor) (any, error) {
 	caseField := pb.WhichOneof(oneofField)
 	if caseField == nil {
-		return nil, fmt.Errorf("%s is empty", snaker.SnakeToCamel(string(oneofField.Name())))
+		return nil, fmt.Errorf("%s is empty", oneofField.Name())
 	}
 
 	caseValue := pb.Get(caseField)
