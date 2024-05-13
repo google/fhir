@@ -1620,7 +1620,7 @@ class TraceFunction : public SingleValueFunctionNode {
 
     DVLOG(1) << "trace(" << name << "):";
     for (auto it = results->begin(); it != results->end(); it++) {
-      DVLOG(1) << (*it).Message()->DebugString();
+      DVLOG(1) << *(*it).Message();
     }
 
     return absl::OkStatus();
