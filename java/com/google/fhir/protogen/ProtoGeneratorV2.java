@@ -381,10 +381,23 @@ public class ProtoGeneratorV2 {
       if (valueElement.getTypeCount() == 1) {
         Optional<String> regexOptional = getPrimitiveRegex(valueElement);
         if (regexOptional.isPresent()) {
-          builder.setOptions(
-              builder.getOptions().toBuilder()
-                  .setExtension(Annotations.valueRegex, regexOptional.get())
-                  .build());
+          // Handling the regex for Decimal definition in FHIR R5 separately. Refer b/342413826
+          if (builder.getName().equals("Decimal")
+              && regexOptional
+                  .get()
+                  .equals("-?(0|[1-9][0-9]{0,17})(\\.[0-9]{1,17})?([eE][+-]?[0-9]{1,9}})?")) {
+            builder.setOptions(
+                builder.getOptions().toBuilder()
+                    .setExtension(
+                        Annotations.valueRegex,
+                        "-?(0|[1-9][0-9]{0,17})(\\.[0-9]{1,17})?([eE][+-]?[0-9]{1,9})?")
+                    .build());
+          } else {
+            builder.setOptions(
+                builder.getOptions().toBuilder()
+                    .setExtension(Annotations.valueRegex, regexOptional.get())
+                    .build());
+          }
         }
       }
 
