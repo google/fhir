@@ -288,7 +288,7 @@ absl::Status AddCoding(Message* concept_proto,
         Message* target_coding =
             MutableOrAddMessage(concept_proto, profiled_field);
         stu3::proto::CodingWithFixedSystem* fixed_system_coding =
-            google::protobuf::DownCastToGenerated<stu3::proto::CodingWithFixedSystem>(
+            google::protobuf::DownCastMessage<stu3::proto::CodingWithFixedSystem>(
                 target_coding);
         CopyCommonCodingFields(coding, fixed_system_coding);
         *fixed_system_coding->mutable_code() = coding.code();
@@ -308,7 +308,7 @@ absl::Status AddCoding(Message* concept_proto,
           Message* target_coding =
               MutableOrAddMessage(concept_proto, profiled_field);
           stu3::proto::CodingWithFixedCode* fixed_system_code =
-              google::protobuf::DownCastToGenerated<stu3::proto::CodingWithFixedCode>(
+              google::protobuf::DownCastMessage<stu3::proto::CodingWithFixedCode>(
                   target_coding);
           CopyCommonCodingFields(coding, fixed_system_code);
           return absl::OkStatus();
