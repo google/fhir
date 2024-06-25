@@ -129,7 +129,7 @@ absl::Status RetrieveField(
       root, &field, [&](const Message& child) {
         // R4+ packs contained resources in Any protos.
         if (IsMessageType<google::protobuf::Any>(child)) {
-          auto any = google::protobuf::DownCastToGenerated<google::protobuf::Any>(child);
+          auto any = google::protobuf::DownCastMessage<google::protobuf::Any>(child);
 
           FHIR_ASSIGN_OR_RETURN(
               Message * unpacked_message,
