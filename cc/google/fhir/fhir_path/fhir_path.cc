@@ -2625,6 +2625,9 @@ class ChildrenFunction : public ZeroParameterFunctionNode {
 
     for (const WorkspaceMessage& child : child_results) {
       const Descriptor* descriptor = child.Message()->GetDescriptor();
+      if (IsPrimitive(descriptor)) {
+        continue;
+      }
       for (int i = 0; i < descriptor->field_count(); i++) {
         std::vector<const Message*> messages;
         FHIR_RETURN_IF_ERROR(

@@ -738,6 +738,8 @@ TYPED_TEST(FhirPathTest, TestFunctionChildren) {
       UnorderedElementsAreArray(
           {EqualsProto(structure_definition.snapshot().element(0)),
            EqualsProto(structure_definition.differential().element(0))}));
+
+  EXPECT_THAT(TestFixture::Evaluate("(1 | 2).children()"), EvalsToEmpty());
 }
 
 TYPED_TEST(FhirPathTest, TestFunctionDescendants) {
@@ -763,6 +765,9 @@ TYPED_TEST(FhirPathTest, TestFunctionDescendants) {
            EqualsProto(structure_definition.differential().element(0)),
            EqualsProto(
                structure_definition.differential().element(0).label())}));
+
+  EXPECT_THAT(TestFixture::Evaluate("('foo' | 'bar').descendants()"),
+              EvalsToEmpty());
 }
 
 TYPED_TEST(FhirPathTest, TestFunctionDescendantsOnEmptyCollection) {
