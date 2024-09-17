@@ -118,7 +118,7 @@ absl::StatusOr<bool> IsResourceFromContainedResourceType(
         auto* resource_types = new absl::flat_hash_set<std::string>();
         // Iterate through all `oneof` fields to get names of resources.
         for (int i = 0; i < resource_oneof->field_count(); i++) {
-          resource_types->insert(
+          resource_types->emplace(
               resource_oneof->field(i)->message_type()->full_name());
         }
         return resource_types;

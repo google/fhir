@@ -18,6 +18,7 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/string_view.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/protobuf/descriptor.h"
@@ -28,8 +29,7 @@ namespace fhir {
 
 namespace codes_internal {
 
-std::string TitleCaseToUpperUnderscores(const std::string& src);
-
+std::string TitleCaseToUpperUnderscores(absl::string_view src);
 }
 
 absl::StatusOr<const ::google::protobuf::EnumValueDescriptor*> CodeStringToEnumValue(

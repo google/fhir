@@ -25,6 +25,7 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/string_view.h"
 #include "absl/strings/substitute.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
@@ -57,7 +58,7 @@ absl::StatusOr<const ::google::protobuf::Message*> GetSubmessageByPath(
 template <typename T>
 absl::StatusOr<T*> GetMutableSubmessageByPathAndCheckType(
     ::google::protobuf::Message* message, const std::string& field_path) {
-  const std::string& message_name = message->GetDescriptor()->name();
+  absl::string_view message_name = message->GetDescriptor()->name();
   auto got = GetMutableSubmessageByPath(message, field_path);
   FHIR_RETURN_IF_ERROR(got.status());
   ::google::protobuf::Message* submessage = got.value();
@@ -75,7 +76,7 @@ absl::StatusOr<T*> GetMutableSubmessageByPathAndCheckType(
 template <typename T>
 absl::StatusOr<const T*> GetSubmessageByPathAndCheckType(
     const ::google::protobuf::Message& message, const std::string& field_path) {
-  const std::string& message_name = message.GetDescriptor()->name();
+  absl::string_view message_name = message.GetDescriptor()->name();
   auto got = GetSubmessageByPath(message, field_path);
   FHIR_RETURN_IF_ERROR(got.status());
   const ::google::protobuf::Message* submessage = got.value();

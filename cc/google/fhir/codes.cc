@@ -14,11 +14,11 @@
 
 #include "google/fhir/codes.h"
 
-#include <unordered_map>
-
 #include "google/protobuf/descriptor.pb.h"
+#include "absl/container/flat_hash_map.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/ascii.h"
+#include "absl/strings/string_view.h"
 #include "absl/synchronization/mutex.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/fhir_types.h"
@@ -37,11 +37,10 @@ using ::google::protobuf::EnumValueDescriptor;
 using ::google::protobuf::FieldDescriptor;
 using ::google::protobuf::Message;
 using ::google::protobuf::Reflection;
-using std::unordered_map;
 
 namespace codes_internal {
 
-std::string TitleCaseToUpperUnderscores(const std::string& src) {
+std::string TitleCaseToUpperUnderscores(absl::string_view src) {
   std::string dst;
   for (auto iter = src.begin(); iter != src.end(); ++iter) {
     if (absl::ascii_isupper(*iter) && iter != src.begin()) {
@@ -61,7 +60,7 @@ std::string EnumValueToCodeString(const EnumValueDescriptor* enum_value) {
         ::google::fhir::proto::fhir_original_code);
   }
 
-  std::string code_string = enum_value->name();
+  std::string code_string(enum_value->name());
   std::transform(code_string.begin(), code_string.end(), code_string.begin(),
                  tolower);
   std::replace(code_string.begin(), code_string.end(), '_', '-');
@@ -72,8 +71,9 @@ absl::StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
     const std::string& code_string, const EnumDescriptor* target_enum_type) {
   // Map from (target_enum_type->full_name() x code_string) -> result
   // for previous runs.
-  static auto* memos = new unordered_map<
-      std::string, unordered_map<std::string, const EnumValueDescriptor*>>();
+  static auto* memos = new absl::flat_hash_map<
+      std::string,
+      absl::flat_hash_map<std::string, const EnumValueDescriptor*>>();
   static absl::Mutex memos_mutex;
 
   // Check for memoized result.  Note we lock the mutex, in case something tries

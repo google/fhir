@@ -19,14 +19,15 @@
 
 #include <optional>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 
+#include "absl/container/flat_hash_map.h"
 #include "absl/log/check.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/string_view.h"
 #include "absl/strings/substitute.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/codes.h"
@@ -121,11 +122,11 @@ absl::StatusOr<const google::protobuf::Message*> GetSimpleExtensionValueFromExte
 template <typename ExtensionType>
 std::optional<const ::google::protobuf::FieldDescriptor*> GetExtensionValueFieldByType(
     const ::google::protobuf::Descriptor* field_type) {
-  static const std::unordered_map<
+  static const absl::flat_hash_map<
       std::string,
       const ::google::protobuf::FieldDescriptor*>* extension_value_fields_by_type = []() {
-    std::unordered_map<std::string, const ::google::protobuf::FieldDescriptor*>* map =
-        new std::unordered_map<std::string, const ::google::protobuf::FieldDescriptor*>;
+    absl::flat_hash_map<std::string, const ::google::protobuf::FieldDescriptor*>* map =
+        new absl::flat_hash_map<std::string, const ::google::protobuf::FieldDescriptor*>;
 
     const google::protobuf::OneofDescriptor* value_oneof =
         ExtensionType::ValueX::descriptor()->FindOneofByName("choice");

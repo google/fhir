@@ -22,6 +22,7 @@
 #include "glog/logging.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_split.h"
+#include "absl/strings/string_view.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "re2/re2.h"
@@ -47,7 +48,7 @@ enum class EmptyFieldsBehavior { ADD_DEFAULT, RETURN_NOT_FOUND };
 absl::StatusOr<Message*> GetSubmessageByPathInternal(
     Message* message, const std::string& field_path,
     const EmptyFieldsBehavior empty_fields_behavior) {
-  const std::string& message_name = message->GetDescriptor()->name();
+  absl::string_view message_name = message->GetDescriptor()->name();
   std::vector<std::string> tokens = absl::StrSplit(field_path, '.');
   if (message_name != tokens[0]) {
     return InvalidArgumentError(absl::StrCat("Cannot find ", field_path, " in ",

@@ -20,6 +20,7 @@
 #include <vector>
 
 #include "absl/status/status.h"
+#include "absl/strings/string_view.h"
 
 namespace google::fhir::profiled {
 
@@ -28,7 +29,7 @@ std::string GetInlinedExtensionUrl(const google::protobuf::FieldDescriptor* fiel
              ::google::fhir::proto::fhir_inlined_extension_url)
              ? field->options().GetExtension(
                    ::google::fhir::proto::fhir_inlined_extension_url)
-             : field->json_name();
+             : std::string(field->json_name());
 }
 
 namespace internal {
@@ -37,7 +38,7 @@ std::vector<const google::protobuf::FieldDescriptor*> FindValueFields(
     const google::protobuf::Descriptor* descriptor) {
   std::vector<const google::protobuf::FieldDescriptor*> value_fields;
   for (int i = 0; i < descriptor->field_count(); i++) {
-    const std::string& name = descriptor->field(i)->name();
+    absl::string_view name = descriptor->field(i)->name();
     if (name != "id" && name != "extension") {
       value_fields.push_back(descriptor->field(i));
     }
