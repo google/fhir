@@ -1,5 +1,7 @@
 # TODO(b/244184211): describe this package.
 
+load("@rules_java//java:defs.bzl", "java_test")
+
 licenses(["notice"])
 
 java_test(
