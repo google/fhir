@@ -3439,6 +3439,110 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "extension with valueString",
+			inputs: []mvr{
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						Extension: []*d4pb.Extension{
+							{
+								Url:   &d4pb.Uri{Value: "http://hl7.org/extension_url"},
+								Value: &d4pb.Extension_ValueX{Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "extension_value"}}},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						Extension: []*d3pb.Extension{
+							{
+								Url:   &d3pb.Uri{Value: "http://hl7.org/extension_url"},
+								Value: &d3pb.Extension_ValueX{Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "extension_value"}}},
+							},
+						},
+					},
+				},
+			},
+			want: map[string]any{
+				"extension_url": []any{
+					map[string]any{
+						"value": map[string]any{"string": "extension_value"},
+					},
+				},
+			},
+		},
+		{
+			name: "extension with valueId",
+			inputs: []mvr{
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						Extension: []*d4pb.Extension{
+							{
+								Url:   &d4pb.Uri{Value: "http://hl7.org/extension_url"},
+								Value: &d4pb.Extension_ValueX{Choice: &d4pb.Extension_ValueX_Id{Id: &d4pb.Id{Value: "extension_value"}}},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						Extension: []*d3pb.Extension{
+							{
+								Url:   &d3pb.Uri{Value: "http://hl7.org/extension_url"},
+								Value: &d3pb.Extension_ValueX{Choice: &d3pb.Extension_ValueX_Id{Id: &d3pb.Id{Value: "extension_value"}}},
+							},
+						},
+					},
+				},
+			},
+			want: map[string]any{
+				"extension_url": []any{
+					map[string]any{
+						"value": map[string]any{"id": "extension_value"},
+					},
+				},
+			},
+		},
+		{
+			name: "extension with Id and valueId", // Id should be omitted but valueId should be kept
+			inputs: []mvr{
+				{
+					ver: fhirversion.R4,
+					r: &r4patientpb.Patient{
+						Extension: []*d4pb.Extension{
+							{
+								Id:    &d4pb.String{Value: "exampleExtension"},
+								Url:   &d4pb.Uri{Value: "http://hl7.org/extension_url"},
+								Value: &d4pb.Extension_ValueX{Choice: &d4pb.Extension_ValueX_Id{Id: &d4pb.Id{Value: "extension_value"}}},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.Patient{
+						Extension: []*d3pb.Extension{
+							{
+								Id:    &d3pb.String{Value: "exampleExtension"},
+								Url:   &d3pb.Uri{Value: "http://hl7.org/extension_url"},
+								Value: &d3pb.Extension_ValueX{Choice: &d3pb.Extension_ValueX_Id{Id: &d3pb.Id{Value: "extension_value"}}},
+							},
+						},
+					},
+				},
+			},
+			want: map[string]any{
+				"extension_url": []any{
+					map[string]any{
+						"value": map[string]any{"id": "extension_value"},
+					},
+				},
+			},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {

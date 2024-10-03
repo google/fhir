@@ -488,7 +488,6 @@ func (m *Marshaller) marshalSingleExtensionHelper(pb protoreflect.Message) (json
 		}
 	}
 	return cm, err
-
 }
 
 func (m *Marshaller) marshalExtensionsAsURLs(decmap jsonpbhelper.JSONObject, pbs []protoreflect.Message) error {
@@ -739,7 +738,7 @@ func (m *Marshaller) marshalMessageToMap(pb protoreflect.Message) (jsonpbhelper.
 	if err != nil {
 		return nil, err
 	}
-	if m.jsonFormat != formatPure && !jsonpbhelper.IsResourceType(pb.Descriptor()) {
+	if m.jsonFormat != formatPure && !jsonpbhelper.IsResourceType(pb.Descriptor()) && !jsonpbhelper.IsChoice(pb.Descriptor()){
 		// Omit FHIR element ID fields for analytics json.
 		// See https://github.com/rbrush/sql-on-fhir/blob/master/sql-on-fhir.md#id-fields-omitted.
 		delete(decmap, "id")
