@@ -1,4 +1,6 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("//tools/build_defs/go:go_library.bzl", "go_library")
+load("//tools/build_defs/go:go_wrap_cc.bzl", "go_wrap_cc")
 
 licenses(["notice"])
 
