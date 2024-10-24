@@ -218,14 +218,14 @@ class Printer {
 
       // TODO(b/148916862): Use a registry to determine the correct
       // ContainedResource to unpack to.
-      if (google::protobuf::DownCastToGenerated<Any>(proto).UnpackTo(contained.get())) {
+      if (google::protobuf::DownCastMessage<Any>(proto).UnpackTo(contained.get())) {
         return PrintContainedResource(*contained);
       }
 
       // If we can't unpack the Any proto as a contained resource, try to unpack
       // it as a contained resource `one of` field.
       std::optional<std::unique_ptr<google::protobuf::Message>> resource_msg =
-          ExtractConcreteMessage(google::protobuf::DownCastToGenerated<Any>(proto));
+          ExtractConcreteMessage(google::protobuf::DownCastMessage<Any>(proto));
       if (resource_msg == std::nullopt) {
         // Unable to extract Any proto into a concrete message. This could
         // happen if the proto is not a core FHIR resource. In this case we
