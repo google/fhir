@@ -26,6 +26,7 @@
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_split.h"
+#include "absl/strings/string_view.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/json_format.h"
 #include "google/fhir/r4/json_format.h"
@@ -57,7 +58,7 @@ static const absl::TimeZone GetTimeZone() {
 
 static const absl::TimeZone kTimeZone = GetTimeZone();
 
-std::string CamelCaseToLowerUnderscores(const std::string& src) {
+std::string CamelCaseToLowerUnderscores(absl::string_view src) {
   std::string dst;
   for (auto iter = src.begin(); iter != src.end(); ++iter) {
     if (absl::ascii_isupper(*iter) && iter != src.begin()) {

@@ -23,6 +23,7 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/string_view.h"
 #include "absl/types/optional.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/status/status.h"
@@ -225,7 +226,7 @@ absl::Status PopulateTypedReferenceId(const std::string& resource_id,
 }
 
 const FieldDescriptor* GetReferenceFieldForResource(
-    const Message& reference, const std::string& resource_type) {
+    const Message& reference, absl::string_view resource_type) {
   const std::string field_name =
       absl::StrCat(ToSnakeCase(resource_type), "_id");
   return reference.GetDescriptor()->FindFieldByName(field_name);

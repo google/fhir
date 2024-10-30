@@ -325,7 +325,7 @@ std::string PathTerm(const Message& message, const FieldDescriptor* field) {
       IsChoiceTypeContainer(message.GetDescriptor())) {
     return absl::StrCat("ofType(", field->message_type()->name(), ")");
   }
-  return FhirJsonName(field);
+  return std::string(FhirJsonName(field));
 }
 
 namespace {

@@ -112,9 +112,9 @@ GetBaseResourceInstanceFromDescriptor(const Descriptor* descriptor) {
       return GetBaseResourceInstanceForVersion<r4::core::ContainedResource>(
           descriptor);
     default:
-      return InvalidArgumentError(
-          "Unsupported FHIR Version for core_resource_registry for resource: " +
-          descriptor->full_name());
+      return InvalidArgumentError(absl::StrCat(
+          "Unsupported FHIR Version for core_resource_registry for resource: ",
+          descriptor->full_name()));
   }
 }
 

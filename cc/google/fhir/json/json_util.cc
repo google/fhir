@@ -62,13 +62,12 @@ absl::StatusOr<std::string> ToJsonStringValue(absl::string_view raw_value) {
   return result;
 }
 
-const std::string& FhirJsonName(const google::protobuf::FieldDescriptor* field) {
+absl::string_view FhirJsonName(const google::protobuf::FieldDescriptor* field) {
   // When translating References between proto and JSON, the unstructured
   // FHIR JSON Reference.reference field maps to the absolute URI field
   // in the proto Reference.
-  static const std::string* kReferenceFieldName = new std::string("reference");
   if (field->name() == "uri" && IsReference(field->containing_type())) {
-    return *kReferenceFieldName;
+    return "reference";
   }
   return field->json_name();
 }

@@ -21,6 +21,7 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
+#include "absl/strings/string_view.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/fhir_path/fhir_path_validation.h"

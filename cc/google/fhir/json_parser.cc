@@ -80,7 +80,7 @@ MakeFieldMap(const Descriptor* descriptor) {
       std::unordered_map<std::string, const FieldDescriptor*>>();
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
-    const std::string& json_name = FhirJsonName(field);
+    absl::string_view json_name = FhirJsonName(field);
     if (IsChoiceType(field)) {
       std::unique_ptr<
           const std::unordered_map<std::string, const FieldDescriptor*>>
@@ -101,13 +101,13 @@ MakeFieldMap(const Descriptor* descriptor) {
         }
       }
     } else {
-      (*field_map)[json_name] = field;
+      (*field_map)[std::string(json_name)] = field;
 
       if (field->type() == FieldDescriptor::TYPE_MESSAGE &&
           IsPrimitive(field->message_type())) {
         // Fhir JSON represents extensions to primitive fields as separate
         // standalone JSON objects, keyed by the "_" + field name.
-        (*field_map)["_" + json_name] = field;
+        (*field_map)[absl::StrCat("_", json_name)] = field;
       }
     }
   }
@@ -159,7 +159,7 @@ std::unique_ptr<FieldMap> BuildResourceTypeMap(const Descriptor* descriptor) {
   auto map = std::make_unique<FieldMap>();
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);
-    (*map)[field->message_type()->name()] = field;
+    (*map)[std::string(field->message_type()->name())] = field;
   }
   return map;
 }
@@ -173,8 +173,8 @@ absl::StatusOr<const FieldDescriptor*> GetContainedResourceField(
           new std::unordered_map<std::string, std::unique_ptr<FieldMap>>
               ABSL_GUARDED_BY(field_table_mutex);
 
-  const std::string& contained_resource_name =
-      contained_resource_desc->full_name();
+  const std::string contained_resource_name(
+      contained_resource_desc->full_name());
   {
     absl::ReaderMutexLock reader_lock(&field_table_mutex);
     auto field_table_iter = field_table->find(contained_resource_name);
@@ -565,8 +565,8 @@ absl::StatusOr<ParseResult> Parser::MergeJsonFhirObjectIntoProto(
       !IsPrimitive(target->GetDescriptor())) {
     if (GetFhirVersion(*target) != proto::R4) {
       return InvalidArgumentError(
-          "Unsupported FHIR Version for profiling for resource: " +
-          target->GetDescriptor()->full_name());
+          absl::StrCat("Unsupported FHIR Version for profiling for resource: ",
+                       target->GetDescriptor()->full_name()));
     }
     FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> core_resource,
                           GetBaseResourceInstance(*target));

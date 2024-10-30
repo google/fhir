@@ -22,6 +22,7 @@
 
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
+#include "absl/strings/string_view.h"
 #include "absl/strings/strip.h"
 #include "google/fhir/annotations.h"
 #include "google/fhir/core_resource_registry.h"
@@ -37,7 +38,7 @@ absl::Status PopulateTypedReferenceId(const std::string& resource_id,
                                       const std::string& version,
                                       ::google::protobuf::Message* reference_id);
 const ::google::protobuf::FieldDescriptor* GetReferenceFieldForResource(
-    const ::google::protobuf::Message& reference, const std::string& resource_type);
+    const ::google::protobuf::Message& reference, absl::string_view resource_type);
 
 }  // namespace internal
 

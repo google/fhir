@@ -112,7 +112,7 @@ class Printer {
     }
   }
 
-  void PrintFieldPreamble(const std::string& name) {
+  void PrintFieldPreamble(absl::string_view name) {
     absl::StrAppend(&output_, "\"", name, "\": ");
   }
 
@@ -383,7 +383,7 @@ class Printer {
   }
 
   absl::Status PrintPrimitiveField(const Message& proto,
-                                   const std::string& field_name) {
+                                   absl::string_view field_name) {
     // TODO(b/153462178): check for ReferenceId using an annotation.
     if (json_format_ == kFormatAnalytic &&
         proto.GetDescriptor()->name() == "ReferenceId") {
@@ -415,7 +415,7 @@ class Printer {
   }
 
   absl::Status PrintChoiceTypeField(const Message& choice_container,
-                                    const std::string& json_name) {
+                                    absl::string_view json_name) {
     const google::protobuf::Reflection* choice_reflection =
         choice_container.GetReflection();
     const google::protobuf::Descriptor* choice_descriptor =
@@ -434,7 +434,7 @@ class Printer {
     }
     const google::protobuf::FieldDescriptor* value_field =
         choice_reflection->GetOneofFieldDescriptor(choice_container, oneof);
-    std::string oneof_field_name = FhirJsonName(value_field);
+    std::string oneof_field_name(FhirJsonName(value_field));
     oneof_field_name[0] = toupper(oneof_field_name[0]);
 
     if (IsPrimitive(value_field->message_type())) {
@@ -550,9 +550,9 @@ class Printer {
             });
         break;
       default:
-        return InvalidArgumentError(
-            "Unsupported FHIR Version for profiling for resource: " +
-            profiled_codeable_concept.GetDescriptor()->full_name());
+        return InvalidArgumentError(absl::StrCat(
+            "Unsupported FHIR Version for profiling for resource: ",
+            profiled_codeable_concept.GetDescriptor()->full_name()));
     }
 
     return std::move(analytic_codeable_concept);
@@ -610,8 +610,8 @@ absl::StatusOr<std::string> WriteMessage(Printer printer,
   if (IsProfile(message.GetDescriptor())) {
     if (GetFhirVersion(message) != proto::R4) {
       return InvalidArgumentError(
-          "Unsupported FHIR Version for profiling for resource: " +
-          message.GetDescriptor()->full_name());
+          absl::StrCat("Unsupported FHIR Version for profiling for resource: ",
+                       message.GetDescriptor()->full_name()));
     }
     // Unprofile before writing, since JSON should be based on raw proto
     // Note that these are "lenient" profilings, because it doesn't make

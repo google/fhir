@@ -55,7 +55,7 @@ static const absl::TimeZone GetTimeZone() {
 
 static const absl::TimeZone kTimeZone = GetTimeZone();
 
-std::string CamelCaseToLowerUnderscores(const std::string& src) {
+std::string CamelCaseToLowerUnderscores(absl::string_view src) {
   std::string dst;
   for (auto iter = src.begin(); iter != src.end(); ++iter) {
     if (absl::ascii_isupper(*iter) && iter != src.begin()) {

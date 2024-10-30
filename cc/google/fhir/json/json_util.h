@@ -46,7 +46,7 @@ namespace google::fhir {
 absl::StatusOr<std::string> ToJsonStringValue(absl::string_view raw_value);
 
 // Given a proto field, returns the name of the field in FHIR JSON.
-const std::string& FhirJsonName(const google::protobuf::FieldDescriptor* field);
+absl::string_view FhirJsonName(const google::protobuf::FieldDescriptor* field);
 
 }  // namespace google::fhir
 
