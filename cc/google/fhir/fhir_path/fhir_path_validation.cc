@@ -223,13 +223,14 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
     const Descriptor* descriptor,
     const PrimitiveHandler* primitive_handler) const {
   // Simply return the cached constraint if it exists.
-  auto iter = constraints_cache_.find(descriptor->full_name());
+  std::unique_ptr<MessageConstraints>& constraints =
+      constraints_cache_[std::string(descriptor->full_name())];
 
-  if (iter != constraints_cache_.end()) {
-    return iter->second.get();
+  if (constraints != nullptr) {
+    return constraints.get();
   }
 
-  auto constraints = std::make_unique<MessageConstraints>();
+  constraints = std::make_unique<MessageConstraints>();
   AddMessageConstraints(descriptor, Severity::kFailure, primitive_handler,
                         &constraints->message_error_expressions);
   AddMessageConstraints(descriptor, Severity::kWarning, primitive_handler,
@@ -243,11 +244,6 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
                         primitive_handler,
                         &constraints->field_warning_expressions);
   }
-
-  // Add the successful constraints to the cache while keeping a local
-  // reference.
-  MessageConstraints* constraints_local = constraints.get();
-  constraints_cache_[descriptor->full_name()] = std::move(constraints);
 
   // Now we recursively look for fields with constraints.
   for (int i = 0; i < descriptor->field_count(); i++) {
@@ -267,12 +263,12 @@ FhirPathValidator::MessageConstraints* FhirPathValidator::ConstraintsFor(
           !child_constraints->field_error_expressions.empty() ||
           !child_constraints->field_warning_expressions.empty() ||
           !child_constraints->nested_with_constraints.empty()) {
-        constraints_local->nested_with_constraints.push_back(field);
+        constraints->nested_with_constraints.push_back(field);
       }
     }
   }
 
-  return constraints_local;
+  return constraints.get();
 }
 
 // Validates the given message against a given FHIRPath expression.
