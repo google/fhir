@@ -14,6 +14,8 @@
 
 #include "google/fhir/json/json_sax_handler.h"
 
+#include <cstddef>
+#include <cstdint>
 #include <functional>
 #include <memory>
 #include <optional>
@@ -25,6 +27,7 @@
 #include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
+#include "absl/strings/string_view.h"
 #include "absl/types/optional.h"
 #include "include/nlohmann/json.hpp"
 #include "include/nlohmann/json_fwd.hpp"

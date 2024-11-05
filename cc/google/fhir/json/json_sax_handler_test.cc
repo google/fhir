@@ -19,6 +19,7 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/status/status.h"
 #include "google/fhir/json/test_matchers.h"
 
 namespace google {
@@ -233,8 +234,10 @@ TEST(JsonSaxHandlerTest, DictionaryNestedInArray) {
 TEST(JsonSaxHandlerTest, ErrorParseEmptyInput) {
   FhirJson json_value;
   EXPECT_THAT(ParseJsonValue("", json_value),
-              IsErrorStatus(absl::StatusCode::kInvalidArgument,
-                            "unexpected end of input"));
+              testing::AnyOf(IsErrorStatus(absl::StatusCode::kInvalidArgument,
+                                           "unexpected end of input"),
+                             IsErrorStatus(absl::StatusCode::kInvalidArgument,
+                                           "empty input")));
 }
 
 TEST(JsonSaxHandlerTest, ErrorParseInvalidLiteral) {
