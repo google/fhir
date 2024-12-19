@@ -14,6 +14,9 @@
 
 #include "google/fhir/stu3/codeable_concepts.h"
 
+#include <memory>
+#include <string>
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "google/fhir/test_helper.h"

@@ -14,6 +14,9 @@
 
 #include "google/fhir/fhir_path/fhir_path_validation_rule.h"
 
+#include <string>
+#include <utility>
+
 namespace google::fhir::fhir_path {
 
 ValidationRuleBuilder& ValidationRuleBuilder::IgnoringConstraint(

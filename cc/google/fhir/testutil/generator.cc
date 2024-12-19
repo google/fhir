@@ -14,6 +14,7 @@
 
 #include "google/fhir/testutil/generator.h"
 
+#include <cmath>
 #include <memory>
 #include <string>
 #include <vector>

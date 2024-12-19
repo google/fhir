@@ -14,6 +14,8 @@
 
 #include "google/fhir/util.h"
 
+#include <string>
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/memory/memory.h"

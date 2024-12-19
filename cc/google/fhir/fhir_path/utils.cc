@@ -14,6 +14,10 @@
 
 #include "google/fhir/fhir_path/utils.h"
 
+#include <functional>
+#include <string>
+#include <vector>
+
 #include "google/protobuf/any.pb.h"
 #include "absl/status/status.h"
 #include "absl/strings/str_cat.h"

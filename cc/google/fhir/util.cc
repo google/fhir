@@ -14,6 +14,7 @@
 
 #include "google/fhir/util.h"
 
+#include <functional>
 #include <iterator>
 #include <memory>
 #include <string>

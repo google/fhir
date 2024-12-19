@@ -14,6 +14,7 @@
 
 #include "google/fhir/fhir_package.h"
 
+#include <cstddef>
 #include <functional>
 #include <memory>
 #include <string>

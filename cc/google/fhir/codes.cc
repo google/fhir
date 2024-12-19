@@ -14,6 +14,9 @@
 
 #include "google/fhir/codes.h"
 
+#include <algorithm>
+#include <string>
+
 #include "google/protobuf/descriptor.pb.h"
 #include "absl/container/flat_hash_map.h"
 #include "absl/status/statusor.h"

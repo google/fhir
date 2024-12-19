@@ -18,12 +18,18 @@
 #include <any>
 #include <cstddef>
 #include <cstdint>
+#include <exception>
+#include <functional>
 #include <iterator>
+#include <locale>
 #include <map>
 #include <memory>
 #include <optional>
+#include <string>
 #include <type_traits>
+#include <unordered_set>
 #include <utility>
+#include <vector>
 
 #include "google/protobuf/any.pb.h"
 #include "google/protobuf/util/message_differencer.h"

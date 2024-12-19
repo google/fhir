@@ -14,6 +14,9 @@
 
 #include "google/fhir/fhir_path/utils.h"
 
+#include <memory>
+#include <vector>
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "google/fhir/status/status.h"

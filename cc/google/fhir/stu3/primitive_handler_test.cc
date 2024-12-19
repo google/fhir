@@ -16,6 +16,7 @@
 
 #include "google/fhir/stu3/primitive_handler.h"
 
+#include <memory>
 #include <string>
 #include <vector>
 

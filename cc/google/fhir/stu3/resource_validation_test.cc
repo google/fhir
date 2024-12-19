@@ -16,6 +16,8 @@
 
 #include "google/fhir/stu3/resource_validation.h"
 
+#include <string>
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/status/status.h"

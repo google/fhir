@@ -14,6 +14,8 @@
 
 #include "google/fhir/codes.h"
 
+#include <string>
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "google/fhir/proto_util.h"

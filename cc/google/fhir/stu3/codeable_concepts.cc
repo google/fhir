@@ -14,7 +14,11 @@
 
 #include "google/fhir/stu3/codeable_concepts.h"
 
+#include <functional>
+#include <memory>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "absl/memory/memory.h"
 #include "absl/status/status.h"

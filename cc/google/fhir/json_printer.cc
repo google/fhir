@@ -20,6 +20,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <utility>
 #include <vector>
 
 
@@ -35,8 +36,8 @@
 #include "google/fhir/core_resource_registry.h"
 #include "google/fhir/extensions.h"
 #include "google/fhir/fhir_types.h"
-#include "google/fhir/json_format.h"
 #include "google/fhir/json/json_util.h"
+#include "google/fhir/json_format.h"
 #include "google/fhir/primitive_handler.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/r4/codeable_concepts.h"
