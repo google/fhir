@@ -229,6 +229,7 @@ const (
 	ErrorSeverityInformation = ErrorSeverity("informational")
 	ErrorSeverityWarning     = ErrorSeverity("warning")
 	ErrorSeverityError       = ErrorSeverity("error")
+	ErrorSeveritySuccess     = ErrorSeverity("success") // Only valid in R5.
 )
 
 // UnmarshalError is a public error message for an error that occurred during unmarshaling.
