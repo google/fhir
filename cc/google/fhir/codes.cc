@@ -68,7 +68,7 @@ std::string EnumValueToCodeString(const EnumValueDescriptor* enum_value) {
 }
 
 absl::StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
-    const std::string& code_string, const EnumDescriptor* target_enum_type) {
+    absl::string_view code_string, const EnumDescriptor* target_enum_type) {
   // Map from (target_enum_type->full_name() x code_string) -> result
   // for previous runs.
   static auto* memos = new absl::flat_hash_map<

@@ -33,7 +33,7 @@ std::string TitleCaseToUpperUnderscores(absl::string_view src);
 }
 
 absl::StatusOr<const ::google::protobuf::EnumValueDescriptor*> CodeStringToEnumValue(
-    const std::string& code_string,
+    absl::string_view code_string,
     const ::google::protobuf::EnumDescriptor* target_enum_type);
 std::string EnumValueToCodeString(
     const ::google::protobuf::EnumValueDescriptor* enum_value);
