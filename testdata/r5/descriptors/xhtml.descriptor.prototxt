@@ -1,0 +1,32 @@
+name: "Xhtml"
+field {
+  name: "value"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_STRING
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Actual xhtml"
+  }
+}
+field {
+  name: "id"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  number: 3
+  options {
+    [google.fhir.proto.reserved_reason]: "xhtml.extension not present on profile."
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for xhtml, last updated 2019-12-31T21:03:40.621+11:00.\nPrimitive Type xhtml.\nSee http://hl7.org/fhir/StructureDefinition/xhtml"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/xhtml"
+}

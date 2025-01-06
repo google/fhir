@@ -1,0 +1,250 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/naming_system_go_proto";
+
+// Auto-generated from StructureDefinition for NamingSystem.
+// System of unique identification.
+// See http://hl7.org/fhir/StructureDefinition/NamingSystem
+message NamingSystem {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/NamingSystem";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "kind != 'root' or uniqueId.all(type != 'uuid')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "uniqueId.where(preferred = true).select(type).isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "uniqueId.where(authoritative = 'true').select(type.toString() & period.start.toString() & period.end.toString()).isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.exists() implies name.matches('^[A-Z]([A-Za-z0-9_]){1,254}$')";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // NamingSystem.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this naming system, represented as a URI (globally
+  // unique)
+  Uri url = 23 [(.google.fhir.proto.fhir_path_warning_constraint) =
+                    "exists() implies matches('^[^|# ]+$')"];
+
+  // Additional identifier for the naming system (business identifier)
+  repeated Identifier identifier = 24;
+
+  // Business version of the naming system
+  String version = 25;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 26;
+
+  // Name for this naming system (computer friendly)
+  String name = 10
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Title for this naming system (human friendly)
+  String title = 27;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // codesystem | identifier | root
+  message KindCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/namingsystem-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    NamingSystemTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  KindCode kind = 12
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 28;
+
+  // Date last changed
+  DateTime date = 13
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Name of the publisher/steward (organization or individual)
+  String publisher = 14;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 15;
+
+  // Who maintains system namespace?
+  String responsible = 16;
+
+  // e.g. driver,  provider,  patient, bank etc
+  CodeableConcept type = 17;
+
+  // Natural language description of the naming system
+  Markdown description = 18;
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 19;
+
+  // Intended jurisdiction for naming system (if applicable)
+  repeated CodeableConcept jurisdiction = 20;
+
+  // Why this naming system is defined
+  Markdown purpose = 29;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 30;
+
+  // Copyright holder and year(s)
+  String copyright_label = 31;
+
+  // When the NamingSystem was approved by publisher
+  Date approval_date = 32;
+
+  // When the NamingSystem was last reviewed by the publisher
+  Date last_review_date = 33;
+
+  // When the NamingSystem is expected to be used
+  Period effective_period = 34;
+
+  // E.g. Education, Treatment, Assessment, etc
+  repeated CodeableConcept topic = 35;
+
+  // Who authored the CodeSystem
+  repeated ContactDetail author = 36;
+
+  // Who edited the NamingSystem
+  repeated ContactDetail editor = 37;
+
+  // Who reviewed the NamingSystem
+  repeated ContactDetail reviewer = 38;
+
+  // Who endorsed the NamingSystem
+  repeated ContactDetail endorser = 39;
+
+  // Additional documentation, citations, etc
+  repeated RelatedArtifact related_artifact = 40;
+
+  // How/where is it used
+  String usage = 21;
+
+  // Unique identifiers used for system
+  message UniqueId {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // oid | uuid | uri | iri-stem | v2csmnemonic | other
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/namingsystem-identifier-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      NamingSystemIdentifierTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // The unique identifier
+    String value = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Is this the id that should be used for this type
+    Boolean preferred = 6;
+
+    // Notes about identifier usage
+    String comment = 7;
+
+    // When is identifier valid?
+    Period period = 8;
+
+    // Whether the identifier is authoritative
+    Boolean authoritative = 9;
+  }
+  repeated UniqueId unique_id = 22
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+}

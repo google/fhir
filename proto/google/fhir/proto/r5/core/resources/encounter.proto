@@ -1,0 +1,318 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/encounter_go_proto";
+
+// Auto-generated from StructureDefinition for Encounter.
+// An interaction during which services are provided to the patient.
+// See http://hl7.org/fhir/StructureDefinition/Encounter
+message Encounter {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Encounter";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Encounter.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Identifier(s) by which this encounter is known
+  repeated Identifier identifier = 10;
+
+  // planned | in-progress | on-hold | discharged | completed | cancelled |
+  // discontinued | entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/encounter-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    EncounterStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of patient encounter context - e.g. Inpatient, outpatient
+  repeated CodeableConcept class_value = 33 [json_name = "class"];
+
+  // Indicates the urgency of the encounter
+  CodeableConcept priority = 17;
+
+  // Specific type of encounter (e.g. e-mail consultation, surgical day-care,
+  // ...)
+  repeated CodeableConcept type = 15;
+
+  // Specific type of service
+  repeated CodeableReference service_type = 34;
+
+  // The patient or group related to this encounter
+  Reference subject = 18 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // The current status of the subject in relation to the Encounter
+  CodeableConcept subject_status = 35;
+
+  // Episode(s) of care that this encounter should be recorded against
+  repeated Reference episode_of_care = 19
+      [(.google.fhir.proto.valid_reference_type) = "EpisodeOfCare"];
+
+  // The request that initiated this encounter
+  repeated Reference based_on = 20 [
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "DeviceRequest",
+    (.google.fhir.proto.valid_reference_type) = "MedicationRequest",
+    (.google.fhir.proto.valid_reference_type) = "ServiceRequest"
+  ];
+
+  // The group(s) that are allocated to participate in this encounter
+  repeated Reference care_team = 36
+      [(.google.fhir.proto.valid_reference_type) = "CareTeam"];
+
+  // Another Encounter this encounter is part of
+  Reference part_of = 32
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // The organization (facility) responsible for this encounter
+  Reference service_provider = 31
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // List of participants involved in the encounter
+  message Participant {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "actor.exists() or type.exists()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "actor.exists(resolve() is Patient or resolve() is Group) implies type.exists().not()";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Role of participant in encounter
+    repeated CodeableConcept type = 4;
+
+    // Period of time during the encounter that the participant participated
+    Period period = 5;
+
+    // The individual, device, or service participating in the encounter
+    Reference actor = 7 [
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Group",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Device",
+      (.google.fhir.proto.valid_reference_type) = "HealthcareService"
+    ];
+  }
+  repeated Participant participant = 21;
+
+  // The appointment that scheduled this encounter
+  repeated Reference appointment = 22
+      [(.google.fhir.proto.valid_reference_type) = "Appointment"];
+
+  // Connection details of a virtual service (e.g. conference call)
+  repeated VirtualServiceDetail virtual_service = 37;
+
+  // The actual start and end time of the encounter
+  Period actual_period = 38;
+
+  // The planned start date/time (or admission date) of the encounter
+  DateTime planned_start_date = 39;
+
+  // The planned end date/time (or discharge date) of the encounter
+  DateTime planned_end_date = 40;
+
+  // Actual quantity of time the encounter lasted (less time absent)
+  Duration length = 24;
+
+  // The list of medical reasons that are expected to be addressed during the
+  // episode of care
+  message Reason {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // What the reason value should be used for/as
+    repeated CodeableConcept use = 4;
+
+    // Reason the encounter takes place (core or reference)
+    repeated CodeableReference value = 5;
+  }
+  repeated Reason reason = 41;
+
+  // The list of diagnosis relevant to this encounter
+  message Diagnosis {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The diagnosis relevant to the encounter
+    repeated CodeableReference condition = 7;
+
+    // Role that this diagnosis has within the encounter (e.g. admission,
+    // billing, discharge …)
+    repeated CodeableConcept use = 8;
+  }
+  repeated Diagnosis diagnosis = 27;
+
+  // The set of accounts that may be used for billing for this Encounter
+  repeated Reference account = 28
+      [(.google.fhir.proto.valid_reference_type) = "Account"];
+
+  // Diet preferences reported by the patient
+  repeated CodeableConcept diet_preference = 42;
+
+  // Wheelchair, translator, stretcher, etc
+  repeated CodeableConcept special_arrangement = 43;
+
+  // Special courtesies (VIP, board member)
+  repeated CodeableConcept special_courtesy = 44;
+
+  // Details about the admission to a healthcare service
+  message Admission {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Pre-admission identifier
+    Identifier pre_admission_identifier = 4;
+
+    // The location/organization from which the patient came before admission
+    Reference origin = 5 [
+      (.google.fhir.proto.valid_reference_type) = "Location",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // From where patient was admitted (physician referral, transfer)
+    CodeableConcept admit_source = 6;
+
+    // Indicates that the patient is being re-admitted
+    CodeableConcept re_admission = 7;
+
+    // Location/organization to which the patient is discharged
+    Reference destination = 8 [
+      (.google.fhir.proto.valid_reference_type) = "Location",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // Category or kind of location after discharge
+    CodeableConcept discharge_disposition = 9;
+  }
+  Admission admission = 45;
+
+  // List of locations where the patient has been
+  message Location {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Location the encounter takes place
+    Reference location = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Location"
+    ];
+
+    // planned | active | reserved | completed
+    message StatusCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/encounter-location-status";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      EncounterLocationStatusCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    StatusCode status = 5;
+
+    // The physical type of the location (usually the level in the location
+    // hierarchy - bed, room, ward, virtual etc.)
+    CodeableConcept form = 8;
+
+    // Time period during which the patient was present at the location
+    Period period = 7;
+  }
+  repeated Location location = 30;
+}

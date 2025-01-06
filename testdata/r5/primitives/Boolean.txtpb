@@ -1,0 +1,29 @@
+# proto-file: proto/google/fhir/proto/r5/primitive_test_suite.proto
+# proto-message: PrimitiveTestSuite
+valid_pairs {
+  json_string: "true"
+  proto {
+    boolean {
+      value: true
+    }
+  }
+}
+
+valid_pairs {
+  json_string: "false"
+  proto {
+    boolean {
+      value: false
+    }
+  }
+}
+
+invalid_json: "\"true\""
+invalid_json: "\"false\""
+invalid_json: "\"\""
+invalid_json: "0"
+invalid_json: "0.0"
+invalid_json: "1"
+invalid_json: "1.0"
+
+no_invalid_protos_reason: "Due to datatype, all values are valid"

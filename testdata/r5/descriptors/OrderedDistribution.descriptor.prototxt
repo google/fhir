@@ -1,0 +1,149 @@
+name: "OrderedDistribution"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "modifier_extension"
+  number: 3
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Extensions that cannot be ignored even if unrecognized"
+  }
+}
+field {
+  name: "description"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "A description of the content and value of the statistic"
+  }
+}
+field {
+  name: "note"
+  number: 5
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Annotation"
+  options {
+    [google.fhir.proto.field_description]: "Footnotes and/or explanatory notes"
+  }
+}
+field {
+  name: "number_of_intervals"
+  number: 6
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Integer"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Number of intervals in an array, eg 4 for quartiles"
+  }
+}
+field {
+  name: "bottom_of_first_interval"
+  number: 7
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Quantity"
+  options {
+    [google.fhir.proto.field_description]: "Bottom of first interval"
+    [google.fhir.proto.fhir_path_constraint]: "true"
+  }
+}
+field {
+  name: "interval"
+  number: 8
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.OrderedDistribution.Interval"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "Interval"
+  }
+}
+field {
+  name: "top_of_interval"
+  number: 9
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Quantity"
+  options {
+    [google.fhir.proto.field_description]: "Singular value of the statistic at the upper bound of the interval"
+  }
+}
+nested_type {
+  name: "Interval"
+  field {
+    name: "id"
+    number: 1
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.String"
+    options {
+      [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+    }
+  }
+  field {
+    name: "extension"
+    number: 2
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Extension"
+    options {
+      [google.fhir.proto.field_description]: "Additional content defined by implementations"
+    }
+  }
+  field {
+    name: "rank_order"
+    number: 3
+    label: LABEL_OPTIONAL
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Integer"
+    options {
+      [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+      [google.fhir.proto.field_description]: "Relative order of interval"
+      [google.fhir.proto.fhir_path_constraint]: "true"
+      [google.fhir.proto.fhir_path_constraint]: "true"
+    }
+  }
+  field {
+    name: "interval_statistic"
+    number: 4
+    label: LABEL_REPEATED
+    type: TYPE_MESSAGE
+    type_name: ".google.fhir.r5.core.Statistic"
+    options {
+      [google.fhir.proto.field_description]: "Values and parameters for a single statistic related to the interval"
+    }
+  }
+  options {
+    [google.fhir.proto.fhir_path_message_constraint]: "true"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for OrderedDistribution, last updated 2019-12-31T21:03:40.621+11:00.\nAn ordered list (distribution) of statistics.\nSee http://hl7.org/fhir/StructureDefinition/OrderedDistribution"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/OrderedDistribution"
+  [google.fhir.proto.fhir_path_message_constraint]: "interval.count() = numberOfIntervals"
+}

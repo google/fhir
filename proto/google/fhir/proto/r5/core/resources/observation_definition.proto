@@ -1,0 +1,343 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/observation_definition_go_proto";
+
+// Auto-generated from StructureDefinition for ObservationDefinition.
+// Definition of an observation.
+// See http://hl7.org/fhir/StructureDefinition/ObservationDefinition
+message ObservationDefinition {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ObservationDefinition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "permittedUnit.exists() implies (permittedDataType = 'Quantity').exists()";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.exists() implies name.matches('^[A-Z]([A-Za-z0-9_]){1,254}$')";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // ObservationDefinition.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Logical canonical URL to reference this ObservationDefinition (globally
+  // unique)
+  Uri url = 23;
+
+  // Business identifier of the ObservationDefinition
+  Identifier identifier = 24;
+
+  // Business version of the ObservationDefinition
+  String version = 25;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 26;
+
+  // Name for this ObservationDefinition (computer friendly)
+  String name = 27;
+
+  // Name for this ObservationDefinition (human friendly)
+  String title = 28;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 29
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // If for testing purposes, not real usage
+  Boolean experimental = 30;
+
+  // Date last changed
+  DateTime date = 31;
+
+  // The name of the individual or organization that published the
+  // ObservationDefinition
+  String publisher = 32;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 33;
+
+  // Natural language description of the ObservationDefinition
+  Markdown description = 34;
+
+  // Content intends to support these contexts
+  repeated UsageContext use_context = 35;
+
+  // Intended jurisdiction for this ObservationDefinition (if applicable)
+  repeated CodeableConcept jurisdiction = 36;
+
+  // Why this ObservationDefinition is defined
+  Markdown purpose = 37;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 38;
+
+  // Copyright holder and year(s)
+  String copyright_label = 39;
+
+  // When ObservationDefinition was approved by publisher
+  Date approval_date = 40;
+
+  // Date on which the asset content was last reviewed by the publisher
+  Date last_review_date = 41;
+
+  // The effective date range for the ObservationDefinition
+  Period effective_period = 42;
+
+  // Based on FHIR definition of another observation
+  repeated Canonical derived_from_canonical = 43;
+
+  // Based on external definition
+  repeated Uri derived_from_uri = 44;
+
+  // Type of subject for the defined observation
+  repeated CodeableConcept subject = 45;
+
+  // Desired kind of performer for such kind of observation
+  CodeableConcept performer_type = 46;
+
+  // General type of observation
+  repeated CodeableConcept category = 10;
+
+  // Type of observation
+  CodeableConcept code = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Quantity | CodeableConcept | string | boolean | integer | Range | Ratio |
+  // SampledData | time | dateTime | Period
+  message PermittedDataTypeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/permitted-data-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ObservationDataTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  repeated PermittedDataTypeCode permitted_data_type = 13;
+
+  // Multiple results allowed for conforming observations
+  Boolean multiple_results_allowed = 14;
+
+  // Body part to be observed
+  CodeableConcept body_site = 47;
+
+  // Method used to produce the observation
+  CodeableConcept method = 15;
+
+  // Kind of specimen used by this type of observation
+  repeated Reference specimen = 48
+      [(.google.fhir.proto.valid_reference_type) = "SpecimenDefinition"];
+
+  // Measurement device or model of device
+  repeated Reference device = 49 [
+    (.google.fhir.proto.valid_reference_type) = "DeviceDefinition",
+    (.google.fhir.proto.valid_reference_type) = "Device"
+  ];
+
+  // The preferred name to be used when reporting the observation results
+  String preferred_report_name = 16;
+
+  // Unit for quantitative results
+  repeated Coding permitted_unit = 50;
+
+  // Set of qualified values for observation results
+  message QualifiedValue {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Context qualifier for the set of qualified values
+    CodeableConcept context = 4;
+
+    // Targetted population for the set of qualified values
+    repeated CodeableConcept applies_to = 5;
+
+    // male | female | other | unknown
+    message GenderCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/administrative-gender";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      AdministrativeGenderCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    GenderCode gender = 6;
+
+    // Applicable age range for the set of qualified values
+    Range age = 7;
+
+    // Applicable gestational age range for the set of qualified values
+    Range gestational_age = 8;
+
+    // Condition associated with the set of qualified values
+    String condition = 9;
+
+    // reference | critical | absolute
+    message RangeCategoryCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/observation-range-category";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ObservationRangeCategoryCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    RangeCategoryCode range_category = 10;
+
+    // The range for continuous or ordinal observations
+    Range range = 11;
+
+    // Value set of valid coded values as part of this set of qualified values
+    Canonical valid_coded_value_set = 12;
+
+    // Value set of normal coded values as part of this set of qualified values
+    Canonical normal_coded_value_set = 13;
+
+    // Value set of abnormal coded values as part of this set of qualified
+    // values
+    Canonical abnormal_coded_value_set = 14;
+
+    // Value set of critical coded values as part of this set of qualified
+    // values
+    Canonical critical_coded_value_set = 15;
+  }
+  repeated QualifiedValue qualified_value = 51;
+
+  // Definitions of related resources belonging to this kind of observation
+  // group
+  repeated Reference has_member = 52 [
+    (.google.fhir.proto.valid_reference_type) = "ObservationDefinition",
+    (.google.fhir.proto.valid_reference_type) = "Questionnaire"
+  ];
+
+  // Component results
+  message Component {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "permittedUnit.exists() implies (permittedDataType = 'Quantity').exists()";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Type of observation
+    CodeableConcept code = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Quantity | CodeableConcept | string | boolean | integer | Range | Ratio |
+    // SampledData | time | dateTime | Period
+    message PermittedDataTypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/permitted-data-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ObservationDataTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    repeated PermittedDataTypeCode permitted_data_type = 5;
+
+    // Unit for quantitative results
+    repeated Coding permitted_unit = 6;
+
+    // Set of qualified values for observation results
+    repeated QualifiedValue qualified_value = 7;
+  }
+  repeated Component component = 53;
+}

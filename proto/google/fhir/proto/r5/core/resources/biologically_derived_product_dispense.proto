@@ -1,0 +1,157 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/biologically_derived_product_dispense_go_proto";
+
+// Auto-generated from StructureDefinition for
+// BiologicallyDerivedProductDispense. A record of dispensation of a
+// biologically derived product. See
+// http://hl7.org/fhir/StructureDefinition/BiologicallyDerivedProductDispense
+message BiologicallyDerivedProductDispense {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/BiologicallyDerivedProductDispense";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // BiologicallyDerivedProductDispense.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business identifier for this dispense
+  repeated Identifier identifier = 10;
+
+  // The order or request that this dispense is fulfilling
+  repeated Reference based_on = 11
+      [(.google.fhir.proto.valid_reference_type) = "ServiceRequest"];
+
+  // Short description
+  repeated Reference part_of = 12 [(.google.fhir.proto.valid_reference_type) =
+                                       "BiologicallyDerivedProductDispense"];
+
+  // preparation | in-progress | allocated | issued | unfulfilled | returned |
+  // entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/biologicallyderivedproductdispense-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    BiologicallyDerivedProductDispenseCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 13
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Relationship between the donor and intended recipient
+  CodeableConcept origin_relationship_type = 14;
+
+  // The BiologicallyDerivedProduct that is dispensed
+  Reference product = 15 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "BiologicallyDerivedProduct"
+  ];
+
+  // The intended recipient of the dispensed product
+  Reference patient = 16 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient"
+  ];
+
+  // Indicates the type of matching associated with the dispense
+  CodeableConcept match_status = 17;
+
+  // Indicates who or what performed an action
+  message Performer {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Identifies the function of the performer during the dispense
+    CodeableConcept function = 4;
+
+    // Who performed the action
+    Reference actor = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Practitioner"
+    ];
+  }
+  repeated Performer performer = 18;
+
+  // Where the dispense occurred
+  Reference location = 19
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Amount dispensed
+  SimpleQuantity quantity = 20;
+
+  // When product was selected/matched
+  DateTime prepared_date = 21;
+
+  // When the product was dispatched
+  DateTime when_handed_over = 22;
+
+  // Where the product was dispatched to
+  Reference destination = 23
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Additional notes
+  repeated Annotation note = 24;
+
+  // Specific instructions for use
+  String usage_instruction = 25;
+}

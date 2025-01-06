@@ -1,0 +1,203 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/manufactured_item_definition_go_proto";
+
+// Auto-generated from StructureDefinition for ManufacturedItemDefinition.
+// The definition and characteristics of a medicinal manufactured item, such as
+// a tablet or capsule, as contained in a packaged medicinal product. See
+// http://hl7.org/fhir/StructureDefinition/ManufacturedItemDefinition
+message ManufacturedItemDefinition {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ManufacturedItemDefinition";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // ManufacturedItemDefinition.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Unique identifier
+  repeated Identifier identifier = 10;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // A descriptive name applied to this item
+  String name = 12;
+
+  // Dose form as manufactured (before any necessary transformation)
+  CodeableConcept manufactured_dose_form = 13
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The “real-world” units in which the quantity of the item is described
+  CodeableConcept unit_of_presentation = 14;
+
+  // Manufacturer of the item, one of several possible
+  repeated Reference manufacturer = 15
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Allows specifying that an item is on the market for sale, or that it is not
+  // available, and the dates and locations associated
+  repeated MarketingStatus marketing_status = 16;
+
+  // The ingredients of this manufactured item. Only needed if these are not
+  // specified by incoming references from the Ingredient resource
+  repeated CodeableConcept ingredient = 17;
+
+  // General characteristics of this item
+  message Property {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // A code expressing the type of characteristic
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // A value for the characteristic
+    message ValueX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        CodeableConcept codeable_concept = 1;
+        Quantity quantity = 2;
+        Date date = 3;
+        Boolean boolean = 4;
+        Markdown markdown = 5;
+        Attachment attachment = 6;
+        Reference reference = 7
+            [(.google.fhir.proto.valid_reference_type) = "Binary"];
+      }
+    }
+    ValueX value = 5;
+  }
+  repeated Property property = 18;
+
+  // Physical parts of the manufactured item, that it is intrisically made from.
+  // This is distinct from the ingredients that are part of its chemical makeup
+  message Component {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Defining type of the component e.g. shell, layer, ink
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // The function of this component within the item e.g. delivers active
+    // ingredient, masks taste
+    repeated CodeableConcept function = 5;
+
+    // The measurable amount of total quantity of all substances in the
+    // component, expressable in different ways (e.g. by mass or volume)
+    repeated Quantity amount = 6;
+
+    // A reference to a constituent of the manufactured item as a whole, linked
+    // here so that its component location within the item can be indicated.
+    // This not where the item's ingredient are primarily stated (for which see
+    // Ingredient.for or ManufacturedItemDefinition.ingredient)
+    message Constituent {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The measurable amount of the substance, expressable in different ways
+      // (e.g. by mass or volume)
+      repeated Quantity amount = 4;
+
+      // The physical location of the constituent/ingredient within the
+      // component
+      repeated CodeableConcept location = 5;
+
+      // The function of this constituent within the component e.g. binder
+      repeated CodeableConcept function = 6;
+
+      // The ingredient that is the constituent of the given component
+      repeated CodeableReference has_ingredient = 7;
+    }
+    repeated Constituent constituent = 7;
+
+    // General characteristics of this component
+    repeated Property property = 8;
+
+    // A component that this component contains or is made from
+    repeated Component component = 9;
+  }
+  repeated Component component = 19;
+}

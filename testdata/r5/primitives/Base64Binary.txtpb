@@ -1,0 +1,38 @@
+# proto-file: proto/google/fhir/proto/r5/primitive_test_suite.proto
+# proto-message: PrimitiveTestSuite
+valid_pairs {
+  json_string: "\"JVBERi0xLjUNJeLjz9MNCjEwIDAg\""
+  proto {
+    base64_binary {
+      value: "%PDF-1.5\r%\342\343\317\323\r\n10 0 "
+    }
+  }
+}
+
+valid_pairs {
+  json_string: "\"JVBE  Ri0x  LjUN  JeLj  z9MN  CjEw  IDAg\""
+  proto {
+    base64_binary {
+      value: "%PDF-1.5\r%\342\343\317\323\r\n10 0 "
+      extension {
+        url { value: "https://g.co/fhir/StructureDefinition/base64Binary-separatorStride" }
+        extension {
+          url { value: "separator" }
+          value { string_value { value: "  " } }
+        }
+        extension {
+          url { value: "stride" }
+          value { positive_int { value: 4 } }
+        }
+      }
+    }
+  }
+}
+
+invalid_json: "\"using&invalid&characters\""
+invalid_json: "true"
+invalid_json: "1"
+invalid_json: "1.0"
+
+# TODO(b/179911416): Add test cases to be used by other languages, and filter them out in java
+no_invalid_protos_reason: "Due to limitations in regex engines, Base64Binary strings are not checked"

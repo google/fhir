@@ -1,0 +1,196 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/condition_go_proto";
+
+// Auto-generated from StructureDefinition for Condition.
+// Detailed information about conditions, problems or diagnoses.
+// See http://hl7.org/fhir/StructureDefinition/Condition
+message Condition {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Condition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "abatement.exists() implies (clinicalStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-clinical' and (code='inactive' or code='resolved' or code='remission')).exists())";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "category.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-category' and code='problem-list-item').exists() implies clinicalStatus.coding.where(system='http://terminology.hl7.org/CodeSystem/condition-clinical' and code='unknown').exists().not()";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Condition.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // External Ids for this condition
+  repeated Identifier identifier = 10;
+
+  // active | recurrence | relapse | inactive | remission | resolved | unknown
+  CodeableConcept clinical_status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // unconfirmed | provisional | differential | confirmed | refuted |
+  // entered-in-error
+  CodeableConcept verification_status = 12;
+
+  // problem-list-item | encounter-diagnosis
+  repeated CodeableConcept category = 13;
+
+  // Subjective severity of condition
+  CodeableConcept severity = 14;
+
+  // Identification of the condition, problem or diagnosis
+  CodeableConcept code = 15;
+
+  // Anatomical location, if relevant
+  repeated CodeableConcept body_site = 16;
+
+  // Who has the condition?
+  Reference subject = 17 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // The Encounter during which this Condition was created
+  Reference encounter = 18
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // Estimated or actual date,  date-time, or age
+  message OnsetX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      DateTime date_time = 1;
+      Age age = 2;
+      Period period = 3;
+      Range range = 4;
+      String string_value = 5 [json_name = "string"];
+    }
+  }
+  OnsetX onset = 19;
+
+  // When in resolution/remission
+  message AbatementX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      DateTime date_time = 1;
+      Age age = 2;
+      Period period = 3;
+      Range range = 4;
+      String string_value = 5 [json_name = "string"];
+    }
+  }
+  AbatementX abatement = 20;
+
+  // Date condition was first recorded
+  DateTime recorded_date = 21;
+
+  // Who or what participated in the activities related to the condition and how
+  // they were involved
+  message Participant {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Type of involvement
+    CodeableConcept function = 4;
+
+    // Who or what participated in the activities related to the condition
+    Reference actor = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+      (.google.fhir.proto.valid_reference_type) = "Device",
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "CareTeam"
+    ];
+  }
+  repeated Participant participant = 27;
+
+  // Stage/grade, usually assessed formally
+  message Stage {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "summary.exists() or assessment.exists()";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Simple summary (disease specific)
+    CodeableConcept summary = 4;
+
+    // Formal record of assessment
+    repeated Reference assessment = 5 [
+      (.google.fhir.proto.valid_reference_type) = "ClinicalImpression",
+      (.google.fhir.proto.valid_reference_type) = "DiagnosticReport",
+      (.google.fhir.proto.valid_reference_type) = "Observation"
+    ];
+
+    // Kind of staging
+    CodeableConcept type = 6;
+  }
+  repeated Stage stage = 24;
+
+  // Supporting evidence for the verification status
+  repeated CodeableReference evidence = 28;
+
+  // Additional information about the Condition
+  repeated Annotation note = 26;
+}

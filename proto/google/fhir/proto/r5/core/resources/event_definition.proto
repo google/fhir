@@ -1,0 +1,190 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/event_definition_go_proto";
+
+// Auto-generated from StructureDefinition for EventDefinition.
+// A description of when an event can occur.
+// See http://hl7.org/fhir/StructureDefinition/EventDefinition
+message EventDefinition {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/EventDefinition";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.exists() implies name.matches('^[A-Z]([A-Za-z0-9_]){1,254}$')";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // EventDefinition.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this event definition, represented as a URI
+  // (globally unique)
+  Uri url = 10 [(.google.fhir.proto.fhir_path_warning_constraint) =
+                    "exists() implies matches('^[^|# ]+$')"];
+
+  // Additional identifier for the event definition
+  repeated Identifier identifier = 11;
+
+  // Business version of the event definition
+  String version = 12;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 38;
+
+  // Name for this event definition (computer friendly)
+  String name = 13;
+
+  // Name for this event definition (human friendly)
+  String title = 14;
+
+  // Subordinate title of the event definition
+  String subtitle = 15;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 17;
+
+  // Type of individual the event definition is focused on
+  message SubjectX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      CodeableConcept codeable_concept = 1;
+      Reference reference = 2
+          [(.google.fhir.proto.valid_reference_type) = "Group"];
+    }
+  }
+  SubjectX subject = 18;
+
+  // Date last changed
+  DateTime date = 19;
+
+  // Name of the publisher/steward (organization or individual)
+  String publisher = 20;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 21;
+
+  // Natural language description of the event definition
+  Markdown description = 22;
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 23;
+
+  // Intended jurisdiction for event definition (if applicable)
+  repeated CodeableConcept jurisdiction = 24;
+
+  // Why this event definition is defined
+  Markdown purpose = 25;
+
+  // Describes the clinical usage of the event definition
+  Markdown usage = 39;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 27;
+
+  // Copyright holder and year(s)
+  String copyright_label = 40;
+
+  // When the event definition was approved by publisher
+  Date approval_date = 28;
+
+  // When the event definition was last reviewed by the publisher
+  Date last_review_date = 29;
+
+  // When the event definition is expected to be used
+  Period effective_period = 30;
+
+  // E.g. Education, Treatment, Assessment, etc
+  repeated CodeableConcept topic = 31;
+
+  // Who authored the content
+  repeated ContactDetail author = 32;
+
+  // Who edited the content
+  repeated ContactDetail editor = 33;
+
+  // Who reviewed the content
+  repeated ContactDetail reviewer = 34;
+
+  // Who endorsed the content
+  repeated ContactDetail endorser = 35;
+
+  // Additional documentation, citations, etc
+  repeated RelatedArtifact related_artifact = 36;
+
+  // "when" the event occurs (multiple = 'or')
+  repeated TriggerDefinition trigger = 37
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+}

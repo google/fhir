@@ -1,0 +1,215 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/charge_item_definition_go_proto";
+
+// Auto-generated from StructureDefinition for ChargeItemDefinition.
+// Definition of properties and rules about how the price and the applicability
+// of a ChargeItem can be determined. See
+// http://hl7.org/fhir/StructureDefinition/ChargeItemDefinition
+message ChargeItemDefinition {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ChargeItemDefinition";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.exists() implies name.matches('^[A-Z]([A-Za-z0-9_]){1,254}$')";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // ChargeItemDefinition.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this charge item definition, represented as a URI
+  // (globally unique)
+  Uri url = 10 [(.google.fhir.proto.fhir_path_warning_constraint) =
+                    "exists() implies matches('^[^|# ]+$')"];
+
+  // Additional identifier for the charge item definition
+  repeated Identifier identifier = 11;
+
+  // Business version of the charge item definition
+  String version = 12;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 33;
+
+  // Name for this charge item definition (computer friendly)
+  String name = 34;
+
+  // Name for this charge item definition (human friendly)
+  String title = 13;
+
+  // Underlying externally-defined charge item definition
+  repeated Uri derived_from_uri = 14;
+
+  // A larger definition of which this particular definition is a component or
+  // step
+  repeated Canonical part_of = 15;
+
+  // Completed or terminated request(s) whose function is taken by this new
+  // request
+  repeated Canonical replaces = 16;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 18;
+
+  // Date last changed
+  DateTime date = 19;
+
+  // Name of the publisher/steward (organization or individual)
+  String publisher = 20;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 21;
+
+  // Natural language description of the charge item definition
+  Markdown description = 22;
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 23;
+
+  // Intended jurisdiction for charge item definition (if applicable)
+  repeated CodeableConcept jurisdiction = 24;
+
+  // Why this charge item definition is defined
+  Markdown purpose = 35;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 25;
+
+  // Copyright holder and year(s)
+  String copyright_label = 36;
+
+  // When the charge item definition was approved by publisher
+  Date approval_date = 26;
+
+  // When the charge item definition was last reviewed by the publisher
+  Date last_review_date = 27;
+
+  // Billing code or product type this definition applies to
+  CodeableConcept code = 29;
+
+  // Instances this definition applies to
+  repeated Reference instance = 30 [
+    (.google.fhir.proto.valid_reference_type) = "Medication",
+    (.google.fhir.proto.valid_reference_type) = "Substance",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "DeviceDefinition",
+    (.google.fhir.proto.valid_reference_type) = "ActivityDefinition",
+    (.google.fhir.proto.valid_reference_type) = "PlanDefinition",
+    (.google.fhir.proto.valid_reference_type) = "HealthcareService"
+  ];
+
+  // Whether or not the billing code is applicable
+  message Applicability {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Boolean-valued expression
+    Expression condition = 7;
+
+    // When the charge item definition is expected to be used
+    Period effective_period = 8;
+
+    // Reference to / quotation of the external source of the group of
+    // properties
+    RelatedArtifact related_artifact = 9;
+  }
+  repeated Applicability applicability = 31;
+
+  // Group of properties which are applicable under the same conditions
+  message PropertyGroup {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Conditions under which the priceComponent is applicable
+    repeated Applicability applicability = 4;
+
+    // Components of total line item price
+    repeated MonetaryComponent price_component = 6;
+  }
+  repeated PropertyGroup property_group = 32;
+}

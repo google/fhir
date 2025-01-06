@@ -1,0 +1,226 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/verification_result_go_proto";
+
+// Auto-generated from StructureDefinition for VerificationResult.
+// Describes validation requirements, source(s), status and dates for one or
+// more elements. See http://hl7.org/fhir/StructureDefinition/VerificationResult
+message VerificationResult {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/VerificationResult";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // VerificationResult.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // A resource that was validated
+  repeated Reference target = 10
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // The fhirpath location(s) within the resource that was validated
+  repeated String target_location = 11;
+
+  // none | initial | periodic
+  CodeableConcept need = 12;
+
+  // attested | validated | in-process | req-revalid | val-fail | reval-fail |
+  // entered-in-error
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/verificationresult-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    .google.fhir.r5.core.StatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 13
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // When the validation status was updated
+  DateTime status_date = 14;
+
+  // nothing | primary | multiple
+  CodeableConcept validation_type = 15;
+
+  // The primary process by which the target is validated (edit check; value
+  // set; primary source; multiple sources; standalone; in context)
+  repeated CodeableConcept validation_process = 16;
+
+  // Frequency of revalidation
+  Timing frequency = 17;
+
+  // The date/time validation was last completed (including failed validations)
+  DateTime last_performed = 18;
+
+  // The date when target is next validated, if appropriate
+  Date next_scheduled = 19;
+
+  // fatal | warn | rec-only | none
+  CodeableConcept failure_action = 20;
+
+  // Information about the primary source(s) involved in validation
+  message PrimarySource {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Reference to the primary source
+    Reference who = 4 [
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+    ];
+
+    // Type of primary source (License Board; Primary Education; Continuing
+    // Education; Postal Service; Relationship owner; Registration Authority;
+    // legal source; issuing source; authoritative source)
+    repeated CodeableConcept type = 5;
+
+    // Method for exchanging information with the primary source
+    repeated CodeableConcept communication_method = 6;
+
+    // successful | failed | unknown
+    CodeableConcept validation_status = 7;
+
+    // When the target was validated against the primary source
+    DateTime validation_date = 8;
+
+    // yes | no | undetermined
+    CodeableConcept can_push_updates = 9;
+
+    // specific | any | source
+    repeated CodeableConcept push_type_available = 10;
+  }
+  repeated PrimarySource primary_source = 21;
+
+  // Information about the entity attesting to information
+  message Attestation {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The individual or organization attesting to information
+    Reference who = 4 [
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // When the who is asserting on behalf of another (organization or
+    // individual)
+    Reference on_behalf_of = 5 [
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+    ];
+
+    // The method by which attested information was submitted/retrieved
+    CodeableConcept communication_method = 6;
+
+    // The date the information was attested to
+    Date date = 7;
+
+    // A digital identity certificate associated with the attestation source
+    String source_identity_certificate = 8;
+
+    // A digital identity certificate associated with the proxy entity
+    // submitting attested information on behalf of the attestation source
+    String proxy_identity_certificate = 9;
+
+    // Proxy signature (digital or image)
+    Signature proxy_signature = 10;
+
+    // Attester signature (digital or image)
+    Signature source_signature = 11;
+  }
+  Attestation attestation = 22;
+
+  // Information about the entity validating information
+  message Validator {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Reference to the organization validating information
+    Reference organization = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // A digital identity certificate associated with the validator
+    String identity_certificate = 5;
+
+    // Validator signature (digital or image)
+    Signature attestation_signature = 6;
+  }
+  repeated Validator validator = 23;
+}

@@ -1,0 +1,155 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/endpoint_go_proto";
+
+// Auto-generated from StructureDefinition for Endpoint.
+// The technical details of an endpoint that can be used for electronic
+// services. See http://hl7.org/fhir/StructureDefinition/Endpoint
+message Endpoint {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Endpoint";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Endpoint.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Identifies this endpoint across multiple systems
+  repeated Identifier identifier = 10;
+
+  // active | suspended | error | off | entered-in-error | test
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/endpoint-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    EndpointStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Protocol/Profile/Standard to be used with this endpoint connection
+  repeated CodeableConcept connection_type = 21
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // A name that this endpoint can be identified by
+  String name = 13;
+
+  // Additional details about the endpoint that could be displayed as further
+  // information to identify the description beyond its name
+  String description = 22;
+
+  // The type of environment(s) exposed at this endpoint
+  repeated CodeableConcept environment_type = 23;
+
+  // Organization that manages this endpoint (might not be the organization that
+  // exposes the endpoint)
+  Reference managing_organization = 14
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Contact details for source (e.g. troubleshooting)
+  repeated ContactPoint contact = 15;
+
+  // Interval the endpoint is expected to be operational
+  Period period = 16;
+
+  // Set of payloads that are provided by this endpoint
+  message Payload {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The type of content that may be used at this endpoint (e.g. XDS Discharge
+    // summaries)
+    repeated CodeableConcept type = 4;
+
+    // Mimetype to send. If not specified, the content could be anything
+    // (including no payload, if the connectionType defined this)
+    message MimeTypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/mimetypes";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      // Field 1 reserved to allow enumeration in the future.
+      reserved 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+
+      // This valueset is not enumerable, and so is represented as a string.
+      string value = 4;
+    }
+    repeated MimeTypeCode mime_type = 5;
+  }
+  repeated Payload payload = 24;
+
+  // The technical base address for connecting to this endpoint
+  Url address = 19
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Usage depends on the channel type
+  repeated String header = 20;
+}

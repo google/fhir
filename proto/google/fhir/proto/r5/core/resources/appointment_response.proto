@@ -1,0 +1,129 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+import "proto/google/fhir/proto/r5/core/valuesets.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/appointment_response_go_proto";
+
+// Auto-generated from StructureDefinition for AppointmentResponse.
+// A reply to an appointment request for a patient and/or practitioner(s), such
+// as a confirmation or rejection. See
+// http://hl7.org/fhir/StructureDefinition/AppointmentResponse
+message AppointmentResponse {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/AppointmentResponse";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "participantType.exists() or actor.exists()";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // AppointmentResponse.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // External Ids for this item
+  repeated Identifier identifier = 10;
+
+  // Appointment this response relates to
+  Reference appointment = 11 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Appointment"
+  ];
+
+  // Indicator for a counter proposal
+  Boolean proposed_new_time = 18;
+
+  // Time from appointment, or requested new start time
+  Instant start = 12;
+
+  // Time from appointment, or requested new end time
+  Instant end = 13;
+
+  // Role of participant in the appointment
+  repeated CodeableConcept participant_type = 14;
+
+  // Person(s), Location, HealthcareService, or Device
+  Reference actor = 15 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+    (.google.fhir.proto.valid_reference_type) = "Location"
+  ];
+
+  // accepted | declined | tentative | needs-action | entered-in-error
+  message ParticipantStatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/appointmentresponse-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AppointmentResponseStatusValueSet.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ParticipantStatusCode participant_status = 19
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Additional comments
+  Markdown comment = 20;
+
+  // This response is for all occurrences in a recurring request
+  Boolean recurring = 21;
+
+  // Original date within a recurring request
+  Date occurrence_date = 22;
+
+  // The recurrence ID of the specific recurring request
+  PositiveInt recurrence_id = 23;
+}

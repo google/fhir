@@ -1,0 +1,224 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/message_header_go_proto";
+
+// Auto-generated from StructureDefinition for MessageHeader.
+// A resource that describes a message that is exchanged between systems.
+// See http://hl7.org/fhir/StructureDefinition/MessageHeader
+message MessageHeader {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MessageHeader";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // MessageHeader.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Event code or link to EventDefinition
+  message EventX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Coding coding = 1;
+      Canonical canonical = 3;
+    }
+  }
+  EventX event = 10
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Message destination application(s)
+  message MessageDestination {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Actual destination address or Endpoint resource
+    message EndpointX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Url url = 1;
+        Reference reference = 2
+            [(.google.fhir.proto.valid_reference_type) = "Endpoint"];
+      }
+    }
+    EndpointX endpoint = 8;
+
+    // Name of system
+    String name = 4;
+
+    // Particular delivery destination within the destination
+    Reference target = 5 [(.google.fhir.proto.valid_reference_type) = "Device"];
+
+    // Intended "real-world" recipient for the data
+    Reference receiver = 7 [
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+  }
+  repeated MessageDestination destination = 11;
+
+  // Real world sender of the message
+  Reference sender = 12 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Organization"
+  ];
+
+  // The source of the decision
+  Reference author = 14 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Organization"
+  ];
+
+  // Message source application
+  message MessageSource {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Actual source address or Endpoint resource
+    message EndpointX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Url url = 1;
+        Reference reference = 2
+            [(.google.fhir.proto.valid_reference_type) = "Endpoint"];
+      }
+    }
+    EndpointX endpoint = 9;
+
+    // Name of system
+    String name = 4;
+
+    // Name of software running the system
+    String software = 5;
+
+    // Version of software running
+    String version = 6;
+
+    // Human contact for problems
+    ContactPoint contact = 7;
+  }
+  MessageSource source = 15
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Final responsibility for event
+  Reference responsible = 16 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization"
+  ];
+
+  // Cause of event
+  CodeableConcept reason = 17;
+
+  // If this is a reply to prior message
+  message Response {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Bundle.identifier of original message
+    Identifier identifier = 7
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // ok | transient-error | fatal-error
+    message CodeType {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/response-code";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ResponseTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    CodeType code = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Specific list of hints/warnings/errors
+    Reference details = 6
+        [(.google.fhir.proto.valid_reference_type) = "OperationOutcome"];
+  }
+  Response response = 18;
+
+  // The actual content of the message
+  repeated Reference focus = 19
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Link to the definition for this message
+  Canonical definition = 20;
+}

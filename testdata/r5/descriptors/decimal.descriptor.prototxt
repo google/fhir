@@ -1,0 +1,36 @@
+name: "Decimal"
+field {
+  name: "value"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_STRING
+  options {
+    [google.fhir.proto.field_description]: "Primitive value for decimal"
+  }
+}
+field {
+  name: "id"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  name: "extension"
+  number: 3
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for decimal, last updated 2019-12-31T21:03:40.621+11:00.\nPrimitive Type decimal.\nSee http://hl7.org/fhir/StructureDefinition/decimal"
+  [google.fhir.proto.value_regex]: "-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/decimal"
+}

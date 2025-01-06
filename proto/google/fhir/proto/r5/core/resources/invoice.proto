@@ -1,0 +1,214 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/invoice_go_proto";
+
+// Auto-generated from StructureDefinition for Invoice.
+// Invoice containing ChargeItems from an Account.
+// See http://hl7.org/fhir/StructureDefinition/Invoice
+message Invoice {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Invoice";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Invoice.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business Identifier for item
+  repeated Identifier identifier = 10;
+
+  // draft | issued | balanced | cancelled | entered-in-error
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/invoice-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    InvoiceStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Reason for cancellation of this Invoice
+  String cancelled_reason = 12;
+
+  // Type of Invoice
+  CodeableConcept type = 13;
+
+  // Recipient(s) of goods and services
+  Reference subject = 14 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // Recipient of this invoice
+  Reference recipient = 15 [
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+  ];
+
+  // DEPRICATED
+  DateTime date = 16;
+
+  // When posted
+  DateTime creation = 26;
+
+  // Billing date or period
+  message PeriodX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Date date = 1;
+      Period period = 2;
+    }
+  }
+  PeriodX period = 27;
+
+  // Participant in creation of this Invoice
+  message Participant {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Type of involvement in creation of this Invoice
+    CodeableConcept role = 4;
+
+    // Individual who was involved
+    Reference actor = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Device",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+    ];
+  }
+  repeated Participant participant = 17;
+
+  // Issuing Organization of Invoice
+  Reference issuer = 18
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Account that is being balanced
+  Reference account = 19
+      [(.google.fhir.proto.valid_reference_type) = "Account"];
+
+  // Line items of this Invoice
+  message LineItem {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Sequence number of line item
+    PositiveInt sequence = 4;
+
+    // Service data or period
+    message ServicedX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Date date = 1;
+        Period period = 2;
+      }
+    }
+    ServicedX serviced = 7;
+
+    // Reference to ChargeItem containing details of this line item or an inline
+    // billing code
+    message ChargeItemX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Reference reference = 1
+            [(.google.fhir.proto.valid_reference_type) = "ChargeItem"];
+        CodeableConcept codeable_concept = 2;
+      }
+    }
+    ChargeItemX charge_item = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Components of total line item price
+    repeated MonetaryComponent price_component = 8;
+  }
+  repeated LineItem line_item = 20;
+
+  // Components of Invoice total
+  repeated MonetaryComponent total_price_component = 28;
+
+  // Net total of this Invoice
+  Money total_net = 22;
+
+  // Gross total of this Invoice
+  Money total_gross = 23;
+
+  // Payment details
+  Markdown payment_terms = 24;
+
+  // Comments made about the invoice
+  repeated Annotation note = 25;
+}

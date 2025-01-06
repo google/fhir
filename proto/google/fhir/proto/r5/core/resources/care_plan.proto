@@ -1,0 +1,225 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+import "proto/google/fhir/proto/r5/core/valuesets.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/care_plan_go_proto";
+
+// Auto-generated from StructureDefinition for CarePlan.
+// Healthcare plan for patient or group.
+// See http://hl7.org/fhir/StructureDefinition/CarePlan
+message CarePlan {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/CarePlan";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // CarePlan.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // External Ids for this plan
+  repeated Identifier identifier = 10;
+
+  // Instantiates FHIR protocol or definition
+  repeated Canonical instantiates_canonical = 11;
+
+  // Instantiates external protocol or definition
+  repeated Uri instantiates_uri = 12;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 13 [
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "ServiceRequest",
+    (.google.fhir.proto.valid_reference_type) = "RequestOrchestration",
+    (.google.fhir.proto.valid_reference_type) = "NutritionOrder"
+  ];
+
+  // CarePlan replaced by this CarePlan
+  repeated Reference replaces = 14
+      [(.google.fhir.proto.valid_reference_type) = "CarePlan"];
+
+  // Part of referenced CarePlan
+  repeated Reference part_of = 15
+      [(.google.fhir.proto.valid_reference_type) = "CarePlan"];
+
+  // draft | active | on-hold | revoked | completed | entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // proposal | plan | order | option | directive
+  message IntentCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/care-plan-intent";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    CarePlanIntentValueSet.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  IntentCode intent = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Type of plan
+  repeated CodeableConcept category = 18;
+
+  // Human-friendly name for the care plan
+  String title = 19;
+
+  // Summary of nature of plan
+  String description = 20;
+
+  // Who the care plan is for
+  Reference subject = 21 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // The Encounter during which this CarePlan was created
+  Reference encounter = 22
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // Time period plan covers
+  Period period = 23;
+
+  // Date record was first recorded
+  DateTime created = 24;
+
+  // Who is the designated responsible party
+  Reference custodian = 33 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "CareTeam"
+  ];
+
+  // Who provided the content of the care plan
+  repeated Reference contributor = 26 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "CareTeam"
+  ];
+
+  // Who's involved in plan?
+  repeated Reference care_team = 27
+      [(.google.fhir.proto.valid_reference_type) = "CareTeam"];
+
+  // Health issues this plan addresses
+  repeated CodeableReference addresses = 34;
+
+  // Information considered as part of plan
+  repeated Reference supporting_info = 29
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Desired outcome of plan
+  repeated Reference goal = 30
+      [(.google.fhir.proto.valid_reference_type) = "Goal"];
+
+  // Action to occur or has occurred as part of plan
+  message Activity {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Results of the activity (concept, or Appointment, Encounter, Procedure,
+    // etc.)
+    repeated CodeableReference performed_activity = 9;
+
+    // Comments about the activity status/progress
+    repeated Annotation progress = 6;
+
+    // Activity that is intended to be part of the care plan
+    Reference planned_activity_reference = 10 [
+      (.google.fhir.proto.valid_reference_type) = "Appointment",
+      (.google.fhir.proto.valid_reference_type) = "CommunicationRequest",
+      (.google.fhir.proto.valid_reference_type) = "DeviceRequest",
+      (.google.fhir.proto.valid_reference_type) = "MedicationRequest",
+      (.google.fhir.proto.valid_reference_type) = "NutritionOrder",
+      (.google.fhir.proto.valid_reference_type) = "Task",
+      (.google.fhir.proto.valid_reference_type) = "ServiceRequest",
+      (.google.fhir.proto.valid_reference_type) = "VisionPrescription",
+      (.google.fhir.proto.valid_reference_type) = "RequestOrchestration",
+      (.google.fhir.proto.valid_reference_type) = "ImmunizationRecommendation",
+      (.google.fhir.proto.valid_reference_type) = "SupplyRequest"
+    ];
+  }
+  repeated Activity activity = 31;
+
+  // Comments about the plan
+  repeated Annotation note = 32;
+}

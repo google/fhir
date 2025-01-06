@@ -1,0 +1,411 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/evidence_variable_go_proto";
+
+// Auto-generated from StructureDefinition for EvidenceVariable.
+// A definition of an exposure, outcome, or other variable.
+// See http://hl7.org/fhir/StructureDefinition/EvidenceVariable
+message EvidenceVariable {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/EvidenceVariable";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.exists() implies name.matches('^[A-Z]([A-Za-z0-9_]){1,254}$')";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // EvidenceVariable.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this evidence variable, represented as a URI
+  // (globally unique)
+  Uri url = 10 [(.google.fhir.proto.fhir_path_warning_constraint) =
+                    "exists() implies matches('^[^|# ]+$')"];
+
+  // Additional identifier for the evidence variable
+  repeated Identifier identifier = 11;
+
+  // Business version of the evidence variable
+  String version = 12;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 37;
+
+  // Name for this evidence variable (computer friendly)
+  String name = 13;
+
+  // Name for this evidence variable (human friendly)
+  String title = 14;
+
+  // Title for use in informal contexts
+  String short_title = 15;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 38;
+
+  // Date last changed
+  DateTime date = 18;
+
+  // Name of the publisher/steward (organization or individual)
+  String publisher = 19;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 20;
+
+  // Natural language description of the evidence variable
+  Markdown description = 21;
+
+  // Used for footnotes or explanatory notes
+  repeated Annotation note = 22;
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 23;
+
+  // Why this EvidenceVariable is defined
+  Markdown purpose = 39;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 25;
+
+  // Copyright holder and year(s)
+  String copyright_label = 40;
+
+  // When the resource was approved by publisher
+  Date approval_date = 26;
+
+  // When the resource was last reviewed by the publisher
+  Date last_review_date = 27;
+
+  // When the resource is expected to be used
+  Period effective_period = 28;
+
+  // Who authored the content
+  repeated ContactDetail author = 30;
+
+  // Who edited the content
+  repeated ContactDetail editor = 31;
+
+  // Who reviewed the content
+  repeated ContactDetail reviewer = 32;
+
+  // Who endorsed the content
+  repeated ContactDetail endorser = 33;
+
+  // Additional documentation, citations, etc
+  repeated RelatedArtifact related_artifact = 34;
+
+  // Actual or conceptual
+  Boolean actual = 41;
+
+  // A defining factor of the EvidenceVariable
+  message Characteristic {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(definitionReference.count() + definitionCanonical.count() + definitionCodeableConcept.count() + definitionId.count() + definitionByTypeAndValue.count() + definitionByCombination.count())  < 2";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Label for internal linking
+    Id link_id = 11;
+
+    // Natural language description of the characteristic
+    Markdown description = 12;
+
+    // Used for footnotes or explanatory notes
+    repeated Annotation note = 13;
+
+    // Whether the characteristic is an inclusion criterion or exclusion
+    // criterion
+    Boolean exclude = 7;
+
+    // Defines the characteristic (without using type and value) by a Reference
+    Reference definition_reference = 14 [
+      (.google.fhir.proto.valid_reference_type) = "EvidenceVariable",
+      (.google.fhir.proto.valid_reference_type) = "Group",
+      (.google.fhir.proto.valid_reference_type) = "Evidence"
+    ];
+
+    // Defines the characteristic (without using type and value) by a Canonical
+    Canonical definition_canonical = 15;
+
+    // Defines the characteristic (without using type and value) by a
+    // CodeableConcept
+    CodeableConcept definition_codeable_concept = 16;
+
+    // Defines the characteristic (without using type and value) by an
+    // expression
+    Expression definition_expression = 17;
+
+    // Defines the characteristic (without using type and value) by an id
+    Id definition_id = 18;
+
+    // Defines the characteristic using type and value
+    message DefinitionByTypeAndValue {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Expresses the type of characteristic
+      CodeableConcept type = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Method for how the characteristic value was determined
+      repeated CodeableConcept method = 5;
+
+      // Device used for determining characteristic
+      Reference device = 6 [
+        (.google.fhir.proto.valid_reference_type) = "Device",
+        (.google.fhir.proto.valid_reference_type) = "DeviceMetric"
+      ];
+
+      // Defines the characteristic when coupled with characteristic.type
+      message ValueX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          CodeableConcept codeable_concept = 1;
+          Boolean boolean = 2;
+          Quantity quantity = 3;
+          Range range = 4;
+          Reference reference = 5;
+          Id id = 6;
+        }
+      }
+      ValueX value = 7
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Reference point for valueQuantity or valueRange
+      CodeableConcept offset = 8;
+    }
+    DefinitionByTypeAndValue definition_by_type_and_value = 19;
+
+    // Used to specify how two or more characteristics are combined
+    message DefinitionByCombination {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // all-of | any-of | at-least | at-most | statistical | net-effect |
+      // dataset
+      message CodeType {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/characteristic-combination";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        CharacteristicCombinationCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      CodeType code = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Provides the value of "n" when "at-least" or "at-most" codes are used
+      PositiveInt threshold = 5;
+
+      // A defining factor of the characteristic
+      repeated Characteristic characteristic = 6
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    DefinitionByCombination definition_by_combination = 20;
+
+    // Number of occurrences meeting the characteristic
+    message InstancesX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Quantity quantity = 1;
+        Range range = 2;
+      }
+    }
+    InstancesX instances = 21;
+
+    // Length of time in which the characteristic is met
+    message DurationX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Quantity quantity = 1;
+        Range range = 2;
+      }
+    }
+    DurationX duration = 22;
+
+    // Timing in which the characteristic is determined
+    message TimeFromEvent {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Human readable description
+      Markdown description = 4;
+
+      // Used for footnotes or explanatory notes
+      repeated Annotation note = 5;
+
+      // The event used as a base point (reference point) in time
+      message EventX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          CodeableConcept codeable_concept = 1;
+          Reference reference = 2;
+          DateTime date_time = 3;
+          Id id = 4;
+        }
+      }
+      EventX event = 6;
+
+      // Used to express the observation at a defined amount of time before or
+      // after the event
+      Quantity quantity = 7;
+
+      // Used to express the observation within a period before and/or after the
+      // event
+      Range range = 8;
+    }
+    repeated TimeFromEvent time_from_event = 23;
+  }
+  repeated Characteristic characteristic = 36;
+
+  // continuous | dichotomous | ordinal | polychotomous
+  message HandlingCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/variable-handling";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    EvidenceVariableHandlingCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  HandlingCode handling = 42;
+
+  // A grouping for ordinal or polychotomous variables
+  message Category {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Description of the grouping
+    String name = 4;
+
+    // Definition of the grouping
+    message ValueX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        CodeableConcept codeable_concept = 1;
+        Quantity quantity = 2;
+        Range range = 3;
+      }
+    }
+    ValueX value = 5;
+  }
+  repeated Category category = 43;
+}

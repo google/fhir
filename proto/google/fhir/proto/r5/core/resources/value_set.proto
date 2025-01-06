@@ -1,0 +1,535 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/value_set_go_proto";
+
+// Auto-generated from StructureDefinition for ValueSet.
+// A set of codes drawn from one or more code systems.
+// See http://hl7.org/fhir/StructureDefinition/ValueSet
+message ValueSet {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ValueSet";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.exists() implies name.matches('^[A-Z]([A-Za-z0-9_]){1,254}$')";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // ValueSet.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this value set, represented as a URI (globally
+  // unique)
+  Uri url = 10 [(.google.fhir.proto.fhir_path_warning_constraint) =
+                    "exists() implies matches('^[^|# ]+$')"];
+
+  // Additional identifier for the value set (business identifier)
+  repeated Identifier identifier = 11;
+
+  // Business version of the value set
+  String version = 12;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 28;
+
+  // Name for this value set (computer friendly)
+  String name = 13;
+
+  // Name for this value set (human friendly)
+  String title = 14;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 15
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 16;
+
+  // Date last changed
+  DateTime date = 17;
+
+  // Name of the publisher/steward (organization or individual)
+  String publisher = 18;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 19;
+
+  // Natural language description of the value set
+  Markdown description = 20;
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 21;
+
+  // Intended jurisdiction for value set (if applicable)
+  repeated CodeableConcept jurisdiction = 22;
+
+  // Indicates whether or not any change to the content logical definition may
+  // occur
+  Boolean immutable = 23;
+
+  // Why this value set is defined
+  Markdown purpose = 24;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 25;
+
+  // Copyright holder and year(s)
+  String copyright_label = 29;
+
+  // When the ValueSet was approved by publisher
+  Date approval_date = 30;
+
+  // When the ValueSet was last reviewed by the publisher
+  Date last_review_date = 31;
+
+  // When the ValueSet is expected to be used
+  Period effective_period = 32;
+
+  // E.g. Education, Treatment, Assessment, etc
+  repeated CodeableConcept topic = 33;
+
+  // Who authored the ValueSet
+  repeated ContactDetail author = 34;
+
+  // Who edited the ValueSet
+  repeated ContactDetail editor = 35;
+
+  // Who reviewed the ValueSet
+  repeated ContactDetail reviewer = 36;
+
+  // Who endorsed the ValueSet
+  repeated ContactDetail endorser = 37;
+
+  // Additional documentation, citations, etc
+  repeated RelatedArtifact related_artifact = 38;
+
+  // Content logical definition of the value set (CLD)
+  message Compose {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Fixed date for references with no specified version (transitive)
+    Date locked_date = 4;
+
+    // Whether inactive codes are in the value set
+    Boolean inactive = 5;
+
+    // Include one or more codes from a code system or other value set(s)
+    message ConceptSet {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "valueSet.exists() or system.exists()";
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "(concept.exists() or filter.exists()) implies system.exists()";
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "concept.empty() or filter.empty()";
+
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The system the codes come from
+      Uri system = 4;
+
+      // Specific version of the code system referred to
+      String version = 5;
+
+      // A concept defined in the system
+      message ConceptReference {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Code or expression from system
+        Code code = 4
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+        // Text to display for this code for this value set in this valueset
+        String display = 5;
+
+        // Additional representations for this concept
+        message Designation {
+          option (.google.fhir.proto.fhir_path_message_constraint) =
+              "additionalUse.exists() implies use.exists()";
+
+          // Unique id for inter-element referencing
+          String id = 1;
+
+          // Additional content defined by implementations
+          repeated Extension extension = 2;
+
+          // Extensions that cannot be ignored even if unrecognized
+          repeated Extension modifier_extension = 3;
+
+          // Human language of the designation
+          Code language = 4;
+
+          // Types of uses of designations
+          Coding use = 5;
+
+          // Additional ways how this designation would be used
+          repeated Coding additional_use = 7;
+
+          // The text value for this designation
+          String value = 6
+              [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+        }
+        repeated Designation designation = 6;
+      }
+      repeated ConceptReference concept = 6;
+
+      // Select codes/concepts by their properties (including relationships)
+      message Filter {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // A property/filter defined by the code system
+        Code property = 4
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+        // = | is-a | descendent-of | is-not-a | regex | in | not-in |
+        // generalizes | child-of | descendent-leaf | exists
+        message OpCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/filter-operator";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          FilterOperatorCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        OpCode op = 5
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+        // Code from the system, or regex criteria, or boolean value for exists
+        String value = 6
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+      }
+      repeated Filter filter = 7;
+
+      // Select the contents included in this value set
+      repeated Canonical value_set = 8;
+
+      // A copyright statement for the specific code system included in the
+      // value set
+      String copyright = 9;
+    }
+    repeated ConceptSet include = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Explicitly exclude codes from a code system or other value sets
+    repeated ConceptSet exclude = 7;
+
+    // Property to return if client doesn't override
+    repeated String property = 8;
+  }
+  Compose compose = 26;
+
+  // Used when the value set is "expanded"
+  message Expansion {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Identifies the value set expansion (business identifier)
+    Uri identifier = 4;
+
+    // Opaque urls for paging through expansion results
+    Uri next = 10;
+
+    // Time ValueSet expansion happened
+    DateTime timestamp = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Total number of codes in the expansion
+    Integer total = 6;
+
+    // Offset at which this resource starts
+    Integer offset = 7;
+
+    // Parameter that controlled the expansion process
+    message Parameter {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Name as assigned by the client or server
+      String name = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Value of the named parameter
+      message ValueX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          String string_value = 1 [json_name = "string"];
+          Boolean boolean = 2;
+          Integer integer = 3;
+          Decimal decimal = 4;
+          Uri uri = 5;
+          Code code = 6;
+          DateTime date_time = 7;
+        }
+      }
+      ValueX value = 5;
+    }
+    repeated Parameter parameter = 8;
+
+    // Additional information supplied about each concept
+    message Property {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Identifies the property on the concepts, and when referred to in
+      // operations
+      Code code = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Formal identifier for the property
+      Uri uri = 5;
+    }
+    repeated Property property = 11;
+
+    // Codes in the value set
+    message Contains {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "code.exists() or display.exists()";
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "code.exists() or abstract = true";
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "code.empty() or system.exists()";
+
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // System value for the code
+      Uri system = 4;
+
+      // If user cannot select this entry
+      Boolean abstract = 5;
+
+      // If concept is inactive in the code system
+      Boolean inactive = 6;
+
+      // Version in which this code/display is defined
+      String version = 7;
+
+      // Code - if blank, this is not a selectable code
+      Code code = 8;
+
+      // User display for the concept
+      String display = 9;
+
+      // Additional representations for this item
+      repeated Compose.ConceptSet.ConceptReference.Designation designation = 10;
+
+      // Property value for the concept
+      message ConceptProperty {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Reference to ValueSet.expansion.property.code
+        Code code = 4
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+        // Value of the property for this concept
+        message ValueX {
+          option (.google.fhir.proto.is_choice_type) = true;
+
+          oneof choice {
+            Code code = 1;
+            Coding coding = 2;
+            String string_value = 3 [json_name = "string"];
+            Integer integer = 4;
+            Boolean boolean = 5;
+            DateTime date_time = 6;
+            Decimal decimal = 7;
+          }
+        }
+        ValueX value = 5
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+        // SubProperty value for the concept
+        message ConceptSubProperty {
+          // Unique id for inter-element referencing
+          String id = 1;
+
+          // Additional content defined by implementations
+          repeated Extension extension = 2;
+
+          // Extensions that cannot be ignored even if unrecognized
+          repeated Extension modifier_extension = 3;
+
+          // Reference to ValueSet.expansion.property.code
+          Code code = 4
+              [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+          // Value of the subproperty for this concept
+          message ValueX {
+            option (.google.fhir.proto.is_choice_type) = true;
+
+            oneof choice {
+              Code code = 1;
+              Coding coding = 2;
+              String string_value = 3 [json_name = "string"];
+              Integer integer = 4;
+              Boolean boolean = 5;
+              DateTime date_time = 6;
+              Decimal decimal = 7;
+            }
+          }
+          ValueX value = 5
+              [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+        }
+        repeated ConceptSubProperty sub_property = 6;
+      }
+      repeated ConceptProperty property = 12;
+
+      // Codes contained under this entry
+      repeated Contains contains = 11;
+    }
+    repeated Contains contains = 9;
+  }
+  Expansion expansion = 27;
+
+  // Description of the semantic space the Value Set Expansion is intended to
+  // cover and should further clarify the text in ValueSet.description
+  message Scope {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Criteria describing which concepts or codes should be included and why
+    String inclusion_criteria = 4;
+
+    // Criteria describing which concepts or codes should be excluded and why
+    String exclusion_criteria = 5;
+  }
+  Scope scope = 39;
+}

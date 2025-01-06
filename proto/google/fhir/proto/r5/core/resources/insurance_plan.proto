@@ -1,0 +1,293 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/insurance_plan_go_proto";
+
+// Auto-generated from StructureDefinition for InsurancePlan.
+// Details of a Health Insurance product/plan provided by an organization.
+// See http://hl7.org/fhir/StructureDefinition/InsurancePlan
+message InsurancePlan {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/InsurancePlan";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(identifier.count() + name.count()) > 0";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // InsurancePlan.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business Identifier for Product
+  repeated Identifier identifier = 10;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11;
+
+  // Kind of product
+  repeated CodeableConcept type = 12;
+
+  // Official name
+  String name = 13;
+
+  // Alternate names
+  repeated String alias = 14;
+
+  // When the product is available
+  Period period = 15;
+
+  // Product issuer
+  Reference owned_by = 16
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Product administrator
+  Reference administered_by = 17
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Where product applies
+  repeated Reference coverage_area = 18
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Official contact details relevant to the health insurance plan/product
+  repeated ExtendedContactDetail contact = 24;
+
+  // Technical endpoint
+  repeated Reference endpoint = 20
+      [(.google.fhir.proto.valid_reference_type) = "Endpoint"];
+
+  // What networks are Included
+  repeated Reference network = 21
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Coverage details
+  message Coverage {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Type of coverage
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // What networks provide coverage
+    repeated Reference network = 5
+        [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+    // List of benefits
+    message CoverageBenefit {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Type of benefit
+      CodeableConcept type = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Referral requirements
+      String requirement = 5;
+
+      // Benefit limits
+      message Limit {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Maximum value allowed
+        Quantity value = 4;
+
+        // Benefit limit details
+        CodeableConcept code = 5;
+      }
+      repeated Limit limit = 6;
+    }
+    repeated CoverageBenefit benefit = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Coverage coverage = 22;
+
+  // Plan details
+  message Plan {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Business Identifier for Product
+    repeated Identifier identifier = 4;
+
+    // Type of plan
+    CodeableConcept type = 5;
+
+    // Where product applies
+    repeated Reference coverage_area = 6
+        [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+    // What networks provide coverage
+    repeated Reference network = 7
+        [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+    // Overall costs
+    message GeneralCost {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Type of cost
+      CodeableConcept type = 4;
+
+      // Number of enrollees
+      PositiveInt group_size = 5;
+
+      // Cost value
+      Money cost = 6;
+
+      // Additional cost information
+      String comment = 7;
+    }
+    repeated GeneralCost general_cost = 8;
+
+    // Specific costs
+    message SpecificCost {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // General category of benefit
+      CodeableConcept category = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Benefits list
+      message PlanBenefit {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Type of specific benefit
+        CodeableConcept type = 4
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+        // List of the costs
+        message Cost {
+          // Unique id for inter-element referencing
+          String id = 1;
+
+          // Additional content defined by implementations
+          repeated Extension extension = 2;
+
+          // Extensions that cannot be ignored even if unrecognized
+          repeated Extension modifier_extension = 3;
+
+          // Type of cost
+          CodeableConcept type = 4
+              [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+          // in-network | out-of-network | other
+          CodeableConcept applicability = 5;
+
+          // Additional information about the cost
+          repeated CodeableConcept qualifiers = 6;
+
+          // The actual cost value
+          Quantity value = 7;
+        }
+        repeated Cost cost = 5;
+      }
+      repeated PlanBenefit benefit = 5;
+    }
+    repeated SpecificCost specific_cost = 9;
+  }
+  repeated Plan plan = 23;
+}

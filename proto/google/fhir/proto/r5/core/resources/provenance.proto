@@ -1,0 +1,209 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/provenance_go_proto";
+
+// Auto-generated from StructureDefinition for Provenance.
+// Who, What, When for a set of resources.
+// See http://hl7.org/fhir/StructureDefinition/Provenance
+message Provenance {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Provenance";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Provenance.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Target Reference(s) (usually version specific)
+  repeated Reference target = 10 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Resource"
+  ];
+
+  // When the activity occurred
+  message OccurredX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Period period = 1;
+      DateTime date_time = 2;
+    }
+  }
+  OccurredX occurred = 11;
+
+  // When the activity was recorded / updated
+  Instant recorded = 12;
+
+  // Policy or plan the activity was defined by
+  repeated Uri policy = 13;
+
+  // Where the activity occurred, if relevant
+  Reference location = 14
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Authorization (purposeOfUse) related to the event
+  repeated CodeableReference authorization = 20;
+
+  // Activity that occurred
+  CodeableConcept activity = 16;
+
+  // Workflow authorization within which this event occurred
+  repeated Reference based_on = 21 [
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "DeviceRequest",
+    (.google.fhir.proto.valid_reference_type) = "ImmunizationRecommendation",
+    (.google.fhir.proto.valid_reference_type) = "MedicationRequest",
+    (.google.fhir.proto.valid_reference_type) = "NutritionOrder",
+    (.google.fhir.proto.valid_reference_type) = "ServiceRequest",
+    (.google.fhir.proto.valid_reference_type) = "Task"
+  ];
+
+  // The patient is the subject of the data created/updated (.target) by the
+  // activity
+  Reference patient = 22
+      [(.google.fhir.proto.valid_reference_type) = "Patient"];
+
+  // Encounter within which this event occurred or which the event is tightly
+  // associated
+  Reference encounter = 23
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // Actor involved
+  message Agent {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "who.resolve().exists() and onBehalfOf.resolve().exists() implies who.resolve() != onBehalfOf.resolve()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "who.resolve().ofType(PractitionerRole).practitioner.resolve().exists() and onBehalfOf.resolve().ofType(Practitioner).exists() implies who.resolve().practitioner.resolve() != onBehalfOf.resolve()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "who.resolve().ofType(Organization).exists() and onBehalfOf.resolve().ofType(PractitionerRole).organization.resolve().exists() implies who.resolve() != onBehalfOf.resolve().organization.resolve()";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // How the agent participated
+    CodeableConcept type = 4;
+
+    // What the agents role was
+    repeated CodeableConcept role = 5;
+
+    // The agent that participated in the event
+    Reference who = 6 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "CareTeam",
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Device",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+    ];
+
+    // The agent that delegated
+    Reference on_behalf_of = 7 [
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "CareTeam",
+      (.google.fhir.proto.valid_reference_type) = "Patient"
+    ];
+  }
+  repeated Agent agent = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // An entity used in this activity
+  message Entity {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // revision | quotation | source | instantiates | removal
+    message RoleCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/provenance-entity-role";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ProvenanceEntityRoleCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    RoleCode role = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Identity of entity
+    Reference what = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Resource"
+    ];
+
+    // Entity is attributed to this agent
+    repeated Agent agent = 6;
+  }
+  repeated Entity entity = 18;
+
+  // Signature on target
+  repeated Signature signature = 19;
+}

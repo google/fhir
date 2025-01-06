@@ -1,0 +1,323 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/specimen_definition_go_proto";
+
+// Auto-generated from StructureDefinition for SpecimenDefinition.
+// Kind of specimen.
+// See http://hl7.org/fhir/StructureDefinition/SpecimenDefinition
+message SpecimenDefinition {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/SpecimenDefinition";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // SpecimenDefinition.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Logical canonical URL to reference this SpecimenDefinition (globally
+  // unique)
+  Uri url = 16;
+
+  // Business identifier
+  Identifier identifier = 10;
+
+  // Business version of the SpecimenDefinition
+  String version = 17;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 18;
+
+  // Name for this {{title}} (computer friendly)
+  String name = 19;
+
+  // Name for this SpecimenDefinition (Human friendly)
+  String title = 20;
+
+  // Based on FHIR definition of another SpecimenDefinition
+  repeated Canonical derived_from_canonical = 21;
+
+  // Based on external definition
+  repeated Uri derived_from_uri = 22;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 23
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // If this SpecimenDefinition is not for real usage
+  Boolean experimental = 24;
+
+  // Type of subject for specimen collection
+  message SubjectX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      CodeableConcept codeable_concept = 1;
+      Reference reference = 2
+          [(.google.fhir.proto.valid_reference_type) = "Group"];
+    }
+  }
+  SubjectX subject = 25;
+
+  // Date status first applied
+  DateTime date = 26;
+
+  // The name of the individual or organization that published the
+  // SpecimenDefinition
+  String publisher = 27;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 28;
+
+  // Natural language description of the SpecimenDefinition
+  Markdown description = 29;
+
+  // Content intends to support these contexts
+  repeated UsageContext use_context = 30;
+
+  // Intended jurisdiction for this SpecimenDefinition (if applicable)
+  repeated CodeableConcept jurisdiction = 31;
+
+  // Why this SpecimenDefinition is defined
+  Markdown purpose = 32;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 33;
+
+  // Copyright holder and year(s)
+  String copyright_label = 34;
+
+  // When SpecimenDefinition was approved by publisher
+  Date approval_date = 35;
+
+  // The date on which the asset content was last reviewed by the publisher
+  Date last_review_date = 36;
+
+  // The effective date range for the SpecimenDefinition
+  Period effective_period = 37;
+
+  // Kind of material to collect
+  CodeableConcept type_collected = 11;
+
+  // Patient preparation for collection
+  repeated CodeableConcept patient_preparation = 12;
+
+  // Time aspect for collection
+  String time_aspect = 13;
+
+  // Specimen collection procedure
+  repeated CodeableConcept collection = 14;
+
+  // Specimen in container intended for testing by lab
+  message TypeTested {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Primary or secondary specimen
+    Boolean is_derived = 4;
+
+    // Type of intended specimen
+    CodeableConcept type = 5;
+
+    // preferred | alternate
+    message PreferenceCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/specimen-contained-preference";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      SpecimenContainedPreferenceCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    PreferenceCode preference = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // The specimen's container
+    message Container {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The material type used for the container
+      CodeableConcept material = 4;
+
+      // Kind of container associated with the kind of specimen
+      CodeableConcept type = 5;
+
+      // Color of container cap
+      CodeableConcept cap = 6;
+
+      // The description of the kind of container
+      Markdown description = 12;
+
+      // The capacity of this kind of container
+      SimpleQuantity capacity = 8;
+
+      // Minimum volume
+      message MinimumVolumeX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          SimpleQuantity quantity = 1;
+          String string_value = 2 [json_name = "string"];
+        }
+      }
+      MinimumVolumeX minimum_volume = 9;
+
+      // Additive associated with container
+      message Additive {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Additive associated with container
+        message AdditiveX {
+          option (.google.fhir.proto.is_choice_type) = true;
+
+          oneof choice {
+            CodeableConcept codeable_concept = 1;
+            Reference reference = 2 [(.google.fhir.proto.valid_reference_type) =
+                                         "SubstanceDefinition"];
+          }
+        }
+        AdditiveX additive = 4
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+      }
+      repeated Additive additive = 10;
+
+      // Special processing applied to the container for this specimen type
+      Markdown preparation = 13;
+    }
+    Container container = 7;
+
+    // Requirements for specimen delivery and special handling
+    Markdown requirement = 12;
+
+    // The usual time for retaining this kind of specimen
+    Duration retention_time = 9;
+
+    // Specimen for single use only
+    Boolean single_use = 13;
+
+    // Criterion specified for specimen rejection
+    repeated CodeableConcept rejection_criterion = 10;
+
+    // Specimen handling before testing
+    message Handling {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Qualifies the interval of temperature
+      CodeableConcept temperature_qualifier = 4;
+
+      // Temperature range for these handling instructions
+      Range temperature_range = 5;
+
+      // Maximum preservation time
+      Duration max_duration = 6;
+
+      // Preservation instruction
+      Markdown instruction = 8;
+    }
+    repeated Handling handling = 11;
+
+    // Where the specimen will be tested
+    repeated CodeableConcept testing_destination = 14;
+  }
+  repeated TypeTested type_tested = 15;
+}

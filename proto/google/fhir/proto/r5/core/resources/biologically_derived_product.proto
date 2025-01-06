@@ -1,0 +1,174 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/biologically_derived_product_go_proto";
+
+// Auto-generated from StructureDefinition for BiologicallyDerivedProduct.
+// This resource reflects an instance of a biologically derived product.
+// See http://hl7.org/fhir/StructureDefinition/BiologicallyDerivedProduct
+message BiologicallyDerivedProduct {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/BiologicallyDerivedProduct";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // BiologicallyDerivedProduct.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // organ | tissue | fluid | cells | biologicalAgent
+  Coding product_category = 21;
+
+  // A code that identifies the kind of this biologically derived product
+  CodeableConcept product_code = 12;
+
+  // The parent biologically-derived product
+  repeated Reference parent = 16 [(.google.fhir.proto.valid_reference_type) =
+                                      "BiologicallyDerivedProduct"];
+
+  // Request to obtain and/or infuse this product
+  repeated Reference request = 14
+      [(.google.fhir.proto.valid_reference_type) = "ServiceRequest"];
+
+  // Instance identifier
+  repeated Identifier identifier = 10;
+
+  // An identifier that supports traceability to the event during which material
+  // in this product from one or more biological entities was obtained or pooled
+  Identifier biological_source_event = 22;
+
+  // Processing facilities responsible for the labeling and distribution of this
+  // biologically derived product
+  repeated Reference processing_facility = 23
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // A unique identifier for an aliquot of a product
+  String division = 24;
+
+  // available | unavailable
+  Coding product_status = 25;
+
+  // Date, and where relevant time, of expiration
+  DateTime expiration_date = 26;
+
+  // How this product was collected
+  message Collection {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Individual performing collection
+    Reference collector = 4 [
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+    ];
+
+    // The patient who underwent the medical procedure to collect the product or
+    // the organization that facilitated the collection
+    Reference source = 5 [
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // Time of product collection
+    message CollectedX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        DateTime date_time = 1;
+        Period period = 2;
+      }
+    }
+    CollectedX collected = 6;
+  }
+  Collection collection = 17;
+
+  // Product storage temperature requirements
+  Range storage_temp_requirements = 27;
+
+  // A property that is specific to this BiologicallyDerviedProduct instance
+  message Property {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Code that specifies the property
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Property values
+    message ValueX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Boolean boolean = 1;
+        Integer integer = 2;
+        CodeableConcept codeable_concept = 3;
+        Period period = 4;
+        Quantity quantity = 5;
+        Range range = 6;
+        Ratio ratio = 7;
+        String string_value = 8 [json_name = "string"];
+        Attachment attachment = 9;
+      }
+    }
+    ValueX value = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Property property = 28;
+}

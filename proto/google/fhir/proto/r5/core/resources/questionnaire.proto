@@ -1,0 +1,451 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+import "proto/google/fhir/proto/r5/core/valuesets.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/questionnaire_go_proto";
+
+// Auto-generated from StructureDefinition for Questionnaire.
+// A structured set of questions.
+// See http://hl7.org/fhir/StructureDefinition/Questionnaire
+message Questionnaire {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Questionnaire";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "descendants().linkId.isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.exists() implies name.matches('^[A-Z]([A-Za-z0-9_]){1,254}$')";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Questionnaire.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this questionnaire, represented as an absolute URI
+  // (globally unique)
+  Uri url = 10 [(.google.fhir.proto.fhir_path_warning_constraint) =
+                    "exists() implies matches('^[^|# ]+$')"];
+
+  // Business identifier for questionnaire
+  repeated Identifier identifier = 11;
+
+  // Business version of the questionnaire
+  String version = 12;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 32;
+
+  // Name for this questionnaire (computer friendly)
+  String name = 13;
+
+  // Name for this questionnaire (human friendly)
+  String title = 14;
+
+  // Based on Questionnaire
+  repeated Canonical derived_from = 15;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 17;
+
+  // Resource that can be subject of QuestionnaireResponse
+  message SubjectTypeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/resource-types";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ResourceTypeValueSet.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  repeated SubjectTypeCode subject_type = 18;
+
+  // Date last changed
+  DateTime date = 19;
+
+  // Name of the publisher/steward (organization or individual)
+  String publisher = 20;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 21;
+
+  // Natural language description of the questionnaire
+  Markdown description = 22;
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 23;
+
+  // Intended jurisdiction for questionnaire (if applicable)
+  repeated CodeableConcept jurisdiction = 24;
+
+  // Why this questionnaire is defined
+  Markdown purpose = 25;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 26;
+
+  // Copyright holder and year(s)
+  String copyright_label = 33;
+
+  // When the questionnaire was approved by publisher
+  Date approval_date = 27;
+
+  // When the questionnaire was last reviewed by the publisher
+  Date last_review_date = 28;
+
+  // When the questionnaire is expected to be used
+  Period effective_period = 29;
+
+  // Concept that represents the overall questionnaire
+  repeated Coding code = 30;
+
+  // Questions and sections within the Questionnaire
+  message Item {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(type='group' and %resource.status='complete') implies item.empty().not()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "type='display' implies item.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "type!='display' or code.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "answerOption.empty() or answerValueSet.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(type='coding' or type = 'decimal' or type = 'integer' or type = 'date' or type = 'dateTime' or type = 'time' or type = 'string' or type = 'quantity') or (answerValueSet.empty() and answerOption.empty())";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "type!='display' or (required.empty() and repeats.empty())";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(type!='group' and type!='display') or initial.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "type!='display' or readOnly.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(type in ('boolean' | 'decimal' | 'integer' | 'string' | 'text' | 'url')) or answerConstraint='optionOrString' or maxLength.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "answerOption.empty() or initial.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "enableWhen.count() > 1 implies enableBehavior.exists()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "repeats=true or initial.count() <= 1";
+    option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+        "type='group' implies item.empty().not()";
+    option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+        "answerConstraint.exists() implies answerOption.exists() or answerValueSet.exists()";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Unique id for item in questionnaire
+    String link_id = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.fhir_path_warning_constraint) =
+          "$this.length() <= 255"
+    ];
+
+    // ElementDefinition - details for the item
+    Uri definition = 5;
+
+    // Corresponding concept for this item in a terminology
+    repeated Coding code = 6;
+
+    // E.g. "1(a)", "2.5.3"
+    String prefix = 7;
+
+    // Primary text for the item
+    String text = 8;
+
+    // group | display | boolean | decimal | integer | date | dateTime +
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/item-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      QuestionnaireItemTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 9
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Only allow data when
+    message EnableWhen {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "operator = 'exists' implies (answer is boolean)";
+
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The linkId of question that determines whether item is enabled/disabled
+      String question = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // exists | = | != | > | < | >= | <=
+      message OperatorCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/questionnaire-enable-operator";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        QuestionnaireItemOperatorCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      OperatorCode operator = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Value for question comparison based on operator
+      message AnswerX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          Boolean boolean = 1;
+          Decimal decimal = 2;
+          Integer integer = 3;
+          Date date = 4;
+          DateTime date_time = 5;
+          Time time = 6;
+          String string_value = 7 [json_name = "string"];
+          Coding coding = 8;
+          Quantity quantity = 9;
+          Reference reference = 10
+              [(.google.fhir.proto.valid_reference_type) = "Resource"];
+        }
+      }
+      AnswerX answer = 6
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated EnableWhen enable_when = 10;
+
+    // all | any
+    message EnableBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/questionnaire-enable-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      EnableWhenBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    EnableBehaviorCode enable_behavior = 11;
+
+    // hidden | protected
+    message DisabledDisplayCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/questionnaire-disabled-display";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      QuestionnaireItemDisabledDisplayCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    DisabledDisplayCode disabled_display = 20;
+
+    // Whether the item must be included in data results
+    Boolean required = 12;
+
+    // Whether the item may repeat
+    Boolean repeats = 13;
+
+    // Don't allow human editing
+    Boolean read_only = 14;
+
+    // No more than these many characters
+    Integer max_length = 15;
+
+    // optionsOnly | optionsOrType | optionsOrString
+    message AnswerConstraintCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/questionnaire-answer-constraint";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      QuestionnaireAnswerConstraintCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    AnswerConstraintCode answer_constraint = 21;
+
+    // ValueSet containing permitted answers
+    Canonical answer_value_set = 16;
+
+    // Permitted answer
+    message AnswerOption {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Answer value
+      message ValueX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          Integer integer = 1;
+          Date date = 2;
+          Time time = 3;
+          String string_value = 4 [json_name = "string"];
+          Coding coding = 5;
+          Reference reference = 6
+              [(.google.fhir.proto.valid_reference_type) = "Resource"];
+        }
+      }
+      ValueX value = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Whether option is selected by default
+      Boolean initial_selected = 5;
+    }
+    repeated AnswerOption answer_option = 17;
+
+    // Initial value(s) when item is first rendered
+    message Initial {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Actual value for initializing the question
+      message ValueX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          Boolean boolean = 1;
+          Decimal decimal = 2;
+          Integer integer = 3;
+          Date date = 4;
+          DateTime date_time = 5;
+          Time time = 6;
+          String string_value = 7 [json_name = "string"];
+          Uri uri = 8;
+          Attachment attachment = 9;
+          Coding coding = 10;
+          Quantity quantity = 11;
+          Reference reference = 12
+              [(.google.fhir.proto.valid_reference_type) = "Resource"];
+        }
+      }
+      ValueX value = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated Initial initial = 18;
+
+    // Nested questionnaire items
+    repeated Item item = 19;
+  }
+  repeated Item item = 31;
+}

@@ -1,0 +1,36 @@
+# proto-file: proto/google/fhir/proto/r5/primitive_test_suite.proto
+# proto-message: PrimitiveTestSuite
+valid_pairs {
+  json_string: "\"urn:uuid:22dd2c95-ddcc-4268-a733-5846c4b12383\""
+  proto {
+    uuid {
+      value: "urn:uuid:22dd2c95-ddcc-4268-a733-5846c4b12383"
+    }
+  }
+}
+
+valid_pairs {
+  json_string: "\"urn:uuid:44287613-951d-4d1c-8530-421a2d6d3c1c\""
+  proto {
+    uuid {
+      value: "urn:uuid:44287613-951d-4d1c-8530-421a2d6d3c1c"
+    }
+  }
+}
+
+invalid_json: "true"
+invalid_json: "\" \""
+invalid_json: "1"
+invalid_json: "1.0"
+
+invalid_protos {
+  uuid {
+    value: " "
+  }
+}
+
+invalid_protos {
+  uuid {
+    value: "urn:uuid:44287613-951d-4d1c-421a2d6d3c1c"
+  }
+}

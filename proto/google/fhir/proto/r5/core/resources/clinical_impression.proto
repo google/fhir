@@ -1,0 +1,176 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/clinical_impression_go_proto";
+
+// Auto-generated from StructureDefinition for ClinicalImpression.
+// A clinical assessment performed when planning treatments and management
+// strategies for a patient. See
+// http://hl7.org/fhir/StructureDefinition/ClinicalImpression
+message ClinicalImpression {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ClinicalImpression";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // ClinicalImpression.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business identifier
+  repeated Identifier identifier = 10;
+
+  // preparation | in-progress | not-done | on-hold | stopped | completed |
+  // entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/event-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    EventStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 30
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Reason for current status
+  CodeableConcept status_reason = 12;
+
+  // Why/how the assessment was performed
+  String description = 14;
+
+  // Patient or group assessed
+  Reference subject = 15 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // The Encounter during which this ClinicalImpression was created
+  Reference encounter = 16
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // Time of assessment
+  message EffectiveX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  EffectiveX effective = 17;
+
+  // When the assessment was documented
+  DateTime date = 18;
+
+  // The clinician performing the assessment
+  Reference performer = 31 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  ];
+
+  // Reference to last assessment
+  Reference previous = 20
+      [(.google.fhir.proto.valid_reference_type) = "ClinicalImpression"];
+
+  // Relevant impressions of patient state
+  repeated Reference problem = 21 [
+    (.google.fhir.proto.valid_reference_type) = "Condition",
+    (.google.fhir.proto.valid_reference_type) = "AllergyIntolerance"
+  ];
+
+  // Change in the status/pattern of a subject's condition since previously
+  // assessed, such as worsening, improving, or no change
+  CodeableConcept change_pattern = 32;
+
+  // Clinical Protocol followed
+  repeated Uri protocol = 23;
+
+  // Summary of the assessment
+  String summary = 24;
+
+  // Possible or likely findings and diagnoses
+  message Finding {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // What was found
+    CodeableReference item = 7;
+
+    // Which investigations support finding
+    String basis = 6;
+  }
+  repeated Finding finding = 25;
+
+  // Estimate of likely outcome
+  repeated CodeableConcept prognosis_codeable_concept = 26;
+
+  // RiskAssessment expressing likely outcome
+  repeated Reference prognosis_reference = 27
+      [(.google.fhir.proto.valid_reference_type) = "RiskAssessment"];
+
+  // Information supporting the clinical impression
+  repeated Reference supporting_info = 28
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Comments made about the ClinicalImpression
+  repeated Annotation note = 29;
+}

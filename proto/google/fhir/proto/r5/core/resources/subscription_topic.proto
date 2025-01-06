@@ -1,0 +1,364 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+import "proto/google/fhir/proto/r5/core/valuesets.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/subscription_topic_go_proto";
+
+// Auto-generated from StructureDefinition for SubscriptionTopic.
+// The definition of a specific topic for triggering events within the
+// Subscriptions framework. See
+// http://hl7.org/fhir/StructureDefinition/SubscriptionTopic
+message SubscriptionTopic {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/SubscriptionTopic";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // SubscriptionTopic.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this subscription topic, represented as an
+  // absolute URI (globally unique)
+  Uri url = 10 [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Business identifier for subscription topic
+  repeated Identifier identifier = 11;
+
+  // Business version of the subscription topic
+  String version = 12;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 13;
+
+  // Name for this subscription topic (computer friendly)
+  String name = 14;
+
+  // Name for this subscription topic (human friendly)
+  String title = 15;
+
+  // Based on FHIR protocol or definition
+  repeated Canonical derived_from = 16;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // If for testing purposes, not real usage
+  Boolean experimental = 18;
+
+  // Date status first applied
+  DateTime date = 19;
+
+  // The name of the individual or organization that published the
+  // SubscriptionTopic
+  String publisher = 20;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 21;
+
+  // Natural language description of the SubscriptionTopic
+  Markdown description = 22;
+
+  // Content intends to support these contexts
+  repeated UsageContext use_context = 23;
+
+  // Intended jurisdiction of the SubscriptionTopic (if applicable)
+  repeated CodeableConcept jurisdiction = 24;
+
+  // Why this SubscriptionTopic is defined
+  Markdown purpose = 25;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 26;
+
+  // Copyright holder and year(s)
+  String copyright_label = 27;
+
+  // When SubscriptionTopic is/was approved by publisher
+  Date approval_date = 28;
+
+  // Date the Subscription Topic was last reviewed by the publisher
+  Date last_review_date = 29;
+
+  // The effective date range for the SubscriptionTopic
+  Period effective_period = 30;
+
+  // Definition of a resource-based trigger for the subscription topic
+  message ResourceTrigger {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Text representation of the resource trigger
+    Markdown description = 4;
+
+    // Data Type or Resource (reference to definition) for this trigger
+    // definition
+    Uri resource = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // create | update | delete
+    message SupportedInteractionCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/interaction-trigger";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      InteractionTriggerValueSet.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    repeated SupportedInteractionCode supported_interaction = 6;
+
+    // Query based trigger rule
+    message QueryCriteria {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Rule applied to previous resource state
+      String previous = 4;
+
+      // test-passes | test-fails
+      message ResultForCreateCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/subscriptiontopic-cr-behavior";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        CriteriaNotExistsBehaviorCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      ResultForCreateCode result_for_create = 5;
+
+      // Rule applied to current resource state
+      String current = 6;
+
+      // test-passes | test-fails
+      message ResultForDeleteCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/subscriptiontopic-cr-behavior";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        CriteriaNotExistsBehaviorCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      ResultForDeleteCode result_for_delete = 7;
+
+      // Both must be true flag
+      Boolean require_both = 8;
+    }
+    QueryCriteria query_criteria = 7;
+
+    // FHIRPath based trigger rule
+    String fhir_path_criteria = 8;
+  }
+  repeated ResourceTrigger resource_trigger = 31;
+
+  // Event definitions the SubscriptionTopic
+  message EventTrigger {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Text representation of the event trigger
+    Markdown description = 4;
+
+    // Event which can trigger a notification from the SubscriptionTopic
+    CodeableConcept event = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Data Type or Resource (reference to definition) for this trigger
+    // definition
+    Uri resource = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated EventTrigger event_trigger = 32;
+
+  // Properties by which a Subscription can filter notifications from the
+  // SubscriptionTopic
+  message CanFilterBy {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Description of this filter parameter
+    Markdown description = 4;
+
+    // URL of the triggering Resource that this filter applies to
+    Uri resource = 5;
+
+    // Human-readable and computation-friendly name for a filter parameter
+    // usable by subscriptions on this topic, via
+    // Subscription.filterBy.filterParameter
+    String filter_parameter = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Canonical URL for a filterParameter definition
+    Uri filter_definition = 7;
+
+    // eq | ne | gt | lt | ge | le | sa | eb | ap
+    message ComparatorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/search-comparator";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      SearchComparatorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    repeated ComparatorCode comparator = 8;
+
+    // missing | exact | contains | not | text | in | not-in | below | above |
+    // type | identifier | of-type | code-text | text-advanced | iterate
+    message ModifierCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/search-modifier-code";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      SearchModifierCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    repeated ModifierCode modifier = 9;
+  }
+  repeated CanFilterBy can_filter_by = 33;
+
+  // Properties for describing the shape of notifications generated by this
+  // topic
+  message NotificationShape {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // URL of the Resource that is the focus (main) resource in a notification
+    // shape
+    Uri resource = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Include directives, rooted in the resource for this shape
+    repeated String include = 5;
+
+    // Reverse include directives, rooted in the resource for this shape
+    repeated String rev_include = 6;
+  }
+  repeated NotificationShape notification_shape = 34;
+}

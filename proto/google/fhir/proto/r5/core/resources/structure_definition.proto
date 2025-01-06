@@ -1,0 +1,368 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/structure_definition_go_proto";
+
+// Auto-generated from StructureDefinition for StructureDefinition.
+// Structural Definition.
+// See http://hl7.org/fhir/StructureDefinition/StructureDefinition
+message StructureDefinition {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/StructureDefinition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "derivation = 'constraint' or snapshot.element.select(path).isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "abstract = true or baseDefinition.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "type != 'Extension' or derivation = 'specialization' or (context.exists())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "snapshot.exists() or differential.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "kind != 'logical' implies snapshot.empty() or snapshot.element.first().path = type";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "snapshot.element.all(id.exists()) and differential.element.all(id.exists())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "kind!='logical'  implies snapshot.element.first().type.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(kind!='logical'  and differential.element.first().path.contains('.').not()) implies differential.element.first().type.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "children().element.where(path.contains('.').not()).label.empty() and children().element.where(path.contains('.').not()).code.empty() and children().element.where(path.contains('.').not()).requirements.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "snapshot.element.all(id.exists()) and snapshot.element.id.trace('ids').isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "differential.element.all(id.exists()) and differential.element.id.trace('ids').isDistinct()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "contextInvariant.exists() implies type = 'Extension'";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "url.startsWith('http://hl7.org/fhir/StructureDefinition') implies (differential | snapshot).element.type.code.all(matches('^[a-zA-Z0-9]+$') or matches('^http:\\\\/\\\\/hl7\\\\.org\\\\/fhirpath\\\\/System\\\\.[A-Z][A-Za-z]+$'))";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "differential.element.defaultValue.exists() implies (derivation = 'specialization')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "url.startsWith('http://hl7.org/fhir/StructureDefinition') implies (snapshot.element.defaultValue.empty() and differential.element.defaultValue.empty())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(snapshot | differential).element.all(path.contains('.').not() implies sliceName.empty())";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "baseDefinition.exists() implies derivation.exists()";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.exists() implies name.matches('^[A-Z]([A-Za-z0-9_]){1,254}$')";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "((kind in 'resource' | 'complex-type') and (derivation = 'specialization')) implies differential.element.where((min != 0 and min != 1) or (max != '1' and max != '*')).empty()";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // StructureDefinition.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this structure definition, represented as a URI
+  // (globally unique)
+  Uri url = 10 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_warning_constraint) =
+        "exists() implies matches('^[^|# ]+$')"
+  ];
+
+  // Additional identifier for the structure definition
+  repeated Identifier identifier = 11;
+
+  // Business version of the structure definition
+  String version = 12;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 37;
+
+  // Name for this structure definition (computer friendly)
+  String name = 13
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Name for this structure definition (human friendly)
+  String title = 14;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 15
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 16;
+
+  // Date last changed
+  DateTime date = 17;
+
+  // Name of the publisher/steward (organization or individual)
+  String publisher = 18;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 19;
+
+  // Natural language description of the structure definition
+  Markdown description = 20;
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 21;
+
+  // Intended jurisdiction for structure definition (if applicable)
+  repeated CodeableConcept jurisdiction = 22;
+
+  // Why this structure definition is defined
+  Markdown purpose = 23;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 24;
+
+  // Copyright holder and year(s)
+  String copyright_label = 38;
+
+  // Assist with indexing and finding
+  repeated Coding keyword = 25;
+
+  // FHIR Version this StructureDefinition targets
+  message FhirVersionCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/FHIR-version";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    FHIRVersionCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  FhirVersionCode fhir_version = 26;
+
+  // External specification that the content is mapped to
+  message Mapping {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "name.exists() or uri.exists()";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Internal id when this mapping is used
+    Id identity = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Identifies what this mapping refers to
+    Uri uri = 5;
+
+    // Names what this mapping refers to
+    String name = 6;
+
+    // Versions, Issues, Scope limitations etc
+    String comment = 7;
+  }
+  repeated Mapping mapping = 27;
+
+  // primitive-type | complex-type | resource | logical
+  message KindCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/structure-definition-kind";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    StructureDefinitionKindCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  KindCode kind = 28
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Whether the structure is abstract
+  Boolean abstract = 29
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // If an extension, where it can be used in instances
+  message Context {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // fhirpath | element | extension
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/extension-context-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ExtensionContextTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Where the extension can be used in instances
+    String expression = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Context context = 30;
+
+  // FHIRPath invariants - when the extension can be used
+  repeated String context_invariant = 31;
+
+  // Type defined or constrained by this structure
+  Uri type = 32
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Definition that this type is constrained/specialized from
+  Canonical base_definition = 33;
+
+  // specialization | constraint - How relates to base definition
+  message DerivationCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/type-derivation-rule";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    TypeDerivationRuleCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  DerivationCode derivation = 34;
+
+  // Snapshot view of the structure
+  message Snapshot {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "%resource.kind = 'logical' or element.all(definition.exists() and min.exists() and max.exists())";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(%resource.kind = 'logical' or element.first().path = %resource.type) and element.tail().all(path.startsWith(%resource.snapshot.element.first().path&'.'))";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "element.where(type.where(code='Reference').exists() and path.endsWith('.reference') and type.targetProfile.exists() and (path.substring(0,$this.path.length()-10) in %context.element.where(type.where(code='CodeableReference').exists()).path)).exists().not()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "element.where(type.where(code='CodeableConcept').exists() and path.endsWith('.concept') and binding.exists() and (path.substring(0,$this.path.length()-8) in %context.element.where(type.where(code='CodeableReference').exists()).path)).exists().not()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "element.all(base.exists())";
+    option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+        "$this.where(element[0].mustSupport='true').exists().not()";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Definition of elements in the resource (if no StructureDefinition)
+    repeated ElementDefinition element = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.fhir_path_constraint) =
+          "binding.empty() or binding.valueSet.exists() or binding.description.exists()",
+      (.google.fhir.proto.fhir_path_constraint) =
+          "slicing.exists().not() or (slicing.discriminator.exists() or slicing.description.exists())"
+    ];
+  }
+  Snapshot snapshot = 35;
+
+  // Differential view of the structure
+  message Differential {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "element.where(path.contains('.').not()).slicing.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "(%resource.kind = 'logical' or element.first().path.startsWith(%resource.type)) and (element.tail().empty() or  element.tail().all(path.startsWith(%resource.differential.element.first().path.replaceMatches('\\\\..*','')&'.')))";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Definition of elements in the resource (if no StructureDefinition)
+    repeated ElementDefinition element = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  Differential differential = 36;
+}

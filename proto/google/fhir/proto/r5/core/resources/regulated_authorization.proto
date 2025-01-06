@@ -1,0 +1,171 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/regulated_authorization_go_proto";
+
+// Auto-generated from StructureDefinition for RegulatedAuthorization.
+// Regulatory approval, clearance or licencing related to a regulated product,
+// treatment, facility or activity e.g. Market Authorization for a Medicinal
+// Product. See http://hl7.org/fhir/StructureDefinition/RegulatedAuthorization
+message RegulatedAuthorization {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/RegulatedAuthorization";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // RegulatedAuthorization.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business identifier for the authorization, typically assigned by the
+  // authorizing body
+  repeated Identifier identifier = 10;
+
+  // The product type, treatment, facility or activity that is being authorized
+  repeated Reference subject = 11 [
+    (.google.fhir.proto.valid_reference_type) = "MedicinalProductDefinition",
+    (.google.fhir.proto.valid_reference_type) = "BiologicallyDerivedProduct",
+    (.google.fhir.proto.valid_reference_type) = "NutritionProduct",
+    (.google.fhir.proto.valid_reference_type) = "PackagedProductDefinition",
+    (.google.fhir.proto.valid_reference_type) = "ManufacturedItemDefinition",
+    (.google.fhir.proto.valid_reference_type) = "Ingredient",
+    (.google.fhir.proto.valid_reference_type) = "SubstanceDefinition",
+    (.google.fhir.proto.valid_reference_type) = "DeviceDefinition",
+    (.google.fhir.proto.valid_reference_type) = "ResearchStudy",
+    (.google.fhir.proto.valid_reference_type) = "ActivityDefinition",
+    (.google.fhir.proto.valid_reference_type) = "PlanDefinition",
+    (.google.fhir.proto.valid_reference_type) = "ObservationDefinition",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Location"
+  ];
+
+  // Overall type of this authorization, for example drug marketing approval,
+  // orphan drug designation
+  CodeableConcept type = 12;
+
+  // General textual supporting information
+  Markdown description = 13;
+
+  // The territory in which the authorization has been granted
+  repeated CodeableConcept region = 14;
+
+  // The status that is authorised e.g. approved. Intermediate states can be
+  // tracked with cases and applications
+  CodeableConcept status = 15;
+
+  // The date at which the current status was assigned
+  DateTime status_date = 16;
+
+  // The time period in which the regulatory approval etc. is in effect, e.g. a
+  // Marketing Authorization includes the date of authorization and/or
+  // expiration date
+  Period validity_period = 17;
+
+  // Condition for which the use of the regulated product applies
+  repeated CodeableReference indication = 18;
+
+  // The intended use of the product, e.g. prevention, treatment
+  CodeableConcept intended_use = 19;
+
+  // The legal/regulatory framework or reasons under which this authorization is
+  // granted
+  repeated CodeableConcept basis = 20;
+
+  // The organization that has been granted this authorization, by the regulator
+  Reference holder = 21
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // The regulatory authority or authorizing body granting the authorization
+  Reference regulator = 22
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Additional information or supporting documentation about the authorization
+  repeated Reference attached_document = 23
+      [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
+
+  // The case or regulatory procedure for granting or amending a regulated
+  // authorization. Note: This area is subject to ongoing review and the
+  // workgroup is seeking implementer feedback on its use (see link at bottom of
+  // page)
+  message Case {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Identifier by which this case can be referenced
+    Identifier identifier = 4;
+
+    // The defining type of case
+    CodeableConcept type = 5;
+
+    // The status associated with the case
+    CodeableConcept status = 6;
+
+    // Relevant date for this case
+    message DateX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Period period = 1;
+        DateTime date_time = 2;
+      }
+    }
+    DateX date = 7;
+
+    // Applications submitted to obtain a regulated authorization. Steps within
+    // the longer running case or procedure
+    repeated Case application = 8;
+  }
+  Case case = 24;
+}

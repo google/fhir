@@ -1,0 +1,212 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/communication_go_proto";
+
+// Auto-generated from StructureDefinition for Communication.
+// A clinical or business level record of information being transmitted or
+// shared. See http://hl7.org/fhir/StructureDefinition/Communication
+message Communication {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Communication";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Communication.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Unique identifier
+  repeated Identifier identifier = 10;
+
+  // Instantiates FHIR protocol or definition
+  repeated Canonical instantiates_canonical = 11;
+
+  // Instantiates external protocol or definition
+  repeated Uri instantiates_uri = 12;
+
+  // Request fulfilled by this communication
+  repeated Reference based_on = 13
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Part of referenced event (e.g. Communication, Procedure)
+  repeated Reference part_of = 14
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Reply to
+  repeated Reference in_response_to = 15
+      [(.google.fhir.proto.valid_reference_type) = "Communication"];
+
+  // preparation | in-progress | not-done | on-hold | stopped | completed |
+  // entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/event-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    EventStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Reason for current status
+  CodeableConcept status_reason = 17;
+
+  // Message category
+  repeated CodeableConcept category = 18;
+
+  // routine | urgent | asap | stat
+  message PriorityCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-priority";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestPriorityCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  PriorityCode priority = 19;
+
+  // A channel of communication
+  repeated CodeableConcept medium = 20;
+
+  // Focus of message
+  Reference subject = 21 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // Description of the purpose/content
+  CodeableConcept topic = 22;
+
+  // Resources that pertain to this communication
+  repeated Reference about = 23
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // The Encounter during which this Communication was created
+  Reference encounter = 24
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // When sent
+  DateTime sent = 25;
+
+  // When received
+  DateTime received = 26;
+
+  // Who the information is shared with
+  repeated Reference recipient = 27 [
+    (.google.fhir.proto.valid_reference_type) = "CareTeam",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+    (.google.fhir.proto.valid_reference_type) = "Location",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.proto.valid_reference_type) = "Endpoint"
+  ];
+
+  // Who shares the information
+  Reference sender = 28 [
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+    (.google.fhir.proto.valid_reference_type) = "Endpoint",
+    (.google.fhir.proto.valid_reference_type) = "CareTeam"
+  ];
+
+  // Indication for message
+  repeated CodeableReference reason = 33;
+
+  // Message payload
+  message Payload {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Message part content
+    message ContentX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Attachment attachment = 2;
+        Reference reference = 3
+            [(.google.fhir.proto.valid_reference_type) = "Resource"];
+        CodeableConcept codeable_concept = 4;
+      }
+    }
+    ContentX content = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Payload payload = 31;
+
+  // Comments made about the communication
+  repeated Annotation note = 32;
+}

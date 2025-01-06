@@ -1,0 +1,30 @@
+name: "MedicationDispenseQuantityRemaining"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+  }
+}
+field {
+  name: "value_quantity"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.SimpleQuantity"
+  options {
+    [google.fhir.proto.validation_requirement]: REQUIRED_BY_FHIR
+    [google.fhir.proto.field_description]: "A fixed quantity (no comparator)"
+    [google.fhir.proto.fhir_path_constraint]: "code.empty() or system.exists()"
+    [google.fhir.proto.fhir_path_constraint]: "comparator.empty()"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for quantityRemaining.\nQuanity of medication left to be dispensed after a dispensing event.\nSee http://hl7.org/fhir/StructureDefinition/medicationdispense-quantityRemaining"
+  [google.fhir.proto.fhir_profile_base]: "http://hl7.org/fhir/StructureDefinition/Extension"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/medicationdispense-quantityRemaining"
+}

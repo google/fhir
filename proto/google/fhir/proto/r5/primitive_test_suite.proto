@@ -1,0 +1,69 @@
+//    Copyright 2024 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.testing;
+
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.testing";
+
+// Union type of all primitives that can be tested for R5 FHIR.
+message PrimitiveProtoUnion {
+  oneof primitive_proto_oneof {
+    google.fhir.r5.core.Base64Binary base64_binary = 1;
+    google.fhir.r5.core.Boolean boolean = 2;
+    google.fhir.r5.core.Canonical canonical = 3;
+    google.fhir.r5.core.Code code = 4;
+    google.fhir.r5.core.Date date = 5;
+    google.fhir.r5.core.DateTime date_time = 6;
+    google.fhir.r5.core.Decimal decimal = 7;
+    google.fhir.r5.core.Id id = 8;
+    google.fhir.r5.core.Instant instant = 9;
+    google.fhir.r5.core.Integer integer = 10;
+    google.fhir.r5.core.Integer64 integer64 = 11;
+    google.fhir.r5.core.Markdown markdown = 12;
+    google.fhir.r5.core.Oid oid = 13;
+    google.fhir.r5.core.PositiveInt positive_int = 14;
+    google.fhir.r5.core.String string_proto = 15;
+    google.fhir.r5.core.Time time = 16;
+    google.fhir.r5.core.UnsignedInt unsigned_int = 17;
+    google.fhir.r5.core.Uri uri = 18;
+    google.fhir.r5.core.Url url = 19;
+    google.fhir.r5.core.Uuid uuid = 20;
+    google.fhir.r5.core.Xhtml xhtml = 21;
+    google.fhir.r5.core.Reference reference = 22;
+  }
+}
+
+// Pair representing a FHIR primitive represented as both a json string and as a
+// proto.
+message ValidPair {
+  string json_string = 1;
+  PrimitiveProtoUnion proto = 2;
+}
+
+message PrimitiveTestSuite {
+  // Note: The test suite will fail if any of these are empty.
+  repeated ValidPair valid_pairs = 1;
+  repeated string invalid_json = 2;
+  repeated PrimitiveProtoUnion invalid_protos = 3;
+
+  // If it's impossible to formulate an invalid proto, set this string
+  // so that the tests don't fail.
+  // E.g., Boolean uses a boolean value datatype, so all values are valid
+  string no_invalid_protos_reason = 4;
+}

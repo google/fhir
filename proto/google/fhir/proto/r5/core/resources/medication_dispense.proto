@@ -1,0 +1,237 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/medication_dispense_go_proto";
+
+// Auto-generated from StructureDefinition for MedicationDispense.
+// Dispensing a medication to a named patient.
+// See http://hl7.org/fhir/StructureDefinition/MedicationDispense
+message MedicationDispense {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MedicationDispense";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "whenHandedOver.empty() or whenPrepared.empty() or whenHandedOver >= whenPrepared";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // MedicationDispense.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // External identifier
+  repeated Identifier identifier = 10;
+
+  // Plan that is fulfilled by this dispense
+  repeated Reference based_on = 34
+      [(.google.fhir.proto.valid_reference_type) = "CarePlan"];
+
+  // Event that dispense is part of
+  repeated Reference part_of = 11 [
+    (.google.fhir.proto.valid_reference_type) = "Procedure",
+    (.google.fhir.proto.valid_reference_type) = "MedicationAdministration"
+  ];
+
+  // preparation | in-progress | cancelled | on-hold | completed |
+  // entered-in-error | stopped | declined | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/medicationdispense-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    MedicationDispenseStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 12
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Why a dispense was not performed
+  CodeableReference not_performed_reason = 35;
+
+  // When the status changed
+  DateTime status_changed = 36;
+
+  // Type of medication dispense
+  repeated CodeableConcept category = 37;
+
+  // What medication was supplied
+  CodeableReference medication = 38
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who the dispense is for
+  Reference subject = 16 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // Encounter associated with event
+  Reference encounter = 39
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // Information that supports the dispensing of the medication
+  repeated Reference supporting_information = 18
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Who performed event
+  message Performer {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Who performed the dispense and what they did
+    CodeableConcept function = 4;
+
+    // Individual who was performing
+    Reference actor = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Device",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+      (.google.fhir.proto.valid_reference_type) = "CareTeam"
+    ];
+  }
+  repeated Performer performer = 19;
+
+  // Where the dispense occurred
+  Reference location = 20
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Medication order that authorizes the dispense
+  repeated Reference authorizing_prescription = 21
+      [(.google.fhir.proto.valid_reference_type) = "MedicationRequest"];
+
+  // Trial fill, partial fill, emergency fill, etc
+  CodeableConcept type = 22;
+
+  // Amount dispensed
+  SimpleQuantity quantity = 23;
+
+  // Amount of medication expressed as a timing amount
+  SimpleQuantity days_supply = 24;
+
+  // When the recording of the dispense started
+  DateTime recorded = 40;
+
+  // When product was packaged and reviewed
+  DateTime when_prepared = 25;
+
+  // When product was given out
+  DateTime when_handed_over = 26;
+
+  // Where the medication was/will be sent
+  Reference destination = 27
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Who collected the medication or where the medication was delivered
+  repeated Reference receiver = 28 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.proto.valid_reference_type) = "Location",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  ];
+
+  // Information about the dispense
+  repeated Annotation note = 29;
+
+  // Full representation of the dosage instructions
+  Markdown rendered_dosage_instruction = 41;
+
+  // How the medication is to be used by the patient or administered by the
+  // caregiver
+  repeated Dosage dosage_instruction = 30;
+
+  // Whether a substitution was performed on the dispense
+  message Substitution {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Whether a substitution was or was not performed on the dispense
+    Boolean was_substituted = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Code signifying whether a different drug was dispensed from what was
+    // prescribed
+    CodeableConcept type = 5;
+
+    // Why was substitution made
+    repeated CodeableConcept reason = 6;
+
+    // Who is responsible for the substitution
+    Reference responsible_party = 8 [
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+  }
+  Substitution substitution = 31;
+
+  // A list of relevant lifecycle events
+  repeated Reference event_history = 33
+      [(.google.fhir.proto.valid_reference_type) = "Provenance"];
+}

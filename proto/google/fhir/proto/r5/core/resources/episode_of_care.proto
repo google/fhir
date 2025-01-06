@@ -1,0 +1,198 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/episode_of_care_go_proto";
+
+// Auto-generated from StructureDefinition for EpisodeOfCare.
+// An association of a Patient with an Organization and  Healthcare Provider(s)
+// for a period of time that the Organization assumes some level of
+// responsibility. See http://hl7.org/fhir/StructureDefinition/EpisodeOfCare
+message EpisodeOfCare {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/EpisodeOfCare";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // EpisodeOfCare.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business Identifier(s) relevant for this EpisodeOfCare
+  repeated Identifier identifier = 10;
+
+  // planned | waitlist | active | onhold | finished | cancelled |
+  // entered-in-error
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/episode-of-care-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    EpisodeOfCareStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Past list of status codes (the current status may be included to cover the
+  // start date of the status)
+  message StatusHistory {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // planned | waitlist | active | onhold | finished | cancelled |
+    // entered-in-error
+    message StatusCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/episode-of-care-status";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      EpisodeOfCareStatusCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    StatusCode status = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Duration the EpisodeOfCare was in the specified status
+    Period period = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated StatusHistory status_history = 12;
+
+  // Type/class  - e.g. specialist referral, disease management
+  repeated CodeableConcept type = 13;
+
+  // The list of medical reasons that are expected to be addressed during the
+  // episode of care
+  message Reason {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // What the reason value should be used for/as
+    CodeableConcept use = 4;
+
+    // Medical reason to be addressed
+    repeated CodeableReference value = 5;
+  }
+  repeated Reason reason = 22;
+
+  // The list of medical conditions that were addressed during the episode of
+  // care
+  message Diagnosis {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The medical condition that was addressed during the episode of care
+    repeated CodeableReference condition = 7;
+
+    // Role that this diagnosis has within the episode of care (e.g. admission,
+    // billing, discharge …)
+    CodeableConcept use = 8;
+  }
+  repeated Diagnosis diagnosis = 14;
+
+  // The patient who is the focus of this episode of care
+  Reference patient = 15 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient"
+  ];
+
+  // Organization that assumes responsibility for care coordination
+  Reference managing_organization = 16
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Interval during responsibility is assumed
+  Period period = 17;
+
+  // Originating Referral Request(s)
+  repeated Reference referral_request = 18
+      [(.google.fhir.proto.valid_reference_type) = "ServiceRequest"];
+
+  // Care manager/care coordinator for the patient
+  Reference care_manager = 19 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  ];
+
+  // Other practitioners facilitating this episode of care
+  repeated Reference care_team = 23
+      [(.google.fhir.proto.valid_reference_type) = "CareTeam"];
+
+  // The set of accounts that may be used for billing for this EpisodeOfCare
+  repeated Reference account = 21
+      [(.google.fhir.proto.valid_reference_type) = "Account"];
+}

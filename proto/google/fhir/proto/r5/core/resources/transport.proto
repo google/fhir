@@ -1,0 +1,419 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+import "proto/google/fhir/proto/r5/core/valuesets.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/transport_go_proto";
+
+// Auto-generated from StructureDefinition for Transport.
+// Delivery of item.
+// See http://hl7.org/fhir/StructureDefinition/Transport
+message Transport {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Transport";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Transport.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // External identifier
+  repeated Identifier identifier = 10;
+
+  // Formal definition of transport
+  Canonical instantiates_canonical = 11;
+
+  // Formal definition of transport
+  Uri instantiates_uri = 12;
+
+  // Request fulfilled by this transport
+  repeated Reference based_on = 13
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Requisition or grouper id
+  Identifier group_identifier = 14;
+
+  // Part of referenced event
+  repeated Reference part_of = 15
+      [(.google.fhir.proto.valid_reference_type) = "Transport"];
+
+  // in-progress | completed | abandoned | cancelled | planned |
+  // entered-in-error
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/transport-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    TransportStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16;
+
+  // Reason for current status
+  CodeableConcept status_reason = 17;
+
+  // unknown | proposal | plan | order | original-order | reflex-order |
+  // filler-order | instance-order | option
+  message IntentCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/transport-intent";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    TransportIntentValueSet.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  IntentCode intent = 18
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // routine | urgent | asap | stat
+  message PriorityCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-priority";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestPriorityCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  PriorityCode priority = 19;
+
+  // Transport Type
+  CodeableConcept code = 20;
+
+  // Human-readable explanation of transport
+  String description = 21;
+
+  // What transport is acting on
+  Reference focus = 22 [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Beneficiary of the Transport
+  Reference for_value = 23 [
+    (.google.fhir.proto.valid_reference_type) = "Resource",
+    json_name = "for"
+  ];
+
+  // Healthcare event during which this transport originated
+  Reference encounter = 24
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // Completion time of the event (the occurrence)
+  DateTime completion_time = 25;
+
+  // Transport Creation Date
+  DateTime authored_on = 26;
+
+  // Transport Last Modified Date
+  DateTime last_modified = 27;
+
+  // Who is asking for transport to be done
+  Reference requester = 28 [
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+  ];
+
+  // Requested performer
+  repeated CodeableConcept performer_type = 29;
+
+  // Responsible individual
+  Reference owner = 30 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "CareTeam",
+    (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+  ];
+
+  // Where transport occurs
+  Reference location = 31
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Associated insurance coverage
+  repeated Reference insurance = 32 [
+    (.google.fhir.proto.valid_reference_type) = "Coverage",
+    (.google.fhir.proto.valid_reference_type) = "ClaimResponse"
+  ];
+
+  // Comments made about the transport
+  repeated Annotation note = 33;
+
+  // Key events in history of the Transport
+  repeated Reference relevant_history = 34
+      [(.google.fhir.proto.valid_reference_type) = "Provenance"];
+
+  // Constraints on fulfillment transports
+  message Restriction {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // How many times to repeat
+    PositiveInt repetitions = 4;
+
+    // When fulfillment sought
+    Period period = 5;
+
+    // For whom is fulfillment sought?
+    repeated Reference recipient = 6 [
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+      (.google.fhir.proto.valid_reference_type) = "Group",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+  }
+  Restriction restriction = 35;
+
+  // Information used to perform transport
+  message Parameter {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Label for the input
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Content to use in performing the transport
+    message ValueX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Base64Binary base64_binary = 1;
+        Boolean boolean = 2;
+        Canonical canonical = 3;
+        Code code = 4;
+        Date date = 5;
+        DateTime date_time = 6;
+        Decimal decimal = 7;
+        Id id = 8;
+        Instant instant = 9;
+        Integer integer = 10;
+        Integer64 integer64 = 11;
+        Markdown markdown = 12;
+        Oid oid = 13;
+        PositiveInt positive_int = 14;
+        String string_value = 15 [json_name = "string"];
+        Time time = 16;
+        UnsignedInt unsigned_int = 17;
+        Uri uri = 18;
+        Url url = 19;
+        Uuid uuid = 20;
+        Address address = 21;
+        Age age = 22;
+        Annotation annotation = 23;
+        Attachment attachment = 24;
+        CodeableConcept codeable_concept = 25;
+        CodeableReference codeable_reference = 26;
+        Coding coding = 27;
+        ContactPoint contact_point = 28;
+        Count count = 29;
+        Distance distance = 30;
+        Duration duration = 31;
+        HumanName human_name = 32;
+        Identifier identifier = 33;
+        Money money = 34;
+        Period period = 35;
+        Quantity quantity = 36;
+        Range range = 37;
+        Ratio ratio = 38;
+        RatioRange ratio_range = 39;
+        Reference reference = 40;
+        SampledData sampled_data = 41;
+        Signature signature = 42;
+        Timing timing = 43;
+        ContactDetail contact_detail = 44;
+        DataRequirement data_requirement = 45;
+        Expression expression = 46;
+        ParameterDefinition parameter_definition = 47;
+        RelatedArtifact related_artifact = 48;
+        TriggerDefinition trigger_definition = 49;
+        UsageContext usage_context = 50;
+        Availability availability = 51;
+        ExtendedContactDetail extended_contact_detail = 52;
+        Dosage dosage = 53;
+        Meta meta = 54;
+      }
+    }
+    ValueX value = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Parameter input = 36;
+
+  // Information produced as part of transport
+  message Output {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Label for output
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Result of output
+    message ValueX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Base64Binary base64_binary = 1;
+        Boolean boolean = 2;
+        Canonical canonical = 3;
+        Code code = 4;
+        Date date = 5;
+        DateTime date_time = 6;
+        Decimal decimal = 7;
+        Id id = 8;
+        Instant instant = 9;
+        Integer integer = 10;
+        Integer64 integer64 = 11;
+        Markdown markdown = 12;
+        Oid oid = 13;
+        PositiveInt positive_int = 14;
+        String string_value = 15 [json_name = "string"];
+        Time time = 16;
+        UnsignedInt unsigned_int = 17;
+        Uri uri = 18;
+        Url url = 19;
+        Uuid uuid = 20;
+        Address address = 21;
+        Age age = 22;
+        Annotation annotation = 23;
+        Attachment attachment = 24;
+        CodeableConcept codeable_concept = 25;
+        CodeableReference codeable_reference = 26;
+        Coding coding = 27;
+        ContactPoint contact_point = 28;
+        Count count = 29;
+        Distance distance = 30;
+        Duration duration = 31;
+        HumanName human_name = 32;
+        Identifier identifier = 33;
+        Money money = 34;
+        Period period = 35;
+        Quantity quantity = 36;
+        Range range = 37;
+        Ratio ratio = 38;
+        RatioRange ratio_range = 39;
+        Reference reference = 40;
+        SampledData sampled_data = 41;
+        Signature signature = 42;
+        Timing timing = 43;
+        ContactDetail contact_detail = 44;
+        DataRequirement data_requirement = 45;
+        Expression expression = 46;
+        ParameterDefinition parameter_definition = 47;
+        RelatedArtifact related_artifact = 48;
+        TriggerDefinition trigger_definition = 49;
+        UsageContext usage_context = 50;
+        Availability availability = 51;
+        ExtendedContactDetail extended_contact_detail = 52;
+        Dosage dosage = 53;
+        Meta meta = 54;
+      }
+    }
+    ValueX value = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Output output = 37;
+
+  // The desired location
+  Reference requested_location = 38 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Location"
+  ];
+
+  // The entity current location
+  Reference current_location = 39 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Location"
+  ];
+
+  // Why transport is needed
+  CodeableReference reason = 40;
+
+  // Parent (or preceding) transport
+  Reference history = 41
+      [(.google.fhir.proto.valid_reference_type) = "Transport"];
+}

@@ -1,0 +1,161 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/practitioner_go_proto";
+
+// Auto-generated from StructureDefinition for Practitioner.
+// A person with a  formal responsibility in the provisioning of healthcare or
+// related services. See http://hl7.org/fhir/StructureDefinition/Practitioner
+message Practitioner {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Practitioner";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Practitioner.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // An identifier for the person as this agent
+  repeated Identifier identifier = 10;
+
+  // Whether this practitioner's record is in active use
+  Boolean active = 11;
+
+  // The name(s) associated with the practitioner
+  repeated HumanName name = 12;
+
+  // A contact detail for the practitioner (that apply to all roles)
+  repeated ContactPoint telecom = 13;
+
+  // male | female | other | unknown
+  message GenderCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/administrative-gender";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AdministrativeGenderCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  GenderCode gender = 15;
+
+  // The date  on which the practitioner was born
+  Date birth_date = 16;
+
+  // Indicates if the practitioner is deceased or not
+  message DeceasedX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Boolean boolean = 1;
+      DateTime date_time = 2;
+    }
+  }
+  DeceasedX deceased = 20;
+
+  // Address(es) of the practitioner that are not role specific (typically home
+  // address)
+  repeated Address address = 14;
+
+  // Image of the person
+  repeated Attachment photo = 17;
+
+  // Qualifications, certifications, accreditations, licenses, training, etc.
+  // pertaining to the provision of care
+  message Qualification {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // An identifier for this qualification for the practitioner
+    repeated Identifier identifier = 4;
+
+    // Coded representation of the qualification
+    CodeableConcept code = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Period during which the qualification is valid
+    Period period = 6;
+
+    // Organization that regulates and issues the qualification
+    Reference issuer = 7
+        [(.google.fhir.proto.valid_reference_type) = "Organization"];
+  }
+  repeated Qualification qualification = 18;
+
+  // A language which may be used to communicate with the practitioner
+  message Communication {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The language code used to communicate with the practitioner
+    CodeableConcept language = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Language preference indicator
+    Boolean preferred = 5;
+  }
+  repeated Communication communication = 21;
+}

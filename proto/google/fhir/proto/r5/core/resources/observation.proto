@@ -1,0 +1,380 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/observation_go_proto";
+
+// Auto-generated from StructureDefinition for Observation.
+// Measurements and simple assertions.
+// See http://hl7.org/fhir/StructureDefinition/Observation
+message Observation {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Observation";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "dataAbsentReason.empty() or value.empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "bodySite.exists() implies bodyStructure.empty()";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Observation.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business Identifier for observation
+  repeated Identifier identifier = 10;
+
+  // Instantiates FHIR ObservationDefinition
+  message InstantiatesX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Canonical canonical = 1;
+      Reference reference = 2
+          [(.google.fhir.proto.valid_reference_type) = "ObservationDefinition"];
+    }
+  }
+  InstantiatesX instantiates = 34;
+
+  // Fulfills plan, proposal or order
+  repeated Reference based_on = 11 [
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "DeviceRequest",
+    (.google.fhir.proto.valid_reference_type) = "ImmunizationRecommendation",
+    (.google.fhir.proto.valid_reference_type) = "MedicationRequest",
+    (.google.fhir.proto.valid_reference_type) = "NutritionOrder",
+    (.google.fhir.proto.valid_reference_type) = "ServiceRequest"
+  ];
+
+  // Triggering observation(s)
+  message TriggeredBy {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Triggering observation
+    Reference observation = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Observation"
+    ];
+
+    // reflex | repeat | re-run
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/observation-triggeredbytype";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      TriggeredBytypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Reason that the observation was triggered
+    String reason = 6;
+  }
+  repeated TriggeredBy triggered_by = 35;
+
+  // Part of referenced event
+  repeated Reference part_of = 12 [
+    (.google.fhir.proto.valid_reference_type) = "MedicationAdministration",
+    (.google.fhir.proto.valid_reference_type) = "MedicationDispense",
+    (.google.fhir.proto.valid_reference_type) = "MedicationStatement",
+    (.google.fhir.proto.valid_reference_type) = "Procedure",
+    (.google.fhir.proto.valid_reference_type) = "Immunization",
+    (.google.fhir.proto.valid_reference_type) = "ImagingStudy",
+    (.google.fhir.proto.valid_reference_type) = "GenomicStudy"
+  ];
+
+  // registered | preliminary | final | amended +
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/observation-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ObservationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 13
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of  type of observation
+  repeated CodeableConcept category = 14;
+
+  // Type of observation (code / type)
+  CodeableConcept code = 15
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who and/or what the observation is about
+  Reference subject = 16 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Location",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Procedure",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "Medication",
+    (.google.fhir.proto.valid_reference_type) = "Substance",
+    (.google.fhir.proto.valid_reference_type) = "BiologicallyDerivedProduct",
+    (.google.fhir.proto.valid_reference_type) = "NutritionProduct"
+  ];
+
+  // What the observation is about, when it is not about the subject of record
+  repeated Reference focus = 17
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Healthcare event during which this observation is made
+  Reference encounter = 18
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // Clinically relevant time/time-period for observation
+  message EffectiveX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      DateTime date_time = 1;
+      Period period = 2;
+      Timing timing = 3;
+      Instant instant = 4;
+    }
+  }
+  EffectiveX effective = 19;
+
+  // Date/Time this version was made available
+  Instant issued = 20;
+
+  // Who is responsible for the observation
+  repeated Reference performer = 21 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "CareTeam",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+  ];
+
+  // Actual result
+  message ValueX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Quantity quantity = 1;
+      CodeableConcept codeable_concept = 2;
+      String string_value = 3 [json_name = "string"];
+      Boolean boolean = 4;
+      Integer integer = 5;
+      Range range = 6;
+      Ratio ratio = 7;
+      SampledData sampled_data = 8;
+      Time time = 9;
+      DateTime date_time = 10;
+      Period period = 11;
+      Attachment attachment = 12;
+      Reference reference = 13
+          [(.google.fhir.proto.valid_reference_type) = "MolecularSequence"];
+    }
+  }
+  ValueX value = 22;
+
+  // Why the result is missing
+  CodeableConcept data_absent_reason = 23;
+
+  // High, low, normal, etc
+  repeated CodeableConcept interpretation = 24;
+
+  // Comments about the observation
+  repeated Annotation note = 25;
+
+  // Observed body part
+  CodeableConcept body_site = 26;
+
+  // Observed body structure
+  Reference body_structure = 36
+      [(.google.fhir.proto.valid_reference_type) = "BodyStructure"];
+
+  // How it was done
+  CodeableConcept method = 27;
+
+  // Specimen used for this observation
+  Reference specimen = 28 [
+    (.google.fhir.proto.valid_reference_type) = "Specimen",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.fhir_path_constraint) =
+        "(reference.resolve().exists() and reference.resolve() is Group) implies reference.resolve().member.entity.resolve().all($this is Specimen)"
+  ];
+
+  // A reference to the device that generates the measurements or the device
+  // settings for the device
+  Reference device = 29 [
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "DeviceMetric"
+  ];
+
+  // Provides guide for interpretation
+  message ReferenceRange {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "low.exists() or high.exists() or text.exists()";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Low Range, if relevant
+    SimpleQuantity low = 4;
+
+    // High Range, if relevant
+    SimpleQuantity high = 5;
+
+    // Normal value, if relevant
+    CodeableConcept normal_value = 10;
+
+    // Reference range qualifier
+    CodeableConcept type = 6;
+
+    // Reference range population
+    repeated CodeableConcept applies_to = 7;
+
+    // Applicable age range, if relevant
+    Range age = 8;
+
+    // Text based reference range in an observation
+    Markdown text = 11;
+  }
+  repeated ReferenceRange reference_range = 30;
+
+  // Related resource that belongs to the Observation group
+  repeated Reference has_member = 31 [
+    (.google.fhir.proto.valid_reference_type) = "Observation",
+    (.google.fhir.proto.valid_reference_type) = "QuestionnaireResponse",
+    (.google.fhir.proto.valid_reference_type) = "MolecularSequence"
+  ];
+
+  // Related resource from which the observation is made
+  repeated Reference derived_from = 32 [
+    (.google.fhir.proto.valid_reference_type) = "DocumentReference",
+    (.google.fhir.proto.valid_reference_type) = "ImagingStudy",
+    (.google.fhir.proto.valid_reference_type) = "ImagingSelection",
+    (.google.fhir.proto.valid_reference_type) = "QuestionnaireResponse",
+    (.google.fhir.proto.valid_reference_type) = "Observation",
+    (.google.fhir.proto.valid_reference_type) = "MolecularSequence",
+    (.google.fhir.proto.valid_reference_type) = "GenomicStudy"
+  ];
+
+  // Component results
+  message Component {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Type of component observation (code / type)
+    CodeableConcept code = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Actual component result
+    message ValueX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Quantity quantity = 1;
+        CodeableConcept codeable_concept = 2;
+        String string_value = 3 [json_name = "string"];
+        Boolean boolean = 4;
+        Integer integer = 5;
+        Range range = 6;
+        Ratio ratio = 7;
+        SampledData sampled_data = 8;
+        Time time = 9;
+        DateTime date_time = 10;
+        Period period = 11;
+        Attachment attachment = 12;
+        Reference reference = 13
+            [(.google.fhir.proto.valid_reference_type) = "MolecularSequence"];
+      }
+    }
+    ValueX value = 5;
+
+    // Why the component result is missing
+    CodeableConcept data_absent_reason = 6;
+
+    // High, low, normal, etc
+    repeated CodeableConcept interpretation = 7;
+
+    // Provides guide for interpretation of component result
+    repeated ReferenceRange reference_range = 8;
+  }
+  repeated Component component = 33;
+}

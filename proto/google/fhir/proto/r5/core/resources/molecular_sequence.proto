@@ -1,0 +1,242 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/molecular_sequence_go_proto";
+
+// Auto-generated from StructureDefinition for MolecularSequence.
+// Representation of a molecular sequence.
+// See http://hl7.org/fhir/StructureDefinition/MolecularSequence
+message MolecularSequence {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MolecularSequence";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // MolecularSequence.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Unique ID for this particular sequence
+  repeated Identifier identifier = 10;
+
+  // aa | dna | rna
+  message TypeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/sequence-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    SequenceTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  TypeCode type = 11;
+
+  // Subject this sequence is associated too
+  Reference subject = 26 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.valid_reference_type) = "Substance",
+    (.google.fhir.proto.valid_reference_type) = "BiologicallyDerivedProduct",
+    (.google.fhir.proto.valid_reference_type) = "NutritionProduct"
+  ];
+
+  // What the molecular sequence is about, when it is not about the subject of
+  // record
+  repeated Reference focus = 27
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Specimen used for sequencing
+  Reference specimen = 14
+      [(.google.fhir.proto.valid_reference_type) = "Specimen"];
+
+  // The method for sequencing
+  Reference device = 15 [(.google.fhir.proto.valid_reference_type) = "Device"];
+
+  // Who should be responsible for test result
+  Reference performer = 16
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Sequence that was observed
+  String literal = 28;
+
+  // Embedded file or a link (URL) which contains content to represent the
+  // sequence
+  repeated Attachment formatted = 29;
+
+  // A sequence defined relative to another sequence
+  message Relative {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Ways of identifying nucleotides or amino acids within a sequence
+    CodeableConcept coordinate_system = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Indicates the order in which the sequence should be considered when
+    // putting multiple 'relative' elements together
+    Integer ordinal_position = 5;
+
+    // Indicates the nucleotide range in the composed sequence when multiple
+    // 'relative' elements are used together
+    Range sequence_range = 6;
+
+    // A sequence used as starting sequence
+    message StartingSequence {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "chromosome.exists() = genomeAssembly.exists()";
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "genomeAssembly.exists() xor sequence.exists()";
+
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The genome assembly used for starting sequence, e.g. GRCh38
+      CodeableConcept genome_assembly = 4;
+
+      // Chromosome Identifier
+      CodeableConcept chromosome = 5;
+
+      // The reference sequence that represents the starting sequence
+      message SequenceX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          CodeableConcept codeable_concept = 1;
+          String string_value = 2 [json_name = "string"];
+          Reference reference = 3
+              [(.google.fhir.proto.valid_reference_type) = "MolecularSequence"];
+        }
+      }
+      SequenceX sequence = 6;
+
+      // Start position of the window on the starting sequence
+      Integer window_start = 7;
+
+      // End position of the window on the starting sequence
+      Integer window_end = 8;
+
+      // sense | antisense
+      message OrientationCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/orientation-type";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        OrientationTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      OrientationCode orientation = 9;
+
+      // watson | crick
+      message StrandCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/strand-type";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        StrandTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      StrandCode strand = 10;
+    }
+    StartingSequence starting_sequence = 7;
+
+    // Changes in sequence from the starting sequence
+    message Edit {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Start position of the edit on the starting sequence
+      Integer start = 4;
+
+      // End position of the edit on the starting sequence
+      Integer end = 5;
+
+      // Allele that was observed
+      String replacement_sequence = 6;
+
+      // Allele in the starting sequence
+      String replaced_sequence = 7;
+    }
+    repeated Edit edit = 8;
+  }
+  repeated Relative relative = 30;
+}

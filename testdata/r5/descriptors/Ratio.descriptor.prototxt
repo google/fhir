@@ -1,0 +1,47 @@
+name: "Ratio"
+field {
+  name: "id"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "Unique id for inter-element referencing"
+  }
+}
+field {
+  name: "extension"
+  number: 2
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+field {
+  name: "numerator"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Quantity"
+  options {
+    [google.fhir.proto.field_description]: "Numerator value"
+  }
+}
+field {
+  name: "denominator"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Quantity"
+  options {
+    [google.fhir.proto.field_description]: "Denominator value"
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_COMPLEX_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for Ratio, last updated 2019-12-31T21:03:40.621+11:00.\nA ratio of two Quantity values - a numerator and a denominator.\nSee http://hl7.org/fhir/StructureDefinition/Ratio"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/Ratio"
+  [google.fhir.proto.fhir_path_message_constraint]: "(numerator.empty() xor denominator.exists()) and (numerator.exists() or extension.exists())"
+}

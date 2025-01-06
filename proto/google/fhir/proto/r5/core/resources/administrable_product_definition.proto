@@ -1,0 +1,237 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/administrable_product_definition_go_proto";
+
+// Auto-generated from StructureDefinition for AdministrableProductDefinition.
+// A medicinal product in the final form, suitable for administration - after
+// any mixing of multiple components. See
+// http://hl7.org/fhir/StructureDefinition/AdministrableProductDefinition
+message AdministrableProductDefinition {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/AdministrableProductDefinition";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "AdministrableProductDefinition.formOf.resolve().route.empty()";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // AdministrableProductDefinition.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // An identifier for the administrable product
+  repeated Identifier identifier = 10;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // References a product from which one or more of the constituent parts of
+  // that product can be prepared and used as described by this administrable
+  // product
+  repeated Reference form_of = 12 [(.google.fhir.proto.valid_reference_type) =
+                                       "MedicinalProductDefinition"];
+
+  // The dose form of the final product after necessary reconstitution or
+  // processing
+  CodeableConcept administrable_dose_form = 13;
+
+  // The presentation type in which this item is given to a patient. e.g. for a
+  // spray - 'puff'
+  CodeableConcept unit_of_presentation = 14;
+
+  // Indicates the specific manufactured items that are part of the 'formOf'
+  // product that are used in the preparation of this specific administrable
+  // form
+  repeated Reference produced_from = 15
+      [(.google.fhir.proto.valid_reference_type) =
+           "ManufacturedItemDefinition"];
+
+  // The ingredients of this administrable medicinal product. This is only
+  // needed if the ingredients are not specified either using
+  // ManufacturedItemDefiniton, or using by incoming references from the
+  // Ingredient resource
+  repeated CodeableConcept ingredient = 16;
+
+  // A device that is integral to the medicinal product, in effect being
+  // considered as an "ingredient" of the medicinal product
+  Reference device = 17
+      [(.google.fhir.proto.valid_reference_type) = "DeviceDefinition"];
+
+  // A general description of the product, when in its final form, suitable for
+  // administration e.g. effervescent blue liquid, to be swallowed
+  Markdown description = 18;
+
+  // Characteristics e.g. a product's onset of action
+  message Property {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // A code expressing the type of characteristic
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // A value for the characteristic
+    message ValueX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        CodeableConcept codeable_concept = 1;
+        Quantity quantity = 2;
+        Date date = 3;
+        Boolean boolean = 4;
+        Markdown markdown = 5;
+        Attachment attachment = 6;
+        Reference reference = 7
+            [(.google.fhir.proto.valid_reference_type) = "Binary"];
+      }
+    }
+    ValueX value = 5;
+
+    // The status of characteristic e.g. assigned or pending
+    CodeableConcept status = 6;
+  }
+  repeated Property property = 19;
+
+  // The path by which the product is taken into or makes contact with the body
+  message RouteOfAdministration {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Coded expression for the route
+    CodeableConcept code = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // The first dose (dose quantity) administered can be specified for the
+    // product
+    Quantity first_dose = 5;
+
+    // The maximum single dose that can be administered
+    Quantity max_single_dose = 6;
+
+    // The maximum dose quantity to be administered in any one 24-h period
+    Quantity max_dose_per_day = 7;
+
+    // The maximum dose per treatment period that can be administered
+    Ratio max_dose_per_treatment_period = 8;
+
+    // The maximum treatment period during which the product can be administered
+    Duration max_treatment_period = 9;
+
+    // A species for which this route applies
+    message TargetSpecies {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Coded expression for the species
+      CodeableConcept code = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // A species specific time during which consumption of animal product is
+      // not appropriate
+      message WithdrawalPeriod {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // The type of tissue for which the withdrawal period applies, e.g.
+        // meat, milk
+        CodeableConcept tissue = 4
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+        // A value for the time
+        Quantity value = 5
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+        // Extra information about the withdrawal period
+        String supporting_information = 6;
+      }
+      repeated WithdrawalPeriod withdrawal_period = 5;
+    }
+    repeated TargetSpecies target_species = 10;
+  }
+  repeated RouteOfAdministration route_of_administration = 20
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+}

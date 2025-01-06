@@ -1,0 +1,21 @@
+# proto-file: proto/google/fhir/proto/r5/primitive_test_suite.proto
+# proto-message: PrimitiveTestSuite
+valid_pairs {
+  json_string: "\"8472\""
+  proto { id { value: "8472" } }
+}
+valid_pairs {
+  json_string: "\"text\""
+  proto { id { value: "text" } }
+}
+
+invalid_json: "\"using:invalid:characters\""
+invalid_json: "\"spaces not allowed in an id\""
+invalid_json: "\"waytoolong12345678901234567890123456789012345678901234567890123456789012345\""
+invalid_json: "true"
+invalid_json: "1"
+invalid_json: "1.0"
+
+invalid_protos { id { value: "using:invalid:characters" } }
+invalid_protos { id { value: "spaces not allowed in an id" } }
+invalid_protos { id { value: "waytoolong12345678901234567890123456789012345678901234567890123456789012345" } }

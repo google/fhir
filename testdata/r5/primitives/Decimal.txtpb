@@ -1,0 +1,41 @@
+# proto-file: proto/google/fhir/proto/r5/primitive_test_suite.proto
+# proto-message: PrimitiveTestSuite
+valid_pairs {
+  json_string: "3.1415"
+  proto { decimal { value: "3.1415" } }
+}
+valid_pairs {
+  json_string: "-3.7"
+  proto { decimal { value: "-3.7" } }
+}
+valid_pairs {
+  json_string: "1"
+  proto { decimal { value: "1" } }
+}
+valid_pairs {
+  json_string: "1.0E+30"
+  proto { decimal { value: "1.0E+30" } }
+}
+valid_pairs {
+  json_string: "1.0E-30"
+  proto { decimal { value: "1.0E-30" } }
+}
+valid_pairs {
+  json_string: "1.0E+401"
+  proto { decimal { value: "1.0E+401" } }
+}
+
+# TODO(b/178611707):  Add other variants of scientific notation.
+
+invalid_json: "\"text\""
+invalid_json: "\" 1\""
+invalid_json: "\"1 \""
+invalid_json: "\"1.0.0\""
+invalid_json: "\"4.5\""
+invalid_json: "true"
+
+invalid_protos { decimal { value: "text" } }
+invalid_protos { decimal { value: " 1" } }
+invalid_protos { decimal { value: "1 " } }
+invalid_protos { decimal { value: "1.0.0" } }
+

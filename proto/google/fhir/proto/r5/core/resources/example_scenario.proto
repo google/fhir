@@ -1,0 +1,441 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/example_scenario_go_proto";
+
+// Auto-generated from StructureDefinition for ExampleScenario.
+// Example of workflow instance.
+// See http://hl7.org/fhir/StructureDefinition/ExampleScenario
+message ExampleScenario {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ExampleScenario";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "status='active' or status='retired' implies actor.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "status='active' or status='retired' implies process.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "actor.key.count() = actor.key.distinct().count()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "actor.title.count() = actor.title.distinct().count()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "instance.key.count() = instance.key.distinct().count()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "instance.title.count() = instance.title.distinct().count()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "process.title.count() = process.title.distinct().count()";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.exists() implies name.matches('^[A-Z]([A-Za-z0-9_]){1,254}$')";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // ExampleScenario.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this example scenario, represented as a URI
+  // (globally unique)
+  Uri url = 10 [(.google.fhir.proto.fhir_path_warning_constraint) =
+                    "exists() implies matches('^[^|# ]+$')"];
+
+  // Additional identifier for the example scenario
+  repeated Identifier identifier = 11;
+
+  // Business version of the example scenario
+  String version = 12;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 27;
+
+  // To be removed?
+  String name = 13;
+
+  // Name for this example scenario (human friendly)
+  String title = 28;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 14
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 15;
+
+  // Date last changed
+  DateTime date = 16;
+
+  // Name of the publisher/steward (organization or individual)
+  String publisher = 17;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 18;
+
+  // Natural language description of the ExampleScenario
+  Markdown description = 29;
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 19;
+
+  // Intended jurisdiction for example scenario (if applicable)
+  repeated CodeableConcept jurisdiction = 20;
+
+  // The purpose of the example, e.g. to illustrate a scenario
+  Markdown purpose = 22;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 21;
+
+  // Copyright holder and year(s)
+  String copyright_label = 30;
+
+  // Individual involved in exchange
+  message Actor {
+    option (.google.fhir.proto.fhir_path_message_constraint) = "key != 'OTHER'";
+    option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+        "%resource.process.descendants().select(operation).where(initiator=%context.key or receiver=%context.key).exists()";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // ID or acronym of the actor
+    String key = 8
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // person | system
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/examplescenario-actor-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ExampleScenarioActorTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Label for actor when rendering
+    String title = 9
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Details about actor
+    Markdown description = 7;
+  }
+  repeated Actor actor = 23;
+
+  // Data used in the scenario
+  message Instance {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "structureType.exists() and structureType.memberOf('http://hl7.org/fhir/ValueSet/resource-types').not() implies structureVersion.exists()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "content.exists() implies version.empty()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "version.key.count() = version.key.distinct().count()";
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "version.title.count() = version.title.distinct().count()";
+    option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+        "%resource.process.descendants().select(instanceReference).where($this=%context.key).exists()";
+    option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+        "version.exists() implies version.key.intersect(%resource.process.descendants().where(instanceReference = %context.key).versionReference).exists()";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // ID or acronym of the instance
+    String key = 10
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Data structure for example
+    Coding structure_type = 11
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // E.g. 4.0.1
+    String structure_version = 12;
+
+    // Rules instance adheres to
+    message StructureProfileX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Canonical canonical = 1;
+        Uri uri = 2;
+      }
+    }
+    StructureProfileX structure_profile = 13;
+
+    // Label for instance
+    String title = 14
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Human-friendly description of the instance
+    Markdown description = 7;
+
+    // Example instance data
+    Reference content = 15;
+
+    // Snapshot of instance that changes
+    message Version {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // ID or acronym of the version
+      String key = 6
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Label for instance version
+      String title = 7
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Details about version
+      Markdown description = 5;
+
+      // Example instance version data
+      Reference content = 8;
+    }
+    repeated Version version = 8;
+
+    // Resources contained in the instance
+    message ContainedInstance {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "%resource.instance.where(key=%context.instanceReference).exists()";
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "versionReference.empty() implies %resource.instance.where(key=%context.instanceReference).version.empty()";
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "versionReference.exists() implies %resource.instance.where(key=%context.instanceReference).version.where(key=%context.versionReference).exists()";
+
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Key of contained instance
+      String instance_reference = 6
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Key of contained instance version
+      String version_reference = 7;
+    }
+    repeated ContainedInstance contained_instance = 9;
+  }
+  repeated Instance instance = 24;
+
+  // Major process within scenario
+  message Process {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "%resource.status='active' or %resource.status='retired' implies step.exists()";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Label for procss
+    String title = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Human-friendly description of the process
+    Markdown description = 5;
+
+    // Status before process starts
+    Markdown pre_conditions = 6;
+
+    // Status after successful completion
+    Markdown post_conditions = 7;
+
+    // Event within of the process
+    message Step {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "alternative.title.count() = alternative.title.distinct().count()";
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "(process.exists() implies workflow.empty() and operation.empty()) and (workflow.exists() implies operation.empty())";
+
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Sequential number of the step
+      String number = 8;
+
+      // Step is nested process
+      Process process = 9;
+
+      // Step is nested workflow
+      Canonical workflow = 10;
+
+      // Step is simple action
+      message Operation {
+        option (.google.fhir.proto.fhir_path_message_constraint) =
+            "initiator.exists() implies initiator = 'OTHER' or %resource.actor.where(key=%context.initiator).exists()";
+        option (.google.fhir.proto.fhir_path_message_constraint) =
+            "receiver.exists() implies receiver = 'OTHER' or %resource.actor.where(key=%context.receiver).exists()";
+
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Kind of action
+        Coding type = 14;
+
+        // Label for step
+        String title = 15
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+        // Who starts the operation
+        String initiator = 7;
+
+        // Who receives the operation
+        String receiver = 8;
+
+        // Human-friendly description of the operation
+        Markdown description = 9;
+
+        // Initiator stays active?
+        Boolean initiator_active = 10;
+
+        // Receiver stays active?
+        Boolean receiver_active = 11;
+
+        // Instance transmitted on invocation
+        Instance.ContainedInstance request = 12;
+
+        // Instance transmitted on invocation response
+        Instance.ContainedInstance response = 13;
+      }
+      Operation operation = 6;
+
+      // Alternate non-typical step action
+      message Alternative {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Label for alternative
+        String title = 4
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+        // Human-readable description of option
+        Markdown description = 5;
+
+        // Alternative action(s)
+        repeated Step step = 6;
+      }
+      repeated Alternative alternative = 7;
+
+      // Pause in the flow?
+      Boolean pause = 5;
+    }
+    repeated Step step = 8;
+  }
+  repeated Process process = 25;
+}

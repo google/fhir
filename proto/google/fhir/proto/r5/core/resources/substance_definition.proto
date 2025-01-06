@@ -1,0 +1,499 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/substance_definition_go_proto";
+
+// Auto-generated from StructureDefinition for SubstanceDefinition.
+// The detailed description of a substance, typically at a level beyond what is
+// used for prescribing. See
+// http://hl7.org/fhir/StructureDefinition/SubstanceDefinition
+message SubstanceDefinition {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/SubstanceDefinition";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // SubstanceDefinition.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Identifier by which this substance is known
+  repeated Identifier identifier = 10;
+
+  // A business level version identifier of the substance
+  String version = 11;
+
+  // Status of substance within the catalogue e.g. active, retired
+  CodeableConcept status = 12;
+
+  // A categorization, high level e.g. polymer or nucleic acid, or food,
+  // chemical, biological, or lower e.g. polymer linear or branch chain, or type
+  // of impurity
+  repeated CodeableConcept classification = 13;
+
+  // If the substance applies to human or veterinary use
+  CodeableConcept domain = 14;
+
+  // The quality standard, established benchmark, to which substance complies
+  // (e.g. USP/NF, BP)
+  repeated CodeableConcept grade = 15;
+
+  // Textual description of the substance
+  Markdown description = 16;
+
+  // Supporting literature
+  repeated Reference information_source = 17
+      [(.google.fhir.proto.valid_reference_type) = "Citation"];
+
+  // Textual comment about the substance's catalogue or registry record
+  repeated Annotation note = 18;
+
+  // The entity that creates, makes, produces or fabricates the substance
+  repeated Reference manufacturer = 19
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // An entity that is the source for the substance. It may be different from
+  // the manufacturer
+  repeated Reference supplier = 20
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Moiety, for structural modifications
+  message Moiety {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Role that the moiety is playing
+    CodeableConcept role = 4;
+
+    // Identifier by which this moiety substance is known
+    Identifier identifier = 5;
+
+    // Textual name for this moiety substance
+    String name = 6;
+
+    // Stereochemistry type
+    CodeableConcept stereochemistry = 7;
+
+    // Optical activity type
+    CodeableConcept optical_activity = 8;
+
+    // Molecular formula for this moiety (e.g. with the Hill system)
+    String molecular_formula = 9;
+
+    // Quantitative value for this moiety
+    message AmountX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Quantity quantity = 1;
+        String string_value = 2 [json_name = "string"];
+      }
+    }
+    AmountX amount = 10;
+
+    // The measurement type of the quantitative value
+    CodeableConcept measurement_type = 11;
+  }
+  repeated Moiety moiety = 21;
+
+  // General specifications for this substance
+  message Characterization {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The method used to find the characterization e.g. HPLC
+    CodeableConcept technique = 4;
+
+    // Describes the nature of the chemical entity and explains, for instance,
+    // whether this is a base or a salt form
+    CodeableConcept form = 5;
+
+    // The description or justification in support of the interpretation of the
+    // data file
+    Markdown description = 6;
+
+    // The data produced by the analytical instrument or a pictorial
+    // representation of that data. Examples: a JCAMP, JDX, or ADX file, or a
+    // chromatogram or spectrum analysis
+    repeated Attachment file = 7;
+  }
+  repeated Characterization characterization = 22;
+
+  // General specifications for this substance
+  message Property {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // A code expressing the type of property
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // A value for the property
+    message ValueX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        CodeableConcept codeable_concept = 1;
+        Quantity quantity = 2;
+        Date date = 3;
+        Boolean boolean = 4;
+        Attachment attachment = 5;
+      }
+    }
+    ValueX value = 5;
+  }
+  repeated Property property = 23;
+
+  // General information detailing this substance
+  Reference reference_information = 24
+      [(.google.fhir.proto.valid_reference_type) =
+           "SubstanceReferenceInformation"];
+
+  // The average mass of a molecule of a compound
+  message MolecularWeight {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The method by which the weight was determined
+    CodeableConcept method = 4;
+
+    // Type of molecular weight e.g. exact, average, weight average
+    CodeableConcept type = 5;
+
+    // Used to capture quantitative values for a variety of elements
+    Quantity amount = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated MolecularWeight molecular_weight = 25;
+
+  // Structural information
+  message Structure {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Stereochemistry type
+    CodeableConcept stereochemistry = 4;
+
+    // Optical activity type
+    CodeableConcept optical_activity = 5;
+
+    // An expression which states the number and type of atoms present in a
+    // molecule of a substance
+    String molecular_formula = 6;
+
+    // Specified per moiety according to the Hill system
+    String molecular_formula_by_moiety = 7;
+
+    // The molecular weight or weight range
+    MolecularWeight molecular_weight = 8;
+
+    // The method used to find the structure e.g. X-ray, NMR
+    repeated CodeableConcept technique = 9;
+
+    // Source of information for the structure
+    repeated Reference source_document = 10
+        [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
+
+    // A depiction of the structure of the substance
+    message Representation {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The kind of structural representation (e.g. full, partial)
+      CodeableConcept type = 4;
+
+      // The structural representation as a text string in a standard format
+      String representation = 5;
+
+      // The format of the representation e.g. InChI, SMILES, MOLFILE (note: not
+      // the physical file format)
+      CodeableConcept format = 6;
+
+      // An attachment with the structural representation e.g. a structure
+      // graphic or AnIML file
+      Reference document = 7
+          [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
+    }
+    repeated Representation representation = 11;
+  }
+  Structure structure = 26;
+
+  // Codes associated with the substance
+  message CodeType {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The specific code
+    CodeableConcept code = 4;
+
+    // Status of the code assignment, for example 'provisional', 'approved'
+    CodeableConcept status = 5;
+
+    // The date at which the code status was changed
+    DateTime status_date = 6;
+
+    // Any comment can be provided in this field
+    repeated Annotation note = 7;
+
+    // Supporting literature
+    repeated Reference source = 8
+        [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
+  }
+  repeated CodeType code = 27;
+
+  // Names applicable to this substance
+  message Name {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The actual name
+    String name = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Name type e.g. 'systematic',  'scientific, 'brand'
+    CodeableConcept type = 5;
+
+    // The status of the name e.g. 'current', 'proposed'
+    CodeableConcept status = 6;
+
+    // If this is the preferred name for this substance
+    Boolean preferred = 7;
+
+    // Human language that the name is written in
+    repeated CodeableConcept language = 8;
+
+    // The use context of this name e.g. as an active ingredient or as a food
+    // colour additive
+    repeated CodeableConcept domain = 9;
+
+    // The jurisdiction where this name applies
+    repeated CodeableConcept jurisdiction = 10;
+
+    // A synonym of this particular name, by which the substance is also known
+    repeated Name synonym = 11;
+
+    // A translation for this name into another human language
+    repeated Name translation = 12;
+
+    // Details of the official nature of this name
+    message Official {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Which authority uses this official name
+      CodeableConcept authority = 4;
+
+      // The status of the official name, for example 'draft', 'active'
+      CodeableConcept status = 5;
+
+      // Date of official name change
+      DateTime date = 6;
+    }
+    repeated Official official = 13;
+
+    // Supporting literature
+    repeated Reference source = 14
+        [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
+  }
+  repeated Name name = 28;
+
+  // A link between this substance and another
+  message Relationship {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // A pointer to another substance, as a resource or a representational code
+    message SubstanceDefinitionX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Reference reference = 1
+            [(.google.fhir.proto.valid_reference_type) = "SubstanceDefinition"];
+        CodeableConcept codeable_concept = 2;
+      }
+    }
+    SubstanceDefinitionX substance_definition = 4;
+
+    // For example "salt to parent", "active moiety"
+    CodeableConcept type = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // For example where an enzyme strongly bonds with a particular substance,
+    // this is a defining relationship for that enzyme, out of several possible
+    // relationships
+    Boolean is_defining = 6;
+
+    // A numeric factor for the relationship, e.g. that a substance salt has
+    // some percentage of active substance in relation to some other
+    message AmountX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Quantity quantity = 1;
+        Ratio ratio = 2;
+        String string_value = 3 [json_name = "string"];
+      }
+    }
+    AmountX amount = 7;
+
+    // For use when the numeric has an uncertain range
+    Ratio ratio_high_limit_amount = 8;
+
+    // An operator for the amount, for example "average", "approximately", "less
+    // than"
+    CodeableConcept comparator = 9;
+
+    // Supporting literature
+    repeated Reference source = 10
+        [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
+  }
+  repeated Relationship relationship = 29;
+
+  // Data items specific to nucleic acids
+  Reference nucleic_acid = 30
+      [(.google.fhir.proto.valid_reference_type) = "SubstanceNucleicAcid"];
+
+  // Data items specific to polymers
+  Reference polymer = 31
+      [(.google.fhir.proto.valid_reference_type) = "SubstancePolymer"];
+
+  // Data items specific to proteins
+  Reference protein = 32
+      [(.google.fhir.proto.valid_reference_type) = "SubstanceProtein"];
+
+  // Material or taxonomic/anatomical source
+  message SourceMaterial {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Classification of the origin of the raw material. e.g. cat hair is an
+    // Animal source type
+    CodeableConcept type = 4;
+
+    // The genus of an organism e.g. the Latin epithet of the plant/animal
+    // scientific name
+    CodeableConcept genus = 5;
+
+    // The species of an organism e.g. the Latin epithet of the species of the
+    // plant/animal
+    CodeableConcept species = 6;
+
+    // An anatomical origin of the source material within an organism
+    CodeableConcept part = 7;
+
+    // The country or countries where the material is harvested
+    repeated CodeableConcept country_of_origin = 8;
+  }
+  SourceMaterial source_material = 33;
+}

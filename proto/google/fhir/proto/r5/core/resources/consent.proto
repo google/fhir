@@ -1,0 +1,337 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/consent_go_proto";
+
+// Auto-generated from StructureDefinition for Consent.
+// A healthcare consumer's  or third party's choices to permit or deny
+// recipients or roles to perform actions for specific purposes and periods of
+// time. See http://hl7.org/fhir/StructureDefinition/Consent
+message Consent {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Consent";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Consent.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Identifier for this record (external references)
+  repeated Identifier identifier = 10;
+
+  // draft | active | inactive | not-done | entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/consent-state-codes";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ConsentStateCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of the consent statement - for indexing/retrieval
+  repeated CodeableConcept category = 13;
+
+  // Who the consent applies to
+  Reference subject = 23 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // Fully executed date of the consent
+  Date date = 24;
+
+  // Effective period for this Consent
+  Period period = 25;
+
+  // Who is granting rights according to the policy and rules
+  repeated Reference grantor = 26 [
+    (.google.fhir.proto.valid_reference_type) = "CareTeam",
+    (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  ];
+
+  // Who is agreeing to the policy and rules
+  repeated Reference grantee = 27 [
+    (.google.fhir.proto.valid_reference_type) = "CareTeam",
+    (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  ];
+
+  // Consent workflow management
+  repeated Reference manager = 28 [
+    (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner"
+  ];
+
+  // Consent Enforcer
+  repeated Reference controller = 29 [
+    (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner"
+  ];
+
+  // Source from which this consent is taken
+  repeated Attachment source_attachment = 30;
+
+  // Source from which this consent is taken
+  repeated Reference source_reference = 31 [
+    (.google.fhir.proto.valid_reference_type) = "Consent",
+    (.google.fhir.proto.valid_reference_type) = "DocumentReference",
+    (.google.fhir.proto.valid_reference_type) = "Contract",
+    (.google.fhir.proto.valid_reference_type) = "QuestionnaireResponse"
+  ];
+
+  // Regulations establishing base Consent
+  repeated CodeableConcept regulatory_basis = 32;
+
+  // Computable version of the backing policy
+  message PolicyBasis {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Reference backing policy resource
+    Reference reference = 4
+        [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+    // URL to a computable backing policy
+    Url url = 5;
+  }
+  PolicyBasis policy_basis = 33;
+
+  // Human Readable Policy
+  repeated Reference policy_text = 34
+      [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
+
+  // Consent Verified by patient or family
+  message Verification {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Has been verified
+    Boolean verified = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Business case of verification
+    CodeableConcept verification_type = 7;
+
+    // Person conducting verification
+    Reference verified_by = 8 [
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+    ];
+
+    // Person who verified
+    Reference verified_with = 5 [
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+    ];
+
+    // When consent verified
+    repeated DateTime verification_date = 9;
+  }
+  repeated Verification verification = 21;
+
+  // deny | permit
+  message DecisionCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/consent-provision-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ConsentProvisionTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  DecisionCode decision = 35;
+
+  // Constraints to the base Consent.policyRule/Consent.policy
+  message Provision {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Timeframe for this provision
+    Period period = 5;
+
+    // Who|what controlled by this provision (or group, by role)
+    message ProvisionActor {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // How the actor is involved
+      CodeableConcept role = 4;
+
+      // Resource for the actor (or group, by role)
+      Reference reference = 5 [
+        (.google.fhir.proto.valid_reference_type) = "Device",
+        (.google.fhir.proto.valid_reference_type) = "Group",
+        (.google.fhir.proto.valid_reference_type) = "CareTeam",
+        (.google.fhir.proto.valid_reference_type) = "Organization",
+        (.google.fhir.proto.valid_reference_type) = "Patient",
+        (.google.fhir.proto.valid_reference_type) = "Practitioner",
+        (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+        (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+      ];
+    }
+    repeated ProvisionActor actor = 6;
+
+    // Actions controlled by this provision
+    repeated CodeableConcept action = 7;
+
+    // Security Labels that define affected resources
+    repeated Coding security_label = 8;
+
+    // Context of activities covered by this provision
+    repeated Coding purpose = 9;
+
+    // e.g. Resource Type, Profile, CDA, etc
+    repeated Coding document_type = 15;
+
+    // e.g. Resource Type, Profile, etc
+    repeated Coding resource_type = 16;
+
+    // e.g. LOINC or SNOMED CT code, etc. in the content
+    repeated CodeableConcept code = 11;
+
+    // Timeframe for data controlled by this provision
+    Period data_period = 12;
+
+    // Data controlled by this provision
+    message ProvisionData {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // instance | related | dependents | authoredby
+      message MeaningCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/consent-data-meaning";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ConsentDataMeaningCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      MeaningCode meaning = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // The actual data reference
+      Reference reference = 5 [
+        (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+        (.google.fhir.proto.valid_reference_type) = "Resource"
+      ];
+    }
+    repeated ProvisionData data = 13;
+
+    // A computable expression of the consent
+    Expression expression = 17;
+
+    // Nested Exception Provisions
+    repeated Provision provision = 14;
+  }
+  repeated Provision provision = 36;
+}

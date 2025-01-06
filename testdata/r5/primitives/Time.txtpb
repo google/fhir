@@ -1,0 +1,39 @@
+# proto-file: proto/google/fhir/proto/r5/primitive_test_suite.proto
+# proto-message: PrimitiveTestSuite
+valid_pairs {
+  json_string: "\"10:00:00\""
+  proto {
+    time {
+      value_us: 36000000000
+      precision: SECOND
+    }
+  }
+}
+
+# Precision level that requires a timezone
+invalid_json: "\"1970-01-01T12:00:00.123\""
+invalid_json: "\"2014-10-09T14:58:00\""
+
+# Invalid format
+invalid_json: "\"text\""
+invalid_json: "\"12:05\""
+invalid_json: "\"24:00:00\""
+
+# wrong datatypes
+invalid_json: "true"
+invalid_json: "1"
+invalid_json: "1.0"
+
+invalid_protos {
+  # longer than a day
+  time {
+    value_us: 1552977350000
+    precision: SECOND
+  }
+}
+invalid_protos {
+  # No Precision
+  time {
+    value_us: 15529773500
+  }
+}

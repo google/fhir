@@ -1,0 +1,415 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+import "proto/google/fhir/proto/r5/core/valuesets.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/adverse_event_go_proto";
+
+// Auto-generated from StructureDefinition for AdverseEvent.
+// An event that may be related to unintended effects on a patient or research
+// participant. See http://hl7.org/fhir/StructureDefinition/AdverseEvent
+message AdverseEvent {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/AdverseEvent";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // AdverseEvent.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business identifier for the event
+  repeated Identifier identifier = 30;
+
+  // in-progress | completed | entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/adverse-event-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AdverseEventStatusValueSet.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 31
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // actual | potential
+  message ActualityCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/adverse-event-actuality";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AdverseEventActualityCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ActualityCode actuality = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // wrong-patient | procedure-mishap | medication-mishap | device |
+  // unsafe-physical-environment | hospital-aquired-infection | wrong-body-site
+  repeated CodeableConcept category = 12;
+
+  // Event or incident that occurred or was averted
+  CodeableConcept code = 32;
+
+  // Subject impacted by event
+  Reference subject = 14 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.proto.valid_reference_type) = "ResearchSubject"
+  ];
+
+  // The Encounter associated with the start of the AdverseEvent
+  Reference encounter = 15
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // When the event occurred
+  message OccurrenceX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      DateTime date_time = 1;
+      Period period = 2;
+      Timing timing = 3;
+    }
+  }
+  OccurrenceX occurrence = 33;
+
+  // When the event was detected
+  DateTime detected = 17;
+
+  // When the event was recorded
+  DateTime recorded_date = 18;
+
+  // Effect on the subject due to this event
+  repeated Reference resulting_effect = 34 [
+    (.google.fhir.proto.valid_reference_type) = "Condition",
+    (.google.fhir.proto.valid_reference_type) = "Observation"
+  ];
+
+  // Location where adverse event occurred
+  Reference location = 20
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Seriousness or gravity of the event
+  CodeableConcept seriousness = 21;
+
+  // Type of outcome from the adverse event
+  repeated CodeableConcept outcome = 35;
+
+  // Who recorded the adverse event
+  Reference recorder = 24 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+    (.google.fhir.proto.valid_reference_type) = "ResearchSubject"
+  ];
+
+  // Who was involved in the adverse event or the potential adverse event and
+  // what they did
+  message Participant {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Type of involvement
+    CodeableConcept function = 4;
+
+    // Who was involved in the adverse event or the potential adverse event
+    Reference actor = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "CareTeam",
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Device",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+      (.google.fhir.proto.valid_reference_type) = "ResearchSubject"
+    ];
+  }
+  repeated Participant participant = 36;
+
+  // Research study that the subject is enrolled in
+  repeated Reference study = 29
+      [(.google.fhir.proto.valid_reference_type) = "ResearchStudy"];
+
+  // Considered likely or probable or anticipated in the research study
+  Boolean expected_in_research_study = 37;
+
+  // The suspected agent causing the adverse event
+  message SuspectEntity {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Refers to the specific entity that caused the adverse event
+    message InstanceX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        CodeableConcept codeable_concept = 1;
+        Reference reference = 2 [
+          (.google.fhir.proto.valid_reference_type) = "Immunization",
+          (.google.fhir.proto.valid_reference_type) = "Procedure",
+          (.google.fhir.proto.valid_reference_type) = "Substance",
+          (.google.fhir.proto.valid_reference_type) = "Medication",
+          (.google.fhir.proto.valid_reference_type) =
+              "MedicationAdministration",
+          (.google.fhir.proto.valid_reference_type) = "MedicationStatement",
+          (.google.fhir.proto.valid_reference_type) = "Device",
+          (.google.fhir.proto.valid_reference_type) =
+              "BiologicallyDerivedProduct",
+          (.google.fhir.proto.valid_reference_type) = "ResearchStudy"
+        ];
+      }
+    }
+    InstanceX instance = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Information on the possible cause of the event
+    message Causality {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Method of evaluating the relatedness of the suspected entity to the
+      // event
+      CodeableConcept assessment_method = 8;
+
+      // Result of the assessment regarding the relatedness of the suspected
+      // entity to the event
+      CodeableConcept entity_relatedness = 9;
+
+      // Author of the information on the possible cause of the event
+      Reference author = 6 [
+        (.google.fhir.proto.valid_reference_type) = "Practitioner",
+        (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+        (.google.fhir.proto.valid_reference_type) = "Patient",
+        (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+        (.google.fhir.proto.valid_reference_type) = "ResearchSubject"
+      ];
+    }
+    Causality causality = 7;
+  }
+  repeated SuspectEntity suspect_entity = 26;
+
+  // Contributing factors suspected to have increased the probability or
+  // severity of the adverse event
+  message ContributingFactor {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Item suspected to have increased the probability or severity of the
+    // adverse event
+    message ItemX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Reference reference = 1 [
+          (.google.fhir.proto.valid_reference_type) = "Condition",
+          (.google.fhir.proto.valid_reference_type) = "Observation",
+          (.google.fhir.proto.valid_reference_type) = "AllergyIntolerance",
+          (.google.fhir.proto.valid_reference_type) = "FamilyMemberHistory",
+          (.google.fhir.proto.valid_reference_type) = "Immunization",
+          (.google.fhir.proto.valid_reference_type) = "Procedure",
+          (.google.fhir.proto.valid_reference_type) = "Device",
+          (.google.fhir.proto.valid_reference_type) = "DeviceUsage",
+          (.google.fhir.proto.valid_reference_type) = "DocumentReference",
+          (.google.fhir.proto.valid_reference_type) =
+              "MedicationAdministration",
+          (.google.fhir.proto.valid_reference_type) = "MedicationStatement"
+        ];
+        CodeableConcept codeable_concept = 2;
+      }
+    }
+    ItemX item = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated ContributingFactor contributing_factor = 38;
+
+  // Preventive actions that contributed to avoiding the adverse event
+  message PreventiveAction {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Action that contributed to avoiding the adverse event
+    message ItemX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Reference reference = 1 [
+          (.google.fhir.proto.valid_reference_type) = "Immunization",
+          (.google.fhir.proto.valid_reference_type) = "Procedure",
+          (.google.fhir.proto.valid_reference_type) = "DocumentReference",
+          (.google.fhir.proto.valid_reference_type) =
+              "MedicationAdministration",
+          (.google.fhir.proto.valid_reference_type) = "MedicationRequest"
+        ];
+        CodeableConcept codeable_concept = 2;
+      }
+    }
+    ItemX item = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated PreventiveAction preventive_action = 39;
+
+  // Ameliorating actions taken after the adverse event occured in order to
+  // reduce the extent of harm
+  message MitigatingAction {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Ameliorating action taken after the adverse event occured in order to
+    // reduce the extent of harm
+    message ItemX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Reference reference = 1 [
+          (.google.fhir.proto.valid_reference_type) = "Procedure",
+          (.google.fhir.proto.valid_reference_type) = "DocumentReference",
+          (.google.fhir.proto.valid_reference_type) =
+              "MedicationAdministration",
+          (.google.fhir.proto.valid_reference_type) = "MedicationRequest"
+        ];
+        CodeableConcept codeable_concept = 2;
+      }
+    }
+    ItemX item = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated MitigatingAction mitigating_action = 40;
+
+  // Supporting information relevant to the event
+  message SupportingInfo {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Subject medical history or document relevant to this adverse event
+    message ItemX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Reference reference = 1 [
+          (.google.fhir.proto.valid_reference_type) = "Condition",
+          (.google.fhir.proto.valid_reference_type) = "Observation",
+          (.google.fhir.proto.valid_reference_type) = "AllergyIntolerance",
+          (.google.fhir.proto.valid_reference_type) = "FamilyMemberHistory",
+          (.google.fhir.proto.valid_reference_type) = "Immunization",
+          (.google.fhir.proto.valid_reference_type) = "Procedure",
+          (.google.fhir.proto.valid_reference_type) = "DocumentReference",
+          (.google.fhir.proto.valid_reference_type) =
+              "MedicationAdministration",
+          (.google.fhir.proto.valid_reference_type) = "MedicationStatement",
+          (.google.fhir.proto.valid_reference_type) = "QuestionnaireResponse"
+        ];
+        CodeableConcept codeable_concept = 2;
+      }
+    }
+    ItemX item = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated SupportingInfo supporting_info = 41;
+
+  // Comment on adverse event
+  repeated Annotation note = 42;
+}

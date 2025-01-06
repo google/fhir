@@ -1,0 +1,255 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/nutrition_intake_go_proto";
+
+// Auto-generated from StructureDefinition for NutritionIntake.
+// Record of food or fluid being taken by a patient.
+// See http://hl7.org/fhir/StructureDefinition/NutritionIntake
+message NutritionIntake {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/NutritionIntake";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // NutritionIntake.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // External identifier
+  repeated Identifier identifier = 10;
+
+  // Instantiates FHIR protocol or definition
+  repeated Canonical instantiates_canonical = 11;
+
+  // Instantiates external protocol or definition
+  repeated Uri instantiates_uri = 12;
+
+  // Fulfils plan, proposal or order
+  repeated Reference based_on = 13 [
+    (.google.fhir.proto.valid_reference_type) = "NutritionOrder",
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "ServiceRequest"
+  ];
+
+  // Part of referenced event
+  repeated Reference part_of = 14 [
+    (.google.fhir.proto.valid_reference_type) = "NutritionIntake",
+    (.google.fhir.proto.valid_reference_type) = "Procedure",
+    (.google.fhir.proto.valid_reference_type) = "Observation"
+  ];
+
+  // preparation | in-progress | not-done | on-hold | stopped | completed |
+  // entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/event-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    EventStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 15
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Reason for current status
+  repeated CodeableConcept status_reason = 16;
+
+  // Code representing an overall type of nutrition intake
+  CodeableConcept code = 17;
+
+  // Who is/was consuming the food or fluid
+  Reference subject = 18 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // Encounter associated with NutritionIntake
+  Reference encounter = 19
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // The date/time or interval when the food or fluid is/was consumed
+  message OccurrenceX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      DateTime date_time = 1;
+      Period period = 2;
+    }
+  }
+  OccurrenceX occurrence = 20;
+
+  // When the intake was recorded
+  DateTime recorded = 21;
+
+  // Person or organization that provided the information about the consumption
+  // of this food or fluid
+  message ReportedX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Boolean boolean = 1;
+      Reference reference = 2 [
+        (.google.fhir.proto.valid_reference_type) = "Patient",
+        (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+        (.google.fhir.proto.valid_reference_type) = "Practitioner",
+        (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+        (.google.fhir.proto.valid_reference_type) = "Organization"
+      ];
+    }
+  }
+  ReportedX reported = 22;
+
+  // What food or fluid product or item was consumed
+  message ConsumedItem {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The type of food or fluid product
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Code that identifies the food or fluid product that was consumed
+    CodeableReference nutrition_product = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Scheduled frequency of consumption
+    Timing schedule = 6;
+
+    // Quantity of the specified food
+    SimpleQuantity amount = 7;
+
+    // Rate at which enteral feeding was administered
+    SimpleQuantity rate = 8;
+
+    // Flag to indicate if the food or fluid item was refused or otherwise not
+    // consumed
+    Boolean not_consumed = 9;
+
+    // Reason food or fluid was not consumed
+    CodeableConcept not_consumed_reason = 10;
+  }
+  repeated ConsumedItem consumed_item = 23
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Total nutrient for the whole meal, product, serving
+  message IngredientLabel {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Total nutrient consumed
+    CodeableReference nutrient = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Total amount of nutrient consumed
+    SimpleQuantity amount = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated IngredientLabel ingredient_label = 24;
+
+  // Who was performed in the intake
+  message Performer {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Type of performer
+    CodeableConcept function = 4;
+
+    // Who performed the intake
+    Reference actor = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "CareTeam",
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Device",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+    ];
+  }
+  repeated Performer performer = 25;
+
+  // Where the intake occurred
+  Reference location = 26
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Additional supporting information
+  repeated Reference derived_from = 27
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Reason for why the food or fluid is /was consumed
+  repeated CodeableReference reason = 28;
+
+  // Further information about the consumption
+  repeated Annotation note = 29;
+}

@@ -1,0 +1,373 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/appointment_go_proto";
+
+// Auto-generated from StructureDefinition for Appointment.
+// A booking of a healthcare event among patient(s), practitioner(s), related
+// person(s) and/or device(s) for a specific date/time. This may result in one
+// or more Encounter(s). See http://hl7.org/fhir/StructureDefinition/Appointment
+message Appointment {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Appointment";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "start.exists() = end.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(start.exists() and end.exists()) or (status in ('proposed' | 'cancelled' | 'waitlist'))";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "cancellationReason.exists() implies (status='noshow' or status='cancelled')";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "start.exists() implies start <= end";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "cancellationDate.exists() implies (status='noshow' or status='cancelled')";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "originatingAppointment.exists().not() or recurrenceTemplate.exists().not()";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Appointment.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // External Ids for this item
+  repeated Identifier identifier = 10;
+
+  // proposed | pending | booked | arrived | fulfilled | cancelled | noshow |
+  // entered-in-error | checked-in | waitlist
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/appointmentstatus";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AppointmentStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The coded reason for the appointment being cancelled
+  CodeableConcept cancellation_reason = 32;
+
+  // Classification when becoming an encounter
+  repeated CodeableConcept class_value = 33 [json_name = "class"];
+
+  // A broad categorization of the service that is to be performed during this
+  // appointment
+  repeated CodeableConcept service_category = 13;
+
+  // The specific service that is to be performed during this appointment
+  repeated CodeableReference service_type = 34;
+
+  // The specialty of a practitioner that would be required to perform the
+  // service requested in this appointment
+  repeated CodeableConcept specialty = 15;
+
+  // The style of appointment or patient that has been booked in the slot (not
+  // service type)
+  CodeableConcept appointment_type = 16;
+
+  // Reason this appointment is scheduled
+  repeated CodeableReference reason = 35;
+
+  // Used to make informed decisions if needing to re-prioritize
+  CodeableConcept priority = 36;
+
+  // Shown on a subject line in a meeting request, or appointment list
+  String description = 20;
+
+  // Appointment replaced by this Appointment
+  repeated Reference replaces = 37
+      [(.google.fhir.proto.valid_reference_type) = "Appointment"];
+
+  // Connection details of a virtual service (e.g. conference call)
+  repeated VirtualServiceDetail virtual_service = 38;
+
+  // Additional information to support the appointment
+  repeated Reference supporting_information = 21
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // The previous appointment in a series
+  Reference previous_appointment = 39
+      [(.google.fhir.proto.valid_reference_type) = "Appointment"];
+
+  // The originating appointment in a recurring set of appointments
+  Reference originating_appointment = 40
+      [(.google.fhir.proto.valid_reference_type) = "Appointment"];
+
+  // When appointment is to take place
+  Instant start = 22;
+
+  // When appointment is to conclude
+  Instant end = 23;
+
+  // Can be less than start/end (e.g. estimate)
+  PositiveInt minutes_duration = 24;
+
+  // Potential date/time interval(s) requested to allocate the appointment
+  // within
+  repeated Period requested_period = 31;
+
+  // The slots that this appointment is filling
+  repeated Reference slot = 25
+      [(.google.fhir.proto.valid_reference_type) = "Slot"];
+
+  // The set of accounts that may be used for billing for this Appointment
+  repeated Reference account = 41
+      [(.google.fhir.proto.valid_reference_type) = "Account"];
+
+  // The date that this appointment was initially created
+  DateTime created = 26;
+
+  // When the appointment was cancelled
+  DateTime cancellation_date = 42;
+
+  // Additional comments
+  repeated Annotation note = 43;
+
+  // Detailed information and instructions for the patient
+  repeated CodeableReference patient_instruction = 44;
+
+  // The request this appointment is allocated to assess
+  repeated Reference based_on = 29 [
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "DeviceRequest",
+    (.google.fhir.proto.valid_reference_type) = "MedicationRequest",
+    (.google.fhir.proto.valid_reference_type) = "ServiceRequest"
+  ];
+
+  // The patient or group associated with the appointment
+  Reference subject = 45 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // Participants involved in appointment
+  message Participant {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "type.exists() or actor.exists()";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Role of participant in the appointment
+    repeated CodeableConcept type = 4;
+
+    // Participation period of the actor
+    Period period = 8;
+
+    // The individual, device, location, or service participating in the
+    // appointment
+    Reference actor = 5 [
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Group",
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "CareTeam",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+      (.google.fhir.proto.valid_reference_type) = "Device",
+      (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+      (.google.fhir.proto.valid_reference_type) = "Location"
+    ];
+
+    // The participant is required to attend (optional when false)
+    Boolean required = 9;
+
+    // accepted | declined | tentative | needs-action
+    message StatusCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/participationstatus";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ParticipationStatusCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    StatusCode status = 7
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Participant participant = 30
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The sequence number in the recurrence
+  PositiveInt recurrence_id = 46;
+
+  // Indicates that this appointment varies from a recurrence pattern
+  Boolean occurrence_changed = 47;
+
+  // Details of the recurrence pattern/template used to generate occurrences
+  message RecurrenceTemplate {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The timezone of the occurrences
+    CodeableConcept timezone = 4;
+
+    // The frequency of the recurrence
+    CodeableConcept recurrence_type = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // The date when the recurrence should end
+    Date last_occurrence_date = 6;
+
+    // The number of planned occurrences
+    PositiveInt occurrence_count = 7;
+
+    // Specific dates for a recurring set of appointments (no template)
+    repeated Date occurrence_date = 8;
+
+    // Information about weekly recurring appointments
+    message WeeklyTemplate {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Recurs on Mondays
+      Boolean monday = 4;
+
+      // Recurs on Tuesday
+      Boolean tuesday = 5;
+
+      // Recurs on Wednesday
+      Boolean wednesday = 6;
+
+      // Recurs on Thursday
+      Boolean thursday = 7;
+
+      // Recurs on Friday
+      Boolean friday = 8;
+
+      // Recurs on Saturday
+      Boolean saturday = 9;
+
+      // Recurs on Sunday
+      Boolean sunday = 10;
+
+      // Recurs every nth week
+      PositiveInt week_interval = 11;
+    }
+    WeeklyTemplate weekly_template = 9;
+
+    // Information about monthly recurring appointments
+    message MonthlyTemplate {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Recurs on a specific day of the month
+      PositiveInt day_of_month = 4;
+
+      // Indicates which week of the month the appointment should occur
+      Coding nth_week_of_month = 5;
+
+      // Indicates which day of the week the appointment should occur
+      Coding day_of_week = 6;
+
+      // Recurs every nth month
+      PositiveInt month_interval = 7
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    MonthlyTemplate monthly_template = 10;
+
+    // Information about yearly recurring appointments
+    message YearlyTemplate {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Recurs every nth year
+      PositiveInt year_interval = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    YearlyTemplate yearly_template = 11;
+
+    // Any dates that should be excluded from the series
+    repeated Date excluding_date = 12;
+
+    // Any recurrence IDs that should be excluded from the recurrence
+    repeated PositiveInt excluding_recurrence_id = 13;
+  }
+  repeated RecurrenceTemplate recurrence_template = 48;
+}

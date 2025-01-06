@@ -1,0 +1,146 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/encounter_history_go_proto";
+
+// Auto-generated from StructureDefinition for EncounterHistory.
+// A record of significant events/milestones key data throughout the history of
+// an Encounter. See http://hl7.org/fhir/StructureDefinition/EncounterHistory
+message EncounterHistory {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/EncounterHistory";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // EncounterHistory.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // The Encounter associated with this set of historic values
+  Reference encounter = 10
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // Identifier(s) by which this encounter is known
+  repeated Identifier identifier = 11;
+
+  // planned | in-progress | on-hold | discharged | completed | cancelled |
+  // discontinued | entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/encounter-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    EncounterStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 12
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Classification of patient encounter
+  CodeableConcept class_value = 13 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    json_name = "class"
+  ];
+
+  // Specific type of encounter
+  repeated CodeableConcept type = 14;
+
+  // Specific type of service
+  repeated CodeableReference service_type = 15;
+
+  // The patient or group related to this encounter
+  Reference subject = 16 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // The current status of the subject in relation to the Encounter
+  CodeableConcept subject_status = 17;
+
+  // The actual start and end time associated with this set of values associated
+  // with the encounter
+  Period actual_period = 18;
+
+  // The planned start date/time (or admission date) of the encounter
+  DateTime planned_start_date = 19;
+
+  // The planned end date/time (or discharge date) of the encounter
+  DateTime planned_end_date = 20;
+
+  // Actual quantity of time the encounter lasted (less time absent)
+  Duration length = 21;
+
+  // Location of the patient at this point in the encounter
+  message Location {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Location the encounter takes place
+    Reference location = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Location"
+    ];
+
+    // The physical type of the location (usually the level in the location
+    // hierarchy - bed, room, ward, virtual etc.)
+    CodeableConcept form = 5;
+  }
+  repeated Location location = 22;
+}

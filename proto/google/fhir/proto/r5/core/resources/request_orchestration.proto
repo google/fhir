@@ -1,0 +1,610 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/request_orchestration_go_proto";
+
+// Auto-generated from StructureDefinition for RequestOrchestration.
+// A set of related requests.
+// See http://hl7.org/fhir/StructureDefinition/RequestOrchestration
+message RequestOrchestration {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/RequestOrchestration";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // RequestOrchestration.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business identifier
+  repeated Identifier identifier = 10;
+
+  // Instantiates FHIR protocol or definition
+  repeated Canonical instantiates_canonical = 11;
+
+  // Instantiates external protocol or definition
+  repeated Uri instantiates_uri = 12;
+
+  // Fulfills plan, proposal, or order
+  repeated Reference based_on = 13
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Request(s) replaced by this request
+  repeated Reference replaces = 14
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Composite request this is part of
+  Identifier group_identifier = 15;
+
+  // draft | active | on-hold | revoked | completed | entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // proposal | plan | directive | order | original-order | reflex-order |
+  // filler-order | instance-order | option
+  message IntentCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-intent";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestIntentCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  IntentCode intent = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // routine | urgent | asap | stat
+  message PriorityCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-priority";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestPriorityCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  PriorityCode priority = 18;
+
+  // What's being requested/ordered
+  CodeableConcept code = 19;
+
+  // Who the request orchestration is about
+  Reference subject = 20 [
+    (.google.fhir.proto.valid_reference_type) = "CareTeam",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+    (.google.fhir.proto.valid_reference_type) = "Location",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+  ];
+
+  // Created as part of
+  Reference encounter = 21
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // When the request orchestration was authored
+  DateTime authored_on = 22;
+
+  // Device or practitioner that authored the request orchestration
+  Reference author = 23 [
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  ];
+
+  // Why the request orchestration is needed
+  repeated CodeableReference reason = 24;
+
+  // What goals
+  repeated Reference goal = 25
+      [(.google.fhir.proto.valid_reference_type) = "Goal"];
+
+  // Additional notes about the response
+  repeated Annotation note = 26;
+
+  // Proposed actions, if any
+  message Action {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "resource.exists() != action.exists()";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Pointer to specific item from the PlanDefinition
+    String link_id = 4;
+
+    // User-visible prefix for the action (e.g. 1. or A.)
+    String prefix = 5;
+
+    // User-visible title
+    String title = 6;
+
+    // Short description of the action
+    Markdown description = 7;
+
+    // Static text equivalent of the action, used if the dynamic aspects cannot
+    // be interpreted by the receiving system
+    Markdown text_equivalent = 8;
+
+    // routine | urgent | asap | stat
+    message PriorityCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/request-priority";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      RequestPriorityCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    PriorityCode priority = 9;
+
+    // Code representing the meaning of the action or sub-actions
+    repeated CodeableConcept code = 10;
+
+    // Supporting documentation for the intended performer of the action
+    repeated RelatedArtifact documentation = 11;
+
+    // What goals
+    repeated Reference goal = 12
+        [(.google.fhir.proto.valid_reference_type) = "Goal"];
+
+    // Whether or not the action is applicable
+    message Condition {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // applicability | start | stop
+      message KindCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/action-condition-kind";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ActionConditionKindCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      KindCode kind = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Boolean-valued expression
+      Expression expression = 5;
+    }
+    repeated Condition condition = 13;
+
+    // Input data requirements
+    message Input {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "requirement.exists() xor relatedData.exists()";
+
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // User-visible title
+      String title = 4;
+
+      // What data is provided
+      DataRequirement requirement = 5;
+
+      // What data is provided
+      Id related_data = 6;
+    }
+    repeated Input input = 14;
+
+    // Output data definition
+    message Output {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "requirement.exists() xor relatedData.exists()";
+
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // User-visible title
+      String title = 4;
+
+      // What data is provided
+      DataRequirement requirement = 5;
+
+      // What data is provided
+      String related_data = 6;
+    }
+    repeated Output output = 15;
+
+    // Relationship to another action
+    message RelatedAction {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // What action this is related to
+      Id target_id = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // before | before-start | before-end | concurrent | concurrent-with-start
+      // | concurrent-with-end | after | after-start | after-end
+      message RelationshipCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/action-relationship-type";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ActionRelationshipTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      RelationshipCode relationship = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // before | before-start | before-end | concurrent | concurrent-with-start
+      // | concurrent-with-end | after | after-start | after-end
+      message EndRelationshipCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/action-relationship-type";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ActionRelationshipTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      EndRelationshipCode end_relationship = 6;
+
+      // Time offset for the relationship
+      message OffsetX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          Duration duration = 1;
+          Range range = 2;
+        }
+      }
+      OffsetX offset = 7;
+    }
+    repeated RelatedAction related_action = 16;
+
+    // When the action should take place
+    message TimingX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        DateTime date_time = 1;
+        Age age = 2;
+        Period period = 3;
+        Duration duration = 4;
+        Range range = 5;
+        Timing timing = 6;
+      }
+    }
+    TimingX timing = 17;
+
+    // Where it should happen
+    CodeableReference location = 18;
+
+    // Who should perform the action
+    message Participant {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // careteam | device | group | healthcareservice | location | organization
+      // | patient | practitioner | practitionerrole | relatedperson
+      message TypeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/action-participant-type";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ActionParticipantTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      TypeCode type = 4;
+
+      // Who or what can participate
+      Canonical type_canonical = 5;
+
+      // Who or what can participate
+      Reference type_reference = 6 [
+        (.google.fhir.proto.valid_reference_type) = "CareTeam",
+        (.google.fhir.proto.valid_reference_type) = "Device",
+        (.google.fhir.proto.valid_reference_type) = "DeviceDefinition",
+        (.google.fhir.proto.valid_reference_type) = "Endpoint",
+        (.google.fhir.proto.valid_reference_type) = "Group",
+        (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+        (.google.fhir.proto.valid_reference_type) = "Location",
+        (.google.fhir.proto.valid_reference_type) = "Organization",
+        (.google.fhir.proto.valid_reference_type) = "Patient",
+        (.google.fhir.proto.valid_reference_type) = "Practitioner",
+        (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+        (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+      ];
+
+      // E.g. Nurse, Surgeon, Parent, etc
+      CodeableConcept role = 7;
+
+      // E.g. Author, Reviewer, Witness, etc
+      CodeableConcept function = 8;
+
+      // Who/what is participating?
+      message ActorX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          Canonical canonical = 1;
+          Reference reference = 2 [
+            (.google.fhir.proto.valid_reference_type) = "CareTeam",
+            (.google.fhir.proto.valid_reference_type) = "Device",
+            (.google.fhir.proto.valid_reference_type) = "DeviceDefinition",
+            (.google.fhir.proto.valid_reference_type) = "Endpoint",
+            (.google.fhir.proto.valid_reference_type) = "Group",
+            (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+            (.google.fhir.proto.valid_reference_type) = "Location",
+            (.google.fhir.proto.valid_reference_type) = "Organization",
+            (.google.fhir.proto.valid_reference_type) = "Patient",
+            (.google.fhir.proto.valid_reference_type) = "Practitioner",
+            (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+            (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+          ];
+        }
+      }
+      ActorX actor = 9;
+    }
+    repeated Participant participant = 19;
+
+    // create | update | remove | fire-event
+    CodeableConcept type = 20;
+
+    // visual-group | logical-group | sentence-group
+    message GroupingBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-grouping-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionGroupingBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    GroupingBehaviorCode grouping_behavior = 21;
+
+    // any | all | all-or-none | exactly-one | at-most-one | one-or-more
+    message SelectionBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-selection-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionSelectionBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    SelectionBehaviorCode selection_behavior = 22;
+
+    // must | could | must-unless-documented
+    message RequiredBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-required-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionRequiredBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    RequiredBehaviorCode required_behavior = 23;
+
+    // yes | no
+    message PrecheckBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-precheck-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionPrecheckBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    PrecheckBehaviorCode precheck_behavior = 24;
+
+    // single | multiple
+    message CardinalityBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-cardinality-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionCardinalityBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    CardinalityBehaviorCode cardinality_behavior = 25;
+
+    // The target of the action
+    Reference resource = 26
+        [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+    // Description of the activity to be performed
+    message DefinitionX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Canonical canonical = 1;
+        Uri uri = 2;
+      }
+    }
+    DefinitionX definition = 27;
+
+    // Transform to apply the template
+    Canonical transform = 28;
+
+    // Dynamic aspects of the definition
+    message DynamicValue {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The path to the element to be set dynamically
+      String path = 4;
+
+      // An expression that provides the dynamic value for the customization
+      Expression expression = 5;
+    }
+    repeated DynamicValue dynamic_value = 29;
+
+    // Sub action
+    repeated Action action = 30;
+  }
+  repeated Action action = 27;
+}

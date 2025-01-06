@@ -1,0 +1,245 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/packaged_product_definition_go_proto";
+
+// Auto-generated from StructureDefinition for PackagedProductDefinition.
+// A medically related item or items, in a container or package.
+// See http://hl7.org/fhir/StructureDefinition/PackagedProductDefinition
+message PackagedProductDefinition {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/PackagedProductDefinition";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // PackagedProductDefinition.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // A unique identifier for this package as whole - not for the content of the
+  // package
+  repeated Identifier identifier = 10;
+
+  // A name for this package. Typically as listed in a drug formulary,
+  // catalogue, inventory etc
+  String name = 11;
+
+  // A high level category e.g. medicinal product, raw material, shipping
+  // container etc
+  CodeableConcept type = 12;
+
+  // The product that this is a pack for
+  repeated Reference package_for = 13
+      [(.google.fhir.proto.valid_reference_type) =
+           "MedicinalProductDefinition"];
+
+  // The status within the lifecycle of this item. High level - not intended to
+  // duplicate details elsewhere e.g. legal status, or authorization/marketing
+  // status
+  CodeableConcept status = 14;
+
+  // The date at which the given status became applicable
+  DateTime status_date = 15;
+
+  // A total of the complete count of contained items of a particular type/form,
+  // independent of sub-packaging or organization. This can be considered as the
+  // pack size. See also packaging.containedItem.amount (especially the long
+  // definition)
+  repeated Quantity contained_item_quantity = 16;
+
+  // Textual description. Note that this is not the name of the package or
+  // product
+  Markdown description = 17;
+
+  // The legal status of supply of the packaged item as classified by the
+  // regulator
+  message LegalStatusOfSupply {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The actual status of supply. In what situation this package type may be
+    // supplied for use
+    CodeableConcept code = 4;
+
+    // The place where the legal status of supply applies
+    CodeableConcept jurisdiction = 5;
+  }
+  repeated LegalStatusOfSupply legal_status_of_supply = 18;
+
+  // Allows specifying that an item is on the market for sale, or that it is not
+  // available, and the dates and locations associated
+  repeated MarketingStatus marketing_status = 19;
+
+  // Identifies if the drug product is supplied with another item such as a
+  // diluent or adjuvant
+  Boolean copackaged_indicator = 20;
+
+  // Manufacturer of this package type (multiple means these are all possible
+  // manufacturers)
+  repeated Reference manufacturer = 21
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Additional information or supporting documentation about the packaged
+  // product
+  repeated Reference attached_document = 22
+      [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
+
+  // A packaging item, as a container for medically related items, possibly with
+  // other packaging items within, or a packaging component, such as bottle cap
+  message Packaging {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // An identifier that is specific to this particular part of the packaging.
+    // Including possibly a Data Carrier Identifier
+    repeated Identifier identifier = 4;
+
+    // The physical type of the container of the items
+    CodeableConcept type = 5;
+
+    // Is this a part of the packaging (e.g. a cap or bottle stopper), rather
+    // than the packaging itself (e.g. a bottle or vial)
+    Boolean component_part = 6;
+
+    // The quantity of this level of packaging in the package that contains it
+    // (with the outermost level being 1)
+    Integer quantity = 7;
+
+    // Material type of the package item
+    repeated CodeableConcept material = 8;
+
+    // A possible alternate material for this part of the packaging, that is
+    // allowed to be used instead of the usual material
+    repeated CodeableConcept alternate_material = 9;
+
+    // Shelf Life and storage information
+    repeated ProductShelfLife shelf_life_storage = 10;
+
+    // Manufacturer of this packaging item (multiple means these are all
+    // potential manufacturers)
+    repeated Reference manufacturer = 11
+        [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+    // General characteristics of this item
+    message Property {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // A code expressing the type of characteristic
+      CodeableConcept type = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // A value for the characteristic
+      message ValueX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          CodeableConcept codeable_concept = 1;
+          Quantity quantity = 2;
+          Date date = 3;
+          Boolean boolean = 4;
+          Attachment attachment = 5;
+        }
+      }
+      ValueX value = 5;
+    }
+    repeated Property property = 12;
+
+    // The item(s) within the packaging
+    message ContainedItem {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The actual item(s) of medication, as manufactured, or a device, or
+      // other medically related item (food, biologicals, raw materials, medical
+      // fluids, gases etc.), as contained in the package
+      CodeableReference item = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // The number of this type of item within this packaging or for continuous
+      // items such as liquids it is the quantity (for example 25ml). See also
+      // PackagedProductDefinition.containedItemQuantity (especially the long
+      // definition)
+      Quantity amount = 5;
+    }
+    repeated ContainedItem contained_item = 13;
+
+    // Allows containers (and parts of containers) within containers, still as a
+    // part of single packaged product
+    repeated Packaging packaging = 14;
+  }
+  Packaging packaging = 23;
+
+  // Allows the key features to be recorded, such as "hospital pack", "nurse
+  // prescribable"
+  repeated Packaging.Property characteristic = 24;
+}

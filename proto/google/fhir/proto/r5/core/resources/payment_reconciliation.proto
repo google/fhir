@@ -1,0 +1,302 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/payment_reconciliation_go_proto";
+
+// Auto-generated from StructureDefinition for PaymentReconciliation.
+// PaymentReconciliation resource.
+// See http://hl7.org/fhir/StructureDefinition/PaymentReconciliation
+message PaymentReconciliation {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/PaymentReconciliation";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // PaymentReconciliation.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business Identifier for a payment reconciliation
+  repeated Identifier identifier = 10;
+
+  // Category of payment
+  CodeableConcept type = 25
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // active | cancelled | draft | entered-in-error
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/fm-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    FinancialResourceStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Workflow originating payment
+  CodeableConcept kind = 26;
+
+  // Period covered
+  Period period = 12;
+
+  // Creation date
+  DateTime created = 13
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who entered the payment
+  Reference enterer = 27 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization"
+  ];
+
+  // Nature of the source
+  CodeableConcept issuer_type = 28;
+
+  // Party generating payment
+  Reference payment_issuer = 14 [
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+  ];
+
+  // Reference to requesting resource
+  Reference request = 15 [(.google.fhir.proto.valid_reference_type) = "Task"];
+
+  // Responsible practitioner
+  Reference requestor = 16 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization"
+  ];
+
+  // queued | complete | error | partial
+  message OutcomeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/payment-outcome";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PaymentOutcomeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  OutcomeCode outcome = 29;
+
+  // Disposition message
+  String disposition = 18;
+
+  // When payment issued
+  Date date = 30
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Where payment collected
+  Reference location = 31
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Payment instrument
+  CodeableConcept method = 32;
+
+  // Type of card
+  String card_brand = 33;
+
+  // Digits for verification
+  String account_number = 34;
+
+  // Expiration year-month
+  Date expiration_date = 35;
+
+  // Processor name
+  String processor = 36;
+
+  // Check number or payment reference
+  String reference_number = 37;
+
+  // Authorization number
+  String authorization = 38;
+
+  // Amount offered by the issuer
+  Money tendered_amount = 39;
+
+  // Amount returned by the receiver
+  Money returned_amount = 40;
+
+  // Total amount of Payment
+  Money amount = 41
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Business identifier for the payment
+  Identifier payment_identifier = 21;
+
+  // Settlement particulars
+  message Allocation {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Business identifier of the payment detail
+    Identifier identifier = 4;
+
+    // Business identifier of the prior payment detail
+    Identifier predecessor = 5;
+
+    // Subject of the payment
+    Reference target = 6 [
+      (.google.fhir.proto.valid_reference_type) = "Claim",
+      (.google.fhir.proto.valid_reference_type) = "Account",
+      (.google.fhir.proto.valid_reference_type) = "Invoice",
+      (.google.fhir.proto.valid_reference_type) = "ChargeItem",
+      (.google.fhir.proto.valid_reference_type) = "Encounter",
+      (.google.fhir.proto.valid_reference_type) = "Contract"
+    ];
+
+    // Sub-element of the subject
+    message TargetItemX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        String string_value = 1 [json_name = "string"];
+        Identifier identifier = 2;
+        PositiveInt positive_int = 3;
+      }
+    }
+    TargetItemX target_item = 7;
+
+    // Applied-to encounter
+    Reference encounter = 8
+        [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+    // Applied-to account
+    Reference account = 9
+        [(.google.fhir.proto.valid_reference_type) = "Account"];
+
+    // Category of payment
+    CodeableConcept type = 10;
+
+    // Submitter of the request
+    Reference submitter = 11 [
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // Response committing to a payment
+    Reference response = 12
+        [(.google.fhir.proto.valid_reference_type) = "ClaimResponse"];
+
+    // Date of commitment to pay
+    Date date = 13;
+
+    // Contact for the response
+    Reference responsible = 14
+        [(.google.fhir.proto.valid_reference_type) = "PractitionerRole"];
+
+    // Recipient of the payment
+    Reference payee = 15 [
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // Amount allocated to this payable
+    Money amount = 16;
+  }
+  repeated Allocation allocation = 42;
+
+  // Printed form identifier
+  CodeableConcept form_code = 23;
+
+  // Note concerning processing
+  message Notes {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // display | print | printoper
+    message TypeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/note-type";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      NoteTypeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeCode type = 4;
+
+    // Note explanatory text
+    String text = 5;
+  }
+  repeated Notes process_note = 24;
+}

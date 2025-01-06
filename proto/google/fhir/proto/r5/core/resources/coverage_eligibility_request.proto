@@ -1,0 +1,300 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/coverage_eligibility_request_go_proto";
+
+// Auto-generated from StructureDefinition for CoverageEligibilityRequest.
+// CoverageEligibilityRequest resource.
+// See http://hl7.org/fhir/StructureDefinition/CoverageEligibilityRequest
+message CoverageEligibilityRequest {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/CoverageEligibilityRequest";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // CoverageEligibilityRequest.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business Identifier for coverage eligiblity request
+  repeated Identifier identifier = 10;
+
+  // active | cancelled | draft | entered-in-error
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/fm-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    FinancialResourceStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Desired processing priority
+  CodeableConcept priority = 12;
+
+  // auth-requirements | benefits | discovery | validation
+  message PurposeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/eligibilityrequest-purpose";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    EligibilityRequestPurposeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  repeated PurposeCode purpose = 13
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Intended recipient of products and services
+  Reference patient = 14 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient"
+  ];
+
+  // Event information
+  message Event {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Specific event
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Occurance date or period
+    message WhenX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        DateTime date_time = 1;
+        Period period = 2;
+      }
+    }
+    WhenX when = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Event event = 24;
+
+  // Estimated date or dates of service
+  message ServicedX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Date date = 1;
+      Period period = 2;
+    }
+  }
+  ServicedX serviced = 15;
+
+  // Creation date
+  DateTime created = 16
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Author
+  Reference enterer = 17 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  ];
+
+  // Party responsible for the request
+  Reference provider = 18 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization"
+  ];
+
+  // Coverage issuer
+  Reference insurer = 19 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Organization"
+  ];
+
+  // Servicing facility
+  Reference facility = 20
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Supporting information
+  message SupportingInformation {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Information instance identifier
+    PositiveInt sequence = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Data to be provided
+    Reference information = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Resource"
+    ];
+
+    // Applies to all items
+    Boolean applies_to_all = 6;
+  }
+  repeated SupportingInformation supporting_info = 21;
+
+  // Patient insurance information
+  message Insurance {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Applicable coverage
+    Boolean focal = 4;
+
+    // Insurance information
+    Reference coverage = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Coverage"
+    ];
+
+    // Additional provider contract number
+    String business_arrangement = 6;
+  }
+  repeated Insurance insurance = 22;
+
+  // Item to be evaluated for eligibiity
+  message Details {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Applicable exception or supporting information
+    repeated PositiveInt supporting_info_sequence = 4;
+
+    // Benefit classification
+    CodeableConcept category = 5;
+
+    // Billing, service, product, or drug code
+    CodeableConcept product_or_service = 6;
+
+    // Product or service billing modifiers
+    repeated CodeableConcept modifier = 7;
+
+    // Perfoming practitioner
+    Reference provider = 8 [
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+    ];
+
+    // Count of products or services
+    SimpleQuantity quantity = 9;
+
+    // Fee, charge or cost per item
+    Money unit_price = 10;
+
+    // Servicing facility
+    Reference facility = 11 [
+      (.google.fhir.proto.valid_reference_type) = "Location",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // Applicable diagnosis
+    message Diagnosis {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Nature of illness or problem
+      message DiagnosisX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          CodeableConcept codeable_concept = 1;
+          Reference reference = 2
+              [(.google.fhir.proto.valid_reference_type) = "Condition"];
+        }
+      }
+      DiagnosisX diagnosis = 4;
+    }
+    repeated Diagnosis diagnosis = 12;
+
+    // Product or service details
+    repeated Reference detail = 13
+        [(.google.fhir.proto.valid_reference_type) = "Resource"];
+  }
+  repeated Details item = 23;
+}

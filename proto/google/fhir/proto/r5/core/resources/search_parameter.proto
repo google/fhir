@@ -1,0 +1,296 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+import "proto/google/fhir/proto/r5/core/valuesets.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/search_parameter_go_proto";
+
+// Auto-generated from StructureDefinition for SearchParameter.
+// Search parameter for a resource.
+// See http://hl7.org/fhir/StructureDefinition/SearchParameter
+message SearchParameter {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/SearchParameter";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "expression.empty() or processingMode.exists()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "chain.empty() or type = 'reference'";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "comparator.empty() or (type in ('number' | 'date' | 'quantity' | 'special'))";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.exists() implies name.matches('^[A-Z]([A-Za-z0-9_]){1,254}$')";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // SearchParameter.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this search parameter, represented as a URI
+  // (globally unique)
+  Uri url = 10 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_warning_constraint) =
+        "exists() implies matches('^[^|# ]+$')"
+  ];
+
+  // Additional identifier for the search parameter (business identifier)
+  repeated Identifier identifier = 36;
+
+  // Business version of the search parameter
+  String version = 11;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 37;
+
+  // Name for this search parameter (computer friendly)
+  String name = 12
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Name for this search parameter (human friendly)
+  String title = 38;
+
+  // Original definition for the search parameter
+  Canonical derived_from = 13;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 14
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 15;
+
+  // Date last changed
+  DateTime date = 16;
+
+  // Name of the publisher/steward (organization or individual)
+  String publisher = 17;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 18;
+
+  // Natural language description of the search parameter
+  Markdown description = 19
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 20;
+
+  // Intended jurisdiction for search parameter (if applicable)
+  repeated CodeableConcept jurisdiction = 21;
+
+  // Why this search parameter is defined
+  Markdown purpose = 22;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 39;
+
+  // Copyright holder and year(s)
+  String copyright_label = 40;
+
+  // Recommended name for parameter in search url
+  Code code = 23
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The resource type(s) this search parameter applies to
+  message BaseCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/version-independent-all-resource-types";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    VersionIndependentResourceTypesAllValueSet.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  repeated BaseCode base = 41
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // number | date | string | token | reference | composite | quantity | uri |
+  // special
+  message TypeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/search-param-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    SearchParamTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  TypeCode type = 25
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // FHIRPath expression that extracts the values
+  String expression = 26;
+
+  // normal | phonetic | other
+  message ProcessingModeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/search-processingmode";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    SearchProcessingModeTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ProcessingModeCode processing_mode = 42;
+
+  // FHIRPath expression that constraints the usage of this SearchParamete
+  String constraint = 43;
+
+  // Types of resource (if a resource reference)
+  message TargetCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/version-independent-all-resource-types";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    VersionIndependentResourceTypesAllValueSet.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  repeated TargetCode target = 44;
+
+  // Allow multiple values per parameter (or)
+  Boolean multiple_or = 30;
+
+  // Allow multiple parameters (and)
+  Boolean multiple_and = 31;
+
+  // eq | ne | gt | lt | ge | le | sa | eb | ap
+  message ComparatorCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/search-comparator";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    SearchComparatorCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  repeated ComparatorCode comparator = 32;
+
+  // missing | exact | contains | not | text | in | not-in | below | above |
+  // type | identifier | of-type | code-text | text-advanced | iterate
+  message ModifierCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/search-modifier-code";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    SearchModifierCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  repeated ModifierCode modifier = 33;
+
+  // Chained names supported
+  repeated String chain = 34;
+
+  // For Composite resources to define the parts
+  message Component {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Defines how the part works
+    Canonical definition = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Subexpression relative to main expression
+    String expression = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Component component = 35;
+}

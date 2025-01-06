@@ -1,0 +1,249 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/imaging_study_go_proto";
+
+// Auto-generated from StructureDefinition for ImagingStudy.
+// A set of images produced in single study (one or more series of references
+// images). See http://hl7.org/fhir/StructureDefinition/ImagingStudy
+message ImagingStudy {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ImagingStudy";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // ImagingStudy.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Identifiers for the whole study
+  repeated Identifier identifier = 10;
+
+  // registered | available | cancelled | entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/imagingstudy-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ImagingStudyStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // All of the distinct values for series' modalities
+  repeated CodeableConcept modality = 30;
+
+  // Who or what is the subject of the study
+  Reference subject = 13 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // Encounter with which this imaging study is associated
+  Reference encounter = 14
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // When the study was started
+  DateTime started = 15;
+
+  // Request fulfilled
+  repeated Reference based_on = 16 [
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "ServiceRequest",
+    (.google.fhir.proto.valid_reference_type) = "Appointment",
+    (.google.fhir.proto.valid_reference_type) = "AppointmentResponse",
+    (.google.fhir.proto.valid_reference_type) = "Task"
+  ];
+
+  // Part of referenced event
+  repeated Reference part_of = 31
+      [(.google.fhir.proto.valid_reference_type) = "Procedure"];
+
+  // Referring physician
+  Reference referrer = 17 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  ];
+
+  // Study access endpoint
+  repeated Reference endpoint = 19
+      [(.google.fhir.proto.valid_reference_type) = "Endpoint"];
+
+  // Number of Study Related Series
+  UnsignedInt number_of_series = 20;
+
+  // Number of Study Related Instances
+  UnsignedInt number_of_instances = 21;
+
+  // The performed procedure or code
+  repeated CodeableReference procedure = 32;
+
+  // Where ImagingStudy occurred
+  Reference location = 24
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Why the study was requested / performed
+  repeated CodeableReference reason = 33;
+
+  // User-defined comments
+  repeated Annotation note = 27;
+
+  // Institution-generated description
+  String description = 28;
+
+  // Each study has one or more series of instances
+  message Series {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // DICOM Series Instance UID for the series
+    Id uid = 4 [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Numeric identifier of this series
+    UnsignedInt number = 5;
+
+    // The modality used for this series
+    CodeableConcept modality = 16
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // A short human readable summary of the series
+    String description = 7;
+
+    // Number of Series Related Instances
+    UnsignedInt number_of_instances = 8;
+
+    // Series access endpoint
+    repeated Reference endpoint = 9
+        [(.google.fhir.proto.valid_reference_type) = "Endpoint"];
+
+    // Body part examined
+    CodeableReference body_site = 17;
+
+    // Body part laterality
+    CodeableConcept laterality = 18;
+
+    // Specimen imaged
+    repeated Reference specimen = 12
+        [(.google.fhir.proto.valid_reference_type) = "Specimen"];
+
+    // When the series started
+    DateTime started = 13;
+
+    // Who performed the series
+    message Performer {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Type of performance
+      CodeableConcept function = 4;
+
+      // Who performed the series
+      Reference actor = 5 [
+        (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+        (.google.fhir.proto.valid_reference_type) = "Practitioner",
+        (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+        (.google.fhir.proto.valid_reference_type) = "Organization",
+        (.google.fhir.proto.valid_reference_type) = "CareTeam",
+        (.google.fhir.proto.valid_reference_type) = "Patient",
+        (.google.fhir.proto.valid_reference_type) = "Device",
+        (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+        (.google.fhir.proto.valid_reference_type) = "HealthcareService"
+      ];
+    }
+    repeated Performer performer = 14;
+
+    // A single SOP instance from the series
+    message Instance {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // DICOM SOP Instance UID
+      Id uid = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // DICOM class type
+      Coding sop_class = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // The number of this instance in the series
+      UnsignedInt number = 6;
+
+      // Description of instance
+      String title = 7;
+    }
+    repeated Instance instance = 15;
+  }
+  repeated Series series = 29;
+}

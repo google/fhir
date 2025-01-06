@@ -1,0 +1,358 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/research_study_go_proto";
+
+// Auto-generated from StructureDefinition for ResearchStudy.
+// Investigation to increase healthcare-related patient-independent knowledge.
+// See http://hl7.org/fhir/StructureDefinition/ResearchStudy
+message ResearchStudy {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ResearchStudy";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // ResearchStudy.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this study resource
+  Uri url = 34;
+
+  // Business Identifier for study
+  repeated Identifier identifier = 10;
+
+  // The business version for the study record
+  String version = 35;
+
+  // Name for this study (computer friendly)
+  String name = 36;
+
+  // Human readable name of the study
+  String title = 11;
+
+  // Additional names for the study
+  message Label {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // primary | official | scientific | plain-language | subtitle | short-title
+    // | acronym | earlier-title | language | auto-translated | human-use |
+    // machine-use | duplicate-uid
+    CodeableConcept type = 4;
+
+    // The name
+    String value = 5;
+  }
+  repeated Label label = 37;
+
+  // Steps followed in executing study
+  repeated Reference protocol = 12
+      [(.google.fhir.proto.valid_reference_type) = "PlanDefinition"];
+
+  // Part of larger study
+  repeated Reference part_of = 13
+      [(.google.fhir.proto.valid_reference_type) = "ResearchStudy"];
+
+  // References, URLs, and attachments
+  repeated RelatedArtifact related_artifact = 21;
+
+  // Date the resource last changed
+  DateTime date = 38;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 39
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // treatment | prevention | diagnostic | supportive-care | screening |
+  // health-services-research | basic-science | device-feasibility
+  CodeableConcept primary_purpose_type = 15;
+
+  // n-a | early-phase-1 | phase-1 | phase-1-phase-2 | phase-2 | phase-2-phase-3
+  // | phase-3 | phase-4
+  CodeableConcept phase = 16;
+
+  // Classifications of the study design characteristics
+  repeated CodeableConcept study_design = 40;
+
+  // Drugs, devices, etc. under study
+  repeated CodeableReference focus = 41;
+
+  // Condition being studied
+  repeated CodeableConcept condition = 19;
+
+  // Used to search for the study
+  repeated CodeableConcept keyword = 22;
+
+  // Geographic area for the study
+  repeated CodeableConcept region = 42;
+
+  // Brief text explaining the study
+  Markdown description_summary = 43;
+
+  // Detailed narrative of the study
+  Markdown description = 24;
+
+  // When the study began and ended
+  Period period = 26;
+
+  // Facility where study activities are conducted
+  repeated Reference site = 29 [
+    (.google.fhir.proto.valid_reference_type) = "Location",
+    (.google.fhir.proto.valid_reference_type) = "ResearchStudy",
+    (.google.fhir.proto.valid_reference_type) = "Organization"
+  ];
+
+  // Comments made about the study
+  repeated Annotation note = 31;
+
+  // Classification for the study
+  repeated CodeableConcept classifier = 44;
+
+  // Sponsors, collaborators, and other parties
+  message AssociatedParty {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Name of associated party
+    String name = 4;
+
+    // sponsor | lead-sponsor | sponsor-investigator | primary-investigator |
+    // collaborator | funding-source | general-contact | recruitment-contact |
+    // sub-investigator | study-director | study-chair
+    CodeableConcept role = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // When active in the role
+    repeated Period period = 6;
+
+    // nih | fda | government | nonprofit | academic | industry
+    repeated CodeableConcept classifier = 7;
+
+    // Individual or organization associated with study (use practitionerRole to
+    // specify their organisation)
+    Reference party = 8 [
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+  }
+  repeated AssociatedParty associated_party = 45;
+
+  // Status of study with time for that status
+  message ProgressStatus {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Label for status or state (e.g. recruitment status)
+    CodeableConcept state = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Actual if true else anticipated
+    Boolean actual = 5;
+
+    // Date range
+    Period period = 6;
+  }
+  repeated ProgressStatus progress_status = 46;
+
+  // accrual-goal-met | closed-due-to-toxicity |
+  // closed-due-to-lack-of-study-progress | temporarily-closed-per-study-design
+  CodeableConcept why_stopped = 47;
+
+  // Target or actual group of participants enrolled in study
+  message Recruitment {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Estimated total number of participants to be enrolled
+    UnsignedInt target_number = 4;
+
+    // Actual total number of participants enrolled in study
+    UnsignedInt actual_number = 5;
+
+    // Inclusion and exclusion criteria
+    Reference eligibility = 6 [
+      (.google.fhir.proto.valid_reference_type) = "Group",
+      (.google.fhir.proto.valid_reference_type) = "EvidenceVariable"
+    ];
+
+    // Group of participants who were enrolled in study
+    Reference actual_group = 7
+        [(.google.fhir.proto.valid_reference_type) = "Group"];
+  }
+  Recruitment recruitment = 48;
+
+  // Defined path through the study for a subject
+  message ComparisonGroup {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Allows the comparisonGroup for the study and the comparisonGroup for the
+    // subject to be linked easily
+    Id link_id = 4;
+
+    // Label for study comparisonGroup
+    String name = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Categorization of study comparisonGroup
+    CodeableConcept type = 6;
+
+    // Short explanation of study path
+    Markdown description = 7;
+
+    // Interventions or exposures in this comparisonGroup or cohort
+    repeated Reference intended_exposure = 8
+        [(.google.fhir.proto.valid_reference_type) = "EvidenceVariable"];
+
+    // Group of participants who were enrolled in study comparisonGroup
+    Reference observed_group = 9
+        [(.google.fhir.proto.valid_reference_type) = "Group"];
+  }
+  repeated ComparisonGroup comparison_group = 49;
+
+  // A goal for the study
+  message Objective {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Label for the objective
+    String name = 4;
+
+    // primary | secondary | exploratory
+    CodeableConcept type = 5;
+
+    // Description of the objective
+    Markdown description = 6;
+  }
+  repeated Objective objective = 33;
+
+  // A variable measured during the study
+  message OutcomeMeasure {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Label for the outcome
+    String name = 4;
+
+    // primary | secondary | exploratory
+    repeated CodeableConcept type = 5;
+
+    // Description of the outcome
+    Markdown description = 6;
+
+    // Structured outcome definition
+    Reference reference = 7
+        [(.google.fhir.proto.valid_reference_type) = "EvidenceVariable"];
+  }
+  repeated OutcomeMeasure outcome_measure = 50;
+
+  // Link to results generated during the study
+  repeated Reference result = 51 [
+    (.google.fhir.proto.valid_reference_type) = "EvidenceReport",
+    (.google.fhir.proto.valid_reference_type) = "Citation",
+    (.google.fhir.proto.valid_reference_type) = "DiagnosticReport"
+  ];
+}

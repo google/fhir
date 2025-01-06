@@ -1,0 +1,270 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/imaging_selection_go_proto";
+
+// Auto-generated from StructureDefinition for ImagingSelection.
+// A selection of DICOM SOP instances and/or frames.
+// See http://hl7.org/fhir/StructureDefinition/ImagingSelection
+message ImagingSelection {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ImagingSelection";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // ImagingSelection.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business Identifier for Imaging Selection
+  repeated Identifier identifier = 10;
+
+  // available | entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/imagingselection-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ImagingSelectionStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Subject of the selected instances
+  Reference subject = 12 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Location",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Procedure",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "Medication",
+    (.google.fhir.proto.valid_reference_type) = "Substance",
+    (.google.fhir.proto.valid_reference_type) = "Specimen"
+  ];
+
+  // Date / Time when this imaging selection was created
+  Instant issued = 13;
+
+  // Selector of the instances (human or machine)
+  message Performer {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Type of performer
+    CodeableConcept function = 4;
+
+    // Author (human or machine)
+    Reference actor = 5 [
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Device",
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "CareTeam",
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+      (.google.fhir.proto.valid_reference_type) = "HealthcareService"
+    ];
+  }
+  repeated Performer performer = 14;
+
+  // Associated request
+  repeated Reference based_on = 15 [
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "ServiceRequest",
+    (.google.fhir.proto.valid_reference_type) = "Appointment",
+    (.google.fhir.proto.valid_reference_type) = "AppointmentResponse",
+    (.google.fhir.proto.valid_reference_type) = "Task"
+  ];
+
+  // Classifies the imaging selection
+  repeated CodeableConcept category = 16;
+
+  // Imaging Selection purpose text or code
+  CodeableConcept code = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // DICOM Study Instance UID
+  Id study_uid = 18;
+
+  // The imaging study from which the imaging selection is derived
+  repeated Reference derived_from = 19 [
+    (.google.fhir.proto.valid_reference_type) = "ImagingStudy",
+    (.google.fhir.proto.valid_reference_type) = "DocumentReference"
+  ];
+
+  // The network service providing retrieval for the images referenced in the
+  // imaging selection
+  repeated Reference endpoint = 20
+      [(.google.fhir.proto.valid_reference_type) = "Endpoint"];
+
+  // DICOM Series Instance UID
+  Id series_uid = 21;
+
+  // DICOM Series Number
+  UnsignedInt series_number = 22;
+
+  // The Frame of Reference UID for the selected images
+  Id frame_of_reference_uid = 23;
+
+  // Body part examined
+  CodeableReference body_site = 24;
+
+  // Related resource that is the focus for the imaging selection
+  repeated Reference focus = 25
+      [(.google.fhir.proto.valid_reference_type) = "ImagingSelection"];
+
+  // The selected instances
+  message Instance {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // DICOM SOP Instance UID
+    Id uid = 4 [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // DICOM Instance Number
+    UnsignedInt number = 5;
+
+    // DICOM SOP Class UID
+    Coding sop_class = 6;
+
+    // The selected subset of the SOP Instance
+    repeated String subset = 7;
+
+    // A specific 2D region in a DICOM image / frame
+    message ImageRegion2D {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // point | polyline | interpolated | circle | ellipse
+      message RegionTypeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/imagingselection-2dgraphictype";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ImagingSelection2DGraphicTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      RegionTypeCode region_type = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Specifies the coordinates that define the image region
+      repeated Decimal coordinate = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated ImageRegion2D image_region2_d = 8;
+
+    // A specific 3D region in a DICOM frame of reference
+    message ImageRegion3D {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // point | multipoint | polyline | polygon | ellipse | ellipsoid
+      message RegionTypeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/imagingselection-3dgraphictype";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ImagingSelection3DGraphicTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      RegionTypeCode region_type = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Specifies the coordinates that define the image region
+      repeated Decimal coordinate = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated ImageRegion3D image_region3_d = 9;
+  }
+  repeated Instance instance = 26;
+}

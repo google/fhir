@@ -1,0 +1,397 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/measure_report_go_proto";
+
+// Auto-generated from StructureDefinition for MeasureReport.
+// Results of a measure evaluation.
+// See http://hl7.org/fhir/StructureDefinition/MeasureReport
+message MeasureReport {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/MeasureReport";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "(type != 'data-exchange') or group.exists().not()";
+  option (.google.fhir.proto.fhir_path_message_constraint) =
+      "group.stratifier.stratum.all(value.exists() xor component.exists())";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // MeasureReport.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Additional identifier for the MeasureReport
+  repeated Identifier identifier = 10;
+
+  // complete | pending | error
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/measure-report-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    MeasureReportStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // individual | subject-list | summary | data-exchange
+  message TypeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/measure-report-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    MeasureReportTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  TypeCode type = 12
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // incremental | snapshot
+  message DataUpdateTypeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/submit-data-update-type";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    SubmitDataUpdateTypeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  DataUpdateTypeCode data_update_type = 21;
+
+  // What measure was calculated
+  Canonical measure = 13;
+
+  // What individual(s) the report is for
+  Reference subject = 14 [
+    (.google.fhir.proto.valid_reference_type) = "CareTeam",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+    (.google.fhir.proto.valid_reference_type) = "Location",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+  ];
+
+  // When the measure was calculated
+  DateTime date = 15;
+
+  // Who is reporting the data
+  Reference reporter = 16 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // What vendor prepared the data
+  Reference reporting_vendor = 22
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Where the reported data is from
+  Reference location = 23
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // What period the report covers
+  Period period = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // What parameters were provided to the report
+  Reference input_parameters = 24
+      [(.google.fhir.proto.valid_reference_type) = "Parameters"];
+
+  // What scoring method (e.g. proportion, ratio, continuous-variable)
+  CodeableConcept scoring = 25;
+
+  // increase | decrease
+  CodeableConcept improvement_notation = 18;
+
+  // Measure results for each group
+  message Group {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Pointer to specific group from Measure
+    String link_id = 8;
+
+    // Meaning of the group
+    CodeableConcept code = 4;
+
+    // What individual(s) the report is for
+    Reference subject = 9 [
+      (.google.fhir.proto.valid_reference_type) = "CareTeam",
+      (.google.fhir.proto.valid_reference_type) = "Device",
+      (.google.fhir.proto.valid_reference_type) = "Group",
+      (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+      (.google.fhir.proto.valid_reference_type) = "Location",
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+    ];
+
+    // The populations in the group
+    message Population {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Pointer to specific population from Measure
+      String link_id = 7;
+
+      // initial-population | numerator | numerator-exclusion | denominator |
+      // denominator-exclusion | denominator-exception | measure-population |
+      // measure-population-exclusion | measure-observation
+      CodeableConcept code = 4;
+
+      // Size of the population
+      Integer count = 5;
+
+      // For subject-list reports, the subject results in this population
+      Reference subject_results = 6
+          [(.google.fhir.proto.valid_reference_type) = "List"];
+
+      // For subject-list reports, a subject result in this population
+      repeated Reference subject_report = 8
+          [(.google.fhir.proto.valid_reference_type) = "MeasureReport"];
+
+      // What individual(s) in the population
+      Reference subjects = 9
+          [(.google.fhir.proto.valid_reference_type) = "Group"];
+    }
+    repeated Population population = 5;
+
+    // What score this group achieved
+    message MeasureScoreX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Quantity quantity = 1;
+        DateTime date_time = 2;
+        CodeableConcept codeable_concept = 3;
+        Period period = 4;
+        Range range = 5;
+        Duration duration = 6;
+      }
+    }
+    MeasureScoreX measure_score = 10;
+
+    // Stratification results
+    message Stratifier {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Pointer to specific stratifier from Measure
+      String link_id = 6;
+
+      // What stratifier of the group
+      CodeableConcept code = 7;
+
+      // Stratum results, one for each unique value, or set of values, in the
+      // stratifier, or stratifier components
+      message StratifierGroup {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // The stratum value, e.g. male
+        message ValueX {
+          option (.google.fhir.proto.is_choice_type) = true;
+
+          oneof choice {
+            CodeableConcept codeable_concept = 1;
+            Boolean boolean = 2;
+            Quantity quantity = 3;
+            Range range = 4;
+            Reference reference = 5;
+          }
+        }
+        ValueX value = 8;
+
+        // Stratifier component values
+        message Component {
+          // Unique id for inter-element referencing
+          String id = 1;
+
+          // Additional content defined by implementations
+          repeated Extension extension = 2;
+
+          // Extensions that cannot be ignored even if unrecognized
+          repeated Extension modifier_extension = 3;
+
+          // Pointer to specific stratifier component from Measure
+          String link_id = 6;
+
+          // What stratifier component of the group
+          CodeableConcept code = 4
+              [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+          // The stratum component value, e.g. male
+          message ValueX {
+            option (.google.fhir.proto.is_choice_type) = true;
+
+            oneof choice {
+              CodeableConcept codeable_concept = 1;
+              Boolean boolean = 2;
+              Quantity quantity = 3;
+              Range range = 4;
+              Reference reference = 5;
+            }
+          }
+          ValueX value = 7
+              [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+        }
+        repeated Component component = 5;
+
+        // Population results in this stratum
+        message StratifierGroupPopulation {
+          // Unique id for inter-element referencing
+          String id = 1;
+
+          // Additional content defined by implementations
+          repeated Extension extension = 2;
+
+          // Extensions that cannot be ignored even if unrecognized
+          repeated Extension modifier_extension = 3;
+
+          // Pointer to specific population from Measure
+          String link_id = 7;
+
+          // initial-population | numerator | numerator-exclusion | denominator
+          // | denominator-exclusion | denominator-exception |
+          // measure-population | measure-population-exclusion |
+          // measure-observation
+          CodeableConcept code = 4;
+
+          // Size of the population
+          Integer count = 5;
+
+          // For subject-list reports, the subject results in this population
+          Reference subject_results = 6
+              [(.google.fhir.proto.valid_reference_type) = "List"];
+
+          // For subject-list reports, a subject result in this population
+          repeated Reference subject_report = 8
+              [(.google.fhir.proto.valid_reference_type) = "MeasureReport"];
+
+          // What individual(s) in the population
+          Reference subjects = 9
+              [(.google.fhir.proto.valid_reference_type) = "Group"];
+        }
+        repeated StratifierGroupPopulation population = 6;
+
+        // What score this stratum achieved
+        message MeasureScoreX {
+          option (.google.fhir.proto.is_choice_type) = true;
+
+          oneof choice {
+            Quantity quantity = 1;
+            DateTime date_time = 2;
+            CodeableConcept codeable_concept = 3;
+            Period period = 4;
+            Range range = 5;
+            Duration duration = 6;
+          }
+        }
+        MeasureScoreX measure_score = 9;
+      }
+      repeated StratifierGroup stratum = 5;
+    }
+    repeated Stratifier stratifier = 7;
+  }
+  repeated Group group = 19;
+
+  // Additional information collected for the report
+  repeated Reference supplemental_data = 26
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // What data was used to calculate the measure score
+  repeated Reference evaluated_resource = 20
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+}

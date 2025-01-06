@@ -1,0 +1,68 @@
+name: "Date"
+field {
+  name: "value_us"
+  number: 1
+  label: LABEL_OPTIONAL
+  type: TYPE_INT64
+  options {
+    [google.fhir.proto.field_description]: "Primitive value for date"
+  }
+}
+field {
+  name: "timezone"
+  number: 2
+  label: LABEL_OPTIONAL
+  type: TYPE_STRING
+}
+field {
+  name: "precision"
+  number: 3
+  label: LABEL_OPTIONAL
+  type: TYPE_ENUM
+  type_name: ".google.fhir.r5.core.Date.Precision"
+}
+field {
+  name: "id"
+  number: 4
+  label: LABEL_OPTIONAL
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.String"
+  options {
+    [google.fhir.proto.field_description]: "xml:id (or equivalent in JSON)"
+  }
+}
+field {
+  name: "extension"
+  number: 5
+  label: LABEL_REPEATED
+  type: TYPE_MESSAGE
+  type_name: ".google.fhir.r5.core.Extension"
+  options {
+    [google.fhir.proto.field_description]: "Additional content defined by implementations"
+  }
+}
+enum_type {
+  name: "Precision"
+  value {
+    name: "PRECISION_UNSPECIFIED"
+    number: 0
+  }
+  value {
+    name: "YEAR"
+    number: 1
+  }
+  value {
+    name: "MONTH"
+    number: 2
+  }
+  value {
+    name: "DAY"
+    number: 3
+  }
+}
+options {
+  [google.fhir.proto.structure_definition_kind]: KIND_PRIMITIVE_TYPE
+  [google.fhir.proto.message_description]: "Auto-generated from StructureDefinition for date, last updated 2019-12-31T21:03:40.621+11:00.\nPrimitive Type date.\nSee http://hl7.org/fhir/StructureDefinition/date"
+  [google.fhir.proto.value_regex]: "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?"
+  [google.fhir.proto.fhir_structure_definition_url]: "http://hl7.org/fhir/StructureDefinition/date"
+}

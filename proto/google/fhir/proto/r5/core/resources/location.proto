@@ -1,0 +1,171 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/location_go_proto";
+
+// Auto-generated from StructureDefinition for Location.
+// Details and position information for a place.
+// See http://hl7.org/fhir/StructureDefinition/Location
+message Location {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Location";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Location.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Unique code or number identifying the location to its users
+  repeated Identifier identifier = 10;
+
+  // active | suspended | inactive
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/location-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    LocationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11;
+
+  // The operational status of the location (typically only for a bed/room)
+  Coding operational_status = 12;
+
+  // Name of the location as used by humans
+  String name = 13;
+
+  // A list of alternate names that the location is known as, or was known as,
+  // in the past
+  repeated String alias = 14;
+
+  // Additional details about the location that could be displayed as further
+  // information to identify the location beyond its name
+  Markdown description = 27;
+
+  // instance | kind
+  message ModeCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/location-mode";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    LocationModeCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ModeCode mode = 16;
+
+  // Type of function performed
+  repeated CodeableConcept type = 17;
+
+  // Official contact details for the location
+  repeated ExtendedContactDetail contact = 28;
+
+  // Physical location
+  Address address = 19;
+
+  // Physical form of the location
+  CodeableConcept form = 29;
+
+  // The absolute geographic location
+  message Position {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Longitude with WGS84 datum
+    Decimal longitude = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Latitude with WGS84 datum
+    Decimal latitude = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Altitude with WGS84 datum
+    Decimal altitude = 6;
+  }
+  Position position = 21;
+
+  // Organization responsible for provisioning and upkeep
+  Reference managing_organization = 22
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Another Location this one is physically a part of
+  Reference part_of = 23
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Collection of characteristics (attributes)
+  repeated CodeableConcept characteristic = 30;
+
+  // What days/times during a week is this location usually open (including
+  // exceptions)
+  repeated Availability hours_of_operation = 31;
+
+  // Connection details of a virtual service (e.g. conference call)
+  repeated VirtualServiceDetail virtual_service = 32;
+
+  // Technical endpoints providing access to services operated for the location
+  repeated Reference endpoint = 26
+      [(.google.fhir.proto.valid_reference_type) = "Endpoint"];
+}

@@ -1,0 +1,52 @@
+# proto-file: proto/google/fhir/proto/r5/primitive_test_suite.proto
+# proto-message: PrimitiveTestSuite
+valid_pairs {
+  json_string: "\"3000\""
+  proto {
+    date {
+      value_us: 32503640400000000
+      timezone: "Australia/Sydney"
+      precision: YEAR
+    }
+  }
+}
+valid_pairs {
+  json_string: "\"1800-02\""
+  proto {
+    date {
+      value_us: -5362020292000000
+      timezone: "Australia/Sydney"
+      precision: MONTH
+    }
+  }
+}
+valid_pairs {
+  json_string: "\"1970-01-01\""
+  proto {
+    date {
+      value_us: -36000000000
+      timezone: "Australia/Sydney"
+      precision: DAY
+    }
+  }
+}
+
+invalid_json: "\"text\""
+invalid_json: "true"
+invalid_json: "1"
+invalid_json: "1.0"
+
+invalid_protos {
+  # No Timezone
+  date {
+    value_us: 1552977350000
+    precision: DAY
+  }
+}
+invalid_protos {
+  # No Precision
+  date {
+    value_us: 1552977350000
+    timezone: "Australia/Sydney"
+  }
+}

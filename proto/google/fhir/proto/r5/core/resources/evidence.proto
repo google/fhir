@@ -1,0 +1,422 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/evidence_go_proto";
+
+// Auto-generated from StructureDefinition for Evidence.
+// Single evidence bit.
+// See http://hl7.org/fhir/StructureDefinition/Evidence
+message Evidence {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Evidence";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.exists() implies name.matches('^[A-Z]([A-Za-z0-9_]){1,254}$')";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Evidence.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this evidence, represented as a globally unique
+  // URI
+  Uri url = 10 [(.google.fhir.proto.fhir_path_warning_constraint) =
+                    "exists() implies matches('^[^|# ]+$')"];
+
+  // Additional identifier for the summary
+  repeated Identifier identifier = 11;
+
+  // Business version of this summary
+  String version = 12;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 38;
+
+  // Name for this summary (machine friendly)
+  String name = 13;
+
+  // Name for this summary (human friendly)
+  String title = 14;
+
+  // Citation for this evidence
+  message CiteAsX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Reference reference = 1
+          [(.google.fhir.proto.valid_reference_type) = "Citation"];
+      Markdown markdown = 2;
+    }
+  }
+  CiteAsX cite_as = 39;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 40;
+
+  // Date last changed
+  DateTime date = 18;
+
+  // When the summary was approved by publisher
+  Date approval_date = 26;
+
+  // When the summary was last reviewed by the publisher
+  Date last_review_date = 27;
+
+  // Name of the publisher/steward (organization or individual)
+  String publisher = 19;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 20;
+
+  // Who authored the content
+  repeated ContactDetail author = 30;
+
+  // Who edited the content
+  repeated ContactDetail editor = 31;
+
+  // Who reviewed the content
+  repeated ContactDetail reviewer = 32;
+
+  // Who endorsed the content
+  repeated ContactDetail endorser = 33;
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 23;
+
+  // Why this Evidence is defined
+  Markdown purpose = 41;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 25;
+
+  // Copyright holder and year(s)
+  String copyright_label = 42;
+
+  // Link or citation to artifact associated with the summary
+  repeated RelatedArtifact related_artifact = 34;
+
+  // Description of the particular summary
+  Markdown description = 21;
+
+  // Declarative description of the Evidence
+  Markdown assertion = 43;
+
+  // Footnotes and/or explanatory notes
+  repeated Annotation note = 22;
+
+  // Evidence variable such as population, exposure, or outcome
+  message VariableDefinition {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // A text description or summary of the variable
+    Markdown description = 4;
+
+    // Footnotes and/or explanatory notes
+    repeated Annotation note = 5;
+
+    // population | subpopulation | exposure | referenceExposure |
+    // measuredVariable | confounder
+    CodeableConcept variable_role = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Definition of the actual variable related to the statistic(s)
+    Reference observed = 7 [
+      (.google.fhir.proto.valid_reference_type) = "Group",
+      (.google.fhir.proto.valid_reference_type) = "EvidenceVariable"
+    ];
+
+    // Definition of the intended variable related to the Evidence
+    Reference intended = 8 [
+      (.google.fhir.proto.valid_reference_type) = "Group",
+      (.google.fhir.proto.valid_reference_type) = "EvidenceVariable"
+    ];
+
+    // low | moderate | high | exact
+    CodeableConcept directness_match = 9;
+  }
+  repeated VariableDefinition variable_definition = 44
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // The method to combine studies
+  CodeableConcept synthesis_type = 45;
+
+  // The design of the study that produced this evidence
+  repeated CodeableConcept study_design = 46;
+
+  // Values and parameters for a single statistic
+  message Statistic {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Description of content
+    Markdown description = 4;
+
+    // Footnotes and/or explanatory notes
+    repeated Annotation note = 5;
+
+    // Type of statistic, e.g., relative risk
+    CodeableConcept statistic_type = 6;
+
+    // Associated category for categorical variable
+    CodeableConcept category = 7;
+
+    // Statistic value
+    Quantity quantity = 8;
+
+    // The number of events associated with the statistic
+    UnsignedInt number_of_events = 9;
+
+    // The number of participants affected
+    UnsignedInt number_affected = 10;
+
+    // Number of samples in the statistic
+    message SampleSize {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Textual description of sample size for statistic
+      Markdown description = 4;
+
+      // Footnote or explanatory note about the sample size
+      repeated Annotation note = 5;
+
+      // Number of contributing studies
+      UnsignedInt number_of_studies = 6;
+
+      // Cumulative number of participants
+      UnsignedInt number_of_participants = 7;
+
+      // Number of participants with known results for measured variables
+      UnsignedInt known_data_count = 8;
+    }
+    SampleSize sample_size = 11;
+
+    // An attribute of the Statistic
+    message AttributeEstimate {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Textual description of the attribute estimate
+      Markdown description = 4;
+
+      // Footnote or explanatory note about the estimate
+      repeated Annotation note = 5;
+
+      // The type of attribute estimate, e.g., confidence interval or p value
+      CodeableConcept type = 6;
+
+      // The singular quantity of the attribute estimate, for attribute
+      // estimates represented as single values; also used to report unit of
+      // measure
+      Quantity quantity = 7;
+
+      // Level of confidence interval, e.g., 0.95 for 95% confidence interval
+      Decimal level = 8;
+
+      // Lower and upper bound values of the attribute estimate
+      Range range = 9;
+
+      // A nested attribute estimate; which is the attribute estimate of an
+      // attribute estimate
+      repeated AttributeEstimate attribute_estimate = 10;
+    }
+    repeated AttributeEstimate attribute_estimate = 12;
+
+    // An aspect of the statistical model
+    message ModelCharacteristic {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Model specification
+      CodeableConcept code = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Numerical value to complete model specification
+      SimpleQuantity value = 5;
+
+      // A variable adjusted for in the adjusted analysis
+      message Variable {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Description of the variable
+        Reference variable_definition = 4 [
+          (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+          (.google.fhir.proto.valid_reference_type) = "Group",
+          (.google.fhir.proto.valid_reference_type) = "EvidenceVariable"
+        ];
+
+        // continuous | dichotomous | ordinal | polychotomous
+        message HandlingCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/variable-handling";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          EvidenceVariableHandlingCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        HandlingCode handling = 5;
+
+        // Description for grouping of ordinal or polychotomous variables
+        repeated CodeableConcept value_category = 6;
+
+        // Discrete value for grouping of ordinal or polychotomous variables
+        repeated Quantity value_quantity = 7;
+
+        // Range of values for grouping of ordinal or polychotomous variables
+        repeated Range value_range = 8;
+      }
+      repeated Variable variable = 6;
+
+      // An attribute of the statistic used as a model characteristic
+      repeated AttributeEstimate attribute_estimate = 7;
+    }
+    repeated ModelCharacteristic model_characteristic = 13;
+  }
+  repeated Statistic statistic = 47;
+
+  // Certainty or quality of the evidence
+  message Certainty {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Textual description of certainty
+    Markdown description = 4;
+
+    // Footnotes and/or explanatory notes
+    repeated Annotation note = 5;
+
+    // Aspect of certainty being rated
+    CodeableConcept type = 6;
+
+    // Assessment or judgement of the aspect
+    CodeableConcept rating = 7;
+
+    // Individual or group who did the rating
+    String rater = 8;
+
+    // A domain or subdomain of certainty
+    repeated Certainty subcomponent = 9;
+  }
+  repeated Certainty certainty = 48;
+}

@@ -1,0 +1,51 @@
+# proto-file: proto/google/fhir/proto/r5/primitive_test_suite.proto
+# proto-message: PrimitiveTestSuite
+valid_pairs {
+  json_string: "\"1970-01-01T12:00:00.123Z\""
+  proto {
+    instant {
+      value_us: 43200123000
+      timezone: "Z"
+      precision: MILLISECOND
+    }
+  }
+}
+valid_pairs {
+  json_string: "\"1970-01-01T12:00:00+10:00\""
+  proto {
+    instant {
+      value_us: 7200000000
+      timezone: "+10:00"
+      precision: SECOND
+    }
+  }
+}
+
+# Missing timezone
+invalid_json: "\"1970-01-01T12:00:00.123\""
+invalid_json: "\"2014-10-09T14:58:00\""
+
+# Invalid formats for Instant - too low precision
+invalid_json: "\"3000\""
+invalid_json: "\"1800-02\""
+invalid_json: "\"1970-01-01\""
+
+# wrong datatypes
+invalid_json: "true"
+invalid_json: "1"
+invalid_json: "1.0"
+
+invalid_protos {
+  # No Timezone
+  instant {
+    value_us: 1552977350000
+    precision: SECOND
+  }
+}
+invalid_protos {
+  # No Precision
+  instant {
+    value_us: 1552977350000
+    timezone: "Australia/Sydney"
+  }
+}

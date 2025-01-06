@@ -1,0 +1,319 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/audit_event_go_proto";
+
+// Auto-generated from StructureDefinition for AuditEvent.
+// Record of an event.
+// See http://hl7.org/fhir/StructureDefinition/AuditEvent
+message AuditEvent {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/AuditEvent";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // AuditEvent.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Type/identifier of event
+  repeated CodeableConcept category = 21;
+
+  // Specific type of event
+  CodeableConcept code = 22
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Type of action performed during the event
+  message ActionCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/audit-event-action";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AuditEventActionCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  ActionCode action = 12;
+
+  // emergency | alert | critical | error | warning | notice | informational |
+  // debug
+  message SeverityCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/audit-event-severity";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AuditEventSeverityCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  SeverityCode severity = 23;
+
+  // When the activity occurred
+  message OccurredX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Period period = 1;
+      DateTime date_time = 2;
+    }
+  }
+  OccurredX occurred = 24;
+
+  // Time when the event was recorded
+  Instant recorded = 14
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Whether the event succeeded or failed
+  message Outcome {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Whether the event succeeded or failed
+    Coding code = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Additional outcome detail
+    repeated CodeableConcept detail = 5;
+  }
+  Outcome outcome = 25;
+
+  // Authorization related to the event
+  repeated CodeableConcept authorization = 26;
+
+  // Workflow authorization within which this event occurred
+  repeated Reference based_on = 27 [
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "DeviceRequest",
+    (.google.fhir.proto.valid_reference_type) = "ImmunizationRecommendation",
+    (.google.fhir.proto.valid_reference_type) = "MedicationRequest",
+    (.google.fhir.proto.valid_reference_type) = "NutritionOrder",
+    (.google.fhir.proto.valid_reference_type) = "ServiceRequest",
+    (.google.fhir.proto.valid_reference_type) = "Task"
+  ];
+
+  // The patient is the subject of the data used/created/updated/deleted during
+  // the activity
+  Reference patient = 28
+      [(.google.fhir.proto.valid_reference_type) = "Patient"];
+
+  // Encounter within which this event occurred or which the event is tightly
+  // associated
+  Reference encounter = 29
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // Actor involved in the event
+  message Agent {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // How agent participated
+    CodeableConcept type = 4;
+
+    // Agent role in the event
+    repeated CodeableConcept role = 5;
+
+    // Identifier of who
+    Reference who = 6 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "CareTeam",
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Device",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+    ];
+
+    // Whether user is initiator
+    Boolean requestor = 9;
+
+    // The agent location when the event occurred
+    Reference location = 10
+        [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+    // Policy that authorized the agent participation in the event
+    repeated Uri policy = 11;
+
+    // This agent network location for the activity
+    message NetworkX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Reference reference = 1
+            [(.google.fhir.proto.valid_reference_type) = "Endpoint"];
+        Uri uri = 2;
+        String string_value = 3 [json_name = "string"];
+      }
+    }
+    NetworkX network = 15;
+
+    // Allowable authorization for this agent
+    repeated CodeableConcept authorization = 16;
+  }
+  repeated Agent agent = 18
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Audit Event Reporter
+  message Source {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Logical source location within the enterprise
+    Reference site = 7 [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+    // The identity of source detecting the event
+    Reference observer = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "CareTeam",
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Device",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+    ];
+
+    // The type of source where event originated
+    repeated CodeableConcept type = 8;
+  }
+  Source source = 19
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Data or objects used
+  message Entity {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Specific instance of resource
+    Reference what = 4 [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+    // What role the entity played
+    CodeableConcept role = 13;
+
+    // Security labels on the entity
+    repeated CodeableConcept security_label = 14;
+
+    // Query parameters
+    Base64Binary query = 11;
+
+    // Additional Information about the entity
+    message Detail {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Name of the property
+      CodeableConcept type = 6
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Property value
+      message ValueX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          Quantity quantity = 3;
+          CodeableConcept codeable_concept = 4;
+          String string_value = 1 [json_name = "string"];
+          Boolean boolean = 5;
+          Integer integer = 6;
+          Range range = 7;
+          Ratio ratio = 8;
+          Time time = 9;
+          DateTime date_time = 10;
+          Period period = 11;
+          Base64Binary base64_binary = 2;
+        }
+      }
+      ValueX value = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated Detail detail = 12;
+
+    // Entity is attributed to this agent
+    repeated Agent agent = 15;
+  }
+  repeated Entity entity = 20;
+}

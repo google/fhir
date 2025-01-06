@@ -1,0 +1,21 @@
+# proto-file: proto/google/fhir/proto/r5/primitive_test_suite.proto
+# proto-message: PrimitiveTestSuite
+valid_pairs {
+  json_string: "\"text\""
+  proto { string_proto { value: "text" } }
+}
+valid_pairs {
+  json_string: "\"foo\\tbar\\rbaz\\nquux\""
+  proto { string_proto { value: "foo\tbar\rbaz\nquux" } }
+}
+valid_pairs {
+  json_string: "\"André 3000\""
+  proto { string_proto { value: "Andr\303\251 3000" } }
+}
+
+invalid_json: "true"
+invalid_json: "1"
+invalid_json: "1.0"
+invalid_json: "\"\""
+
+invalid_protos { string_proto { value: "" } }

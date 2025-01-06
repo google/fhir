@@ -1,0 +1,17 @@
+# proto-file: proto/google/fhir/proto/r5/primitive_test_suite.proto
+# proto-message: PrimitiveTestSuite
+valid_pairs {
+  json_string: "\"I've got a lovely bunch of coconuts\""
+  proto {
+    markdown {
+      value: "I've got a lovely bunch of coconuts"
+    }
+  }
+}
+
+invalid_json: "true"
+invalid_json: "1"
+invalid_json: "1.0"
+
+# TODO(b/178605278): Add additional string character validation beyond regex
+no_invalid_protos_reason: "Markdown regex is overly permissive"

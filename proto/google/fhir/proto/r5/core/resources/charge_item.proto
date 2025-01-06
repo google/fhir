@@ -1,0 +1,211 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/charge_item_go_proto";
+
+// Auto-generated from StructureDefinition for ChargeItem.
+// Item containing charge code(s) associated with the provision of healthcare
+// provider products. See http://hl7.org/fhir/StructureDefinition/ChargeItem
+message ChargeItem {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ChargeItem";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // ChargeItem.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business Identifier for item
+  repeated Identifier identifier = 10;
+
+  // Defining information about the code of this charge item
+  repeated Uri definition_uri = 11;
+
+  // Resource defining the code of this ChargeItem
+  repeated Canonical definition_canonical = 12;
+
+  // planned | billable | not-billable | aborted | billed | entered-in-error |
+  // unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/chargeitem-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ChargeItemStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 13
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Part of referenced ChargeItem
+  repeated Reference part_of = 14
+      [(.google.fhir.proto.valid_reference_type) = "ChargeItem"];
+
+  // A code that identifies the charge, like a billing code
+  CodeableConcept code = 15
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Individual service was done for/to
+  Reference subject = 16 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // Encounter associated with this ChargeItem
+  Reference encounter = 36
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // When the charged service was applied
+  message OccurrenceX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      DateTime date_time = 1;
+      Period period = 2;
+      Timing timing = 3;
+    }
+  }
+  OccurrenceX occurrence = 18;
+
+  // Who performed charged service
+  message Performer {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // What type of performance was done
+    CodeableConcept function = 4;
+
+    // Individual who was performing
+    Reference actor = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+      (.google.fhir.proto.valid_reference_type) = "CareTeam",
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Device",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+    ];
+  }
+  repeated Performer performer = 19;
+
+  // Organization providing the charged service
+  Reference performing_organization = 20
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Organization requesting the charged service
+  Reference requesting_organization = 21
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Organization that has ownership of the (potential, future) revenue
+  Reference cost_center = 22
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Quantity of which the charge item has been serviced
+  Quantity quantity = 23;
+
+  // Anatomical location, if relevant
+  repeated CodeableConcept bodysite = 24;
+
+  // Unit price overriding the associated rules
+  MonetaryComponent unit_price_component = 37;
+
+  // Total price overriding the associated rules
+  MonetaryComponent total_price_component = 38;
+
+  // Reason for overriding the list price/factor
+  CodeableConcept override_reason = 39;
+
+  // Individual who was entering
+  Reference enterer = 28 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization",
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+  ];
+
+  // Date the charge item was entered
+  DateTime entered_date = 29;
+
+  // Why was the charged  service rendered?
+  repeated CodeableConcept reason = 30;
+
+  // Which rendered service is being charged?
+  repeated CodeableReference service = 40;
+
+  // Product charged
+  repeated CodeableReference product = 41;
+
+  // Account to place this charge
+  repeated Reference account = 33
+      [(.google.fhir.proto.valid_reference_type) = "Account"];
+
+  // Comments made about the ChargeItem
+  repeated Annotation note = 34;
+
+  // Further information supporting this charge
+  repeated Reference supporting_information = 35
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+}

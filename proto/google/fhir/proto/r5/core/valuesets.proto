@@ -1,0 +1,2808 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "proto/google/fhir/proto/annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/valuesets_go_proto";
+
+// Codes identifying the lifecycle stage of an adverse event.
+// See http://hl7.org/fhir/ValueSet/adverse-event-status
+message AdverseEventStatusValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/adverse-event-status";
+
+    INVALID_UNINITIALIZED = 0;
+    IN_PROGRESS = 1 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/event-status"];
+    COMPLETED = 2 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/event-status"];
+    ENTERED_IN_ERROR = 3 [(.google.fhir.proto.source_code_system) =
+                              "http://hl7.org/fhir/event-status"];
+    UNKNOWN = 4 [(.google.fhir.proto.source_code_system) =
+                     "http://hl7.org/fhir/event-status"];
+  }
+}
+
+// The Participation status for a participant in response to a request for an
+// appointment. See http://hl7.org/fhir/ValueSet/appointmentresponse-status
+message AppointmentResponseStatusValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/appointmentresponse-status";
+
+    INVALID_UNINITIALIZED = 0;
+    ACCEPTED = 1 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/participationstatus"];
+    DECLINED = 2 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/participationstatus"];
+    TENTATIVE = 3 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/participationstatus"];
+    NEEDS_ACTION = 4 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/participationstatus"];
+    ENTERED_IN_ERROR = 5 [(.google.fhir.proto.source_code_system) =
+                              "http://hl7.org/fhir/appointmentstatus"];
+  }
+}
+
+// UCUM units for recording body length measures such as height and head
+// circumference See http://hl7.org/fhir/ValueSet/ucum-bodylength
+message BodyLengthUnitsValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/ucum-bodylength";
+
+    INVALID_UNINITIALIZED = 0;
+    CM = 1
+        [(.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"];
+    IN_I = 2 [
+      (.google.fhir.proto.fhir_original_code) = "[in_i]",
+      (.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"
+    ];
+  }
+}
+
+// UCUM units for recording Body Temperature
+// See http://hl7.org/fhir/ValueSet/ucum-bodytemp
+message BodyTemperatureUnitsValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/ucum-bodytemp";
+
+    INVALID_UNINITIALIZED = 0;
+    CEL = 1 [
+      (.google.fhir.proto.fhir_original_code) = "Cel",
+      (.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"
+    ];
+    DEG_F = 2 [
+      (.google.fhir.proto.fhir_original_code) = "[degF]",
+      (.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"
+    ];
+  }
+}
+
+// UCUM units for recording Body Weight
+// See http://hl7.org/fhir/ValueSet/ucum-bodyweight
+message BodyWeightUnitsValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/ucum-bodyweight";
+
+    INVALID_UNINITIALIZED = 0;
+    KG = 1
+        [(.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"];
+    LB_AV = 2 [
+      (.google.fhir.proto.fhir_original_code) = "[lb_av]",
+      (.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"
+    ];
+    G = 3
+        [(.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"];
+  }
+}
+
+// Codes indicating the degree of authority/intentionality associated with a
+// care plan. See http://hl7.org/fhir/ValueSet/care-plan-intent
+message CarePlanIntentValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/care-plan-intent";
+
+    INVALID_UNINITIALIZED = 0;
+    PROPOSAL = 1 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/request-intent"];
+    PLAN = 2 [(.google.fhir.proto.source_code_system) =
+                  "http://hl7.org/fhir/request-intent"];
+    ORDER = 3 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/request-intent"];
+    OPTION = 4 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/request-intent"];
+    DIRECTIVE = 5 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/request-intent"];
+  }
+}
+
+// This value set includes color codes - either the color names as defined in
+// [CSS4](https://www.w3.org/TR/css-color-4/), or any valid RGB code
+// (```#RRGGBB``` in Hex). See http://hl7.org/fhir/ValueSet/color-codes
+message ColorCodesOrRGBValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/color-codes";
+
+    INVALID_UNINITIALIZED = 0;
+    ALICEBLUE = 1 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/color-names"];
+    ANTIQUEWHITE = 2 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/color-names"];
+    AQUA = 3 [(.google.fhir.proto.source_code_system) =
+                  "http://hl7.org/fhir/color-names"];
+    AQUAMARINE = 4 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    AZURE = 5 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/color-names"];
+    BEIGE = 6 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/color-names"];
+    BISQUE = 7 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/color-names"];
+    BLACK = 8 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/color-names"];
+    BLANCHEDALMOND = 9 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/color-names"];
+    BLUE = 10 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/color-names"];
+    BLUEVIOLET = 11 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    BROWN = 12 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/color-names"];
+    BURLYWOOD = 13 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    CADETBLUE = 14 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    CHARTREUSE = 15 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    CHOCOLATE = 16 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    CORAL = 17 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/color-names"];
+    CORNFLOWERBLUE = 18 [(.google.fhir.proto.source_code_system) =
+                             "http://hl7.org/fhir/color-names"];
+    CORNSILK = 19 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/color-names"];
+    CRIMSON = 20 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/color-names"];
+    CYAN = 21 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/color-names"];
+    DARKBLUE = 22 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/color-names"];
+    DARKCYAN = 23 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/color-names"];
+    DARKGOLDENROD = 24 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/color-names"];
+    DARKGRAY = 25 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/color-names"];
+    DARKGREEN = 26 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    DARKGREY = 27 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/color-names"];
+    DARKKHAKI = 28 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    DARKMAGENTA = 29 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/color-names"];
+    DARKOLIVEGREEN = 30 [(.google.fhir.proto.source_code_system) =
+                             "http://hl7.org/fhir/color-names"];
+    DARKORANGE = 31 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    DARKORCHID = 32 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    DARKRED = 33 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/color-names"];
+    DARKSALMON = 34 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    DARKSEAGREEN = 35 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/color-names"];
+    DARKSLATEBLUE = 36 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/color-names"];
+    DARKSLATEGRAY = 37 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/color-names"];
+    DARKSLATEGREY = 38 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/color-names"];
+    DARKTURQUOISE = 39 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/color-names"];
+    DARKVIOLET = 40 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    DEEPPINK = 41 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/color-names"];
+    DEEPSKYBLUE = 42 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/color-names"];
+    DIMGRAY = 43 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/color-names"];
+    DIMGREY = 44 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/color-names"];
+    DODGERBLUE = 45 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    FIREBRICK = 46 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    FLORALWHITE = 47 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/color-names"];
+    FORESTGREEN = 48 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/color-names"];
+    FUCHSIA = 49 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/color-names"];
+    GAINSBORO = 50 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    GHOSTWHITE = 51 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    GOLD = 52 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/color-names"];
+    GOLDENROD = 53 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    GRAY = 54 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/color-names"];
+    GREEN = 55 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/color-names"];
+    GREENYELLOW = 56 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/color-names"];
+    GREY = 57 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/color-names"];
+    HONEYDEW = 58 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/color-names"];
+    HOTPINK = 59 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/color-names"];
+    INDIANRED = 60 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    INDIGO = 61 [(.google.fhir.proto.source_code_system) =
+                     "http://hl7.org/fhir/color-names"];
+    IVORY = 62 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/color-names"];
+    KHAKI = 63 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/color-names"];
+    LAVENDER = 64 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/color-names"];
+    LAVENDERBLUSH = 65 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/color-names"];
+    LAWNGREEN = 66 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    LEMONCHIFFON = 67 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/color-names"];
+    LIGHTBLUE = 68 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    LIGHTCORAL = 69 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    LIGHTCYAN = 70 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    LIGHTGOLDENRODYELLOW = 71 [(.google.fhir.proto.source_code_system) =
+                                   "http://hl7.org/fhir/color-names"];
+    LIGHTGRAY = 72 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    LIGHTGREEN = 73 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    LIGHTGREY = 74 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    LIGHTPINK = 75 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    LIGHTSALMON = 76 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/color-names"];
+    LIGHTSEAGREEN = 77 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/color-names"];
+    LIGHTSKYBLUE = 78 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/color-names"];
+    LIGHTSLATEGRAY = 79 [(.google.fhir.proto.source_code_system) =
+                             "http://hl7.org/fhir/color-names"];
+    LIGHTSLATEGREY = 80 [(.google.fhir.proto.source_code_system) =
+                             "http://hl7.org/fhir/color-names"];
+    LIGHTSTEELBLUE = 81 [(.google.fhir.proto.source_code_system) =
+                             "http://hl7.org/fhir/color-names"];
+    LIGHTYELLOW = 82 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/color-names"];
+    LIME = 83 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/color-names"];
+    LIMEGREEN = 84 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    LINEN = 85 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/color-names"];
+    MAGENTA = 86 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/color-names"];
+    MAROON = 87 [(.google.fhir.proto.source_code_system) =
+                     "http://hl7.org/fhir/color-names"];
+    MEDIUMAQUAMARINE = 88 [(.google.fhir.proto.source_code_system) =
+                               "http://hl7.org/fhir/color-names"];
+    MEDIUMBLUE = 89 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    MEDIUMORCHID = 90 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/color-names"];
+    MEDIUMPURPLE = 91 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/color-names"];
+    MEDIUMSEAGREEN = 92 [(.google.fhir.proto.source_code_system) =
+                             "http://hl7.org/fhir/color-names"];
+    MEDIUMSLATEBLUE = 93 [(.google.fhir.proto.source_code_system) =
+                              "http://hl7.org/fhir/color-names"];
+    MEDIUMSPRINGGREEN = 94 [(.google.fhir.proto.source_code_system) =
+                                "http://hl7.org/fhir/color-names"];
+    MEDIUMTURQUOISE = 95 [(.google.fhir.proto.source_code_system) =
+                              "http://hl7.org/fhir/color-names"];
+    MEDIUMVIOLETRED = 96 [(.google.fhir.proto.source_code_system) =
+                              "http://hl7.org/fhir/color-names"];
+    MIDNIGHTBLUE = 97 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/color-names"];
+    MINTCREAM = 98 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    MISTYROSE = 99 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    MOCCASIN = 100 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    NAVAJOWHITE = 101 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/color-names"];
+    NAVY = 102 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/color-names"];
+    OLDLACE = 103 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/color-names"];
+    OLIVE = 104 [(.google.fhir.proto.source_code_system) =
+                     "http://hl7.org/fhir/color-names"];
+    OLIVEDRAB = 105 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    ORANGE = 106 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/color-names"];
+    ORANGERED = 107 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    ORCHID = 108 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/color-names"];
+    PALEGOLDENROD = 109 [(.google.fhir.proto.source_code_system) =
+                             "http://hl7.org/fhir/color-names"];
+    PALEGREEN = 110 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    PALETURQUOISE = 111 [(.google.fhir.proto.source_code_system) =
+                             "http://hl7.org/fhir/color-names"];
+    PALEVIOLETRED = 112 [(.google.fhir.proto.source_code_system) =
+                             "http://hl7.org/fhir/color-names"];
+    PAPAYAWHIP = 113 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/color-names"];
+    PEACHPUFF = 114 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    PERU = 115 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/color-names"];
+    PINK = 116 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/color-names"];
+    PLUM = 117 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/color-names"];
+    POWDERBLUE = 118 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/color-names"];
+    PURPLE = 119 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/color-names"];
+    REBECCAPURPLE = 120 [(.google.fhir.proto.source_code_system) =
+                             "http://hl7.org/fhir/color-names"];
+    RED = 121 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/color-names"];
+    ROSYBROWN = 122 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    ROYALBLUE = 123 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    SADDLEBROWN = 124 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/color-names"];
+    SALMON = 125 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/color-names"];
+    SANDYBROWN = 126 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/color-names"];
+    SEAGREEN = 127 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    SEASHELL = 128 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/color-names"];
+    SIENNA = 129 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/color-names"];
+    SILVER = 130 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/color-names"];
+    SKYBLUE = 131 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/color-names"];
+    SLATEBLUE = 132 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    SLATEGRAY = 133 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    SLATEGREY = 134 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    SNOW = 135 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/color-names"];
+    SPRINGGREEN = 136 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/color-names"];
+    STEELBLUE = 137 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    TAN = 138 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/color-names"];
+    TEAL = 139 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/color-names"];
+    THISTLE = 140 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/color-names"];
+    TOMATO = 141 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/color-names"];
+    TURQUOISE = 142 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/color-names"];
+    VIOLET = 143 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/color-names"];
+    WHEAT = 144 [(.google.fhir.proto.source_code_system) =
+                     "http://hl7.org/fhir/color-names"];
+    WHITE = 145 [(.google.fhir.proto.source_code_system) =
+                     "http://hl7.org/fhir/color-names"];
+    WHITESMOKE = 146 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/color-names"];
+    YELLOW = 147 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/color-names"];
+    YELLOWGREEN = 148 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/color-names"];
+  }
+}
+
+// This value set includes common codes from BCP-47 (see
+// http://tools.ietf.org/html/bcp47) See http://hl7.org/fhir/ValueSet/languages
+message CommonLanguagesValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/languages";
+
+    INVALID_UNINITIALIZED = 0;
+    AR = 1 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    BG = 2 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    BG_BG = 3 [
+      (.google.fhir.proto.fhir_original_code) = "bg-BG",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    BN = 4 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    CS = 5 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    CS_CZ = 6 [
+      (.google.fhir.proto.fhir_original_code) = "cs-CZ",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    BS = 7 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    BS_BA = 8 [
+      (.google.fhir.proto.fhir_original_code) = "bs-BA",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    DA = 9 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    DA_DK = 10 [
+      (.google.fhir.proto.fhir_original_code) = "da-DK",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    DE = 11 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    DE_AT = 12 [
+      (.google.fhir.proto.fhir_original_code) = "de-AT",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    DE_CH = 13 [
+      (.google.fhir.proto.fhir_original_code) = "de-CH",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    DE_DE = 14 [
+      (.google.fhir.proto.fhir_original_code) = "de-DE",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    EL = 15 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    EL_GR = 16 [
+      (.google.fhir.proto.fhir_original_code) = "el-GR",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    EN = 17 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    EN_AU = 18 [
+      (.google.fhir.proto.fhir_original_code) = "en-AU",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    EN_CA = 19 [
+      (.google.fhir.proto.fhir_original_code) = "en-CA",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    EN_GB = 20 [
+      (.google.fhir.proto.fhir_original_code) = "en-GB",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    EN_IN = 21 [
+      (.google.fhir.proto.fhir_original_code) = "en-IN",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    EN_NZ = 22 [
+      (.google.fhir.proto.fhir_original_code) = "en-NZ",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    EN_SG = 23 [
+      (.google.fhir.proto.fhir_original_code) = "en-SG",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    EN_US = 24 [
+      (.google.fhir.proto.fhir_original_code) = "en-US",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    ES = 25 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    ES_AR = 26 [
+      (.google.fhir.proto.fhir_original_code) = "es-AR",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    ES_ES = 27 [
+      (.google.fhir.proto.fhir_original_code) = "es-ES",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    ES_UY = 28 [
+      (.google.fhir.proto.fhir_original_code) = "es-UY",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    ET = 29 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    ET_EE = 30 [
+      (.google.fhir.proto.fhir_original_code) = "et-EE",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    FI = 31 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    FR = 32 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    FR_BE = 33 [
+      (.google.fhir.proto.fhir_original_code) = "fr-BE",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    FR_CH = 34 [
+      (.google.fhir.proto.fhir_original_code) = "fr-CH",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    FR_FR = 35 [
+      (.google.fhir.proto.fhir_original_code) = "fr-FR",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    FI_FI = 36 [
+      (.google.fhir.proto.fhir_original_code) = "fi-FI",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    FR_CA = 37 [
+      (.google.fhir.proto.fhir_original_code) = "fr-CA",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    FY = 38 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    FY_NL = 39 [
+      (.google.fhir.proto.fhir_original_code) = "fy-NL",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    HI = 40 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    HR = 41 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    HR_HR = 42 [
+      (.google.fhir.proto.fhir_original_code) = "hr-HR",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    IS = 43 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    IS_IS = 44 [
+      (.google.fhir.proto.fhir_original_code) = "is-IS",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    IT = 45 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    IT_CH = 46 [
+      (.google.fhir.proto.fhir_original_code) = "it-CH",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    IT_IT = 47 [
+      (.google.fhir.proto.fhir_original_code) = "it-IT",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    JA = 48 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    KO = 49 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    LT = 50 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    LT_LT = 51 [
+      (.google.fhir.proto.fhir_original_code) = "lt-LT",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    LV = 52 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    LV_LV = 53 [
+      (.google.fhir.proto.fhir_original_code) = "lv-LV",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    NL = 54 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    NL_BE = 55 [
+      (.google.fhir.proto.fhir_original_code) = "nl-BE",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    NL_NL = 56 [
+      (.google.fhir.proto.fhir_original_code) = "nl-NL",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    NO = 57 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    NO_NO = 58 [
+      (.google.fhir.proto.fhir_original_code) = "no-NO",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    PA = 59 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    PL = 60 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    PL_PL = 61 [
+      (.google.fhir.proto.fhir_original_code) = "pl-PL",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    PT = 62 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    PT_PT = 63 [
+      (.google.fhir.proto.fhir_original_code) = "pt-PT",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    PT_BR = 64 [
+      (.google.fhir.proto.fhir_original_code) = "pt-BR",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    RO = 65 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    RO_RO = 66 [
+      (.google.fhir.proto.fhir_original_code) = "ro-RO",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    RU = 67 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    RU_RU = 68 [
+      (.google.fhir.proto.fhir_original_code) = "ru-RU",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    SK = 69 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    SK_SK = 70 [
+      (.google.fhir.proto.fhir_original_code) = "sk-SK",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    SL = 71 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    SL_SI = 72 [
+      (.google.fhir.proto.fhir_original_code) = "sl-SI",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    SR = 73 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    SR_RS = 74 [
+      (.google.fhir.proto.fhir_original_code) = "sr-RS",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    SV = 75 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    SV_SE = 76 [
+      (.google.fhir.proto.fhir_original_code) = "sv-SE",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    TE = 77 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    ZH = 78 [(.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"];
+    ZH_CN = 79 [
+      (.google.fhir.proto.fhir_original_code) = "zh-CN",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    ZH_HK = 80 [
+      (.google.fhir.proto.fhir_original_code) = "zh-HK",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    ZH_SG = 81 [
+      (.google.fhir.proto.fhir_original_code) = "zh-SG",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+    ZH_TW = 82 [
+      (.google.fhir.proto.fhir_original_code) = "zh-TW",
+      (.google.fhir.proto.source_code_system) = "urn:ietf:bcp:47"
+    ];
+  }
+}
+
+// Indicates the status of a detected issue
+// See http://hl7.org/fhir/ValueSet/detectedissue-status
+message DetectedIssueStatusValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/detectedissue-status";
+
+    INVALID_UNINITIALIZED = 0;
+    PRELIMINARY = 1 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/observation-status"];
+    FINAL = 2 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/observation-status"];
+    ENTERED_IN_ERROR = 3 [(.google.fhir.proto.source_code_system) =
+                              "http://hl7.org/fhir/observation-status"];
+    MITIGATED = 4 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/detectedissue-status"];
+  }
+}
+
+// Real-world event relating to the schedule.
+// See http://hl7.org/fhir/ValueSet/event-timing
+message EventTimingValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/event-timing";
+
+    INVALID_UNINITIALIZED = 0;
+    MORN = 1 [
+      (.google.fhir.proto.fhir_original_code) = "MORN",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/event-timing"
+    ];
+    MORN_EARLY = 2 [
+      (.google.fhir.proto.fhir_original_code) = "MORN.early",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/event-timing"
+    ];
+    MORN_LATE = 3 [
+      (.google.fhir.proto.fhir_original_code) = "MORN.late",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/event-timing"
+    ];
+    NOON = 4 [
+      (.google.fhir.proto.fhir_original_code) = "NOON",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/event-timing"
+    ];
+    AFT = 5 [
+      (.google.fhir.proto.fhir_original_code) = "AFT",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/event-timing"
+    ];
+    AFT_EARLY = 6 [
+      (.google.fhir.proto.fhir_original_code) = "AFT.early",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/event-timing"
+    ];
+    AFT_LATE = 7 [
+      (.google.fhir.proto.fhir_original_code) = "AFT.late",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/event-timing"
+    ];
+    EVE = 8 [
+      (.google.fhir.proto.fhir_original_code) = "EVE",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/event-timing"
+    ];
+    EVE_EARLY = 9 [
+      (.google.fhir.proto.fhir_original_code) = "EVE.early",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/event-timing"
+    ];
+    EVE_LATE = 10 [
+      (.google.fhir.proto.fhir_original_code) = "EVE.late",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/event-timing"
+    ];
+    NIGHT = 11 [
+      (.google.fhir.proto.fhir_original_code) = "NIGHT",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/event-timing"
+    ];
+    PHS = 12 [
+      (.google.fhir.proto.fhir_original_code) = "PHS",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/event-timing"
+    ];
+    IMD = 27 [
+      (.google.fhir.proto.fhir_original_code) = "IMD",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/event-timing"
+    ];
+    HS = 13 [
+      (.google.fhir.proto.fhir_original_code) = "HS",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-TimingEvent"
+    ];
+    WAKE = 14 [
+      (.google.fhir.proto.fhir_original_code) = "WAKE",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-TimingEvent"
+    ];
+    C = 15 [
+      (.google.fhir.proto.fhir_original_code) = "C",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-TimingEvent"
+    ];
+    CM = 16 [
+      (.google.fhir.proto.fhir_original_code) = "CM",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-TimingEvent"
+    ];
+    CD = 17 [
+      (.google.fhir.proto.fhir_original_code) = "CD",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-TimingEvent"
+    ];
+    CV = 18 [
+      (.google.fhir.proto.fhir_original_code) = "CV",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-TimingEvent"
+    ];
+    AC = 19 [
+      (.google.fhir.proto.fhir_original_code) = "AC",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-TimingEvent"
+    ];
+    ACM = 20 [
+      (.google.fhir.proto.fhir_original_code) = "ACM",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-TimingEvent"
+    ];
+    ACD = 21 [
+      (.google.fhir.proto.fhir_original_code) = "ACD",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-TimingEvent"
+    ];
+    ACV = 22 [
+      (.google.fhir.proto.fhir_original_code) = "ACV",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-TimingEvent"
+    ];
+    PC = 23 [
+      (.google.fhir.proto.fhir_original_code) = "PC",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-TimingEvent"
+    ];
+    PCM = 24 [
+      (.google.fhir.proto.fhir_original_code) = "PCM",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-TimingEvent"
+    ];
+    PCD = 25 [
+      (.google.fhir.proto.fhir_original_code) = "PCD",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-TimingEvent"
+    ];
+    PCV = 26 [
+      (.google.fhir.proto.fhir_original_code) = "PCV",
+      (.google.fhir.proto.source_code_system) =
+          "http://terminology.hl7.org/CodeSystem/v3-TimingEvent"
+    ];
+  }
+}
+
+// The value set to instantiate this attribute should be drawn from a
+// terminologically robust code system that consists of or contains concepts to
+// support describing the current status of the evaluation for vaccine
+// administration event. See
+// http://hl7.org/fhir/ValueSet/immunization-evaluation-status
+message ImmunizationEvaluationStatusCodesValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/immunization-evaluation-status";
+
+    INVALID_UNINITIALIZED = 0;
+    COMPLETED = 1
+        [(.google.fhir.proto.source_code_system) =
+             "http://hl7.org/fhir/CodeSystem/medication-admin-status"];
+    ENTERED_IN_ERROR = 2
+        [(.google.fhir.proto.source_code_system) =
+             "http://hl7.org/fhir/CodeSystem/medication-admin-status"];
+  }
+}
+
+// The value set to instantiate this attribute should be drawn from a
+// terminologically robust code system that consists of or contains concepts to
+// support describing the current status of the administered dose of vaccine.
+// See http://hl7.org/fhir/ValueSet/immunization-status
+message ImmunizationStatusCodesValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/immunization-status";
+
+    INVALID_UNINITIALIZED = 0;
+    COMPLETED = 1 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/event-status"];
+    ENTERED_IN_ERROR = 2 [(.google.fhir.proto.source_code_system) =
+                              "http://hl7.org/fhir/event-status"];
+    NOT_DONE = 3 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/event-status"];
+  }
+}
+
+// FHIR RESTful interaction codes used for SubscriptionTopic trigger.
+// See http://hl7.org/fhir/ValueSet/interaction-trigger
+message InteractionTriggerValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/interaction-trigger";
+
+    INVALID_UNINITIALIZED = 0;
+    CREATE = 1 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/restful-interaction"];
+    UPDATE = 2 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/restful-interaction"];
+    DELETE = 3 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/restful-interaction"];
+  }
+}
+
+// LDL Cholesterol codes - measured or calculated
+// See http://hl7.org/fhir/ValueSet/lipid-ldl-codes
+message LDLCodesValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/lipid-ldl-codes";
+
+    INVALID_UNINITIALIZED = 0;
+    LDL_CHOLESTEROL_ASSAY = 1 [
+      (.google.fhir.proto.fhir_original_code) = "18262-6",
+      (.google.fhir.proto.source_code_system) = "http://loinc.org"
+    ];
+    CHOLESTEROL_IN_LDL_MASS_VOLUME_IN_SERUM_OR_PLASMA_BY_CALCULATION = 2 [
+      (.google.fhir.proto.fhir_original_code) = "13457-7",
+      (.google.fhir.proto.source_code_system) = "http://loinc.org"
+    ];
+  }
+}
+
+// The type of relationship to the cited artifact.
+// See http://hl7.org/fhir/ValueSet/related-artifact-type-all
+message RelatedArtifactTypeExpandedValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/related-artifact-type-all";
+
+    INVALID_UNINITIALIZED = 0;
+    DOCUMENTATION = 1 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/related-artifact-type"];
+    JUSTIFICATION = 2 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/related-artifact-type"];
+    CITATION = 3 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/related-artifact-type"];
+    PREDECESSOR = 4 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/related-artifact-type"];
+    SUCCESSOR = 5 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/related-artifact-type"];
+    DERIVED_FROM = 6 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/related-artifact-type"];
+    DEPENDS_ON = 7 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/related-artifact-type"];
+    COMPOSED_OF = 8 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/related-artifact-type"];
+    PART_OF = 9 [(.google.fhir.proto.source_code_system) =
+                     "http://hl7.org/fhir/related-artifact-type"];
+    AMENDS = 10 [(.google.fhir.proto.source_code_system) =
+                     "http://hl7.org/fhir/related-artifact-type"];
+    AMENDED_WITH = 11 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/related-artifact-type"];
+    APPENDS = 12 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/related-artifact-type"];
+    APPENDED_WITH = 13 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/related-artifact-type"];
+    CITES = 14 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/related-artifact-type"];
+    CITED_BY = 15 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/related-artifact-type"];
+    COMMENTS_ON = 16 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/related-artifact-type"];
+    COMMENT_IN = 17 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/related-artifact-type"];
+    CONTAINS = 18 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/related-artifact-type"];
+    CONTAINED_IN = 19 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/related-artifact-type"];
+    CORRECTS = 20 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/related-artifact-type"];
+    CORRECTION_IN = 21 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/related-artifact-type"];
+    REPLACES = 22 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/related-artifact-type"];
+    REPLACED_WITH = 23 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/related-artifact-type"];
+    RETRACTS = 24 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/related-artifact-type"];
+    RETRACTED_BY = 25 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/related-artifact-type"];
+    SIGNS = 26 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/related-artifact-type"];
+    SIMILAR_TO = 27 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/related-artifact-type"];
+    SUPPORTS = 28 [(.google.fhir.proto.source_code_system) =
+                       "http://hl7.org/fhir/related-artifact-type"];
+    SUPPORTED_WITH = 29 [(.google.fhir.proto.source_code_system) =
+                             "http://hl7.org/fhir/related-artifact-type"];
+    TRANSFORMS = 30 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/related-artifact-type"];
+    TRANSFORMED_INTO = 31 [(.google.fhir.proto.source_code_system) =
+                               "http://hl7.org/fhir/related-artifact-type"];
+    TRANSFORMED_WITH = 32 [(.google.fhir.proto.source_code_system) =
+                               "http://hl7.org/fhir/related-artifact-type"];
+    DOCUMENTS = 33 [(.google.fhir.proto.source_code_system) =
+                        "http://hl7.org/fhir/related-artifact-type"];
+    SPECIFICATION_OF = 34 [(.google.fhir.proto.source_code_system) =
+                               "http://hl7.org/fhir/related-artifact-type"];
+    CREATED_WITH = 35 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/related-artifact-type"];
+    CITE_AS = 36 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/related-artifact-type"];
+    REPRINT = 37 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/related-artifact-type-expanded"];
+    REPRINT_OF = 38 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/related-artifact-type-expanded"];
+  }
+}
+
+// All Resource Types that represent request resources
+// See http://hl7.org/fhir/ValueSet/request-resource-types
+message RequestResourceTypesValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-resource-types";
+
+    INVALID_UNINITIALIZED = 0;
+    APPOINTMENT = 1 [
+      (.google.fhir.proto.fhir_original_code) = "Appointment",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    APPOINTMENT_RESPONSE = 2 [
+      (.google.fhir.proto.fhir_original_code) = "AppointmentResponse",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CARE_PLAN = 3 [
+      (.google.fhir.proto.fhir_original_code) = "CarePlan",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CLAIM = 4 [
+      (.google.fhir.proto.fhir_original_code) = "Claim",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    COMMUNICATION_REQUEST = 5 [
+      (.google.fhir.proto.fhir_original_code) = "CommunicationRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    COVERAGE_ELIGIBILITY_REQUEST = 16 [
+      (.google.fhir.proto.fhir_original_code) = "CoverageEligibilityRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DEVICE_REQUEST = 7 [
+      (.google.fhir.proto.fhir_original_code) = "DeviceRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ENROLLMENT_REQUEST = 8 [
+      (.google.fhir.proto.fhir_original_code) = "EnrollmentRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    IMMUNIZATION_RECOMMENDATION = 9 [
+      (.google.fhir.proto.fhir_original_code) = "ImmunizationRecommendation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEDICATION_REQUEST = 10 [
+      (.google.fhir.proto.fhir_original_code) = "MedicationRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    NUTRITION_ORDER = 11 [
+      (.google.fhir.proto.fhir_original_code) = "NutritionOrder",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    REQUEST_ORCHESTRATION = 17 [
+      (.google.fhir.proto.fhir_original_code) = "RequestOrchestration",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SERVICE_REQUEST = 12 [
+      (.google.fhir.proto.fhir_original_code) = "ServiceRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUPPLY_REQUEST = 13 [
+      (.google.fhir.proto.fhir_original_code) = "SupplyRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    TASK = 14 [
+      (.google.fhir.proto.fhir_original_code) = "Task",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    TRANSPORT = 18 [
+      (.google.fhir.proto.fhir_original_code) = "Transport",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    VISION_PRESCRIPTION = 15 [
+      (.google.fhir.proto.fhir_original_code) = "VisionPrescription",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+  }
+}
+
+// Concrete FHIR Resource Types
+// See http://hl7.org/fhir/ValueSet/resource-types
+message ResourceTypeValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/resource-types";
+
+    INVALID_UNINITIALIZED = 0;
+    ACCOUNT = 1 [
+      (.google.fhir.proto.fhir_original_code) = "Account",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ACTIVITY_DEFINITION = 2 [
+      (.google.fhir.proto.fhir_original_code) = "ActivityDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ACTOR_DEFINITION = 149 [
+      (.google.fhir.proto.fhir_original_code) = "ActorDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ADMINISTRABLE_PRODUCT_DEFINITION = 150 [
+      (.google.fhir.proto.fhir_original_code) =
+          "AdministrableProductDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ADVERSE_EVENT = 3 [
+      (.google.fhir.proto.fhir_original_code) = "AdverseEvent",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ALLERGY_INTOLERANCE = 4 [
+      (.google.fhir.proto.fhir_original_code) = "AllergyIntolerance",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    APPOINTMENT = 5 [
+      (.google.fhir.proto.fhir_original_code) = "Appointment",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    APPOINTMENT_RESPONSE = 6 [
+      (.google.fhir.proto.fhir_original_code) = "AppointmentResponse",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ARTIFACT_ASSESSMENT = 151 [
+      (.google.fhir.proto.fhir_original_code) = "ArtifactAssessment",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    AUDIT_EVENT = 7 [
+      (.google.fhir.proto.fhir_original_code) = "AuditEvent",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    BASIC = 8 [
+      (.google.fhir.proto.fhir_original_code) = "Basic",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    BINARY = 9 [
+      (.google.fhir.proto.fhir_original_code) = "Binary",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    BIOLOGICALLY_DERIVED_PRODUCT = 10 [
+      (.google.fhir.proto.fhir_original_code) = "BiologicallyDerivedProduct",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    BIOLOGICALLY_DERIVED_PRODUCT_DISPENSE = 152 [
+      (.google.fhir.proto.fhir_original_code) =
+          "BiologicallyDerivedProductDispense",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    BODY_STRUCTURE = 11 [
+      (.google.fhir.proto.fhir_original_code) = "BodyStructure",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    BUNDLE = 12 [
+      (.google.fhir.proto.fhir_original_code) = "Bundle",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CAPABILITY_STATEMENT = 13 [
+      (.google.fhir.proto.fhir_original_code) = "CapabilityStatement",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CARE_PLAN = 14 [
+      (.google.fhir.proto.fhir_original_code) = "CarePlan",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CARE_TEAM = 15 [
+      (.google.fhir.proto.fhir_original_code) = "CareTeam",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CHARGE_ITEM = 17 [
+      (.google.fhir.proto.fhir_original_code) = "ChargeItem",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CHARGE_ITEM_DEFINITION = 18 [
+      (.google.fhir.proto.fhir_original_code) = "ChargeItemDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CITATION = 153 [
+      (.google.fhir.proto.fhir_original_code) = "Citation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CLAIM = 19 [
+      (.google.fhir.proto.fhir_original_code) = "Claim",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CLAIM_RESPONSE = 20 [
+      (.google.fhir.proto.fhir_original_code) = "ClaimResponse",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CLINICAL_IMPRESSION = 21 [
+      (.google.fhir.proto.fhir_original_code) = "ClinicalImpression",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CLINICAL_USE_DEFINITION = 154 [
+      (.google.fhir.proto.fhir_original_code) = "ClinicalUseDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CODE_SYSTEM = 22 [
+      (.google.fhir.proto.fhir_original_code) = "CodeSystem",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    COMMUNICATION = 23 [
+      (.google.fhir.proto.fhir_original_code) = "Communication",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    COMMUNICATION_REQUEST = 24 [
+      (.google.fhir.proto.fhir_original_code) = "CommunicationRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    COMPARTMENT_DEFINITION = 25 [
+      (.google.fhir.proto.fhir_original_code) = "CompartmentDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    COMPOSITION = 26 [
+      (.google.fhir.proto.fhir_original_code) = "Composition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CONCEPT_MAP = 27 [
+      (.google.fhir.proto.fhir_original_code) = "ConceptMap",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CONDITION = 28 [
+      (.google.fhir.proto.fhir_original_code) = "Condition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CONDITION_DEFINITION = 155 [
+      (.google.fhir.proto.fhir_original_code) = "ConditionDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CONSENT = 29 [
+      (.google.fhir.proto.fhir_original_code) = "Consent",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CONTRACT = 30 [
+      (.google.fhir.proto.fhir_original_code) = "Contract",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    COVERAGE = 31 [
+      (.google.fhir.proto.fhir_original_code) = "Coverage",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    COVERAGE_ELIGIBILITY_REQUEST = 32 [
+      (.google.fhir.proto.fhir_original_code) = "CoverageEligibilityRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    COVERAGE_ELIGIBILITY_RESPONSE = 33 [
+      (.google.fhir.proto.fhir_original_code) = "CoverageEligibilityResponse",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DETECTED_ISSUE = 34 [
+      (.google.fhir.proto.fhir_original_code) = "DetectedIssue",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DEVICE = 35 [
+      (.google.fhir.proto.fhir_original_code) = "Device",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DEVICE_ASSOCIATION = 156 [
+      (.google.fhir.proto.fhir_original_code) = "DeviceAssociation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DEVICE_DEFINITION = 36 [
+      (.google.fhir.proto.fhir_original_code) = "DeviceDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DEVICE_DISPENSE = 157 [
+      (.google.fhir.proto.fhir_original_code) = "DeviceDispense",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DEVICE_METRIC = 37 [
+      (.google.fhir.proto.fhir_original_code) = "DeviceMetric",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DEVICE_REQUEST = 38 [
+      (.google.fhir.proto.fhir_original_code) = "DeviceRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DEVICE_USAGE = 158 [
+      (.google.fhir.proto.fhir_original_code) = "DeviceUsage",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DIAGNOSTIC_REPORT = 40 [
+      (.google.fhir.proto.fhir_original_code) = "DiagnosticReport",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DOCUMENT_REFERENCE = 42 [
+      (.google.fhir.proto.fhir_original_code) = "DocumentReference",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ENCOUNTER = 45 [
+      (.google.fhir.proto.fhir_original_code) = "Encounter",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ENCOUNTER_HISTORY = 159 [
+      (.google.fhir.proto.fhir_original_code) = "EncounterHistory",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ENDPOINT = 46 [
+      (.google.fhir.proto.fhir_original_code) = "Endpoint",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ENROLLMENT_REQUEST = 47 [
+      (.google.fhir.proto.fhir_original_code) = "EnrollmentRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ENROLLMENT_RESPONSE = 48 [
+      (.google.fhir.proto.fhir_original_code) = "EnrollmentResponse",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    EPISODE_OF_CARE = 49 [
+      (.google.fhir.proto.fhir_original_code) = "EpisodeOfCare",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    EVENT_DEFINITION = 50 [
+      (.google.fhir.proto.fhir_original_code) = "EventDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    EVIDENCE = 51 [
+      (.google.fhir.proto.fhir_original_code) = "Evidence",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    EVIDENCE_REPORT = 160 [
+      (.google.fhir.proto.fhir_original_code) = "EvidenceReport",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    EVIDENCE_VARIABLE = 52 [
+      (.google.fhir.proto.fhir_original_code) = "EvidenceVariable",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    EXAMPLE_SCENARIO = 53 [
+      (.google.fhir.proto.fhir_original_code) = "ExampleScenario",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    EXPLANATION_OF_BENEFIT = 54 [
+      (.google.fhir.proto.fhir_original_code) = "ExplanationOfBenefit",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    FAMILY_MEMBER_HISTORY = 55 [
+      (.google.fhir.proto.fhir_original_code) = "FamilyMemberHistory",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    FLAG = 56 [
+      (.google.fhir.proto.fhir_original_code) = "Flag",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    FORMULARY_ITEM = 161 [
+      (.google.fhir.proto.fhir_original_code) = "FormularyItem",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    GENOMIC_STUDY = 162 [
+      (.google.fhir.proto.fhir_original_code) = "GenomicStudy",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    GOAL = 57 [
+      (.google.fhir.proto.fhir_original_code) = "Goal",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    GRAPH_DEFINITION = 58 [
+      (.google.fhir.proto.fhir_original_code) = "GraphDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    GROUP = 59 [
+      (.google.fhir.proto.fhir_original_code) = "Group",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    GUIDANCE_RESPONSE = 60 [
+      (.google.fhir.proto.fhir_original_code) = "GuidanceResponse",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    HEALTHCARE_SERVICE = 61 [
+      (.google.fhir.proto.fhir_original_code) = "HealthcareService",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    IMAGING_SELECTION = 163 [
+      (.google.fhir.proto.fhir_original_code) = "ImagingSelection",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    IMAGING_STUDY = 62 [
+      (.google.fhir.proto.fhir_original_code) = "ImagingStudy",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    IMMUNIZATION = 63 [
+      (.google.fhir.proto.fhir_original_code) = "Immunization",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    IMMUNIZATION_EVALUATION = 64 [
+      (.google.fhir.proto.fhir_original_code) = "ImmunizationEvaluation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    IMMUNIZATION_RECOMMENDATION = 65 [
+      (.google.fhir.proto.fhir_original_code) = "ImmunizationRecommendation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    IMPLEMENTATION_GUIDE = 66 [
+      (.google.fhir.proto.fhir_original_code) = "ImplementationGuide",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    INGREDIENT = 164 [
+      (.google.fhir.proto.fhir_original_code) = "Ingredient",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    INSURANCE_PLAN = 67 [
+      (.google.fhir.proto.fhir_original_code) = "InsurancePlan",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    INVENTORY_ITEM = 165 [
+      (.google.fhir.proto.fhir_original_code) = "InventoryItem",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    INVENTORY_REPORT = 166 [
+      (.google.fhir.proto.fhir_original_code) = "InventoryReport",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    INVOICE = 68 [
+      (.google.fhir.proto.fhir_original_code) = "Invoice",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    LIBRARY = 69 [
+      (.google.fhir.proto.fhir_original_code) = "Library",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    LINKAGE = 70 [
+      (.google.fhir.proto.fhir_original_code) = "Linkage",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    LIST = 71 [
+      (.google.fhir.proto.fhir_original_code) = "List",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    LOCATION = 72 [
+      (.google.fhir.proto.fhir_original_code) = "Location",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MANUFACTURED_ITEM_DEFINITION = 167 [
+      (.google.fhir.proto.fhir_original_code) = "ManufacturedItemDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEASURE = 73 [
+      (.google.fhir.proto.fhir_original_code) = "Measure",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEASURE_REPORT = 74 [
+      (.google.fhir.proto.fhir_original_code) = "MeasureReport",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEDICATION = 76 [
+      (.google.fhir.proto.fhir_original_code) = "Medication",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEDICATION_ADMINISTRATION = 77 [
+      (.google.fhir.proto.fhir_original_code) = "MedicationAdministration",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEDICATION_DISPENSE = 78 [
+      (.google.fhir.proto.fhir_original_code) = "MedicationDispense",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEDICATION_KNOWLEDGE = 79 [
+      (.google.fhir.proto.fhir_original_code) = "MedicationKnowledge",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEDICATION_REQUEST = 80 [
+      (.google.fhir.proto.fhir_original_code) = "MedicationRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEDICATION_STATEMENT = 81 [
+      (.google.fhir.proto.fhir_original_code) = "MedicationStatement",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEDICINAL_PRODUCT_DEFINITION = 168 [
+      (.google.fhir.proto.fhir_original_code) = "MedicinalProductDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MESSAGE_DEFINITION = 92 [
+      (.google.fhir.proto.fhir_original_code) = "MessageDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MESSAGE_HEADER = 93 [
+      (.google.fhir.proto.fhir_original_code) = "MessageHeader",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MOLECULAR_SEQUENCE = 94 [
+      (.google.fhir.proto.fhir_original_code) = "MolecularSequence",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    NAMING_SYSTEM = 95 [
+      (.google.fhir.proto.fhir_original_code) = "NamingSystem",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    NUTRITION_INTAKE = 169 [
+      (.google.fhir.proto.fhir_original_code) = "NutritionIntake",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    NUTRITION_ORDER = 96 [
+      (.google.fhir.proto.fhir_original_code) = "NutritionOrder",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    NUTRITION_PRODUCT = 170 [
+      (.google.fhir.proto.fhir_original_code) = "NutritionProduct",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    OBSERVATION = 97 [
+      (.google.fhir.proto.fhir_original_code) = "Observation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    OBSERVATION_DEFINITION = 98 [
+      (.google.fhir.proto.fhir_original_code) = "ObservationDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    OPERATION_DEFINITION = 99 [
+      (.google.fhir.proto.fhir_original_code) = "OperationDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    OPERATION_OUTCOME = 100 [
+      (.google.fhir.proto.fhir_original_code) = "OperationOutcome",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ORGANIZATION = 101 [
+      (.google.fhir.proto.fhir_original_code) = "Organization",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ORGANIZATION_AFFILIATION = 102 [
+      (.google.fhir.proto.fhir_original_code) = "OrganizationAffiliation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PACKAGED_PRODUCT_DEFINITION = 171 [
+      (.google.fhir.proto.fhir_original_code) = "PackagedProductDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PARAMETERS = 103 [
+      (.google.fhir.proto.fhir_original_code) = "Parameters",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PATIENT = 104 [
+      (.google.fhir.proto.fhir_original_code) = "Patient",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PAYMENT_NOTICE = 105 [
+      (.google.fhir.proto.fhir_original_code) = "PaymentNotice",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PAYMENT_RECONCILIATION = 106 [
+      (.google.fhir.proto.fhir_original_code) = "PaymentReconciliation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PERMISSION = 172 [
+      (.google.fhir.proto.fhir_original_code) = "Permission",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PERSON = 107 [
+      (.google.fhir.proto.fhir_original_code) = "Person",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PLAN_DEFINITION = 108 [
+      (.google.fhir.proto.fhir_original_code) = "PlanDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PRACTITIONER = 109 [
+      (.google.fhir.proto.fhir_original_code) = "Practitioner",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PRACTITIONER_ROLE = 110 [
+      (.google.fhir.proto.fhir_original_code) = "PractitionerRole",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PROCEDURE = 111 [
+      (.google.fhir.proto.fhir_original_code) = "Procedure",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PROVENANCE = 112 [
+      (.google.fhir.proto.fhir_original_code) = "Provenance",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    QUESTIONNAIRE = 113 [
+      (.google.fhir.proto.fhir_original_code) = "Questionnaire",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    QUESTIONNAIRE_RESPONSE = 114 [
+      (.google.fhir.proto.fhir_original_code) = "QuestionnaireResponse",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    REGULATED_AUTHORIZATION = 173 [
+      (.google.fhir.proto.fhir_original_code) = "RegulatedAuthorization",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    RELATED_PERSON = 115 [
+      (.google.fhir.proto.fhir_original_code) = "RelatedPerson",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    REQUEST_ORCHESTRATION = 174 [
+      (.google.fhir.proto.fhir_original_code) = "RequestOrchestration",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    REQUIREMENTS = 175 [
+      (.google.fhir.proto.fhir_original_code) = "Requirements",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    RESEARCH_STUDY = 119 [
+      (.google.fhir.proto.fhir_original_code) = "ResearchStudy",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    RESEARCH_SUBJECT = 120 [
+      (.google.fhir.proto.fhir_original_code) = "ResearchSubject",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    RISK_ASSESSMENT = 122 [
+      (.google.fhir.proto.fhir_original_code) = "RiskAssessment",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SCHEDULE = 124 [
+      (.google.fhir.proto.fhir_original_code) = "Schedule",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SEARCH_PARAMETER = 125 [
+      (.google.fhir.proto.fhir_original_code) = "SearchParameter",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SERVICE_REQUEST = 126 [
+      (.google.fhir.proto.fhir_original_code) = "ServiceRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SLOT = 127 [
+      (.google.fhir.proto.fhir_original_code) = "Slot",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SPECIMEN = 128 [
+      (.google.fhir.proto.fhir_original_code) = "Specimen",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SPECIMEN_DEFINITION = 129 [
+      (.google.fhir.proto.fhir_original_code) = "SpecimenDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    STRUCTURE_DEFINITION = 130 [
+      (.google.fhir.proto.fhir_original_code) = "StructureDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    STRUCTURE_MAP = 131 [
+      (.google.fhir.proto.fhir_original_code) = "StructureMap",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSCRIPTION = 132 [
+      (.google.fhir.proto.fhir_original_code) = "Subscription",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSCRIPTION_STATUS = 176 [
+      (.google.fhir.proto.fhir_original_code) = "SubscriptionStatus",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSCRIPTION_TOPIC = 177 [
+      (.google.fhir.proto.fhir_original_code) = "SubscriptionTopic",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSTANCE = 133 [
+      (.google.fhir.proto.fhir_original_code) = "Substance",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSTANCE_DEFINITION = 178 [
+      (.google.fhir.proto.fhir_original_code) = "SubstanceDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSTANCE_NUCLEIC_ACID = 134 [
+      (.google.fhir.proto.fhir_original_code) = "SubstanceNucleicAcid",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSTANCE_POLYMER = 135 [
+      (.google.fhir.proto.fhir_original_code) = "SubstancePolymer",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSTANCE_PROTEIN = 136 [
+      (.google.fhir.proto.fhir_original_code) = "SubstanceProtein",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSTANCE_REFERENCE_INFORMATION = 137 [
+      (.google.fhir.proto.fhir_original_code) = "SubstanceReferenceInformation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSTANCE_SOURCE_MATERIAL = 138 [
+      (.google.fhir.proto.fhir_original_code) = "SubstanceSourceMaterial",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUPPLY_DELIVERY = 140 [
+      (.google.fhir.proto.fhir_original_code) = "SupplyDelivery",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUPPLY_REQUEST = 141 [
+      (.google.fhir.proto.fhir_original_code) = "SupplyRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    TASK = 142 [
+      (.google.fhir.proto.fhir_original_code) = "Task",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    TERMINOLOGY_CAPABILITIES = 143 [
+      (.google.fhir.proto.fhir_original_code) = "TerminologyCapabilities",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    TEST_PLAN = 179 [
+      (.google.fhir.proto.fhir_original_code) = "TestPlan",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    TEST_REPORT = 144 [
+      (.google.fhir.proto.fhir_original_code) = "TestReport",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    TEST_SCRIPT = 145 [
+      (.google.fhir.proto.fhir_original_code) = "TestScript",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    TRANSPORT = 180 [
+      (.google.fhir.proto.fhir_original_code) = "Transport",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    VALUE_SET = 146 [
+      (.google.fhir.proto.fhir_original_code) = "ValueSet",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    VERIFICATION_RESULT = 147 [
+      (.google.fhir.proto.fhir_original_code) = "VerificationResult",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    VISION_PRESCRIPTION = 148 [
+      (.google.fhir.proto.fhir_original_code) = "VisionPrescription",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+  }
+}
+
+// Operations supported by REST at the system level.
+// See http://hl7.org/fhir/ValueSet/system-restful-interaction
+message SystemRestfulInteractionValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/system-restful-interaction";
+
+    INVALID_UNINITIALIZED = 0;
+    TRANSACTION = 1 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/restful-interaction"];
+    BATCH = 2 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/restful-interaction"];
+    SEARCH_SYSTEM = 3 [(.google.fhir.proto.source_code_system) =
+                           "http://hl7.org/fhir/restful-interaction"];
+    HISTORY_SYSTEM = 4 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/restful-interaction"];
+  }
+}
+
+// Distinguishes whether the task is a proposal, plan or full order.
+// See http://hl7.org/fhir/ValueSet/task-intent
+message TaskIntentValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/task-intent";
+
+    INVALID_UNINITIALIZED = 0;
+    UNKNOWN = 1 [(.google.fhir.proto.source_code_system) =
+                     "http://hl7.org/fhir/task-intent"];
+    PROPOSAL = 2 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/request-intent"];
+    PLAN = 3 [(.google.fhir.proto.source_code_system) =
+                  "http://hl7.org/fhir/request-intent"];
+    ORDER = 4 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/request-intent"];
+    ORIGINAL_ORDER = 5 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/request-intent"];
+    REFLEX_ORDER = 6 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/request-intent"];
+    FILLER_ORDER = 7 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/request-intent"];
+    INSTANCE_ORDER = 8 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/request-intent"];
+    OPTION = 9 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/request-intent"];
+  }
+}
+
+// Distinguishes whether the transport is a proposal, plan or full order.
+// See http://hl7.org/fhir/ValueSet/transport-intent
+message TransportIntentValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/transport-intent";
+
+    INVALID_UNINITIALIZED = 0;
+    UNKNOWN = 1 [(.google.fhir.proto.source_code_system) =
+                     "http://hl7.org/fhir/transport-intent"];
+    PROPOSAL = 2 [(.google.fhir.proto.source_code_system) =
+                      "http://hl7.org/fhir/request-intent"];
+    PLAN = 3 [(.google.fhir.proto.source_code_system) =
+                  "http://hl7.org/fhir/request-intent"];
+    ORDER = 4 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/request-intent"];
+    ORIGINAL_ORDER = 5 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/request-intent"];
+    REFLEX_ORDER = 6 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/request-intent"];
+    FILLER_ORDER = 7 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/request-intent"];
+    INSTANCE_ORDER = 8 [(.google.fhir.proto.source_code_system) =
+                            "http://hl7.org/fhir/request-intent"];
+    OPTION = 9 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/request-intent"];
+  }
+}
+
+// Operations supported by REST at the type or instance level.
+// See http://hl7.org/fhir/ValueSet/type-restful-interaction
+message TypeRestfulInteractionValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/type-restful-interaction";
+
+    INVALID_UNINITIALIZED = 0;
+    READ = 1 [(.google.fhir.proto.source_code_system) =
+                  "http://hl7.org/fhir/restful-interaction"];
+    VREAD = 2 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/restful-interaction"];
+    UPDATE = 3 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/restful-interaction"];
+    PATCH = 4 [(.google.fhir.proto.source_code_system) =
+                   "http://hl7.org/fhir/restful-interaction"];
+    DELETE = 5 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/restful-interaction"];
+    HISTORY_INSTANCE = 6 [(.google.fhir.proto.source_code_system) =
+                              "http://hl7.org/fhir/restful-interaction"];
+    HISTORY_TYPE = 7 [(.google.fhir.proto.source_code_system) =
+                          "http://hl7.org/fhir/restful-interaction"];
+    CREATE = 8 [(.google.fhir.proto.source_code_system) =
+                    "http://hl7.org/fhir/restful-interaction"];
+    SEARCH_TYPE = 9 [(.google.fhir.proto.source_code_system) =
+                         "http://hl7.org/fhir/restful-interaction"];
+  }
+}
+
+// A unit of time (units from UCUM).
+// See http://hl7.org/fhir/ValueSet/units-of-time
+message UnitsOfTimeValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/units-of-time";
+
+    INVALID_UNINITIALIZED = 0;
+    S = 1
+        [(.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"];
+    MIN = 2
+        [(.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"];
+    H = 3
+        [(.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"];
+    D = 4
+        [(.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"];
+    WK = 5
+        [(.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"];
+    MO = 6
+        [(.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"];
+    A = 7
+        [(.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"];
+  }
+}
+
+// The type of comparator operator to use
+// See http://hl7.org/fhir/ValueSet/value-filter-comparator
+message ValueFilterComparatorValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/value-filter-comparator";
+
+    INVALID_UNINITIALIZED = 0;
+    EQ = 1 [(.google.fhir.proto.source_code_system) =
+                "http://hl7.org/fhir/search-comparator"];
+    GT = 2 [(.google.fhir.proto.source_code_system) =
+                "http://hl7.org/fhir/search-comparator"];
+    LT = 3 [(.google.fhir.proto.source_code_system) =
+                "http://hl7.org/fhir/search-comparator"];
+    GE = 4 [(.google.fhir.proto.source_code_system) =
+                "http://hl7.org/fhir/search-comparator"];
+    LE = 5 [(.google.fhir.proto.source_code_system) =
+                "http://hl7.org/fhir/search-comparator"];
+    SA = 6 [(.google.fhir.proto.source_code_system) =
+                "http://hl7.org/fhir/search-comparator"];
+    EB = 7 [(.google.fhir.proto.source_code_system) =
+                "http://hl7.org/fhir/search-comparator"];
+  }
+}
+
+// Current and past FHIR resource types (deleted or renamed), including abstract
+// types See http://hl7.org/fhir/ValueSet/version-independent-all-resource-types
+message VersionIndependentResourceTypesAllValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/version-independent-all-resource-types";
+
+    INVALID_UNINITIALIZED = 0;
+    ACCOUNT = 1 [
+      (.google.fhir.proto.fhir_original_code) = "Account",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ACTIVITY_DEFINITION = 2 [
+      (.google.fhir.proto.fhir_original_code) = "ActivityDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ACTOR_DEFINITION = 3 [
+      (.google.fhir.proto.fhir_original_code) = "ActorDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ADMINISTRABLE_PRODUCT_DEFINITION = 4 [
+      (.google.fhir.proto.fhir_original_code) =
+          "AdministrableProductDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ADVERSE_EVENT = 5 [
+      (.google.fhir.proto.fhir_original_code) = "AdverseEvent",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ALLERGY_INTOLERANCE = 6 [
+      (.google.fhir.proto.fhir_original_code) = "AllergyIntolerance",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    APPOINTMENT = 7 [
+      (.google.fhir.proto.fhir_original_code) = "Appointment",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    APPOINTMENT_RESPONSE = 8 [
+      (.google.fhir.proto.fhir_original_code) = "AppointmentResponse",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ARTIFACT_ASSESSMENT = 9 [
+      (.google.fhir.proto.fhir_original_code) = "ArtifactAssessment",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    AUDIT_EVENT = 10 [
+      (.google.fhir.proto.fhir_original_code) = "AuditEvent",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    BASIC = 11 [
+      (.google.fhir.proto.fhir_original_code) = "Basic",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    BINARY = 12 [
+      (.google.fhir.proto.fhir_original_code) = "Binary",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    BIOLOGICALLY_DERIVED_PRODUCT = 13 [
+      (.google.fhir.proto.fhir_original_code) = "BiologicallyDerivedProduct",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    BIOLOGICALLY_DERIVED_PRODUCT_DISPENSE = 14 [
+      (.google.fhir.proto.fhir_original_code) =
+          "BiologicallyDerivedProductDispense",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    BODY_STRUCTURE = 15 [
+      (.google.fhir.proto.fhir_original_code) = "BodyStructure",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    BUNDLE = 16 [
+      (.google.fhir.proto.fhir_original_code) = "Bundle",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CANONICAL_RESOURCE = 17 [
+      (.google.fhir.proto.fhir_original_code) = "CanonicalResource",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CAPABILITY_STATEMENT = 18 [
+      (.google.fhir.proto.fhir_original_code) = "CapabilityStatement",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CARE_PLAN = 19 [
+      (.google.fhir.proto.fhir_original_code) = "CarePlan",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CARE_TEAM = 20 [
+      (.google.fhir.proto.fhir_original_code) = "CareTeam",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CHARGE_ITEM = 21 [
+      (.google.fhir.proto.fhir_original_code) = "ChargeItem",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CHARGE_ITEM_DEFINITION = 22 [
+      (.google.fhir.proto.fhir_original_code) = "ChargeItemDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CITATION = 23 [
+      (.google.fhir.proto.fhir_original_code) = "Citation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CLAIM = 24 [
+      (.google.fhir.proto.fhir_original_code) = "Claim",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CLAIM_RESPONSE = 25 [
+      (.google.fhir.proto.fhir_original_code) = "ClaimResponse",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CLINICAL_IMPRESSION = 26 [
+      (.google.fhir.proto.fhir_original_code) = "ClinicalImpression",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CLINICAL_USE_DEFINITION = 27 [
+      (.google.fhir.proto.fhir_original_code) = "ClinicalUseDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CODE_SYSTEM = 28 [
+      (.google.fhir.proto.fhir_original_code) = "CodeSystem",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    COMMUNICATION = 29 [
+      (.google.fhir.proto.fhir_original_code) = "Communication",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    COMMUNICATION_REQUEST = 30 [
+      (.google.fhir.proto.fhir_original_code) = "CommunicationRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    COMPARTMENT_DEFINITION = 31 [
+      (.google.fhir.proto.fhir_original_code) = "CompartmentDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    COMPOSITION = 32 [
+      (.google.fhir.proto.fhir_original_code) = "Composition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CONCEPT_MAP = 33 [
+      (.google.fhir.proto.fhir_original_code) = "ConceptMap",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CONDITION = 34 [
+      (.google.fhir.proto.fhir_original_code) = "Condition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CONDITION_DEFINITION = 35 [
+      (.google.fhir.proto.fhir_original_code) = "ConditionDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CONSENT = 36 [
+      (.google.fhir.proto.fhir_original_code) = "Consent",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    CONTRACT = 37 [
+      (.google.fhir.proto.fhir_original_code) = "Contract",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    COVERAGE = 38 [
+      (.google.fhir.proto.fhir_original_code) = "Coverage",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    COVERAGE_ELIGIBILITY_REQUEST = 39 [
+      (.google.fhir.proto.fhir_original_code) = "CoverageEligibilityRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    COVERAGE_ELIGIBILITY_RESPONSE = 40 [
+      (.google.fhir.proto.fhir_original_code) = "CoverageEligibilityResponse",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DETECTED_ISSUE = 41 [
+      (.google.fhir.proto.fhir_original_code) = "DetectedIssue",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DEVICE = 42 [
+      (.google.fhir.proto.fhir_original_code) = "Device",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DEVICE_ASSOCIATION = 43 [
+      (.google.fhir.proto.fhir_original_code) = "DeviceAssociation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DEVICE_DEFINITION = 44 [
+      (.google.fhir.proto.fhir_original_code) = "DeviceDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DEVICE_DISPENSE = 45 [
+      (.google.fhir.proto.fhir_original_code) = "DeviceDispense",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DEVICE_METRIC = 46 [
+      (.google.fhir.proto.fhir_original_code) = "DeviceMetric",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DEVICE_REQUEST = 47 [
+      (.google.fhir.proto.fhir_original_code) = "DeviceRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DEVICE_USAGE = 48 [
+      (.google.fhir.proto.fhir_original_code) = "DeviceUsage",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DIAGNOSTIC_REPORT = 49 [
+      (.google.fhir.proto.fhir_original_code) = "DiagnosticReport",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DOCUMENT_REFERENCE = 50 [
+      (.google.fhir.proto.fhir_original_code) = "DocumentReference",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    DOMAIN_RESOURCE = 51 [
+      (.google.fhir.proto.fhir_original_code) = "DomainResource",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ENCOUNTER = 52 [
+      (.google.fhir.proto.fhir_original_code) = "Encounter",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ENCOUNTER_HISTORY = 53 [
+      (.google.fhir.proto.fhir_original_code) = "EncounterHistory",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ENDPOINT = 54 [
+      (.google.fhir.proto.fhir_original_code) = "Endpoint",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ENROLLMENT_REQUEST = 55 [
+      (.google.fhir.proto.fhir_original_code) = "EnrollmentRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ENROLLMENT_RESPONSE = 56 [
+      (.google.fhir.proto.fhir_original_code) = "EnrollmentResponse",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    EPISODE_OF_CARE = 57 [
+      (.google.fhir.proto.fhir_original_code) = "EpisodeOfCare",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    EVENT_DEFINITION = 58 [
+      (.google.fhir.proto.fhir_original_code) = "EventDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    EVIDENCE = 59 [
+      (.google.fhir.proto.fhir_original_code) = "Evidence",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    EVIDENCE_REPORT = 60 [
+      (.google.fhir.proto.fhir_original_code) = "EvidenceReport",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    EVIDENCE_VARIABLE = 61 [
+      (.google.fhir.proto.fhir_original_code) = "EvidenceVariable",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    EXAMPLE_SCENARIO = 62 [
+      (.google.fhir.proto.fhir_original_code) = "ExampleScenario",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    EXPLANATION_OF_BENEFIT = 63 [
+      (.google.fhir.proto.fhir_original_code) = "ExplanationOfBenefit",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    FAMILY_MEMBER_HISTORY = 64 [
+      (.google.fhir.proto.fhir_original_code) = "FamilyMemberHistory",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    FLAG = 65 [
+      (.google.fhir.proto.fhir_original_code) = "Flag",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    FORMULARY_ITEM = 66 [
+      (.google.fhir.proto.fhir_original_code) = "FormularyItem",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    GENOMIC_STUDY = 67 [
+      (.google.fhir.proto.fhir_original_code) = "GenomicStudy",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    GOAL = 68 [
+      (.google.fhir.proto.fhir_original_code) = "Goal",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    GRAPH_DEFINITION = 69 [
+      (.google.fhir.proto.fhir_original_code) = "GraphDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    GROUP = 70 [
+      (.google.fhir.proto.fhir_original_code) = "Group",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    GUIDANCE_RESPONSE = 71 [
+      (.google.fhir.proto.fhir_original_code) = "GuidanceResponse",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    HEALTHCARE_SERVICE = 72 [
+      (.google.fhir.proto.fhir_original_code) = "HealthcareService",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    IMAGING_SELECTION = 73 [
+      (.google.fhir.proto.fhir_original_code) = "ImagingSelection",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    IMAGING_STUDY = 74 [
+      (.google.fhir.proto.fhir_original_code) = "ImagingStudy",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    IMMUNIZATION = 75 [
+      (.google.fhir.proto.fhir_original_code) = "Immunization",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    IMMUNIZATION_EVALUATION = 76 [
+      (.google.fhir.proto.fhir_original_code) = "ImmunizationEvaluation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    IMMUNIZATION_RECOMMENDATION = 77 [
+      (.google.fhir.proto.fhir_original_code) = "ImmunizationRecommendation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    IMPLEMENTATION_GUIDE = 78 [
+      (.google.fhir.proto.fhir_original_code) = "ImplementationGuide",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    INGREDIENT = 79 [
+      (.google.fhir.proto.fhir_original_code) = "Ingredient",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    INSURANCE_PLAN = 80 [
+      (.google.fhir.proto.fhir_original_code) = "InsurancePlan",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    INVENTORY_ITEM = 81 [
+      (.google.fhir.proto.fhir_original_code) = "InventoryItem",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    INVENTORY_REPORT = 82 [
+      (.google.fhir.proto.fhir_original_code) = "InventoryReport",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    INVOICE = 83 [
+      (.google.fhir.proto.fhir_original_code) = "Invoice",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    LIBRARY = 84 [
+      (.google.fhir.proto.fhir_original_code) = "Library",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    LINKAGE = 85 [
+      (.google.fhir.proto.fhir_original_code) = "Linkage",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    LIST = 86 [
+      (.google.fhir.proto.fhir_original_code) = "List",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    LOCATION = 87 [
+      (.google.fhir.proto.fhir_original_code) = "Location",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MANUFACTURED_ITEM_DEFINITION = 88 [
+      (.google.fhir.proto.fhir_original_code) = "ManufacturedItemDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEASURE = 89 [
+      (.google.fhir.proto.fhir_original_code) = "Measure",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEASURE_REPORT = 90 [
+      (.google.fhir.proto.fhir_original_code) = "MeasureReport",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEDICATION = 91 [
+      (.google.fhir.proto.fhir_original_code) = "Medication",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEDICATION_ADMINISTRATION = 92 [
+      (.google.fhir.proto.fhir_original_code) = "MedicationAdministration",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEDICATION_DISPENSE = 93 [
+      (.google.fhir.proto.fhir_original_code) = "MedicationDispense",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEDICATION_KNOWLEDGE = 94 [
+      (.google.fhir.proto.fhir_original_code) = "MedicationKnowledge",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEDICATION_REQUEST = 95 [
+      (.google.fhir.proto.fhir_original_code) = "MedicationRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEDICATION_STATEMENT = 96 [
+      (.google.fhir.proto.fhir_original_code) = "MedicationStatement",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MEDICINAL_PRODUCT_DEFINITION = 97 [
+      (.google.fhir.proto.fhir_original_code) = "MedicinalProductDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MESSAGE_DEFINITION = 98 [
+      (.google.fhir.proto.fhir_original_code) = "MessageDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MESSAGE_HEADER = 99 [
+      (.google.fhir.proto.fhir_original_code) = "MessageHeader",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    METADATA_RESOURCE = 100 [
+      (.google.fhir.proto.fhir_original_code) = "MetadataResource",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    MOLECULAR_SEQUENCE = 101 [
+      (.google.fhir.proto.fhir_original_code) = "MolecularSequence",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    NAMING_SYSTEM = 102 [
+      (.google.fhir.proto.fhir_original_code) = "NamingSystem",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    NUTRITION_INTAKE = 103 [
+      (.google.fhir.proto.fhir_original_code) = "NutritionIntake",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    NUTRITION_ORDER = 104 [
+      (.google.fhir.proto.fhir_original_code) = "NutritionOrder",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    NUTRITION_PRODUCT = 105 [
+      (.google.fhir.proto.fhir_original_code) = "NutritionProduct",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    OBSERVATION = 106 [
+      (.google.fhir.proto.fhir_original_code) = "Observation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    OBSERVATION_DEFINITION = 107 [
+      (.google.fhir.proto.fhir_original_code) = "ObservationDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    OPERATION_DEFINITION = 108 [
+      (.google.fhir.proto.fhir_original_code) = "OperationDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    OPERATION_OUTCOME = 109 [
+      (.google.fhir.proto.fhir_original_code) = "OperationOutcome",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ORGANIZATION = 110 [
+      (.google.fhir.proto.fhir_original_code) = "Organization",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    ORGANIZATION_AFFILIATION = 111 [
+      (.google.fhir.proto.fhir_original_code) = "OrganizationAffiliation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PACKAGED_PRODUCT_DEFINITION = 112 [
+      (.google.fhir.proto.fhir_original_code) = "PackagedProductDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PARAMETERS = 113 [
+      (.google.fhir.proto.fhir_original_code) = "Parameters",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PATIENT = 114 [
+      (.google.fhir.proto.fhir_original_code) = "Patient",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PAYMENT_NOTICE = 115 [
+      (.google.fhir.proto.fhir_original_code) = "PaymentNotice",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PAYMENT_RECONCILIATION = 116 [
+      (.google.fhir.proto.fhir_original_code) = "PaymentReconciliation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PERMISSION = 117 [
+      (.google.fhir.proto.fhir_original_code) = "Permission",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PERSON = 118 [
+      (.google.fhir.proto.fhir_original_code) = "Person",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PLAN_DEFINITION = 119 [
+      (.google.fhir.proto.fhir_original_code) = "PlanDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PRACTITIONER = 120 [
+      (.google.fhir.proto.fhir_original_code) = "Practitioner",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PRACTITIONER_ROLE = 121 [
+      (.google.fhir.proto.fhir_original_code) = "PractitionerRole",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PROCEDURE = 122 [
+      (.google.fhir.proto.fhir_original_code) = "Procedure",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    PROVENANCE = 123 [
+      (.google.fhir.proto.fhir_original_code) = "Provenance",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    QUESTIONNAIRE = 124 [
+      (.google.fhir.proto.fhir_original_code) = "Questionnaire",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    QUESTIONNAIRE_RESPONSE = 125 [
+      (.google.fhir.proto.fhir_original_code) = "QuestionnaireResponse",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    REGULATED_AUTHORIZATION = 126 [
+      (.google.fhir.proto.fhir_original_code) = "RegulatedAuthorization",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    RELATED_PERSON = 127 [
+      (.google.fhir.proto.fhir_original_code) = "RelatedPerson",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    REQUEST_ORCHESTRATION = 128 [
+      (.google.fhir.proto.fhir_original_code) = "RequestOrchestration",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    REQUIREMENTS = 129 [
+      (.google.fhir.proto.fhir_original_code) = "Requirements",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    RESEARCH_STUDY = 130 [
+      (.google.fhir.proto.fhir_original_code) = "ResearchStudy",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    RESEARCH_SUBJECT = 131 [
+      (.google.fhir.proto.fhir_original_code) = "ResearchSubject",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    RESOURCE = 132 [
+      (.google.fhir.proto.fhir_original_code) = "Resource",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    RISK_ASSESSMENT = 133 [
+      (.google.fhir.proto.fhir_original_code) = "RiskAssessment",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SCHEDULE = 134 [
+      (.google.fhir.proto.fhir_original_code) = "Schedule",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SEARCH_PARAMETER = 135 [
+      (.google.fhir.proto.fhir_original_code) = "SearchParameter",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SERVICE_REQUEST = 136 [
+      (.google.fhir.proto.fhir_original_code) = "ServiceRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SLOT = 137 [
+      (.google.fhir.proto.fhir_original_code) = "Slot",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SPECIMEN = 138 [
+      (.google.fhir.proto.fhir_original_code) = "Specimen",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SPECIMEN_DEFINITION = 139 [
+      (.google.fhir.proto.fhir_original_code) = "SpecimenDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    STRUCTURE_DEFINITION = 140 [
+      (.google.fhir.proto.fhir_original_code) = "StructureDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    STRUCTURE_MAP = 141 [
+      (.google.fhir.proto.fhir_original_code) = "StructureMap",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSCRIPTION = 142 [
+      (.google.fhir.proto.fhir_original_code) = "Subscription",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSCRIPTION_STATUS = 143 [
+      (.google.fhir.proto.fhir_original_code) = "SubscriptionStatus",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSCRIPTION_TOPIC = 144 [
+      (.google.fhir.proto.fhir_original_code) = "SubscriptionTopic",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSTANCE = 145 [
+      (.google.fhir.proto.fhir_original_code) = "Substance",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSTANCE_DEFINITION = 146 [
+      (.google.fhir.proto.fhir_original_code) = "SubstanceDefinition",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSTANCE_NUCLEIC_ACID = 147 [
+      (.google.fhir.proto.fhir_original_code) = "SubstanceNucleicAcid",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSTANCE_POLYMER = 148 [
+      (.google.fhir.proto.fhir_original_code) = "SubstancePolymer",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSTANCE_PROTEIN = 149 [
+      (.google.fhir.proto.fhir_original_code) = "SubstanceProtein",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSTANCE_REFERENCE_INFORMATION = 150 [
+      (.google.fhir.proto.fhir_original_code) = "SubstanceReferenceInformation",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUBSTANCE_SOURCE_MATERIAL = 151 [
+      (.google.fhir.proto.fhir_original_code) = "SubstanceSourceMaterial",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUPPLY_DELIVERY = 152 [
+      (.google.fhir.proto.fhir_original_code) = "SupplyDelivery",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    SUPPLY_REQUEST = 153 [
+      (.google.fhir.proto.fhir_original_code) = "SupplyRequest",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    TASK = 154 [
+      (.google.fhir.proto.fhir_original_code) = "Task",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    TERMINOLOGY_CAPABILITIES = 155 [
+      (.google.fhir.proto.fhir_original_code) = "TerminologyCapabilities",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    TEST_PLAN = 156 [
+      (.google.fhir.proto.fhir_original_code) = "TestPlan",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    TEST_REPORT = 157 [
+      (.google.fhir.proto.fhir_original_code) = "TestReport",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    TEST_SCRIPT = 158 [
+      (.google.fhir.proto.fhir_original_code) = "TestScript",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    TRANSPORT = 159 [
+      (.google.fhir.proto.fhir_original_code) = "Transport",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    VALUE_SET = 160 [
+      (.google.fhir.proto.fhir_original_code) = "ValueSet",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    VERIFICATION_RESULT = 161 [
+      (.google.fhir.proto.fhir_original_code) = "VerificationResult",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    VISION_PRESCRIPTION = 162 [
+      (.google.fhir.proto.fhir_original_code) = "VisionPrescription",
+      (.google.fhir.proto.source_code_system) = "http://hl7.org/fhir/fhir-types"
+    ];
+    BODY_SITE = 163 [
+      (.google.fhir.proto.fhir_original_code) = "BodySite",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    CATALOG_ENTRY = 164 [
+      (.google.fhir.proto.fhir_original_code) = "CatalogEntry",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    CONFORMANCE = 165 [
+      (.google.fhir.proto.fhir_original_code) = "Conformance",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    DATA_ELEMENT = 166 [
+      (.google.fhir.proto.fhir_original_code) = "DataElement",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    DEVICE_COMPONENT = 167 [
+      (.google.fhir.proto.fhir_original_code) = "DeviceComponent",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    DEVICE_USE_REQUEST = 168 [
+      (.google.fhir.proto.fhir_original_code) = "DeviceUseRequest",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    DEVICE_USE_STATEMENT = 169 [
+      (.google.fhir.proto.fhir_original_code) = "DeviceUseStatement",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    DIAGNOSTIC_ORDER = 170 [
+      (.google.fhir.proto.fhir_original_code) = "DiagnosticOrder",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    DOCUMENT_MANIFEST = 171 [
+      (.google.fhir.proto.fhir_original_code) = "DocumentManifest",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    EFFECT_EVIDENCE_SYNTHESIS = 172 [
+      (.google.fhir.proto.fhir_original_code) = "EffectEvidenceSynthesis",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    ELIGIBILITY_REQUEST = 173 [
+      (.google.fhir.proto.fhir_original_code) = "EligibilityRequest",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    ELIGIBILITY_RESPONSE = 174 [
+      (.google.fhir.proto.fhir_original_code) = "EligibilityResponse",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    EXPANSION_PROFILE = 175 [
+      (.google.fhir.proto.fhir_original_code) = "ExpansionProfile",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    IMAGING_MANIFEST = 176 [
+      (.google.fhir.proto.fhir_original_code) = "ImagingManifest",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    IMAGING_OBJECT_SELECTION = 177 [
+      (.google.fhir.proto.fhir_original_code) = "ImagingObjectSelection",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    MEDIA = 178 [
+      (.google.fhir.proto.fhir_original_code) = "Media",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    MEDICATION_ORDER = 179 [
+      (.google.fhir.proto.fhir_original_code) = "MedicationOrder",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    MEDICATION_USAGE = 180 [
+      (.google.fhir.proto.fhir_original_code) = "MedicationUsage",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    MEDICINAL_PRODUCT = 181 [
+      (.google.fhir.proto.fhir_original_code) = "MedicinalProduct",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    MEDICINAL_PRODUCT_AUTHORIZATION = 182 [
+      (.google.fhir.proto.fhir_original_code) = "MedicinalProductAuthorization",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    MEDICINAL_PRODUCT_CONTRAINDICATION = 183 [
+      (.google.fhir.proto.fhir_original_code) =
+          "MedicinalProductContraindication",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    MEDICINAL_PRODUCT_INDICATION = 184 [
+      (.google.fhir.proto.fhir_original_code) = "MedicinalProductIndication",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    MEDICINAL_PRODUCT_INGREDIENT = 185 [
+      (.google.fhir.proto.fhir_original_code) = "MedicinalProductIngredient",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    MEDICINAL_PRODUCT_INTERACTION = 186 [
+      (.google.fhir.proto.fhir_original_code) = "MedicinalProductInteraction",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    MEDICINAL_PRODUCT_MANUFACTURED = 187 [
+      (.google.fhir.proto.fhir_original_code) = "MedicinalProductManufactured",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    MEDICINAL_PRODUCT_PACKAGED = 188 [
+      (.google.fhir.proto.fhir_original_code) = "MedicinalProductPackaged",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    MEDICINAL_PRODUCT_PHARMACEUTICAL = 189 [
+      (.google.fhir.proto.fhir_original_code) =
+          "MedicinalProductPharmaceutical",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    MEDICINAL_PRODUCT_UNDESIRABLE_EFFECT = 190 [
+      (.google.fhir.proto.fhir_original_code) =
+          "MedicinalProductUndesirableEffect",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    ORDER = 191 [
+      (.google.fhir.proto.fhir_original_code) = "Order",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    ORDER_RESPONSE = 192 [
+      (.google.fhir.proto.fhir_original_code) = "OrderResponse",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    PROCEDURE_REQUEST = 193 [
+      (.google.fhir.proto.fhir_original_code) = "ProcedureRequest",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    PROCESS_REQUEST = 194 [
+      (.google.fhir.proto.fhir_original_code) = "ProcessRequest",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    PROCESS_RESPONSE = 195 [
+      (.google.fhir.proto.fhir_original_code) = "ProcessResponse",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    REFERRAL_REQUEST = 196 [
+      (.google.fhir.proto.fhir_original_code) = "ReferralRequest",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    REQUEST_GROUP = 197 [
+      (.google.fhir.proto.fhir_original_code) = "RequestGroup",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    RESEARCH_DEFINITION = 198 [
+      (.google.fhir.proto.fhir_original_code) = "ResearchDefinition",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    RESEARCH_ELEMENT_DEFINITION = 199 [
+      (.google.fhir.proto.fhir_original_code) = "ResearchElementDefinition",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    RISK_EVIDENCE_SYNTHESIS = 200 [
+      (.google.fhir.proto.fhir_original_code) = "RiskEvidenceSynthesis",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    SEQUENCE = 201 [
+      (.google.fhir.proto.fhir_original_code) = "Sequence",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    SERVICE_DEFINITION = 202 [
+      (.google.fhir.proto.fhir_original_code) = "ServiceDefinition",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+    SUBSTANCE_SPECIFICATION = 203 [
+      (.google.fhir.proto.fhir_original_code) = "SubstanceSpecification",
+      (.google.fhir.proto.source_code_system) =
+          "http://hl7.org/fhir/fhir-old-types"
+    ];
+  }
+}
+
+// Common UCUM units for recording Vital Signs
+// See http://hl7.org/fhir/ValueSet/ucum-vitals-common
+message VitalSignsUnitsValueSet {
+  enum Value {
+    option (.google.fhir.proto.enum_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/ucum-vitals-common";
+
+    INVALID_UNINITIALIZED = 0;
+    PERCENT = 1 [
+      (.google.fhir.proto.fhir_original_code) = "%",
+      (.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"
+    ];
+    CM = 2
+        [(.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"];
+    IN_I = 3 [
+      (.google.fhir.proto.fhir_original_code) = "[in_i]",
+      (.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"
+    ];
+    KG = 4
+        [(.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"];
+    G = 5
+        [(.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"];
+    LB_AV = 6 [
+      (.google.fhir.proto.fhir_original_code) = "[lb_av]",
+      (.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"
+    ];
+    CEL = 7 [
+      (.google.fhir.proto.fhir_original_code) = "Cel",
+      (.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"
+    ];
+    DEG_F = 8 [
+      (.google.fhir.proto.fhir_original_code) = "[degF]",
+      (.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"
+    ];
+    MM_HG = 9 [
+      (.google.fhir.proto.fhir_original_code) = "mm[Hg]",
+      (.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"
+    ];
+    PER_MIN = 10 [
+      (.google.fhir.proto.fhir_original_code) = "/min",
+      (.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"
+    ];
+    KG_M2 = 11 [
+      (.google.fhir.proto.fhir_original_code) = "kg/m2",
+      (.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"
+    ];
+    M2 = 12
+        [(.google.fhir.proto.source_code_system) = "http://unitsofmeasure.org"];
+  }
+}

@@ -1,0 +1,291 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/account_go_proto";
+
+// Auto-generated from StructureDefinition for Account.
+// Tracks balance, charges, for patient or cost center.
+// See http://hl7.org/fhir/StructureDefinition/Account
+message Account {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Account";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Account.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Account number
+  repeated Identifier identifier = 10;
+
+  // active | inactive | entered-in-error | on-hold | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/account-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    AccountStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 11
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Tracks the lifecycle of the account through the billing process
+  CodeableConcept billing_status = 21;
+
+  // E.g. patient, expense, depreciation
+  CodeableConcept type = 12;
+
+  // Human-readable label
+  String name = 13;
+
+  // The entity that caused the expenses
+  repeated Reference subject = 14 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Location",
+    (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+    (.google.fhir.proto.valid_reference_type) = "Organization"
+  ];
+
+  // Transaction window
+  Period service_period = 15;
+
+  // The party(s) that are responsible for covering the payment of this account,
+  // and what order should they be applied to the account
+  message Coverage {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // The party(s), such as insurances, that may contribute to the payment of
+    // this account
+    Reference coverage = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Coverage"
+    ];
+
+    // The priority of the coverage in the context of this account
+    PositiveInt priority = 5;
+  }
+  repeated Coverage coverage = 16;
+
+  // Entity managing the Account
+  Reference owner = 17
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Explanation of purpose/use
+  Markdown description = 22;
+
+  // The parties ultimately responsible for balancing the Account
+  message Guarantor {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Responsible entity
+    Reference party = 4 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // Credit or other hold applied
+    Boolean on_hold = 5;
+
+    // Guarantee account during
+    Period period = 6;
+  }
+  repeated Guarantor guarantor = 19;
+
+  // The list of diagnoses relevant to this account
+  message Diagnosis {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "condition.reference.empty().not() implies dateOfDiagnosis.empty()";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Ranking of the diagnosis (for each type)
+    PositiveInt sequence = 4;
+
+    // The diagnosis relevant to the account
+    CodeableReference condition = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Date of the diagnosis (when coded diagnosis)
+    DateTime date_of_diagnosis = 6;
+
+    // Type that this diagnosis has relevant to the account (e.g. admission,
+    // billing, discharge …)
+    repeated CodeableConcept type = 7;
+
+    // Diagnosis present on Admission
+    Boolean on_admission = 8;
+
+    // Package Code specific for billing
+    repeated CodeableConcept package_code = 9;
+  }
+  repeated Diagnosis diagnosis = 23;
+
+  // The list of procedures relevant to this account
+  message Procedure {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "code.reference.empty().not() implies dateOfService.empty()";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Ranking of the procedure (for each type)
+    PositiveInt sequence = 4;
+
+    // The procedure relevant to the account
+    CodeableReference code = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Date of the procedure (when coded procedure)
+    DateTime date_of_service = 6;
+
+    // How this procedure value should be used in charging the account
+    repeated CodeableConcept type = 7;
+
+    // Package Code specific for billing
+    repeated CodeableConcept package_code = 8;
+
+    // Any devices that were associated with the procedure
+    repeated Reference device = 9
+        [(.google.fhir.proto.valid_reference_type) = "Device"];
+  }
+  repeated Procedure procedure = 24;
+
+  // Other associated accounts related to this account
+  message RelatedAccount {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Relationship of the associated Account
+    CodeableConcept relationship = 4;
+
+    // Reference to an associated Account
+    Reference account = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Account"
+    ];
+  }
+  repeated RelatedAccount related_account = 25;
+
+  // The base or default currency
+  CodeableConcept currency = 26;
+
+  // Calculated account balance(s)
+  message Balance {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Who is expected to pay this part of the balance
+    CodeableConcept aggregate = 4;
+
+    // current | 30 | 60 | 90 | 120
+    CodeableConcept term = 5;
+
+    // Estimated balance
+    Boolean estimate = 6;
+
+    // Calculated amount
+    Money amount = 7
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Balance balance = 27;
+
+  // Time the balance amount was calculated
+  Instant calculated_at = 28;
+}

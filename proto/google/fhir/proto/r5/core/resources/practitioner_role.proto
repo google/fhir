@@ -1,0 +1,112 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/practitioner_role_go_proto";
+
+// Auto-generated from StructureDefinition for PractitionerRole.
+// Roles/organizations the practitioner is associated with.
+// See http://hl7.org/fhir/StructureDefinition/PractitionerRole
+message PractitionerRole {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/PractitionerRole";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // PractitionerRole.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Identifiers for a role/location
+  repeated Identifier identifier = 10;
+
+  // Whether this practitioner role record is in active use
+  Boolean active = 11;
+
+  // The period during which the practitioner is authorized to perform in these
+  // role(s)
+  Period period = 12;
+
+  // Practitioner that provides services for the organization
+  Reference practitioner = 13
+      [(.google.fhir.proto.valid_reference_type) = "Practitioner"];
+
+  // Organization where the roles are available
+  Reference organization = 14
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Roles which this practitioner may perform
+  repeated CodeableConcept code = 15;
+
+  // Specific specialty of the practitioner
+  repeated CodeableConcept specialty = 16;
+
+  // Location(s) where the practitioner provides care
+  repeated Reference location = 17
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Healthcare services provided for this role's Organization/Location(s)
+  repeated Reference healthcare_service = 18
+      [(.google.fhir.proto.valid_reference_type) = "HealthcareService"];
+
+  // Official contact details relating to this PractitionerRole
+  repeated ExtendedContactDetail contact = 24;
+
+  // Collection of characteristics (attributes)
+  repeated CodeableConcept characteristic = 25;
+
+  // A language the practitioner (in this role) can use in patient communication
+  repeated CodeableConcept communication = 26;
+
+  // Times the Practitioner is available at this location and/or healthcare
+  // service (including exceptions)
+  repeated Availability availability = 27;
+
+  // Endpoints for interacting with the practitioner in this role
+  repeated Reference endpoint = 23
+      [(.google.fhir.proto.valid_reference_type) = "Endpoint"];
+}

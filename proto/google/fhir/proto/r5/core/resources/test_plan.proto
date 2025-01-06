@@ -1,0 +1,312 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/test_plan_go_proto";
+
+// Auto-generated from StructureDefinition for TestPlan.
+// Description of intented testing.
+// See http://hl7.org/fhir/StructureDefinition/TestPlan
+message TestPlan {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/TestPlan";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.exists() implies name.matches('^[A-Z]([A-Za-z0-9_]){1,254}$')";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // TestPlan.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this test plan, represented as a URI (globally
+  // unique)
+  Uri url = 10 [(.google.fhir.proto.fhir_path_warning_constraint) =
+                    "exists() implies matches('^[^|# ]+$')"];
+
+  // Business identifier identifier for the test plan
+  repeated Identifier identifier = 11;
+
+  // Business version of the test plan
+  String version = 12;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 13;
+
+  // Name for this test plan (computer friendly)
+  String name = 14;
+
+  // Name for this test plan (human friendly)
+  String title = 15;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 16
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 17;
+
+  // Date last changed
+  DateTime date = 18;
+
+  // Name of the publisher/steward (organization or individual)
+  String publisher = 19;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 20;
+
+  // Natural language description of the test plan
+  Markdown description = 21;
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 22;
+
+  // Intended jurisdiction where the test plan applies (if applicable)
+  repeated CodeableConcept jurisdiction = 23;
+
+  // Why this test plan is defined
+  Markdown purpose = 24;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 25;
+
+  // Copyright holder and year(s)
+  String copyright_label = 26;
+
+  // The category of the Test Plan - can be acceptance, unit, performance
+  repeated CodeableConcept category = 27;
+
+  // What is being tested with this Test Plan - a conformance resource, or
+  // narrative criteria, or an external reference
+  repeated Reference scope = 28;
+
+  // A description of test tools to be used in the test plan - narrative for now
+  Markdown test_tools = 29;
+
+  // The required criteria to execute the test plan - e.g. preconditions,
+  // previous tests
+  message Dependency {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Description of the dependency criterium
+    Markdown description = 4;
+
+    // Link to predecessor test plans
+    Reference predecessor = 5;
+  }
+  repeated Dependency dependency = 30;
+
+  // The threshold or criteria for the test plan to be considered successfully
+  // executed - narrative
+  Markdown exit_criteria = 31;
+
+  // The test cases that constitute this plan
+  message TestCase {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Sequence of test case in the test plan
+    Integer sequence = 4;
+
+    // The scope or artifact covered by the case
+    repeated Reference scope = 5;
+
+    // Required criteria to execute the test case
+    message TestCaseDependency {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Description of the criteria
+      Markdown description = 4;
+
+      // Link to predecessor test plans
+      Reference predecessor = 5;
+    }
+    repeated TestCaseDependency dependency = 6;
+
+    // The actual test to be executed
+    message TestRun {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The narrative description of the tests
+      Markdown narrative = 4;
+
+      // The test cases in a structured language e.g. gherkin, Postman, or FHIR
+      // TestScript
+      message Script {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // The language for the test cases e.g. 'gherkin', 'testscript'
+        CodeableConcept language = 4;
+
+        // The actual content of the cases - references to TestScripts or
+        // externally defined content
+        message SourceX {
+          option (.google.fhir.proto.is_choice_type) = true;
+
+          oneof choice {
+            String string_value = 1 [json_name = "string"];
+            Reference reference = 2;
+          }
+        }
+        SourceX source = 5;
+      }
+      Script script = 5;
+    }
+    repeated TestRun test_run = 7;
+
+    // The test data used in the test case
+    message TestData {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The type of test data description, e.g. 'synthea'
+      Coding type = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // The actual test resources when they exist
+      Reference content = 5;
+
+      // Pointer to a definition of test resources - narrative or structured
+      // e.g. synthetic data generation, etc
+      message SourceX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          String string_value = 1 [json_name = "string"];
+          Reference reference = 2;
+        }
+      }
+      SourceX source = 6;
+    }
+    repeated TestData test_data = 8;
+
+    // Test assertions or expectations
+    message Assertion {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Assertion type - for example 'informative' or 'required'
+      repeated CodeableConcept type = 4;
+
+      // The focus or object of the assertion
+      repeated CodeableReference object = 5;
+
+      // The actual result assertion
+      repeated CodeableReference result = 6;
+    }
+    repeated Assertion assertion = 9;
+  }
+  repeated TestCase test_case = 32;
+}

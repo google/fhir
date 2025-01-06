@@ -1,0 +1,154 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/healthcare_service_go_proto";
+
+// Auto-generated from StructureDefinition for HealthcareService.
+// The details of a healthcare service available at a location.
+// See http://hl7.org/fhir/StructureDefinition/HealthcareService
+message HealthcareService {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/HealthcareService";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // HealthcareService.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // External identifiers for this item
+  repeated Identifier identifier = 10;
+
+  // Whether this HealthcareService record is in active use
+  Boolean active = 11;
+
+  // Organization that provides this service
+  Reference provided_by = 12
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // The service within which this service is offered
+  repeated Reference offered_in = 34
+      [(.google.fhir.proto.valid_reference_type) = "HealthcareService"];
+
+  // Broad category of service being performed or delivered
+  repeated CodeableConcept category = 13;
+
+  // Type of service that may be delivered or performed
+  repeated CodeableConcept type = 14;
+
+  // Specialties handled by the HealthcareService
+  repeated CodeableConcept specialty = 15;
+
+  // Location(s) where service may be provided
+  repeated Reference location = 16
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Description of service as presented to a consumer while searching
+  String name = 17;
+
+  // Additional description and/or any specific issues not covered elsewhere
+  Markdown comment = 35;
+
+  // Extra details about the service that can't be placed in the other fields
+  Markdown extra_details = 19;
+
+  // Facilitates quick identification of the service
+  Attachment photo = 20;
+
+  // Official contact details for the HealthcareService
+  repeated ExtendedContactDetail contact = 36;
+
+  // Location(s) service is intended for/available to
+  repeated Reference coverage_area = 22
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Conditions under which service is available/offered
+  repeated CodeableConcept service_provision_code = 23;
+
+  // Specific eligibility requirements required to use the service
+  message Eligibility {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Coded value for the eligibility
+    CodeableConcept code = 4;
+
+    // Describes the eligibility conditions for the service
+    Markdown comment = 5;
+  }
+  repeated Eligibility eligibility = 24;
+
+  // Programs that this service is applicable to
+  repeated CodeableConcept program = 25;
+
+  // Collection of characteristics (attributes)
+  repeated CodeableConcept characteristic = 26;
+
+  // The language that this service is offered in
+  repeated CodeableConcept communication = 27;
+
+  // Ways that the service accepts referrals
+  repeated CodeableConcept referral_method = 28;
+
+  // If an appointment is required for access to this service
+  Boolean appointment_required = 29;
+
+  // Times the healthcare service is available (including exceptions)
+  repeated Availability availability = 37;
+
+  // Technical endpoints providing access to electronic services operated for
+  // the healthcare service
+  repeated Reference endpoint = 33
+      [(.google.fhir.proto.valid_reference_type) = "Endpoint"];
+}

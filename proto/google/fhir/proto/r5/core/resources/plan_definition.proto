@@ -1,0 +1,780 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/plan_definition_go_proto";
+
+// Auto-generated from StructureDefinition for PlanDefinition.
+// The definition of a plan for a series of actions, independent of any specific
+// patient or context. See
+// http://hl7.org/fhir/StructureDefinition/PlanDefinition
+message PlanDefinition {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/PlanDefinition";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.exists() implies name.matches('^[A-Z]([A-Za-z0-9_]){1,254}$')";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "%context.repeat(action).where((goalId in %context.goal.id).not()).exists().not()";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "%context.repeat(action).relatedAction.where((targetId in %context.repeat(action).id).not()).exists().not()";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // PlanDefinition.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this plan definition, represented as a URI
+  // (globally unique)
+  Uri url = 10 [(.google.fhir.proto.fhir_path_warning_constraint) =
+                    "exists() implies matches('^[^|# ]+$')"];
+
+  // Additional identifier for the plan definition
+  repeated Identifier identifier = 11;
+
+  // Business version of the plan definition
+  String version = 12;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 41;
+
+  // Name for this plan definition (computer friendly)
+  String name = 13;
+
+  // Name for this plan definition (human friendly)
+  String title = 14;
+
+  // Subordinate title of the plan definition
+  String subtitle = 15;
+
+  // order-set | clinical-protocol | eca-rule | workflow-definition
+  CodeableConcept type = 16;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 17
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 18;
+
+  // Type of individual the plan definition is focused on
+  message SubjectX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      CodeableConcept codeable_concept = 1;
+      Reference reference = 2 [
+        (.google.fhir.proto.valid_reference_type) = "Group",
+        (.google.fhir.proto.valid_reference_type) =
+            "MedicinalProductDefinition",
+        (.google.fhir.proto.valid_reference_type) = "SubstanceDefinition",
+        (.google.fhir.proto.valid_reference_type) =
+            "AdministrableProductDefinition",
+        (.google.fhir.proto.valid_reference_type) =
+            "ManufacturedItemDefinition",
+        (.google.fhir.proto.valid_reference_type) = "PackagedProductDefinition"
+      ];
+      Canonical canonical = 3;
+    }
+  }
+  SubjectX subject = 19;
+
+  // Date last changed
+  DateTime date = 20;
+
+  // Name of the publisher/steward (organization or individual)
+  String publisher = 21;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 22;
+
+  // Natural language description of the plan definition
+  Markdown description = 23;
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 24;
+
+  // Intended jurisdiction for plan definition (if applicable)
+  repeated CodeableConcept jurisdiction = 25;
+
+  // Why this plan definition is defined
+  Markdown purpose = 26;
+
+  // Describes the clinical usage of the plan
+  Markdown usage = 42;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 28;
+
+  // Copyright holder and year(s)
+  String copyright_label = 43;
+
+  // When the plan definition was approved by publisher
+  Date approval_date = 29;
+
+  // When the plan definition was last reviewed by the publisher
+  Date last_review_date = 30;
+
+  // When the plan definition is expected to be used
+  Period effective_period = 31;
+
+  // E.g. Education, Treatment, Assessment
+  repeated CodeableConcept topic = 32;
+
+  // Who authored the content
+  repeated ContactDetail author = 33;
+
+  // Who edited the content
+  repeated ContactDetail editor = 34;
+
+  // Who reviewed the content
+  repeated ContactDetail reviewer = 35;
+
+  // Who endorsed the content
+  repeated ContactDetail endorser = 36;
+
+  // Additional documentation, citations
+  repeated RelatedArtifact related_artifact = 37;
+
+  // Logic used by the plan definition
+  repeated Canonical library = 38;
+
+  // What the plan is trying to accomplish
+  message Goal {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // E.g. Treatment, dietary, behavioral
+    CodeableConcept category = 4;
+
+    // Code or text describing the goal
+    CodeableConcept description = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // high-priority | medium-priority | low-priority
+    CodeableConcept priority = 6;
+
+    // When goal pursuit begins
+    CodeableConcept start = 7;
+
+    // What does the goal address
+    repeated CodeableConcept addresses = 8;
+
+    // Supporting documentation for the goal
+    repeated RelatedArtifact documentation = 9;
+
+    // Target outcome for the goal
+    message Target {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The parameter whose value is to be tracked
+      CodeableConcept measure = 4;
+
+      // The target value to be achieved
+      message DetailX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          Quantity quantity = 1;
+          Range range = 2;
+          CodeableConcept codeable_concept = 3;
+          String string_value = 4 [json_name = "string"];
+          Boolean boolean = 5;
+          Integer integer = 6;
+          Ratio ratio = 7;
+        }
+      }
+      DetailX detail = 5;
+
+      // Reach goal within
+      Duration due = 6;
+    }
+    repeated Target target = 10;
+  }
+  repeated Goal goal = 39;
+
+  // Actors within the plan
+  message Actor {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // User-visible title
+    String title = 4;
+
+    // Describes the actor
+    Markdown description = 5;
+
+    // Who or what can be this actor
+    message Option {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // careteam | device | group | healthcareservice | location | organization
+      // | patient | practitioner | practitionerrole | relatedperson
+      message TypeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/action-participant-type";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ActionParticipantTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      TypeCode type = 4;
+
+      // Who or what can participate
+      Canonical type_canonical = 5;
+
+      // Who or what can participate
+      Reference type_reference = 6 [
+        (.google.fhir.proto.valid_reference_type) = "CareTeam",
+        (.google.fhir.proto.valid_reference_type) = "Device",
+        (.google.fhir.proto.valid_reference_type) = "DeviceDefinition",
+        (.google.fhir.proto.valid_reference_type) = "Endpoint",
+        (.google.fhir.proto.valid_reference_type) = "Group",
+        (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+        (.google.fhir.proto.valid_reference_type) = "Location",
+        (.google.fhir.proto.valid_reference_type) = "Organization",
+        (.google.fhir.proto.valid_reference_type) = "Patient",
+        (.google.fhir.proto.valid_reference_type) = "Practitioner",
+        (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+        (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+      ];
+
+      // E.g. Nurse, Surgeon, Parent
+      CodeableConcept role = 7;
+    }
+    repeated Option option = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Actor actor = 44;
+
+  // Action defined by the plan
+  message Action {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Unique id for the action in the PlanDefinition
+    String link_id = 31;
+
+    // User-visible prefix for the action (e.g. 1. or A.)
+    String prefix = 4;
+
+    // User-visible title
+    String title = 5;
+
+    // Brief description of the action
+    Markdown description = 32;
+
+    // Static text equivalent of the action, used if the dynamic aspects cannot
+    // be interpreted by the receiving system
+    Markdown text_equivalent = 33;
+
+    // routine | urgent | asap | stat
+    message PriorityCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/request-priority";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      RequestPriorityCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    PriorityCode priority = 8;
+
+    // Code representing the meaning of the action or sub-actions
+    CodeableConcept code = 34;
+
+    // Why the action should be performed
+    repeated CodeableConcept reason = 10;
+
+    // Supporting documentation for the intended performer of the action
+    repeated RelatedArtifact documentation = 11;
+
+    // What goals this action supports
+    repeated Id goal_id = 12;
+
+    // Type of individual the action is focused on
+    message SubjectX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        CodeableConcept codeable_concept = 1;
+        Reference reference = 2
+            [(.google.fhir.proto.valid_reference_type) = "Group"];
+        Canonical canonical = 3;
+      }
+    }
+    SubjectX subject = 13;
+
+    // When the action should be triggered
+    repeated TriggerDefinition trigger = 14;
+
+    // Whether or not the action is applicable
+    message Condition {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // applicability | start | stop
+      message KindCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/action-condition-kind";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ActionConditionKindCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      KindCode kind = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Boolean-valued expression
+      Expression expression = 5;
+    }
+    repeated Condition condition = 15;
+
+    // Input data requirements
+    message Input {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "requirement.exists() xor relatedData.exists()";
+
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // User-visible title
+      String title = 4;
+
+      // What data is provided
+      DataRequirement requirement = 5;
+
+      // What data is provided
+      Id related_data = 6;
+    }
+    repeated Input input = 35;
+
+    // Output data definition
+    message Output {
+      option (.google.fhir.proto.fhir_path_message_constraint) =
+          "requirement.exists() xor relatedData.exists()";
+
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // User-visible title
+      String title = 4;
+
+      // What data is provided
+      DataRequirement requirement = 5;
+
+      // What data is provided
+      String related_data = 6;
+    }
+    repeated Output output = 36;
+
+    // Relationship to another action
+    message RelatedAction {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // What action is this related to
+      Id target_id = 7
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // before | before-start | before-end | concurrent | concurrent-with-start
+      // | concurrent-with-end | after | after-start | after-end
+      message RelationshipCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/action-relationship-type";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ActionRelationshipTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      RelationshipCode relationship = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // before | before-start | before-end | concurrent | concurrent-with-start
+      // | concurrent-with-end | after | after-start | after-end
+      message EndRelationshipCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/action-relationship-type";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ActionRelationshipTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      EndRelationshipCode end_relationship = 8;
+
+      // Time offset for the relationship
+      message OffsetX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          Duration duration = 1;
+          Range range = 2;
+        }
+      }
+      OffsetX offset = 6;
+    }
+    repeated RelatedAction related_action = 18;
+
+    // When the action should take place
+    message TimingX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Age age = 2;
+        Duration duration = 4;
+        Range range = 5;
+        Timing timing = 6;
+      }
+    }
+    TimingX timing = 19;
+
+    // Where it should happen
+    CodeableReference location = 37;
+
+    // Who should participate in the action
+    message Participant {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // What actor
+      String actor_id = 6;
+
+      // careteam | device | group | healthcareservice | location | organization
+      // | patient | practitioner | practitionerrole | relatedperson
+      message TypeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/action-participant-type";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        ActionParticipantTypeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      TypeCode type = 4;
+
+      // Who or what can participate
+      Canonical type_canonical = 7;
+
+      // Who or what can participate
+      Reference type_reference = 8 [
+        (.google.fhir.proto.valid_reference_type) = "CareTeam",
+        (.google.fhir.proto.valid_reference_type) = "Device",
+        (.google.fhir.proto.valid_reference_type) = "DeviceDefinition",
+        (.google.fhir.proto.valid_reference_type) = "Endpoint",
+        (.google.fhir.proto.valid_reference_type) = "Group",
+        (.google.fhir.proto.valid_reference_type) = "HealthcareService",
+        (.google.fhir.proto.valid_reference_type) = "Location",
+        (.google.fhir.proto.valid_reference_type) = "Organization",
+        (.google.fhir.proto.valid_reference_type) = "Patient",
+        (.google.fhir.proto.valid_reference_type) = "Practitioner",
+        (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+        (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+      ];
+
+      // E.g. Nurse, Surgeon, Parent
+      CodeableConcept role = 5;
+
+      // E.g. Author, Reviewer, Witness, etc
+      CodeableConcept function = 9;
+    }
+    repeated Participant participant = 20;
+
+    // create | update | remove | fire-event
+    CodeableConcept type = 21;
+
+    // visual-group | logical-group | sentence-group
+    message GroupingBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-grouping-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionGroupingBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    GroupingBehaviorCode grouping_behavior = 22;
+
+    // any | all | all-or-none | exactly-one | at-most-one | one-or-more
+    message SelectionBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-selection-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionSelectionBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    SelectionBehaviorCode selection_behavior = 23;
+
+    // must | could | must-unless-documented
+    message RequiredBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-required-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionRequiredBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    RequiredBehaviorCode required_behavior = 24;
+
+    // yes | no
+    message PrecheckBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-precheck-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionPrecheckBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    PrecheckBehaviorCode precheck_behavior = 25;
+
+    // single | multiple
+    message CardinalityBehaviorCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/action-cardinality-behavior";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ActionCardinalityBehaviorCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    CardinalityBehaviorCode cardinality_behavior = 26;
+
+    // Description of the activity to be performed
+    message DefinitionX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Canonical canonical = 1;
+        Uri uri = 2;
+      }
+    }
+    DefinitionX definition = 27;
+
+    // Transform to apply the template
+    Canonical transform = 28;
+
+    // Dynamic aspects of the definition
+    message DynamicValue {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // The path to the element to be set dynamically
+      String path = 4;
+
+      // An expression that provides the dynamic value for the customization
+      Expression expression = 5;
+    }
+    repeated DynamicValue dynamic_value = 29;
+
+    // A sub-action
+    repeated Action action = 30;
+  }
+  repeated Action action = 40;
+
+  // Preconditions for service
+  message AsNeededX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Boolean boolean = 1;
+      CodeableConcept codeable_concept = 2;
+    }
+  }
+  AsNeededX as_needed = 45;
+}

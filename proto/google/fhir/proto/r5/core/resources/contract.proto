@@ -1,0 +1,816 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/contract_go_proto";
+
+// Auto-generated from StructureDefinition for Contract.
+// Legal Agreement.
+// See http://hl7.org/fhir/StructureDefinition/Contract
+message Contract {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Contract";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Contract.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Contract number
+  repeated Identifier identifier = 10;
+
+  // Basal definition
+  Uri url = 11;
+
+  // Business edition
+  String version = 12;
+
+  // amended | appended | cancelled | disputed | entered-in-error | executable +
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/contract-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    ContractStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 13;
+
+  // Negotiation status
+  CodeableConcept legal_state = 14;
+
+  // Source Contract Definition
+  Reference instantiates_canonical = 15
+      [(.google.fhir.proto.valid_reference_type) = "Contract"];
+
+  // External Contract Definition
+  Uri instantiates_uri = 16;
+
+  // Content derived from the basal information
+  CodeableConcept content_derivative = 17;
+
+  // When this Contract was issued
+  DateTime issued = 18;
+
+  // Effective time
+  Period applies = 19;
+
+  // Contract cessation cause
+  CodeableConcept expiration_type = 20;
+
+  // Contract Target Entity
+  repeated Reference subject = 21
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Authority under which this Contract has standing
+  repeated Reference authority = 22
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // A sphere of control governed by an authoritative jurisdiction,
+  // organization, or person
+  repeated Reference domain = 23
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Specific Location
+  repeated Reference site = 24
+      [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+  // Computer friendly designation
+  String name = 25;
+
+  // Human Friendly name
+  String title = 26;
+
+  // Subordinate Friendly name
+  String subtitle = 27;
+
+  // Acronym or short name
+  repeated String alias = 28;
+
+  // Source of Contract
+  Reference author = 29 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+    (.google.fhir.proto.valid_reference_type) = "Organization"
+  ];
+
+  // Range of Legal Concerns
+  CodeableConcept scope = 30;
+
+  // Focus of contract interest
+  message TopicX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      CodeableConcept codeable_concept = 1;
+      Reference reference = 2
+          [(.google.fhir.proto.valid_reference_type) = "Resource"];
+    }
+  }
+  TopicX topic = 31;
+
+  // Legal instrument category
+  CodeableConcept type = 32;
+
+  // Subtype within the context of type
+  repeated CodeableConcept sub_type = 33;
+
+  // Contract precursor content
+  message ContentDefinition {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Content structure and use
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Detailed Content Type Definition
+    CodeableConcept sub_type = 5;
+
+    // Publisher Entity
+    Reference publisher = 6 [
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Organization"
+    ];
+
+    // When published
+    DateTime publication_date = 7;
+
+    // amended | appended | cancelled | disputed | entered-in-error | executable
+    // +
+    message PublicationStatusCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/contract-publicationstatus";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      ContractPublicationStatusCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    PublicationStatusCode publication_status = 8
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Publication Ownership
+    Markdown copyright = 9;
+  }
+  ContentDefinition content_definition = 34;
+
+  // Contract Term List
+  message Term {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Contract Term Number
+    Identifier identifier = 4;
+
+    // Contract Term Issue Date Time
+    DateTime issued = 5;
+
+    // Contract Term Effective Time
+    Period applies = 6;
+
+    // Term Concern
+    message TopicX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        CodeableConcept codeable_concept = 1;
+        Reference reference = 2
+            [(.google.fhir.proto.valid_reference_type) = "Resource"];
+      }
+    }
+    TopicX topic = 7;
+
+    // Contract Term Type or Form
+    CodeableConcept type = 8;
+
+    // Contract Term Type specific classification
+    CodeableConcept sub_type = 9;
+
+    // Term Statement
+    String text = 10;
+
+    // Protection for the Term
+    message SecurityLabel {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Link to Security Labels
+      repeated UnsignedInt number = 4;
+
+      // Confidentiality Protection
+      Coding classification = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Applicable Policy
+      repeated Coding category = 6;
+
+      // Handling Instructions
+      repeated Coding control = 7;
+    }
+    repeated SecurityLabel security_label = 11;
+
+    // Context of the Contract term
+    message ContractOffer {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Offer business ID
+      repeated Identifier identifier = 4;
+
+      // Offer Recipient
+      message ContractParty {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Referenced entity
+        repeated Reference reference = 4 [
+          (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+          (.google.fhir.proto.valid_reference_type) = "Patient",
+          (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+          (.google.fhir.proto.valid_reference_type) = "Practitioner",
+          (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+          (.google.fhir.proto.valid_reference_type) = "Device",
+          (.google.fhir.proto.valid_reference_type) = "Group",
+          (.google.fhir.proto.valid_reference_type) = "Organization"
+        ];
+
+        // Participant engagement type
+        CodeableConcept role = 5
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+      }
+      repeated ContractParty party = 5;
+
+      // Negotiable offer asset
+      Reference topic = 6
+          [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+      // Contract Offer Type or Form
+      CodeableConcept type = 7;
+
+      // Accepting party choice
+      CodeableConcept decision = 8;
+
+      // How decision is conveyed
+      repeated CodeableConcept decision_mode = 9;
+
+      // Response to offer text
+      message Answer {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // The actual answer response
+        message ValueX {
+          option (.google.fhir.proto.is_choice_type) = true;
+
+          oneof choice {
+            Boolean boolean = 1;
+            Decimal decimal = 2;
+            Integer integer = 3;
+            Date date = 4;
+            DateTime date_time = 5;
+            Time time = 6;
+            String string_value = 7 [json_name = "string"];
+            Uri uri = 8;
+            Attachment attachment = 9;
+            Coding coding = 10;
+            Quantity quantity = 11;
+            Reference reference = 12
+                [(.google.fhir.proto.valid_reference_type) = "Resource"];
+          }
+        }
+        ValueX value = 4
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+      }
+      repeated Answer answer = 10;
+
+      // Human readable offer text
+      String text = 11;
+
+      // Pointer to text
+      repeated String link_id = 12;
+
+      // Offer restriction numbers
+      repeated UnsignedInt security_label_number = 13;
+    }
+    ContractOffer offer = 12
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Contract Term Asset List
+    message ContractAsset {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Range of asset
+      CodeableConcept scope = 4;
+
+      // Asset category
+      repeated CodeableConcept type = 5;
+
+      // Associated entities
+      repeated Reference type_reference = 6
+          [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+      // Asset sub-category
+      repeated CodeableConcept subtype = 7;
+
+      // Kinship of the asset
+      Coding relationship = 8;
+
+      // Circumstance of the asset
+      message AssetContext {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Creator,custodian or owner
+        Reference reference = 4
+            [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+        // Codeable asset context
+        repeated CodeableConcept code = 5;
+
+        // Context description
+        String text = 6;
+      }
+      repeated AssetContext context = 9;
+
+      // Quality desctiption of asset
+      String condition = 10;
+
+      // Asset availability types
+      repeated CodeableConcept period_type = 11;
+
+      // Time period of the asset
+      repeated Period period = 12;
+
+      // Time period
+      repeated Period use_period = 13;
+
+      // Asset clause or question text
+      String text = 14;
+
+      // Pointer to asset text
+      repeated String link_id = 15;
+
+      // Response to assets
+      repeated ContractOffer.Answer answer = 16;
+
+      // Asset restriction numbers
+      repeated UnsignedInt security_label_number = 17;
+
+      // Contract Valued Item List
+      message ValuedItem {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Contract Valued Item Type
+        message EntityX {
+          option (.google.fhir.proto.is_choice_type) = true;
+
+          oneof choice {
+            CodeableConcept codeable_concept = 1;
+            Reference reference = 2
+                [(.google.fhir.proto.valid_reference_type) = "Resource"];
+          }
+        }
+        EntityX entity = 4;
+
+        // Contract Valued Item Number
+        Identifier identifier = 5;
+
+        // Contract Valued Item Effective Tiem
+        DateTime effective_time = 6;
+
+        // Count of Contract Valued Items
+        SimpleQuantity quantity = 7;
+
+        // Contract Valued Item fee, charge, or cost
+        Money unit_price = 8;
+
+        // Contract Valued Item Price Scaling Factor
+        Decimal factor = 9;
+
+        // Contract Valued Item Difficulty Scaling Factor
+        Decimal points = 10;
+
+        // Total Contract Valued Item Value
+        Money net = 11;
+
+        // Terms of valuation
+        String payment = 12;
+
+        // When payment is due
+        DateTime payment_date = 13;
+
+        // Who will make payment
+        Reference responsible = 14 [
+          (.google.fhir.proto.valid_reference_type) = "Organization",
+          (.google.fhir.proto.valid_reference_type) = "Patient",
+          (.google.fhir.proto.valid_reference_type) = "Practitioner",
+          (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+          (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+        ];
+
+        // Who will receive payment
+        Reference recipient = 15 [
+          (.google.fhir.proto.valid_reference_type) = "Organization",
+          (.google.fhir.proto.valid_reference_type) = "Patient",
+          (.google.fhir.proto.valid_reference_type) = "Practitioner",
+          (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+          (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+        ];
+
+        // Pointer to specific item
+        repeated String link_id = 16;
+
+        // Security Labels that define affected terms
+        repeated UnsignedInt security_label_number = 17;
+      }
+      repeated ValuedItem valued_item = 18;
+    }
+    repeated ContractAsset asset = 13;
+
+    // Entity being ascribed responsibility
+    message Action {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // True if the term prohibits the  action
+      Boolean do_not_perform = 4;
+
+      // Type or form of the action
+      CodeableConcept type = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Entity of the action
+      message ActionSubject {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Entity of the action
+        repeated Reference reference = 4 [
+          (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+          (.google.fhir.proto.valid_reference_type) = "Patient",
+          (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+          (.google.fhir.proto.valid_reference_type) = "Practitioner",
+          (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+          (.google.fhir.proto.valid_reference_type) = "Device",
+          (.google.fhir.proto.valid_reference_type) = "Group",
+          (.google.fhir.proto.valid_reference_type) = "Organization"
+        ];
+
+        // Role type of the agent
+        CodeableConcept role = 5;
+      }
+      repeated ActionSubject subject = 6;
+
+      // Purpose for the Contract Term Action
+      CodeableConcept intent = 7
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Pointer to specific item
+      repeated String link_id = 8;
+
+      // State of the action
+      CodeableConcept status = 9
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Episode associated with action
+      Reference context = 10 [
+        (.google.fhir.proto.valid_reference_type) = "Encounter",
+        (.google.fhir.proto.valid_reference_type) = "EpisodeOfCare"
+      ];
+
+      // Pointer to specific item
+      repeated String context_link_id = 11;
+
+      // When action happens
+      message OccurrenceX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          DateTime date_time = 1;
+          Period period = 2;
+          Timing timing = 3;
+        }
+      }
+      OccurrenceX occurrence = 12;
+
+      // Who asked for action
+      repeated Reference requester = 13 [
+        (.google.fhir.proto.valid_reference_type) = "Patient",
+        (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+        (.google.fhir.proto.valid_reference_type) = "Practitioner",
+        (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+        (.google.fhir.proto.valid_reference_type) = "Device",
+        (.google.fhir.proto.valid_reference_type) = "Group",
+        (.google.fhir.proto.valid_reference_type) = "Organization"
+      ];
+
+      // Pointer to specific item
+      repeated String requester_link_id = 14;
+
+      // Kind of service performer
+      repeated CodeableConcept performer_type = 15;
+
+      // Competency of the performer
+      CodeableConcept performer_role = 16;
+
+      // Actor that wil execute (or not) the action
+      Reference performer = 17 [
+        (.google.fhir.proto.valid_reference_type) = "RelatedPerson",
+        (.google.fhir.proto.valid_reference_type) = "Patient",
+        (.google.fhir.proto.valid_reference_type) = "Practitioner",
+        (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+        (.google.fhir.proto.valid_reference_type) = "CareTeam",
+        (.google.fhir.proto.valid_reference_type) = "Device",
+        (.google.fhir.proto.valid_reference_type) = "Substance",
+        (.google.fhir.proto.valid_reference_type) = "Organization",
+        (.google.fhir.proto.valid_reference_type) = "Location"
+      ];
+
+      // Pointer to specific item
+      repeated String performer_link_id = 18;
+
+      // Why is action (not) needed?
+      repeated CodeableReference reason = 25;
+
+      // Pointer to specific item
+      repeated String reason_link_id = 22;
+
+      // Comments about the action
+      repeated Annotation note = 23;
+
+      // Action restriction numbers
+      repeated UnsignedInt security_label_number = 24;
+    }
+    repeated Action action = 14;
+
+    // Nested Contract Term Group
+    repeated Term group = 15;
+  }
+  repeated Term term = 35;
+
+  // Extra Information
+  repeated Reference supporting_info = 36
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Key event in Contract History
+  repeated Reference relevant_history = 37
+      [(.google.fhir.proto.valid_reference_type) = "Provenance"];
+
+  // Contract Signatory
+  message Signatory {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Contract Signatory Role
+    Coding type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Contract Signatory Party
+    Reference party = 5 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Organization",
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+    ];
+
+    // Contract Documentation Signature
+    repeated Signature signature = 6
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Signatory signer = 38;
+
+  // Contract Friendly Language
+  message FriendlyLanguage {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Easily comprehended representation of this Contract
+    message ContentX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Attachment attachment = 1;
+        Reference reference = 2 [
+          (.google.fhir.proto.valid_reference_type) = "Composition",
+          (.google.fhir.proto.valid_reference_type) = "DocumentReference",
+          (.google.fhir.proto.valid_reference_type) = "QuestionnaireResponse"
+        ];
+      }
+    }
+    ContentX content = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated FriendlyLanguage friendly = 39;
+
+  // Contract Legal Language
+  message LegalLanguage {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Contract Legal Text
+    message ContentX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Attachment attachment = 1;
+        Reference reference = 2 [
+          (.google.fhir.proto.valid_reference_type) = "Composition",
+          (.google.fhir.proto.valid_reference_type) = "DocumentReference",
+          (.google.fhir.proto.valid_reference_type) = "QuestionnaireResponse"
+        ];
+      }
+    }
+    ContentX content = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated LegalLanguage legal = 40;
+
+  // Computable Contract Language
+  message ComputableLanguage {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Computable Contract Rules
+    message ContentX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        Attachment attachment = 1;
+        Reference reference = 2
+            [(.google.fhir.proto.valid_reference_type) = "DocumentReference"];
+      }
+    }
+    ContentX content = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated ComputableLanguage rule = 41;
+
+  // Binding Contract
+  message LegallyBindingX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      Attachment attachment = 1;
+      Reference reference = 2 [
+        (.google.fhir.proto.valid_reference_type) = "Composition",
+        (.google.fhir.proto.valid_reference_type) = "DocumentReference",
+        (.google.fhir.proto.valid_reference_type) = "QuestionnaireResponse",
+        (.google.fhir.proto.valid_reference_type) = "Contract"
+      ];
+    }
+  }
+  LegallyBindingX legally_binding = 42;
+}

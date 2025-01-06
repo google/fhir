@@ -1,0 +1,280 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/specimen_go_proto";
+
+// Auto-generated from StructureDefinition for Specimen.
+// Sample for analysis.
+// See http://hl7.org/fhir/StructureDefinition/Specimen
+message Specimen {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/Specimen";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // Specimen.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // External Identifier
+  repeated Identifier identifier = 10;
+
+  // Identifier assigned by the lab
+  Identifier accession_identifier = 11;
+
+  // available | unavailable | unsatisfactory | entered-in-error
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/specimen-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    SpecimenStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 12;
+
+  // Kind of material that forms the specimen
+  CodeableConcept type = 13;
+
+  // Where the specimen came from. This may be from patient(s), from a location
+  // (e.g., the source of an environmental sample), or a sampling of a
+  // substance, a biologically-derived product, or a device
+  Reference subject = 14 [
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group",
+    (.google.fhir.proto.valid_reference_type) = "Device",
+    (.google.fhir.proto.valid_reference_type) = "BiologicallyDerivedProduct",
+    (.google.fhir.proto.valid_reference_type) = "Substance",
+    (.google.fhir.proto.valid_reference_type) = "Location"
+  ];
+
+  // The time when specimen is received by the testing laboratory
+  DateTime received_time = 15;
+
+  // Specimen from which this specimen originated
+  repeated Reference parent = 16
+      [(.google.fhir.proto.valid_reference_type) = "Specimen"];
+
+  // Why the specimen was collected
+  repeated Reference request = 17
+      [(.google.fhir.proto.valid_reference_type) = "ServiceRequest"];
+
+  // grouped | pooled
+  message CombinedCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/specimen-combined";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    SpecimenCombinedCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  CombinedCode combined = 23;
+
+  // The role the specimen serves
+  repeated CodeableConcept role = 24;
+
+  // The physical feature of a specimen
+  message Feature {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Highlighted feature
+    CodeableConcept type = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Information about the feature
+    String description = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+  }
+  repeated Feature feature = 25;
+
+  // Collection details
+  message Collection {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Who collected the specimen
+    Reference collector = 4 [
+      (.google.fhir.proto.valid_reference_type) = "Practitioner",
+      (.google.fhir.proto.valid_reference_type) = "PractitionerRole",
+      (.google.fhir.proto.valid_reference_type) = "Patient",
+      (.google.fhir.proto.valid_reference_type) = "RelatedPerson"
+    ];
+
+    // Collection time
+    message CollectedX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        DateTime date_time = 1;
+        Period period = 2;
+      }
+    }
+    CollectedX collected = 5;
+
+    // How long it took to collect specimen
+    Duration duration = 6;
+
+    // The quantity of specimen collected
+    SimpleQuantity quantity = 7;
+
+    // Technique used to perform collection
+    CodeableConcept method = 8;
+
+    // Device used to perform collection
+    CodeableReference device = 11;
+
+    // The procedure that collects the specimen
+    Reference procedure = 12
+        [(.google.fhir.proto.valid_reference_type) = "Procedure"];
+
+    // Anatomical collection site
+    CodeableReference body_site = 13;
+
+    // Whether or how long patient abstained from food and/or drink
+    message FastingStatusX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        CodeableConcept codeable_concept = 1;
+        Duration duration = 2;
+      }
+    }
+    FastingStatusX fasting_status = 10;
+  }
+  Collection collection = 18;
+
+  // Processing and processing step details
+  message Processing {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Textual description of procedure
+    String description = 4;
+
+    // Indicates the treatment step  applied to the specimen
+    CodeableConcept method = 8;
+
+    // Material used in the processing step
+    repeated Reference additive = 6
+        [(.google.fhir.proto.valid_reference_type) = "Substance"];
+
+    // Date and time of specimen processing
+    message TimeX {
+      option (.google.fhir.proto.is_choice_type) = true;
+
+      oneof choice {
+        DateTime date_time = 1;
+        Period period = 2;
+      }
+    }
+    TimeX time = 7;
+  }
+  repeated Processing processing = 19;
+
+  // Direct container of specimen (tube/slide, etc.)
+  message Container {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Device resource for the container
+    Reference device = 10 [
+      (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+      (.google.fhir.proto.valid_reference_type) = "Device"
+    ];
+
+    // Where the container is
+    Reference location = 11
+        [(.google.fhir.proto.valid_reference_type) = "Location"];
+
+    // Quantity of specimen within container
+    SimpleQuantity specimen_quantity = 8;
+  }
+  repeated Container container = 20;
+
+  // State of the specimen
+  repeated CodeableConcept condition = 21;
+
+  // Comments
+  repeated Annotation note = 22;
+}

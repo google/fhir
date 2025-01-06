@@ -1,0 +1,419 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/nutrition_order_go_proto";
+
+// Auto-generated from StructureDefinition for NutritionOrder.
+// Diet, formula or nutritional supplement request.
+// See http://hl7.org/fhir/StructureDefinition/NutritionOrder
+message NutritionOrder {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/NutritionOrder";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "oralDiet.exists() or supplement.exists() or enteralFormula.exists()";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // NutritionOrder.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Identifiers assigned to this order
+  repeated Identifier identifier = 10;
+
+  // Instantiates FHIR protocol or definition
+  repeated Canonical instantiates_canonical = 11;
+
+  // Instantiates external protocol or definition
+  repeated Uri instantiates_uri = 12;
+
+  // Instantiates protocol or definition
+  repeated Uri instantiates = 13;
+
+  // What this order fulfills
+  repeated Reference based_on = 27 [
+    (.google.fhir.proto.valid_reference_type) = "CarePlan",
+    (.google.fhir.proto.valid_reference_type) = "NutritionOrder",
+    (.google.fhir.proto.valid_reference_type) = "ServiceRequest"
+  ];
+
+  // Composite Request ID
+  Identifier group_identifier = 28;
+
+  // draft | active | on-hold | revoked | completed | entered-in-error | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 14
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // proposal | plan | directive | order | original-order | reflex-order |
+  // filler-order | instance-order | option
+  message IntentCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-intent";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestIntentCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  IntentCode intent = 15
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // routine | urgent | asap | stat
+  message PriorityCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/request-priority";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    RequestPriorityCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  PriorityCode priority = 29;
+
+  // Who requires the diet, formula or nutritional supplement
+  Reference subject = 30 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient",
+    (.google.fhir.proto.valid_reference_type) = "Group"
+  ];
+
+  // The encounter associated with this nutrition order
+  Reference encounter = 17
+      [(.google.fhir.proto.valid_reference_type) = "Encounter"];
+
+  // Information to support fulfilling of the nutrition order
+  repeated Reference supporting_information = 31
+      [(.google.fhir.proto.valid_reference_type) = "Resource"];
+
+  // Date and time the nutrition order was requested
+  DateTime date_time = 18
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who ordered the diet, formula or nutritional supplement
+  Reference orderer = 19 [
+    (.google.fhir.proto.valid_reference_type) = "Practitioner",
+    (.google.fhir.proto.valid_reference_type) = "PractitionerRole"
+  ];
+
+  // Who is desired to perform the administration of what is being ordered
+  repeated CodeableReference performer = 32;
+
+  // List of the patient's food and nutrition-related allergies and intolerances
+  repeated Reference allergy_intolerance = 20
+      [(.google.fhir.proto.valid_reference_type) = "AllergyIntolerance"];
+
+  // Order-specific modifier about the type of food that should be given
+  repeated CodeableConcept food_preference_modifier = 21;
+
+  // Order-specific modifier about the type of food that should not be given
+  repeated CodeableConcept exclude_food_modifier = 22;
+
+  // Capture when a food item is brought in by the patient and/or family
+  Boolean outside_food_allowed = 33;
+
+  // Oral diet components
+  message OralDiet {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Type of oral diet or diet restrictions that describe what can be consumed
+    // orally
+    repeated CodeableConcept type = 4;
+
+    // Scheduling information for oral diets
+    message OralDietSchedule {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Scheduled frequency of diet
+      repeated Timing timing = 4;
+
+      // Take 'as needed'
+      Boolean as_needed = 5;
+
+      // Take 'as needed' for x
+      CodeableConcept as_needed_for = 6;
+    }
+    OralDietSchedule schedule = 10;
+
+    // Required  nutrient modifications
+    message Nutrient {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Type of nutrient that is being modified
+      CodeableConcept modifier = 4;
+
+      // Quantity of the specified nutrient
+      SimpleQuantity amount = 5;
+    }
+    repeated Nutrient nutrient = 6;
+
+    // Required  texture modifications
+    message Texture {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Code to indicate how to alter the texture of the foods, e.g. pureed
+      CodeableConcept modifier = 4;
+
+      // Concepts that are used to identify an entity that is ingested for
+      // nutritional purposes
+      CodeableConcept food_type = 5;
+    }
+    repeated Texture texture = 7;
+
+    // The required consistency of fluids and liquids provided to the patient
+    repeated CodeableConcept fluid_consistency_type = 8;
+
+    // Instructions or additional information about the oral diet
+    String instruction = 9;
+  }
+  OralDiet oral_diet = 23;
+
+  // Supplement components
+  message Supplement {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Type of supplement product requested
+    CodeableReference type = 9;
+
+    // Product or brand name of the nutritional supplement
+    String product_name = 5;
+
+    // Scheduling information for supplements
+    message SupplementSchedule {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Scheduled frequency of diet
+      repeated Timing timing = 4;
+
+      // Take 'as needed'
+      Boolean as_needed = 5;
+
+      // Take 'as needed' for x
+      CodeableConcept as_needed_for = 6;
+    }
+    SupplementSchedule schedule = 10;
+
+    // Amount of the nutritional supplement
+    SimpleQuantity quantity = 7;
+
+    // Instructions or additional information about the oral supplement
+    String instruction = 8;
+  }
+  repeated Supplement supplement = 24;
+
+  // Enteral formula components
+  message EnteralFormula {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Type of enteral or infant formula
+    CodeableReference base_formula_type = 13;
+
+    // Product or brand name of the enteral or infant formula
+    String base_formula_product_name = 5;
+
+    // Intended type of device for the administration
+    repeated CodeableReference delivery_device = 14;
+
+    // Components to add to the feeding
+    message Additive {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Type of modular component to add to the feeding
+      CodeableReference type = 4;
+
+      // Product or brand name of the modular additive
+      String product_name = 5;
+
+      // Amount of additive to be given or mixed in
+      SimpleQuantity quantity = 6;
+    }
+    repeated Additive additive = 15;
+
+    // Amount of energy per specified volume that is required
+    SimpleQuantity caloric_density = 8;
+
+    // How the formula should enter the patient's gastrointestinal tract
+    CodeableConcept route_of_administration = 16;
+
+    // Formula feeding instruction as structured data
+    message Administration {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Scheduling information for enteral formula products
+      message EnteralFormulaSchedule {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Scheduled frequency of enteral formula
+        repeated Timing timing = 4;
+
+        // Take 'as needed'
+        Boolean as_needed = 5;
+
+        // Take 'as needed' for x
+        CodeableConcept as_needed_for = 6;
+      }
+      EnteralFormulaSchedule schedule = 7;
+
+      // The volume of formula to provide
+      SimpleQuantity quantity = 5;
+
+      // Speed with which the formula is provided per period of time
+      message RateX {
+        option (.google.fhir.proto.is_choice_type) = true;
+
+        oneof choice {
+          SimpleQuantity quantity = 1;
+          Ratio ratio = 2;
+        }
+      }
+      RateX rate = 6;
+    }
+    repeated Administration administration = 10;
+
+    // Upper limit on formula volume per unit of time
+    SimpleQuantity max_volume_to_deliver = 11;
+
+    // Formula feeding instructions expressed as text
+    Markdown administration_instruction = 17;
+  }
+  EnteralFormula enteral_formula = 25;
+
+  // Comments
+  repeated Annotation note = 26;
+}

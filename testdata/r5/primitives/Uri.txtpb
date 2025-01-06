@@ -1,0 +1,30 @@
+# proto-file: proto/google/fhir/proto/r5/primitive_test_suite.proto
+# proto-message: PrimitiveTestSuite
+valid_pairs {
+  json_string: "\"urn:uuid:53fefa32-fcbb-4ff8-8a92-55ee120877b7\""
+  proto {
+    uri {
+      value: "urn:uuid:53fefa32-fcbb-4ff8-8a92-55ee120877b7"
+    }
+  }
+}
+
+valid_pairs {
+  json_string: "\"http://www.google.com\""
+  proto {
+    uri {
+      value: "http://www.google.com"
+    }
+  }
+}
+
+invalid_json: "true"
+invalid_json: "\" \""
+invalid_json: "1"
+invalid_json: "1.0"
+
+invalid_protos {
+  uri {
+    value: " "
+  }
+}

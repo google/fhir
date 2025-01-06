@@ -1,0 +1,490 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/codes.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/structure_map_go_proto";
+
+// Auto-generated from StructureDefinition for StructureMap.
+// A Map of relationships between 2 structures that can be used to transform
+// data. See http://hl7.org/fhir/StructureDefinition/StructureMap
+message StructureMap {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/StructureMap";
+  option (.google.fhir.proto.fhir_path_message_warning_constraint) =
+      "name.exists() implies name.matches('^[A-Z]([A-Za-z0-9_]){1,254}$')";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // StructureMap.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Canonical identifier for this structure map, represented as a URI (globally
+  // unique)
+  Uri url = 10 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.fhir_path_warning_constraint) =
+        "exists() implies matches('^[^|# ]+$')"
+  ];
+
+  // Additional identifier for the structure map
+  repeated Identifier identifier = 11;
+
+  // Business version of the structure map
+  String version = 12;
+
+  // How to compare versions
+  message VersionAlgorithmX {
+    option (.google.fhir.proto.is_choice_type) = true;
+
+    oneof choice {
+      String string_value = 1 [json_name = "string"];
+      Coding coding = 2;
+    }
+  }
+  VersionAlgorithmX version_algorithm = 28;
+
+  // Name for this structure map (computer friendly)
+  String name = 13
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Name for this structure map (human friendly)
+  String title = 14;
+
+  // draft | active | retired | unknown
+  message StatusCode {
+    option (.google.fhir.proto.structure_definition_kind) = KIND_PRIMITIVE_TYPE;
+    option (.google.fhir.proto.fhir_valueset_url) =
+        "http://hl7.org/fhir/ValueSet/publication-status";
+    option (.google.fhir.proto.fhir_profile_base) =
+        "http://hl7.org/fhir/StructureDefinition/code";
+
+    PublicationStatusCode.Value value = 1;
+
+    String id = 2;
+
+    repeated Extension extension = 3;
+  }
+  StatusCode status = 15
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // For testing purposes, not real usage
+  Boolean experimental = 16;
+
+  // Date last changed
+  DateTime date = 17;
+
+  // Name of the publisher/steward (organization or individual)
+  String publisher = 18;
+
+  // Contact details for the publisher
+  repeated ContactDetail contact = 19;
+
+  // Natural language description of the structure map
+  Markdown description = 20;
+
+  // The context that the content is intended to support
+  repeated UsageContext use_context = 21;
+
+  // Intended jurisdiction for structure map (if applicable)
+  repeated CodeableConcept jurisdiction = 22;
+
+  // Why this structure map is defined
+  Markdown purpose = 23;
+
+  // Use and/or publishing restrictions
+  Markdown copyright = 24;
+
+  // Copyright holder and year(s)
+  String copyright_label = 29;
+
+  // Structure Definition used by this map
+  message Structure {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Canonical reference to structure definition
+    Canonical url = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // source | queried | target | produced
+    message ModeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/map-model-mode";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      StructureMapModelModeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    ModeCode mode = 5
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Name for type in this map
+    String alias = 6;
+
+    // Documentation on use of structure
+    String documentation = 7;
+  }
+  repeated Structure structure = 25;
+
+  // Other maps used by this map (canonical URLs)
+  repeated Canonical import = 26;
+
+  // Definition of the constant value used in the map rules
+  message Const {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Constant name
+    Id name = 4;
+
+    // FHIRPath exression - value of the constant
+    String value = 5;
+  }
+  repeated Const const = 30;
+
+  // Named sections for reader convenience
+  message Group {
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Human-readable label
+    Id name = 4
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Another group that this group adds rules to
+    Id extends = 5;
+
+    // types | type-and-types
+    message TypeModeCode {
+      option (.google.fhir.proto.structure_definition_kind) =
+          KIND_PRIMITIVE_TYPE;
+      option (.google.fhir.proto.fhir_valueset_url) =
+          "http://hl7.org/fhir/ValueSet/map-group-type-mode";
+      option (.google.fhir.proto.fhir_profile_base) =
+          "http://hl7.org/fhir/StructureDefinition/code";
+
+      StructureMapGroupTypeModeCode.Value value = 1;
+
+      String id = 2;
+
+      repeated Extension extension = 3;
+    }
+    TypeModeCode type_mode = 6;
+
+    // Additional description/explanation for group
+    String documentation = 7;
+
+    // Named instance provided when invoking the map
+    message Input {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Name for this instance of data
+      Id name = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Type for this instance of data
+      String type = 5;
+
+      // source | target
+      message ModeCode {
+        option (.google.fhir.proto.structure_definition_kind) =
+            KIND_PRIMITIVE_TYPE;
+        option (.google.fhir.proto.fhir_valueset_url) =
+            "http://hl7.org/fhir/ValueSet/map-input-mode";
+        option (.google.fhir.proto.fhir_profile_base) =
+            "http://hl7.org/fhir/StructureDefinition/code";
+
+        StructureMapInputModeCode.Value value = 1;
+
+        String id = 2;
+
+        repeated Extension extension = 3;
+      }
+      ModeCode mode = 6
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Documentation for this instance of data
+      String documentation = 7;
+    }
+    repeated Input input = 8
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Transform Rule from source to target
+    message Rule {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Name of the rule for internal references
+      Id name = 4;
+
+      // Source inputs to the mapping
+      message Source {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Type or variable this rule applies to
+        Id context = 4
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+        // Specified minimum cardinality
+        Integer min = 5;
+
+        // Specified maximum cardinality (number or *)
+        String max = 6;
+
+        // Rule only applies if source has this type
+        String type = 7;
+
+        // Default value if no value exists
+        String default_value = 15;
+
+        // Optional field for this source
+        String element = 9;
+
+        // first | not_first | last | not_last | only_one
+        message ListModeCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/map-source-list-mode";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          StructureMapSourceListModeCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        ListModeCode list_mode = 10;
+
+        // Named context for field, if a field is specified
+        Id variable = 11;
+
+        // FHIRPath expression  - must be true or the rule does not apply
+        String condition = 12;
+
+        // FHIRPath expression  - must be true or the mapping engine throws an
+        // error instead of completing
+        String check = 13;
+
+        // Message to put in log if source exists (FHIRPath)
+        String log_message = 14;
+      }
+      repeated Source source = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Content to create because of this mapping rule
+      message Target {
+        option (.google.fhir.proto.fhir_path_message_constraint) =
+            "element.exists() implies context.exists()";
+
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Variable this rule applies to
+        String context = 12;
+
+        // Field to create in the context
+        String element = 6;
+
+        // Named context for field, if desired, and a field is specified
+        Id variable = 7;
+
+        // first | share | last | single
+        message ListModeCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/map-target-list-mode";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          StructureMapTargetListModeCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        repeated ListModeCode list_mode = 8;
+
+        // Internal rule reference for shared list items
+        Id list_rule_id = 9;
+
+        // create | copy +
+        message TransformCode {
+          option (.google.fhir.proto.structure_definition_kind) =
+              KIND_PRIMITIVE_TYPE;
+          option (.google.fhir.proto.fhir_valueset_url) =
+              "http://hl7.org/fhir/ValueSet/map-transform";
+          option (.google.fhir.proto.fhir_profile_base) =
+              "http://hl7.org/fhir/StructureDefinition/code";
+
+          StructureMapTransformCode.Value value = 1;
+
+          String id = 2;
+
+          repeated Extension extension = 3;
+        }
+        TransformCode transform = 10;
+
+        // Parameters to the transform
+        message Parameter {
+          // Unique id for inter-element referencing
+          String id = 1;
+
+          // Additional content defined by implementations
+          repeated Extension extension = 2;
+
+          // Extensions that cannot be ignored even if unrecognized
+          repeated Extension modifier_extension = 3;
+
+          // Parameter value - variable or literal
+          message ValueX {
+            option (.google.fhir.proto.is_choice_type) = true;
+
+            oneof choice {
+              Id id = 1;
+              String string_value = 2 [json_name = "string"];
+              Boolean boolean = 3;
+              Integer integer = 4;
+              Decimal decimal = 5;
+              Date date = 6;
+              Time time = 7;
+              DateTime date_time = 8;
+            }
+          }
+          ValueX value = 4
+              [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+        }
+        repeated Parameter parameter = 11;
+      }
+      repeated Target target = 6;
+
+      // Rules contained in this rule
+      repeated Rule rule = 7;
+
+      // Which other rules to apply in the context of this rule
+      message Dependent {
+        // Unique id for inter-element referencing
+        String id = 1;
+
+        // Additional content defined by implementations
+        repeated Extension extension = 2;
+
+        // Extensions that cannot be ignored even if unrecognized
+        repeated Extension modifier_extension = 3;
+
+        // Name of a rule or group to apply
+        Id name = 4
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+        // Parameter to pass to the rule or group
+        repeated Target.Parameter parameter = 6
+            [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+      }
+      repeated Dependent dependent = 8;
+
+      // Documentation for this instance of data
+      String documentation = 9;
+    }
+    repeated Rule rule = 9;
+  }
+  repeated Group group = 27
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+}

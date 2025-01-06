@@ -1,0 +1,156 @@
+//    Copyright 2023 Google Inc.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        https://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+
+syntax = "proto3";
+
+package google.fhir.r5.core;
+
+import "google/protobuf/any.proto";
+import "proto/google/fhir/proto/annotations.proto";
+import "proto/google/fhir/proto/r5/core/datatypes.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.fhir.r5.core";
+option (.google.fhir.proto.fhir_version) = R5;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/immunization_recommendation_go_proto";
+
+// Auto-generated from StructureDefinition for ImmunizationRecommendation.
+// Guidance or advice relating to an immunization.
+// See http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation
+message ImmunizationRecommendation {
+  option (.google.fhir.proto.structure_definition_kind) = KIND_RESOURCE;
+  option (.google.fhir.proto.fhir_structure_definition_url) =
+      "http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation";
+
+  // Logical id of this artifact
+  Id id = 1;
+
+  // Metadata about the resource
+  Meta meta = 2;
+
+  // A set of rules under which this content was created
+  Uri implicit_rules = 3;
+
+  // Language of the resource content
+  Code language = 4;
+
+  // Text summary of the resource, for human interpretation
+  Narrative text = 5;
+
+  // Contained, inline Resources
+  repeated protobuf.Any contained = 6;
+
+  // Field 7 reserved for strongly-typed ContainedResource for id:
+  // ImmunizationRecommendation.contained
+  reserved 7;
+
+  // Additional content defined by implementations
+  repeated Extension extension = 8;
+
+  // Extensions that cannot be ignored
+  repeated Extension modifier_extension = 9;
+
+  // Business identifier
+  repeated Identifier identifier = 10;
+
+  // Who this profile is for
+  Reference patient = 11 [
+    (.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR,
+    (.google.fhir.proto.valid_reference_type) = "Patient"
+  ];
+
+  // Date recommendation(s) created
+  DateTime date = 12
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+  // Who is responsible for protocol
+  Reference authority = 13
+      [(.google.fhir.proto.valid_reference_type) = "Organization"];
+
+  // Vaccine administration recommendations
+  message Recommendation {
+    option (.google.fhir.proto.fhir_path_message_constraint) =
+        "vaccineCode.exists() or targetDisease.exists()";
+
+    // Unique id for inter-element referencing
+    String id = 1;
+
+    // Additional content defined by implementations
+    repeated Extension extension = 2;
+
+    // Extensions that cannot be ignored even if unrecognized
+    repeated Extension modifier_extension = 3;
+
+    // Vaccine  or vaccine group recommendation applies to
+    repeated CodeableConcept vaccine_code = 4;
+
+    // Disease to be immunized against
+    repeated CodeableConcept target_disease = 16;
+
+    // Vaccine which is contraindicated to fulfill the recommendation
+    repeated CodeableConcept contraindicated_vaccine_code = 6;
+
+    // Vaccine recommendation status
+    CodeableConcept forecast_status = 7
+        [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+    // Vaccine administration status reason
+    repeated CodeableConcept forecast_reason = 8;
+
+    // Dates governing proposed immunization
+    message DateCriterion {
+      // Unique id for inter-element referencing
+      String id = 1;
+
+      // Additional content defined by implementations
+      repeated Extension extension = 2;
+
+      // Extensions that cannot be ignored even if unrecognized
+      repeated Extension modifier_extension = 3;
+
+      // Type of date
+      CodeableConcept code = 4
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+
+      // Recommended date
+      DateTime value = 5
+          [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+    }
+    repeated DateCriterion date_criterion = 9;
+
+    // Protocol details
+    Markdown description = 17;
+
+    // Name of vaccination series
+    String series = 11;
+
+    // Recommended dose number within series
+    String dose_number = 18;
+
+    // Recommended number of doses for immunity
+    String series_doses = 19;
+
+    // Past immunizations supporting recommendation
+    repeated Reference supporting_immunization = 14 [
+      (.google.fhir.proto.valid_reference_type) = "Immunization",
+      (.google.fhir.proto.valid_reference_type) = "ImmunizationEvaluation"
+    ];
+
+    // Patient observations supporting recommendation
+    repeated Reference supporting_patient_information = 15
+        [(.google.fhir.proto.valid_reference_type) = "Resource"];
+  }
+  repeated Recommendation recommendation = 14
+      [(.google.fhir.proto.validation_requirement) = REQUIRED_BY_FHIR];
+}
