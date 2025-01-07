@@ -33,28 +33,29 @@ import (
 
 	apb "github.com/google/fhir/go/proto/google/fhir/proto/annotations_go_proto"
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
+	d5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/datatypes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 )
 
 var (
 	stringMessageNames = collectDescriptorNames(
-		&d3pb.String{}, &d4pb.String{})
+		&d3pb.String{}, &d4pb.String{}, &d5pb.String{})
 	unsignedIntMessageNames = collectDescriptorNames(
-		&d3pb.UnsignedInt{}, &d4pb.UnsignedInt{})
+		&d3pb.UnsignedInt{}, &d4pb.UnsignedInt{}, &d5pb.UnsignedInt{})
 	positiveIntMessageNames = collectDescriptorNames(
-		&d3pb.PositiveInt{}, &d4pb.PositiveInt{})
+		&d3pb.PositiveInt{}, &d4pb.PositiveInt{}, &d5pb.PositiveInt{})
 	intMessageNames = unsignedIntMessageNames.Union(positiveIntMessageNames)
 	oidMessageNames = collectDescriptorNames(
-		&d3pb.Oid{}, &d4pb.Oid{})
+		&d3pb.Oid{}, &d4pb.Oid{}, &d5pb.Oid{})
 	idMessageNames = collectDescriptorNames(
-		&d3pb.Id{}, &d4pb.Id{})
+		&d3pb.Id{}, &d4pb.Id{}, &d5pb.Id{})
 	uuidMessageNames = collectDescriptorNames(
-		&d3pb.Uuid{}, &d4pb.Uuid{})
+		&d3pb.Uuid{}, &d4pb.Uuid{}, &d5pb.Uuid{})
 	codeMessageNames = collectDescriptorNames(
-		&d3pb.Code{}, &d4pb.Code{})
+		&d3pb.Code{}, &d4pb.Code{}, &d5pb.Code{})
 	stringRegexMessageNames = oidMessageNames.Union(idMessageNames).Union(uuidMessageNames).Union(codeMessageNames)
 	urlMessageNames         = collectDescriptorNames(
-		&d3pb.Uri{}, &d4pb.Uri{}, &d4pb.Url{}, &d4pb.Canonical{})
+		&d3pb.Uri{}, &d4pb.Uri{}, &d4pb.Url{}, &d4pb.Canonical{}, &d5pb.Uri{}, &d5pb.Url{}, &d5pb.Canonical{})
 	validatedTypes stringset.Set
 )
 

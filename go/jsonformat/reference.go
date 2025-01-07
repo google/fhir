@@ -24,6 +24,7 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
+	d5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/datatypes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 )
 
@@ -163,6 +164,30 @@ func normalizeR4Reference(ref *d4pb.Reference) error {
 	return setReferenceID(ref.ProtoReflect(), parts[0], refID.ProtoReflect())
 }
 
+func normalizeR5Reference(ref *d5pb.Reference) error {
+	uri := ref.GetUri().GetValue()
+	if uri == "" {
+		return nil
+	}
+
+	if strings.HasPrefix(uri, jsonpbhelper.RefFragmentPrefix) {
+		fragVal := uri[len(jsonpbhelper.RefFragmentPrefix):]
+		ref.Reference = &d5pb.Reference_Fragment{Fragment: &d5pb.String{Value: fragVal}}
+		return nil
+	}
+	parts := strings.Split(uri, "/")
+	if !(len(parts) == 2 || len(parts) == 4 && parts[2] == jsonpbhelper.RefHistory) {
+		return nil
+	}
+
+	refID := &d5pb.ReferenceId{Value: parts[1]}
+	if len(parts) > 2 {
+		refID.History = &d5pb.Id{Value: parts[3]}
+	}
+
+	return setReferenceID(ref.ProtoReflect(), parts[0], refID.ProtoReflect())
+}
+
 // DenormalizeReference recovers the absolute reference URI from a normalized representation.
 func DenormalizeReference(pb proto.Message) error {
 	switch ref := pb.(type) {
@@ -170,6 +195,8 @@ func DenormalizeReference(pb proto.Message) error {
 		denormalizeR3Reference(ref)
 	case *d4pb.Reference:
 		denormalizeR4Reference(ref)
+	case *d5pb.Reference:
+		denormalizeR5Reference(ref)
 	default:
 		return fmt.Errorf("invalid reference type %T", pb)
 	}
@@ -184,6 +211,8 @@ func NewDenormalizedReference(pb proto.Message) (proto.Message, error) {
 		newRef = copyR3Reference(ref)
 	case *d4pb.Reference:
 		newRef = copyR4Reference(ref)
+	case *d5pb.Reference:
+		newRef = copyR5Reference(ref)
 	default:
 		return nil, fmt.Errorf("invalid reference type %T", pb)
 	}
@@ -234,6 +263,17 @@ func denormalizeR3Reference(ref *d3pb.Reference) {
 
 func copyR4Reference(ref *d4pb.Reference) proto.Message {
 	return &d4pb.Reference{
+		Id:         ref.GetId(),
+		Extension:  ref.GetExtension(),
+		Type:       ref.GetType(),
+		Identifier: ref.GetIdentifier(),
+		Display:    ref.GetDisplay(),
+		Reference:  ref.GetReference(),
+	}
+}
+
+func copyR5Reference(ref *d5pb.Reference) proto.Message {
+	return &d5pb.Reference{
 		Id:         ref.GetId(),
 		Extension:  ref.GetExtension(),
 		Type:       ref.GetType(),

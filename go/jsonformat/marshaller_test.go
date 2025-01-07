@@ -39,6 +39,16 @@ import (
 	r4patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/patient_go_proto"
 	r4researchstudypb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/research_study_go_proto"
 	r4searchparampb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/search_parameter_go_proto"
+	c5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/codes_go_proto"
+	d5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/datatypes_go_proto"
+	r5binarypb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/binary_go_proto"
+	r5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/bundle_and_contained_resource_go_proto"
+	r5codesystempb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/code_system_go_proto"
+	r5conditionpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/condition_go_proto"
+	r5devicepb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/device_go_proto"
+	r5patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/patient_go_proto"
+	r5researchstudypb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/research_study_go_proto"
+	r5searchparampb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/search_parameter_go_proto"
 	c3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/codes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 	m3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/metadatatypes_go_proto"
@@ -209,6 +219,38 @@ func TestMarshalContainedResource(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Patient{
+							Patient: &r5patientpb.Patient{
+								Active: &d5pb.Boolean{
+									Value: true,
+								},
+								Name: []*d5pb.HumanName{{
+									Given: []*d5pb.String{{
+										Value: "Toby",
+										Id: &d5pb.String{
+											Value: "a3",
+										},
+										Extension: []*d5pb.Extension{{
+											Url: &d5pb.Uri{
+												Value: "http://hl7.org/fhir/StructureDefinition/qualifier",
+											},
+											Value: &d5pb.Extension_ValueX{
+												Choice: &d5pb.Extension_ValueX_Code{
+													Code: &d5pb.Code{
+														Value: "MID",
+													},
+												},
+											},
+										}},
+									}},
+								}},
+							},
+						},
+					},
+				},
 			},
 			want: []byte(`{
         "active": true,
@@ -272,7 +314,7 @@ func TestMarshalContainedResource(t *testing.T) {
       }`),
 		},
 		{
-			name:   "R4 ResearchStudy",
+			name:   "R4/R5 ResearchStudy",
 			pretty: true,
 			inputs: []mvr{
 				{
@@ -293,6 +335,29 @@ func TestMarshalContainedResource(t *testing.T) {
 								},
 								Status: &r4researchstudypb.ResearchStudy_StatusCode{
 									Value: c4pb.ResearchStudyStatusCode_ACTIVE,
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_ResearchStudy{
+							ResearchStudy: &r5researchstudypb.ResearchStudy{
+								Id: &d5pb.Id{
+									Value: "example",
+								},
+								Text: &d5pb.Narrative{
+									Status: &d5pb.Narrative_StatusCode{
+										Value: c5pb.NarrativeStatusCode_GENERATED,
+									},
+									Div: &d5pb.Xhtml{
+										Value: `<div xmlns="http://www.w3.org/1999/xhtml">[Put rendering here]</div>`,
+									},
+								},
+								Status: &r5researchstudypb.ResearchStudy_StatusCode{
+									Value: c5pb.PublicationStatusCode_ACTIVE,
 								},
 							},
 						},
@@ -361,7 +426,7 @@ func TestMarshalContainedResource(t *testing.T) {
 			want: []byte(`{"id":"example","resourceType":"Device","udi":{"carrierHRF":"test"}}`),
 		},
 		{
-			name: "R4 acronym field",
+			name: "R4/R5 acronym field",
 			inputs: []mvr{
 				{
 					ver: fhirversion.R4,
@@ -373,6 +438,21 @@ func TestMarshalContainedResource(t *testing.T) {
 								},
 								UdiCarrier: []*r4devicepb.Device_UdiCarrier{
 									{CarrierHrf: &d4pb.String{Value: "test"}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Device{
+							Device: &r5devicepb.Device{
+								Id: &d5pb.Id{
+									Value: "example",
+								},
+								UdiCarrier: []*r5devicepb.Device_UdiCarrier{
+									{CarrierHrf: &d5pb.String{Value: "test"}},
 								},
 							},
 						},
@@ -439,6 +519,38 @@ func TestMarshalContainedResource(t *testing.T) {
 											},
 										},
 									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Patient{
+							Patient: &r5patientpb.Patient{
+								Id: &d5pb.Id{Value: "wan"},
+								Contained: []*anypb.Any{
+									marshalToAny(t, &r5pb.ContainedResource{
+										OneofResource: &r5pb.ContainedResource_Patient{
+											Patient: &r5patientpb.Patient{
+												Id: &d5pb.Id{
+													Value: "nat",
+												},
+												Contained: []*anypb.Any{
+													marshalToAny(t, &r5pb.ContainedResource{
+														OneofResource: &r5pb.ContainedResource_Patient{
+															Patient: &r5patientpb.Patient{
+																Id: &d5pb.Id{
+																	Value: "double-nat",
+																},
+															},
+														},
+													}),
+												},
+											},
+										},
+									}),
 								},
 							},
 						},
@@ -550,6 +662,34 @@ func TestMarshalResource(t *testing.T) {
 									Value: &d4pb.Extension_ValueX{
 										Choice: &d4pb.Extension_ValueX_Code{
 											Code: &d4pb.Code{
+												Value: "MID",
+											},
+										},
+									},
+								}},
+							}},
+						}},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Active: &d5pb.Boolean{
+							Value: true,
+						},
+						Name: []*d5pb.HumanName{{
+							Given: []*d5pb.String{{
+								Value: "Toby",
+								Id: &d5pb.String{
+									Value: "a3",
+								},
+								Extension: []*d5pb.Extension{{
+									Url: &d5pb.Uri{
+										Value: "http://hl7.org/fhir/StructureDefinition/qualifier",
+									},
+									Value: &d5pb.Extension_ValueX{
+										Choice: &d5pb.Extension_ValueX_Code{
+											Code: &d5pb.Code{
 												Value: "MID",
 											},
 										},
@@ -725,6 +865,31 @@ func TestMarshalMessage(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.Bundle{
+						Entry: []*r5pb.Bundle_Entry{{
+							Resource: &r5pb.ContainedResource{
+								OneofResource: &r5pb.ContainedResource_SearchParameter{
+									SearchParameter: &r5searchparampb.SearchParameter{
+										Id: &d5pb.Id{
+											Value: "DomainResource-text",
+										},
+									},
+								},
+							}},
+							{Resource: &r5pb.ContainedResource{
+								OneofResource: &r5pb.ContainedResource_SearchParameter{
+									SearchParameter: &r5searchparampb.SearchParameter{
+										Id: &d5pb.Id{
+											Value: "Resource-content",
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
 			},
 			want: map[string]interface{}{
 				"resourceType": "Bundle",
@@ -799,6 +964,32 @@ func TestMarshalMessage(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						BirthDate: &d5pb.Date{
+							ValueUs:   1463529600000000,
+							Precision: d5pb.Date_DAY,
+							Id: &d5pb.String{
+								Value: "a3",
+							},
+							Extension: []*d5pb.Extension{{
+								Url: &d5pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_DateTime{
+										DateTime: &d5pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d5pb.DateTime_SECOND,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
 			},
 			want: map[string]interface{}{
 				"resourceType": "Patient",
@@ -856,6 +1047,29 @@ func TestMarshalMessage(t *testing.T) {
 											ValueUs:   1463567325000000,
 											Timezone:  "Z",
 											Precision: d4pb.DateTime_SECOND,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						BirthDate: &d5pb.Date{
+							ValueUs:   1463529600000000,
+							Precision: d5pb.Date_DAY,
+							Extension: []*d5pb.Extension{{
+								Url: &d5pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_DateTime{
+										DateTime: &d5pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d5pb.DateTime_SECOND,
 										},
 									},
 								},
@@ -944,6 +1158,38 @@ func TestMarshalMessage(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						BirthDate: &d5pb.Date{
+							Extension: []*d5pb.Extension{{
+								Url: &d5pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_DateTime{
+										DateTime: &d5pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d5pb.DateTime_SECOND,
+										},
+									},
+								},
+							}, {
+								Url: &d5pb.Uri{
+									Value: jsonpbhelper.PrimitiveHasNoValueURL,
+								},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_Boolean{
+										Boolean: &d5pb.Boolean{
+											Value: true,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
 			},
 			want: map[string]interface{}{
 				"resourceType": "Patient",
@@ -996,7 +1242,7 @@ func TestMarshalMessage(t *testing.T) {
 			},
 		},
 		{
-			name: "Binary with stride - R4",
+			name: "Binary with stride - R4/R5",
 			inputs: []mvr{
 				{
 					ver: fhirversion.R4,
@@ -1019,6 +1265,35 @@ func TestMarshalMessage(t *testing.T) {
 										Value: &d4pb.Extension_ValueX{
 											Choice: &d4pb.Extension_ValueX_PositiveInt{
 												PositiveInt: &d4pb.PositiveInt{Value: 2},
+											},
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5binarypb.Binary{
+						Data: &d5pb.Base64Binary{
+							Value: []byte{1, 2, 3, 4},
+							Extension: []*d5pb.Extension{{
+								Url: &d5pb.Uri{Value: jsonpbhelper.Base64BinarySeparatorStrideURL},
+								Extension: []*d5pb.Extension{
+									{
+										Url: &d5pb.Uri{Value: "separator"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_StringValue{
+												StringValue: &d5pb.String{Value: "  "},
+											},
+										},
+									},
+									{
+										Url: &d5pb.Uri{Value: "stride"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_PositiveInt{
+												PositiveInt: &d5pb.PositiveInt{Value: 2},
 											},
 										},
 									},
@@ -1132,6 +1407,18 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						ManagingOrganization: &d5pb.Reference{
+							Reference: &d5pb.Reference_Uri{
+								Uri: &d5pb.String{
+									Value: "Organization/1",
+								},
+							},
+						},
+					},
+				},
 			},
 			depth: 10,
 			want: map[string]interface{}{
@@ -1156,6 +1443,14 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 					r: &r4patientpb.Patient{
 						Deceased: &r4patientpb.Patient_DeceasedX{
 							Choice: &r4patientpb.Patient_DeceasedX_Boolean{Boolean: &d4pb.Boolean{Value: false}},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Deceased: &r5patientpb.Patient_DeceasedX{
+							Choice: &r5patientpb.Patient_DeceasedX_Boolean{Boolean: &d5pb.Boolean{Value: false}},
 						},
 					},
 				},
@@ -1240,6 +1535,41 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d5pb.Extension{
+									{
+										Url: &d5pb.Uri{Value: "ombCategory"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_Coding{
+												Coding: &d5pb.Coding{
+													System: &d5pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d5pb.Code{Value: "2106-3"},
+												},
+											},
+										},
+									},
+									{
+										Url: &d5pb.Uri{Value: "text"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "White"}},
+										},
+									},
+								},
+							},
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "Rosie"}},
+								},
+							},
+						},
+					},
+				},
 			},
 			depth: 10,
 			want: map[string]interface{}{
@@ -1297,6 +1627,32 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 											ValueUs:   1463567325000000,
 											Timezone:  "Z",
 											Precision: d4pb.DateTime_SECOND,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						BirthDate: &d5pb.Date{
+							ValueUs:   1463529600000000,
+							Precision: d5pb.Date_DAY,
+							Id: &d5pb.String{
+								Value: "a3",
+							},
+							Extension: []*d5pb.Extension{{
+								Url: &d5pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_DateTime{
+										DateTime: &d5pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d5pb.DateTime_SECOND,
 										},
 									},
 								},
@@ -1377,6 +1733,38 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						BirthDate: &d5pb.Date{
+							Extension: []*d5pb.Extension{{
+								Url: &d5pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_DateTime{
+										DateTime: &d5pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d5pb.DateTime_SECOND,
+										},
+									},
+								},
+							}, {
+								Url: &d5pb.Uri{
+									Value: jsonpbhelper.PrimitiveHasNoValueURL,
+								},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_Boolean{
+										Boolean: &d5pb.Boolean{
+											Value: true,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
 			},
 			depth: 10,
 			want:  map[string]interface{}{},
@@ -1426,6 +1814,32 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 										Concept: []*r4codesystempb.CodeSystem_ConceptDefinition{
 											{
 												Code: &d4pb.Code{
+													Value: "code3",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5codesystempb.CodeSystem{
+						Concept: []*r5codesystempb.CodeSystem_ConceptDefinition{
+							{
+								Code: &d5pb.Code{
+									Value: "code1",
+								},
+								Concept: []*r5codesystempb.CodeSystem_ConceptDefinition{
+									{
+										Code: &d5pb.Code{
+											Value: "code2",
+										},
+										Concept: []*r5codesystempb.CodeSystem_ConceptDefinition{
+											{
+												Code: &d5pb.Code{
 													Value: "code3",
 												},
 											},
@@ -1491,6 +1905,24 @@ func TestMarshalMessageForAnalytics(t *testing.T) {
 										Code: &d4pb.Code{Value: "code2"},
 										Concept: []*r4codesystempb.CodeSystem_ConceptDefinition{
 											{Code: &d4pb.Code{Value: "code3"}},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5codesystempb.CodeSystem{
+						Concept: []*r5codesystempb.CodeSystem_ConceptDefinition{
+							{
+								Code: &d5pb.Code{Value: "code1"},
+								Concept: []*r5codesystempb.CodeSystem_ConceptDefinition{
+									{
+										Code: &d5pb.Code{Value: "code2"},
+										Concept: []*r5codesystempb.CodeSystem_ConceptDefinition{
+											{Code: &d5pb.Code{Value: "code3"}},
 										},
 									},
 								},
@@ -1611,6 +2043,18 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						ManagingOrganization: &d5pb.Reference{
+							Reference: &d5pb.Reference_Uri{
+								Uri: &d5pb.String{
+									Value: "Organization/1",
+								},
+							},
+						},
+					},
+				},
 			},
 			depth: 10,
 			want: map[string]interface{}{
@@ -1635,6 +2079,14 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 					r: &r4patientpb.Patient{
 						Deceased: &r4patientpb.Patient_DeceasedX{
 							Choice: &r4patientpb.Patient_DeceasedX_Boolean{Boolean: &d4pb.Boolean{Value: false}},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Deceased: &r5patientpb.Patient_DeceasedX{
+							Choice: &r5patientpb.Patient_DeceasedX_Boolean{Boolean: &d5pb.Boolean{Value: false}},
 						},
 					},
 				},
@@ -1714,6 +2166,41 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"},
 								Value: &d4pb.Extension_ValueX{
 									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "Rosie"}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d5pb.Extension{
+									{
+										Url: &d5pb.Uri{Value: "ombCategory"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_Coding{
+												Coding: &d5pb.Coding{
+													System: &d5pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d5pb.Code{Value: "2106-3"},
+												},
+											},
+										},
+									},
+									{
+										Url: &d5pb.Uri{Value: "text"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "White"}},
+										},
+									},
+								},
+							},
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "Rosie"}},
 								},
 							},
 						},
@@ -1809,6 +2296,37 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d5pb.Extension{
+									{
+										Url: &d5pb.Uri{Value: "ombCategory"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_Coding{
+												Coding: &d5pb.Coding{
+													System: &d5pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d5pb.Code{Value: "2106-3"},
+												},
+											},
+										},
+										Extension: []*d5pb.Extension{
+											{
+												Url: &d5pb.Uri{Value: "text"},
+												Value: &d5pb.Extension_ValueX{
+													Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "White"}},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 			depth: 10,
 			want: map[string]interface{}{
@@ -1872,6 +2390,32 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 											ValueUs:   1463567325000000,
 											Timezone:  "Z",
 											Precision: d4pb.DateTime_SECOND,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						BirthDate: &d5pb.Date{
+							ValueUs:   1463529600000000,
+							Precision: d5pb.Date_DAY,
+							Id: &d5pb.String{
+								Value: "a3",
+							},
+							Extension: []*d5pb.Extension{{
+								Url: &d5pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_DateTime{
+										DateTime: &d5pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d5pb.DateTime_SECOND,
 										},
 									},
 								},
@@ -1959,6 +2503,38 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						BirthDate: &d5pb.Date{
+							Extension: []*d5pb.Extension{{
+								Url: &d5pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_DateTime{
+										DateTime: &d5pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d5pb.DateTime_SECOND,
+										},
+									},
+								},
+							}, {
+								Url: &d5pb.Uri{
+									Value: jsonpbhelper.PrimitiveHasNoValueURL,
+								},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_Boolean{
+										Boolean: &d5pb.Boolean{
+											Value: true,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
 			},
 			depth: 10,
 			want: map[string]interface{}{
@@ -2016,6 +2592,32 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 										Concept: []*r4codesystempb.CodeSystem_ConceptDefinition{
 											{
 												Code: &d4pb.Code{
+													Value: "code3",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5codesystempb.CodeSystem{
+						Concept: []*r5codesystempb.CodeSystem_ConceptDefinition{
+							{
+								Code: &d5pb.Code{
+									Value: "code1",
+								},
+								Concept: []*r5codesystempb.CodeSystem_ConceptDefinition{
+									{
+										Code: &d5pb.Code{
+											Value: "code2",
+										},
+										Concept: []*r5codesystempb.CodeSystem_ConceptDefinition{
+											{
+												Code: &d5pb.Code{
 													Value: "code3",
 												},
 											},
@@ -2088,6 +2690,24 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5codesystempb.CodeSystem{
+						Concept: []*r5codesystempb.CodeSystem_ConceptDefinition{
+							{
+								Code: &d5pb.Code{Value: "code1"},
+								Concept: []*r5codesystempb.CodeSystem_ConceptDefinition{
+									{
+										Code: &d5pb.Code{Value: "code2"},
+										Concept: []*r5codesystempb.CodeSystem_ConceptDefinition{
+											{Code: &d5pb.Code{Value: "code3"}},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 			want: map[string]interface{}{
 				"concept": []interface{}{
@@ -2128,6 +2748,20 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
 								Value: &d4pb.Extension_ValueX{
 									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Id: &d5pb.Id{Value: "id1"},
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "id2"}},
 								},
 							},
 						},
@@ -2184,6 +2818,25 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition1/id"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/id"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
 			},
 			want: map[string]interface{}{
 				"hl7_org_fhir_StructureDefinition1_id": map[string]interface{}{
@@ -2234,6 +2887,25 @@ func TestMarshalMessageForAnalytics_InferredSchema(t *testing.T) {
 								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/ID"},
 								Value: &d4pb.Extension_ValueX{
 									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition1/id"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/ID"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "id2"}},
 								},
 							},
 						},
@@ -2325,6 +2997,25 @@ func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/extension-field"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/extension-field"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -2356,6 +3047,19 @@ func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: ""},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "id1"}},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -2380,6 +3084,18 @@ func TestMarshalMessageForAnalytics_InferredSchema_Error(t *testing.T) {
 							{
 								Value: &d4pb.Extension_ValueX{
 									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id1"}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "id1"}},
 								},
 							},
 						},
@@ -2504,6 +3220,52 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 										Url: &d4pb.Uri{Value: "text"},
 										Value: &d4pb.Extension_ValueX{
 											Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "Asian"}},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d5pb.Extension{
+									{
+										Url: &d5pb.Uri{Value: "ombCategory"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_Coding{
+												Coding: &d5pb.Coding{
+													System: &d5pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d5pb.Code{Value: "2076-8"},
+												},
+											},
+										},
+									},
+									{
+										Url: &d5pb.Uri{Value: "text"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "Native Hawaiian or Other Pacific Islander"}},
+										},
+									},
+									{
+										Url: &d5pb.Uri{Value: "ombCategory"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_Coding{
+												Coding: &d5pb.Coding{
+													System: &d5pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d5pb.Code{Value: "2028-9"},
+												},
+											},
+										},
+									},
+									{
+										Url: &d5pb.Uri{Value: "text"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "Asian"}},
 										},
 									},
 								},
@@ -2671,6 +3433,71 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 												Value: &d4pb.Extension_ValueX{
 													Choice: &d4pb.Extension_ValueX_StringValue{
 														StringValue: &d4pb.String{Value: "f"},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/StructureDefinition/test"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{
+										StringValue: &d5pb.String{Value: "a"},
+									},
+								},
+							},
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/StructureDefinition/test"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{
+										StringValue: &d5pb.String{Value: "b"},
+									},
+								},
+							},
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/StructureDefinition/test"},
+								Extension: []*d5pb.Extension{
+									{
+										Url: &d5pb.Uri{Value: "test"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_StringValue{
+												StringValue: &d5pb.String{Value: "c"},
+											},
+										},
+									},
+									{
+										Url: &d5pb.Uri{Value: "test"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_StringValue{
+												StringValue: &d5pb.String{Value: "d"},
+											},
+										},
+									},
+									{
+										Url: &d5pb.Uri{Value: "test"},
+										Extension: []*d5pb.Extension{
+											{
+												Url: &d5pb.Uri{Value: "test"},
+												Value: &d5pb.Extension_ValueX{
+													Choice: &d5pb.Extension_ValueX_StringValue{
+														StringValue: &d5pb.String{Value: "e"},
+													},
+												},
+											},
+											{
+												Url: &d5pb.Uri{Value: "test"},
+												Value: &d5pb.Extension_ValueX{
+													Choice: &d5pb.Extension_ValueX_StringValue{
+														StringValue: &d5pb.String{Value: "f"},
 													},
 												},
 											},
@@ -2858,6 +3685,71 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: "http://example.com/Extension/QueryData"},
+								Extension: []*d5pb.Extension{
+									{
+										Url: &d5pb.Uri{Value: "https://example.com/Extension/QueryMnemonic"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_StringValue{
+												StringValue: &d5pb.String{Value: "a"},
+											},
+										},
+									},
+									{
+										Url: &d5pb.Uri{Value: "https://example.com/Extension/QueryQuestion"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_StringValue{
+												StringValue: &d5pb.String{Value: "b"},
+											},
+										},
+									},
+									{
+										Url: &d5pb.Uri{Value: "https://example.com/Extension/QueryResponse"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_StringValue{
+												StringValue: &d5pb.String{Value: "c"},
+											},
+										},
+									},
+								},
+							},
+							{
+								Url: &d5pb.Uri{Value: "http://example.com/Extension/QueryData"},
+								Extension: []*d5pb.Extension{
+									{
+										Url: &d5pb.Uri{Value: "https://example.com/Extension/QueryMnemonic"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_StringValue{
+												StringValue: &d5pb.String{Value: "d"},
+											},
+										},
+									},
+									{
+										Url: &d5pb.Uri{Value: "https://example.com/Extension/QueryQuestion"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_StringValue{
+												StringValue: &d5pb.String{Value: "e"},
+											},
+										},
+									},
+									{
+										Url: &d5pb.Uri{Value: "https://example.com/Extension/QueryResponse"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_StringValue{
+												StringValue: &d5pb.String{Value: "f"},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 			want: map[string]interface{}{
 				"QueryData": []interface{}{
@@ -2941,6 +3833,20 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Id: &d5pb.Id{Value: "id1"},
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/id"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
 			},
 			want: map[string]interface{}{
 				"id": "id1",
@@ -2989,6 +3895,25 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/id"},
 								Value: &d4pb.Extension_ValueX{
 									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition1/id"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/id"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "id2"}},
 								},
 							},
 						},
@@ -3044,6 +3969,25 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 								Url: &d4pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/ID"},
 								Value: &d4pb.Extension_ValueX{
 									Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "id2"}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition1/id"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "id1"}},
+								},
+							},
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition2/ID"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "id2"}},
 								},
 							},
 						},
@@ -3128,6 +4072,37 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d5pb.Extension{
+									{
+										Url: &d5pb.Uri{Value: "ombCategory"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_Coding{
+												Coding: &d5pb.Coding{
+													System: &d5pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d5pb.Code{Value: "2106-3"},
+												},
+											},
+										},
+										Extension: []*d5pb.Extension{
+											{
+												Url: &d5pb.Uri{Value: "text"},
+												Value: &d5pb.Extension_ValueX{
+													Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "White"}},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 			want: map[string]interface{}{
 				"us_core_race": []interface{}{
@@ -3188,6 +4163,27 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 										Url: &d4pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race/value"},
 										Value: &d4pb.Extension_ValueX{
 											Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "Asian"}},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "Asian"}},
+								},
+								Extension: []*d5pb.Extension{
+									{
+										Url: &d5pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race/value"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "Asian"}},
 										},
 									},
 								},
@@ -3257,6 +4253,32 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 											ValueUs:   1463567325000000,
 											Timezone:  "Z",
 											Precision: d4pb.DateTime_SECOND,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						BirthDate: &d5pb.Date{
+							ValueUs:   1463529600000000,
+							Precision: d5pb.Date_DAY,
+							Id: &d5pb.String{
+								Value: "a3",
+							},
+							Extension: []*d5pb.Extension{{
+								Url: &d5pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_DateTime{
+										DateTime: &d5pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d5pb.DateTime_SECOND,
 										},
 									},
 								},
@@ -3335,6 +4357,38 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 								Value: &d4pb.Extension_ValueX{
 									Choice: &d4pb.Extension_ValueX_Boolean{
 										Boolean: &d4pb.Boolean{
+											Value: true,
+										},
+									},
+								},
+							}},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						BirthDate: &d5pb.Date{
+							Extension: []*d5pb.Extension{{
+								Url: &d5pb.Uri{
+									Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+								},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_DateTime{
+										DateTime: &d5pb.DateTime{
+											ValueUs:   1463567325000000,
+											Timezone:  "Z",
+											Precision: d5pb.DateTime_SECOND,
+										},
+									},
+								},
+							}, {
+								Url: &d5pb.Uri{
+									Value: jsonpbhelper.PrimitiveHasNoValueURL,
+								},
+								Value: &d5pb.Extension_ValueX{
+									Choice: &d5pb.Extension_ValueX_Boolean{
+										Boolean: &d5pb.Boolean{
 											Value: true,
 										},
 									},
@@ -3440,6 +4494,62 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 			},
 		},
 		{
+			name: "Contained Resource R5",
+			inputs: []mvr{
+				{
+					ver: fhirversion.R5,
+					r: &r5conditionpb.Condition{
+						Contained: []*anypb.Any{
+							marshalToAny(t, &r5pb.ContainedResource{
+								OneofResource: &r5pb.ContainedResource_Patient{
+									Patient: &r5patientpb.Patient{
+										Id: &d5pb.Id{
+											Value: "p1",
+										},
+										Extension: []*d5pb.Extension{{
+											Url: &d5pb.Uri{
+												Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime",
+											},
+											Value: &d5pb.Extension_ValueX{
+												Choice: &d5pb.Extension_ValueX_DateTime{
+													DateTime: &d5pb.DateTime{
+														ValueUs:   1463567325000000,
+														Timezone:  "Z",
+														Precision: d5pb.DateTime_SECOND,
+													},
+												},
+											},
+										}},
+									},
+								},
+							}),
+						},
+						Participant: []*r5conditionpb.Condition_Participant{
+							{
+								Actor: &d5pb.Reference{
+									Reference: &d5pb.Reference_Fragment{
+										Fragment: &d5pb.String{Value: "p1"},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			want: map[string]any{
+				"contained": []any{
+					`{"resourceType":"Patient","id":"p1","patient_birthTime":[{"value":{"dateTime":"2016-05-18T10:28:45Z"}}]}`,
+				},
+				"participant": []any{
+					map[string]any{
+						"actor": map[string]any{
+							"reference": "#p1",
+						},
+					},
+				},
+			},
+		},
+		{
 			name: "extension with valueString",
 			inputs: []mvr{
 				{
@@ -3460,6 +4570,17 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 							{
 								Url:   &d3pb.Uri{Value: "http://hl7.org/extension_url"},
 								Value: &d3pb.Extension_ValueX{Choice: &d3pb.Extension_ValueX_StringValue{StringValue: &d3pb.String{Value: "extension_value"}}},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url:   &d5pb.Uri{Value: "http://hl7.org/extension_url"},
+								Value: &d5pb.Extension_ValueX{Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "extension_value"}}},
 							},
 						},
 					},
@@ -3498,6 +4619,17 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url:   &d5pb.Uri{Value: "http://hl7.org/extension_url"},
+								Value: &d5pb.Extension_ValueX{Choice: &d5pb.Extension_ValueX_Id{Id: &d5pb.Id{Value: "extension_value"}}},
+							},
+						},
+					},
+				},
 			},
 			want: map[string]any{
 				"extension_url": []any{
@@ -3530,6 +4662,18 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema(t *testing.T) {
 								Id:    &d3pb.String{Value: "exampleExtension"},
 								Url:   &d3pb.Uri{Value: "http://hl7.org/extension_url"},
 								Value: &d3pb.Extension_ValueX{Choice: &d3pb.Extension_ValueX_Id{Id: &d3pb.Id{Value: "extension_value"}}},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Id:    &d5pb.String{Value: "exampleExtension"},
+								Url:   &d5pb.Uri{Value: "http://hl7.org/extension_url"},
+								Value: &d5pb.Extension_ValueX{Choice: &d5pb.Extension_ValueX_Id{Id: &d5pb.Id{Value: "extension_value"}}},
 							},
 						},
 					},
@@ -3631,6 +4775,37 @@ func TestMarshalMessageForAnalyticsV2_InferredSchema_Error(t *testing.T) {
 												Url: &d4pb.Uri{Value: "value"},
 												Value: &d4pb.Extension_ValueX{
 													Choice: &d4pb.Extension_ValueX_StringValue{StringValue: &d4pb.String{Value: "White"}},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient{
+						Extension: []*d5pb.Extension{
+							{
+								Url: &d5pb.Uri{Value: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"},
+								Extension: []*d5pb.Extension{
+									{
+										Url: &d5pb.Uri{Value: "ombCategory"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_Coding{
+												Coding: &d5pb.Coding{
+													System: &d5pb.Uri{Value: "urn:oid:2.16.840.1.113883.6.238"},
+													Code:   &d5pb.Code{Value: "2106-3"},
+												},
+											},
+										},
+										Extension: []*d5pb.Extension{
+											{
+												Url: &d5pb.Uri{Value: "value"},
+												Value: &d5pb.Extension_ValueX{
+													Choice: &d5pb.Extension_ValueX_StringValue{StringValue: &d5pb.String{Value: "White"}},
 												},
 											},
 										},

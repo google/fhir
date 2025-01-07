@@ -28,9 +28,16 @@ import (
 	c4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/codes_go_proto"
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	r4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
-	drpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/device_request_go_proto"
+	r4devicerequestpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/device_request_go_proto"
 	r4outcomepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/operation_outcome_go_proto"
 	r4patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/patient_go_proto"
+	c5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/codes_go_proto"
+	d5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/datatypes_go_proto"
+	r5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/bundle_and_contained_resource_go_proto"
+	r5immunizationpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/immunization_go_proto"
+	r5outcomepb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/operation_outcome_go_proto"
+	r5patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/patient_go_proto"
+	vs5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/valuesets_go_proto"
 	c3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/codes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 	r3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto"
@@ -56,6 +63,15 @@ func TestRequiredFields(t *testing.T) {
 				},
 			},
 		},
+		&r5pb.ContainedResource{
+			OneofResource: &r5pb.ContainedResource_Patient{
+				Patient: &r5patientpb.Patient{
+					Link: []*r5patientpb.Patient_Link{
+						{},
+					},
+				},
+			},
+		},
 	}
 	for _, test := range tests {
 		wantErr := `error at "Patient.link[0]": missing required field "other"
@@ -70,18 +86,44 @@ error at "Patient.link[0]": missing required field "type"`
 }
 
 func TestRequired_ChoiceField(t *testing.T) {
-	test := &r4pb.ContainedResource{
-		OneofResource: &r4pb.ContainedResource_DeviceRequest{
-			DeviceRequest: &drpb.DeviceRequest{
-				Intent:  &drpb.DeviceRequest_IntentCode{Value: c4pb.RequestIntentCode_REFLEX_ORDER},
-				Subject: &d4pb.Reference{Reference: &d4pb.Reference_PatientId{PatientId: &d4pb.ReferenceId{Value: "1"}}},
+	tests := []struct {
+		name    string
+		res     proto.Message
+		wantErr string
+	}{
+		{
+			name: "R4 missing code[x]",
+			res: &r4pb.ContainedResource{
+				OneofResource: &r4pb.ContainedResource_DeviceRequest{
+					DeviceRequest: &r4devicerequestpb.DeviceRequest{
+						Intent:  &r4devicerequestpb.DeviceRequest_IntentCode{Value: c4pb.RequestIntentCode_REFLEX_ORDER},
+						Subject: &d4pb.Reference{Reference: &d4pb.Reference_PatientId{PatientId: &d4pb.ReferenceId{Value: "1"}}},
+					},
+				},
 			},
+			wantErr: `error at "DeviceRequest": missing required field "code[x]"`,
+		},
+		{
+			name: "R5 missing occurrence[x]",
+			res: &r5pb.ContainedResource{
+				OneofResource: &r5pb.ContainedResource_Immunization{
+					Immunization: &r5immunizationpb.Immunization{
+						Status:      &r5immunizationpb.Immunization_StatusCode{Value: vs5pb.ImmunizationStatusCodesValueSet_COMPLETED},
+						VaccineCode: &d5pb.CodeableConcept{},
+						Patient:     &d5pb.Reference{Reference: &d5pb.Reference_PatientId{PatientId: &d5pb.ReferenceId{Value: "1"}}},
+					},
+				},
+			},
+			wantErr: `error at "Immunization": missing required field "occurrence[x]"`,
 		},
 	}
-	wantErr := `error at "DeviceRequest": missing required field "code[x]"`
-	err := Validate(test)
-	if err == nil || err.Error() != wantErr {
-		t.Fatalf("Validate %v failed: got error %v, want %q", test, err, wantErr)
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			err := Validate(test.res)
+			if err == nil || err.Error() != test.wantErr {
+				t.Fatalf("Validate %v failed: got error %v, want %q", test.name, err, test.wantErr)
+			}
+		})
 	}
 }
 
@@ -104,6 +146,17 @@ func TestReferenceTypes(t *testing.T) {
 					ManagingOrganization: &d4pb.Reference{
 						Reference: &d4pb.Reference_PatientId{
 							PatientId: &d4pb.ReferenceId{Value: "2"},
+						},
+					},
+				},
+			},
+		},
+		&r5pb.ContainedResource{
+			OneofResource: &r5pb.ContainedResource_Patient{
+				Patient: &r5patientpb.Patient{
+					ManagingOrganization: &d5pb.Reference{
+						Reference: &d5pb.Reference_PatientId{
+							PatientId: &d5pb.ReferenceId{Value: "2"},
 						},
 					},
 				},
@@ -139,6 +192,11 @@ func TestValidatePrimitive_Success(t *testing.T) {
 						Url: &d4pb.Uri{Value: jsonpbhelper.PrimitiveHasNoValueURL},
 					}},
 				},
+				&d5pb.Code{
+					Extension: []*d5pb.Extension{{
+						Url: &d5pb.Uri{Value: jsonpbhelper.PrimitiveHasNoValueURL},
+					}},
+				},
 			},
 		},
 	}
@@ -164,6 +222,7 @@ func TestValidatePrimitive_Errors(t *testing.T) {
 			msgs: []proto.Message{
 				&d3pb.Code{Value: "    left has spaces"},
 				&d4pb.Code{Value: "    left has spaces"},
+				&d5pb.Code{Value: "    left has spaces"},
 			},
 		},
 		{
@@ -171,6 +230,7 @@ func TestValidatePrimitive_Errors(t *testing.T) {
 			msgs: []proto.Message{
 				&d3pb.Code{Value: "right has tabs\t\t"},
 				&d4pb.Code{Value: "right has tabs\t\t"},
+				&d5pb.Code{Value: "right has tabs\t\t"},
 			},
 		},
 		{
@@ -178,6 +238,7 @@ func TestValidatePrimitive_Errors(t *testing.T) {
 			msgs: []proto.Message{
 				&d3pb.Code{Value: "\rleft has carriage return"},
 				&d4pb.Code{Value: "\rleft has carriage return"},
+				&d5pb.Code{Value: "\rleft has carriage return"},
 			},
 		},
 		{
@@ -185,6 +246,7 @@ func TestValidatePrimitive_Errors(t *testing.T) {
 			msgs: []proto.Message{
 				&d3pb.Code{Value: "right has newlines\n\n"},
 				&d4pb.Code{Value: "right has newlines\n\n"},
+				&d5pb.Code{Value: "right has newlines\n\n"},
 			},
 		},
 		{
@@ -192,6 +254,7 @@ func TestValidatePrimitive_Errors(t *testing.T) {
 			msgs: []proto.Message{
 				&d3pb.Id{Value: "this.is.a.pretty.long.id-in.fact.it.has.65.characters--1.too.many"},
 				&d4pb.Id{Value: "this.is.a.pretty.long.id-in.fact.it.has.65.characters--1.too.many"},
+				&d5pb.Id{Value: "this.is.a.pretty.long.id-in.fact.it.has.65.characters--1.too.many"},
 			},
 		},
 		{
@@ -199,6 +262,7 @@ func TestValidatePrimitive_Errors(t *testing.T) {
 			msgs: []proto.Message{
 				&d3pb.Id{Value: "#Ah0!"},
 				&d4pb.Id{Value: "#Ah0!"},
+				&d5pb.Id{Value: "#Ah0!"},
 			},
 		},
 		{
@@ -206,6 +270,7 @@ func TestValidatePrimitive_Errors(t *testing.T) {
 			msgs: []proto.Message{
 				&d3pb.Oid{Value: "wrong:prefix:0.12.34"},
 				&d4pb.Oid{Value: "wrong:prefix:0.12.34"},
+				&d5pb.Oid{Value: "wrong:prefix:0.12.34"},
 			},
 		},
 		{
@@ -213,6 +278,7 @@ func TestValidatePrimitive_Errors(t *testing.T) {
 			msgs: []proto.Message{
 				&d3pb.Oid{Value: "urn:old:1.23.0x97"},
 				&d4pb.Oid{Value: "urn:old:1.23.0x97"},
+				&d5pb.Oid{Value: "urn:old:1.23.0x97"},
 			},
 		},
 		{
@@ -220,6 +286,7 @@ func TestValidatePrimitive_Errors(t *testing.T) {
 			msgs: []proto.Message{
 				&d3pb.PositiveInt{Value: math.MaxInt32 + 1},
 				&d4pb.PositiveInt{Value: math.MaxInt32 + 1},
+				&d5pb.PositiveInt{Value: math.MaxInt32 + 1},
 			},
 		},
 		{
@@ -227,6 +294,7 @@ func TestValidatePrimitive_Errors(t *testing.T) {
 			msgs: []proto.Message{
 				&d3pb.UnsignedInt{Value: math.MaxInt32 + 1},
 				&d4pb.UnsignedInt{Value: math.MaxInt32 + 1},
+				&d5pb.UnsignedInt{Value: math.MaxInt32 + 1},
 			},
 		},
 	}
@@ -264,6 +332,15 @@ func TestValidateWithErrorReporter(t *testing.T) {
 					OneofResource: &r4pb.ContainedResource_Patient{
 						Patient: &r4patientpb.Patient{
 							Link: []*r4patientpb.Patient_Link{
+								{},
+							},
+						},
+					},
+				},
+				&r5pb.ContainedResource{
+					OneofResource: &r5pb.ContainedResource_Patient{
+						Patient: &r5patientpb.Patient{
+							Link: []*r5patientpb.Patient_Link{
 								{},
 							},
 						},
@@ -333,6 +410,37 @@ func TestValidateWithErrorReporter(t *testing.T) {
 						},
 					},
 				},
+				&errorreporter.MultiVersionOperationOutcome{
+					Version: fhirversion.R5,
+					R5Outcome: &r5outcomepb.OperationOutcome{
+						Issue: []*r5outcomepb.OperationOutcome_Issue{
+							&r5outcomepb.OperationOutcome_Issue{
+								Code: &r5outcomepb.OperationOutcome_Issue_CodeType{
+									Value: c5pb.IssueTypeCode_VALUE,
+								},
+								Severity: &r5outcomepb.OperationOutcome_Issue_SeverityCode{
+									Value: c5pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d5pb.String{Value: `error at "Patient.link[0]": missing required field "other"`},
+								Expression: []*d5pb.String{
+									&d5pb.String{Value: `Patient.link[0]`},
+								},
+							},
+							&r5outcomepb.OperationOutcome_Issue{
+								Code: &r5outcomepb.OperationOutcome_Issue_CodeType{
+									Value: c5pb.IssueTypeCode_VALUE,
+								},
+								Severity: &r5outcomepb.OperationOutcome_Issue_SeverityCode{
+									Value: c5pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d5pb.String{Value: `error at "Patient.link[0]": missing required field "type"`},
+								Expression: []*d5pb.String{
+									&d5pb.String{Value: `Patient.link[0]`},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -355,6 +463,17 @@ func TestValidateWithErrorReporter(t *testing.T) {
 							ManagingOrganization: &d4pb.Reference{
 								Reference: &d4pb.Reference_PatientId{
 									PatientId: &d4pb.ReferenceId{Value: "2"},
+								},
+							},
+						},
+					},
+				},
+				&r5pb.ContainedResource{
+					OneofResource: &r5pb.ContainedResource_Patient{
+						Patient: &r5patientpb.Patient{
+							ManagingOrganization: &d5pb.Reference{
+								Reference: &d5pb.Reference_PatientId{
+									PatientId: &d5pb.ReferenceId{Value: "2"},
 								},
 							},
 						},
@@ -400,6 +519,25 @@ func TestValidateWithErrorReporter(t *testing.T) {
 						},
 					},
 				},
+				&errorreporter.MultiVersionOperationOutcome{
+					Version: fhirversion.R5,
+					R5Outcome: &r5outcomepb.OperationOutcome{
+						Issue: []*r5outcomepb.OperationOutcome_Issue{
+							&r5outcomepb.OperationOutcome_Issue{
+								Code: &r5outcomepb.OperationOutcome_Issue_CodeType{
+									Value: c5pb.IssueTypeCode_VALUE,
+								},
+								Severity: &r5outcomepb.OperationOutcome_Issue_SeverityCode{
+									Value: c5pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d5pb.String{Value: `error at "Patient.managingOrganization": invalid reference to a Patient resource, want Organization`},
+								Expression: []*d5pb.String{
+									&d5pb.String{Value: `Patient.managingOrganization`},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -413,6 +551,20 @@ func TestValidateWithErrorReporter(t *testing.T) {
 								{Resource: &r3pb.ContainedResource{OneofResource: &r3pb.ContainedResource_Patient{
 									Patient: &r3pb.Patient{
 										Extension: []*d3pb.Extension{{}},
+									},
+								}}},
+							},
+						},
+					},
+				},
+				&r4pb.ContainedResource{
+					OneofResource: &r4pb.ContainedResource_Bundle{
+						Bundle: &r4pb.Bundle{
+							Type: &r4pb.Bundle_TypeCode{Value: c4pb.BundleTypeCode_BATCH},
+							Entry: []*r4pb.Bundle_Entry{
+								{Resource: &r4pb.ContainedResource{OneofResource: &r4pb.ContainedResource_Patient{
+									Patient: &r4patientpb.Patient{
+										Extension: []*d4pb.Extension{{}},
 									},
 								}}},
 							},
@@ -468,6 +620,25 @@ func TestValidateWithErrorReporter(t *testing.T) {
 								Diagnostics: &d4pb.String{Value: `error at "Bundle.entry[0].resource.ofType(Patient).extension[0]": missing required field "url"`},
 								Expression: []*d4pb.String{
 									&d4pb.String{Value: `Bundle.entry[0].resource.ofType(Patient).extension[0]`},
+								},
+							},
+						},
+					},
+				},
+				&errorreporter.MultiVersionOperationOutcome{
+					Version: fhirversion.R5,
+					R5Outcome: &r5outcomepb.OperationOutcome{
+						Issue: []*r5outcomepb.OperationOutcome_Issue{
+							&r5outcomepb.OperationOutcome_Issue{
+								Code: &r5outcomepb.OperationOutcome_Issue_CodeType{
+									Value: c5pb.IssueTypeCode_VALUE,
+								},
+								Severity: &r5outcomepb.OperationOutcome_Issue_SeverityCode{
+									Value: c5pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d5pb.String{Value: `error at "Bundle.entry[0].resource.ofType(Patient).extension[0]": missing required field "url"`},
+								Expression: []*d5pb.String{
+									&d5pb.String{Value: `Bundle.entry[0].resource.ofType(Patient).extension[0]`},
 								},
 							},
 						},

@@ -17,6 +17,7 @@ package jsonpbhelper
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -31,6 +32,9 @@ import (
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	r4basicpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/basic_go_proto"
 	r4patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/patient_go_proto"
+	d5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/datatypes_go_proto"
+	r5basicpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/basic_go_proto"
+	r5patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/patient_go_proto"
 	c3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/codes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 	e3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/fhirproto_extensions_go_proto"
@@ -1048,9 +1052,13 @@ func TestValidateOID(t *testing.T) {
 		"urn:oid:1.2.3.4",
 		"urn:oid:1.100",
 	}
-	for _, test := range tests {
-		if ok := regexForType(&d4pb.Oid{}).MatchString(test); !ok {
-			t.Errorf("OID regex: expected %q to be valid", test)
+	for _, typ := range []proto.Message{&d4pb.Oid{}, &d5pb.Oid{}} {
+		for _, test := range tests {
+			t.Run(fmt.Sprintf("%T", typ), func(t *testing.T) {
+				if ok := regexForType(typ).MatchString(test); !ok {
+					t.Errorf("OID regex: expected %q to be valid", test)
+				}
+			})
 		}
 	}
 }
@@ -1061,9 +1069,13 @@ func TestValidateOID_Invalid(t *testing.T) {
 		"urn:oid:999",
 		"urn:oid:01",
 	}
-	for _, test := range tests {
-		if ok := regexForType(&d4pb.Oid{}).MatchString(test); ok {
-			t.Errorf("OID regex: expected %q to be invalid", test)
+	for _, typ := range []proto.Message{&d4pb.Oid{}, &d5pb.Oid{}} {
+		for _, test := range tests {
+			t.Run(fmt.Sprintf("%T", typ), func(t *testing.T) {
+				if ok := regexForType(typ).MatchString(test); ok {
+					t.Errorf("OID regex: expected %q to be invalid", test)
+				}
+			})
 		}
 	}
 }
@@ -1077,9 +1089,13 @@ func TestValidateID(t *testing.T) {
 		// 64 characters, meets length limit.
 		"1234567890123456789012345678901234567890123456789012345678901234",
 	}
-	for _, test := range tests {
-		if ok := regexForType(&d4pb.Id{}).MatchString(test); !ok {
-			t.Errorf("ID regex: expected %q to be valid", test)
+	for _, typ := range []proto.Message{&d4pb.Id{}, &d5pb.Id{}} {
+		for _, test := range tests {
+			t.Run(fmt.Sprintf("%T", typ), func(t *testing.T) {
+				if ok := regexForType(typ).MatchString(test); !ok {
+					t.Errorf("ID regex: expected %q to be valid", test)
+				}
+			})
 		}
 	}
 }
@@ -1092,9 +1108,13 @@ func TestValidateID_Invalid(t *testing.T) {
 		"12345678901234567890123456789012345678901234567890123456789012345",
 		"",
 	}
-	for _, test := range tests {
-		if ok := regexForType(&d4pb.Id{}).MatchString(test); ok {
-			t.Errorf("ID regex: expected %q to be invalid", test)
+	for _, typ := range []proto.Message{&d4pb.Id{}, &d5pb.Id{}} {
+		for _, test := range tests {
+			t.Run(fmt.Sprintf("%T", typ), func(t *testing.T) {
+				if ok := regexForType(typ).MatchString(test); ok {
+					t.Errorf("ID regex: expected %q to be invalid", test)
+				}
+			})
 		}
 	}
 }
@@ -1106,9 +1126,13 @@ func TestValidateCode(t *testing.T) {
 		"http://example.com/code",
 		"a value",
 	}
-	for _, test := range tests {
-		if ok := regexForType(&d4pb.Code{}).MatchString(test); !ok {
-			t.Errorf("Code regex: expected %q to be valid", test)
+	for _, typ := range []proto.Message{&d4pb.Code{}, &d5pb.Code{}} {
+		for _, test := range tests {
+			t.Run(fmt.Sprintf("%T", typ), func(t *testing.T) {
+				if ok := regexForType(typ).MatchString(test); !ok {
+					t.Errorf("Code regex: expected %q to be valid", test)
+				}
+			})
 		}
 	}
 }
@@ -1121,9 +1145,13 @@ func TestValidateCode_Invalid(t *testing.T) {
 		"",
 		"bad  value",
 	}
-	for _, test := range tests {
-		if ok := regexForType(&d4pb.Code{}).MatchString(test); ok {
-			t.Errorf("Code regex: expected %q to be invalid", test)
+	for _, typ := range []proto.Message{&d4pb.Code{}, &d5pb.Code{}} {
+		for _, test := range tests {
+			t.Run(fmt.Sprintf("%T", typ), func(t *testing.T) {
+				if ok := regexForType(typ).MatchString(test); ok {
+					t.Errorf("Code regex: expected %q to be invalid", test)
+				}
+			})
 		}
 	}
 }
@@ -1364,6 +1392,61 @@ func TestValidateReferenceType(t *testing.T) {
 			&d4pb.Reference{
 				Reference: &d4pb.Reference_PatientId{
 					PatientId: &d4pb.ReferenceId{Value: "1"},
+				},
+			},
+			false,
+		},
+		{
+			"r5 valid reference",
+			&r5patientpb.Patient{},
+			"managing_organization",
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_OrganizationId{
+					OrganizationId: &d5pb.ReferenceId{Value: "1"},
+				},
+			},
+			true,
+		},
+		{
+			"r5 URI reference",
+			&r5patientpb.Patient{},
+			"managing_organization",
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_Uri{
+					Uri: &d5pb.String{Value: "Patient/1"},
+				},
+			},
+			true,
+		},
+		{
+			"r5 fragment reference",
+			&r5patientpb.Patient{},
+			"managing_organization",
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_Fragment{
+					Fragment: &d5pb.String{Value: "#1"},
+				},
+			},
+			true,
+		},
+		{
+			"r5 reference of any type",
+			&r5basicpb.Basic{},
+			"subject",
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_AccountId{
+					AccountId: &d5pb.ReferenceId{Value: "1"},
+				},
+			},
+			true,
+		},
+		{
+			"r5 invalid reference",
+			&r5patientpb.Patient{},
+			"managing_organization",
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_PatientId{
+					PatientId: &d5pb.ReferenceId{Value: "1"},
 				},
 			},
 			false,

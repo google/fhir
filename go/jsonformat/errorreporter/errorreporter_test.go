@@ -25,6 +25,9 @@ import (
 	c4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/codes_go_proto"
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	r4outcomepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/operation_outcome_go_proto"
+	c5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/codes_go_proto"
+	d5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/datatypes_go_proto"
+	r5outcomepb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/operation_outcome_go_proto"
 	c3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/codes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 	r3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto"
@@ -96,6 +99,30 @@ func TestReportValidationError(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "r5 ErrorReporter",
+			err:  &jsonpbhelper.UnmarshalError{Details: detail1},
+			ver:  fhirversion.R5,
+			want: &MultiVersionOperationOutcome{
+				Version: fhirversion.R5,
+				R5Outcome: &r5outcomepb.OperationOutcome{
+					Issue: []*r5outcomepb.OperationOutcome_Issue{
+						&r5outcomepb.OperationOutcome_Issue{
+							Code: &r5outcomepb.OperationOutcome_Issue_CodeType{
+								Value: c5pb.IssueTypeCode_VALUE,
+							},
+							Severity: &r5outcomepb.OperationOutcome_Issue_SeverityCode{
+								Value: c5pb.IssueSeverityCode_ERROR,
+							},
+							Diagnostics: &d5pb.String{Value: detail1},
+							Expression: []*d5pb.String{
+								&d5pb.String{Value: elementPath1},
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -160,6 +187,30 @@ func TestReportValidationWarning(t *testing.T) {
 							Diagnostics: &d4pb.String{Value: detail1},
 							Expression: []*d4pb.String{
 								&d4pb.String{Value: elementPath1},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "r5 ErrorReporter",
+			err:  &jsonpbhelper.UnmarshalError{Details: detail1},
+			ver:  fhirversion.R5,
+			want: &MultiVersionOperationOutcome{
+				Version: fhirversion.R5,
+				R5Outcome: &r5outcomepb.OperationOutcome{
+					Issue: []*r5outcomepb.OperationOutcome_Issue{
+						&r5outcomepb.OperationOutcome_Issue{
+							Code: &r5outcomepb.OperationOutcome_Issue_CodeType{
+								Value: c5pb.IssueTypeCode_VALUE,
+							},
+							Severity: &r5outcomepb.OperationOutcome_Issue_SeverityCode{
+								Value: c5pb.IssueSeverityCode_WARNING,
+							},
+							Diagnostics: &d5pb.String{Value: detail1},
+							Expression: []*d5pb.String{
+								&d5pb.String{Value: elementPath1},
 							},
 						},
 					},
@@ -301,6 +352,65 @@ func TestReportValidationError_Accumulate(t *testing.T) {
 							Diagnostics: &d4pb.String{Value: detail3},
 							Expression: []*d4pb.String{
 								&d4pb.String{Value: elementPath3},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			name:         "r5 ErrorReporter, multiple errors",
+			elementPaths: []string{elementPath1, elementPath2, elementPath3},
+			err: jsonpbhelper.UnmarshalErrorList{
+				&jsonpbhelper.UnmarshalError{
+					Details: detail1,
+				},
+				&jsonpbhelper.UnmarshalError{
+					Details: detail2,
+				},
+				&jsonpbhelper.UnmarshalError{
+					Details: detail3,
+				},
+			},
+			ver: fhirversion.R5,
+			want: &MultiVersionOperationOutcome{
+				Version: fhirversion.R5,
+				R5Outcome: &r5outcomepb.OperationOutcome{
+					Issue: []*r5outcomepb.OperationOutcome_Issue{
+						&r5outcomepb.OperationOutcome_Issue{
+							Code: &r5outcomepb.OperationOutcome_Issue_CodeType{
+								Value: c5pb.IssueTypeCode_VALUE,
+							},
+							Severity: &r5outcomepb.OperationOutcome_Issue_SeverityCode{
+								Value: c5pb.IssueSeverityCode_ERROR,
+							},
+							Diagnostics: &d5pb.String{Value: detail1},
+							Expression: []*d5pb.String{
+								&d5pb.String{Value: elementPath1},
+							},
+						},
+						&r5outcomepb.OperationOutcome_Issue{
+							Code: &r5outcomepb.OperationOutcome_Issue_CodeType{
+								Value: c5pb.IssueTypeCode_VALUE,
+							},
+							Severity: &r5outcomepb.OperationOutcome_Issue_SeverityCode{
+								Value: c5pb.IssueSeverityCode_ERROR,
+							},
+							Diagnostics: &d5pb.String{Value: detail2},
+							Expression: []*d5pb.String{
+								&d5pb.String{Value: elementPath2},
+							},
+						},
+						&r5outcomepb.OperationOutcome_Issue{
+							Code: &r5outcomepb.OperationOutcome_Issue_CodeType{
+								Value: c5pb.IssueTypeCode_VALUE,
+							},
+							Severity: &r5outcomepb.OperationOutcome_Issue_SeverityCode{
+								Value: c5pb.IssueSeverityCode_ERROR,
+							},
+							Diagnostics: &d5pb.String{Value: detail3},
+							Expression: []*d5pb.String{
+								&d5pb.String{Value: elementPath3},
 							},
 						},
 					},

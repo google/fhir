@@ -710,6 +710,16 @@ func (u *Unmarshaller) parsePrimitiveType(jsonPath string, in protoreflect.Messa
 			}
 		}
 		return createAndSetValue(val)
+	case "Integer64":
+		var val int64
+		if err := jsp.Unmarshal(rm, &val); err != nil {
+			return nil, &jsonpbhelper.UnmarshalError{
+				Path:        jsonPath,
+				Details:     "expected integer64",
+				Diagnostics: fmt.Sprintf("found %s", rm),
+			}
+		}
+		return createAndSetValue(val)
 	case "Oid":
 		var val string
 		if err := jsp.Unmarshal(rm, &val); err != nil {

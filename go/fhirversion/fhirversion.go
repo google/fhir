@@ -22,6 +22,7 @@ type Version string
 const (
 	STU3  = Version("STU3")
 	R4    = Version("R4")
+	R5    = Version("R5")
 )
 
 // String returns the Version as a string.

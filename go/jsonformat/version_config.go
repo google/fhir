@@ -39,6 +39,8 @@ func getConfig(ver fhirversion.Version) (config, error) {
 		return r3Config{}, nil
 	case fhirversion.R4:
 		return r4Config{}, nil
+	case fhirversion.R5:
+		return r5Config{}, nil
 	default:
 		return nil, fmt.Errorf("unsupported FHIR version %s", ver)
 	}

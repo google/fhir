@@ -25,6 +25,9 @@ import (
 	c4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/codes_go_proto"
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	r4outcomepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/operation_outcome_go_proto"
+	c5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/codes_go_proto"
+	d5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/datatypes_go_proto"
+	r5outcomepb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/operation_outcome_go_proto"
 	c3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/codes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 	r3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto"
@@ -62,6 +65,15 @@ var (
 	R4OutcomeCodeMap = map[IssueTypeCode]c4pb.IssueTypeCode_Value{
 		ValueIssueTypeCode: c4pb.IssueTypeCode_VALUE,
 	}
+	// R5IssueSeverityCodeMap maps IssueSeverityCode to R5IssueSeverityCode
+	R5IssueSeverityCodeMap = map[IssueSeverityCode]c5pb.IssueSeverityCode_Value{
+		IssueSeverityError:   c5pb.IssueSeverityCode_ERROR,
+		IssueSeverityWarning: c5pb.IssueSeverityCode_WARNING,
+	}
+	// R5OutcomeCodeMap maps IssueTypeCode to R5IssueTypeCode_Value
+	R5OutcomeCodeMap = map[IssueTypeCode]c5pb.IssueTypeCode_Value{
+		ValueIssueTypeCode: c5pb.IssueTypeCode_VALUE,
+	}
 )
 
 // An ErrorReporter can be used to handle validation errors in the manner
@@ -92,6 +104,7 @@ type MultiVersionOperationOutcome struct {
 	Version   fhirversion.Version
 	R3Outcome *r3pb.OperationOutcome
 	R4Outcome *r4outcomepb.OperationOutcome
+	R5Outcome *r5outcomepb.OperationOutcome
 }
 
 // OperationErrorReporter is an implementation of ErrorReporter. It makes
@@ -111,6 +124,8 @@ func NewOperationErrorReporter(ver fhirversion.Version) *OperationErrorReporter 
 		outcome.R3Outcome = &r3pb.OperationOutcome{}
 	case fhirversion.R4:
 		outcome.R4Outcome = &r4outcomepb.OperationOutcome{}
+	case fhirversion.R5:
+		outcome.R5Outcome = &r5outcomepb.OperationOutcome{}
 	}
 	return &OperationErrorReporter{
 		Outcome: outcome,
@@ -161,6 +176,21 @@ func (oe *OperationErrorReporter) report(elementPath string, err error, typeCode
 			issue.Expression = append(issue.Expression, &d4pb.String{Value: elementPath})
 		}
 		oe.Outcome.R4Outcome.Issue = append(issues, issue)
+	case fhirversion.R5:
+		issues := oe.Outcome.R5Outcome.GetIssue()
+		issue := &r5outcomepb.OperationOutcome_Issue{
+			Code: &r5outcomepb.OperationOutcome_Issue_CodeType{
+				Value: R5OutcomeCodeMap[typeCode],
+			},
+			Severity: &r5outcomepb.OperationOutcome_Issue_SeverityCode{
+				Value: R5IssueSeverityCodeMap[severity],
+			},
+			Diagnostics: &d5pb.String{Value: err.Error()},
+		}
+		if elementPath != "" {
+			issue.Expression = append(issue.Expression, &d5pb.String{Value: elementPath})
+		}
+		oe.Outcome.R5Outcome.Issue = append(issues, issue)
 	default:
 		return fmt.Errorf("unsupported FHIR version %s", oe.Outcome.Version)
 	}

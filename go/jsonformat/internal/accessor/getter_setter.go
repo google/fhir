@@ -624,7 +624,8 @@ func SetValue(rpb protoreflect.Message, value interface{}, fields ...string) err
 		protoreflect.EnumKind,
 		protoreflect.Sint32Kind,
 		protoreflect.Uint32Kind,
-		protoreflect.Int64Kind:
+		protoreflect.Int64Kind,
+		protoreflect.Sint64Kind:
 		// this works because the field is guaranteed to be not repeated
 		defaultValue := fd.Default().Interface()
 		defaultGoKind := reflect.TypeOf(defaultValue).Kind()

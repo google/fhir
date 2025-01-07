@@ -49,6 +49,15 @@ import (
 	r4outcomepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/operation_outcome_go_proto"
 	r4patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/patient_go_proto"
 	r4searchparampb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/search_parameter_go_proto"
+	c5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/codes_go_proto"
+	d5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/datatypes_go_proto"
+	r5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/bundle_and_contained_resource_go_proto"
+	r5devicepb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/device_go_proto"
+	r5observationpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/observation_go_proto"
+	r5outcomepb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/operation_outcome_go_proto"
+	r5patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/patient_go_proto"
+	r5searchparampb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/search_parameter_go_proto"
+	r5valuesetpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/valuesets_go_proto"
 	c3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/codes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 	m3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/metadatatypes_go_proto"
@@ -63,7 +72,7 @@ var (
 		return v
 	})
 	basePath = "testdata/jsonformat"
-	allVers  = []fhirversion.Version{fhirversion.STU3, fhirversion.R4}
+	allVers  = []fhirversion.Version{fhirversion.STU3, fhirversion.R4, fhirversion.R5}
 )
 
 // TODO(b/135148603): Find a better way to maintain the versioned unit tests.
@@ -156,6 +165,22 @@ func TestUnmarshal(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_SearchParameter{
+							SearchParameter: &r5searchparampb.SearchParameter{
+								Url:         &d5pb.Uri{Value: "http://example.com/SearchParameter"},
+								Name:        &d5pb.String{Value: "Search-parameter"},
+								Status:      &r5searchparampb.SearchParameter_StatusCode{Value: c5pb.PublicationStatusCode_ACTIVE},
+								Description: &d5pb.Markdown{Value: "custom search parameter"},
+								Code:        &d5pb.Code{Value: "value-quantity"},
+								Base:        []*r5searchparampb.SearchParameter_BaseCode{{Value: r5valuesetpb.VersionIndependentResourceTypesAllValueSet_OBSERVATION}},
+								Type:        &r5searchparampb.SearchParameter_TypeCode{Value: c5pb.SearchParamTypeCode_NUMBER},
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -218,6 +243,28 @@ func TestUnmarshal(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Observation{
+							Observation: &r5observationpb.Observation{
+								Id: &d5pb.Id{
+									Value: "example",
+								},
+								Status: &r5observationpb.Observation_StatusCode{Value: c5pb.ObservationStatusCode_FINAL},
+								Code:   &d5pb.CodeableConcept{Text: &d5pb.String{Value: "test"}},
+								Text: &d5pb.Narrative{
+									Status: &d5pb.Narrative_StatusCode{
+										Value: c5pb.NarrativeStatusCode_GENERATED,
+									},
+									Div: &d5pb.Xhtml{
+										Value: `<div xmlns="http://www.w3.org/1999/xhtml">[Put rendering here]</div>`,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -252,6 +299,18 @@ func TestUnmarshal(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Patient{
+							Patient: &r5patientpb.Patient{
+								MultipleBirth: &r5patientpb.Patient_MultipleBirthX{
+									Choice: &r5patientpb.Patient_MultipleBirthX_Boolean{
+										Boolean: &d5pb.Boolean{Value: false}}},
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -262,11 +321,13 @@ func TestUnmarshal(t *testing.T) {
 			"type": "collection",
       "entry": [
         {
+					"fullUrl": "Patient/1",
           "resource": {
             "resourceType": "Patient"
           }
         },
         {
+					"fullUrl": "Patient/2",
           "resource": {
             "resourceType": "Patient"
           }
@@ -281,16 +342,19 @@ func TestUnmarshal(t *testing.T) {
 							Bundle: &r3pb.Bundle{
 								Type: &c3pb.BundleTypeCode{Value: c3pb.BundleTypeCode_COLLECTION},
 								Entry: []*r3pb.Bundle_Entry{{
+									FullUrl: &d3pb.Uri{Value: "Patient/1"},
 									Resource: &r3pb.ContainedResource{
 										OneofResource: &r3pb.ContainedResource_Patient{
 											Patient: &r3pb.Patient{},
 										},
 									}},
-									{Resource: &r3pb.ContainedResource{
-										OneofResource: &r3pb.ContainedResource_Patient{
-											Patient: &r3pb.Patient{},
-										},
-									}},
+									{
+										FullUrl: &d3pb.Uri{Value: "Patient/2"},
+										Resource: &r3pb.ContainedResource{
+											OneofResource: &r3pb.ContainedResource_Patient{
+												Patient: &r3pb.Patient{},
+											},
+										}},
 								},
 							},
 						},
@@ -303,16 +367,45 @@ func TestUnmarshal(t *testing.T) {
 							Bundle: &r4pb.Bundle{
 								Type: &r4pb.Bundle_TypeCode{Value: c4pb.BundleTypeCode_COLLECTION},
 								Entry: []*r4pb.Bundle_Entry{{
+									FullUrl: &d4pb.Uri{Value: "Patient/1"},
 									Resource: &r4pb.ContainedResource{
 										OneofResource: &r4pb.ContainedResource_Patient{
 											Patient: &r4patientpb.Patient{},
 										},
 									}},
-									{Resource: &r4pb.ContainedResource{
-										OneofResource: &r4pb.ContainedResource_Patient{
-											Patient: &r4patientpb.Patient{},
+									{
+										FullUrl: &d4pb.Uri{Value: "Patient/2"},
+										Resource: &r4pb.ContainedResource{
+											OneofResource: &r4pb.ContainedResource_Patient{
+												Patient: &r4patientpb.Patient{},
+											},
+										}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Bundle{
+							Bundle: &r5pb.Bundle{
+								Type: &r5pb.Bundle_TypeCode{Value: c5pb.BundleTypeCode_COLLECTION},
+								Entry: []*r5pb.Bundle_Entry{{
+									FullUrl: &d5pb.Uri{Value: "Patient/1"},
+									Resource: &r5pb.ContainedResource{
+										OneofResource: &r5pb.ContainedResource_Patient{
+											Patient: &r5patientpb.Patient{},
 										},
 									}},
+									{
+										FullUrl: &d5pb.Uri{Value: "Patient/2"},
+										Resource: &r5pb.ContainedResource{
+											OneofResource: &r5pb.ContainedResource_Patient{
+												Patient: &r5patientpb.Patient{},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -388,6 +481,35 @@ func TestUnmarshal(t *testing.T) {
 											Value: &d4pb.Extension_ValueX{
 												Choice: &d4pb.Extension_ValueX_Code{
 													Code: &d4pb.Code{
+														Value: "MID",
+													},
+												},
+											},
+										}},
+									}},
+								}},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Patient{
+							Patient: &r5patientpb.Patient{
+								Name: []*d5pb.HumanName{{
+									Given: []*d5pb.String{{
+										Value: "Toby",
+										Id: &d5pb.String{
+											Value: "a3",
+										},
+										Extension: []*d5pb.Extension{{
+											Url: &d5pb.Uri{
+												Value: "http://hl7.org/fhir/StructureDefinition/qualifier",
+											},
+											Value: &d5pb.Extension_ValueX{
+												Choice: &d5pb.Extension_ValueX_Code{
+													Code: &d5pb.Code{
 														Value: "MID",
 													},
 												},
@@ -519,6 +641,53 @@ func TestUnmarshal(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Patient{
+							Patient: &r5patientpb.Patient{
+								Name: []*d5pb.HumanName{{
+									Given: []*d5pb.String{{
+										Id: &d5pb.String{Value: "a3"},
+										Extension: []*d5pb.Extension{
+											{
+												Url: &d5pb.Uri{
+													Value: "http://hl7.org/fhir/StructureDefinition/ext1",
+												},
+												Value: &d5pb.Extension_ValueX{
+													Choice: &d5pb.Extension_ValueX_Code{
+														Code: &d5pb.Code{Value: "value1"},
+													},
+												},
+											},
+											{
+												Url: &d5pb.Uri{
+													Value: "http://hl7.org/fhir/StructureDefinition/ext2",
+												},
+												Value: &d5pb.Extension_ValueX{
+													Choice: &d5pb.Extension_ValueX_Code{
+														Code: &d5pb.Code{Value: "value2"},
+													},
+												},
+											},
+											{
+												Url: &d5pb.Uri{
+													Value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
+												},
+												Value: &d5pb.Extension_ValueX{
+													Choice: &d5pb.Extension_ValueX_Boolean{
+														Boolean: &d5pb.Boolean{
+															Value: true,
+														},
+													},
+												},
+											}},
+									}},
+								}},
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -569,6 +738,28 @@ func TestUnmarshal(t *testing.T) {
 										Value: &d4pb.Extension_ValueX{
 											Choice: &d4pb.Extension_ValueX_Code{
 												Code: &d4pb.Code{
+													Value: "non-binary",
+												},
+											},
+										},
+									}},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Patient{
+							Patient: &r5patientpb.Patient{
+								Gender: &r5patientpb.Patient_GenderCode{
+									Value: c5pb.AdministrativeGenderCode_OTHER,
+									Extension: []*d5pb.Extension{{
+										Url: &d5pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/patient-genderIdentity"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_Code{
+												Code: &d5pb.Code{
 													Value: "non-binary",
 												},
 											},
@@ -660,6 +851,31 @@ func TestUnmarshal(t *testing.T) {
 			},
 		},
 		{
+			name: "R5 acronym field",
+			json: []byte(`{"id":"example","resourceType":"Device","udiCarrier":[{"deviceIdentifier":"1","issuer":"1","carrierHRF":"test"}]}`),
+			wants: []mvr{
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Device{
+							Device: &r5devicepb.Device{
+								Id: &d5pb.Id{
+									Value: "example",
+								},
+								UdiCarrier: []*r5devicepb.Device_UdiCarrier{
+									{
+										DeviceIdentifier: &d5pb.String{Value: "1"},
+										Issuer:           &d5pb.Uri{Value: "1"},
+										CarrierHrf:       &d5pb.String{Value: "test"},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
 			name: "inline resource",
 			json: []byte(`{
 	"contained":[
@@ -734,6 +950,34 @@ func TestUnmarshal(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Patient{
+							Patient: &r5patientpb.Patient{
+								Id: &d5pb.Id{Value: "example"},
+								Contained: []*anypb.Any{
+									marshalToAny(t, &r5pb.ContainedResource{
+										OneofResource: &r5pb.ContainedResource_Patient{
+											Patient: &r5patientpb.Patient{
+												Id: &d5pb.Id{Value: "nested"},
+												Contained: []*anypb.Any{
+													marshalToAny(t, &r5pb.ContainedResource{
+														OneofResource: &r5pb.ContainedResource_Patient{
+															Patient: &r5patientpb.Patient{
+																Id: &d5pb.Id{Value: "double-nested"},
+															},
+														},
+													}),
+												},
+											},
+										},
+									}),
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -772,6 +1016,22 @@ func TestUnmarshal(t *testing.T) {
 								ManagingOrganization: &d4pb.Reference{
 									Identifier: &d4pb.Identifier{
 										Value: &d4pb.String{
+											Value: "myorg",
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Patient{
+							Patient: &r5patientpb.Patient{
+								ManagingOrganization: &d5pb.Reference{
+									Identifier: &d5pb.Identifier{
+										Value: &d5pb.String{
 											Value: "myorg",
 										},
 									},
@@ -941,6 +1201,65 @@ func TestUnmarshal(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Patient{
+							Patient: &r5patientpb.Patient{
+								Id: &d5pb.Id{
+									Value: "example",
+								},
+								Gender: &r5patientpb.Patient_GenderCode{
+									Value: c5pb.AdministrativeGenderCode_FEMALE,
+								},
+								Extension: []*d5pb.Extension{{
+									Url: &d5pb.Uri{Value: "http://nema.org/fhir/extensions#0010:1020"},
+									Value: &d5pb.Extension_ValueX{
+										Choice: &d5pb.Extension_ValueX_Quantity{
+											Quantity: &d5pb.Quantity{Value: &d5pb.Decimal{Value: "1.83"}, Unit: &d5pb.String{Value: "m"}},
+										},
+									},
+								}},
+								Identifier: []*d5pb.Identifier{{
+									System: &d5pb.Uri{
+										Value: "http://nema.org/examples/patients",
+									},
+									Value: &d5pb.String{Value: "1234"},
+								}},
+								BirthDate: &d5pb.Date{
+									Id:        &d5pb.String{Value: "12345"},
+									ValueUs:   1463554800000000,
+									Timezone:  "America/Los_Angeles",
+									Precision: d5pb.Date_DAY,
+									Extension: []*d5pb.Extension{{
+										Url: &d5pb.Uri{Value: "http://hl7.org/fhir/StructureDefinition/patient-birthTime"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_DateTime{
+												DateTime: &d5pb.DateTime{
+													ValueUs:   1463567325000000,
+													Timezone:  "Z",
+													Precision: d5pb.DateTime_SECOND,
+													Extension: []*d5pb.Extension{{
+														Url: &d5pb.Uri{Value: "http://example.com/fhir/extension"},
+														Value: &d5pb.Extension_ValueX{
+															Choice: &d5pb.Extension_ValueX_DateTime{
+																DateTime: &d5pb.DateTime{
+																	ValueUs:   1463567325000000,
+																	Timezone:  "Z",
+																	Precision: d5pb.DateTime_SECOND,
+																},
+															},
+														},
+													}},
+												},
+											},
+										},
+									}},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -960,6 +1279,14 @@ func TestUnmarshal(t *testing.T) {
 					r: &r4pb.ContainedResource{
 						OneofResource: &r4pb.ContainedResource_Patient{
 							Patient: &r4patientpb.Patient{},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Patient{
+							Patient: &r5patientpb.Patient{},
 						},
 					},
 				},
@@ -1038,6 +1365,35 @@ func TestUnmarshal(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Observation{
+							Observation: &r5observationpb.Observation{
+								Status: &r5observationpb.Observation_StatusCode{
+									Extension: []*d5pb.Extension{{
+										Url: &d5pb.Uri{Value: jsonpbhelper.PrimitiveHasNoValueURL},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_Boolean{
+												Boolean: &d5pb.Boolean{Value: true},
+											},
+										},
+									}, {
+										Url: &d5pb.Uri{Value: "http://hl7.org/fhir/ValueSet/data-absent-reason"},
+										Value: &d5pb.Extension_ValueX{
+											Choice: &d5pb.Extension_ValueX_Code{
+												Code: &d5pb.Code{Value: "unsupported"},
+											},
+										},
+									}},
+								},
+								Code: &d5pb.CodeableConcept{
+									Coding: []*d5pb.Coding{},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -1056,6 +1412,9 @@ func TestUnmarshal(t *testing.T) {
 							return e1.GetUrl().GetValue() < e2.GetUrl().GetValue()
 						}),
 						protocmp.SortRepeated(func(e1, e2 *d4pb.Extension) bool {
+							return e1.GetUrl().GetValue() < e2.GetUrl().GetValue()
+						}),
+						protocmp.SortRepeated(func(e1, e2 *d5pb.Extension) bool {
 							return e1.GetUrl().GetValue() < e2.GetUrl().GetValue()
 						}),
 					}
@@ -1077,6 +1436,8 @@ func TestUnmarshal(t *testing.T) {
 						ic = len(mvo.R3Outcome.GetIssue())
 					case fhirversion.R4:
 						ic = len(mvo.R4Outcome.GetIssue())
+					case fhirversion.R5:
+						ic = len(mvo.R5Outcome.GetIssue())
 					default:
 						t.Fatalf("unmarshalWithOutcome %v had unexpected version %v", test.name, w.ver)
 					}
@@ -1098,6 +1459,8 @@ func TestUnmarshal(t *testing.T) {
 						ic = len(er.Outcome.R3Outcome.GetIssue())
 					case fhirversion.R4:
 						ic = len(er.Outcome.R4Outcome.GetIssue())
+					case fhirversion.R5:
+						ic = len(er.Outcome.R5Outcome.GetIssue())
 					default:
 						t.Fatalf("UnmarshalWithErrorReporter %v had unexpected version %v", test.name, w.ver)
 					}
@@ -1144,6 +1507,16 @@ func TestUnmarshal_NoExtendedValidation(t *testing.T) {
 						},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Patient{
+							Patient: &r5patientpb.Patient{
+								Link: []*r5patientpb.Patient_Link{{}},
+							},
+						},
+					},
+				},
 			},
 		},
 		{
@@ -1178,6 +1551,20 @@ func TestUnmarshal_NoExtendedValidation(t *testing.T) {
 								ManagingOrganization: &d4pb.Reference{
 									Reference: &d4pb.Reference_PatientId{
 										PatientId: &d4pb.ReferenceId{Value: "1"},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Patient{
+							Patient: &r5patientpb.Patient{
+								ManagingOrganization: &d5pb.Reference{
+									Reference: &d5pb.Reference_PatientId{
+										PatientId: &d5pb.ReferenceId{Value: "1"},
 									},
 								},
 							},
@@ -1269,6 +1656,25 @@ func TestUnmarshalWithOutcome_Errors(t *testing.T) {
 						},
 					},
 				},
+				&errorreporter.MultiVersionOperationOutcome{
+					Version: fhirversion.R5,
+					R5Outcome: &r5outcomepb.OperationOutcome{
+						Issue: []*r5outcomepb.OperationOutcome_Issue{
+							&r5outcomepb.OperationOutcome_Issue{
+								Code: &r5outcomepb.OperationOutcome_Issue_CodeType{
+									Value: c5pb.IssueTypeCode_VALUE,
+								},
+								Severity: &r5outcomepb.OperationOutcome_Issue_SeverityCode{
+									Value: c5pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d5pb.String{Value: `error at "Patient.managingOrganization": invalid reference to a Patient resource, want Organization`},
+								Expression: []*d5pb.String{
+									&d5pb.String{Value: `Patient.managingOrganization`},
+								},
+							},
+						},
+					},
+				},
 			},
 			wantMsgs: []proto.Message{
 				&r3pb.ContainedResource{
@@ -1288,6 +1694,17 @@ func TestUnmarshalWithOutcome_Errors(t *testing.T) {
 							ManagingOrganization: &d4pb.Reference{
 								Reference: &d4pb.Reference_PatientId{
 									PatientId: &d4pb.ReferenceId{Value: "1"},
+								},
+							},
+						},
+					},
+				},
+				&r5pb.ContainedResource{
+					OneofResource: &r5pb.ContainedResource_Patient{
+						Patient: &r5patientpb.Patient{
+							ManagingOrganization: &d5pb.Reference{
+								Reference: &d5pb.Reference_PatientId{
+									PatientId: &d5pb.ReferenceId{Value: "1"},
 								},
 							},
 						},
@@ -1365,6 +1782,37 @@ func TestUnmarshalWithOutcome_Errors(t *testing.T) {
 						},
 					},
 				},
+				&errorreporter.MultiVersionOperationOutcome{
+					Version: fhirversion.R5,
+					R5Outcome: &r5outcomepb.OperationOutcome{
+						Issue: []*r5outcomepb.OperationOutcome_Issue{
+							&r5outcomepb.OperationOutcome_Issue{
+								Code: &r5outcomepb.OperationOutcome_Issue_CodeType{
+									Value: c5pb.IssueTypeCode_VALUE,
+								},
+								Severity: &r5outcomepb.OperationOutcome_Issue_SeverityCode{
+									Value: c5pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d5pb.String{Value: `error at "Patient.link[0]": missing required field "other"`},
+								Expression: []*d5pb.String{
+									&d5pb.String{Value: `Patient.link[0]`},
+								},
+							},
+							&r5outcomepb.OperationOutcome_Issue{
+								Code: &r5outcomepb.OperationOutcome_Issue_CodeType{
+									Value: c5pb.IssueTypeCode_VALUE,
+								},
+								Severity: &r5outcomepb.OperationOutcome_Issue_SeverityCode{
+									Value: c5pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d5pb.String{Value: `error at "Patient.link[0]": missing required field "type"`},
+								Expression: []*d5pb.String{
+									&d5pb.String{Value: `Patient.link[0]`},
+								},
+							},
+						},
+					},
+				},
 			},
 			wantMsgs: []proto.Message{
 				&r3pb.ContainedResource{
@@ -1378,6 +1826,13 @@ func TestUnmarshalWithOutcome_Errors(t *testing.T) {
 					OneofResource: &r4pb.ContainedResource_Patient{
 						Patient: &r4patientpb.Patient{
 							Link: []*r4patientpb.Patient_Link{{}},
+						},
+					},
+				},
+				&r5pb.ContainedResource{
+					OneofResource: &r5pb.ContainedResource_Patient{
+						Patient: &r5patientpb.Patient{
+							Link: []*r5patientpb.Patient_Link{{}},
 						},
 					},
 				},
@@ -1461,6 +1916,25 @@ func TestUnmarshalWithErrorReporter_Errors(t *testing.T) {
 						},
 					},
 				},
+				&errorreporter.MultiVersionOperationOutcome{
+					Version: fhirversion.R5,
+					R5Outcome: &r5outcomepb.OperationOutcome{
+						Issue: []*r5outcomepb.OperationOutcome_Issue{
+							&r5outcomepb.OperationOutcome_Issue{
+								Code: &r5outcomepb.OperationOutcome_Issue_CodeType{
+									Value: c5pb.IssueTypeCode_VALUE,
+								},
+								Severity: &r5outcomepb.OperationOutcome_Issue_SeverityCode{
+									Value: c5pb.IssueSeverityCode_ERROR,
+								},
+								Diagnostics: &d5pb.String{Value: `error at "Patient.managingOrganization": invalid reference to a Patient resource, want Organization`},
+								Expression: []*d5pb.String{
+									&d5pb.String{Value: `Patient.managingOrganization`},
+								},
+							},
+						},
+					},
+				},
 			},
 			wantMsgs: []proto.Message{
 				&r3pb.ContainedResource{
@@ -1480,6 +1954,17 @@ func TestUnmarshalWithErrorReporter_Errors(t *testing.T) {
 							ManagingOrganization: &d4pb.Reference{
 								Reference: &d4pb.Reference_PatientId{
 									PatientId: &d4pb.ReferenceId{Value: "1"},
+								},
+							},
+						},
+					},
+				},
+				&r5pb.ContainedResource{
+					OneofResource: &r5pb.ContainedResource_Patient{
+						Patient: &r5patientpb.Patient{
+							ManagingOrganization: &d5pb.Reference{
+								Reference: &d5pb.Reference_PatientId{
+									PatientId: &d5pb.ReferenceId{Value: "1"},
 								},
 							},
 						},
@@ -1730,7 +2215,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			errs: []string{`error at "Patient.animal.species.coding": expected array`},
 		},
 		{
-			name: "R4 error in nested object",
+			name: "R4/R5 error in nested object",
 			json: `
 		{
       "resourceType": "Patient",
@@ -1743,7 +2228,7 @@ func TestUnmarshal_Errors(t *testing.T) {
 			]
     }
     `,
-			vers: []fhirversion.Version{fhirversion.R4},
+			vers: []fhirversion.Version{fhirversion.R4, fhirversion.R5},
 			errs: []string{`error at "Patient.communication[0].language.coding": expected array`},
 		},
 		{
@@ -2042,6 +2527,9 @@ func TestUnmarshal_ExtendedValidation_Errors(t *testing.T) {
 				t.Run(v.String(), func(t *testing.T) {
 					u := setupUnmarshaller(t, v)
 					_, err := u.Unmarshal([]byte(test.json))
+					if err == nil {
+						t.Fatalf("unmarshal %s got nil error, want: %v", test.name, test.err)
+					}
 					if diff := cmp.Diff(test.err, err, unnestErrorListOpt); diff != "" {
 						t.Errorf("unmarshal %s: got error %q, want %q\ndiff: %s", test.name, err.Error(), test.err, diff)
 					}
@@ -2073,6 +2561,12 @@ func TestParsePrimitiveType(t *testing.T) {
 						Value: []byte("base64 bytes"),
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Base64Binary{
+						Value: []byte("base64 bytes"),
+					},
+				},
 			},
 		},
 		{
@@ -2091,6 +2585,12 @@ func TestParsePrimitiveType(t *testing.T) {
 						Value: true,
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Boolean{
+						Value: true,
+					},
+				},
 			},
 		},
 		{
@@ -2100,6 +2600,12 @@ func TestParsePrimitiveType(t *testing.T) {
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.Canonical{
+						Value: "c",
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Canonical{
 						Value: "c",
 					},
 				},
@@ -2121,6 +2627,12 @@ func TestParsePrimitiveType(t *testing.T) {
 						Value: "<some code>",
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Code{
+						Value: "<some code>",
+					},
+				},
 			},
 		},
 		{
@@ -2136,6 +2648,12 @@ func TestParsePrimitiveType(t *testing.T) {
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.Id{
+						Value: "abc123",
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Id{
 						Value: "abc123",
 					},
 				},
@@ -2157,6 +2675,24 @@ func TestParsePrimitiveType(t *testing.T) {
 						Value: -1234,
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Integer{
+						Value: -1234,
+					},
+				},
+			},
+		},
+		{
+			pType: "Integer64",
+			value: json.RawMessage(`-1234`),
+			wants: []mvr{
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Integer64{
+						Value: -1234,
+					},
+				},
 			},
 		},
 		{
@@ -2172,6 +2708,12 @@ func TestParsePrimitiveType(t *testing.T) {
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.Markdown{
+						Value: "# md",
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Markdown{
 						Value: "# md",
 					},
 				},
@@ -2193,6 +2735,12 @@ func TestParsePrimitiveType(t *testing.T) {
 						Value: "urn:oid:1.23",
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Oid{
+						Value: "urn:oid:1.23",
+					},
+				},
 			},
 		},
 		{
@@ -2208,6 +2756,12 @@ func TestParsePrimitiveType(t *testing.T) {
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.Uuid{
+						Value: "urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Uuid{
 						Value: "urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
 					},
 				},
@@ -2229,6 +2783,12 @@ func TestParsePrimitiveType(t *testing.T) {
 						Value: 5678,
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.PositiveInt{
+						Value: 5678,
+					},
+				},
 			},
 		},
 		{
@@ -2247,6 +2807,12 @@ func TestParsePrimitiveType(t *testing.T) {
 						Value: "a given string",
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.String{
+						Value: "a given string",
+					},
+				},
 			},
 		},
 		{
@@ -2262,6 +2828,12 @@ func TestParsePrimitiveType(t *testing.T) {
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.UnsignedInt{
+						Value: 90,
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.UnsignedInt{
 						Value: 90,
 					},
 				},
@@ -2287,6 +2859,14 @@ func TestParsePrimitiveType(t *testing.T) {
 						Timezone:  "America/Los_Angeles",
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Date{
+						ValueUs:   1483257600000000,
+						Precision: d5pb.Date_YEAR,
+						Timezone:  "America/Los_Angeles",
+					},
+				},
 			},
 		},
 		{
@@ -2306,6 +2886,14 @@ func TestParsePrimitiveType(t *testing.T) {
 					r: &d4pb.DateTime{
 						ValueUs:   1514793600000000,
 						Precision: d4pb.DateTime_YEAR,
+						Timezone:  "America/Los_Angeles",
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.DateTime{
+						ValueUs:   1514793600000000,
+						Precision: d5pb.DateTime_YEAR,
 						Timezone:  "America/Los_Angeles",
 					},
 				},
@@ -2331,6 +2919,14 @@ func TestParsePrimitiveType(t *testing.T) {
 						Timezone:  "America/Los_Angeles",
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.DateTime{
+						ValueUs:   1514793600000000,
+						Precision: d5pb.DateTime_DAY,
+						Timezone:  "America/Los_Angeles",
+					},
+				},
 			},
 		},
 		{
@@ -2349,6 +2945,13 @@ func TestParsePrimitiveType(t *testing.T) {
 					r: &d4pb.Time{
 						ValueUs:   43200000000,
 						Precision: d4pb.Time_SECOND,
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Time{
+						ValueUs:   43200000000,
+						Precision: d5pb.Time_SECOND,
 					},
 				},
 			},
@@ -2373,6 +2976,14 @@ func TestParsePrimitiveType(t *testing.T) {
 						Timezone:  "Z",
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Instant{
+						ValueUs:   1514808000000000,
+						Precision: d5pb.Instant_MILLISECOND,
+						Timezone:  "Z",
+					},
+				},
 			},
 		},
 		{
@@ -2388,6 +2999,12 @@ func TestParsePrimitiveType(t *testing.T) {
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.Decimal{
+						Value: "1.23",
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Decimal{
 						Value: "1.23",
 					},
 				},
@@ -2445,6 +3062,27 @@ func TestParsePrimitiveType(t *testing.T) {
 						}},
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &r5patientpb.Patient_GenderCode{
+						Extension: []*d5pb.Extension{{
+							Url: &d5pb.Uri{
+								Value: "http://example#gender",
+							},
+						}, {
+							Url: &d5pb.Uri{
+								Value: "https://g.co/fhir/StructureDefinition/primitiveHasNoValue",
+							},
+							Value: &d5pb.Extension_ValueX{
+								Choice: &d5pb.Extension_ValueX_Boolean{
+									Boolean: &d5pb.Boolean{
+										Value: true,
+									},
+								},
+							},
+						}},
+					},
+				},
 			},
 		},
 	}
@@ -2477,6 +3115,10 @@ func TestParseURIs(t *testing.T) {
 		{
 			ver: fhirversion.R4,
 			r:   &d4pb.Uri{},
+		},
+		{
+			ver: fhirversion.R5,
+			r:   &d5pb.Uri{},
 		},
 	}
 	tests := []string{
@@ -2532,6 +3174,10 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 					ver: fhirversion.R4,
 					r:   &d4pb.Code{},
 				},
+				{
+					ver: fhirversion.R5,
+					r:   &d5pb.Code{},
+				},
 			},
 		},
 		{
@@ -2545,6 +3191,10 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 				{
 					ver: fhirversion.R4,
 					r:   &d4pb.Oid{},
+				},
+				{
+					ver: fhirversion.R5,
+					r:   &d5pb.Oid{},
 				},
 			},
 		},
@@ -2560,6 +3210,10 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 					ver: fhirversion.R4,
 					r:   &d4pb.PositiveInt{},
 				},
+				{
+					ver: fhirversion.R5,
+					r:   &d5pb.PositiveInt{},
+				},
 			},
 		},
 		{
@@ -2573,6 +3227,10 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 				{
 					ver: fhirversion.STU3,
 					r:   &d3pb.PositiveInt{},
+				},
+				{
+					ver: fhirversion.R5,
+					r:   &d5pb.PositiveInt{},
 				},
 			},
 		},
@@ -2618,6 +3276,10 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 					ver: fhirversion.STU3,
 					r:   &d3pb.UnsignedInt{},
 				},
+				{
+					ver: fhirversion.R5,
+					r:   &d5pb.UnsignedInt{},
+				},
 			},
 		},
 		{
@@ -2642,6 +3304,10 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 					ver: fhirversion.R4,
 					r:   &d4pb.Boolean{},
 				},
+				{
+					ver: fhirversion.R5,
+					r:   &d5pb.Boolean{},
+				},
 			},
 		},
 		{
@@ -2656,6 +3322,10 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 					ver: fhirversion.R4,
 					r:   &d4pb.Instant{},
 				},
+				{
+					ver: fhirversion.R5,
+					r:   &d5pb.Instant{},
+				},
 			},
 		},
 		{
@@ -2669,6 +3339,10 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 				{
 					ver: fhirversion.R4,
 					r:   &d4pb.Instant{},
+				},
+				{
+					ver: fhirversion.R5,
+					r:   &d5pb.Instant{},
 				},
 			},
 		},
@@ -2693,6 +3367,16 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 			},
 		},
 		{
+			name:  "Integer64",
+			value: json.RawMessage(`1.0`),
+			msgs: []mvr{
+				{
+					ver: fhirversion.R5,
+					r:   &d5pb.Integer64{},
+				},
+			},
+		},
+		{
 			name:  "Markdown",
 			value: json.RawMessage(`0`),
 			msgs: []mvr{
@@ -2703,6 +3387,10 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 				{
 					ver: fhirversion.R4,
 					r:   &d4pb.Markdown{},
+				},
+				{
+					ver: fhirversion.R5,
+					r:   &d5pb.Markdown{},
 				},
 			},
 		},
@@ -2718,6 +3406,10 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 					ver: fhirversion.R4,
 					r:   &d4pb.Uri{},
 				},
+				{
+					ver: fhirversion.R5,
+					r:   &d5pb.Uri{},
+				},
 			},
 		},
 		{
@@ -2732,6 +3424,10 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 					ver: fhirversion.R4,
 					r:   &d4pb.Uuid{},
 				},
+				{
+					ver: fhirversion.R5,
+					r:   &d5pb.Uuid{},
+				},
 			},
 		},
 		{
@@ -2745,6 +3441,10 @@ func TestParsePrimitiveType_Errors(t *testing.T) {
 				{
 					ver: fhirversion.R4,
 					r:   &d4pb.Xhtml{},
+				},
+				{
+					ver: fhirversion.R5,
+					r:   &d5pb.Xhtml{},
 				},
 			},
 		},
@@ -2774,6 +3474,9 @@ func TestUnmarshalVersioned(t *testing.T) {
 	if _, err := u3.UnmarshalR4([]byte(patient)); err == nil {
 		t.Errorf("UnmarshalR4(%s) didn't return expected error", patient)
 	}
+	if _, err := u3.UnmarshalR5([]byte(patient)); err == nil {
+		t.Errorf("UnmarshalR5(%s) didn't return expected error", patient)
+	}
 
 	u4 := setupUnmarshaller(t, fhirversion.R4)
 	if _, err := u4.UnmarshalR4([]byte(patient)); err != nil {
@@ -2781,6 +3484,20 @@ func TestUnmarshalVersioned(t *testing.T) {
 	}
 	if _, err := u4.UnmarshalR3([]byte(patient)); err == nil {
 		t.Errorf("UnmarshalR3(%s) didn't return expected error", patient)
+	}
+	if _, err := u4.UnmarshalR5([]byte(patient)); err == nil {
+		t.Errorf("UnmarshalR5(%s) didn't return expected error", patient)
+	}
+
+	u5 := setupUnmarshaller(t, fhirversion.R5)
+	if _, err := u5.UnmarshalR4([]byte(patient)); err == nil {
+		t.Errorf("UnmarshalR3(%s) didn't return expected error", patient)
+	}
+	if _, err := u5.UnmarshalR3([]byte(patient)); err == nil {
+		t.Errorf("UnmarshalR3(%s) didn't return expected error", patient)
+	}
+	if _, err := u5.UnmarshalR5([]byte(patient)); err != nil {
+		t.Errorf("UnmarshalR3(%s) returned unexpected error; %v", patient, err)
 	}
 
 }
@@ -2801,10 +3518,12 @@ func TestUnmarshal_NestingDepth(t *testing.T) {
 		"resourceType": "Bundle",
 		"type": "collection",
 		"entry": [{
+			"fullUrl": "Bundle/1",
 			"resource": {
 				"resourceType": "Bundle",
 				"type": "collection",
 				"entry":[{
+					"fullUrl": "Patient/1",
 					"resource": {
 						"resourceType": "Patient"
 					}

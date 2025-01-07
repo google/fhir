@@ -38,6 +38,9 @@ import (
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	r4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
 
+	d5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/datatypes_go_proto"
+	r5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/bundle_and_contained_resource_go_proto"
+
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 	r3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto"
 )
@@ -401,6 +404,12 @@ func init() {
 		emptyCR.ProtoReflect().Descriptor(),
 		func(node protoreflect.MessageDescriptor) { collectDirectRequiredFields(node, requiredFields) },
 	)
+	// populate R5 required fields
+	emptyCR = &r5pb.ContainedResource{}
+	findAllReferencedMessageTypes(
+		emptyCR.ProtoReflect().Descriptor(),
+		func(node protoreflect.MessageDescriptor) { collectDirectRequiredFields(node, requiredFields) },
+	)
 
 	RegexValues = make(map[protoreflect.FullName]*regexp.Regexp)
 	primitivesWithRegex := []protoreflect.Message{
@@ -415,6 +424,12 @@ func init() {
 		(&d4pb.Id{}).ProtoReflect(),
 		(&d4pb.Uuid{}).ProtoReflect(),
 		(&d4pb.Code{}).ProtoReflect(),
+
+		(&d5pb.Decimal{}).ProtoReflect(),
+		(&d5pb.Oid{}).ProtoReflect(),
+		(&d5pb.Id{}).ProtoReflect(),
+		(&d5pb.Uuid{}).ProtoReflect(),
+		(&d5pb.Code{}).ProtoReflect(),
 	}
 	for _, p := range primitivesWithRegex {
 		p.Descriptor().Options().ProtoReflect().Range(func(f protoreflect.FieldDescriptor, v protoreflect.Value) bool {
@@ -433,6 +448,7 @@ func initReferenceTypes() {
 	for _, refPB := range []proto.Message{
 		&d3pb.Reference{},
 		&d4pb.Reference{},
+		&d5pb.Reference{},
 	} {
 		refOneOf := refPB.ProtoReflect().Descriptor().Oneofs().ByName("reference")
 		options := refOneOf.Fields()
