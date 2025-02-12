@@ -18,5 +18,4 @@ py_binary(
     name = "bulkload",
     srcs = ["bulkload.py"],
     legacy_create_init = 0,
-    python_version = "PY3",
 )
