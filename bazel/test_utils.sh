@@ -13,27 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-readonly PYTHON_VERSION='3.8.10'
-readonly PIP_VERSION='~=21.0.0'
-readonly SETUPTOOLS_VERSION='~=56.0.0'
-
-function run_bazel_in_venv {
-  eval "$(pyenv init -)"
-  pyenv install --skip-existing "${PYTHON_VERSION}"
-  pyenv shell "${PYTHON_VERSION}"
-
-  python -m venv venv
-  source venv/bin/activate
-  pip install pip"${PIP_VERSION}"
-  pip install setuptools"${SETUPTOOLS_VERSION}"
-  pip install wheel
-
-  bazel test --test_output=errors //...
-
-  # Deactivate venv
-  deactivate
-}
-
 function go_modules_tests {
     mkdir -p /tmp/go/src/github.com/google/fhir
     export GOPATH=/tmp/go
@@ -49,6 +28,6 @@ function go_modules_tests {
 # This runs all builds and tests (e.g. all of Bazel tests, Go module tests,
 # etc).
 function run_all_tests {
-  run_bazel_in_venv
+  bazel test --test_output=errors //...
   go_modules_tests
 }
