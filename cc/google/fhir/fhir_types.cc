@@ -12,9 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <string>
+
 #include "google/fhir/fhir_types.h"
 
 #include "google/fhir/annotations.h"
+#include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
 
 namespace google {
@@ -94,6 +97,8 @@ FHIR_SIMPLE_TYPE_CHECK(String,
                        "http://hl7.org/fhir/StructureDefinition/string");
 FHIR_SIMPLE_TYPE_CHECK(Integer,
                        "http://hl7.org/fhir/StructureDefinition/integer");
+FHIR_SIMPLE_TYPE_CHECK(Integer64,
+                       "http://hl7.org/fhir/StructureDefinition/integer64");
 FHIR_SIMPLE_TYPE_CHECK(UnsignedInt,
                        "http://hl7.org/fhir/StructureDefinition/unsignedInt");
 FHIR_SIMPLE_TYPE_CHECK(PositiveInt,

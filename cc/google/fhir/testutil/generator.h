@@ -15,6 +15,7 @@
 #ifndef GOOGLE_FHIR_TESTUTIL_GENERATOR_H_
 #define GOOGLE_FHIR_TESTUTIL_GENERATOR_H_
 
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <utility>
@@ -55,6 +56,8 @@ class ValueProvider {
   virtual std::string GetString(const ::google::protobuf::FieldDescriptor* field,
                                 int recursion_depth) = 0;
   virtual int GetInteger(const ::google::protobuf::FieldDescriptor* field,
+                         int recursion_depth) = 0;
+  virtual std::string GetInteger64(const ::google::protobuf::FieldDescriptor* field,
                          int recursion_depth) = 0;
   virtual int GetPositiveInt(const ::google::protobuf::FieldDescriptor* field,
                              int recursion_depth) = 0;
@@ -186,6 +189,8 @@ class RandomValueProvider : public ValueProvider {
   std::string GetString(const ::google::protobuf::FieldDescriptor* field,
                         int recursion_depth) override;
   int GetInteger(const ::google::protobuf::FieldDescriptor* field,
+                 int recursion_depth) override;
+  std::string GetInteger64(const ::google::protobuf::FieldDescriptor* field,
                  int recursion_depth) override;
   int GetPositiveInt(const ::google::protobuf::FieldDescriptor* field,
                      int recursion_depth) override;

@@ -14,19 +14,27 @@
 
 #include "google/fhir/testutil/generator.h"
 
+#include <cmath>
+#include <cstddef>
 #include <memory>
 #include <string>
 #include <vector>
 
 #include "google/protobuf/any.pb.h"
+#include "absl/container/flat_hash_map.h"
 #include "absl/random/distributions.h"
 #include "absl/status/status.h"
+#include "absl/strings/str_cat.h"
+#include "absl/strings/str_format.h"
+#include "absl/strings/string_view.h"
 #include "google/fhir/annotations.h"
+#include "google/fhir/error_reporter.h"
 #include "google/fhir/fhir_types.h"
+#include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json_format_results.h"
 #include "google/fhir/proto_util.h"
 #include "google/fhir/references.h"
-#include "google/fhir/util.h"
+#include "google/fhir/status/statusor.h"
 #include "google/protobuf/descriptor.h"
 
 namespace google {
@@ -112,6 +120,11 @@ std::string RandomValueProvider::GetBase64Binary(
 int RandomValueProvider::GetInteger(const google::protobuf::FieldDescriptor* field,
                                     int recursion_depth) {
   return absl::Uniform<int>(bitgen_, params_.low_value, params_.high_value);
+}
+
+std::string RandomValueProvider::GetInteger64(
+    const google::protobuf::FieldDescriptor* field, int recursion_depth) {
+  return absl::StrCat(GetInteger(field, recursion_depth));
 }
 
 std::string RandomValueProvider::GetString(const google::protobuf::FieldDescriptor* field,
@@ -294,6 +307,9 @@ absl::Status FhirGenerator::FillPrimitive(
   } else if (google::fhir::IsInteger(*fhir_primitive)) {
     value = internal::FhirJson::CreateInteger(
         value_provider_->GetInteger(field, recursion_depth));
+  } else if (google::fhir::IsInteger64(*fhir_primitive)) {
+    value = internal::FhirJson::CreateInteger64(
+        value_provider_->GetInteger64(field, recursion_depth));
   } else if (google::fhir::IsPositiveInt(*fhir_primitive)) {
     value = internal::FhirJson::CreateUnsigned(
         value_provider_->GetPositiveInt(field, recursion_depth));

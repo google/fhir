@@ -14,12 +14,14 @@
 
 #include "google/fhir/json/fhir_json.h"
 
+#include <cstdint>
 #include <map>
 #include <memory>
 #include <string>
 #include <utility>
 
 #include "absl/memory/memory.h"
+#include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
 
@@ -44,6 +46,12 @@ std::unique_ptr<FhirJson> FhirJson::CreateBoolean(bool val) {
 std::unique_ptr<FhirJson> FhirJson::CreateInteger(int64_t val) {
   auto json = absl::WrapUnique(new FhirJson(FhirJson::intValue));
   json->int_value_ = val;
+  return json;
+}
+
+std::unique_ptr<FhirJson> FhirJson::CreateInteger64(const std::string& val) {
+  auto json = absl::WrapUnique(new FhirJson(FhirJson::int64Value));
+  json->string_value_ = val;
   return json;
 }
 
@@ -130,6 +138,7 @@ void FhirJson::writeToString(std::string& s, int depth,
       appendToString(s, absl::StrCat(uint_value_), num_spaces_first_token);
       break;
     case FhirJson::realValue:
+    case FhirJson::int64Value:
       appendToString(s, string_value_, num_spaces_first_token);
       break;
     case FhirJson::stringValue:
@@ -175,11 +184,13 @@ bool FhirJson::isNull() const { return type_ == FhirJson::nullValue; }
 bool FhirJson::isBool() const { return type_ == FhirJson::booleanValue; }
 
 bool FhirJson::isInt() const {
-  return type_ == FhirJson::intValue || type_ == FhirJson::uintValue;
+  return type_ == FhirJson::intValue || type_ == FhirJson::int64Value ||
+         type_ == FhirJson::uintValue;
 }
 
 bool FhirJson::isString() const {
-  return type_ == FhirJson::stringValue || type_ == FhirJson::realValue;
+  return type_ == FhirJson::stringValue || type_ == FhirJson::realValue ||
+         type_ == FhirJson::int64Value;
 }
 
 bool FhirJson::isObject() const { return type_ == FhirJson::objectValue; }
@@ -215,6 +226,7 @@ absl::StatusOr<int64_t> FhirJson::asInt() const {
 absl::StatusOr<std::string> FhirJson::asString() const {
   switch (type_) {
     case FhirJson::realValue:
+    case FhirJson::int64Value:
     case FhirJson::stringValue:
       return string_value_;
     default:
@@ -291,6 +303,8 @@ std::string FhirJson::typeString() const {
       return "nullValue";
     case FhirJson::intValue:
       return "intValue";
+    case FhirJson::int64Value:
+      return "int64Value";
     case FhirJson::uintValue:
       return "uintValue";
     case FhirJson::realValue:
@@ -318,6 +332,7 @@ bool FhirJson::operator==(const FhirJson& other) const {
       return int_value_ == other.int_value_;
     case FhirJson::uintValue:
       return uint_value_ == other.uint_value_;
+    case FhirJson::int64Value:
     case FhirJson::realValue:
     case FhirJson::stringValue:
       return string_value_ == other.string_value_;

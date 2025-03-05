@@ -39,6 +39,7 @@ class FhirJson {
   static std::unique_ptr<FhirJson> CreateNull();
   static std::unique_ptr<FhirJson> CreateBoolean(bool val);
   static std::unique_ptr<FhirJson> CreateInteger(int64_t val);
+  static std::unique_ptr<FhirJson> CreateInteger64(const std::string& val);
   static std::unique_ptr<FhirJson> CreateUnsigned(uint64_t val);
   static std::unique_ptr<FhirJson> CreateDecimal(const std::string& val);
   static std::unique_ptr<FhirJson> CreateString(const std::string& val);
@@ -88,6 +89,7 @@ class FhirJson {
   enum ValueType {
     nullValue = 0,  ///< 'null' value
     intValue,       ///< signed integer value
+    int64Value,     ///< signed integer64 value
     uintValue,      ///< unsigned integer value
     realValue,      ///< double value
     stringValue,    ///< UTF-8 string value

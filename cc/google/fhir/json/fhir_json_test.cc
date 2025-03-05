@@ -18,6 +18,7 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "absl/status/status.h"
 #include "absl/strings/str_replace.h"
 #include "google/fhir/json/test_matchers.h"
 #include "google/fhir/status/status.h"
@@ -46,6 +47,8 @@ TEST(FhirJsonTest, PrimitiveFactoryFunctions) {
   EXPECT_THAT(FhirJson::CreateBoolean(true)->toString(),
               EqIgnoringWhiteSpaces("true"));
   EXPECT_THAT(FhirJson::CreateInteger(2)->toString(),
+              EqIgnoringWhiteSpaces("2"));
+  EXPECT_THAT(FhirJson::CreateInteger64("2")->toString(),
               EqIgnoringWhiteSpaces("2"));
   EXPECT_THAT(FhirJson::CreateUnsigned(2)->toString(),
               EqIgnoringWhiteSpaces("2"));
