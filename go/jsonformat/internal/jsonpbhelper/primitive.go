@@ -280,7 +280,7 @@ func MarshalPrimitiveType(rpb protoreflect.Message) (IsJSON, error) {
 		return JSONString(binary), nil
 	case "Canonical", "Code", "Markdown", "Oid", "String", "Uri", "Url", "Uuid", "Xhtml", "ReferenceId", "Id":
 		return JSONString(rpb.Get(desc.Fields().ByName("value")).String()), nil
-	case "Boolean", "Integer", "PositiveInt", "UnsignedInt", "Decimal":
+	case "Boolean", "Integer", "PositiveInt", "UnsignedInt", "Decimal", "Integer64":
 		val := rpb.Get(desc.Fields().ByName("value"))
 		return JSONRawValue(fmt.Sprintf("%v", val.Interface())), nil
 	case "Date":

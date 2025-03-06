@@ -27,6 +27,7 @@ import (
 	"google.golang.org/protobuf/testing/protocmp"
 
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
+	d5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/datatypes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 )
 
@@ -34,6 +35,7 @@ func newDatesForTest(val int64, precName string, tz string) []proto.Message {
 	ret := []proto.Message{
 		&d3pb.Date{ValueUs: val, Timezone: tz},
 		&d4pb.Date{ValueUs: val, Timezone: tz},
+		&d5pb.Date{ValueUs: val, Timezone: tz},
 	}
 	for _, p := range ret {
 		rp := p.ProtoReflect()
@@ -159,6 +161,7 @@ func TestParseDateFromJSON_Invalid(t *testing.T) {
 		messages := []proto.Message{
 			&d3pb.Date{},
 			&d4pb.Date{},
+			&d5pb.Date{},
 		}
 		for _, m := range messages {
 			if err := ParseDateFromString(test, loc, m); err == nil {
@@ -172,6 +175,7 @@ func newDateTimesForTest(val int64, precName string, tz string) []proto.Message 
 	ret := []proto.Message{
 		&d3pb.DateTime{ValueUs: val, Timezone: tz},
 		&d4pb.DateTime{ValueUs: val, Timezone: tz},
+		&d5pb.DateTime{ValueUs: val, Timezone: tz},
 	}
 	for _, p := range ret {
 		rp := p.ProtoReflect()
@@ -321,6 +325,7 @@ func TestParseDateTimeFromJSON_Invalid(t *testing.T) {
 		messages := []proto.Message{
 			&d3pb.DateTime{},
 			&d4pb.DateTime{},
+			&d5pb.DateTime{},
 		}
 		for _, m := range messages {
 			if err := ParseDateTimeFromString(test, loc, m); err == nil {
@@ -334,6 +339,7 @@ func newTimesForTest(val int64, precName string) []proto.Message {
 	ret := []proto.Message{
 		&d3pb.Time{ValueUs: val},
 		&d4pb.Time{ValueUs: val},
+		&d5pb.Time{ValueUs: val},
 	}
 	for _, p := range ret {
 		rp := p.ProtoReflect()
@@ -392,6 +398,7 @@ func newInstantsForTest(val int64, precName string, tz string) []proto.Message {
 	ret := []proto.Message{
 		&d3pb.Instant{ValueUs: val, Timezone: tz},
 		&d4pb.Instant{ValueUs: val, Timezone: tz},
+		&d5pb.Instant{ValueUs: val, Timezone: tz},
 	}
 	for _, p := range ret {
 		rp := p.ProtoReflect()
@@ -514,6 +521,7 @@ func TestParseInstant_Invalid(t *testing.T) {
 		messages := []proto.Message{
 			&d3pb.Instant{},
 			&d4pb.Instant{},
+			&d5pb.Instant{},
 		}
 		for _, m := range messages {
 			if err := ParseInstant(test.instant, m); err == nil {
@@ -533,6 +541,7 @@ func TestSerializeInstant_Invalid(t *testing.T) {
 			[]proto.Message{
 				&d3pb.Instant{Timezone: "UTC", Precision: d3pb.Instant_PRECISION_UNSPECIFIED},
 				&d4pb.Instant{Timezone: "UTC", Precision: d4pb.Instant_PRECISION_UNSPECIFIED},
+				&d5pb.Instant{Timezone: "UTC", Precision: d5pb.Instant_PRECISION_UNSPECIFIED},
 			},
 		},
 		{
@@ -540,6 +549,7 @@ func TestSerializeInstant_Invalid(t *testing.T) {
 			[]proto.Message{
 				&d3pb.Instant{Timezone: "XYZ", Precision: d3pb.Instant_SECOND},
 				&d4pb.Instant{Timezone: "XYZ", Precision: d4pb.Instant_SECOND},
+				&d5pb.Instant{Timezone: "XYZ", Precision: d5pb.Instant_SECOND},
 			},
 		},
 	}

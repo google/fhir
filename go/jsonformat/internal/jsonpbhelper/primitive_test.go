@@ -30,6 +30,10 @@ import (
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
 	rs4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/research_study_go_proto"
 	e4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/fhirproto_extensions_go_proto"
+	c5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/codes_go_proto"
+	d5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/datatypes_go_proto"
+	rs5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/research_study_go_proto"
+	e5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/fhirproto_extensions_go_proto"
 	c3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/codes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 	e3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/fhirproto_extensions_go_proto"
@@ -114,6 +118,10 @@ func newBinarySeparatorStrideAndExtensionTestData(sep string, stride uint32) []p
 		protoToExtensionTestData{
 			srcProto:     &e4pb.Base64BinarySeparatorStride{},
 			dstExtension: &d4pb.Extension{},
+		},
+		protoToExtensionTestData{
+			srcProto:     &e5pb.Base64BinarySeparatorStride{},
+			dstExtension: &d5pb.Extension{},
 		},
 	)
 	for _, r := range ret {
@@ -259,6 +267,10 @@ func newAddInternalExtensionTestData(bin []byte, sep string, stride uint32, alre
 			srcBinary: &d4pb.Base64Binary{Value: bin},
 			dstBinary: &d4pb.Base64Binary{Value: bin},
 		},
+		addInternalExtensionTestData{
+			srcBinary: &d5pb.Base64Binary{Value: bin},
+			dstBinary: &d5pb.Base64Binary{Value: bin},
+		},
 	)
 	protoToExtData := newBinarySeparatorStrideAndExtensionTestData(sep, stride)
 	for i, r := range ret {
@@ -315,7 +327,7 @@ func TestAddInternalExtension(t *testing.T) {
 }
 
 func TestDecimal(t *testing.T) {
-	allVers := []fhirversion.Version{fhirversion.STU3, fhirversion.R4}
+	allVers := []fhirversion.Version{fhirversion.STU3, fhirversion.R4, fhirversion.R5}
 	tests := []struct {
 		value string
 		vers  []fhirversion.Version
@@ -329,14 +341,15 @@ func TestDecimal(t *testing.T) {
 		{"0", allVers},
 		{"0.00", allVers},
 		{"66.899999999999991", allVers},
-		{"4e2", []fhirversion.Version{fhirversion.R4}},
-		{"-2E8", []fhirversion.Version{fhirversion.R4}},
+		{"4e2", []fhirversion.Version{fhirversion.R4, fhirversion.R5}},
+		{"-2E8", []fhirversion.Version{fhirversion.R4, fhirversion.R5}},
 	}
 	for _, test := range tests {
 		t.Run(test.value, func(t *testing.T) {
 			expects := map[fhirversion.Version]proto.Message{
 				fhirversion.STU3:  &d3pb.Decimal{Value: test.value},
 				fhirversion.R4:    &d4pb.Decimal{Value: test.value},
+				fhirversion.R5:    &d5pb.Decimal{Value: test.value},
 			}
 			for _, ver := range test.vers {
 				e := expects[ver]
@@ -353,7 +366,7 @@ func TestDecimal(t *testing.T) {
 }
 
 func TestDecimal_Invalid(t *testing.T) {
-	allVers := []fhirversion.Version{fhirversion.STU3, fhirversion.R4}
+	allVers := []fhirversion.Version{fhirversion.STU3, fhirversion.R4, fhirversion.R5}
 	tests := []struct {
 		name string
 		json string
@@ -379,6 +392,7 @@ func TestDecimal_Invalid(t *testing.T) {
 		msgs := map[fhirversion.Version]proto.Message{
 			fhirversion.STU3:  &d3pb.Decimal{},
 			fhirversion.R4:    &d4pb.Decimal{},
+			fhirversion.R5:    &d5pb.Decimal{},
 		}
 		for _, ver := range test.vers {
 			if err := ParseDecimal(json.RawMessage(test.json), msgs[ver]); err == nil {
@@ -433,6 +447,15 @@ func TestBinary(t *testing.T) {
 						return &e4pb.Base64BinarySeparatorStride{
 							Separator: &d4pb.String{Value: sep},
 							Stride:    &d4pb.PositiveInt{Value: stride},
+						}
+					},
+				},
+				{
+					&d5pb.Base64Binary{},
+					func(sep string, stride uint32) proto.Message {
+						return &e5pb.Base64BinarySeparatorStride{
+							Separator: &d5pb.String{Value: sep},
+							Stride:    &d5pb.PositiveInt{Value: stride},
 						}
 					},
 				},
@@ -511,6 +534,15 @@ func TestParseBinary_Invalid(t *testing.T) {
 						}
 					},
 				},
+				{
+					&d5pb.Base64Binary{},
+					func(sep string, stride uint32) proto.Message {
+						return &e5pb.Base64BinarySeparatorStride{
+							Separator: &d5pb.String{Value: sep},
+							Stride:    &d5pb.PositiveInt{Value: stride},
+						}
+					},
+				},
 			}
 			for _, tnc := range typesAndCreators {
 				m := tnc.message.ProtoReflect().New().Interface().(proto.Message)
@@ -548,6 +580,12 @@ func TestMarshalPrimitiveType(t *testing.T) {
 						Value: true,
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Boolean{
+						Value: true,
+					},
+				},
 			},
 			want: JSONRawValue("true"),
 		},
@@ -566,6 +604,24 @@ func TestMarshalPrimitiveType(t *testing.T) {
 						Value: 1,
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Integer{
+						Value: 1,
+					},
+				},
+			},
+			want: JSONRawValue("1"),
+		},
+		{
+			name: "Integer64",
+			inputs: []mvr{
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Integer64{
+						Value: 1,
+					},
+				},
 			},
 			want: JSONRawValue("1"),
 		},
@@ -575,6 +631,12 @@ func TestMarshalPrimitiveType(t *testing.T) {
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.Canonical{
+						Value: "c",
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Canonical{
 						Value: "c",
 					},
 				},
@@ -596,6 +658,12 @@ func TestMarshalPrimitiveType(t *testing.T) {
 						Value: "some code",
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Code{
+						Value: "some code",
+					},
+				},
 			},
 			want: JSONString("some code"),
 		},
@@ -611,6 +679,12 @@ func TestMarshalPrimitiveType(t *testing.T) {
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.Id{
+						Value: "patient1234",
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Id{
 						Value: "patient1234",
 					},
 				},
@@ -632,6 +706,12 @@ func TestMarshalPrimitiveType(t *testing.T) {
 						Value: "This is a string",
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.String{
+						Value: "This is a string",
+					},
+				},
 			},
 			want: JSONString("This is a string"),
 		},
@@ -650,6 +730,12 @@ func TestMarshalPrimitiveType(t *testing.T) {
 						Value: "md",
 					},
 				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Markdown{
+						Value: "md",
+					},
+				},
 			},
 			want: JSONString("md"),
 		},
@@ -659,6 +745,12 @@ func TestMarshalPrimitiveType(t *testing.T) {
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.Url{
+						Value: "u",
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Url{
 						Value: "u",
 					},
 				},
@@ -677,6 +769,12 @@ func TestMarshalPrimitiveType(t *testing.T) {
 				{
 					ver: fhirversion.R4,
 					r: &d4pb.Uuid{
+						Value: "uuid",
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &d5pb.Uuid{
 						Value: "uuid",
 					},
 				},
@@ -702,6 +800,18 @@ func TestMarshalPrimitiveType(t *testing.T) {
 			want: JSONString("completed"),
 		},
 		{
+			name: "ResearchStudyStatusCode_R5",
+			inputs: []mvr{
+				{
+					ver: fhirversion.R5,
+					r: &rs5pb.ResearchStudy_StatusCode{
+						Value: c5pb.PublicationStatusCode_ACTIVE,
+					},
+				},
+			},
+			want: JSONString("active"),
+		},
+		{
 			name: "ResearchStudyStatusCode uninitialized",
 			inputs: []mvr{
 				{
@@ -714,6 +824,12 @@ func TestMarshalPrimitiveType(t *testing.T) {
 					ver: fhirversion.R4,
 					r: &rs4pb.ResearchStudy_StatusCode{
 						Value: c4pb.ResearchStudyStatusCode_INVALID_UNINITIALIZED,
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &rs5pb.ResearchStudy_StatusCode{
+						Value: c5pb.PublicationStatusCode_INVALID_UNINITIALIZED,
 					},
 				},
 			},
