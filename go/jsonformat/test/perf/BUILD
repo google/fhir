@@ -1,4 +1,5 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
+load("//tools/build_defs/go:go_test.bzl", "go_test")
 
 package(default_visibility = ["//visibility:public"])
 
