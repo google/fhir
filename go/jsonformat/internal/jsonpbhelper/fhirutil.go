@@ -1058,7 +1058,7 @@ func ValidateRequiredFields(pb protoreflect.Message, disallowNull bool) error {
 				Details: fmt.Sprintf("missing required field %q", fieldName),
 			})
 		} else if disallowNull {
-			if field.Kind() != protoreflect.MessageKind || field.IsList() || IsPrimitiveType(field.Message()) {
+			if field.Kind() != protoreflect.MessageKind || field.IsList() {
 				continue
 			}
 			msgVal := pb.Get(field).Message().Interface()

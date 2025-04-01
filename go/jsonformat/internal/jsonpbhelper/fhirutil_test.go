@@ -34,6 +34,7 @@ import (
 	r4patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/patient_go_proto"
 	d5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/datatypes_go_proto"
 	r5basicpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/basic_go_proto"
+	r5devicepb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/device_go_proto"
 	r5patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/patient_go_proto"
 	c3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/codes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
@@ -1509,6 +1510,123 @@ func TestValidateRequiredFields(t *testing.T) {
 			valid := err == nil
 			if valid != test.valid {
 				t.Errorf("ValidateRequiredFields(%v): got %v, want %v", test.name, valid, test.valid)
+			}
+		})
+	}
+}
+
+func TestValidateRequiredFields_DisallowNullRequired(t *testing.T) {
+	tests := []struct {
+		name                                  string
+		msg                                   proto.Message
+		wantAllowNullErr, wantDisallowNullErr string
+	}{
+		{
+			name: "required code missing",
+			msg: &r3pb.Observation{
+				Status: &c3pb.ObservationStatusCode{Value: c3pb.ObservationStatusCode_PRELIMINARY},
+			},
+			wantAllowNullErr:    `missing required field "code"`,
+			wantDisallowNullErr: `missing required field "code"`,
+		},
+		{
+			name: "required code empty",
+			msg: &r3pb.Observation{
+				Status: &c3pb.ObservationStatusCode{Value: c3pb.ObservationStatusCode_PRELIMINARY},
+				Code:   &d3pb.CodeableConcept{},
+			},
+			wantAllowNullErr:    "",
+			wantDisallowNullErr: `required field "code" is either null or empty value`,
+		},
+		{
+			name: "required enum missing",
+			msg: &r3pb.Observation{
+				Code: &d3pb.CodeableConcept{
+					Coding: []*d3pb.Coding{
+						{
+							System: &d3pb.Uri{Value: "123"},
+							Code:   &d3pb.Code{Value: "456"},
+						},
+					},
+				},
+			},
+			wantAllowNullErr:    `missing required field "status"`,
+			wantDisallowNullErr: `missing required field "status"`,
+		},
+		{
+			name: "required enum empty",
+			msg: &r3pb.Observation{
+				Status: &c3pb.ObservationStatusCode{},
+				Code: &d3pb.CodeableConcept{
+					Coding: []*d3pb.Coding{
+						{
+							System: &d3pb.Uri{Value: "123"},
+							Code:   &d3pb.Code{Value: "456"},
+						},
+					},
+				},
+			},
+			wantAllowNullErr:    "",
+			wantDisallowNullErr: `required field "status" is either null or empty value`,
+		},
+		{
+			name: "required string missing",
+			msg: &r5devicepb.Device_UdiCarrier{
+				Issuer: &d5pb.Uri{Value: "123"},
+			},
+			wantAllowNullErr:    `missing required field "deviceIdentifier"`,
+			wantDisallowNullErr: `missing required field "deviceIdentifier"`,
+		},
+		{
+			name: "required string empty",
+			msg: &r5devicepb.Device_UdiCarrier{
+				DeviceIdentifier: &d5pb.String{},
+				Issuer:           &d5pb.Uri{Value: "123"},
+			},
+			wantAllowNullErr:    "",
+			wantDisallowNullErr: `required field "deviceIdentifier" is either null or empty value`,
+		},
+		{
+			name: "required uri missing",
+			msg: &r5devicepb.Device_UdiCarrier{
+				DeviceIdentifier: &d5pb.String{Value: "123"},
+			},
+			wantAllowNullErr:    `missing required field "issuer"`,
+			wantDisallowNullErr: `missing required field "issuer"`,
+		},
+		{
+			name: "required uri empty",
+			msg: &r5devicepb.Device_UdiCarrier{
+				DeviceIdentifier: &d5pb.String{Value: "123"},
+				Issuer:           &d5pb.Uri{},
+			},
+			wantAllowNullErr:    "",
+			wantDisallowNullErr: `required field "issuer" is either null or empty value`,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			msg := test.msg.ProtoReflect()
+
+			err := ValidateRequiredFields(msg, false)
+			if err == nil && test.wantAllowNullErr == "" {
+				return
+			} else if err == nil {
+				t.Fatalf("ValidateRequiredFields(msg, disallowNullRequired=false): got nil, want error")
+			}
+			if !strings.Contains(err.Error(), test.wantAllowNullErr) {
+				t.Errorf("ValidateRequiredFields(msg, disallowNullRequired=false): got %v, want error to contain %v", err, test.wantAllowNullErr)
+			}
+
+			err = ValidateRequiredFields(msg, true)
+			if err == nil && test.wantDisallowNullErr == "" {
+				return
+			} else if err == nil {
+				t.Fatalf("ValidateRequiredFields(msg, disallowNullRequired=true): got nil, want error")
+			}
+			if !strings.Contains(err.Error(), test.wantDisallowNullErr) {
+				t.Errorf("ValidateRequiredFields(msg, disallowNullRequired=true): got %v, want error to contain %v", err, test.wantDisallowNullErr)
 			}
 		})
 	}

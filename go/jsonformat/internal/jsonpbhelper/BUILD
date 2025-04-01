@@ -53,6 +53,7 @@ go_test(
         "//proto/google/fhir/proto/r5/core:codes_go_proto",
         "//proto/google/fhir/proto/r5/core:datatypes_go_proto",
         "//proto/google/fhir/proto/r5/core/resources:basic_go_proto",
+        "//proto/google/fhir/proto/r5/core/resources:device_go_proto",
         "//proto/google/fhir/proto/r5/core/resources:patient_go_proto",
         "//proto/google/fhir/proto/r5/core/resources:research_study_go_proto",
         "//proto/google/fhir/proto/stu3:codes_go_proto",
