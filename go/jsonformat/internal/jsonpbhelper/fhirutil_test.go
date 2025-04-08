@@ -34,8 +34,15 @@ import (
 	r4patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/patient_go_proto"
 	d5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/datatypes_go_proto"
 	r5basicpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/basic_go_proto"
+	r5claimpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/claim_go_proto"
 	r5devicepb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/device_go_proto"
+	r5irpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/inventory_report_go_proto"
+	r5locationpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/location_go_proto"
 	r5patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/patient_go_proto"
+	r5slotpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/slot_go_proto"
+	r5sspb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/subscription_status_go_proto"
+	r5tspb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/test_script_go_proto"
+	r5transportpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/transport_go_proto"
 	c3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/codes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 	e3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/fhirproto_extensions_go_proto"
@@ -1522,6 +1529,22 @@ func TestValidateRequiredFields_DisallowNullRequired(t *testing.T) {
 		wantAllowNullErr, wantDisallowNullErr string
 	}{
 		{
+			name: "required code and enum present",
+			msg: &r3pb.Observation{
+				Status: &c3pb.ObservationStatusCode{Value: c3pb.ObservationStatusCode_PRELIMINARY},
+				Code: &d3pb.CodeableConcept{
+					Coding: []*d3pb.Coding{
+						{
+							System: &d3pb.Uri{Value: "123"},
+							Code:   &d3pb.Code{Value: "456"},
+						},
+					},
+				},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``,
+		},
+		{
 			name: "required code missing",
 			msg: &r3pb.Observation{
 				Status: &c3pb.ObservationStatusCode{Value: c3pb.ObservationStatusCode_PRELIMINARY},
@@ -1535,7 +1558,7 @@ func TestValidateRequiredFields_DisallowNullRequired(t *testing.T) {
 				Status: &c3pb.ObservationStatusCode{Value: c3pb.ObservationStatusCode_PRELIMINARY},
 				Code:   &d3pb.CodeableConcept{},
 			},
-			wantAllowNullErr:    "",
+			wantAllowNullErr:    ``,
 			wantDisallowNullErr: `required field "code" is either null or empty value`,
 		},
 		{
@@ -1566,8 +1589,17 @@ func TestValidateRequiredFields_DisallowNullRequired(t *testing.T) {
 					},
 				},
 			},
-			wantAllowNullErr:    "",
+			wantAllowNullErr:    ``,
 			wantDisallowNullErr: `required field "status" is either null or empty value`,
+		},
+		{
+			name: "required string and uri present",
+			msg: &r5devicepb.Device_UdiCarrier{
+				DeviceIdentifier: &d5pb.String{Value: "456"},
+				Issuer:           &d5pb.Uri{Value: "123"},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``,
 		},
 		{
 			name: "required string missing",
@@ -1583,7 +1615,16 @@ func TestValidateRequiredFields_DisallowNullRequired(t *testing.T) {
 				DeviceIdentifier: &d5pb.String{},
 				Issuer:           &d5pb.Uri{Value: "123"},
 			},
-			wantAllowNullErr:    "",
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: `required field "deviceIdentifier" is either null or empty value`,
+		},
+		{
+			name: "required string empty string",
+			msg: &r5devicepb.Device_UdiCarrier{
+				DeviceIdentifier: &d5pb.String{Value: ""},
+				Issuer:           &d5pb.Uri{Value: "123"},
+			},
+			wantAllowNullErr:    ``,
 			wantDisallowNullErr: `required field "deviceIdentifier" is either null or empty value`,
 		},
 		{
@@ -1600,8 +1641,311 @@ func TestValidateRequiredFields_DisallowNullRequired(t *testing.T) {
 				DeviceIdentifier: &d5pb.String{Value: "123"},
 				Issuer:           &d5pb.Uri{},
 			},
-			wantAllowNullErr:    "",
+			wantAllowNullErr:    ``,
 			wantDisallowNullErr: `required field "issuer" is either null or empty value`,
+		},
+		{
+			name: "required uri empty string",
+			msg: &r5devicepb.Device_UdiCarrier{
+				DeviceIdentifier: &d5pb.String{Value: ""},
+				Issuer:           &d5pb.Uri{},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: `required field "issuer" is either null or empty value`,
+		},
+		{
+			name: "bool, int, reference required present",
+			msg: &r5claimpb.Claim_Insurance{
+				Sequence: &d5pb.PositiveInt{Value: 0},
+				Coverage: &d5pb.Reference{Display: &d5pb.String{Value: "text"}},
+				Focal:    &d5pb.Boolean{Value: true},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``,
+		},
+		{
+			name: "required bool missing",
+			msg: &r5claimpb.Claim_Insurance{
+				Sequence: &d5pb.PositiveInt{Value: 1},
+				Coverage: &d5pb.Reference{Display: &d5pb.String{Value: "text"}},
+			},
+			wantAllowNullErr:    `missing required field "focal"`,
+			wantDisallowNullErr: `missing required field "focal"`,
+		},
+		{
+			name: "required bool false",
+			msg: &r5claimpb.Claim_Insurance{
+				Sequence: &d5pb.PositiveInt{Value: 1},
+				Coverage: &d5pb.Reference{Display: &d5pb.String{Value: "text"}},
+				Focal:    &d5pb.Boolean{Value: false},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``,
+		},
+		{
+			name: "required bool empty",
+			msg: &r5claimpb.Claim_Insurance{
+				Sequence: &d5pb.PositiveInt{Value: 1},
+				Coverage: &d5pb.Reference{Display: &d5pb.String{Value: "text"}},
+				Focal:    &d5pb.Boolean{},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``, // Can't differentiate this case and the previous one.
+		},
+		{
+			name: "required uint32 0",
+			msg: &r5claimpb.Claim_Insurance{
+				Sequence: &d5pb.PositiveInt{Value: 0},
+				Coverage: &d5pb.Reference{Display: &d5pb.String{Value: "text"}},
+				Focal:    &d5pb.Boolean{Value: true},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``,
+		},
+		{
+			name: "required uint32 empty",
+			msg: &r5claimpb.Claim_Insurance{
+				Sequence: &d5pb.PositiveInt{},
+				Coverage: &d5pb.Reference{Display: &d5pb.String{Value: "text"}},
+				Focal:    &d5pb.Boolean{Value: true},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``, // Can't differentiate this case and the previous one.
+		},
+		{
+			name: "required uint32 not specified",
+			msg: &r5claimpb.Claim_Insurance{
+				Coverage: &d5pb.Reference{Display: &d5pb.String{Value: "text"}},
+				Focal:    &d5pb.Boolean{Value: true},
+			},
+			wantAllowNullErr:    `missing required field "sequence"`,
+			wantDisallowNullErr: `missing required field "sequence"`,
+		},
+		{
+			name: "required int64 0",
+			msg: &r5sspb.SubscriptionStatus_NotificationEvent{
+				EventNumber: &d5pb.Integer64{Value: 0},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``,
+		},
+		{
+			name: "required int64 empty",
+			msg: &r5sspb.SubscriptionStatus_NotificationEvent{
+				EventNumber: &d5pb.Integer64{Value: 0},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``, // Can't differentiate this case and the previous one.
+		},
+		{
+			name:                "required int64 not specified",
+			msg:                 &r5sspb.SubscriptionStatus_NotificationEvent{},
+			wantAllowNullErr:    `missing required field "eventNumber"`,
+			wantDisallowNullErr: `missing required field "eventNumber"`,
+		},
+		{
+			name: "required int32 present",
+			msg: &r5tspb.TestScript_Origin{
+				Index:   &d5pb.Integer{Value: 0},
+				Profile: &d5pb.Coding{Display: &d5pb.String{Value: ""}},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``,
+		},
+		{
+			name: "required int32 empty",
+			msg: &r5tspb.TestScript_Origin{
+				Index:   &d5pb.Integer{Value: 0},
+				Profile: &d5pb.Coding{Display: &d5pb.String{Value: ""}},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``, // Can't differentiate this case and the previous one.
+		},
+		{
+			name:                "required int32 missing",
+			msg:                 &r5tspb.TestScript_Origin{},
+			wantAllowNullErr:    `missing required field "index"`,
+			wantDisallowNullErr: `missing required field "index"`,
+		},
+		{
+			name: "required reference missing",
+			msg: &r5claimpb.Claim_Insurance{
+				Sequence: &d5pb.PositiveInt{Value: 0},
+				Focal:    &d5pb.Boolean{Value: true},
+			},
+			wantAllowNullErr:    `missing required field "coverage"`,
+			wantDisallowNullErr: `missing required field "coverage"`,
+		},
+		{
+			name: "required reference empty",
+			msg: &r5claimpb.Claim_Insurance{
+				Sequence: &d5pb.PositiveInt{Value: 0},
+				Coverage: &d5pb.Reference{},
+				Focal:    &d5pb.Boolean{Value: true},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: `required field "coverage" is either null or empty value`,
+		},
+		{
+			name: "required date present",
+			msg: &r5claimpb.Claim_Accident{
+				Date: &d5pb.Date{ValueUs: 0},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``,
+		},
+		{
+			name: "required date empty",
+			msg: &r5claimpb.Claim_Accident{
+				Date: &d5pb.Date{},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``, // Can't differentiate this case and the previous one.
+		},
+		{
+			name:                "required date missing",
+			msg:                 &r5claimpb.Claim_Accident{},
+			wantAllowNullErr:    `missing required field "date"`,
+			wantDisallowNullErr: `missing required field "date"`,
+		},
+		{
+			name: "required datetime present",
+			msg: &r5irpb.InventoryReport{
+				Status:           &r5irpb.InventoryReport_StatusCode{Value: c5pb.InventoryReportStatusCode_DRAFT},
+				CountType:        &r5irpb.InventoryReport_CountTypeCode{Value: c5pb.InventoryCountTypeCode_SNAPSHOT},
+				ReportedDateTime: &d5pb.DateTime{ValueUs: 0},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``,
+		},
+		{
+			name: "required date empty",
+			msg: &r5irpb.InventoryReport{
+				Status:           &r5irpb.InventoryReport_StatusCode{Value: c5pb.InventoryReportStatusCode_DRAFT},
+				CountType:        &r5irpb.InventoryReport_CountTypeCode{Value: c5pb.InventoryCountTypeCode_SNAPSHOT},
+				ReportedDateTime: &d5pb.DateTime{},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``, // Can't differentiate this case and the previous one.
+		},
+		{
+			name: "required date missing",
+			msg: &r5irpb.InventoryReport{
+				Status:    &r5irpb.InventoryReport_StatusCode{Value: c5pb.InventoryReportStatusCode_DRAFT},
+				CountType: &r5irpb.InventoryReport_CountTypeCode{Value: c5pb.InventoryCountTypeCode_SNAPSHOT},
+			},
+			wantAllowNullErr:    `missing required field "reportedDateTime"`,
+			wantDisallowNullErr: `missing required field "reportedDateTime"`,
+		},
+		{
+			name: "required decimal present",
+			msg: &r5locationpb.Location_Position{
+				Longitude: &d5pb.Decimal{Value: "0"},
+				Latitude:  &d5pb.Decimal{Value: "0"},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``,
+		},
+		{
+			name: "required decimal empty",
+			msg: &r5locationpb.Location_Position{
+				Longitude: &d5pb.Decimal{Value: ""},
+				Latitude:  &d5pb.Decimal{Value: "0"},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: `required field "longitude" is either null or empty`,
+		},
+		{
+			name: "required decimal missing",
+			msg: &r5locationpb.Location_Position{
+				Latitude: &d5pb.Decimal{Value: "0"},
+			},
+			wantAllowNullErr:    `missing required field "longitude"`,
+			wantDisallowNullErr: `missing required field "longitude"`,
+		},
+		{
+			name: "required instant present",
+			msg: &r5slotpb.Slot{
+				Schedule: &d5pb.Reference{Display: &d5pb.String{Value: "text"}},
+				Status:   &r5slotpb.Slot_StatusCode{Value: c5pb.SlotStatusCode_BUSY},
+				Start:    &d5pb.Instant{ValueUs: 0},
+				End:      &d5pb.Instant{ValueUs: 0},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``,
+		},
+		{
+			name: "required instant empty",
+			msg: &r5slotpb.Slot{
+				Schedule: &d5pb.Reference{Display: &d5pb.String{Value: "text"}},
+				Status:   &r5slotpb.Slot_StatusCode{Value: c5pb.SlotStatusCode_BUSY},
+				Start:    &d5pb.Instant{},
+				End:      &d5pb.Instant{ValueUs: 0},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``, // Can't differentiate this case and the previous one.
+		},
+		{
+			name: "required instant missing",
+			msg: &r5slotpb.Slot{
+				Schedule: &d5pb.Reference{Display: &d5pb.String{Value: "text"}},
+				Status:   &r5slotpb.Slot_StatusCode{Value: c5pb.SlotStatusCode_BUSY},
+				End:      &d5pb.Instant{ValueUs: 0},
+			},
+			wantAllowNullErr:    `missing required field "start"`,
+			wantDisallowNullErr: `missing required field "start"`,
+		},
+		{
+			name: "required choice missing",
+			msg: &r5transportpb.Transport_Parameter{
+				Type: &d5pb.CodeableConcept{Text: &d5pb.String{Value: "text"}},
+			},
+			wantAllowNullErr:    `missing required field "value[x]"`,
+			wantDisallowNullErr: `missing required field "value[x]"`,
+		},
+		{
+			name: "required choice bool present",
+			msg: &r5transportpb.Transport_Parameter{
+				Type: &d5pb.CodeableConcept{Text: &d5pb.String{Value: "text"}},
+				Value: &r5transportpb.Transport_Parameter_ValueX{
+					Choice: &r5transportpb.Transport_Parameter_ValueX_Boolean{Boolean: &d5pb.Boolean{Value: false}},
+				},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``,
+		},
+		{
+			name: "required choice bool empty",
+			msg: &r5transportpb.Transport_Parameter{
+				Type: &d5pb.CodeableConcept{Text: &d5pb.String{Value: "text"}},
+				Value: &r5transportpb.Transport_Parameter_ValueX{
+					Choice: &r5transportpb.Transport_Parameter_ValueX_Boolean{Boolean: &d5pb.Boolean{}},
+				},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``, // Can't differentiate this case and the previous one.
+		},
+		{
+			name: "required choice Base64Binary present",
+			msg: &r5transportpb.Transport_Parameter{
+				Type: &d5pb.CodeableConcept{Text: &d5pb.String{Value: "text"}},
+				Value: &r5transportpb.Transport_Parameter_ValueX{
+					Choice: &r5transportpb.Transport_Parameter_ValueX_Base64Binary{Base64Binary: &d5pb.Base64Binary{Value: []byte{0}}},
+				},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``,
+		},
+		{
+			name: "required choice Base64Binary empty",
+			msg: &r5transportpb.Transport_Parameter{
+				Type: &d5pb.CodeableConcept{Text: &d5pb.String{Value: "text"}},
+				Value: &r5transportpb.Transport_Parameter_ValueX{
+					Choice: &r5transportpb.Transport_Parameter_ValueX_Base64Binary{Base64Binary: &d5pb.Base64Binary{Value: []byte{}}},
+				},
+			},
+			wantAllowNullErr:    ``,
+			wantDisallowNullErr: ``,
 		},
 	}
 
@@ -1609,24 +1953,29 @@ func TestValidateRequiredFields_DisallowNullRequired(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			msg := test.msg.ProtoReflect()
 
-			err := ValidateRequiredFields(msg, false)
-			if err == nil && test.wantAllowNullErr == "" {
-				return
-			} else if err == nil {
-				t.Fatalf("ValidateRequiredFields(msg, disallowNullRequired=false): got nil, want error")
+			diffError := func(err error, wantErr string) error {
+				if wantErr == "" {
+					if err != nil {
+						return fmt.Errorf("got error %w, want nil", err)
+					}
+					return nil
+				}
+				if err == nil {
+					return fmt.Errorf("got nil, want error")
+				}
+				if !strings.Contains(err.Error(), wantErr) {
+					return fmt.Errorf("got %w, want error to contain %v", err, wantErr)
+				}
+				return nil
 			}
-			if !strings.Contains(err.Error(), test.wantAllowNullErr) {
-				t.Errorf("ValidateRequiredFields(msg, disallowNullRequired=false): got %v, want error to contain %v", err, test.wantAllowNullErr)
+			err := ValidateRequiredFields(msg, false)
+			if diff := diffError(err, test.wantAllowNullErr); diff != nil {
+				t.Errorf("ValidateRequiredFields(msg, disallowNullRequired=false): %v", diff)
 			}
 
 			err = ValidateRequiredFields(msg, true)
-			if err == nil && test.wantDisallowNullErr == "" {
-				return
-			} else if err == nil {
-				t.Fatalf("ValidateRequiredFields(msg, disallowNullRequired=true): got nil, want error")
-			}
-			if !strings.Contains(err.Error(), test.wantDisallowNullErr) {
-				t.Errorf("ValidateRequiredFields(msg, disallowNullRequired=true): got %v, want error to contain %v", err, test.wantDisallowNullErr)
+			if diff := diffError(err, test.wantDisallowNullErr); diff != nil {
+				t.Errorf("ValidateRequiredFields(msg, disallowNullRequired=true): %v", diff)
 			}
 		})
 	}

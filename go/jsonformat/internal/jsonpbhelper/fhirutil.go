@@ -1061,7 +1061,24 @@ func ValidateRequiredFields(pb protoreflect.Message, disallowNull bool) error {
 			if field.Kind() != protoreflect.MessageKind || field.IsList() {
 				continue
 			}
-			msgVal := pb.Get(field).Message().Interface()
+			msg := pb.Get(field).Message()
+			msgVal := msg.Interface()
+			if IsPrimitive(field.Message()) {
+				// Only certain kinds of primitives can't be validated for required fields because we can't
+				// differentiate between default value and not specified (eg. bool false or bool unspecified is false).
+				fds := msg.Descriptor().Fields()
+				var val any
+				if valueFD := fds.ByName("value"); valueFD != nil {
+					val = msg.Get(valueFD).Interface()
+				} else if valueFD := fds.ByName("value_us"); valueFD != nil {
+					val = msg.Get(valueFD).Interface()
+				}
+				switch val.(type) {
+				case bool, uint32, int32, int64:
+					continue
+				}
+			}
+
 			isEmpty := isEmptyMessage(msgVal)
 			if isEmpty {
 				el = append(el, &UnmarshalError{
@@ -1069,7 +1086,6 @@ func ValidateRequiredFields(pb protoreflect.Message, disallowNull bool) error {
 					Details: fmt.Sprintf("required field %q is either null or empty value", fieldName),
 				})
 			}
-
 		}
 	}
 	if len(el) > 0 {
