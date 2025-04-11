@@ -57,13 +57,13 @@ type Unmarshaller struct {
 	// Stores whether extended validation checks like required fields and
 	// reference checking should be run.
 	enableExtendedValidation bool
-	cfg                      config
-	ver                      fhirversion.Version
+	cfg config
+	ver fhirversion.Version
 }
 
 // NewUnmarshaller returns an Unmarshaller that performs resource validation.
 func NewUnmarshaller(tz string, ver fhirversion.Version) (*Unmarshaller, error) {
-	return newUnmarshaller(tz, ver, true /*enableExtendedValidation*/)
+		return newUnmarshaller(tz, ver, true /*enableExtendedValidation*/)
 }
 
 // NewUnmarshallerWithoutValidation returns an Unmarshaller that doesn't perform resource validation.
