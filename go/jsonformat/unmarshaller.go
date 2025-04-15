@@ -337,7 +337,7 @@ func (u *Unmarshaller) mergeMessage(jsonPath string, decmap map[string]json.RawM
 			continue
 		}
 		if jsonpbhelper.IsChoice(f.Message()) {
-			if err := u.mergeChoiceField(jsonPath, f, k, v, pb); err != nil {
+			if err := u.mergeChoiceField(jsonPath, f, normalizedFieldName, v, pb); err != nil {
 				if err := jsonpbhelper.AppendUnmarshalError(&errors, err); err != nil {
 					return err
 				}
@@ -367,17 +367,14 @@ func lowerFirst(s string) string {
 func (u *Unmarshaller) mergeChoiceField(jsonPath string, f protoreflect.FieldDescriptor, k string, v json.RawMessage, pb protoreflect.Message) error {
 	fieldMap := jsonpbhelper.FieldMap(f.Message())
 
-	// TODO(b/161479338): reject upper camel case fields names after suitable deprecation warning.
 	var choiceFieldName string
 	if strings.HasPrefix(k, "_") {
 		// Convert ex: "_valueString" and "_ValueString" interchangeably to "_string".
-		choiceFieldName = "_" + lowerFirst(k[1:])
-		choiceFieldName = strings.TrimPrefix(choiceFieldName, "_"+f.JSONName())
+		choiceFieldName = strings.TrimPrefix(k, "_"+f.JSONName())
 		choiceFieldName = "_" + lowerFirst(choiceFieldName)
 	} else {
 		// Convert ex: "ValueString" and "valueString" interchangeably to "string".
-		choiceFieldName = lowerFirst(k)
-		choiceFieldName = lowerFirst(strings.TrimPrefix(choiceFieldName, f.JSONName()))
+		choiceFieldName = lowerFirst(strings.TrimPrefix(k, f.JSONName()))
 	}
 
 	choiceField, ok := fieldMap[choiceFieldName]
