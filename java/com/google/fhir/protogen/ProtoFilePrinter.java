@@ -29,6 +29,7 @@ import com.google.fhir.proto.PackageInfo;
 import com.google.fhir.proto.ProtoGeneratorAnnotations;
 import com.google.fhir.proto.ProtogenConfig;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
+import com.google.protobuf.DescriptorProtos.Edition;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumOptions;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
@@ -50,12 +51,6 @@ import java.util.Set;
 /** A utility to turn protocol message descriptors into .proto files. */
 public class ProtoFilePrinter {
 
-  /** Enum represting the proto Syntax */
-  public static enum Syntax {
-    PROTO2,
-    PROTO3
-  };
-
   private static final String APACHE_LICENSE =
       "//    Copyright %1$s Google Inc.\n"
           + "//\n"
@@ -76,8 +71,6 @@ public class ProtoFilePrinter {
 
   private final PackageInfo.License license;
   private final String licenseDate;
-
-  private final Syntax syntax;
 
   // All Message options in this list will appear in this order, before any options not in this
   // list.  The remainder will be alphabetized.
@@ -105,27 +98,19 @@ public class ProtoFilePrinter {
 
   /** Creates a ProtoFilePrinter with default parameters. */
   public ProtoFilePrinter(PackageInfo packageInfo) {
-    this(packageInfo, Syntax.PROTO3);
-  }
-
-  /** Creates a ProtoFilePrinter with default parameters. */
-  public ProtoFilePrinter(PackageInfo packageInfo, Syntax syntax) {
     license = packageInfo.getLicense();
     licenseDate = packageInfo.getLicenseDate();
-    this.syntax = syntax;
   }
 
   /** Creates a ProtoFilePrinter with default parameters. */
   public ProtoFilePrinter(ProtogenConfig protogenConfig) {
     license = PackageInfo.License.APACHE;
     licenseDate = protogenConfig.getLicenseDate();
-    this.syntax = Syntax.PROTO3;
   }
 
   public ProtoFilePrinter(String licenseDate) {
     license = PackageInfo.License.APACHE;
     this.licenseDate = licenseDate;
-    this.syntax = Syntax.PROTO3;
   }
 
   /** Generate a .proto file corresponding to the provided FileDescriptorProto. */
@@ -151,7 +136,15 @@ public class ProtoFilePrinter {
   private String printHeader(FileDescriptorProto fileDescriptor) {
     StringBuilder header = new StringBuilder();
     if (fileDescriptor.hasSyntax()) {
-      header.append("syntax = \"").append(fileDescriptor.getSyntax()).append("\";\n\n");
+      if (fileDescriptor.getSyntax().equals("editions")) {
+        if (fileDescriptor.getEdition().equals(Edition.EDITION_2023)) {
+          header.append("edition = \"2023\";\n\n");
+        } else {
+          header.append("edition = \"unknown\";\n\n");
+        }
+      } else {
+        header.append("syntax = \"").append(fileDescriptor.getSyntax()).append("\";\n\n");
+      }
     }
     if (fileDescriptor.hasPackage()) {
       header.append("package ").append(fileDescriptor.getPackage()).append(";\n");
@@ -170,6 +163,9 @@ public class ProtoFilePrinter {
   private String printOptions(FileDescriptorProto fileDescriptor, String packageName) {
     StringBuilder options = new StringBuilder();
     FileOptions fileOptions = fileDescriptor.getOptions();
+    if (fileDescriptor.getSyntax().equals("editions")) {
+      options.append("option features.field_presence = IMPLICIT;\n");
+    }
     if (fileOptions.hasJavaMultipleFiles()) {
       options
           .append("option java_multiple_files = ")
@@ -279,7 +275,7 @@ public class ProtoFilePrinter {
                 descriptor, field, typePrefix, packageName, printedNestedTypeDefinitions));
         message.append(
             printField(
-                fieldBuilder.build(), fullName, fieldIndent, packageName, /* inOneof= */ false));
+                fieldBuilder.build(), fullName, fieldIndent, packageName));
         if (i != descriptor.getFieldCount() - 1) {
           message.append("\n");
         }
@@ -327,7 +323,7 @@ public class ProtoFilePrinter {
           }
           message.append(
               printField(
-                  fieldBuilder.build(), fullName, oneofIndent, packageName, /* inOneof= */ true));
+                  fieldBuilder.build(), fullName, oneofIndent, packageName));
           // If this oneof field had a description, and is not the last field, add a newline after.
           if (field.getOptions().hasExtension(ProtoGeneratorAnnotations.fieldDescription)
               && i != descriptor.getFieldCount() - 1) {
@@ -441,19 +437,13 @@ public class ProtoFilePrinter {
       FieldDescriptorProto field,
       String containingType,
       String indent,
-      String packageName,
-      boolean inOneof) {
+      String packageName) {
     StringBuilder message = new StringBuilder();
     message.append(indent);
 
-    // Add the "repeated" or "optional" keywords, if necessary.
+    // Add the "repeated" keyword, if necessary.
     if (field.getLabel() == FieldDescriptorProto.Label.LABEL_REPEATED) {
       message.append("repeated ");
-    }
-    if (!inOneof
-        && field.getLabel() == FieldDescriptorProto.Label.LABEL_OPTIONAL
-        && syntax == Syntax.PROTO2) {
-      message.append("optional ");
     }
 
     // Add the type of the field.
