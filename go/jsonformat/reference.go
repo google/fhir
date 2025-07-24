@@ -311,3 +311,32 @@ func denormalizeR4Reference(ref *d4pb.Reference) {
 	ref.Reference = &d4pb.Reference_Uri{Uri: &d4pb.String{Value: strings.Join(parts, "/")}}
 	return
 }
+
+func denormalizeR5Reference(ref *d5pb.Reference) {
+	if uri := ref.GetUri(); uri != nil {
+		return
+	}
+	if frag := ref.GetFragment(); frag != nil {
+		ref.Reference = &d5pb.Reference_Uri{Uri: &d5pb.String{Value: jsonpbhelper.RefFragmentPrefix + frag.GetValue()}}
+		return
+	}
+
+	rpb := ref.ProtoReflect()
+	f, err := jsonpbhelper.ResourceIDField(rpb)
+	if err != nil || f == nil {
+		return
+	}
+
+	refType, ok := jsonpbhelper.ResourceTypeForReference(f.Name())
+	if !ok {
+		return
+	}
+
+	refID, _ := rpb.Get(f).Message().Interface().(*d5pb.ReferenceId)
+	parts := []string{refType, refID.GetValue()}
+	if refID.GetHistory().GetValue() != "" {
+		parts = append(parts, jsonpbhelper.RefHistory, refID.GetHistory().GetValue())
+	}
+	ref.Reference = &d5pb.Reference_Uri{Uri: &d5pb.String{Value: strings.Join(parts, "/")}}
+	return
+}
