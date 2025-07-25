@@ -40,6 +40,7 @@ import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.ValueSet;
 import com.google.fhir.r4.core.ValueSet.Compose.ConceptSet.Filter;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
+import com.google.protobuf.DescriptorProtos.Edition;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
@@ -67,9 +68,11 @@ public class ValueSetGenerator {
   private final Map<String, CodeSystem> codeSystemsByUrl;
   private final Map<String, ValueSet> valueSetsByUrl;
   private final Map<String, String> protoTypesByUrl;
+  private final String edition;
 
-  public ValueSetGenerator(PackageInfo packageInfo, Set<FhirPackage> fhirPackages) {
+  public ValueSetGenerator(PackageInfo packageInfo, Set<FhirPackage> fhirPackages, String edition) {
     this.packageInfo = packageInfo;
+    this.edition = edition;
     this.fhirVersion = FhirVersion.fromAnnotation(packageInfo.getFhirVersion());
 
     this.codeSystemsByUrl =
@@ -161,7 +164,13 @@ public class ValueSetGenerator {
 
   private FileDescriptorProto generateCodeSystemFile(Collection<CodeSystem> codeSystemsToGenerate) {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
-    builder.setPackage(packageInfo.getProtoPackage()).setSyntax("proto3");
+    builder.setPackage(packageInfo.getProtoPackage());
+    if (this.edition.equals("2023")) {
+      builder.setSyntax("editions");
+      builder.setEdition(Edition.EDITION_2023);
+    } else {
+      builder.setSyntax("proto3");
+    }
     builder.addDependency(new File(GeneratorUtils.ANNOTATION_PATH, "annotations.proto").toString());
     FileOptions.Builder options = FileOptions.newBuilder();
     if (!packageInfo.getJavaProtoPackage().isEmpty()) {
