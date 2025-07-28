@@ -124,7 +124,12 @@ func normalizeR3Reference(ref *d3pb.Reference) error {
 
 	if strings.HasPrefix(uri, jsonpbhelper.RefFragmentPrefix) {
 		fragVal := uri[len(jsonpbhelper.RefFragmentPrefix):]
-		ref.Reference = &d3pb.Reference_Fragment{Fragment: &d3pb.String{Value: fragVal}}
+
+		// Use the existing string proto, but with the fragment value.
+		refStringProto := ref.GetUri()
+		refStringProto.Value = fragVal
+
+		ref.Reference = &d3pb.Reference_Fragment{Fragment: refStringProto}
 		return nil
 	}
 	parts := strings.Split(uri, "/")
@@ -132,7 +137,11 @@ func normalizeR3Reference(ref *d3pb.Reference) error {
 		return nil
 	}
 
-	refID := &d3pb.ReferenceId{Value: parts[1]}
+	refID := &d3pb.ReferenceId{
+		Value:     parts[1],
+		Id:        ref.GetUri().GetId(),
+		Extension: ref.GetUri().GetExtension(),
+	}
 	if len(parts) > 2 {
 		refID.History = &d3pb.Id{Value: parts[3]}
 	}
@@ -148,15 +157,25 @@ func normalizeR4Reference(ref *d4pb.Reference) error {
 
 	if strings.HasPrefix(uri, jsonpbhelper.RefFragmentPrefix) {
 		fragVal := uri[len(jsonpbhelper.RefFragmentPrefix):]
-		ref.Reference = &d4pb.Reference_Fragment{Fragment: &d4pb.String{Value: fragVal}}
+
+		// Use the existing string proto, but with the fragment value.
+		refStringProto := ref.GetUri()
+		refStringProto.Value = fragVal
+
+		ref.Reference = &d4pb.Reference_Fragment{Fragment: refStringProto}
 		return nil
 	}
+
 	parts := strings.Split(uri, "/")
 	if !(len(parts) == 2 || len(parts) == 4 && parts[2] == jsonpbhelper.RefHistory) {
 		return nil
 	}
 
-	refID := &d4pb.ReferenceId{Value: parts[1]}
+	refID := &d4pb.ReferenceId{
+		Value:     parts[1],
+		Id:        ref.GetUri().GetId(),
+		Extension: ref.GetUri().GetExtension(),
+	}
 	if len(parts) > 2 {
 		refID.History = &d4pb.Id{Value: parts[3]}
 	}
@@ -172,7 +191,12 @@ func normalizeR5Reference(ref *d5pb.Reference) error {
 
 	if strings.HasPrefix(uri, jsonpbhelper.RefFragmentPrefix) {
 		fragVal := uri[len(jsonpbhelper.RefFragmentPrefix):]
-		ref.Reference = &d5pb.Reference_Fragment{Fragment: &d5pb.String{Value: fragVal}}
+
+		// Use the existing string proto, but with the fragment value.
+		refStringProto := ref.GetUri()
+		refStringProto.Value = fragVal
+
+		ref.Reference = &d5pb.Reference_Fragment{Fragment: refStringProto}
 		return nil
 	}
 	parts := strings.Split(uri, "/")
@@ -180,7 +204,11 @@ func normalizeR5Reference(ref *d5pb.Reference) error {
 		return nil
 	}
 
-	refID := &d5pb.ReferenceId{Value: parts[1]}
+	refID := &d5pb.ReferenceId{
+		Value:     parts[1],
+		Id:        ref.GetUri().GetId(),
+		Extension: ref.GetUri().GetExtension(),
+	}
 	if len(parts) > 2 {
 		refID.History = &d5pb.Id{Value: parts[3]}
 	}

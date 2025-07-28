@@ -48,6 +48,7 @@ import (
 	r4observationpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/observation_go_proto"
 	r4outcomepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/operation_outcome_go_proto"
 	r4patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/patient_go_proto"
+	r4questionnairepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/questionnaire_go_proto"
 	r4searchparampb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/search_parameter_go_proto"
 	c5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/codes_go_proto"
 	d5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/datatypes_go_proto"
@@ -56,6 +57,7 @@ import (
 	r5observationpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/observation_go_proto"
 	r5outcomepb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/operation_outcome_go_proto"
 	r5patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/patient_go_proto"
+	r5questionnairepb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/questionnaire_go_proto"
 	r5searchparampb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/search_parameter_go_proto"
 	r5valuesetpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/valuesets_go_proto"
 	c3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/codes_go_proto"
@@ -765,6 +767,404 @@ func TestUnmarshal(t *testing.T) {
 											},
 										},
 									}},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "PrimitiveExtensionLocalReference",
+			json: []byte(`
+    {
+      "resourceType": "Observation",
+			"code": {
+				"text": "test"
+			},
+			"status": "final",
+      "subject": {
+				"reference": "Patient/1",
+				"_reference": {
+					"id": "123",
+					"extension": [{
+						"url": "https://example.org",
+						"valueString": "extension-value"
+					}]
+				}
+			}
+    }`),
+			wants: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.ContainedResource{
+						OneofResource: &r3pb.ContainedResource_Observation{
+							Observation: &r3pb.Observation{
+								Code:   &d3pb.CodeableConcept{Text: &d3pb.String{Value: "test"}},
+								Status: &c3pb.ObservationStatusCode{Value: c3pb.ObservationStatusCode_FINAL},
+								Subject: &d3pb.Reference{
+									Reference: &d3pb.Reference_PatientId{
+										PatientId: &d3pb.ReferenceId{
+											Value: "1",
+											Id:    &d3pb.String{Value: "123"},
+											Extension: []*d3pb.Extension{{
+												Url: &d3pb.Uri{Value: "https://example.org"},
+												Value: &d3pb.Extension_ValueX{
+													Choice: &d3pb.Extension_ValueX_StringValue{
+														StringValue: &d3pb.String{
+															Value: "extension-value",
+														},
+													},
+												},
+											}},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4pb.ContainedResource{
+						OneofResource: &r4pb.ContainedResource_Observation{
+							Observation: &r4observationpb.Observation{
+								Code:   &d4pb.CodeableConcept{Text: &d4pb.String{Value: "test"}},
+								Status: &r4observationpb.Observation_StatusCode{Value: c4pb.ObservationStatusCode_FINAL},
+								Subject: &d4pb.Reference{
+									Reference: &d4pb.Reference_PatientId{
+										PatientId: &d4pb.ReferenceId{
+											Value: "1",
+											Id:    &d4pb.String{Value: "123"},
+											Extension: []*d4pb.Extension{{
+												Url: &d4pb.Uri{Value: "https://example.org"},
+												Value: &d4pb.Extension_ValueX{
+													Choice: &d4pb.Extension_ValueX_StringValue{
+														StringValue: &d4pb.String{
+															Value: "extension-value",
+														},
+													},
+												},
+											}},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Observation{
+							Observation: &r5observationpb.Observation{
+								Code:   &d5pb.CodeableConcept{Text: &d5pb.String{Value: "test"}},
+								Status: &r5observationpb.Observation_StatusCode{Value: c5pb.ObservationStatusCode_FINAL},
+								Subject: &d5pb.Reference{
+									Reference: &d5pb.Reference_PatientId{
+										PatientId: &d5pb.ReferenceId{
+											Value: "1",
+											Id:    &d5pb.String{Value: "123"},
+											Extension: []*d5pb.Extension{{
+												Url: &d5pb.Uri{Value: "https://example.org"},
+												Value: &d5pb.Extension_ValueX{
+													Choice: &d5pb.Extension_ValueX_StringValue{
+														StringValue: &d5pb.String{
+															Value: "extension-value",
+														},
+													},
+												},
+											}},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "PrimitiveExtensionContainedReference",
+			json: []byte(`
+		{
+		  "resourceType": "Questionnaire",
+			"status": "active",
+			"contained": [
+				{
+					"resourceType": "Observation",
+					"id": "Observation1",
+					"code": {
+						"text": "test"
+					},
+					"status": "final",
+					"subject": {
+						"reference": "#Patient1",
+						"_reference": {
+							"id": "123",
+							"extension": [{
+								"url": "https://example.org",
+								"valueString": "extension-value"
+							}]
+						}
+					}
+				},
+				{
+					"resourceType": "Patient",
+					"id": "Patient1"
+				}
+			]
+		}`),
+			wants: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.ContainedResource{
+						OneofResource: &r3pb.ContainedResource_Questionnaire{
+							Questionnaire: &r3pb.Questionnaire{
+								Status: &c3pb.PublicationStatusCode{Value: c3pb.PublicationStatusCode_ACTIVE},
+								Contained: []*r3pb.ContainedResource{
+									&r3pb.ContainedResource{
+										OneofResource: &r3pb.ContainedResource_Observation{
+											Observation: &r3pb.Observation{
+												Id:     &d3pb.Id{Value: "Observation1"},
+												Code:   &d3pb.CodeableConcept{Text: &d3pb.String{Value: "test"}},
+												Status: &c3pb.ObservationStatusCode{Value: c3pb.ObservationStatusCode_FINAL},
+												Subject: &d3pb.Reference{
+													Reference: &d3pb.Reference_Fragment{
+														Fragment: &d3pb.String{
+															Value: "Patient1",
+															Id:    &d3pb.String{Value: "123"},
+															Extension: []*d3pb.Extension{{
+																Url: &d3pb.Uri{Value: "https://example.org"},
+																Value: &d3pb.Extension_ValueX{
+																	Choice: &d3pb.Extension_ValueX_StringValue{
+																		StringValue: &d3pb.String{
+																			Value: "extension-value",
+																		},
+																	},
+																},
+															}},
+														},
+													},
+												},
+											},
+										},
+									},
+									&r3pb.ContainedResource{
+										OneofResource: &r3pb.ContainedResource_Patient{
+											Patient: &r3pb.Patient{
+												Id: &d3pb.Id{Value: "Patient1"},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4pb.ContainedResource{
+						OneofResource: &r4pb.ContainedResource_Questionnaire{
+							Questionnaire: &r4questionnairepb.Questionnaire{
+								Status: &r4questionnairepb.Questionnaire_StatusCode{Value: c4pb.PublicationStatusCode_ACTIVE},
+								Contained: []*anypb.Any{
+									marshalToAny(t, &r4pb.ContainedResource{
+										OneofResource: &r4pb.ContainedResource_Observation{
+											Observation: &r4observationpb.Observation{
+												Id:     &d4pb.Id{Value: "Observation1"},
+												Code:   &d4pb.CodeableConcept{Text: &d4pb.String{Value: "test"}},
+												Status: &r4observationpb.Observation_StatusCode{Value: c4pb.ObservationStatusCode_FINAL},
+												Subject: &d4pb.Reference{
+													Reference: &d4pb.Reference_Fragment{
+														Fragment: &d4pb.String{
+															Value: "Patient1",
+															Id:    &d4pb.String{Value: "123"},
+															Extension: []*d4pb.Extension{{
+																Url: &d4pb.Uri{Value: "https://example.org"},
+																Value: &d4pb.Extension_ValueX{
+																	Choice: &d4pb.Extension_ValueX_StringValue{
+																		StringValue: &d4pb.String{
+																			Value: "extension-value",
+																		},
+																	},
+																},
+															}},
+														},
+													},
+												},
+											},
+										},
+									}),
+									marshalToAny(t, &r4pb.ContainedResource{
+										OneofResource: &r4pb.ContainedResource_Patient{
+											Patient: &r4patientpb.Patient{
+												Id: &d4pb.Id{Value: "Patient1"},
+											},
+										},
+									}),
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Questionnaire{
+							Questionnaire: &r5questionnairepb.Questionnaire{
+								Status: &r5questionnairepb.Questionnaire_StatusCode{Value: c5pb.PublicationStatusCode_ACTIVE},
+								Contained: []*anypb.Any{
+									marshalToAny(t, &r5pb.ContainedResource{
+										OneofResource: &r5pb.ContainedResource_Observation{
+											Observation: &r5observationpb.Observation{
+												Id:     &d5pb.Id{Value: "Observation1"},
+												Code:   &d5pb.CodeableConcept{Text: &d5pb.String{Value: "test"}},
+												Status: &r5observationpb.Observation_StatusCode{Value: c5pb.ObservationStatusCode_FINAL},
+												Subject: &d5pb.Reference{
+													Reference: &d5pb.Reference_Fragment{
+														Fragment: &d5pb.String{
+															Value: "Patient1",
+															Id:    &d5pb.String{Value: "123"},
+															Extension: []*d5pb.Extension{{
+																Url: &d5pb.Uri{Value: "https://example.org"},
+																Value: &d5pb.Extension_ValueX{
+																	Choice: &d5pb.Extension_ValueX_StringValue{
+																		StringValue: &d5pb.String{
+																			Value: "extension-value",
+																		},
+																	},
+																},
+															}},
+														},
+													},
+												},
+											},
+										},
+									}),
+									marshalToAny(t, &r5pb.ContainedResource{
+										OneofResource: &r5pb.ContainedResource_Patient{
+											Patient: &r5patientpb.Patient{
+												Id: &d5pb.Id{Value: "Patient1"},
+											},
+										},
+									}),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "PrimitiveExtensionReference",
+			json: []byte(`
+    {
+      "resourceType": "Observation",
+			"code": {
+				"text": "test"
+			},
+			"status": "final",
+      "subject": {
+				"reference": "projects/p/locations/l/datasets/d/fhirStores/f/fhir/Patient/1",
+				"_reference": {
+					"id": "123",
+					"extension": [{
+						"url": "https://example.org",
+						"valueString": "extension-value"
+					}]
+				}
+			}
+    }`),
+			wants: []mvr{
+				{
+					ver: fhirversion.STU3,
+					r: &r3pb.ContainedResource{
+						OneofResource: &r3pb.ContainedResource_Observation{
+							Observation: &r3pb.Observation{
+								Code:   &d3pb.CodeableConcept{Text: &d3pb.String{Value: "test"}},
+								Status: &c3pb.ObservationStatusCode{Value: c3pb.ObservationStatusCode_FINAL},
+								Subject: &d3pb.Reference{
+									Reference: &d3pb.Reference_Uri{
+										Uri: &d3pb.String{
+											Value: "projects/p/locations/l/datasets/d/fhirStores/f/fhir/Patient/1",
+											Id:    &d3pb.String{Value: "123"},
+											Extension: []*d3pb.Extension{
+												{
+													Url: &d3pb.Uri{Value: "https://example.org"},
+													Value: &d3pb.Extension_ValueX{
+														Choice: &d3pb.Extension_ValueX_StringValue{
+															StringValue: &d3pb.String{
+																Value: "extension-value",
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R4,
+					r: &r4pb.ContainedResource{
+						OneofResource: &r4pb.ContainedResource_Observation{
+							Observation: &r4observationpb.Observation{
+								Code:   &d4pb.CodeableConcept{Text: &d4pb.String{Value: "test"}},
+								Status: &r4observationpb.Observation_StatusCode{Value: c4pb.ObservationStatusCode_FINAL},
+								Subject: &d4pb.Reference{
+									Reference: &d4pb.Reference_Uri{
+										Uri: &d4pb.String{
+											Value: "projects/p/locations/l/datasets/d/fhirStores/f/fhir/Patient/1",
+											Id:    &d4pb.String{Value: "123"},
+											Extension: []*d4pb.Extension{
+												{
+													Url: &d4pb.Uri{Value: "https://example.org"},
+													Value: &d4pb.Extension_ValueX{
+														Choice: &d4pb.Extension_ValueX_StringValue{
+															StringValue: &d4pb.String{
+																Value: "extension-value",
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Observation{
+							Observation: &r5observationpb.Observation{
+								Code:   &d5pb.CodeableConcept{Text: &d5pb.String{Value: "test"}},
+								Status: &r5observationpb.Observation_StatusCode{Value: c5pb.ObservationStatusCode_FINAL},
+								Subject: &d5pb.Reference{
+									Reference: &d5pb.Reference_Uri{
+										Uri: &d5pb.String{
+											Value: "projects/p/locations/l/datasets/d/fhirStores/f/fhir/Patient/1",
+											Id:    &d5pb.String{Value: "123"},
+											Extension: []*d5pb.Extension{
+												{
+													Url: &d5pb.Uri{Value: "https://example.org"},
+													Value: &d5pb.Extension_ValueX{
+														Choice: &d5pb.Extension_ValueX_StringValue{
+															StringValue: &d5pb.String{
+																Value: "extension-value",
+															},
+														},
+													},
+												},
+											},
+										},
+									},
 								},
 							},
 						},
