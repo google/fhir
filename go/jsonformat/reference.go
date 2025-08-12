@@ -94,6 +94,8 @@ func NormalizeReference(pb proto.Message) error {
 		return normalizeR3Reference(ref)
 	case *d4pb.Reference:
 		return normalizeR4Reference(ref)
+	case *d5pb.Reference:
+		return normalizeR5Reference(ref)
 	default:
 		return fmt.Errorf("invalid reference type %T", ref)
 	}
