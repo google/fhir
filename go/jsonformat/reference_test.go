@@ -23,6 +23,7 @@ import (
 
 	apb "github.com/google/fhir/go/proto/google/fhir/proto/annotations_go_proto"
 	d4pb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/datatypes_go_proto"
+	d5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/datatypes_go_proto"
 	d3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/datatypes_go_proto"
 )
 
@@ -32,6 +33,8 @@ func referenceProto(t *testing.T, ver apb.FhirVersion) proto.Message {
 		return &d3pb.Reference{}
 	case apb.FhirVersion_R4:
 		return &d4pb.Reference{}
+	case apb.FhirVersion_R5:
+		return &d5pb.Reference{}
 	}
 	t.Fatalf("unsupported version: %s", ver)
 	return nil
@@ -41,7 +44,6 @@ func TestAllReferenceTypes(t *testing.T) {
 	versionsToSkip := []apb.FhirVersion{
 		apb.FhirVersion_FHIR_VERSION_UNKNOWN,
 		apb.FhirVersion_R4B, // TODO(b/265289586): Testing support for r4b
-		apb.FhirVersion_R5,
 	}
 
 	for _, v := range apb.FhirVersion_value {
@@ -217,6 +219,77 @@ func TestNormalizeDenormalizeReference(t *testing.T) {
 				},
 			},
 		},
+		{
+			"r5 absolute url",
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_Uri{
+					Uri: &d5pb.String{
+						Value: "http://a.com/patient123",
+					},
+				},
+			},
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_Uri{
+					Uri: &d5pb.String{
+						Value: "http://a.com/patient123",
+					},
+				},
+			},
+		},
+		{
+			name: "r5 relative reference",
+			denormalized: &d5pb.Reference{
+				Reference: &d5pb.Reference_Uri{
+					Uri: &d5pb.String{
+						Value: "SubstanceDefinition/abc123",
+					},
+				},
+			},
+			normalized: &d5pb.Reference{
+				Reference: &d5pb.Reference_SubstanceDefinitionId{
+					SubstanceDefinitionId: &d5pb.ReferenceId{
+						Value: "abc123",
+					},
+				},
+			},
+		},
+		{
+			"r5 relative reference with history",
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_Uri{
+					Uri: &d5pb.String{
+						Value: "Patient/abc123/_history/3",
+					},
+				},
+			},
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_PatientId{
+					PatientId: &d5pb.ReferenceId{
+						Value: "abc123",
+						History: &d5pb.Id{
+							Value: "3",
+						},
+					},
+				},
+			},
+		},
+		{
+			"r5 internal reference",
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_Uri{
+					Uri: &d5pb.String{
+						Value: "#frag_xyz",
+					},
+				},
+			},
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_Fragment{
+					Fragment: &d5pb.String{
+						Value: "frag_xyz",
+					},
+				},
+			},
+		},
 	}
 	for _, test := range tests {
 		got := proto.Clone(test.denormalized)
@@ -258,6 +331,16 @@ func TestNormalizeReference_Errors(t *testing.T) {
 			in: &d4pb.Reference{
 				Reference: &d4pb.Reference_Uri{
 					Uri: &d4pb.String{
+						Value: "BodySite/123",
+					},
+				},
+			},
+		},
+		{
+			name: "r5 non-existing resource type in reference",
+			in: &d5pb.Reference{
+				Reference: &d5pb.Reference_Uri{
+					Uri: &d5pb.String{
 						Value: "BodySite/123",
 					},
 				},
@@ -377,6 +460,55 @@ func TestNormalizeRelativeReferenceAndIgnoreHistory(t *testing.T) {
 				},
 			},
 		},
+		{
+			"r5 no history",
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_Uri{
+					Uri: &d5pb.String{
+						Value: "Patient/abc123",
+					},
+				},
+			},
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_PatientId{
+					PatientId: &d5pb.ReferenceId{
+						Value: "abc123",
+					},
+				},
+			},
+		},
+		{
+			"r5 relative reference with history",
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_Uri{
+					Uri: &d5pb.String{
+						Value: "Patient/abc123/_history/3",
+					},
+				},
+			},
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_PatientId{
+					PatientId: &d5pb.ReferenceId{
+						Value: "abc123",
+					},
+				},
+			},
+		},
+		{
+			"r5 identifier reference",
+			&d5pb.Reference{
+				Identifier: &d5pb.Identifier{
+					System: &d5pb.Uri{Value: "http://example.com/fhir/identifier"},
+					Value:  &d5pb.String{Value: "Patient/abc123"},
+				},
+			},
+			&d5pb.Reference{
+				Identifier: &d5pb.Identifier{
+					System: &d5pb.Uri{Value: "http://example.com/fhir/identifier"},
+					Value:  &d5pb.String{Value: "Patient/abc123"},
+				},
+			},
+		},
 	}
 	for _, test := range tests {
 		got := proto.Clone(test.denormalized)
@@ -440,6 +572,57 @@ func TestNormalizeInternalReference(t *testing.T) {
 			&d3pb.Reference{
 				Reference: &d3pb.Reference_Fragment{
 					Fragment: &d3pb.String{
+						Value: "frag_xyz",
+					},
+				},
+			},
+		},
+		{
+			"r5 relative reference",
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_Uri{
+					Uri: &d5pb.String{
+						Value: "Patient/abc123",
+					},
+				},
+			},
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_Uri{
+					Uri: &d5pb.String{
+						Value: "Patient/abc123",
+					},
+				},
+			},
+		},
+		{
+			"r5 internal reference",
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_Uri{
+					Uri: &d5pb.String{
+						Value: "#frag_xyz",
+					},
+				},
+			},
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_Fragment{
+					Fragment: &d5pb.String{
+						Value: "frag_xyz",
+					},
+				},
+			},
+		},
+		{
+			"r5 existing internal reference",
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_Fragment{
+					Fragment: &d5pb.String{
+						Value: "frag_xyz",
+					},
+				},
+			},
+			&d5pb.Reference{
+				Reference: &d5pb.Reference_Fragment{
+					Fragment: &d5pb.String{
 						Value: "frag_xyz",
 					},
 				},
