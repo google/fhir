@@ -1,3 +1,5 @@
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
 load("//bazel:antlr4_cc.bzl", "antlr4_cc_lexer", "antlr4_cc_parser")
 
 licenses(["notice"])

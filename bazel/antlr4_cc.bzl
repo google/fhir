@@ -1,5 +1,6 @@
 """Build rules to create C++ code from an Antlr4 grammar."""
 
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
 load("@rules_java//java:defs.bzl", "java_binary")
 
 def antlr4_cc_lexer(name, src, namespaces = None, imports = None, deps = None, lib_import = None):
@@ -48,7 +49,7 @@ def antlr4_cc_lexer(name, src, namespaces = None, imports = None, deps = None, l
         heuristic_label_expansion = 0,
         tools = ["antlr_tool"],
     )
-    native.cc_library(
+    cc_library(
         name = name,
         srcs = [f for f in out_files if f.endswith(".cpp")],
         hdrs = [f for f in out_files if f.endswith(".h")],
@@ -131,7 +132,7 @@ def antlr4_cc_parser(
             ":antlr_tool",
         ],
     )
-    native.cc_library(
+    cc_library(
         name = name,
         srcs = [f for f in out_files if f.endswith(".cpp")],
         hdrs = [f for f in out_files if f.endswith(".h")],
