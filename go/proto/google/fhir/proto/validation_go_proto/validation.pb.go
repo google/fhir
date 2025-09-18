@@ -245,7 +245,7 @@ func (*SqlRequirement) ProtoMessage() {}
 
 func (x *SqlRequirement) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_google_fhir_proto_validation_proto_msgTypes[0]
-	if protoimpl.UnsafeEnabled && x != nil {
+	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
 			ms.StoreMessageInfo(mi)
