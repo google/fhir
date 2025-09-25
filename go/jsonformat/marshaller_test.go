@@ -36,7 +36,9 @@ import (
 	r4codesystempb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/code_system_go_proto"
 	r4conditionpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/condition_go_proto"
 	r4devicepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/device_go_proto"
+	r4observationpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/observation_go_proto"
 	r4patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/patient_go_proto"
+	r4questionnairepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/questionnaire_go_proto"
 	r4researchstudypb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/research_study_go_proto"
 	r4searchparampb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/search_parameter_go_proto"
 	c5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/codes_go_proto"
@@ -749,6 +751,83 @@ func TestMarshalResource(t *testing.T) {
 			},
 			pretty: false,
 			want:   []byte(`{"id":"example","resourceType":"ResearchStudy","status":"draft","text":{"div":"<div xmlns=\"http://www.w3.org/1999/xhtml\">[Put rendering here]</div>","status":"generated"}}`),
+		},
+		{
+			name: "Fragment_extension",
+			inputs: []mvr{{
+				ver: fhirversion.R4,
+				r: &r4questionnairepb.Questionnaire{
+					Status: &r4questionnairepb.Questionnaire_StatusCode{
+						Value: c4pb.PublicationStatusCode_ACTIVE,
+					},
+					Contained: []*anypb.Any{
+						marshalToAny(t, &r4pb.ContainedResource{
+							OneofResource: &r4pb.ContainedResource_Observation{
+								Observation: &r4observationpb.Observation{
+									Id: &d4pb.Id{
+										Value: "Observation1",
+									},
+									Code: &d4pb.CodeableConcept{
+										Text: &d4pb.String{
+											Value: "test",
+										},
+									},
+									Status: &r4observationpb.Observation_StatusCode{
+										Value: c4pb.ObservationStatusCode_FINAL,
+									},
+									Subject: &d4pb.Reference{
+										Reference: &d4pb.Reference_Fragment{
+											Fragment: &d4pb.String{
+												Value: "Patient1",
+												Id:    &d4pb.String{Value: "123"},
+												Extension: []*d4pb.Extension{
+													&d4pb.Extension{
+														Url: &d4pb.Uri{
+															Value: "https://example.org",
+														},
+														Value: &d4pb.Extension_ValueX{
+															Choice: &d4pb.Extension_ValueX_StringValue{
+																StringValue: &d4pb.String{
+																	Value: "extension-value",
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						}),
+					},
+				},
+			}},
+			pretty: true,
+			want: []byte(`{
+        "contained": [
+          {
+            "code": {
+              "text": "test"
+            },
+            "id": "Observation1",
+            "resourceType": "Observation",
+            "status": "final",
+            "subject": {
+              "extension": [
+                {
+                  "url": "https://example.org",
+                  "valueString": "extension-value"
+                }
+              ],
+              "id": "123",
+              "reference": "#Patient1"
+            }
+          }
+        ],
+        "resourceType": "Questionnaire",
+        "status": "active"
+      }`),
 		},
 	}
 

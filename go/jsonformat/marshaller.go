@@ -690,16 +690,36 @@ func (m *Marshaller) marshalNonPrimitiveFieldValue(f protoreflect.FieldDescripto
 }
 
 func (m *Marshaller) marshalReference(rpb protoreflect.Message) (jsonpbhelper.IsJSON, error) {
-	newRef, err := NewDenormalizedReference(rpb.Interface())
+	// NewDenormalizedReference creates a new Reference message for marshalling but
+	// doesn't transfer specific fields from the original fragment such as id and extension.
+	newRefMsg, err := NewDenormalizedReference(rpb.Interface())
 	if err != nil {
 		return nil, err
 	}
+	newRef := newRefMsg.ProtoReflect()
+
+	refOneofDesc := rpb.Descriptor().Oneofs().ByName("reference")
+	if refOneofDesc != nil && m.jsonFormat == formatPure {
+		if f := rpb.WhichOneof(refOneofDesc); f != nil && f.Name() == "fragment" {
+			fragmentMsg := rpb.Get(f).Message()
+
+			idField := fragmentMsg.Descriptor().Fields().ByName("id")
+			if idField != nil && fragmentMsg.Has(idField) {
+				newRef.Set(newRef.Descriptor().Fields().ByName("id"), fragmentMsg.Get(idField))
+			}
+
+			extField := fragmentMsg.Descriptor().Fields().ByName("extension")
+			if extField != nil && fragmentMsg.Has(extField) {
+				newRef.Set(newRef.Descriptor().Fields().ByName("extension"), fragmentMsg.Get(extField))
+			}
+		}
+	}
 	if m.jsonFormat != formatPure {
-		if err := normalizeRelativeReferenceAndIgnoreHistory(newRef); err != nil {
+		if err := normalizeRelativeReferenceAndIgnoreHistory(newRefMsg); err != nil {
 			return nil, err
 		}
 	}
-	return m.marshalMessageToMap(newRef.ProtoReflect())
+	return m.marshalMessageToMap(newRef)
 }
 
 func (m *Marshaller) marshalMessageToMap(pb protoreflect.Message) (jsonpbhelper.JSONObject, error) {
@@ -738,7 +758,7 @@ func (m *Marshaller) marshalMessageToMap(pb protoreflect.Message) (jsonpbhelper.
 	if err != nil {
 		return nil, err
 	}
-	if m.jsonFormat != formatPure && !jsonpbhelper.IsResourceType(pb.Descriptor()) && !jsonpbhelper.IsChoice(pb.Descriptor()){
+	if m.jsonFormat != formatPure && !jsonpbhelper.IsResourceType(pb.Descriptor()) && !jsonpbhelper.IsChoice(pb.Descriptor()) {
 		// Omit FHIR element ID fields for analytics json.
 		// See https://github.com/rbrush/sql-on-fhir/blob/master/sql-on-fhir.md#id-fields-omitted.
 		delete(decmap, "id")
