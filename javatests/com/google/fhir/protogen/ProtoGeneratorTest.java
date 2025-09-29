@@ -79,7 +79,8 @@ public class ProtoGeneratorTest {
         packageInfo,
         codesProtoImport,
         ImmutableSet.copyOf(packages),
-        new ValueSetGenerator(packageInfo, packages));
+        new ValueSetGenerator(packageInfo, packages, "2023"),
+        "2023");
   }
 
   public ProtoGeneratorTest() throws Exception {
