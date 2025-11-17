@@ -150,7 +150,9 @@ public class ProtoFilePrinter {
 
   private String printHeader(FileDescriptorProto fileDescriptor) {
     StringBuilder header = new StringBuilder();
-    if (fileDescriptor.hasSyntax()) {
+    if (fileDescriptor.hasEdition()) {
+      header.append("edition = \"").append(fileDescriptor.getEdition()).append("\";\n\n");
+    } else if (fileDescriptor.hasSyntax()) {
       header.append("syntax = \"").append(fileDescriptor.getSyntax()).append("\";\n\n");
     }
     if (fileDescriptor.hasPackage()) {
