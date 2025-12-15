@@ -79,7 +79,7 @@ absl::StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
   // Check for memoized result.  Note we lock the mutex, in case something tries
   // to read this map while it is being written to.
   {
-    absl::ReaderMutexLock l(&memos_mutex);
+    absl::ReaderMutexLock l(memos_mutex);
     const auto memos_for_enum_type = memos->find(target_enum_type->full_name());
     if (memos_for_enum_type != memos->end()) {
       const auto enum_result = memos_for_enum_type->second.find(code_string);
@@ -96,7 +96,7 @@ absl::StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
   const EnumValueDescriptor* target_enum_value =
       target_enum_type->FindValueByName(enum_case_code_string);
   if (target_enum_value != nullptr) {
-    absl::MutexLock lock(&memos_mutex);
+    absl::MutexLock lock(memos_mutex);
     (*memos)[target_enum_type->full_name()][code_string] = target_enum_value;
     return target_enum_value;
   }
@@ -110,7 +110,7 @@ absl::StatusOr<const EnumValueDescriptor*> CodeStringToEnumValue(
             ::google::fhir::proto::fhir_original_code) &&
         target_value->options().GetExtension(
             ::google::fhir::proto::fhir_original_code) == code_string) {
-      absl::MutexLock lock(&memos_mutex);
+      absl::MutexLock lock(memos_mutex);
       (*memos)[target_enum_type->full_name()][code_string] = target_value;
       return target_value;
     }
