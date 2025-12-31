@@ -351,10 +351,10 @@ absl::Status FhirPathValidator::Validate(
     const ScopedErrorReporter& error_reporter) const {
   // ConstraintsFor may recursively build constraints so
   // we lock the mutex here to ensure thread safety.
-  mutex_.Lock();
+  mutex_.lock();
   MessageConstraints* constraints =
       ConstraintsFor(message.Message()->GetDescriptor(), primitive_handler);
-  mutex_.Unlock();
+  mutex_.unlock();
 
   // Validate the constraints attached to the message root.
   for (const CompiledExpression& expr :
