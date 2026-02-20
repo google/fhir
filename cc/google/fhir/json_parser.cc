@@ -130,14 +130,14 @@ const std::unordered_map<std::string, const FieldDescriptor*>& GetFieldMap(
   const intptr_t memo_key = reinterpret_cast<intptr_t>(descriptor);
 
   {
-    absl::ReaderMutexLock reader_lock(&memos_mutex);
+    absl::ReaderMutexLock reader_lock(memos_mutex);
     const auto iter = memos->find(memo_key);
     if (iter != memos->end()) {
       return *iter->second;
     }
   }
 
-  absl::MutexLock lock(&memos_mutex);
+  absl::MutexLock lock(memos_mutex);
 
   // Check if anything created and wrote the new entry while we were waiting
   // on the lock
@@ -176,7 +176,7 @@ absl::StatusOr<const FieldDescriptor*> GetContainedResourceField(
   const std::string contained_resource_name(
       contained_resource_desc->full_name());
   {
-    absl::ReaderMutexLock reader_lock(&field_table_mutex);
+    absl::ReaderMutexLock reader_lock(field_table_mutex);
     auto field_table_iter = field_table->find(contained_resource_name);
     if (field_table_iter != field_table->end()) {
       const FieldDescriptor* field = (*field_table_iter->second)[resource_type];
@@ -189,7 +189,7 @@ absl::StatusOr<const FieldDescriptor*> GetContainedResourceField(
     }
   }
 
-  absl::MutexLock lock(&field_table_mutex);
+  absl::MutexLock lock(field_table_mutex);
   auto field_map = BuildResourceTypeMap(contained_resource_desc);
   const FieldDescriptor* field = (*field_map)[resource_type];
   (*field_table)[contained_resource_name] = std::move(field_map);
