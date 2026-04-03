@@ -619,9 +619,11 @@ class IntegerTypeWrapper : public ExtensibleWrapper<T> {
       return ParseResult::kSucceeded;
     }
     if (!json.isInt()) {
-      error_reporter.ReportFhirFatal(InvalidArgumentError(
-          absl::StrCat("Cannot parse as ", T::descriptor()->full_name(),
-                       json.isString() ? "  It is a quoted string." : "")));
+      error_reporter
+          .ReportFhirFatal(InvalidArgumentError(
+              absl::StrCat("Cannot parse as ", T::descriptor()->full_name(),
+                           json.isString() ? "  It is a quoted string." : "")))
+          .IgnoreError();
       return ParseResult::kFailed;
     }
     // Before we can treat the json value as an int, we need to make sure

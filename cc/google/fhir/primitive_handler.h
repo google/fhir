@@ -631,6 +631,11 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
 
       case DateTime::MICROSECOND:
         return DateTimePrecision::kMicrosecond;
+
+      // Default case required for proto3 enums.
+      // go/totw/147
+      default:
+        break;
     }
 
     return DateTimePrecision::kUnspecified;
