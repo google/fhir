@@ -63,7 +63,8 @@ TEST(GetResourceFromBundleEntryTest, GetResourceFromEncounter) {
   const google::protobuf::Message* resource = GetResourceFromBundleEntry(entry).value();
   auto* desc = resource->GetDescriptor();
   EXPECT_EQ("Encounter", desc->name());
-  const Encounter* result_encounter = dynamic_cast<const Encounter*>(resource);
+  const Encounter* result_encounter =
+      absl::dynamic_cast<const Encounter*>(resource);
   std::string resource_id;
 
   EXPECT_EQ(EncounterStatusCode::FINISHED, result_encounter->status().value());
@@ -79,7 +80,7 @@ TEST(GetResourceFromBundleEntryTest, GetResourceFromPatient) {
   const google::protobuf::Message* resource = GetResourceFromBundleEntry(entry).value();
   auto* desc = resource->GetDescriptor();
   EXPECT_EQ("Patient", desc->name());
-  const Patient* result_patient = dynamic_cast<const Patient*>(resource);
+  const Patient* result_patient = absl::dynamic_cast<const Patient*>(resource);
 
   EXPECT_EQ(-77641200000000, result_patient->birth_date().value_us());
   EXPECT_EQ("2468", result_patient->id().value());
