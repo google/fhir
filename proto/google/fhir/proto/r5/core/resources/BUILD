@@ -14,3 +14,11 @@ fhir_resource_rules(
         "//proto/google/fhir/proto/r5/core:valuesets_proto",
     ],
 )
+
+# We also make the .proto files readable for testing.
+filegroup(
+    name = "testdata",
+    srcs = glob([
+        "*.proto",
+    ]),
+)
