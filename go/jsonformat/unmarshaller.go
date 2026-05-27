@@ -298,8 +298,8 @@ func (u *Unmarshaller) mergeMessage(jsonPath string, decmap map[string]json.RawM
 		proto.Merge(pb.Interface(), cr)
 		return nil
 	}
-	if pbdesc.Name() == protoName(&anypb.Any{}) && lastFieldInPath(jsonPath) == jsonpbhelper.ContainedField {
-		// Special handling of inlined resources, with 'contained' JSON field name and Any proto type.
+	if pbdesc.Name() == protoName(&anypb.Any{}) && (lastFieldInPath(jsonPath) == jsonpbhelper.ContainedField || lastFieldInPath(jsonPath) == jsonpbhelper.ResourceField) {
+		// Special handling of inlined resources, with 'contained' or 'resource' JSON field name and Any proto type.
 		cr, err := u.parseContainedResource(jsonPath, decmap)
 		if err != nil {
 			return err

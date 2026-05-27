@@ -25,6 +25,8 @@ import (
 const (
 	// ContainedField is the JSON field name of inline resources.
 	ContainedField = "contained"
+	// ResourceField is the JSON field name of resource parameters.
+	ResourceField = "resource"
 	// ResourceTypeField constant.
 	ResourceTypeField = "resourceType"
 	// OneofName field constant.

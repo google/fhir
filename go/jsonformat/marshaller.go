@@ -656,8 +656,8 @@ func (m *Marshaller) marshalNonPrimitiveFieldValue(f protoreflect.FieldDescripto
 		}
 		return m.marshal(pb)
 	}
-	// Handle inlined resources which are wrapped in Any proto. The JSON field name must be 'contained'.
-	if _, ok := pb.Interface().(*anypb.Any); ok && f.JSONName() == jsonpbhelper.ContainedField {
+	// Handle inlined resources which are wrapped in Any proto. The JSON field name must be 'contained' or 'resource'.
+	if _, ok := pb.Interface().(*anypb.Any); ok && (f.JSONName() == jsonpbhelper.ContainedField || f.JSONName() == jsonpbhelper.ResourceField) {
 		if m.jsonFormat == formatAnalyticV2WithInferredSchema {
 			crpb := m.cfg.newEmptyContainedResource()
 			pbAny := pb.Interface().(*anypb.Any)

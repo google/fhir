@@ -38,6 +38,7 @@ import (
 	r4devicepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/device_go_proto"
 	r4observationpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/observation_go_proto"
 	r4patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/patient_go_proto"
+	r4parameterspb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/parameters_go_proto"
 	r4questionnairepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/questionnaire_go_proto"
 	r4researchstudypb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/research_study_go_proto"
 	r4searchparampb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/search_parameter_go_proto"
@@ -49,6 +50,7 @@ import (
 	r5conditionpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/condition_go_proto"
 	r5devicepb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/device_go_proto"
 	r5patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/patient_go_proto"
+	r5parameterspb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/parameters_go_proto"
 	r5researchstudypb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/research_study_go_proto"
 	r5searchparampb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/search_parameter_go_proto"
 	c3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/codes_go_proto"
@@ -751,6 +753,49 @@ func TestMarshalResource(t *testing.T) {
 			},
 			pretty: false,
 			want:   []byte(`{"id":"example","resourceType":"ResearchStudy","status":"draft","text":{"div":"<div xmlns=\"http://www.w3.org/1999/xhtml\">[Put rendering here]</div>","status":"generated"}}`),
+		},
+		{
+			name: "ParametersWithResource",
+			inputs: []mvr{
+				{
+					ver: fhirversion.R4,
+					r: &r4parameterspb.Parameters{
+						Parameter: []*r4parameterspb.Parameters_Parameter{
+							{
+								Name: &d4pb.String{Value: "patient"},
+								Resource: marshalToAny(t, &r4pb.ContainedResource{
+									OneofResource: &r4pb.ContainedResource_Patient{
+										Patient: &r4patientpb.Patient{
+											Id:     &d4pb.Id{Value: "example"},
+											Active: &d4pb.Boolean{Value: true},
+										},
+									},
+								}),
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5parameterspb.Parameters{
+						Parameter: []*r5parameterspb.Parameters_Parameter{
+							{
+								Name: &d5pb.String{Value: "patient"},
+								Resource: marshalToAny(t, &r5pb.ContainedResource{
+									OneofResource: &r5pb.ContainedResource_Patient{
+										Patient: &r5patientpb.Patient{
+											Id:     &d5pb.Id{Value: "example"},
+											Active: &d5pb.Boolean{Value: true},
+										},
+									},
+								}),
+							},
+						},
+					},
+				},
+			},
+			pretty: false,
+			want: []byte(`{"parameter":[{"name":"patient","resource":{"active":true,"id":"example","resourceType":"Patient"}}],"resourceType":"Parameters"}`),
 		},
 		{
 			name: "Fragment_extension",

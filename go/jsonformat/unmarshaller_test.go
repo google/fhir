@@ -48,6 +48,7 @@ import (
 	r4observationpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/observation_go_proto"
 	r4outcomepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/operation_outcome_go_proto"
 	r4patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/patient_go_proto"
+	r4parameterspb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/parameters_go_proto"
 	r4questionnairepb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/questionnaire_go_proto"
 	r4searchparampb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/search_parameter_go_proto"
 	c5pb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/codes_go_proto"
@@ -57,6 +58,7 @@ import (
 	r5observationpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/observation_go_proto"
 	r5outcomepb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/operation_outcome_go_proto"
 	r5patientpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/patient_go_proto"
+	r5parameterspb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/parameters_go_proto"
 	r5questionnairepb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/questionnaire_go_proto"
 	r5searchparampb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/resources/search_parameter_go_proto"
 	r5valuesetpb "github.com/google/fhir/go/proto/google/fhir/proto/r5/core/valuesets_go_proto"
@@ -179,6 +181,67 @@ func TestUnmarshal(t *testing.T) {
 								Code:        &d5pb.Code{Value: "value-quantity"},
 								Base:        []*r5searchparampb.SearchParameter_BaseCode{{Value: r5valuesetpb.VersionIndependentResourceTypesAllValueSet_OBSERVATION}},
 								Type:        &r5searchparampb.SearchParameter_TypeCode{Value: c5pb.SearchParamTypeCode_NUMBER},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "ParametersWithResource",
+			json: []byte(`
+    {
+      "resourceType": "Parameters",
+      "parameter": [{
+        "name": "patient",
+        "resource": {
+          "resourceType": "Patient",
+          "id": "example",
+          "active": true
+        }
+      }]
+    }`),
+			wants: []mvr{
+				{
+					ver: fhirversion.R4,
+					r: &r4pb.ContainedResource{
+						OneofResource: &r4pb.ContainedResource_Parameters{
+							Parameters: &r4parameterspb.Parameters{
+								Parameter: []*r4parameterspb.Parameters_Parameter{
+									{
+										Name: &d4pb.String{Value: "patient"},
+										Resource: marshalToAny(t, &r4pb.ContainedResource{
+											OneofResource: &r4pb.ContainedResource_Patient{
+												Patient: &r4patientpb.Patient{
+													Id:     &d4pb.Id{Value: "example"},
+													Active: &d4pb.Boolean{Value: true},
+												},
+											},
+										}),
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					ver: fhirversion.R5,
+					r: &r5pb.ContainedResource{
+						OneofResource: &r5pb.ContainedResource_Parameters{
+							Parameters: &r5parameterspb.Parameters{
+								Parameter: []*r5parameterspb.Parameters_Parameter{
+									{
+										Name: &d5pb.String{Value: "patient"},
+										Resource: marshalToAny(t, &r5pb.ContainedResource{
+											OneofResource: &r5pb.ContainedResource_Patient{
+												Patient: &r5patientpb.Patient{
+													Id:     &d5pb.Id{Value: "example"},
+													Active: &d5pb.Boolean{Value: true},
+												},
+											},
+										}),
+									},
+								},
 							},
 						},
 					},
