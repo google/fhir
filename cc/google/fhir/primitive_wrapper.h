@@ -42,13 +42,14 @@
 #include "google/fhir/error_reporter.h"
 #include "google/fhir/extensions.h"
 #include "google/fhir/json/fhir_json.h"
-#include "google/fhir/json_format_results.h"
 #include "google/fhir/json/json_util.h"
+#include "google/fhir/json_format_results.h"
 #include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/type_macros.h"
 #include "google/fhir/util.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
+#include "google/protobuf/message_lite.h"
 #include "re2/re2.h"
 
 namespace google {
@@ -154,7 +155,7 @@ class SpecificWrapper : public PrimitiveWrapper {
           message.GetDescriptor()->full_name(), " with wrapper for ",
           T::descriptor()->full_name()));
     }
-    wrapped_ = dynamic_cast<const T*>(&message);
+    wrapped_ = google::protobuf::DownCastMessage<T>(&message);
     return absl::OkStatus();
   }
 
@@ -189,7 +190,8 @@ class XhtmlWrapper : public SpecificWrapper<XhtmlLike> {
       const override {
     std::unique_ptr<Message> element =
         absl::WrapUnique(this->GetWrapped()->New());
-    XhtmlLike* typed_element = dynamic_cast<XhtmlLike*>(element.get());
+    XhtmlLike* typed_element =
+        google::protobuf::DownCastMessage<XhtmlLike>(element.get());
     if (this->GetWrapped()->has_id()) {
       *typed_element->mutable_id() = this->GetWrapped()->id();
     }
@@ -226,7 +228,7 @@ class ExtensibleWrapper : public SpecificWrapper<T> {
       const ScopedErrorReporter& error_reporter) const override {
     FHIR_ASSIGN_OR_RETURN(const bool has_no_value_extension,
                           HasPrimitiveHasNoValue(*this->GetWrapped()));
-    const T& typed = dynamic_cast<const T&>(*this->GetWrapped());
+    const T& typed = google::protobuf::DownCastMessage<T>(*this->GetWrapped());
     if (typed.extension_size() == 1 && has_no_value_extension) {
       FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirError(
           absl::StrCat(T::descriptor()->full_name(),
@@ -240,7 +242,7 @@ class ExtensibleWrapper : public SpecificWrapper<T> {
       const override {
     std::unique_ptr<Message> element =
         absl::WrapUnique(this->GetWrapped()->New());
-    T* typed_element = dynamic_cast<T*>(element.get());
+    T* typed_element = google::protobuf::DownCastMessage<T>(element.get());
     if (this->GetWrapped()->has_id()) {
       *typed_element->mutable_id() = this->GetWrapped()->id();
     }

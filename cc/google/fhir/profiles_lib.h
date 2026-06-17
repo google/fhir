@@ -113,8 +113,8 @@ absl::Status PerformExtensionSlicing(
           typed_extension->CopyFrom(src_value);
         } else if (src_datatype_field->message_type()->full_name() ==
                    CodeLike::descriptor()->full_name()) {
-          FHIR_RETURN_IF_ERROR(
-              CopyCode(dynamic_cast<const CodeLike&>(src_value), typed_extension));
+          FHIR_RETURN_IF_ERROR(CopyCode(
+              google::protobuf::DownCastMessage<CodeLike>(src_value), typed_extension));
         } else {
           FHIR_RETURN_IF_ERROR(
               scope.ReportFhirFatal(absl::InvalidArgumentError(absl::StrCat(
@@ -265,7 +265,7 @@ absl::Status CopyToProfile(const Message& source, Message* target,
            &target_extension_field](const Message& source_message) {
             return UnsliceExtension(
                 source_message, source_field,
-                dynamic_cast<ExtensionLike*>(
+                google::protobuf::DownCastMessage<ExtensionLike>(
                     MutableOrAddMessage(target, target_extension_field)));
           }));
       continue;

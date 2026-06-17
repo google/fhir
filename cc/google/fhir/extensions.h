@@ -21,7 +21,6 @@
 #include <string>
 #include <vector>
 
-
 #include "absl/container/flat_hash_map.h"
 #include "absl/log/check.h"
 #include "absl/status/status.h"
@@ -35,6 +34,7 @@
 #include "google/fhir/status/statusor.h"
 #include "proto/google/fhir/proto/annotations.pb.h"
 #include "google/protobuf/message.h"
+#include "google/protobuf/message_lite.h"
 
 namespace google::fhir {
 
@@ -163,7 +163,7 @@ absl::StatusOr<CoreExtensionType*> AddExtension(google::protobuf::Message* messa
         extension_field->message_type()->full_name()));
   }
 
-  return dynamic_cast<CoreExtensionType*>(
+  return google::protobuf::DownCastMessage<CoreExtensionType>(
       message->GetReflection()->AddMessage(message, extension_field));
 }
 
@@ -219,7 +219,7 @@ absl::StatusOr<std::vector<const CoreExtensionType*>> GetAllMatchingExtensions(
         element.GetReflection()->GetRepeatedMessage(element, extension_field,
                                                     i);
     if (GetExtensionUrl(extension, &scratch) == url) {
-      matches.push_back(dynamic_cast<const CoreExtensionType*>(&extension));
+      matches.push_back(google::protobuf::DownCastMessage<CoreExtensionType>(&extension));
     }
   }
   return matches;
@@ -246,7 +246,7 @@ absl::StatusOr<const CoreExtensionType*> GetOnlyMatchingExtension(
         matches.size()));
   }
 
-  return dynamic_cast<const CoreExtensionType*>(matches.front());
+  return google::protobuf::DownCastMessage<CoreExtensionType>(matches.front());
 }
 
 // Locates the only extension on `element` with url matching `url`
@@ -293,7 +293,7 @@ absl::StatusOr<std::vector<const T*>> GetAllSimpleExtensionValues(
                            url, T::descriptor()->full_name(),
                            value->GetDescriptor()->full_name()));
     }
-    values.push_back(dynamic_cast<const T*>(value));
+    values.push_back(google::protobuf::DownCastMessage<T>(value));
   }
 
   return values;

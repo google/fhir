@@ -37,6 +37,7 @@
 #include "google/fhir/util.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
+#include "google/protobuf/message_lite.h"
 
 namespace google {
 namespace fhir {
@@ -404,7 +405,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
   absl::StatusOr<std::string> GetStringValue(
       const google::protobuf::Message& primitive) const override {
     FHIR_RETURN_IF_ERROR(CheckType<String>(primitive));
-    return dynamic_cast<const String&>(primitive).value();
+    return google::protobuf::DownCastMessage<String>(primitive).value();
   }
 
   google::protobuf::Message* NewString(const std::string& str) const override {
@@ -426,7 +427,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
   absl::StatusOr<bool> GetBooleanValue(
       const google::protobuf::Message& primitive) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Boolean>(primitive));
-    return dynamic_cast<const Boolean&>(primitive).value();
+    return google::protobuf::DownCastMessage<Boolean>(primitive).value();
   }
 
   google::protobuf::Message* NewBoolean(const bool value) const override {
@@ -442,7 +443,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
   absl::StatusOr<int> GetIntegerValue(
       const google::protobuf::Message& primitive) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Integer>(primitive));
-    return dynamic_cast<const Integer&>(primitive).value();
+    return google::protobuf::DownCastMessage<Integer>(primitive).value();
   }
 
   google::protobuf::Message* NewInteger(const int value) const override {
@@ -458,7 +459,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
   absl::StatusOr<int> GetPositiveIntValue(
       const google::protobuf::Message& primitive) const override {
     FHIR_RETURN_IF_ERROR(CheckType<PositiveInt>(primitive));
-    return dynamic_cast<const PositiveInt&>(primitive).value();
+    return google::protobuf::DownCastMessage<PositiveInt>(primitive).value();
   }
 
   google::protobuf::Message* NewPositiveInt(const int value) const override {
@@ -474,7 +475,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
   absl::StatusOr<int> GetUnsignedIntValue(
       const google::protobuf::Message& primitive) const override {
     FHIR_RETURN_IF_ERROR(CheckType<UnsignedInt>(primitive));
-    return dynamic_cast<const UnsignedInt&>(primitive).value();
+    return google::protobuf::DownCastMessage<UnsignedInt>(primitive).value();
   }
 
   google::protobuf::Message* NewUnsignedInt(const int value) const override {
@@ -490,7 +491,7 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
   absl::StatusOr<std::string> GetDecimalValue(
       const google::protobuf::Message& primitive) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Decimal>(primitive));
-    return dynamic_cast<const Decimal&>(primitive).value();
+    return google::protobuf::DownCastMessage<Decimal>(primitive).value();
   }
 
   google::protobuf::Message* NewDecimal(const std::string value) const override {
@@ -506,19 +507,25 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
   absl::StatusOr<std::string> GetSimpleQuantityCode(
       const google::protobuf::Message& simple_quantity) const override {
     FHIR_RETURN_IF_ERROR(CheckType<SimpleQuantity>(simple_quantity));
-    return dynamic_cast<const SimpleQuantity&>(simple_quantity).code().value();
+    return google::protobuf::DownCastMessage<SimpleQuantity>(simple_quantity)
+        .code()
+        .value();
   }
 
   absl::StatusOr<std::string> GetSimpleQuantitySystem(
       const google::protobuf::Message& simple_quantity) const override {
     FHIR_RETURN_IF_ERROR(CheckType<SimpleQuantity>(simple_quantity));
-    return dynamic_cast<const SimpleQuantity&>(simple_quantity).system().value();
+    return google::protobuf::DownCastMessage<SimpleQuantity>(simple_quantity)
+        .system()
+        .value();
   }
 
   absl::StatusOr<std::string> GetSimpleQuantityValue(
       const google::protobuf::Message& simple_quantity) const override {
     FHIR_RETURN_IF_ERROR(CheckType<SimpleQuantity>(simple_quantity));
-    return dynamic_cast<const SimpleQuantity&>(simple_quantity).value().value();
+    return google::protobuf::DownCastMessage<SimpleQuantity>(simple_quantity)
+        .value()
+        .value();
   }
 
   google::protobuf::Message* NewCoding() const override { return new Coding(); }
@@ -526,19 +533,19 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
   absl::StatusOr<std::string> GetCodingSystem(
       const google::protobuf::Message& coding) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Coding>(coding));
-    return dynamic_cast<const Coding&>(coding).system().value();
+    return google::protobuf::DownCastMessage<Coding>(coding).system().value();
   }
 
   absl::StatusOr<std::string> GetCodingCode(
       const google::protobuf::Message& coding) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Coding>(coding));
-    return dynamic_cast<const Coding&>(coding).code().value();
+    return google::protobuf::DownCastMessage<Coding>(coding).code().value();
   }
 
   absl::StatusOr<std::string> GetCodingDisplay(
       const google::protobuf::Message& coding) const override {
     FHIR_RETURN_IF_ERROR(CheckType<Coding>(coding));
-    return dynamic_cast<const Coding&>(coding).display().value();
+    return google::protobuf::DownCastMessage<Coding>(coding).display().value();
   }
 
   const ::google::protobuf::Descriptor* DateTimeDescriptor() const override {
@@ -600,20 +607,20 @@ class PrimitiveHandlerTemplate : public PrimitiveHandler {
       const google::protobuf::Message& date_time) const override {
     FHIR_RETURN_IF_ERROR(CheckType<DateTime>(date_time));
     return absl::FromUnixMicros(
-        dynamic_cast<const DateTime&>(date_time).value_us());
+        google::protobuf::DownCastMessage<DateTime>(date_time).value_us());
   }
 
   absl::StatusOr<absl::TimeZone> GetDateTimeZone(
       const google::protobuf::Message& date_time) const override {
     FHIR_RETURN_IF_ERROR(CheckType<DateTime>(date_time));
     return BuildTimeZoneFromString(
-        dynamic_cast<const DateTime&>(date_time).timezone());
+        google::protobuf::DownCastMessage<DateTime>(date_time).timezone());
   }
 
   absl::StatusOr<DateTimePrecision> GetDateTimePrecision(
       const google::protobuf::Message& date_time) const override {
     FHIR_RETURN_IF_ERROR(CheckType<DateTime>(date_time));
-    switch (dynamic_cast<const DateTime&>(date_time).precision()) {
+    switch (google::protobuf::DownCastMessage<DateTime>(date_time).precision()) {
       case DateTime::YEAR:
         return DateTimePrecision::kYear;
 

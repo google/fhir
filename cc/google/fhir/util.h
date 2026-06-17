@@ -24,7 +24,6 @@
 #include <type_traits>
 #include <utility>
 
-
 #include "google/protobuf/any.pb.h"
 #include "google/protobuf/descriptor.pb.h"
 #include "absl/base/macros.h"
@@ -44,6 +43,7 @@
 #include "proto/google/fhir/proto/annotations.pb.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
+#include "google/protobuf/message_lite.h"
 #include "google/protobuf/reflection.h"
 #include "re2/re2.h"
 
@@ -276,7 +276,7 @@ absl::Status GetResourceByReferenceId(const BundleLike& bundle,
     const ::google::protobuf::Reflection* contained_reflection =
         contained_resource.GetReflection();
     if (contained_reflection->HasField(contained_resource, resource_field)) {
-      const R& resource = dynamic_cast<const R&>(
+      const R& resource = google::protobuf::DownCastMessage<R>(
           contained_reflection->GetMessage(contained_resource, resource_field));
       if (resource.id().value() == reference_id.value()) {
         *output = &resource;
@@ -310,7 +310,7 @@ absl::StatusOr<const R*> GetTypedContainedResource(
             "Contained resource does not have set resource of type ",
             R::descriptor()->name()));
       }
-      return dynamic_cast<const R*>(
+      return google::protobuf::DownCastMessage<R>(
           &contained.GetReflection()->GetMessage(contained, field));
     }
   }

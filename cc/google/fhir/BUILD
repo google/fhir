@@ -227,7 +227,6 @@ cc_library(
     deps = [
         "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
-        "@com_github_glog_glog//:glog",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/strings",

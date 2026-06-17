@@ -20,7 +20,6 @@
 #include <functional>
 #include <string>
 
-
 #include "glog/logging.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
@@ -31,6 +30,7 @@
 #include "google/fhir/status/statusor.h"
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/message.h"
+#include "google/protobuf/message_lite.h"
 
 namespace google {
 namespace fhir {
@@ -70,7 +70,7 @@ absl::StatusOr<T*> GetMutableSubmessageByPathAndCheckType(
                        ".  Found: ", submessage->GetDescriptor()->full_name()));
   }
 
-  return dynamic_cast<T*>(submessage);
+  return google::protobuf::DownCastMessage<T>(submessage);
 }
 
 template <typename T>
@@ -88,7 +88,7 @@ absl::StatusOr<const T*> GetSubmessageByPathAndCheckType(
                        ".  Found: ", submessage->GetDescriptor()->full_name()));
   }
 
-  return dynamic_cast<const T*>(submessage);
+  return google::protobuf::DownCastMessage<T>(submessage);
 }
 
 // Returns true if the field specified by field_path is set on a message,
@@ -147,7 +147,7 @@ template <typename T>
 const T& GetPotentiallyRepeatedMessage(const ::google::protobuf::Message& message,
                                        const ::google::protobuf::FieldDescriptor* field,
                                        const int index) {
-  return dynamic_cast<const T&>(
+  return google::protobuf::DownCastMessage<T>(
       GetPotentiallyRepeatedMessage(message, field, index));
 }
 
@@ -246,7 +246,7 @@ absl::StatusOr<T*> MutableMessageInField(::google::protobuf::Message* message,
         "Invalid arguments to GetMessageInField: $0 is not of type $1",
         field->full_name(), T::descriptor()->full_name()));
   }
-  return dynamic_cast<T*>(
+  return google::protobuf::DownCastMessage<T>(
       message->GetReflection()->MutableMessage(message, field));
 }
 
@@ -259,7 +259,7 @@ absl::StatusOr<T> GetMessageInField(const ::google::protobuf::Message& message,
         " is of type ", field->message_type()->full_name(), " but ",
         T::descriptor()->full_name(), " was requested."));
   }
-  return dynamic_cast<const T&>(
+  return google::protobuf::DownCastMessage<T>(
       message.GetReflection()->GetMessage(message, field));
 }
 
