@@ -79,9 +79,10 @@ absl::Status PerformExtensionSlicing(
   for (int i = 0;
        i < source.GetReflection()->FieldSize(source, source_extension_field);
        ++i) {
-    const ExtensionLike& source_extension = dynamic_cast<const ExtensionLike&>(
-        source_reflection->GetRepeatedMessage(source, source_extension_field,
-                                              i));
+    const ExtensionLike& source_extension =
+        google::protobuf::DynamicCastMessage<ExtensionLike>(
+            source_reflection->GetRepeatedMessage(source,
+                                                  source_extension_field, i));
     ScopedErrorReporter scope = error_reporter.WithScope("extensions", i);
     const std::string& url = source_extension.url().value();
     const auto extension_entry_iter = extension_map.find(url);
