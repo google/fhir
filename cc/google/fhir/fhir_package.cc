@@ -130,9 +130,7 @@ absl::Status MaybeAddEntryToFhirPackage(absl::string_view entry_name,
                                        fhir_package);
 }
 
-// Opens the archive for reading at `archive_file_path` and returns a unique
-// pointer to the archive. The unique pointer will close and free the archive
-// when it is destructed.
+// Unsandboxed Implementation
 absl::StatusOr<std::unique_ptr<archive, decltype(&archive_read_free)>>
 OpenArchive(absl::string_view archive_file_path) {
   // archive_read_free itself calls archive_read_close, so no further cleanup is
