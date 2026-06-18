@@ -596,6 +596,9 @@ cc_library(
     name = "fhir_package",
     srcs = ["fhir_package.cc"],
     hdrs = ["fhir_package.h"],
+    local_defines = select({
+        "//conditions:default": [],
+    }),
     strip_include_prefix = "//cc/",
     deps = [
         ":error_reporter",
