@@ -210,11 +210,11 @@ class Parser {
 
   absl::StatusOr<ParseResult> MergeMessage(
       const internal::FhirJson& value, Message* target,
-      const ScopedErrorReporter& error_reporter) const {
+      const ScopedErrorReporter& error_reporter, int depth) const {
     const Descriptor* target_descriptor = target->GetDescriptor();
     // TODO(b/244184211): handle this with an annotation
     if (target_descriptor->name() == "ContainedResource") {
-      return MergeContainedResource(value, target, error_reporter);
+      return MergeContainedResource(value, target, error_reporter, depth);
     }
 
     const std::unordered_map<std::string, const FieldDescriptor*>& field_map =
@@ -231,7 +231,7 @@ class Parser {
           FHIR_ASSIGN_OR_RETURN(
               ParseResult result,
               MergeChoiceField(*sub_value_iter->second, field_entry->second,
-                               field_entry->first, target, error_reporter));
+                               field_entry->first, target, error_reporter, depth));
           if (result == ParseResult::kFailed) {
             all_values_parsed_successfully = false;
           }
@@ -239,7 +239,7 @@ class Parser {
           FHIR_ASSIGN_OR_RETURN(
               ParseResult result,
               MergeField(*sub_value_iter->second, field_entry->second, target,
-                         error_reporter));
+                         error_reporter, depth));
           if (result == ParseResult::kFailed) {
             all_values_parsed_successfully = false;
           }
@@ -276,7 +276,7 @@ class Parser {
 
   absl::StatusOr<ParseResult> MergeContainedResource(
       const internal::FhirJson& value, Message* target,
-      const ScopedErrorReporter& error_reporter) const {
+      const ScopedErrorReporter& error_reporter, int depth) const {
     // We handle contained resources in a special way, because despite
     // internally being a Oneof, it is not acually a choice-type in FHIR. The
     // JSON field name is just "resource", which doesn't give us any clues
@@ -292,13 +292,13 @@ class Parser {
         GetContainedResourceField(target->GetDescriptor(), resource_type_str));
     return MergeMessage(
         value, target->GetReflection()->MutableMessage(target, contained_field),
-        error_reporter);
+        error_reporter, depth);
   }
 
   absl::StatusOr<ParseResult> MergeChoiceField(
       const internal::FhirJson& json, const FieldDescriptor* choice_field,
       absl::string_view field_name, Message* parent,
-      const ScopedErrorReporter& error_reporter) const {
+      const ScopedErrorReporter& error_reporter, int depth) const {
     const Descriptor* choice_type_descriptor = choice_field->message_type();
     const auto& choice_type_field_map = GetFieldMap(choice_type_descriptor);
     std::string choice_field_name = std::string(field_name);
@@ -325,7 +325,7 @@ class Parser {
     Message* choice_msg =
         parent->GetReflection()->MutableMessage(parent, choice_field);
     return MergeField(json, value_field_iter->second, choice_msg,
-                      error_reporter);
+                      error_reporter, depth);
   }
 
   // Given a JSON value, field, and parent message, merges the FHIR JSON into
@@ -334,7 +334,7 @@ class Parser {
   // differently if the field has been previously set or not.
   absl::StatusOr<ParseResult> MergeField(
       const internal::FhirJson& json, const FieldDescriptor* field,
-      Message* parent, const ScopedErrorReporter& error_reporter) const {
+      Message* parent, const ScopedErrorReporter& error_reporter, int depth) const {
     const Reflection* parent_reflection = parent->GetReflection();
     // If the field is non-primitive make sure it hasn't been set yet.
     // Note that we allow primitive types to be set already, because FHIR
@@ -397,7 +397,7 @@ class Parser {
         FHIR_ASSIGN_OR_RETURN(
             std::unique_ptr<Message> parsed_value,
             ParseFieldValue(field, *json.get(i).value(), parent,
-                            error_reporter.WithScope(field, i)));
+                            error_reporter.WithScope(field, i), depth));
         if (parsed_value == nullptr) {
           overall_result = ParseResult::kFailed;
           continue;
@@ -415,7 +415,7 @@ class Parser {
     } else {
       FHIR_ASSIGN_OR_RETURN(std::unique_ptr<Message> parsed_value,
                             ParseFieldValue(field, json, parent,
-                                            error_reporter.WithScope(field)));
+                                            error_reporter.WithScope(field), depth));
       if (parsed_value == nullptr) {
         return ParseResult::kFailed;
       }
@@ -448,7 +448,7 @@ class Parser {
 
   absl::StatusOr<std::unique_ptr<Message>> ParseFieldValue(
       const FieldDescriptor* field, const internal::FhirJson& json,
-      Message* parent, const ScopedErrorReporter& error_reporter) const {
+      Message* parent, const ScopedErrorReporter& error_reporter, int depth) const {
     if (field->type() != FieldDescriptor::Type::TYPE_MESSAGE) {
       FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirFatal(InvalidArgumentError(
           absl::StrCat("Error in FHIR proto definition: Field ",
@@ -460,7 +460,7 @@ class Parser {
           absl::WrapUnique(primitive_handler_->NewContainedResource());
       FHIR_ASSIGN_OR_RETURN(
           ParseResult result,
-          MergeContainedResource(json, contained.get(), error_reporter));
+          MergeContainedResource(json, contained.get(), error_reporter, depth));
       if (result == ParseResult::kFailed) {
         return nullptr;
       }
@@ -474,7 +474,7 @@ class Parser {
                                ->GetPrototype(field->message_type())
                                ->New());
       FHIR_ASSIGN_OR_RETURN(ParseResult result,
-                            MergeValue(json, target.get(), error_reporter));
+                            MergeValue(json, target.get(), error_reporter, depth + 1));
       if (result == ParseResult::kFailed) {
         return nullptr;
       }
@@ -484,14 +484,20 @@ class Parser {
 
   absl::StatusOr<ParseResult> MergeValue(
       const internal::FhirJson& json, Message* target,
-      const ScopedErrorReporter& error_reporter) const {
+      const ScopedErrorReporter& error_reporter, int depth = 0) const {
+    if (depth > kMaxNestingDepth) {
+      FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirFatal(
+          absl::InvalidArgumentError(
+              "FHIR JSON nesting depth limit exceeded.")));
+      return ParseResult::kFailed;
+    }
     if (IsPrimitive(target->GetDescriptor())) {
       if (json.isObject()) {
         // This is a primitive type extension.
         // Merge the extension fields into into the empty target proto,
         // and tag it as having no value.
         FHIR_ASSIGN_OR_RETURN(ParseResult result,
-                              MergeMessage(json, target, error_reporter));
+                              MergeMessage(json, target, error_reporter, depth));
         if (result == ParseResult::kFailed) {
           return ParseResult::kFailed;
         }
@@ -506,7 +512,7 @@ class Parser {
       }
     } else if (IsReference(target->GetDescriptor())) {
       FHIR_ASSIGN_OR_RETURN(ParseResult result,
-                            MergeMessage(json, target, error_reporter));
+                            MergeMessage(json, target, error_reporter, depth));
       if (result == ParseResult::kFailed) {
         return ParseResult::kFailed;
       }
@@ -520,19 +526,20 @@ class Parser {
         // with a single element array.
         // This is considered valid, and occurs when a profiled resource reduces
         // the size of a repeated FHIR field to max of 1.
-        return MergeMessage(*json.get(0).value(), target, error_reporter);
+        return MergeMessage(*json.get(0).value(), target, error_reporter, depth);
       }
       FHIR_RETURN_IF_ERROR(error_reporter.ReportFhirFatal(InvalidArgumentError(
           absl::StrCat("Expected JsonObject for field of type ",
                        target->GetDescriptor()->full_name()))));
       return ParseResult::kFailed;
     }
-    return MergeMessage(json, target, error_reporter);
+    return MergeMessage(json, target, error_reporter, depth);
   }
 
  private:
   const PrimitiveHandler* primitive_handler_;
   const absl::TimeZone default_timezone_;
+  static constexpr int kMaxNestingDepth = 500;
 };
 
 }  // namespace internal
