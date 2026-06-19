@@ -22,6 +22,7 @@ import "proto/google/fhir/proto/r4/core/datatypes.proto";
 
 option java_package = "com.google.fhir.proto";
 option java_multiple_files = true;
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto";
 
 // Config containing all info needed to generate the core protos for a FHIR
 // version (e.g., R4, R5).

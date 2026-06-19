@@ -16,6 +16,8 @@ syntax = "proto3";
 
 package google.fhir.proto;
 
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto";
+
 // Defines a list of fhir path expressions to be replaced.
 message FHIRPathReplacementList {
   repeated Replacement replacement = 1;
