@@ -20,6 +20,6 @@ SELECT
 FROM
   synthea.Observation o, o.code.coding cc
 WHERE
-  cc.system like '%loinc%' and lower(cc.display) like '%cholesterol%'
+  cc.system like '%loinc%' and lower(cc.display) like '%glucose%'
 GROUP BY 1,2
 ORDER BY 4 desc
