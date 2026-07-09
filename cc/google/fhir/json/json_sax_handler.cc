@@ -293,7 +293,7 @@ class JsonSaxHandler {
   // `actual_token` received and `expected_token` if exists.
   void UpdateError(
       const std::string& actual_token,
-      const absl::optional<std::string>& expected_token = absl::nullopt) {
+      const absl::optional<std::string>& expected_token = std::nullopt) {
     std::string error_message =
         absl::StrFormat("Unexpected `%s`", actual_token);
     if (expected_token) {
