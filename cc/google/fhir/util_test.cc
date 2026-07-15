@@ -421,7 +421,7 @@ TEST(Util, UnpackAnyAsContainedResourceR4CustomFactory) {
   med_req.add_contained()->PackFrom(contained_medication);
 
   // Use a message factory that just returns a custom instance
-  auto local_memory = absl::make_unique<r4::core::ContainedResource>();
+  auto local_memory = std::make_unique<r4::core::ContainedResource>();
   auto result_statusor = UnpackAnyAsContainedResource(
       med_req.contained(0),
       [&](const Descriptor* descriptor) -> absl::StatusOr<Message*> {
