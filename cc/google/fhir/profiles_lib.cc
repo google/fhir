@@ -72,7 +72,7 @@ const bool SharesCommonAncestor(const ::google::protobuf::Descriptor* first,
   const std::string& first_url = GetStructureDefinitionUrl(first);
   const std::string& second_url = GetStructureDefinitionUrl(second);
 
-  absl::MutexLock lock(&memos_mutex);
+  absl::MutexLock lock(memos_mutex);
   const auto& first_url_memo_entry = memos[first_url];
   const auto& memo_entry = first_url_memo_entry.find(second_url);
   if (memo_entry != first_url_memo_entry.end()) {
@@ -100,14 +100,14 @@ const std::unordered_map<std::string, const FieldDescriptor*> GetExtensionMap(
   const intptr_t memo_key = (intptr_t)descriptor;
 
   {
-    absl::ReaderMutexLock l(&memos_mutex);
+    absl::ReaderMutexLock l(memos_mutex);
     const auto iter = memos->find(memo_key);
     if (iter != memos->end()) {
       return iter->second;
     }
   }
 
-  absl::MutexLock lock(&memos_mutex);
+  absl::MutexLock lock(memos_mutex);
   auto& extension_map = (*memos)[memo_key];
   for (int i = 0; i < descriptor->field_count(); i++) {
     const FieldDescriptor* field = descriptor->field(i);

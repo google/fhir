@@ -86,11 +86,11 @@ absl::StatusOr<absl::optional<std::string>> ReferenceProtoToString(
   const ::google::protobuf::FieldDescriptor* reference_field =
       reflection->GetOneofFieldDescriptor(reference, oneof);
   if (reference_field == nullptr) {
-    return absl::nullopt;
+    return std::nullopt;
   }
   if (reference_field->name() == "uri" ||
       reference_field->name() == "fragment") {
-    return absl::nullopt;
+    return std::nullopt;
   }
 
   std::string prefix;
