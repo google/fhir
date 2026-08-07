@@ -75,6 +75,7 @@ def gen_fhir_protos(
         package_deps = [],
         additional_proto_imports = [],
         disable_test = False,
+        edition = "",
         golden_java_proto_rules = []):
     """Generates a proto file from a fhir_package
 
@@ -118,6 +119,9 @@ def gen_fhir_protos(
     ])
 
     flags.append("--directory_in_source " + src_dir)
+
+    if edition != "":
+        flags.append("--edition " + edition)
 
     all_fhir_pkgs = package_deps + [
         package,
@@ -178,6 +182,7 @@ def gen_fhir_definitions_and_protos(
         additional_proto_imports = [],
         disable_test = False,
         golden_java_proto_rules = [],
+        edition = "",
         package_json = None):
     """Generates structure definitions and protos based on Extensions and Profiles protos.
 
@@ -285,6 +290,7 @@ def gen_fhir_definitions_and_protos(
         additional_proto_imports = additional_proto_imports,
         disable_test = disable_test,
         golden_java_proto_rules = golden_java_proto_rules,
+        edition = edition,
     )
 
 def _get_zip_for_pkg(pkg):
