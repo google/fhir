@@ -14,6 +14,7 @@
 
 #include "google/fhir/fhir_package.h"
 
+#include <cstddef>
 #include <functional>
 #include <memory>
 #include <string>
@@ -36,11 +37,14 @@
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
 #include "proto/google/fhir/proto/r4/core/resources/value_set.pb.h"
 #include "libarchive/archive.h"
-#include "libarchive/archive_entry.h"
 
 namespace google::fhir {
 
 namespace {
+
+// Maximum size of a single file in the archive to prevent OOM/truncation
+// issues.
+constexpr la_int64_t kMaxEntrySize = 100 * 1024 * 1024;  // 100 MB
 
 // Adds the resource described by `resource_json` found within `parent_resource`
 // to the appropriate ResourceCollection of the given `fhir_package`. Allows the
@@ -130,9 +134,7 @@ absl::Status MaybeAddEntryToFhirPackage(absl::string_view entry_name,
                                        fhir_package);
 }
 
-// Opens the archive for reading at `archive_file_path` and returns a unique
-// pointer to the archive. The unique pointer will close and free the archive
-// when it is destructed.
+// Unsandboxed Implementation
 absl::StatusOr<std::unique_ptr<archive, decltype(&archive_read_free)>>
 OpenArchive(absl::string_view archive_file_path) {
   // archive_read_free itself calls archive_read_close, so no further cleanup is
@@ -159,6 +161,7 @@ absl::Status LoadPackage(absl::string_view archive_file_path,
                              absl::string_view contents, FhirPackage& package)>
                              handle_entry,
                          FhirPackage& fhir_package) {
+
   // The FHIR_ASSIGN_OR_RETURN macro expansion doesn't parse correctly without
   // placing the type inside a 'using' statement.
   using archive_ptr = std::unique_ptr<archive, decltype(&archive_read_free)>;
@@ -193,6 +196,15 @@ absl::Status LoadPackage(absl::string_view archive_file_path,
     }
 
     la_int64_t length = archive_entry_size(entry);
+    if (length < 0) {
+      return absl::InvalidArgumentError(absl::StrFormat(
+          "Negative entry size: %d in archive %s.", length, archive_file_path));
+    }
+    if (length > kMaxEntrySize) {
+      return absl::InvalidArgumentError(absl::StrFormat(
+          "Entry size %d exceeds max allowed size of %d bytes in archive %s.",
+          length, kMaxEntrySize, archive_file_path));
+    }
     std::string contents(length, '\0');
     la_ssize_t read = archive_read_data(archive.get(), &contents[0], length);
     if (read < length) {

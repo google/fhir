@@ -520,6 +520,7 @@ cc_test(
         ":fhir_package",
         "//cc/google/fhir/json:fhir_json",
         "//cc/google/fhir/json:json_sax_handler",
+        "//cc/google/fhir/status",
         "//cc/google/fhir/status:statusor",
         "//cc/google/fhir/testutil:archive",
         "//proto/google/fhir/proto/r4/core:datatypes_cc_proto",
@@ -596,6 +597,9 @@ cc_library(
     name = "fhir_package",
     srcs = ["fhir_package.cc"],
     hdrs = ["fhir_package.h"],
+    local_defines = select({
+        "//conditions:default": [],
+    }),
     strip_include_prefix = "//cc/",
     deps = [
         ":error_reporter",

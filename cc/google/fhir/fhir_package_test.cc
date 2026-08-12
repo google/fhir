@@ -18,6 +18,7 @@
 #include <string.h>
 
 #include <cstdio>
+#include <functional>
 #include <memory>
 #include <string>
 #include <utility>
@@ -32,6 +33,7 @@
 #include "absl/strings/string_view.h"
 #include "google/fhir/json/fhir_json.h"
 #include "google/fhir/json/json_sax_handler.h"
+#include "google/fhir/status/status.h"
 #include "google/fhir/status/statusor.h"
 #include "google/fhir/testutil/archive.h"
 #include "proto/google/fhir/proto/r4/core/datatypes.pb.h"
@@ -48,6 +50,7 @@ namespace {
 using ::google::fhir::testutil::CreateTarFileContaining;
 using ::google::fhir::testutil::CreateZipFileContaining;
 using ::testing::Eq;
+using ::testing::HasSubstr;
 using ::testing::Pointee;
 using ::testing::UnorderedElementsAre;
 
@@ -919,6 +922,20 @@ TEST(ResourceCollectionTest,
   FHIR_ASSERT_OK(collection.Put(std::move(parsed_json), *resource));
 
   EXPECT_FALSE(collection.Get("http://value.set/id").ok());
+}
+
+TEST(FhirPackageTest, LoadFailsWithTooLargeEntry) {
+  std::string huge_data(100 * 1024 * 1024 + 1, 'a');
+  FHIR_ASSERT_OK_AND_ASSIGN(std::string temp_name,
+                            CreateZipFileContaining({
+                                {"large_file.json", huge_data},
+                            }));
+  absl::Cleanup temp_closer = [&temp_name] { remove(temp_name.c_str()); };
+
+  auto status = FhirPackage::Load(temp_name).status();
+  EXPECT_FALSE(status.ok());
+  EXPECT_EQ(status.code(), absl::StatusCode::kInvalidArgument);
+  EXPECT_THAT(status.message(), HasSubstr("exceeds max allowed size"));
 }
 
 }  // namespace
