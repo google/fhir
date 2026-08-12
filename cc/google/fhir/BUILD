@@ -5,6 +5,9 @@ licenses(["notice"])
 
 package(default_visibility = ["//visibility:public"])
 
+# To override this flag and disable sandboxing (e.g., for legacy clinical use cases),
+# downstream consumers can set: --//cc/google/fhir:enable_fhir_sandboxing=False
+
 package_group(
     name = "internal",
     packages = [
