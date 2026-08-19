@@ -19,6 +19,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <iterator>
+#include <locale>
 #include <map>
 #include <memory>
 #include <optional>
