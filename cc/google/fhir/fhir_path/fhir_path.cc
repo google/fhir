@@ -2811,7 +2811,7 @@ class MemberOfFunction : public SingleValueFunctionNode {
       if (system_field == nullptr) {
         system_field = coding.GetDescriptor()->FindFieldByName("system");
       }
-      absl::optional<std::string> system = absl::nullopt;
+      absl::optional<std::string> system = std::nullopt;
       if (system_field != nullptr &&
           coding.GetReflection()->HasField(coding, system_field)) {
         FHIR_ASSIGN_OR_RETURN(
@@ -2852,7 +2852,7 @@ class MemberOfFunction : public SingleValueFunctionNode {
       } else if (IsCode(*element.Message())) {
         FHIR_ASSIGN_OR_RETURN(
             bool is_member,
-            CodeIsMember(*element.Message(), /*code_system=*/absl::nullopt,
+            CodeIsMember(*element.Message(), /*code_system=*/std::nullopt,
                          value_set_id, work_space));
         membership_results.push_back(is_member);
       } else if (IsString(*element.Message())) {
@@ -3064,13 +3064,13 @@ class ComparisonOperator : public BinaryOperator {
                                              int32_t right) const {
     switch (comparison_type_) {
       case kLessThan:
-        return absl::make_optional(left < right);
+        return std::make_optional(left < right);
       case kGreaterThan:
-        return absl::make_optional(left > right);
+        return std::make_optional(left > right);
       case kLessThanEqualTo:
-        return absl::make_optional(left <= right);
+        return std::make_optional(left <= right);
       case kGreaterThanEqualTo:
-        return absl::make_optional(left >= right);
+        return std::make_optional(left >= right);
     }
   }
 
@@ -3088,20 +3088,20 @@ class ComparisonOperator : public BinaryOperator {
 
     switch (comparison_type_) {
       case kLessThan:
-        return absl::make_optional(left < right);
+        return std::make_optional(left < right);
       case kGreaterThan:
-        return absl::make_optional(left > right);
+        return std::make_optional(left > right);
       case kLessThanEqualTo:
         // Fallback to literal comparison for equality to avoid
         // rounding errors.
-        return absl::make_optional(
+        return std::make_optional(
             left <= right ||
             (left_message->GetDescriptor() == right_message->GetDescriptor() &&
              MessageDifferencer::Equals(*left_message, *right_message)));
       case kGreaterThanEqualTo:
         // Fallback to literal comparison for equality to avoid
         // rounding errors.
-        return absl::make_optional(
+        return std::make_optional(
             left >= right ||
             (left_message->GetDescriptor() == right_message->GetDescriptor() &&
              MessageDifferencer::Equals(*left_message, *right_message)));
@@ -3132,13 +3132,13 @@ class ComparisonOperator : public BinaryOperator {
 
     switch (comparison_type_) {
       case kLessThan:
-        return absl::make_optional(compare_result < 0);
+        return std::make_optional(compare_result < 0);
       case kGreaterThan:
-        return absl::make_optional(compare_result > 0);
+        return std::make_optional(compare_result > 0);
       case kLessThanEqualTo:
-        return absl::make_optional(compare_result <= 0);
+        return std::make_optional(compare_result <= 0);
       case kGreaterThanEqualTo:
-        return absl::make_optional(compare_result >= 0);
+        return std::make_optional(compare_result >= 0);
     }
   }
 
@@ -3202,13 +3202,13 @@ class ComparisonOperator : public BinaryOperator {
 
     switch (comparison_type_) {
       case kLessThan:
-        return absl::make_optional(time_difference < 0);
+        return std::make_optional(time_difference < 0);
       case kGreaterThan:
-        return absl::make_optional(time_difference > 0);
+        return std::make_optional(time_difference > 0);
       case kLessThanEqualTo:
-        return absl::make_optional(time_difference <= 0);
+        return std::make_optional(time_difference <= 0);
       case kGreaterThanEqualTo:
-        return absl::make_optional(time_difference >= 0);
+        return std::make_optional(time_difference >= 0);
     }
   }
 
