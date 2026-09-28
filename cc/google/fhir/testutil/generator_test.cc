@@ -53,7 +53,7 @@ TYPED_TEST(FhirGeneratorTest, TestAllRootFieldsSet) {
   // Create a random value provider that fills all non-recursive fields.
   RandomValueProvider::Params params = RandomValueProvider::DefaultParams();
   params.optional_set_probability = 1;
-  FhirGenerator generator(absl::make_unique<RandomValueProvider>(params),
+  FhirGenerator generator(std::make_unique<RandomValueProvider>(params),
                           TypeParam::PrimitiveHandler::GetInstance());
 
   typename TypeParam::Patient patient;
@@ -73,7 +73,7 @@ TYPED_TEST(FhirGeneratorTest, TestOnlyRequiredAndIdFieldsSet) {
   // Create a random value provider that fills only required fields.
   RandomValueProvider::Params params = RandomValueProvider::DefaultParams();
   params.optional_set_probability = 0;
-  FhirGenerator generator(absl::make_unique<RandomValueProvider>(params),
+  FhirGenerator generator(std::make_unique<RandomValueProvider>(params),
                           TypeParam::PrimitiveHandler::GetInstance());
   typename TypeParam::Patient patient;
   FHIR_ASSERT_OK(generator.Fill(&patient));
@@ -97,7 +97,7 @@ TEST(FhirGeneratorFieldsTest, TestUntypedReference) {
   RandomValueProvider::Params params = RandomValueProvider::DefaultParams();
   params.optional_set_probability = 1;
   FhirGenerator generator(
-      absl::make_unique<RandomValueProvider>(params),
+      std::make_unique<RandomValueProvider>(params),
       ::google::fhir::r4::R4PrimitiveHandler::GetInstance());
 
   FHIR_ASSERT_OK(generator.Fill(&observation));
@@ -114,7 +114,7 @@ TEST(RandomValueProviderTest, TestMaxRecursionDepth) {
   // ... but max out at 2 levels deep.
   params.max_recursion_depth = 2;
   FhirGenerator generator(
-      absl::make_unique<RandomValueProvider>(params),
+      std::make_unique<RandomValueProvider>(params),
       ::google::fhir::r4::R4PrimitiveHandler::GetInstance());
 
   ::google::fhir::r4::core::PlanDefinition plan_definition;
