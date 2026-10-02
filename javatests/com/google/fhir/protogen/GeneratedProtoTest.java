@@ -66,6 +66,9 @@ public final class GeneratedProtoTest {
     }
 
     for (String filename : generatedContentsByFilename.keySet()) {
+      if (filename.startsWith(".")) {
+        continue;
+      }
       assertThat(goldenContentsByFilename).containsKey(filename);
       assertThat(cleanProtoFile(generatedContentsByFilename.get(filename)))
           .isEqualTo(cleanProtoFile(goldenContentsByFilename.get(filename)));
