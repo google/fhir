@@ -68,6 +68,69 @@ import (
 	r3pb "github.com/google/fhir/go/proto/google/fhir/proto/stu3/resources_go_proto"
 )
 
+func TestRestoreNullsInMap(t *testing.T) {
+	m := map[string]json.RawMessage{
+		"nilValue":    nil,
+		"nullLiteral": json.RawMessage("null"),
+		"stringNull":  json.RawMessage(`"null"`),
+		"object":      json.RawMessage(`{"a":1}`),
+	}
+	restoreNullsInMap(m)
+	want := map[string]json.RawMessage{
+		"nilValue":    json.RawMessage("null"),
+		"nullLiteral": json.RawMessage("null"),
+		"stringNull":  json.RawMessage(`"null"`),
+		"object":      json.RawMessage(`{"a":1}`),
+	}
+	if diff := cmp.Diff(want, m); diff != "" {
+		t.Errorf("restoreNullsInMap() unexpected diff (-want +got):\n%s", diff)
+	}
+
+	// A nil map must not panic.
+	restoreNullsInMap(nil)
+}
+
+func TestRestoreNullsInSlice(t *testing.T) {
+	s := []json.RawMessage{nil, json.RawMessage("null"), json.RawMessage(`"null"`), json.RawMessage(`1`)}
+	restoreNullsInSlice(s)
+	want := []json.RawMessage{json.RawMessage("null"), json.RawMessage("null"), json.RawMessage(`"null"`), json.RawMessage(`1`)}
+	if diff := cmp.Diff(want, s); diff != "" {
+		t.Errorf("restoreNullsInSlice() unexpected diff (-want +got):\n%s", diff)
+	}
+
+	// A nil slice must not panic.
+	restoreNullsInSlice(nil)
+}
+
+// TestRestoreNulls_AfterJsoniterDecode checks that JSON nulls decoded by jsoniter into
+// json.RawMessage containers end up as the "null" literal, regardless of whether the
+// jsoniter version yields nil or "null" for them.
+func TestRestoreNulls_AfterJsoniterDecode(t *testing.T) {
+	var m map[string]json.RawMessage
+	if err := jsp.Unmarshal([]byte(`{"a": null, "b": "x"}`), &m); err != nil {
+		t.Fatalf("jsp.Unmarshal(map) failed: %v", err)
+	}
+	restoreNullsInMap(m)
+	if got := string(bytes.TrimSpace(m["a"])); got != "null" {
+		t.Errorf(`map["a"] = %q, want "null"`, got)
+	}
+	if got := string(bytes.TrimSpace(m["b"])); got != `"x"` {
+		t.Errorf(`map["b"] = %q, want "\"x\""`, got)
+	}
+
+	var s []json.RawMessage
+	if err := jsp.Unmarshal([]byte(`["x", null]`), &s); err != nil {
+		t.Fatalf("jsp.Unmarshal(slice) failed: %v", err)
+	}
+	restoreNullsInSlice(s)
+	if len(s) != 2 {
+		t.Fatalf("len(slice) = %d, want 2", len(s))
+	}
+	if got := string(bytes.TrimSpace(s[1])); got != "null" {
+		t.Errorf(`slice[1] = %q, want "null"`, got)
+	}
+}
+
 var (
 	unnestErrorListOpt = cmpopts.AcyclicTransformer("UnnestedErrorList", func(v interface{}) interface{} {
 		if el, ok := v.(jsonpbhelper.UnmarshalErrorList); ok && len(el) == 1 {

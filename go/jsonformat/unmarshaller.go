@@ -47,6 +47,29 @@ func init() {
 	}.Froze()
 }
 
+// jsoniter (since v1.1.11) decodes a JSON null into a nil json.RawMessage,
+// whereas encoding/json (and earlier jsoniter versions) keep the literal
+// "null" bytes. The unmarshaller relies on seeing the literal, so the helpers
+// below restore it after decoding into json.RawMessage containers.
+
+// restoreNullsInMap replaces nil values in m with the JSON null literal.
+func restoreNullsInMap(m map[string]json.RawMessage) {
+	for k, v := range m {
+		if v == nil {
+			m[k] = json.RawMessage("null")
+		}
+	}
+}
+
+// restoreNullsInSlice replaces nil elements in s with the JSON null literal.
+func restoreNullsInSlice(s []json.RawMessage) {
+	for i, v := range s {
+		if v == nil {
+			s[i] = json.RawMessage("null")
+		}
+	}
+}
+
 // Unmarshaller is an object for converting a JSON object to protocol buffer.
 type Unmarshaller struct {
 	TimeZone *time.Location
@@ -124,6 +147,7 @@ func (u *Unmarshaller) UnmarshalWithErrorReporter(in []byte, er errorreporter.Er
 			Cause:       err,
 		}
 	}
+	restoreNullsInMap(decoded)
 	return u.unmarshalJSONObject(decoded, er, opts...)
 }
 
@@ -143,6 +167,7 @@ func readFullResource(in io.Reader) (map[string]json.RawMessage, error) {
 		}
 		return nil, fmt.Errorf("invalid character '%v' after top-level value", b[0])
 	}
+	restoreNullsInMap(decoded)
 	return decoded, nil
 }
 
@@ -278,6 +303,7 @@ func (u *Unmarshaller) mergeRawMessage(jsonPath string, rm json.RawMessage, pb p
 			Diagnostics: fmt.Sprintf("%.50s", rm),
 		}
 	}
+	restoreNullsInMap(decmap)
 	return u.mergeMessage(jsonPath, decmap, pb)
 }
 
@@ -436,6 +462,7 @@ func (u *Unmarshaller) mergeField(jsonPath string, f protoreflect.FieldDescripto
 				Details: "expected array",
 			}
 		}
+		restoreNullsInSlice(rms)
 		if err := u.mergeRepeatedField(jsonPath, f, rms, pb); err != nil {
 			return err
 		}
