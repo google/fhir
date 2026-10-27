@@ -395,6 +395,14 @@ TYPED_TEST(FhirPathTest, TestMalformed) {
                                    "expression->not->valid");
 
   EXPECT_THAT(expr, HasStatusCode(StatusCode::kInternal));
+
+  EXPECT_THAT(TestFixture::Compile(TypeParam::Encounter::descriptor(), "%"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(TestFixture::Compile(TypeParam::Encounter::descriptor(), "-%"),
+              HasStatusCode(StatusCode::kInvalidArgument));
+  EXPECT_THAT(
+      TestFixture::Compile(TypeParam::Encounter::descriptor(), "\xff\xfe"),
+      HasStatusCode(StatusCode::kInvalidArgument));
 }
 
 TYPED_TEST(FhirPathTest, TestGetDirectChild) {
