@@ -18,6 +18,7 @@
 #include <any>
 #include <cstddef>
 #include <cstdint>
+#include <exception>
 #include <iterator>
 #include <locale>
 #include <map>
@@ -3716,6 +3717,12 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitInvocationExpression(
       FhirPathParser::InvocationExpressionContext* node) override {
+    // Grammar: expression '.' invocation
+    // Requires at least 3 children: [0] target expression, [1] '.',
+    // [2] invocation.
+    if (node->children.size() < kBinaryOrInvocationMinChildren) {
+      return IncompleteParseTree("invocationExpression");
+    }
     antlrcpp::Any expression = node->children[0]->accept(this);
 
     // This could be a simple member name or a parameterized function...
@@ -3768,7 +3775,7 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
       FhirPathParser::InvocationTermContext* ctx) override {
     antlrcpp::Any invocation = visitChildren(ctx);
 
-    if (!GetError().ok()) {
+    if (!GetError().ok() || !AnyHasValue(invocation)) {
       return nullptr;
     }
 
@@ -3824,6 +3831,12 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitIndexerExpression(
       FhirPathParser::IndexerExpressionContext* ctx) override {
+    // Grammar: expression '[' param=expression ']'
+    // Requires at least 3 children: [0] target expression, [1] '[',
+    // [2] index expression.
+    if (ctx->children.size() < kBinaryOrInvocationMinChildren) {
+      return IncompleteParseTree("indexerExpression");
+    }
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
 
@@ -3840,6 +3853,10 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitUnionExpression(
       FhirPathParser::UnionExpressionContext* ctx) override {
+    // Grammar: expression '|' expression
+    if (ctx->children.size() < kBinaryOrInvocationMinChildren) {
+      return IncompleteParseTree("unionExpression");
+    }
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
 
@@ -3855,6 +3872,10 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitAdditiveExpression(
       FhirPathParser::AdditiveExpressionContext* ctx) override {
+    // Grammar: expression ('+' | '-' | '&') expression
+    if (ctx->children.size() < kBinaryOrInvocationMinChildren) {
+      return IncompleteParseTree("additiveExpression");
+    }
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
     std::string op = ctx->children[1]->getText();
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
@@ -3887,6 +3908,11 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitPolarityExpression(
       FhirPathParser::PolarityExpressionContext* ctx) override {
+    // Grammar: ('+' | '-') expression
+    // Requires at least 2 children: [0] '+' or '-', [1] operand expression.
+    if (ctx->children.size() < kUnaryOrPrefixMinChildren) {
+      return IncompleteParseTree("polarityExpression");
+    }
     std::string op = ctx->children[0]->getText();
     antlrcpp::Any operand_any = ctx->children[1]->accept(this);
 
@@ -3913,6 +3939,10 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitTypeExpression(
       FhirPathParser::TypeExpressionContext* ctx) override {
+    // Grammar: expression ('is' | 'as') typeSpecifier
+    if (ctx->children.size() < kBinaryOrInvocationMinChildren) {
+      return IncompleteParseTree("typeExpression");
+    }
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
     std::string op = ctx->children[1]->getText();
     std::string type = ctx->children[2]->getText();
@@ -3938,6 +3968,10 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitEqualityExpression(
       FhirPathParser::EqualityExpressionContext* ctx) override {
+    // Grammar: expression ('=' | '~' | '!=' | '!~') expression
+    if (ctx->children.size() < kBinaryOrInvocationMinChildren) {
+      return IncompleteParseTree("equalityExpression");
+    }
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
     std::string op = ctx->children[1]->getText();
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
@@ -3971,6 +4005,10 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitInequalityExpression(
       FhirPathParser::InequalityExpressionContext* ctx) override {
+    // Grammar: expression ('<=' | '<' | '>' | '>=') expression
+    if (ctx->children.size() < kBinaryOrInvocationMinChildren) {
+      return IncompleteParseTree("inequalityExpression");
+    }
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
     std::string op = ctx->children[1]->getText();
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
@@ -4003,6 +4041,10 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitMembershipExpression(
       FhirPathParser::MembershipExpressionContext* ctx) override {
+    // Grammar: expression ('in' | 'contains') expression
+    if (ctx->children.size() < kBinaryOrInvocationMinChildren) {
+      return IncompleteParseTree("membershipExpression");
+    }
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
     std::string op = ctx->children[1]->getText();
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
@@ -4027,9 +4069,10 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   antlrcpp::Any visitMemberInvocation(
       FhirPathParser::MemberInvocationContext* ctx) override {
     std::string text;
-    if (ctx->identifier()->IDENTIFIER()) {
+    if (ctx->identifier() != nullptr && ctx->identifier()->IDENTIFIER()) {
       text = ctx->identifier()->IDENTIFIER()->getSymbol()->getText();
-    } else if (ctx->identifier()->DELIMITEDIDENTIFIER()) {
+    } else if (ctx->identifier() != nullptr &&
+               ctx->identifier()->DELIMITEDIDENTIFIER()) {
       text = ctx->identifier()->DELIMITEDIDENTIFIER()->getSymbol()->getText();
       if (text.size() < 2 || text.front() != '`' || text.back() != '`') {
         SetError(
@@ -4048,6 +4091,10 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
     if (!GetError().ok()) {
       return nullptr;
     }
+    if (ctx->function() == nullptr ||
+        ctx->function()->identifier() == nullptr) {
+      return IncompleteParseTree("functionInvocation");
+    }
 
     std::string text = ctx->function()->identifier()->getText();
     std::vector<FhirPathParser::ExpressionContext*> params;
@@ -4060,6 +4107,10 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitImpliesExpression(
       FhirPathParser::ImpliesExpressionContext* ctx) override {
+    // Grammar: expression 'implies' expression
+    if (ctx->children.size() < kBinaryOrInvocationMinChildren) {
+      return IncompleteParseTree("impliesExpression");
+    }
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
 
@@ -4075,6 +4126,10 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitOrExpression(
       FhirPathParser::OrExpressionContext* ctx) override {
+    // Grammar: expression ('or' | 'xor') expression
+    if (ctx->children.size() < kBinaryOrInvocationMinChildren) {
+      return IncompleteParseTree("orExpression");
+    }
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
     std::string op = ctx->children[1]->getText();
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
@@ -4092,6 +4147,10 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitAndExpression(
       FhirPathParser::AndExpressionContext* ctx) override {
+    // Grammar: expression 'and' expression
+    if (ctx->children.size() < kBinaryOrInvocationMinChildren) {
+      return IncompleteParseTree("andExpression");
+    }
     antlrcpp::Any left_any = ctx->children[0]->accept(this);
     antlrcpp::Any right_any = ctx->children[2]->accept(this);
 
@@ -4107,6 +4166,11 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitParenthesizedTerm(
       FhirPathParser::ParenthesizedTermContext* ctx) override {
+    // Grammar: '(' expression ')'
+    // Requires at least 2 children to access [1] inner expression ([0] is '(').
+    if (ctx->children.size() < kUnaryOrPrefixMinChildren) {
+      return IncompleteParseTree("parenthesizedTerm");
+    }
     // Simply propagate the value of the parenthesized term.
     return ctx->children[1]->accept(this);
   }
@@ -4132,6 +4196,11 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   antlrcpp::Any visitExternalConstant(
       FhirPathParser::ExternalConstantContext* ctx) override {
+    // Grammar: '%' (identifier | STRING)
+    // Requires 2 children: [0] '%', [1] identifier or STRING.
+    if (ctx->children.size() < kUnaryOrPrefixMinChildren) {
+      return IncompleteParseTree("externalConstant");
+    }
     std::string name = ctx->children[1]->getText();
     const PrimitiveHandler* primitive_handler = primitive_handler_;
     if (name == "ucum") {
@@ -4308,6 +4377,18 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
   BaseErrorListener* GetErrorListener() { return &error_listener_; }
 
  private:
+  // Minimum number of ANTLR parse-tree children required before indexing into
+  // `ctx->children` in visitor methods, protecting against incomplete trees
+  // produced by ANTLR error recovery on malformed input:
+  // - 2 children (`[0]` prefix/open token, `[1]` operand/inner node) for
+  //   unary/prefix/parenthesized rules (`polarityExpression`,
+  //   `parenthesizedTerm`, `externalConstant`).
+  // - 3 children (`[0]` left expression, `[1]` operator/delimiter token,
+  //   `[2]` right expression/invocation) for binary, invocation, and indexer
+  //   rules.
+  static constexpr size_t kUnaryOrPrefixMinChildren = 2;
+  static constexpr size_t kBinaryOrInvocationMinChildren = 3;
+
   typedef std::function<absl::StatusOr<ExpressionNode*>(
       std::shared_ptr<ExpressionNode>,
       const std::vector<FhirPathParser::ExpressionContext*>&,
@@ -4488,6 +4569,14 @@ class FhirPathCompilerVisitor : public FhirPathBaseVisitor {
 
   void SetError(const absl::Status& error) { error_ = error; }
 
+  antlrcpp::Any IncompleteParseTree(absl::string_view rule) {
+    if (GetError().ok()) {
+      SetError(InvalidArgumentError(
+          absl::StrCat("Incomplete FHIRPath parse tree at ", rule)));
+    }
+    return nullptr;
+  }
+
   FhirPathErrorListener error_listener_;
   std::vector<const Descriptor*> descriptor_stack_;
   absl::Status error_;
@@ -4667,22 +4756,33 @@ absl::StatusOr<CompiledExpression> CompiledExpression::Compile(
     fns[fn->GetName()] = fn;
   }
 
-  ANTLRInputStream input(fhir_path);
-  FhirPathLexer lexer(&input);
-  CommonTokenStream tokens(&lexer);
-  FhirPathParser parser(&tokens);
+  try {
+    ANTLRInputStream input(fhir_path);
+    FhirPathLexer lexer(&input);
+    CommonTokenStream tokens(&lexer);
+    FhirPathParser parser(&tokens);
 
-  internal::FhirPathCompilerVisitor visitor(descriptor, primitive_handler, fns);
-  parser.addErrorListener(visitor.GetErrorListener());
-  lexer.addErrorListener(visitor.GetErrorListener());
-  antlrcpp::Any result = visitor.visit(parser.expression());
+    internal::FhirPathCompilerVisitor visitor(descriptor, primitive_handler,
+                                              fns);
+    parser.addErrorListener(visitor.GetErrorListener());
+    lexer.addErrorListener(visitor.GetErrorListener());
+    antlrcpp::Any result = visitor.visit(parser.expression());
 
-  if (AnyHasValue(result) && visitor.GetError().ok()) {
-    auto root_node = AnyCast<std::shared_ptr<internal::ExpressionNode>>(result);
-    return CompiledExpression(fhir_path, root_node, primitive_handler,
-                              terminology_resolver);
-  } else {
-    return visitor.GetError();
+    if (AnyHasValue(result) && visitor.GetError().ok()) {
+      auto root_node =
+          AnyCast<std::shared_ptr<internal::ExpressionNode>>(result);
+      return CompiledExpression(fhir_path, root_node, primitive_handler,
+                                terminology_resolver);
+    } else if (!visitor.GetError().ok()) {
+      return visitor.GetError();
+    } else {
+      return absl::InternalError(
+          "FHIRPath compilation produced neither an expression nor an error.");
+    }
+  } catch (const antlr4::IllegalArgumentException& e) {
+    // Thrown by ANTLRInputStream for byte sequences that are not valid UTF-8.
+    return absl::InvalidArgumentError(
+        absl::StrCat("Invalid FHIRPath expression: ", e.what()));
   }
 }
 
