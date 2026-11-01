@@ -59,6 +59,7 @@ import com.google.fhir.r4.core.StructureDefinition;
 import com.google.fhir.r4.core.StructureDefinitionKindCode;
 import com.google.fhir.r4.core.TypeDerivationRuleCode;
 import com.google.protobuf.DescriptorProtos.DescriptorProto;
+import com.google.protobuf.DescriptorProtos.Edition;
 import com.google.protobuf.DescriptorProtos.EnumDescriptorProto;
 import com.google.protobuf.DescriptorProtos.EnumValueDescriptorProto;
 import com.google.protobuf.DescriptorProtos.FieldDescriptorProto;
@@ -214,6 +215,8 @@ public class ProtoGenerator {
 
   private final ImmutableMap<String, Set<String>> coreTypeDefinitionsByFile;
 
+  private final String edition;
+
   private static Set<String> getTypesDefinedInFile(FileDescriptor file) {
     return file.getMessageTypes().stream()
         .flatMap(desc -> getTypesDefinedInType(desc).stream())
@@ -261,19 +264,21 @@ public class ProtoGenerator {
   public ProtoGenerator(
       PackageInfo packageInfo, String codesProtoImport, Set<FhirPackage> fhirPackages)
       throws InvalidFhirException {
-    this(packageInfo, codesProtoImport, fhirPackages, null);
+    this(packageInfo, codesProtoImport, fhirPackages, null, "");
   }
 
   public ProtoGenerator(
       PackageInfo packageInfo,
       String codesProtoImport,
       Set<FhirPackage> fhirPackages,
-      ValueSetGenerator valueSetGenerator)
+      ValueSetGenerator valueSetGenerator,
+      String edition)
       throws InvalidFhirException {
     this.packageInfo = packageInfo;
     this.codesProtoImport = codesProtoImport;
     this.fhirVersion = FhirVersion.fromAnnotation(packageInfo.getFhirVersion());
     this.valueSetGenerator = valueSetGenerator;
+    this.edition = edition;
 
     ImmutableMap.Builder<String, Set<String>> coreTypeBuilder = new ImmutableMap.Builder<>();
     for (Map.Entry<String, FileDescriptor> entry : fhirVersion.coreTypeMap.entrySet()) {
@@ -1834,7 +1839,13 @@ public class ProtoGenerator {
   public FileDescriptorProto generateFileDescriptor(
       List<StructureDefinition> defs, List<String> additionalImports) throws InvalidFhirException {
     FileDescriptorProto.Builder builder = FileDescriptorProto.newBuilder();
-    builder.setPackage(packageInfo.getProtoPackage()).setSyntax("proto3");
+    builder.setPackage(packageInfo.getProtoPackage());
+    if (this.edition.equals("2023")) {
+      builder.setSyntax("editions");
+      builder.setEdition(Edition.EDITION_2023);
+    } else {
+      builder.setSyntax("proto3");
+    }
     FileOptions.Builder options = FileOptions.newBuilder();
     if (!packageInfo.getJavaProtoPackage().isEmpty()) {
       options.setJavaPackage(packageInfo.getJavaProtoPackage()).setJavaMultipleFiles(true);
