@@ -77,7 +77,7 @@ absl::StatusOr<absl::optional<std::string>> ReferenceProtoToString(
     return absl::StrCat("#", fragment_value);
   }
 
-  static const google::protobuf::OneofDescriptor* oneof =
+  const google::protobuf::OneofDescriptor* oneof =
       descriptor->FindOneofByName("reference");
   if (oneof == nullptr) {
     return absl::InvalidArgumentError(
