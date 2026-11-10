@@ -110,6 +110,11 @@ class ProtoGeneratorMain {
     private String outputName = "output";
 
     @Parameter(
+        names = {"--edition"},
+        description = "proto edition")
+    private String edition = "";
+
+    @Parameter(
         names = {"--input_package"},
         description = "Input FHIR package",
         required = true)
@@ -160,13 +165,15 @@ class ProtoGeneratorMain {
     // Generate the proto file.
     System.out.println("Generating proto descriptors...");
 
-    ValueSetGenerator valueSetGenerator = new ValueSetGenerator(packageInfo, fhirPackages);
+    ValueSetGenerator valueSetGenerator =
+        new ValueSetGenerator(packageInfo, fhirPackages, args.edition);
     ProtoGenerator generator =
         new ProtoGenerator(
             packageInfo,
             args.directoryInSource + "/" + args.outputName + "_codes.proto",
             fhirPackages,
-            valueSetGenerator);
+            valueSetGenerator,
+            args.edition);
     ProtoFilePrinter printer = new ProtoFilePrinter(packageInfo);
 
     try (ZipOutputStream zipOutputStream =
