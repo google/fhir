@@ -20,6 +20,7 @@ import "google/protobuf/descriptor.proto";
 
 option java_outer_classname = "ProtoGeneratorAnnotations";
 option java_package = "com.google.fhir.proto";
+option go_package = "github.com/google/fhir/go/proto/google/fhir/proto";
 
 // This file defines extensions to FieldOptions and MessageOptions for use by
 // the ProtoFilePrinter to give directives to as to how things should be
