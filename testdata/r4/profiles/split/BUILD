@@ -24,6 +24,7 @@ gen_fhir_definitions_and_protos(
 )
 
 fhir_proto_library(
+    name = "all",
     srcs = glob(["*.proto"]),
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -31,7 +32,6 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:codes_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
     ],
-    proto_library_prefix = "all",
 )
 
 # Export config files for use in "retagging split" version of test profile.

@@ -161,12 +161,13 @@ PROTO_DEPS = [
 ]
 
 fhir_proto_library(
+    name = "bundle_and_contained_resource",
     srcs = ["bundle_and_contained_resource.proto"],
     proto_deps = PROTO_DEPS,
-    proto_library_prefix = "bundle_and_contained_resource",
 )
 
 fhir_proto_library(
+    name = "account",
     srcs = ["account.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -175,10 +176,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "account",
 )
 
 fhir_proto_library(
+    name = "activity_definition",
     srcs = ["activity_definition.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -187,10 +188,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "activity_definition",
 )
 
 fhir_proto_library(
+    name = "adverse_event",
     srcs = ["adverse_event.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -199,10 +200,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "adverse_event",
 )
 
 fhir_proto_library(
+    name = "allergy_intolerance",
     srcs = ["allergy_intolerance.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -211,10 +212,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "allergy_intolerance",
 )
 
 fhir_proto_library(
+    name = "appointment",
     srcs = ["appointment.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -223,10 +224,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "appointment",
 )
 
 fhir_proto_library(
+    name = "appointment_response",
     srcs = ["appointment_response.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -235,10 +236,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "appointment_response",
 )
 
 fhir_proto_library(
+    name = "audit_event",
     srcs = ["audit_event.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -247,10 +248,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "audit_event",
 )
 
 fhir_proto_library(
+    name = "basic",
     srcs = ["basic.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -259,10 +260,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "basic",
 )
 
 fhir_proto_library(
+    name = "binary",
     srcs = ["binary.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -271,10 +272,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "binary",
 )
 
 fhir_proto_library(
+    name = "biologically_derived_product",
     srcs = ["biologically_derived_product.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -283,10 +284,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "biologically_derived_product",
 )
 
 fhir_proto_library(
+    name = "body_structure",
     srcs = ["body_structure.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -295,10 +296,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "body_structure",
 )
 
 fhir_proto_library(
+    name = "capability_statement",
     srcs = ["capability_statement.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -307,10 +308,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "capability_statement",
 )
 
 fhir_proto_library(
+    name = "care_plan",
     srcs = ["care_plan.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -319,10 +320,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "care_plan",
 )
 
 fhir_proto_library(
+    name = "care_team",
     srcs = ["care_team.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -331,10 +332,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "care_team",
 )
 
 fhir_proto_library(
+    name = "catalog_entry",
     srcs = ["catalog_entry.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -343,10 +344,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "catalog_entry",
 )
 
 fhir_proto_library(
+    name = "charge_item",
     srcs = ["charge_item.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -355,10 +356,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "charge_item",
 )
 
 fhir_proto_library(
+    name = "charge_item_definition",
     srcs = ["charge_item_definition.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -367,10 +368,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "charge_item_definition",
 )
 
 fhir_proto_library(
+    name = "claim",
     srcs = ["claim.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -379,10 +380,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "claim",
 )
 
 fhir_proto_library(
+    name = "claim_response",
     srcs = ["claim_response.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -391,10 +392,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "claim_response",
 )
 
 fhir_proto_library(
+    name = "clinical_impression",
     srcs = ["clinical_impression.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -403,10 +404,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "clinical_impression",
 )
 
 fhir_proto_library(
+    name = "code_system",
     srcs = ["code_system.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -415,10 +416,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "code_system",
 )
 
 fhir_proto_library(
+    name = "communication",
     srcs = ["communication.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -427,10 +428,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "communication",
 )
 
 fhir_proto_library(
+    name = "communication_request",
     srcs = ["communication_request.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -439,10 +440,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "communication_request",
 )
 
 fhir_proto_library(
+    name = "compartment_definition",
     srcs = ["compartment_definition.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -451,10 +452,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "compartment_definition",
 )
 
 fhir_proto_library(
+    name = "composition",
     srcs = ["composition.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -463,10 +464,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "composition",
 )
 
 fhir_proto_library(
+    name = "concept_map",
     srcs = ["concept_map.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -475,10 +476,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "concept_map",
 )
 
 fhir_proto_library(
+    name = "condition",
     srcs = ["condition.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -487,10 +488,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "condition",
 )
 
 fhir_proto_library(
+    name = "consent",
     srcs = ["consent.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -499,10 +500,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "consent",
 )
 
 fhir_proto_library(
+    name = "contract",
     srcs = ["contract.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -511,10 +512,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "contract",
 )
 
 fhir_proto_library(
+    name = "coverage",
     srcs = ["coverage.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -523,10 +524,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "coverage",
 )
 
 fhir_proto_library(
+    name = "coverage_eligibility_request",
     srcs = ["coverage_eligibility_request.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -535,10 +536,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "coverage_eligibility_request",
 )
 
 fhir_proto_library(
+    name = "coverage_eligibility_response",
     srcs = ["coverage_eligibility_response.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -547,10 +548,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "coverage_eligibility_response",
 )
 
 fhir_proto_library(
+    name = "detected_issue",
     srcs = ["detected_issue.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -559,10 +560,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "detected_issue",
 )
 
 fhir_proto_library(
+    name = "device",
     srcs = ["device.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -571,10 +572,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "device",
 )
 
 fhir_proto_library(
+    name = "device_definition",
     srcs = ["device_definition.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -583,10 +584,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "device_definition",
 )
 
 fhir_proto_library(
+    name = "device_metric",
     srcs = ["device_metric.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -595,10 +596,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "device_metric",
 )
 
 fhir_proto_library(
+    name = "device_request",
     srcs = ["device_request.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -607,10 +608,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "device_request",
 )
 
 fhir_proto_library(
+    name = "device_use_statement",
     srcs = ["device_use_statement.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -619,10 +620,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "device_use_statement",
 )
 
 fhir_proto_library(
+    name = "diagnostic_report",
     srcs = ["diagnostic_report.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -631,10 +632,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "diagnostic_report",
 )
 
 fhir_proto_library(
+    name = "document_manifest",
     srcs = ["document_manifest.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -643,10 +644,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "document_manifest",
 )
 
 fhir_proto_library(
+    name = "document_reference",
     srcs = ["document_reference.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -655,10 +656,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "document_reference",
 )
 
 fhir_proto_library(
+    name = "domain_resource",
     srcs = ["domain_resource.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -667,10 +668,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "domain_resource",
 )
 
 fhir_proto_library(
+    name = "effect_evidence_synthesis",
     srcs = ["effect_evidence_synthesis.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -679,10 +680,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "effect_evidence_synthesis",
 )
 
 fhir_proto_library(
+    name = "encounter",
     srcs = ["encounter.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -691,10 +692,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "encounter",
 )
 
 fhir_proto_library(
+    name = "endpoint",
     srcs = ["endpoint.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -703,10 +704,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "endpoint",
 )
 
 fhir_proto_library(
+    name = "enrollment_request",
     srcs = ["enrollment_request.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -715,10 +716,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "enrollment_request",
 )
 
 fhir_proto_library(
+    name = "enrollment_response",
     srcs = ["enrollment_response.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -727,10 +728,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "enrollment_response",
 )
 
 fhir_proto_library(
+    name = "episode_of_care",
     srcs = ["episode_of_care.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -739,10 +740,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "episode_of_care",
 )
 
 fhir_proto_library(
+    name = "event_definition",
     srcs = ["event_definition.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -751,10 +752,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "event_definition",
 )
 
 fhir_proto_library(
+    name = "evidence",
     srcs = ["evidence.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -763,10 +764,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "evidence",
 )
 
 fhir_proto_library(
+    name = "evidence_variable",
     srcs = ["evidence_variable.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -775,10 +776,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "evidence_variable",
 )
 
 fhir_proto_library(
+    name = "example_scenario",
     srcs = ["example_scenario.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -787,10 +788,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "example_scenario",
 )
 
 fhir_proto_library(
+    name = "explanation_of_benefit",
     srcs = ["explanation_of_benefit.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -799,10 +800,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "explanation_of_benefit",
 )
 
 fhir_proto_library(
+    name = "family_member_history",
     srcs = ["family_member_history.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -811,10 +812,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "family_member_history",
 )
 
 fhir_proto_library(
+    name = "flag",
     srcs = ["flag.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -823,10 +824,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "flag",
 )
 
 fhir_proto_library(
+    name = "goal",
     srcs = ["goal.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -835,10 +836,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "goal",
 )
 
 fhir_proto_library(
+    name = "graph_definition",
     srcs = ["graph_definition.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -847,10 +848,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "graph_definition",
 )
 
 fhir_proto_library(
+    name = "group",
     srcs = ["group.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -859,10 +860,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "group",
 )
 
 fhir_proto_library(
+    name = "guidance_response",
     srcs = ["guidance_response.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -871,10 +872,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "guidance_response",
 )
 
 fhir_proto_library(
+    name = "healthcare_service",
     srcs = ["healthcare_service.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -883,10 +884,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "healthcare_service",
 )
 
 fhir_proto_library(
+    name = "imaging_study",
     srcs = ["imaging_study.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -895,10 +896,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "imaging_study",
 )
 
 fhir_proto_library(
+    name = "immunization",
     srcs = ["immunization.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -907,10 +908,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "immunization",
 )
 
 fhir_proto_library(
+    name = "immunization_evaluation",
     srcs = ["immunization_evaluation.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -919,10 +920,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "immunization_evaluation",
 )
 
 fhir_proto_library(
+    name = "immunization_recommendation",
     srcs = ["immunization_recommendation.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -931,10 +932,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "immunization_recommendation",
 )
 
 fhir_proto_library(
+    name = "implementation_guide",
     srcs = ["implementation_guide.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -943,10 +944,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "implementation_guide",
 )
 
 fhir_proto_library(
+    name = "insurance_plan",
     srcs = ["insurance_plan.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -955,10 +956,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "insurance_plan",
 )
 
 fhir_proto_library(
+    name = "invoice",
     srcs = ["invoice.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -967,10 +968,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "invoice",
 )
 
 fhir_proto_library(
+    name = "library",
     srcs = ["library.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -979,10 +980,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "library",
 )
 
 fhir_proto_library(
+    name = "linkage",
     srcs = ["linkage.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -991,10 +992,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "linkage",
 )
 
 fhir_proto_library(
+    name = "list",
     srcs = ["list.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1003,10 +1004,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "list",
 )
 
 fhir_proto_library(
+    name = "location",
     srcs = ["location.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1015,10 +1016,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "location",
 )
 
 fhir_proto_library(
+    name = "measure",
     srcs = ["measure.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1027,10 +1028,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "measure",
 )
 
 fhir_proto_library(
+    name = "measure_report",
     srcs = ["measure_report.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1039,10 +1040,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "measure_report",
 )
 
 fhir_proto_library(
+    name = "media",
     srcs = ["media.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1051,10 +1052,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "media",
 )
 
 fhir_proto_library(
+    name = "medication",
     srcs = ["medication.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1063,10 +1064,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "medication",
 )
 
 fhir_proto_library(
+    name = "medication_administration",
     srcs = ["medication_administration.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1075,10 +1076,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "medication_administration",
 )
 
 fhir_proto_library(
+    name = "medication_dispense",
     srcs = ["medication_dispense.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1087,10 +1088,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "medication_dispense",
 )
 
 fhir_proto_library(
+    name = "medication_knowledge",
     srcs = ["medication_knowledge.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1099,10 +1100,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "medication_knowledge",
 )
 
 fhir_proto_library(
+    name = "medication_request",
     srcs = ["medication_request.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1111,10 +1112,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "medication_request",
 )
 
 fhir_proto_library(
+    name = "medication_statement",
     srcs = ["medication_statement.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1123,10 +1124,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "medication_statement",
 )
 
 fhir_proto_library(
+    name = "medicinal_product",
     srcs = ["medicinal_product.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1135,10 +1136,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "medicinal_product",
 )
 
 fhir_proto_library(
+    name = "medicinal_product_authorization",
     srcs = ["medicinal_product_authorization.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1147,10 +1148,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "medicinal_product_authorization",
 )
 
 fhir_proto_library(
+    name = "medicinal_product_contraindication",
     srcs = ["medicinal_product_contraindication.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1159,10 +1160,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "medicinal_product_contraindication",
 )
 
 fhir_proto_library(
+    name = "medicinal_product_indication",
     srcs = ["medicinal_product_indication.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1171,10 +1172,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "medicinal_product_indication",
 )
 
 fhir_proto_library(
+    name = "medicinal_product_ingredient",
     srcs = ["medicinal_product_ingredient.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1183,10 +1184,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "medicinal_product_ingredient",
 )
 
 fhir_proto_library(
+    name = "medicinal_product_interaction",
     srcs = ["medicinal_product_interaction.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1195,10 +1196,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "medicinal_product_interaction",
 )
 
 fhir_proto_library(
+    name = "medicinal_product_manufactured",
     srcs = ["medicinal_product_manufactured.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1207,10 +1208,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "medicinal_product_manufactured",
 )
 
 fhir_proto_library(
+    name = "medicinal_product_packaged",
     srcs = ["medicinal_product_packaged.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1219,10 +1220,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "medicinal_product_packaged",
 )
 
 fhir_proto_library(
+    name = "medicinal_product_pharmaceutical",
     srcs = ["medicinal_product_pharmaceutical.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1231,10 +1232,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "medicinal_product_pharmaceutical",
 )
 
 fhir_proto_library(
+    name = "medicinal_product_undesirable_effect",
     srcs = ["medicinal_product_undesirable_effect.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1243,10 +1244,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "medicinal_product_undesirable_effect",
 )
 
 fhir_proto_library(
+    name = "message_definition",
     srcs = ["message_definition.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1255,10 +1256,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "message_definition",
 )
 
 fhir_proto_library(
+    name = "message_header",
     srcs = ["message_header.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1267,10 +1268,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "message_header",
 )
 
 fhir_proto_library(
+    name = "molecular_sequence",
     srcs = ["molecular_sequence.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1279,10 +1280,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "molecular_sequence",
 )
 
 fhir_proto_library(
+    name = "naming_system",
     srcs = ["naming_system.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1291,10 +1292,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "naming_system",
 )
 
 fhir_proto_library(
+    name = "nutrition_order",
     srcs = ["nutrition_order.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1303,10 +1304,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "nutrition_order",
 )
 
 fhir_proto_library(
+    name = "observation",
     srcs = ["observation.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1315,10 +1316,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "observation",
 )
 
 fhir_proto_library(
+    name = "observation_definition",
     srcs = ["observation_definition.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1327,10 +1328,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "observation_definition",
 )
 
 fhir_proto_library(
+    name = "operation_definition",
     srcs = ["operation_definition.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1339,10 +1340,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "operation_definition",
 )
 
 fhir_proto_library(
+    name = "operation_outcome",
     srcs = ["operation_outcome.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1351,10 +1352,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "operation_outcome",
 )
 
 fhir_proto_library(
+    name = "organization",
     srcs = ["organization.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1363,10 +1364,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "organization",
 )
 
 fhir_proto_library(
+    name = "organization_affiliation",
     srcs = ["organization_affiliation.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1375,10 +1376,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "organization_affiliation",
 )
 
 fhir_proto_library(
+    name = "parameters",
     srcs = ["parameters.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1387,10 +1388,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "parameters",
 )
 
 fhir_proto_library(
+    name = "patient",
     srcs = ["patient.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1399,10 +1400,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "patient",
 )
 
 fhir_proto_library(
+    name = "payment_notice",
     srcs = ["payment_notice.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1411,10 +1412,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "payment_notice",
 )
 
 fhir_proto_library(
+    name = "payment_reconciliation",
     srcs = ["payment_reconciliation.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1423,10 +1424,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "payment_reconciliation",
 )
 
 fhir_proto_library(
+    name = "person",
     srcs = ["person.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1435,10 +1436,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "person",
 )
 
 fhir_proto_library(
+    name = "plan_definition",
     srcs = ["plan_definition.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1447,10 +1448,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "plan_definition",
 )
 
 fhir_proto_library(
+    name = "practitioner",
     srcs = ["practitioner.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1459,10 +1460,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "practitioner",
 )
 
 fhir_proto_library(
+    name = "practitioner_role",
     srcs = ["practitioner_role.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1471,10 +1472,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "practitioner_role",
 )
 
 fhir_proto_library(
+    name = "procedure",
     srcs = ["procedure.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1483,10 +1484,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "procedure",
 )
 
 fhir_proto_library(
+    name = "provenance",
     srcs = ["provenance.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1495,10 +1496,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "provenance",
 )
 
 fhir_proto_library(
+    name = "questionnaire",
     srcs = ["questionnaire.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1507,10 +1508,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "questionnaire",
 )
 
 fhir_proto_library(
+    name = "questionnaire_response",
     srcs = ["questionnaire_response.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1519,10 +1520,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "questionnaire_response",
 )
 
 fhir_proto_library(
+    name = "related_person",
     srcs = ["related_person.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1531,10 +1532,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "related_person",
 )
 
 fhir_proto_library(
+    name = "request_group",
     srcs = ["request_group.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1543,10 +1544,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "request_group",
 )
 
 fhir_proto_library(
+    name = "research_definition",
     srcs = ["research_definition.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1555,10 +1556,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "research_definition",
 )
 
 fhir_proto_library(
+    name = "research_element_definition",
     srcs = ["research_element_definition.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1567,10 +1568,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "research_element_definition",
 )
 
 fhir_proto_library(
+    name = "research_study",
     srcs = ["research_study.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1579,10 +1580,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "research_study",
 )
 
 fhir_proto_library(
+    name = "research_subject",
     srcs = ["research_subject.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1591,10 +1592,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "research_subject",
 )
 
 fhir_proto_library(
+    name = "resource",
     srcs = ["resource.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1603,10 +1604,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "resource",
 )
 
 fhir_proto_library(
+    name = "risk_assessment",
     srcs = ["risk_assessment.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1615,10 +1616,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "risk_assessment",
 )
 
 fhir_proto_library(
+    name = "risk_evidence_synthesis",
     srcs = ["risk_evidence_synthesis.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1627,10 +1628,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "risk_evidence_synthesis",
 )
 
 fhir_proto_library(
+    name = "schedule",
     srcs = ["schedule.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1639,10 +1640,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "schedule",
 )
 
 fhir_proto_library(
+    name = "search_parameter",
     srcs = ["search_parameter.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1651,10 +1652,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "search_parameter",
 )
 
 fhir_proto_library(
+    name = "service_request",
     srcs = ["service_request.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1663,10 +1664,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "service_request",
 )
 
 fhir_proto_library(
+    name = "slot",
     srcs = ["slot.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1675,10 +1676,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "slot",
 )
 
 fhir_proto_library(
+    name = "specimen",
     srcs = ["specimen.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1687,10 +1688,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "specimen",
 )
 
 fhir_proto_library(
+    name = "specimen_definition",
     srcs = ["specimen_definition.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1699,10 +1700,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "specimen_definition",
 )
 
 fhir_proto_library(
+    name = "structure_definition",
     srcs = ["structure_definition.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1711,10 +1712,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "structure_definition",
 )
 
 fhir_proto_library(
+    name = "structure_map",
     srcs = ["structure_map.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1723,10 +1724,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "structure_map",
 )
 
 fhir_proto_library(
+    name = "subscription",
     srcs = ["subscription.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1735,10 +1736,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "subscription",
 )
 
 fhir_proto_library(
+    name = "substance",
     srcs = ["substance.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1747,10 +1748,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "substance",
 )
 
 fhir_proto_library(
+    name = "substance_nucleic_acid",
     srcs = ["substance_nucleic_acid.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1759,10 +1760,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "substance_nucleic_acid",
 )
 
 fhir_proto_library(
+    name = "substance_polymer",
     srcs = ["substance_polymer.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1771,10 +1772,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "substance_polymer",
 )
 
 fhir_proto_library(
+    name = "substance_protein",
     srcs = ["substance_protein.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1783,10 +1784,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "substance_protein",
 )
 
 fhir_proto_library(
+    name = "substance_reference_information",
     srcs = ["substance_reference_information.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1795,10 +1796,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "substance_reference_information",
 )
 
 fhir_proto_library(
+    name = "substance_source_material",
     srcs = ["substance_source_material.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1807,10 +1808,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "substance_source_material",
 )
 
 fhir_proto_library(
+    name = "substance_specification",
     srcs = ["substance_specification.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1819,10 +1820,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "substance_specification",
 )
 
 fhir_proto_library(
+    name = "supply_delivery",
     srcs = ["supply_delivery.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1831,10 +1832,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "supply_delivery",
 )
 
 fhir_proto_library(
+    name = "supply_request",
     srcs = ["supply_request.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1843,10 +1844,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "supply_request",
 )
 
 fhir_proto_library(
+    name = "task",
     srcs = ["task.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1855,10 +1856,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "task",
 )
 
 fhir_proto_library(
+    name = "terminology_capabilities",
     srcs = ["terminology_capabilities.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1867,10 +1868,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "terminology_capabilities",
 )
 
 fhir_proto_library(
+    name = "test_report",
     srcs = ["test_report.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1879,10 +1880,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "test_report",
 )
 
 fhir_proto_library(
+    name = "test_script",
     srcs = ["test_script.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1891,10 +1892,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "test_script",
 )
 
 fhir_proto_library(
+    name = "value_set",
     srcs = ["value_set.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1903,10 +1904,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "value_set",
 )
 
 fhir_proto_library(
+    name = "verification_result",
     srcs = ["verification_result.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1915,10 +1916,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "verification_result",
 )
 
 fhir_proto_library(
+    name = "vision_prescription",
     srcs = ["vision_prescription.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1927,10 +1928,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "vision_prescription",
 )
 
 fhir_proto_library(
+    name = "metadata_resource",
     srcs = ["metadata_resource.proto"],
     proto_deps = [
         "@com_google_protobuf//:any_proto",
@@ -1939,7 +1940,6 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "metadata_resource",
 )
 
 # We also make the .proto files readable for testing.

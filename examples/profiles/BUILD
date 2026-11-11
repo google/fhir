@@ -20,6 +20,7 @@ gen_fhir_definitions_and_protos(
 )
 
 fhir_proto_library(
+    name = "demo",  # buildifier: disable=duplicated-name
     srcs = [
         "demo.proto",
     ],
@@ -32,5 +33,4 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:extensions_proto",
     ],
-    proto_library_prefix = "demo",
 )

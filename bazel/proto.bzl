@@ -11,15 +11,25 @@ GO_WELL_KNOWN_PROTOS = {
     "any_proto": "@org_golang_google_protobuf//types/known/anypb:go_default_library",
 }
 
-def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = [], **kwargs):
+def fhir_proto_library(
+        name = None,
+        proto_library_prefix = None,
+        srcs = [],
+        proto_deps = [],
+        **kwargs):
     """Generates proto_library target, as well as {cc,java,go}_proto_library targets.
 
     Args:
-      proto_library_prefix: Name prefix to be added to various proto libraries.
+      name: Name prefix to be added to various proto libraries.
+      proto_library_prefix: Deprecated name prefix to be added to various proto libraries.
       srcs: Srcs for the proto library.
       proto_deps: Deps by the proto_library.
       **kwargs: varargs. Passed through to proto rules.
     """
+    prefix = name or proto_library_prefix
+    if not prefix:
+        fail("Either name or proto_library_prefix must be specified.")
+
     cc_deps = []
     go_deps = []
     has_well_known_dep = False
@@ -35,21 +45,21 @@ def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = [], **kwarg
             go_deps.append(x[:-6] + "_go_proto")
 
     proto_library(
-        name = proto_library_prefix + "_proto",
+        name = prefix + "_proto",
         srcs = srcs,
         deps = proto_deps,
         **kwargs
     )
 
     cc_proto_library(
-        name = proto_library_prefix + "_cc_proto",
-        deps = [proto_library_prefix + "_proto"],
+        name = prefix + "_cc_proto",
+        deps = [prefix + "_proto"],
     )
 
     native.java_proto_library(
-        name = proto_library_prefix + "_java_proto",
+        name = prefix + "_java_proto",
         deps = [
-            ":" + proto_library_prefix + "_proto",
+            ":" + prefix + "_proto",
         ],
         **kwargs
     )
@@ -59,19 +69,19 @@ def fhir_proto_library(proto_library_prefix, srcs = [], proto_deps = [], **kwarg
         importpath_prefix = "github.com/google/fhir/"
 
     go_proto_library(
-        name = proto_library_prefix + "_go_proto",
+        name = prefix + "_go_proto",
         deps = go_deps,
-        proto = ":" + proto_library_prefix + "_proto",
-        importpath = importpath_prefix + native.package_name() + "/" + proto_library_prefix + "_go_proto",
+        proto = ":" + prefix + "_proto",
+        importpath = importpath_prefix + native.package_name() + "/" + prefix + "_go_proto",
         **kwargs
     )
 
 def _fhir_individual_resource_rules(resource_files, deps):
     for resource_file in resource_files:
         fhir_proto_library(
+            name = resource_file[:-6],
             srcs = [resource_file],
             proto_deps = deps,
-            proto_library_prefix = resource_file[:-6],
         )
 
 def fhir_resource_rules(resource_files, deps):
@@ -82,9 +92,9 @@ def fhir_resource_rules(resource_files, deps):
     resources_as_dep = [":" + file[:-6] + "_proto" for file in resource_files]
 
     fhir_proto_library(
+        name = "bundle_and_contained_resource",
         srcs = ["bundle_and_contained_resource.proto"],
         proto_deps = deps + resources_as_dep,
-        proto_library_prefix = "bundle_and_contained_resource",
     )
 
 def fhir_profile_rules(resource_files, deps):

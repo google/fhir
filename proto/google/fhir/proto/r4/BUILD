@@ -8,6 +8,7 @@ licenses(["notice"])
 exports_files(["version_config.textproto"])
 
 fhir_proto_library(
+    name = "fhirproto",
     srcs = [
         "fhirproto.proto",
     ],
@@ -17,10 +18,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:codes_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
     ],
-    proto_library_prefix = "fhirproto",
 )
 
 fhir_proto_library(
+    name = "fhirproto_extensions",
     srcs = [
         "fhirproto_extensions.proto",
     ],
@@ -29,10 +30,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:codes_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
     ],
-    proto_library_prefix = "fhirproto_extensions",
 )
 
 fhir_proto_library(
+    name = "ml_extensions",
     srcs = [
         "ml_extensions.proto",
     ],
@@ -41,7 +42,6 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:codes_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
     ],
-    proto_library_prefix = "ml_extensions",
 )
 
 gen_fhir_protos(
@@ -51,6 +51,7 @@ gen_fhir_protos(
 )
 
 fhir_proto_library(
+    name = "uscore",  # buildifier: disable=duplicated-name
     srcs = [
         "uscore.proto",
     ],
@@ -62,10 +63,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//proto/google/fhir/proto/r4/core:valuesets_proto",
     ],
-    proto_library_prefix = "uscore",
 )
 
 fhir_proto_library(
+    name = "uscore_codes",
     srcs = [
         "uscore_codes.proto",
     ],
@@ -73,13 +74,12 @@ fhir_proto_library(
         "//proto/google/fhir/proto:annotations_proto",
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
     ],
-    proto_library_prefix = "uscore_codes",
 )
 
 fhir_proto_library(
+    name = "primitive_test_suite",
     srcs = ["primitive_test_suite.proto"],
     proto_deps = [
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
     ],
-    proto_library_prefix = "primitive_test_suite",
 )

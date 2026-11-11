@@ -8,33 +8,34 @@ licenses(["notice"])
 exports_files(["version_config.textproto"])
 
 fhir_proto_library(
+    name = "datatypes",
     srcs = ["datatypes.proto"],
     proto_deps = [
         "//proto/google/fhir/proto:annotations_proto",
     ],
-    proto_library_prefix = "datatypes",
 )
 
 fhir_proto_library(
+    name = "codes",
     srcs = ["codes.proto"],
     proto_deps = [
         ":datatypes_proto",
         "//proto/google/fhir/proto:annotations_proto",
     ],
-    proto_library_prefix = "codes",
 )
 
 fhir_proto_library(
+    name = "metadatatypes",
     srcs = ["metadatatypes.proto"],
     proto_deps = [
         ":codes_proto",
         ":datatypes_proto",
         "//proto/google/fhir/proto:annotations_proto",
     ],
-    proto_library_prefix = "metadatatypes",
 )
 
 fhir_proto_library(
+    name = "extensions",
     srcs = [
         "extensions.proto",
     ],
@@ -43,10 +44,10 @@ fhir_proto_library(
         ":datatypes_proto",
         "//proto/google/fhir/proto:annotations_proto",
     ],
-    proto_library_prefix = "extensions",
 )
 
 fhir_proto_library(
+    name = "fhirproto_extensions",
     srcs = [
         "fhirproto_extensions.proto",
     ],
@@ -55,10 +56,10 @@ fhir_proto_library(
         ":datatypes_proto",
         "//proto/google/fhir/proto:annotations_proto",
     ],
-    proto_library_prefix = "fhirproto_extensions",
 )
 
 fhir_proto_library(
+    name = "ml_extensions",
     srcs = [
         "ml_extensions.proto",
     ],
@@ -67,10 +68,10 @@ fhir_proto_library(
         ":datatypes_proto",
         "//proto/google/fhir/proto:annotations_proto",
     ],
-    proto_library_prefix = "ml_extensions",
 )
 
 fhir_proto_library(
+    name = "resources",
     srcs = [
         "resources.proto",
     ],
@@ -80,10 +81,10 @@ fhir_proto_library(
         ":metadatatypes_proto",
         "//proto/google/fhir/proto:annotations_proto",
     ],
-    proto_library_prefix = "resources",
 )
 
 fhir_proto_library(
+    name = "profiles",
     srcs = [
         "profiles.proto",
     ],
@@ -95,7 +96,6 @@ fhir_proto_library(
         ":resources_proto",
         "//proto/google/fhir/proto:annotations_proto",
     ],
-    proto_library_prefix = "profiles",
 )
 
 gen_fhir_protos(
@@ -109,6 +109,7 @@ gen_fhir_protos(
 )
 
 fhir_proto_library(
+    name = "uscore",  # buildifier: disable=duplicated-name
     srcs = [
         "uscore.proto",
     ],
@@ -120,10 +121,10 @@ fhir_proto_library(
         ":uscore_codes_proto",
         "//proto/google/fhir/proto:annotations_proto",
     ],
-    proto_library_prefix = "uscore",
 )
 
 fhir_proto_library(
+    name = "uscore_codes",
     srcs = [
         "uscore_codes.proto",
     ],
@@ -131,15 +132,14 @@ fhir_proto_library(
         ":datatypes_proto",
         "//proto/google/fhir/proto:annotations_proto",
     ],
-    proto_library_prefix = "uscore_codes",
 )
 
 fhir_proto_library(
+    name = "primitive_test_suite",
     srcs = ["primitive_test_suite.proto"],
     proto_deps = [
         "//proto/google/fhir/proto/stu3:datatypes_proto",
     ],
-    proto_library_prefix = "primitive_test_suite",
 )
 
 # We also make the .proto files readable for testing.

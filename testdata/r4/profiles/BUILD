@@ -25,6 +25,7 @@ gen_fhir_definitions_and_protos(
 )
 
 fhir_proto_library(
+    name = "test",  # buildifier: disable=duplicated-name
     srcs = [
         "test.proto",
     ],
@@ -35,10 +36,10 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//testdata/r4/profiles:test_extensions_proto",
     ],
-    proto_library_prefix = "test",
 )
 
 fhir_proto_library(
+    name = "test_extensions",
     srcs = [
         "test_extensions.proto",
     ],
@@ -48,17 +49,16 @@ fhir_proto_library(
         "//proto/google/fhir/proto/r4/core:datatypes_proto",
         "//testdata/r4/profiles:test_codes_proto",
     ],
-    proto_library_prefix = "test_extensions",
 )
 
 fhir_proto_library(
+    name = "test_codes",
     srcs = [
         "test_codes.proto",
     ],
     proto_deps = [
         "//proto/google/fhir/proto:annotations_proto",
     ],
-    proto_library_prefix = "test_codes",
 )
 
 filegroup(
