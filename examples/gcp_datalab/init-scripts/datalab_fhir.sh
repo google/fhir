@@ -93,7 +93,7 @@ function configure_master(){
 
   # Add dependencies for fhir - > label
   # https://github.com/google/fhir
-  gsutil -m cp -r gs://<REPLACEME_BUCKETNAME>/fhir .
+  gcloud storage cp --recursive gs://<REPLACEME_BUCKETNAME>/fhir .
   cat << EOF > Dockerfile
 FROM ${DOCKER_IMAGE}
 ADD backports.list /etc/apt/sources.list.d/

@@ -28,4 +28,4 @@ $SYNTHEA_TO_TF_RECORDS --input=${1}/synthea/output/fhir/* \
 
 echo "Uploading bundles to GCS Bucket: $bucketname"
 
-gsutil -m cp $1/bundles/bundles* gs://$bucketname/synthea/bundles
+gcloud storage cp $1/bundles/bundles* gs://$bucketname/synthea/bundles
